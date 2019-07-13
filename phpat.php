@@ -1,0 +1,26 @@
+<?php
+
+use PHPArchiTest\DependencyInjection\ServiceProvider;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+
+$autoload = is_file(__DIR__.'/../../autoload.php')
+    ? __DIR__.'/../../autoload.php'
+    : __DIR__.'/vendor/autoload.php';
+
+require $autoload;
+
+if (PHP_VERSION_ID < 70100) {
+    echo 'Required at least PHP version 7.1.0 but your version is '.PHP_VERSION."\n";
+    exit(1);
+}
+
+$container = new ContainerBuilder();
+$sp = new ServiceProvider($container, $argv);
+$container = $sp->register();
+
+try {
+    $app = $container->get('app');
+    $app->execute();
+} catch (\Exception $e) {
+    exit(1);
+}
