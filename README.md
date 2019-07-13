@@ -1,5 +1,7 @@
 ![PHPat](./docs/logo.png "PHPArchiTest logo")
 
+[![Latest Version](https://img.shields.io/packagist/v/carlosas/phparchitest.svg?style=flat-square)](https://packagist.org/packages/carlosas/phparchitest)
+[![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D_7.1-8892BF.svg?style=flat-square)](https://github.com/carlosas/phparchitest)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square&color=brightgreen)](LICENSE)
 [![contributions](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat-square)](https://github.com/carlosas/phparchitest/issues)
 ![HitCount](http://hits.dwyl.com/carlosas/php-architest.svg)
@@ -60,4 +62,9 @@ class ExampleTest extends ArchiTest
             ->build();
     }
 }
+```
+
+# Usage
+```bash
+php vendor/carlosas/phparchitest/phpat.php phpat.yml
 ```
