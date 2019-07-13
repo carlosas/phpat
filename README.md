@@ -66,5 +66,5 @@ class ExampleTest extends ArchiTest
 
 # Usage
 ```bash
-php vendor/carlosas/phparchitest/phpat.php phpat.yml
+vendor/bin/phpat phpat.yml
 ```
