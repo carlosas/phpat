@@ -1,6 +1,7 @@
 {
   "name": "carlosas/phparchitest",
   "description": "PHPArchiTest is an architecture testing tool for PHP.",
+  "type": "library",
   "license": "MIT",
   "require": {
     "php": "^7.1",
@@ -15,9 +16,6 @@
       "email": "carlos.alandete@gmail.com"
     }
   ],
-  "require-dev": {
-    "phpunit/phpunit": "^7.5"
-  },
   "autoload": {
     "psr-4": {
       "PHPArchiTest\\": "src/"
@@ -25,5 +23,8 @@
   },
   "config": {
     "sort-packages": true
-  }
+  },
+  "bin": [
+    "phpat"
+  ]
 }
