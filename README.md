@@ -1,13 +1,12 @@
 ![PHPat](./docs/logo.png "PHPArchiTest logo")
 
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square&color=brightgreen)](LICENSE)
-[![contributions](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat-square)](https://github.com/carlosas/php-architest/issues)
+[![contributions](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat-square)](https://github.com/carlosas/phparchitest/issues)
 ![HitCount](http://hits.dwyl.com/carlosas/php-architest.svg)
 
 PHPArchiTest is an architecture testing tool for PHP.
 
 # Installation
-Using composer:
 ```bash
 composer require carlosas/phparchitest
 ```
