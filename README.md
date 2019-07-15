@@ -10,7 +10,7 @@ PHPArchiTest is an architecture testing tool for PHP.
 
 # Installation
 ```bash
-composer require carlosas/phparchitest
+composer require --dev carlosas/phparchitest
 ```
 
 # Configuration
