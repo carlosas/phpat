@@ -29,7 +29,7 @@ This is the complete list of options:
 * `files` `origin_included`: Files you want to be included as origin (empty=all).
 * `files` `destinationn_included`: Files you want to be included as destination (empty=all).
 * `files` `origin_excluded`: Files you want to be excluded as origin (empty=none).
-* `files` `destinationn_excluded`: Files you want to be excluded as destination (empty=none).
+* `files` `destination_excluded`: Files you want to be excluded as destination (empty=none).
 * `tests` `path`: The path where your tests are.
 
 # Test definition
