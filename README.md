@@ -19,13 +19,11 @@ You might want to setup a basic configuration:
 # phpat.yml
 files:
   src_path: src/
-  autoload_file: vendor/autoload.php
 tests:
   path: tests/architecture/
 ```
 This is the complete list of options:
 * `files` `src_path`: The root path of your application.
-* `files` `autoload_file`: The autoload file of your application.
 * `files` `origin_included`: Files you want to be included as origin (empty=all).
 * `files` `destination_included`: Files you want to be included as destination (empty=all).
 * `files` `origin_excluded`: Files you want to be excluded as origin (empty=none).

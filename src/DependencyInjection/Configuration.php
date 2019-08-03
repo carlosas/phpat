@@ -16,11 +16,6 @@ class Configuration
         return $this->config['files']['src_path'] ?? '';
     }
 
-    public function getAutoloadFile(): string
-    {
-        return $this->config['files']['autoload_file'] ?? '';
-    }
-
     public function getOriginIncluded(): array
     {
         return $this->config['files']['origin_included'] ?? [];

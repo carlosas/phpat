@@ -16,7 +16,7 @@ if (PHP_VERSION_ID < 70100) {
 }
 
 $container = new ContainerBuilder();
-$sp = new ServiceProvider($container, $argv);
+$sp = new ServiceProvider($container, $autoload, $argv);
 $container = $sp->register();
 
 try {

@@ -14,10 +14,15 @@ use Roave\BetterReflection\SourceLocator\Type\SingleFileSourceLocator;
 class Parser
 {
     private $configuration;
+    /**
+     * @var string
+     */
+    private $autoload;
 
-    public function __construct(Configuration $configuration)
+    public function __construct(Configuration $configuration, string $autoload)
     {
         $this->configuration = $configuration;
+        $this->autoload = $autoload;
     }
 
     /**
@@ -25,7 +30,7 @@ class Parser
      */
     public function parseFile(\SplFileInfo $file): array
     {
-        $loader = require $this->configuration->getAutoloadFile();
+        $loader = require $this->autoload;
 
         $astLocator = (new BetterReflection())->astLocator();
         $sourceLocator = new AggregateSourceLocator([

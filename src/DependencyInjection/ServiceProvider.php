@@ -18,26 +18,27 @@ use Symfony\Component\Yaml\Yaml;
 class ServiceProvider
 {
     private $builder;
-    private $arguments;
+    private $autoload;
+    private $configuration;
 
-    public function __construct(ContainerBuilder $builder, array $argv)
+    public function __construct(ContainerBuilder $builder, string $autoload, array $argv)
     {
         $this->builder = $builder;
-        $this->arguments = $argv;
+        $this->autoload = $autoload;
+        $this->configuration = new Configuration(Yaml::parseFile(getcwd().'/'.($argv[1] ?? 'phpat.yml')));
     }
 
     public function register(): ContainerBuilder
     {
-        $configuration = $this->buildConfiguration();
-
         $this->builder
             ->register(FileFinder::class, FileFinder::class)
             ->addArgument(new SymfonyFinderAdapter(new Finder()))
-            ->addArgument($configuration);
+            ->addArgument($this->configuration);
 
         $this->builder
             ->register(Parser::class, Parser::class)
-            ->addArgument($configuration);
+            ->addArgument($this->configuration)
+            ->addArgument($this->autoload);
 
         $this->builder
             ->register(StatementBuilder::class, StatementBuilder::class)
@@ -49,7 +50,7 @@ class ServiceProvider
 
         $this->builder
             ->register(TestExtractor::class, FileTestExtractor::class)
-            ->addArgument(getcwd().'/'.$configuration->getTestsPath());
+            ->addArgument(getcwd().'/'.$this->configuration->getTestsPath());
 
         $this->builder
             ->register('app', App::class)
@@ -58,12 +59,5 @@ class ServiceProvider
             ->addArgument(new Reference(Validator::class));
 
         return $this->builder;
-    }
-
-    private function buildConfiguration(): Configuration
-    {
-        $configFile = $this->arguments[1] ?? 'phpat.yml';
-
-        return new Configuration(Yaml::parseFile(getcwd().'/'.$configFile));
     }
 }
