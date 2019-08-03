@@ -29,6 +29,7 @@ class ValidatorTest extends TestCase
         $this->ruleType->method('satisfies')->willReturn(true);
         $this->statement->method('isInverse')->willReturn(false);
         $this->statement->method('getType')->willReturn($this->ruleType);
+
         self::assertTrue($this->validator->validate($this->statement));
     }
     
@@ -37,6 +38,7 @@ class ValidatorTest extends TestCase
         $this->ruleType->method('satisfies')->willReturn(false);
         $this->statement->method('isInverse')->willReturn(true);
         $this->statement->method('getType')->willReturn($this->ruleType);
+
         self::assertTrue($this->validator->validate($this->statement));
     }
     
@@ -45,6 +47,7 @@ class ValidatorTest extends TestCase
         $this->ruleType->method('satisfies')->willReturn(false);
         $this->statement->method('isInverse')->willReturn(false);
         $this->statement->method('getType')->willReturn($this->ruleType);
+
         self::assertFalse($this->validator->validate($this->statement));
     }
     
@@ -53,6 +56,7 @@ class ValidatorTest extends TestCase
         $this->ruleType->method('satisfies')->willReturn(true);
         $this->statement->method('isInverse')->willReturn(true);
         $this->statement->method('getType')->willReturn($this->ruleType);
+
         self::assertFalse($this->validator->validate($this->statement));
     }
 }

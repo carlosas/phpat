@@ -24,3 +24,7 @@ jobs:
           name: Configuration validation
           command: |
             php composer.phar validate --strict
+      - run:
+          name: Unit tests
+          command: |
+            vendor/bin/phpunit tests/unit/
