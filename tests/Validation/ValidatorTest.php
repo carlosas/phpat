@@ -1,10 +1,13 @@
 <?php
+
 namespace Tests\PhpArchiTest\Validation;
+
 use PHPArchiTest\Rule\RuleType;
 use PHPArchiTest\Statement\Statement;
 use PHPArchiTest\Validation\Validator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+
 class ValidatorTest extends TestCase
 {
     /** @var Validator */
