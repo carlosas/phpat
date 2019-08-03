@@ -1,0 +1,26 @@
+version: 2.1
+jobs:
+  build:
+    working_directory: /var/www/html
+    docker:
+      - image: php:7.1
+        environment:
+          APP_ENV: test
+    steps:
+      - run:
+          name: Tools installation (pre-checkout)
+          command: |
+            apt-get update && apt-get install -y git zip unzip
+      - checkout
+      - run:
+          name: Tools installation (post-checkout)
+          command: |
+            php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+            php -r "if (hash_file('SHA384', 'composer-setup.php') === trim(file_get_contents('https://composer.github.io/installer.sig'))) { echo 'Installer verified'; } else { echo 'Installer invalid'; unlink('composer-setup.php'); } echo PHP_EOL;"
+            php composer-setup.php
+            php -r "unlink('composer-setup.php');"
+            php composer.phar install
+      - run:
+          name: Configuration validation
+          command: |
+            php composer.phar validate --strict
