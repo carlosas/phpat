@@ -2,9 +2,9 @@
 
 namespace PHPArchiTest\File;
 
-use Symfony\Component\Finder\Iterator\PathFilterIterator;
+use Symfony\Component\Finder\Iterator\MultiplePcreFilterIterator;
 
-class PathnameFilterIterator extends PathFilterIterator
+class PathnameFilterIterator extends MultiplePcreFilterIterator
 {
     public function accept(): bool
     {
