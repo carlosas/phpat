@@ -22,8 +22,8 @@ class StatementBuilder
     {
         foreach ($rules->getValues() as $rule) {
             /** @var ReflectionClass $origin */
-            foreach ($this->findAndParseOriginFiles($rule->getOrigin()) as $origin) {
-                foreach ($this->findAndParseDestinationFiles($rule->getDestination()) as $destination) {
+            foreach ($this->findAndParseOriginFiles($rule->getOrigin(), $rule->getOriginExcluded()) as $origin) {
+                foreach ($this->findAndParseDestinationFiles($rule->getDestination(), $rule->getDestinationExcluded()) as $destination) {
                     if ($origin === $destination) {
                         continue;
                     }
@@ -33,9 +33,9 @@ class StatementBuilder
         }
     }
 
-    private function findAndParseOriginFiles(string $source): \Generator
+    private function findAndParseOriginFiles(string $source, array $exclude): \Generator
     {
-        $filesFound = $this->fileFinder->findOrigin($source);
+        $filesFound = $this->fileFinder->findOrigin($source, $exclude);
         foreach ($filesFound as $file) {
             foreach ($this->parser->parseFile($file) as $class) {
                 yield $class;
@@ -43,9 +43,9 @@ class StatementBuilder
         }
     }
 
-    private function findAndParseDestinationFiles(string $source): \Generator
+    private function findAndParseDestinationFiles(string $source, array $exclude): \Generator
     {
-        $filesFound = $this->fileFinder->findDestination($source);
+        $filesFound = $this->fileFinder->findDestination($source, $exclude);
         foreach ($filesFound as $file) {
             foreach ($this->parser->parseFile($file) as $class) {
                 yield $class;

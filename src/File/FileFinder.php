@@ -18,7 +18,7 @@ class FileFinder
     /**
      * @return \SplFileInfo[]
      */
-    public function findOrigin(string $file): array
+    public function findOrigin(string $file, array $excluded = []): array
     {
         $splittedFile = $this->getSplittedFile($file);
 
@@ -26,14 +26,14 @@ class FileFinder
             $splittedFile[0],
             $splittedFile[1],
             $this->configuration->getOriginIncluded(),
-            $this->configuration->getOriginExcluded()
+            array_merge($excluded, $this->configuration->getOriginExcluded())
         );
     }
 
     /**
      * @return \SplFileInfo[]
      */
-    public function findDestination(string $file): array
+    public function findDestination(string $file, array $excluded = []): array
     {
         $splittedFile = $this->getSplittedFile($file);
 
@@ -41,7 +41,7 @@ class FileFinder
             $splittedFile[0],
             $splittedFile[1],
             $this->configuration->getDestinationIncluded(),
-            $this->configuration->getDestinationExcluded()
+            array_merge($excluded, $this->configuration->getDestinationExcluded())
         );
     }
 

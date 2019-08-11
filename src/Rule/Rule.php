@@ -9,14 +9,25 @@ class Rule
     private $destination;
     private $inverse;
     private $name;
+    private $originExcluded;
+    private $destinationExcluded;
 
-    public function __construct(string $origin, RuleType $type, string $destination, bool $inverse, string $name = '')
-    {
+    public function __construct(
+        string $origin,
+        RuleType $type,
+        string $destination,
+        bool $inverse,
+        string $name = '',
+        array $originExcluded = [],
+        array $destinationExcluded = []
+    ) {
         $this->origin = $origin;
         $this->type = $type;
         $this->destination = $destination;
         $this->inverse = $inverse;
         $this->name = $name;
+        $this->originExcluded = $originExcluded;
+        $this->destinationExcluded = $destinationExcluded;
     }
 
     public function getOrigin(): string
@@ -47,5 +58,15 @@ class Rule
     public function isInverse(): bool
     {
         return $this->inverse;
+    }
+
+    public function getOriginExcluded(): array
+    {
+        return $this->originExcluded;
+    }
+
+    public function getDestinationExcluded(): array
+    {
+        return $this->destinationExcluded;
     }
 }

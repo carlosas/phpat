@@ -5,21 +5,33 @@ namespace PHPArchiTest\Rule;
 class RuleBuilder
 {
     private $origin;
-    private $type;
     private $destination;
+    private $originExclude = [];
+    private $destinationExclude = [];
+    private $type;
     private $inverse;
 
-    public function class(string $origin): self
+    public function filesLike(string $origin): self
     {
         $this->origin = $origin;
 
         return $this;
     }
 
-    public function withClass(string $destination): self
+    public function withFilesLike(string $destination): self
     {
         $this->destination = $destination;
 
+        return $this;
+    }
+
+    public function excluding(string $excluding): self
+    {
+        if (is_null($this->destination)) {
+            $this->originExclude[] = $excluding;
+        } else {
+            $this->destinationExclude[] = $excluding;
+        }
         return $this;
     }
 
@@ -41,7 +53,7 @@ class RuleBuilder
 
     public function build(): Rule
     {
-        $rule = new Rule($this->origin, $this->type, $this->destination, $this->inverse);
+        $rule = new Rule($this->origin, $this->type, $this->destination, $this->inverse, '', $this->originExclude, $this->destinationExclude);
         $this->resetBuilder();
 
         return $rule;
@@ -50,8 +62,10 @@ class RuleBuilder
     private function resetBuilder(): void
     {
         $this->origin = null;
-        $this->type = null;
         $this->destination = null;
+        $this->originExclude = [];
+        $this->destinationExclude = [];
+        $this->type = null;
         $this->inverse = null;
     }
 }

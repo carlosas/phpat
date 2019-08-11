@@ -45,18 +45,21 @@ class ExampleTest extends ArchiTest
     public function testDomainDoNotDependOnApplication(): Rule
     {
         return $this->newRule
-            ->class('Domain/*')
+            ->filesLike('Domain/*')
             ->shouldNotHave(new Dependency())
-            ->withClass('Application/*')
+            ->withFilesLike('Application/*')
+            ->excluding('Application/Shared/Service/KnownBadApproach.php')
             ->build();
     }
     
     public function testAllHandlersExtendAbstractCommandHandler(): Rule
     {
         return $this->newRule
-            ->class('Application/*/UseCase/*Handler.php')
+            ->filesLike('Application/*/UseCase/*Handler.php')
+            ->excluding('Application/Shared/UseCase/TechnicalDebtHandler.php')
+            ->excluding('Application/Shared/UseCase/WillBeFixedHandler.php')
             ->shouldHave(new Inheritance())
-            ->withClass('Application/Shared/UseCase/AbstractCommandHandler.php')
+            ->withFilesLike('Application/Shared/UseCase/AbstractCommandHandler.php')
             ->build();
     }
 }
