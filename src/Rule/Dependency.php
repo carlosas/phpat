@@ -10,12 +10,11 @@ class Dependency implements RuleType
 {
     /** @var ClassLike */
     private $originAst;
-    /** @var array */
-    private $dependencies = [];
 
     public function satisfies(ReflectionClass $origin, ReflectionClass $destination): bool
     {
         $this->originAst = $origin->getAst();
+
         $dependencies = $this->getDependencies();
 
         return in_array($destination->getName(), $dependencies);
@@ -30,26 +29,36 @@ class Dependency implements RuleType
     {
         $methods = $this->originAst->getMethods();
 
+        $deps = [];
         foreach ($methods as $method) {
-            $this->extractMethodDeps($method);
-            $this->extractMethodParamsDeps($method);
-            $this->extractMethodReturnDeps($method);
-            //$this->extractDocDeps($method);
+            $deps = array_merge(
+                $deps,
+                $this->extractMethodDeps($method),
+                $this->extractMethodParamsDeps($method),
+                $this->extractMethodReturnDeps($method)
+                //$this->extractDocDeps($method)
+            );
         }
 
-        return array_unique($this->dependencies);
+        return array_unique($deps);
     }
 
-    private function extractMethodDeps(ClassMethod $method)
+    private function extractMethodDeps(ClassMethod $method): array
     {
+        $dependencies = [];
         try {
             $stmts = $method->getStmts();
             if ($stmts) {
                 foreach ($stmts as $stmt) {
-                    $this->extractNodeDeps($stmt);
-                    //$this->extractFromExceptionsCatched($method);
+                    $dependencies = array_merge(
+                        $dependencies,
+                        $this->extractNodeDeps($stmt)
+                        //$this->extractFromExceptionsCatched($method)
+                    );
                 }
             }
+
+            return $dependencies;
         } catch (\Exception $e) {
             echo $e->getMessage();
             echo $this->originAst->name.PHP_EOL;
@@ -57,47 +66,51 @@ class Dependency implements RuleType
         }
     }
 
-    private function extractNodeDeps(\PhpParser\Node $node)
+    private function extractNodeDeps(\PhpParser\Node $node): array
     {
+        $dependencies = [];
         foreach ($node as $subnode) {
             if ($subnode instanceof \PhpParser\Node\Name\FullyQualified) {
-                $this->dependencies[] = implode('\\', $subnode->parts);
+                $dependencies[] = implode('\\', $subnode->parts);
             }
             if ($subnode instanceof \PhpParser\Node) {
-                $this->extractNodeDeps($subnode);
+                $dependencies = array_merge($dependencies, $this->extractNodeDeps($subnode));
             } elseif (is_array($subnode)) {
                 foreach ($subnode as $item) {
                     if (!is_scalar($item)) {
-                        $this->extractNodeDeps($item);
+                        $dependencies = array_merge($dependencies, $this->extractNodeDeps($item));
                     }
                 }
             }
         }
-    }
-/*
- *
-Warning: Invalid argument supplied for foreach() in /Users/carlosalandete/PhpstormProjects/php-at/src/Rule/Dependency.php on line 47
-PHP Warning:  Invalid argument supplied for foreach() in /Users/carlosalandete/PhpstormProjects/php-at/src/Rule/Dependency.php on line 47
 
- */
-    private function extractMethodParamsDeps(ClassMethod $method)
+        return $dependencies;
+    }
+
+    private function extractMethodParamsDeps(ClassMethod $method): array
     {
+        $dependencies = [];
         foreach ($method->getParams() as $param) {
             $type = $param->type;
             if (is_null($type) || !isset($type->parts)) {
                 continue;
             }
 
-            $this->dependencies[] = implode('\\', $type->parts);
+            $dependencies[] = implode('\\', $type->parts);
         }
+
+        return $dependencies;
     }
 
-    private function extractMethodReturnDeps(ClassMethod $method)
+    private function extractMethodReturnDeps(ClassMethod $method): array
     {
+        $dependencies = [];
         $rType = $method->getReturnType();
         if (!is_null($rType) && isset($rType->parts)) {
-            $this->dependencies[] = implode('\\', $rType->parts);
+            $dependencies[] = implode('\\', $rType->parts);
         }
+
+        return $dependencies;
     }
 
 //    private function extractDocDeps(ClassMethod $method)
