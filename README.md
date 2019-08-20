@@ -1,4 +1,6 @@
-![PHPat](./docs/logo.png "PHPArchiTest logo")
+**WARNING:** BIG REFACTOR IN PROGRESS! [Link](https://github.com/carlosas/phparchitest/tree/brutal-refactor)
+
+---
 
 [![Latest Version](https://img.shields.io/packagist/v/carlosas/phparchitest.svg?style=flat-square)](https://packagist.org/packages/carlosas/phparchitest)
 [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D_7.1-8892BF.svg?style=flat-square)](https://github.com/carlosas/phparchitest)
