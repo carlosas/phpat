@@ -1,7 +1,7 @@
 {
-  "name": "carlosas/phparchitest",
-  "description": "PHPArchiTest is an architecture testing tool for PHP.",
+  "name": "carlosas/phpat",
   "type": "library",
+  "description": "PHP Architecture Tester",
   "license": "MIT",
   "authors": [
     {
