@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace PHPArchiTest\Validation;
+namespace PhpAT\Validation;
 
-class TestErrorCollection
+class ValidationErrorCollection
 {
     private $values = [];
 
     /**
-     * ErrorCollection constructor.
-     * @param TestError[] $errors
+     * ValidationErrorCollection constructor.
+     * @param ValidationError[] $errors
      */
     public function __construct(array $errors = [])
     {
@@ -17,13 +17,13 @@ class TestErrorCollection
         }
     }
 
-    public function addValue(TestError $error): void
+    public function addValue(ValidationError $error): void
     {
         $this->values[] = $error;
     }
 
     /**
-     * @return TestError[]
+     * @return ValidationError[]
      */
     public function getValues(): array
     {

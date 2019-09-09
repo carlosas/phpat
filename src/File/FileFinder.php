@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace PHPArchiTest\File;
+namespace PhpAT\File;
 
-use PHPArchiTest\DependencyInjection\Configuration;
+use PhpAT\DependencyInjection\Configuration;
 
 class FileFinder
 {
@@ -16,38 +16,25 @@ class FileFinder
     }
 
     /**
+     * @param string $file
+     * @param array  $excluded
      * @return \SplFileInfo[]
      */
-    public function findOrigin(string $file, array $excluded = []): array
+    public function findFiles(string $file, array $excluded = []): array
     {
         $splittedFile = $this->getSplittedFile($file);
 
         return $this->finder->find(
             $splittedFile[0],
             $splittedFile[1],
-            $this->configuration->getOriginIncluded(),
-            array_merge($excluded, $this->configuration->getOriginExcluded())
-        );
-    }
-
-    /**
-     * @return \SplFileInfo[]
-     */
-    public function findDestination(string $file, array $excluded = []): array
-    {
-        $splittedFile = $this->getSplittedFile($file);
-
-        return $this->finder->find(
-            $splittedFile[0],
-            $splittedFile[1],
-            $this->configuration->getDestinationIncluded(),
-            array_merge($excluded, $this->configuration->getDestinationExcluded())
+            $this->configuration->getSrcIncluded(),
+            array_merge($excluded, $this->configuration->getSrcExcluded())
         );
     }
 
     private function getSplittedFile(string $file): array
     {
-        $file = $this->configuration->getSrcPath().$file;
+        $file = $this->configuration->getSrcPath() . $file;
         $pos = strrpos($file, '/');
         $splittedFile = array(substr($file, 0, $pos), substr($file, $pos + 1));
 

@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace PHPArchiTest\Test;
+namespace PhpAT\Test;
 
-class ArchiTestCollection
+class ArchitectureTestCollection
 {
     private $values = [];
 
     /**
-     * ArchiTestCollection constructor.
-     * @param ArchiTest[] $tests
+     * ArchitectureTestCollection constructor.
+     * @param ArchitectureTest[] $tests
      */
     public function __construct(array $tests = [])
     {
@@ -17,13 +17,13 @@ class ArchiTestCollection
         }
     }
 
-    public function addValue(ArchiTest $test): void
+    public function addValue(ArchitectureTest $test): void
     {
         $this->values[] = $test;
     }
 
     /**
-     * @return ArchiTest[]
+     * @return ArchitectureTest[]
      */
     public function getValues(): array
     {

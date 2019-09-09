@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PHPArchiTest\DependencyInjection;
+namespace PhpAT\DependencyInjection;
 
 class Configuration
 {
@@ -16,24 +16,14 @@ class Configuration
         return $this->config['files']['src_path'] ?? '';
     }
 
-    public function getOriginIncluded(): array
+    public function getSrcIncluded(): array
     {
-        return $this->config['files']['origin_included'] ?? [];
+        return $this->config['files']['src_included'] ?? [];
     }
 
-    public function getDestinationIncluded(): array
+    public function getSrcExcluded(): array
     {
-        return $this->config['files']['destination_included'] ?? [];
-    }
-
-    public function getOriginExcluded(): array
-    {
-        return $this->config['files']['origin_excluded'] ?? [];
-    }
-
-    public function getDestinationExcluded(): array
-    {
-        return $this->config['files']['destination_excluded'] ?? [];
+        return $this->config['files']['src_excluded'] ?? [];
     }
 
     public function getTestsPath(): string

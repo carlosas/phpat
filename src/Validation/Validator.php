@@ -1,13 +1,24 @@
 <?php declare(strict_types=1);
 
-namespace PHPArchiTest\Validation;
+namespace PhpAT\Validation;
 
-use PHPArchiTest\Statement\Statement;
+use PhpAT\Statement\Statement;
+use PhpAT\Statement\StatementNotValidException;
 
 class Validator
 {
-    public function validate(Statement $statement): bool
+    /**
+     * @param Statement $statement
+     * @throws StatementNotValidException
+     */
+    public function validate(Statement $statement): void
     {
-        return $statement->isInverse() xor $statement->getType()->satisfies($statement->getOrigin(), $statement->getDestination());
+        if (false === (
+                $statement->isInverse()
+                xor $statement->getType()->validate($statement->getOrigin(), $statement->getParams())
+            )
+        ) {
+            throw new StatementNotValidException($statement->getErrorMessage());
+        }
     }
 }

@@ -1,38 +1,35 @@
 <?php declare(strict_types=1);
 
-namespace PHPArchiTest\Rule;
+namespace PhpAT\Rule;
 
 class Rule
 {
-    private $origin;
+    private $source;
     private $type;
-    private $destination;
     private $inverse;
     private $name;
-    private $originExcluded;
-    private $destinationExcluded;
+    private $excluded;
+    private $params;
 
     public function __construct(
-        string $origin,
+        string $source,
         RuleType $type,
-        string $destination,
         bool $inverse,
+        array $params = [],
         string $name = '',
-        array $originExcluded = [],
-        array $destinationExcluded = []
+        array $excluded = []
     ) {
-        $this->origin = $origin;
+        $this->source = $source;
         $this->type = $type;
-        $this->destination = $destination;
         $this->inverse = $inverse;
         $this->name = $name;
-        $this->originExcluded = $originExcluded;
-        $this->destinationExcluded = $destinationExcluded;
+        $this->excluded = $excluded;
+        $this->params = $params;
     }
 
-    public function getOrigin(): string
+    public function getSource(): string
     {
-        return $this->origin;
+        return $this->source;
     }
 
     public function getType(): RuleType
@@ -40,9 +37,9 @@ class Rule
         return $this->type;
     }
 
-    public function getDestination(): string
+    public function getParams(): array
     {
-        return $this->destination;
+        return $this->params;
     }
 
     public function setName(string $name)
@@ -60,13 +57,8 @@ class Rule
         return $this->inverse;
     }
 
-    public function getOriginExcluded(): array
+    public function getExcluded(): array
     {
-        return $this->originExcluded;
-    }
-
-    public function getDestinationExcluded(): array
-    {
-        return $this->destinationExcluded;
+        return $this->excluded;
     }
 }

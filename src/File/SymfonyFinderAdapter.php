@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PHPArchiTest\File;
+namespace PhpAT\File;
 
 class SymfonyFinderAdapter implements Finder
 {
@@ -16,7 +16,7 @@ class SymfonyFinderAdapter implements Finder
         $finder = $this->finder->create();
 
         $finder
-            ->in($filePath.'/')
+            ->in($filePath . '/')
             ->name($fileName)
             ->files()
             ->followLinks()

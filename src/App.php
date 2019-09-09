@@ -1,14 +1,16 @@
 <?php declare(strict_types=1);
 
-namespace PHPArchiTest;
+namespace PhpAT;
 
-use PHPArchiTest\Rule\RuleCollection;
-use PHPArchiTest\Statement\Statement;
-use PHPArchiTest\Statement\StatementBuilder;
-use PHPArchiTest\Test\TestExtractor;
-use PHPArchiTest\Validation\TestError;
-use PHPArchiTest\Validation\TestErrorCollection;
-use PHPArchiTest\Validation\Validator;
+use PhpAT\Rule\Rule;
+use PhpAT\Rule\RuleCollection;
+use PhpAT\Statement\Statement;
+use PhpAT\Statement\StatementBuilder;
+use PhpAT\Statement\StatementNotValidException;
+use PhpAT\Test\TestExtractor;
+use PhpAT\Validation\ValidationError;
+use PhpAT\Validation\ValidationErrorCollection;
+use PhpAT\Validation\Validator;
 
 class App
 {
@@ -31,35 +33,35 @@ class App
     {
         try {
             $testSuite = $this->extractor->execute();
+
             $rules = new RuleCollection();
             foreach ($testSuite->getValues() as $test) {
                 $rules = $rules->merge($test());
             }
-            $statements = $this->statementBuilder->build($rules);
-
             $this->exposeLogo();
-            $errors = new TestErrorCollection();
-            /** @var Statement $statement */
-            foreach ($statements as $statement) {
-                $isValid = $this->validator->validate($statement);
-                //echo $statement->getOrigin()->getName()." -> ".$statement->getDestination()->getName();
-                $this->exposeValidation($isValid);
-                if (false === $isValid) {
-                    $shouldOrNot = $statement->isInverse() ? ' should not ' : ' should ';
-                    $msg = $statement->getOrigin()->getName()
-                        .$shouldOrNot.$statement->getType()->getMessageVerb()
-                        .' '.$statement->getDestination()->getName();
-                    $errors->addValue(new TestError($statement->getName(), $msg));
+            $errors = new ValidationErrorCollection();
+
+            foreach ($rules->getValues() as $rule) {
+                $statements = $this->statementBuilder->build($rule);
+                $this->exposeRuleName($rule);
+                /** @var Statement $statement */
+                foreach ($statements as $statement) {
+                    try {
+                        $this->validator->validate($statement);
+                        $this->exposeValidation(true);
+                    } catch (StatementNotValidException $error) {
+                        $errors->addValue(new ValidationError($statement->getErrorMessage()));
+                        $this->exposeValidation(false);
+                    }
                 }
+                echo PHP_EOL;
+                $this->exposeErrors($errors);
             }
-        } catch (\ReflectionException $e) {
-            $this->exposeFatalAndExit($e->getMessage(), $e->getTrace()[1]['file']);
         } catch (\Exception $e) {
             $this->exposeFatalAndExit($e->getMessage());
         }
 
         if ($errors->hasValues()) {
-            $this->exposeErrors($errors);
             throw new \Exception();
         } else {
             $this->exposeSuccess();
@@ -68,10 +70,15 @@ class App
 
     private function exposeLogo(): void
     {
-        echo '-----/------\-----|----\---/'.PHP_EOL;
-        echo '----/---PHPArchiTest----\-/-'.PHP_EOL;
-        echo '---/----------\---|------X--'.PHP_EOL;
+        echo '---/-------\------|-----\---/--' . PHP_EOL;
+        echo '--/-PHP Architecture Tester/---' . PHP_EOL;
+        echo '-/-----------\----|-------X----' . PHP_EOL;
         echo PHP_EOL;
+    }
+
+    private function exposeRuleName(Rule $rule): void
+    {
+        echo 'RULE: ' . $rule->getName() . PHP_EOL;
     }
 
     private function exposeValidation(bool $success): void
@@ -84,31 +91,25 @@ class App
      */
     private function exposeFatalAndExit(string $message, string $trace = null): void
     {
-        echo ('FATAL ERROR: '.$message);
+        echo ('FATAL ERROR: ' . $message);
         if (!is_null($trace)) {
-            echo ' in '.$trace;
+            echo ' in ' . $trace;
         }
         echo PHP_EOL;
 
         throw new \Exception();
     }
 
-    private function exposeErrors(TestErrorCollection $errors): void
+    private function exposeErrors(ValidationErrorCollection $errors): void
     {
-        $lastTest = '';
-        echo PHP_EOL;
-        /** @var TestError $error */
+        /** @var ValidationError $error */
         foreach ($errors->getValues() as $error) {
-            if ($error->getTestName() !== $lastTest) {
-                 echo PHP_EOL.'ERROR: '.$error->getTestName().PHP_EOL;
-                $lastTest = $error->getTestName();
-            }
-            echo $error->getMessage().PHP_EOL;
+            echo $error->getMessage();
         }
     }
 
     private function exposeSuccess(): void
     {
-        echo PHP_EOL.PHP_EOL.'OK'.PHP_EOL;
+        echo PHP_EOL . PHP_EOL . 'OK' . PHP_EOL;
     }
 }

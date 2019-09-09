@@ -1,6 +1,6 @@
 <?php
 
-namespace PHPArchiTest\File;
+namespace PhpAT\File;
 
 interface Finder
 {

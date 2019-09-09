@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace PHPArchiTest\Statement;
+namespace PhpAT\Statement;
 
-use PHPArchiTest\File\FileFinder;
-use PHPArchiTest\Parser\Parser;
-use PHPArchiTest\Rule\RuleCollection;
-use Roave\BetterReflection\Reflection\ReflectionClass;
+use PhpAT\File\FileFinder;
+use PhpAT\Rule\Rule;
+use PhpAT\Rule\RuleCollection;
+use PhpParser\Parser;
 
 class StatementBuilder
 {
@@ -18,38 +18,35 @@ class StatementBuilder
         $this->parser = $parser;
     }
 
-    public function build(RuleCollection $rules): \Generator
+    public function build(Rule $rule): \Generator
     {
-        foreach ($rules->getValues() as $rule) {
-            /** @var ReflectionClass $origin */
-            foreach ($this->findAndParseOriginFiles($rule->getOrigin(), $rule->getOriginExcluded()) as $origin) {
-                foreach ($this->findAndParseDestinationFiles($rule->getDestination(), $rule->getDestinationExcluded()) as $destination) {
-                    if ($origin === $destination) {
-                        continue;
-                    }
-                    yield new Statement($origin, $rule->getType(), $destination, $rule->isInverse(), $rule->getName());
-                }
-            }
+        foreach ($this->findFiles($rule->getSource(), $rule->getExcluded()) as $file) {
+            $errorMsg = $file->getPathname()
+                . ' does not satisfy the rule'
+                . PHP_EOL;
+
+            yield new Statement(
+                $this->parseFile($file),
+                $rule->getType(),
+                $rule->getParams(),
+                $rule->isInverse(),
+                $errorMsg
+            );
         }
     }
 
-    private function findAndParseOriginFiles(string $source, array $exclude): \Generator
+    /**
+     * @return \SplFileInfo[]
+     */
+    private function findFiles(string $source, array $exclude): array
     {
-        $filesFound = $this->fileFinder->findOrigin($source, $exclude);
-        foreach ($filesFound as $file) {
-            foreach ($this->parser->parseFile($file) as $class) {
-                yield $class;
-            }
-        }
+        return $this->fileFinder->findFiles($source, $exclude);
     }
 
-    private function findAndParseDestinationFiles(string $source, array $exclude): \Generator
+    private function parseFile(\SplFileInfo $file): array
     {
-        $filesFound = $this->fileFinder->findDestination($source, $exclude);
-        foreach ($filesFound as $file) {
-            foreach ($this->parser->parseFile($file) as $class) {
-                yield $class;
-            }
-        }
+        $code = file_get_contents($file->getPathname());
+
+        return $this->parser->parse($code);
     }
 }

@@ -1,33 +1,32 @@
 <?php declare(strict_types=1);
 
-namespace PHPArchiTest\Statement;
+namespace PhpAT\Statement;
 
-use PHPArchiTest\Rule\RuleType;
-use Roave\BetterReflection\Reflection\ReflectionClass;
+use PhpAT\Rule\RuleType;
 
 /**
  * Class Statement
- * @package PHPArchiTest\Rule
+ * @package PhpAT\Rule
  * @internal
  */
 class Statement
 {
     private $origin;
     private $type;
-    private $destination;
+    private $params;
     private $inverse;
-    private $name;
+    private $errorMessage;
 
-    public function __construct(ReflectionClass $origin, RuleType $type, ReflectionClass $destination, bool $inverse, string $name)
+    public function __construct(array $origin, RuleType $type, array $params, bool $inverse, string $errorMessage)
     {
         $this->origin = $origin;
         $this->type = $type;
-        $this->destination = $destination;
+        $this->params = $params;
         $this->inverse = $inverse;
-        $this->name = $name;
+        $this->errorMessage = $errorMessage;
     }
 
-    public function getOrigin(): ReflectionClass
+    public function getOrigin(): array
     {
         return $this->origin;
     }
@@ -37,18 +36,18 @@ class Statement
         return $this->type;
     }
 
-    public function getDestination(): ReflectionClass
+    public function getParams(): array
     {
-        return $this->destination;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
+        return $this->params;
     }
 
     public function isInverse(): bool
     {
         return $this->inverse;
+    }
+
+    public function getErrorMessage(): string
+    {
+        return $this->errorMessage;
     }
 }

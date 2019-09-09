@@ -1,22 +1,20 @@
 <?php declare(strict_types=1);
 
-namespace PHPArchiTest\Test;
+namespace PhpAT\Test;
 
-use PHPArchiTest\Rule\Rule;
-use PHPArchiTest\Rule\RuleBuilder;
-use PHPArchiTest\Rule\RuleCollection;
+use PhpAT\Rule\Rule;
+use PhpAT\Rule\RuleBuilder;
+use PhpAT\Rule\RuleCollection;
 
-abstract class ArchiTest
+abstract class ArchitectureTest
 {
     protected $newRule;
 
-    final public function __construct() {
-        $this->newRule = new RuleBuilder();
+    final public function __construct(RuleBuilder $builder)
+    {
+        $this->newRule = $builder;
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     final public function __invoke(): RuleCollection
     {
         $rules = new RuleCollection();

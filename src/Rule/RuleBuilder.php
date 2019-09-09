@@ -1,15 +1,22 @@
 <?php declare(strict_types=1);
 
-namespace PHPArchiTest\Rule;
+namespace PhpAT\Rule;
+
+use Psr\Container\ContainerInterface;
 
 class RuleBuilder
 {
+    private $container;
     private $origin;
-    private $destination;
-    private $originExclude = [];
-    private $destinationExclude = [];
+    private $params = [];
+    private $exclude = [];
     private $type;
     private $inverse;
+
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
 
     public function filesLike(string $origin): self
     {
@@ -18,34 +25,31 @@ class RuleBuilder
         return $this;
     }
 
-    public function withFilesLike(string $destination): self
+    public function withParams(array $params): self
     {
-        $this->destination = $destination;
+        $this->params = $params;
 
         return $this;
     }
 
     public function excluding(string $excluding): self
     {
-        if (is_null($this->destination)) {
-            $this->originExclude[] = $excluding;
-        } else {
-            $this->destinationExclude[] = $excluding;
-        }
+        $this->exclude[] = $excluding;
+
         return $this;
     }
 
-    public function shouldHave(RuleType $type): self
+    public function shouldHave(string $type): self
     {
-        $this->type = $type;
+        $this->type = $this->container->get($type);
         $this->inverse = false;
 
         return $this;
     }
 
-    public function shouldNotHave(RuleType $type): self
+    public function shouldNotHave(string $type): self
     {
-        $this->type = $type;
+        $this->type = $this->container->get($type);
         $this->inverse = true;
 
         return $this;
@@ -53,7 +57,14 @@ class RuleBuilder
 
     public function build(): Rule
     {
-        $rule = new Rule($this->origin, $this->type, $this->destination, $this->inverse, '', $this->originExclude, $this->destinationExclude);
+        $rule = new Rule(
+            $this->origin,
+            $this->type,
+            $this->inverse,
+            $this->params,
+            '',
+            $this->exclude
+        );
         $this->resetBuilder();
 
         return $rule;
@@ -62,9 +73,8 @@ class RuleBuilder
     private function resetBuilder(): void
     {
         $this->origin = null;
-        $this->destination = null;
-        $this->originExclude = [];
-        $this->destinationExclude = [];
+        $this->params = null;
+        $this->exclude = [];
         $this->type = null;
         $this->inverse = null;
     }

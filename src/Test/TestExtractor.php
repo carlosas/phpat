@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace PHPArchiTest\Test;
+namespace PhpAT\Test;
 
 interface TestExtractor
 {
-    public function execute(): ArchiTestCollection;
+    public function execute(): ArchitectureTestCollection;
 }

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PHPArchiTest\File;
+namespace PhpAT\File;
 
 use Symfony\Component\Finder\Iterator\MultiplePcreFilterIterator;
 
@@ -21,7 +21,7 @@ class PathnameFilterIterator extends MultiplePcreFilterIterator
     {
         $r = $this->isRegex($str) ? $this->parseRegex($str) : preg_quote($str, '/');
 
-        return '/'.$r.'/';
+        return '/' . $r . '/';
     }
 
     protected function isRegex($str): bool
@@ -40,11 +40,11 @@ class PathnameFilterIterator extends MultiplePcreFilterIterator
         foreach ($substrs as $k => $s) {
             $s = str_replace('/', '\/', $s);
             if ($k === 0) {
-                $result .= '('.$s.')';
+                $result .= '(' . $s . ')';
                 continue;
             }
 
-            $result .= '(\w)*('.$s.')';
+            $result .= '(\w)*(' . $s . ')';
         }
 
         return $result;

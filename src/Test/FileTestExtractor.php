@@ -1,23 +1,27 @@
 <?php declare(strict_types=1);
 
-namespace PHPArchiTest\Test;
+namespace PhpAT\Test;
+
+use PhpAT\Rule\RuleBuilder;
 
 class FileTestExtractor implements TestExtractor
 {
+    private $ruleBuilder;
     private $testPath;
 
-    public function __construct(string $testPath)
+    public function __construct(RuleBuilder $ruleBuilder, string $testPath)
     {
+        $this->ruleBuilder = $ruleBuilder;
         $this->testPath = $testPath;
     }
 
-    public function execute(): ArchiTestCollection
+    public function execute(): ArchitectureTestCollection
     {
-        $tests = new ArchiTestCollection();
+        $tests = new ArchitectureTestCollection();
 
         $testClasses = $this->getTestClasses();
         foreach ($testClasses as $class) {
-            $tests->addValue(new $class);
+            $tests->addValue(new $class($this->ruleBuilder));
         }
 
         return $tests;
@@ -32,13 +36,13 @@ class FileTestExtractor implements TestExtractor
 
         foreach ($files as $file) {
             if (preg_match('/^([.A-Za-z\/])+(\.php)$/', $file)) {
-                include $this->testPath.'/'.$file;
+                include $this->testPath . '/' . $file;
             }
         }
 
         $classes = [];
         foreach (get_declared_classes() as $declaredClass) {
-            if (get_parent_class($declaredClass) == ArchiTest::class) {
+            if (get_parent_class($declaredClass) == ArchitectureTest::class) {
                 $classes[] = $declaredClass;
             }
         }
