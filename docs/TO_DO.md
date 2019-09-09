@@ -13,3 +13,4 @@ This is a list of known issues and possible enhancements.
 ## Possible Enhancements
 * Use PhpParser/FindingVisitor for extractors
 * Refactor output system
+* Configuration: Run script without error exit code
