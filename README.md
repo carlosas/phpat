@@ -6,16 +6,12 @@
 [![contributions](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat-square)](https://github.com/carlosas/phpat/issues)
 ![HitCount](http://hits.dwyl.com/carlosas/phpat.svg)
 
-**PHP Architecture Tester** is an easy-to-use architecture testing tool for PHP.
-
----
-
-# Installation
+## Installation
 ```bash
 composer require --dev carlosas/phpat
 ```
 
-# Configuration
+## Configuration
 You might want to setup a basic configuration:
 ```yaml
 # phpat.yml
@@ -30,7 +26,7 @@ This is the complete list of options:
 * `files` `src_exclude`: Files you want to be excluded in the tests (empty=none).
 * `tests` `path`: The path where your tests are.
 
-# Test definition
+## Test definition
 This could be a test with a couple of rules:
 ```php
 <?php
@@ -68,14 +64,14 @@ class ExampleTest extends ArchitectureTest
 }
 ```
 
-# Usage
+## Usage
 ```bash
 vendor/bin/phpat phpat.yml
 ```
 
 ---
 
-# Contributing
+## Contributing
 **PHP Architecture Tester** is in a very early stage, contributions are always welcome.
 
 Please take a look to the [Contribution docs](.github/CONTRIBUTING.md) and the [TO-DO list](docs/TO_DO.md).
