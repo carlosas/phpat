@@ -16,7 +16,7 @@ jobs:
           name: Tools installation (post-checkout)
           command: |
             php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-            php -r "if (hash_file('SHA384', 'composer-setup.php') === trim(file_get_contents('https://composer.github.io/installer.sig'))) { echo 'Installer verified'; echo PHP_EOL; } else { echo 'Installer invalid'; unlink('composer-setup.php'); exit(1);}"
+            php -r "if (hash_file('SHA384', 'composer-setup.php') === trim(file_get_contents('https://composer.github.io/installer.sig'))) { echo 'Installer verified'; echo PHP_EOL; } else { echo 'Installer invalid'; unlink('composer-setup.php'); exit(1); }"
             php composer-setup.php
             php -r "unlink('composer-setup.php');"
             php composer.phar install
