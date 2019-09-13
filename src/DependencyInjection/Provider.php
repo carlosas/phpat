@@ -4,9 +4,9 @@ namespace PhpAT\DependencyInjection;
 
 use PhpAT\File\FileFinder;
 use PhpAT\File\SymfonyFinderAdapter;
-use PhpAT\Rule\Composition;
-use PhpAT\Rule\Dependency;
-use PhpAT\Rule\Inheritance;
+use PhpAT\Rule\Type\Composition;
+use PhpAT\Rule\Type\Dependency;
+use PhpAT\Rule\Type\Inheritance;
 use PhpAT\Rule\RuleBuilder;
 use PhpAT\Statement\StatementBuilder;
 use PhpAT\Test\FileTestExtractor;

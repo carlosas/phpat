@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PhpAT\Rule;
+namespace PhpAT\Rule\Type;
 
 use PhpAT\Parser\DeclarationExtractor;
 use PhpParser\NodeTraverser;

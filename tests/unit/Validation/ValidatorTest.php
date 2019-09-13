@@ -2,7 +2,7 @@
 
 namespace Tests\PhpAT\Validation;
 
-use PhpAT\Rule\RuleType;
+use PhpAT\Rule\Type\RuleType;
 use PhpAT\Statement\Statement;
 use PhpAT\Statement\StatementNotValidException;
 use PhpAT\Validation\Validator;

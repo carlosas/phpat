@@ -31,8 +31,8 @@ This could be a test with a couple of rules:
 ```php
 <?php
 
-use PhpAT\Rule\Dependency;
-use PhpAT\Rule\Inheritance;
+use PhpAT\Rule\Type\Dependency;
+use PhpAT\Rule\Type\Inheritance;
 use PhpAT\Rule\Rule;
 use PhpAT\Test\ArchitectureTest;
 

@@ -2,7 +2,7 @@
 
 namespace PhpAT\Statement;
 
-use PhpAT\Rule\RuleType;
+use PhpAT\Rule\Type\RuleType;
 
 /**
  * Class Statement
