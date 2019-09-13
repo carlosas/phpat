@@ -23,13 +23,19 @@ class Composition implements RuleType
 
     public function validate(array $parsedClass, array $params): bool
     {
-
         $interfaceExtractor = new InterfaceExtractor();
         $this->traverser->addVisitor($interfaceExtractor);
         $this->traverser->traverse($parsedClass);
         $this->traverser->removeVisitor($interfaceExtractor);
 
-        $filesFound = $this->finder->findFiles($params['files']);
+        $filesFound = [];
+        foreach ($params['files'] as $file) {
+            $found = $this->finder->findFiles($file);
+            foreach ($found as $f) {
+                $filesFound[] = $f;
+            }
+        }
+
         $namespaceExtractor = new NamespaceExtractor();
         $this->traverser->addVisitor($namespaceExtractor);
         /** @var \SplFileInfo $file */
