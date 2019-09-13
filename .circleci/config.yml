@@ -36,4 +36,4 @@ jobs:
       - run:
           name: Architecture tests
           command: |
-            phpat phpat.yml
+            ./phpat phpat.yml
