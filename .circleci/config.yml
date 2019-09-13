@@ -33,3 +33,7 @@ jobs:
           name: Unit tests
           command: |
             vendor/bin/phpunit tests/unit/
+      - run:
+          name: Architecture tests
+          command: |
+            phpat phpat.yml
