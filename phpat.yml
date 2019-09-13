@@ -1,0 +1,4 @@
+files:
+  src_path: src/
+tests:
+  path: tests/architecture/
