@@ -2,6 +2,8 @@
 
 namespace PhpAT\Rule;
 
+use PhpAT\Rule\Type\RuleType;
+
 class Rule
 {
     private $source;

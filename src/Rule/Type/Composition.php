@@ -5,7 +5,6 @@ namespace PhpAT\Rule\Type;
 use PhpAT\File\FileFinder;
 use PhpAT\Parser\InterfaceExtractor;
 use PhpAT\Parser\NamespaceExtractor;
-use PhpParser\NodeTraverser;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\Parser;
 

@@ -4,7 +4,6 @@ namespace PhpAT\Statement;
 
 use PhpAT\File\FileFinder;
 use PhpAT\Rule\Rule;
-use PhpAT\Rule\RuleCollection;
 use PhpParser\Parser;
 
 class StatementBuilder
