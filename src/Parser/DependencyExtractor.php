@@ -13,9 +13,9 @@ class DependencyExtractor extends AbstractExtractor
     public function leaveNode(Node $node)
     {
         if ($node instanceof UseUse) {
-            $this->dependencies[] = implode('\\', $node->name->parts);
+            $this->dependencies[] = $node->name->toString();
         } elseif ($node instanceof FullyQualified) {
-            $this->dependencies[] = implode('\\', $node->parts);
+            $this->dependencies[] = $node->toString();
         }
         //TODO: This visitor includes composition/inheritance from different namespaces only
         //TODO: Docblock dependencies
@@ -23,7 +23,7 @@ class DependencyExtractor extends AbstractExtractor
         $this->dependencies = array_unique($this->dependencies);
         $this->result = [];
         foreach ($this->dependencies as $dep) {
-            $this->result[] = new Dependency($dep);
+            $this->result[] = ClassName::createFromFQDN($dep);
         }
     }
 }

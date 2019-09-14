@@ -3,6 +3,8 @@
 namespace PhpAT\Rule\Type;
 
 use PhpAT\File\FileFinder;
+use PhpAT\Parser\ClassName;
+use PhpAT\Parser\ClassNameExtractor;
 use PhpAT\Parser\InterfaceExtractor;
 use PhpAT\Parser\NamespaceExtractor;
 use PhpParser\NodeTraverserInterface;
@@ -13,6 +15,8 @@ class Composition implements RuleType
     private $traverser;
     private $finder;
     private $parser;
+    private $parsedClassNamespace;
+    private $parsedClassInterfaces;
 
     public function __construct(FileFinder $finder, Parser $parser, NodeTraverserInterface $traverser)
     {
@@ -23,10 +27,7 @@ class Composition implements RuleType
 
     public function validate(array $parsedClass, array $params): bool
     {
-        $interfaceExtractor = new InterfaceExtractor();
-        $this->traverser->addVisitor($interfaceExtractor);
-        $this->traverser->traverse($parsedClass);
-        $this->traverser->removeVisitor($interfaceExtractor);
+        $this->extractParsedClassInfo($parsedClass);
 
         $filesFound = [];
         foreach ($params['files'] as $file) {
@@ -36,29 +37,55 @@ class Composition implements RuleType
             }
         }
 
-        $namespaceExtractor = new NamespaceExtractor();
-        $this->traverser->addVisitor($namespaceExtractor);
+        $classNameExtractor = new ClassNameExtractor();
+        $this->traverser->addVisitor($classNameExtractor);
         /** @var \SplFileInfo $file */
         foreach ($filesFound as $file) {
-            $parsedFile = $this->parser->parse(file_get_contents($file->getPathname()));
-            $this->traverser->traverse($parsedFile);
+            $parsed = $this->parser->parse(file_get_contents($file->getPathname()));
+            $this->traverser->traverse($parsed);
         }
-        $this->traverser->removeVisitor($namespaceExtractor);
+        $this->traverser->removeVisitor($classNameExtractor);
 
-        $result = $interfaceExtractor->getResult();
-        if (empty($result)) {
+        if (empty($this->parsedClassInterfaces)) {
             return false;
         }
 
-        if (in_array(reset($result), $namespaceExtractor->getResult())) {
-            return true;
+        /** @var ClassName $className */
+        foreach ($classNameExtractor->getResult() as $className) {
+            if (!in_array($className->getFQDN(), $this->parsedClassInterfaces)) {
+                return false;
+            }
         }
 
-        return false;
+        return true;
     }
 
     public function getMessageVerb(): string
     {
         return 'implement';
+    }
+
+    private function extractParsedClassInfo(array $parsedClass): void
+    {
+        $interfaceExtractor = new InterfaceExtractor();
+        $namespaceExtractor = new NamespaceExtractor();
+
+        $this->traverser->addVisitor($interfaceExtractor);
+        $this->traverser->addVisitor($namespaceExtractor);
+        $this->traverser->traverse($parsedClass);
+        $this->traverser->removeVisitor($interfaceExtractor);
+
+        $this->parsedClassNamespace = $namespaceExtractor->getResult()[0];
+        $this->parsedClassInterfaces = $interfaceExtractor->getResult();
+
+        /** @var ClassName $v */
+        foreach ($this->parsedClassInterfaces as $k => $v) {
+            if (empty($v->getNamespace())) {
+                $className = new ClassName($this->parsedClassNamespace, $v->getName());
+                $this->parsedClassInterfaces[$k] = $className->getFQDN();
+            } else {
+                $this->parsedClassInterfaces[$k] = $v->getFQDN();
+            }
+        }
     }
 }

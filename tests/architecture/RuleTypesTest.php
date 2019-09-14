@@ -1,19 +1,19 @@
 <?php
 
-use PhpAT\Rule\Type\Inheritance;
+use PhpAT\Rule\Type\Composition;
 use PhpAT\Rule\Rule;
 use PhpAT\Test\ArchitectureTest;
 
-class RuleTypeTest extends ArchitectureTest
+class RuleTypesTest extends ArchitectureTest
 {
     public function testRuleTypesImplementRuleTypeInterface(): Rule
     {
         return $this->newRule
             ->filesLike('Rule/Type/*')
             ->excluding('Rule/Type/RuleType.php')
-            ->shouldNotHave(Inheritance::class)
+            ->shouldHave(Composition::class)
             ->withParams([
-                'file' => 'Rule/Type/RuleType.php'
+                'files' => ['Rule/Type/RuleType.php']
             ])
             ->build();
     }
