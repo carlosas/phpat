@@ -33,6 +33,8 @@ class ClassName
 
     public function getFQDN(): string
     {
-        return $this->getNamespace() . '\\' . $this->getName();
+        return (empty($this->getNamespace()))
+            ? $this->getName()
+            : $this->getNamespace() . '\\' . $this->getName();
     }
 }

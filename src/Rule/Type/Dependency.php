@@ -3,6 +3,8 @@
 namespace PhpAT\Rule\Type;
 
 use PhpAT\File\FileFinder;
+use PhpAT\Parser\ClassName;
+use PhpAT\Parser\ClassNameExtractor;
 use PhpAT\Parser\DependencyExtractor;
 use PhpAT\Parser\NamespaceExtractor;
 use PhpParser\NodeTraverserInterface;
@@ -13,6 +15,8 @@ class Dependency implements RuleType
     private $traverser;
     private $finder;
     private $parser;
+    private $parsedClassNamespace;
+    private $parsedClassDependencies;
 
     public function __construct(FileFinder $finder, Parser $parser, NodeTraverserInterface $traverser)
     {
@@ -23,11 +27,7 @@ class Dependency implements RuleType
 
     public function validate(array $parsedClass, array $params): bool
     {
-        $dependencyExtractor = new DependencyExtractor();
-        $this->traverser->addVisitor($dependencyExtractor);
-        $this->traverser->traverse($parsedClass);
-        $dependencies = $dependencyExtractor->getResult();
-        $this->traverser->removeVisitor($dependencyExtractor);
+        $this->extractParsedClassInfo($parsedClass);
 
         $excluded = $params['excluding'] ?? [];
         $filesFound = [];
@@ -38,27 +38,56 @@ class Dependency implements RuleType
             }
         }
 
-        $namespaceExtractor = new NamespaceExtractor();
-        $this->traverser->addVisitor($namespaceExtractor);
+        $classNameExtractor = new ClassNameExtractor();
+        $this->traverser->addVisitor($classNameExtractor);
 
         /** @var \SplFileInfo $file */
         foreach ($filesFound as $file) {
-            $parsedFile = $this->parser->parse(file_get_contents($file->getPathname()));
-            $this->traverser->traverse($parsedFile);
+            $parsed = $this->parser->parse(file_get_contents($file->getPathname()));
+            $this->traverser->traverse($parsed);
+        }
+        $this->traverser->removeVisitor($classNameExtractor);
+
+        if (empty($this->parsedClassDependencies)) {
+            return false;
         }
 
-        /** @var \PhpAT\Parser\Dependency $dependency */
-        foreach ($dependencies as $dependency) {
-            if (in_array($dependency->getPathname(), $namespaceExtractor->getResult())) {
-                return true;
+        /** @var ClassName $className */
+        foreach ($classNameExtractor->getResult() as $className) {
+            if (!in_array($className->getFQDN(), $this->parsedClassDependencies)) {
+                return false;
             }
         }
 
-        return false;
+        return true;
     }
 
     public function getMessageVerb(): string
     {
         return 'depend on';
+    }
+
+    private function extractParsedClassInfo(array $parsedClass): void
+    {
+        $dependencyExtractor = new DependencyExtractor();
+        $namespaceExtractor = new NamespaceExtractor();
+
+        $this->traverser->addVisitor($dependencyExtractor);
+        $this->traverser->addVisitor($namespaceExtractor);
+        $this->traverser->traverse($parsedClass);
+        $this->traverser->removeVisitor($dependencyExtractor);
+
+        $this->parsedClassNamespace = $namespaceExtractor->getResult()[0];
+        $this->parsedClassDependencies = $dependencyExtractor->getResult();
+
+        /** @var ClassName $v */
+        foreach ($this->parsedClassDependencies as $k => $v) {
+            if (empty($v->getNamespace())) {
+                $className = new ClassName($this->parsedClassNamespace, $v->getName());
+                $this->parsedClassDependencies[$k] = $className->getFQDN();
+            } else {
+                $this->parsedClassDependencies[$k] = $v->getFQDN();
+            }
+        }
     }
 }
