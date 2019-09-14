@@ -39,9 +39,9 @@ class App
                 $rules = $rules->merge($test());
             }
             $this->exposeLogo();
-            $errors = new ValidationErrorCollection();
 
             foreach ($rules->getValues() as $rule) {
+                $errors = new ValidationErrorCollection();
                 $statements = $this->statementBuilder->build($rule);
                 $this->exposeRuleName($rule);
                 /** @var Statement $statement */
@@ -78,7 +78,7 @@ class App
 
     private function exposeRuleName(Rule $rule): void
     {
-        echo 'RULE: ' . $rule->getName() . PHP_EOL;
+        echo PHP_EOL . 'RULE: ' . $rule->getName() . PHP_EOL;
     }
 
     private function exposeValidation(bool $success): void
