@@ -75,7 +75,10 @@ class Inheritance implements RuleType
             $this->parsedClassParent = $parentExtractor->getResult()[0];
 
             if (empty($this->parsedClassParent->getNamespace())) {
-                $this->parsedClassParent = new ClassName($this->parsedClassNamespace, $this->parsedClassParent->getName());
+                $this->parsedClassParent = new ClassName(
+                    $this->parsedClassNamespace,
+                    $this->parsedClassParent->getName()
+                );
             }
         }
     }
