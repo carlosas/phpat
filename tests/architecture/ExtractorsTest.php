@@ -4,16 +4,16 @@ use PhpAT\Rule\Type\Inheritance;
 use PhpAT\Rule\Rule;
 use PhpAT\Test\ArchitectureTest;
 
-class ExtractorsTest extends ArchitectureTest
+class CollectorsTest extends ArchitectureTest
 {
-    public function testExtractorsExtendAbstractExtractor(): Rule
+    public function testCollectorsExtendAbstractCollector(): Rule
     {
         return $this->newRule
-            ->filesLike('Parser/*Extractor.php')
-            ->excluding('Parser/AbstractExtractor.php')
+            ->filesLike('Parser/Collector/*Collector.php')
+            ->excluding('Parser/Collector/AbstractCollector.php')
             ->shouldHave(Inheritance::class)
             ->withParams([
-                'file' => 'Parser/AbstractExtractor.php'
+                'file' => 'Parser/AbstractCollector.php'
             ])
             ->build();
     }

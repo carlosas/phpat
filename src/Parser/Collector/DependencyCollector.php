@@ -1,12 +1,13 @@
 <?php
 
-namespace PhpAT\Parser;
+namespace PhpAT\Parser\Collector;
 
+use PhpAT\Parser\ClassName;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\UseUse;
 use PhpParser\Node\Name\FullyQualified;
 
-class DependencyExtractor extends AbstractExtractor
+class DependencyCollector extends AbstractCollector
 {
     private $dependencies = [];
 

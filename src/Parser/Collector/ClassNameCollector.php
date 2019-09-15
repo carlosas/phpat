@@ -1,10 +1,11 @@
 <?php
 
-namespace PhpAT\Parser;
+namespace PhpAT\Parser\Collector;
 
+use PhpAT\Parser\ClassName;
 use PhpParser\Node;
 
-class ClassNameExtractor extends AbstractExtractor
+class ClassNameCollector extends AbstractCollector
 {
     public function leaveNode(Node $node)
     {

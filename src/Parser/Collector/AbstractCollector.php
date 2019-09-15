@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpAT\Parser;
+namespace PhpAT\Parser\Collector;
 
 use PhpParser\NodeVisitorAbstract;
 
-class AbstractExtractor extends NodeVisitorAbstract
+class AbstractCollector extends NodeVisitorAbstract
 {
     /**
      * @var array

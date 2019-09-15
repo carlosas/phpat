@@ -2,7 +2,7 @@
 
 namespace PhpAT\Rule\Type;
 
-use PhpAT\Parser\DeclarationExtractor;
+use PhpAT\Parser\Collector\DeclarationCollector;
 use PhpParser\NodeTraverser;
 
 class Declaration implements RuleType
@@ -16,7 +16,7 @@ class Declaration implements RuleType
 
     public function validate(array $parsedClass, array $params): bool
     {
-        $declarationExt = new DeclarationExtractor();
+        $declarationExt = new DeclarationCollector();
         $this->traverser->addVisitor($declarationExt);
         $this->traverser->traverse($parsedClass);
 

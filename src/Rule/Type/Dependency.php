@@ -4,8 +4,8 @@ namespace PhpAT\Rule\Type;
 
 use PhpAT\File\FileFinder;
 use PhpAT\Parser\ClassName;
-use PhpAT\Parser\ClassNameExtractor;
-use PhpAT\Parser\DependencyExtractor;
+use PhpAT\Parser\Collector\ClassNameCollector;
+use PhpAT\Parser\Collector\DependencyCollector;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\Parser;
 
@@ -37,7 +37,7 @@ class Dependency implements RuleType
             }
         }
 
-        $classNameExtractor = new ClassNameExtractor();
+        $classNameExtractor = new ClassNameCollector();
         $this->traverser->addVisitor($classNameExtractor);
 
         /** @var \SplFileInfo $file */
@@ -68,8 +68,8 @@ class Dependency implements RuleType
 
     private function extractParsedClassInfo(array $parsedClass): void
     {
-        $dependencyExtractor = new DependencyExtractor();
-        $classNameExtractor = new ClassNameExtractor();
+        $dependencyExtractor = new DependencyCollector();
+        $classNameExtractor = new ClassNameCollector();
 
         $this->traverser->addVisitor($dependencyExtractor);
         $this->traverser->addVisitor($classNameExtractor);

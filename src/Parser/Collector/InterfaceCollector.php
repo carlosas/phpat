@@ -1,10 +1,11 @@
 <?php
 
-namespace PhpAT\Parser;
+namespace PhpAT\Parser\Collector;
 
+use PhpAT\Parser\ClassName;
 use PhpParser\Node;
 
-class ParentExtractor extends AbstractExtractor
+class InterfaceCollector extends AbstractCollector
 {
     /** @var ClassName[] $declaredClasses */
     private $declaredClasses = [];
@@ -16,8 +17,10 @@ class ParentExtractor extends AbstractExtractor
         }
 
         if ($node instanceof Node\Stmt\Class_) {
-            if (isset($node->extends) && !is_null($node->extends)) {
-                $this->result[] = $this->matchClassName($node->extends->toString());
+            if (isset($node->implements) && !is_null($node->implements)) {
+                foreach ($node->implements as $interface) {
+                    $this->result[] = $this->matchClassName($interface->toString());
+                }
             }
         }
     }

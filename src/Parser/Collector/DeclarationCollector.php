@@ -1,11 +1,12 @@
 <?php
 
-namespace PhpAT\Parser;
+namespace PhpAT\Parser\Collector;
 
+use PhpAT\Parser\Declaration;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\DeclareDeclare;
 
-class DeclarationExtractor extends AbstractExtractor
+class DeclarationCollector extends AbstractCollector
 {
     private $declarations = [];
 
