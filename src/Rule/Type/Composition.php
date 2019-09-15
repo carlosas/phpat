@@ -6,7 +6,6 @@ use PhpAT\File\FileFinder;
 use PhpAT\Parser\ClassName;
 use PhpAT\Parser\ClassNameExtractor;
 use PhpAT\Parser\InterfaceExtractor;
-use PhpAT\Parser\NamespaceExtractor;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\Parser;
 
@@ -68,14 +67,16 @@ class Composition implements RuleType
     private function extractParsedClassInfo(array $parsedClass): void
     {
         $interfaceExtractor = new InterfaceExtractor();
-        $namespaceExtractor = new NamespaceExtractor();
+        $classNameExtractor = new ClassNameExtractor();
 
         $this->traverser->addVisitor($interfaceExtractor);
-        $this->traverser->addVisitor($namespaceExtractor);
+        $this->traverser->addVisitor($classNameExtractor);
         $this->traverser->traverse($parsedClass);
         $this->traverser->removeVisitor($interfaceExtractor);
 
-        $this->parsedClassNamespace = $namespaceExtractor->getResult()[0];
+        /** @var ClassName $cName */
+        $cName = $classNameExtractor->getResult()[0];
+        $this->parsedClassNamespace = $cName->getNamespace();
         $this->parsedClassInterfaces = $interfaceExtractor->getResult();
 
         /** @var ClassName $v */
