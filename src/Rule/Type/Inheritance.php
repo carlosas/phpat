@@ -40,7 +40,7 @@ class Inheritance implements RuleType
         }
         $this->traverser->removeVisitor($classNameExtractor);
 
-        if (empty($this->parsedClassParent->getFQDN())) {
+        if (is_null($this->parsedClassParent)) {
             return false;
         }
 
@@ -70,10 +70,13 @@ class Inheritance implements RuleType
         $this->traverser->removeVisitor($parentExtractor);
 
         $this->parsedClassNamespace = $namespaceExtractor->getResult()[0];
-        $this->parsedClassParent = $parentExtractor->getResult()[0];
 
-        if (empty($this->parsedClassParent->getNamespace())) {
-            $this->parsedClassParent = new ClassName($this->parsedClassNamespace, $this->parsedClassParent->getName());
+        if (!empty($parentExtractor->getResult())) {
+            $this->parsedClassParent = $parentExtractor->getResult()[0];
+
+            if (empty($this->parsedClassParent->getNamespace())) {
+                $this->parsedClassParent = new ClassName($this->parsedClassNamespace, $this->parsedClassParent->getName());
+            }
         }
     }
 }
