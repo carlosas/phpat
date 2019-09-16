@@ -18,7 +18,7 @@ class EventSubscriber implements EventSubscriberInterface
 
     public function onStatementNotValidEvent(StatementNotValidEvent $event): void
     {
-        printf($event->getMessage() . PHP_EOL);
+        printf('ERROR: ' . $event->getMessage() . PHP_EOL);
         $this->errors = true;
     }
 
