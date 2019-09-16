@@ -30,10 +30,6 @@ jobs:
           command: |
             php phpcs.phar --standard=PSR1,PSR12 src/
       - run:
-          name: Unit tests
-          command: |
-            vendor/bin/phpunit tests/unit/
-      - run:
           name: Architecture tests
           command: |
             php phpat phpat.yml

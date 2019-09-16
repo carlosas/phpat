@@ -1,10 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace PhpAT\Validation;
+namespace PhpAT\Rule\Event;
 
-class ValidationError
+use Symfony\Contracts\EventDispatcher\Event;
+
+class StatementNotValidEvent extends Event
 {
-    protected $message;
+    /** @var string */
+    private $message;
 
     public function __construct(string $message)
     {
