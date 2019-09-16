@@ -6,11 +6,10 @@ use PhpAT\Rule\Rule;
 use PhpAT\Rule\RuleCollection;
 use PhpAT\Statement\Statement;
 use PhpAT\Statement\StatementBuilder;
-use PhpAT\Statement\StatementNotValidException;
+use PhpAT\Subscriber\EventSubscriber;
 use PhpAT\Test\TestExtractor;
-use PhpAT\Validation\ValidationError;
-use PhpAT\Validation\ValidationErrorCollection;
-use PhpAT\Validation\Validator;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class App
 {
@@ -18,20 +17,29 @@ class App
     private $extractor;
     /** @var StatementBuilder $statementBuilder */
     private $statementBuilder;
-    /** @var Validator $validator */
-    private $validator;
+    /** @var EventDispatcherInterface */
+    private $dispatcher;
+    /** @var EventSubscriber */
+    private $subscriber;
 
-    public function __construct(TestExtractor $extractor, StatementBuilder $statementBuilder, Validator $validator)
-    {
+    public function __construct(
+        TestExtractor $extractor,
+        StatementBuilder $statementBuilder,
+        EventDispatcherInterface $dispatcher,
+        EventSubscriberInterface $subscriber
+    ) {
         $this->extractor = $extractor;
         $this->statementBuilder = $statementBuilder;
-        $this->validator = $validator;
+        $this->dispatcher = $dispatcher;
+        $this->subscriber = $subscriber;
     }
 
     /** @throws \Exception */
     public function execute(): void
     {
         try {
+            $this->dispatcher->addSubscriber($this->subscriber);
+
             $testSuite = $this->extractor->execute();
 
             $rules = new RuleCollection();
@@ -41,30 +49,20 @@ class App
             $this->exposeLogo();
 
             foreach ($rules->getValues() as $rule) {
-                $errors = new ValidationErrorCollection();
                 $statements = $this->statementBuilder->build($rule);
                 $this->exposeRuleName($rule);
                 /** @var Statement $statement */
                 foreach ($statements as $statement) {
-                    try {
-                        $this->validator->validate($statement);
-                        $this->exposeValidation(true);
-                    } catch (StatementNotValidException $error) {
-                        $errors->addValue(new ValidationError($statement->getErrorMessage()));
-                        $this->exposeValidation(false);
-                    }
+                    $this->validateStatement($statement);
                 }
                 echo PHP_EOL;
-                $this->exposeErrors($errors);
             }
         } catch (\Exception $e) {
             $this->exposeFatalAndExit($e->getMessage());
         }
 
-        if ($errors->hasValues()) {
+        if ($this->subscriber->thereWereErrors()) {
             throw new \Exception();
-        } else {
-            $this->exposeSuccess();
         }
     }
 
@@ -81,9 +79,9 @@ class App
         echo PHP_EOL . 'RULE: ' . $rule->getName() . PHP_EOL;
     }
 
-    private function exposeValidation(bool $success): void
+    private function validateStatement(Statement $statement): void
     {
-        echo $success ? '.' : 'X';
+        $statement->getType()->validate($statement->getOrigin(), $statement->getParams(), $statement->isInverse());
     }
 
     /**
@@ -98,18 +96,5 @@ class App
         echo PHP_EOL;
 
         throw new \Exception();
-    }
-
-    private function exposeErrors(ValidationErrorCollection $errors): void
-    {
-        /** @var ValidationError $error */
-        foreach ($errors->getValues() as $error) {
-            echo $error->getMessage();
-        }
-    }
-
-    private function exposeSuccess(): void
-    {
-        echo PHP_EOL . PHP_EOL . 'OK' . PHP_EOL;
     }
 }

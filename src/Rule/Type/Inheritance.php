@@ -6,56 +6,62 @@ use PhpAT\File\FileFinder;
 use PhpAT\Parser\ClassName;
 use PhpAT\Parser\Collector\ClassNameCollector;
 use PhpAT\Parser\Collector\ParentCollector;
+use PhpAT\Rule\Event\StatementNotValidEvent;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\Parser;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class Inheritance implements RuleType
 {
     private $traverser;
     private $finder;
     private $parser;
-    private $parsedClassNamespace;
+    private $eventDispatcher;
+    /** @var ClassName */
+    private $parsedClassClassName;
     /** @var ClassName */
     private $parsedClassParent;
 
-    public function __construct(FileFinder $finder, Parser $parser, NodeTraverserInterface $traverser)
-    {
+    public function __construct(
+        FileFinder $finder,
+        Parser $parser,
+        NodeTraverserInterface $traverser,
+        EventDispatcherInterface $eventDispatcher
+    ) {
         $this->finder = $finder;
         $this->parser = $parser;
         $this->traverser = $traverser;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function validate(array $parsedClass, array $params): bool
+    public function validate(array $parsedClass, array $params, bool $inverse = false): void
     {
         $this->extractParsedClassInfo($parsedClass);
 
         $filesFound = $this->finder->findFiles($params['file']);
-        $classNameExtractor = new ClassNameCollector();
-        $this->traverser->addVisitor($classNameExtractor);
+        $classNameCollector = new ClassNameCollector();
+        $this->traverser->addVisitor($classNameCollector);
         /** @var \SplFileInfo $file */
         foreach ($filesFound as $file) {
             $parsedFile = $this->parser->parse(file_get_contents($file->getPathname()));
             $this->traverser->traverse($parsedFile);
         }
-        $this->traverser->removeVisitor($classNameExtractor);
+        $this->traverser->removeVisitor($classNameCollector);
 
-        if (is_null($this->parsedClassParent)) {
-            return false;
+        //TODO: Change to FatalErrorEvent (could not find any class in the test)
+        if (empty($classNameCollector->getResult())) {
+            return;
         }
 
         /** @var ClassName $className */
-        foreach ($classNameExtractor->getResult() as $className) {
-            if (!($className->getFQDN() === $this->parsedClassParent->getFQDN())) {
-                return false;
-            }
+        foreach ($classNameCollector->getResult() as $className) {
+            $result = (
+                !is_null($this->parsedClassParent)
+                && $className->getFQDN() === $this->parsedClassParent->getFQDN()
+            );
+
+            $this->dispatchResult($result, $inverse, $this->parsedClassClassName, $className);
         }
-
-        return true;
-    }
-
-    public function getMessageVerb(): string
-    {
-        return 'extend';
     }
 
     private function extractParsedClassInfo(array $parsedClass): void
@@ -68,19 +74,28 @@ class Inheritance implements RuleType
         $this->traverser->traverse($parsedClass);
         $this->traverser->removeVisitor($parentExtractor);
 
-        /** @var ClassName $cName */
-        $cName = $classNameExtractor->getResult()[0];
-        $this->parsedClassNamespace = $cName->getNamespace();
+        $this->parsedClassClassName = $classNameExtractor->getResult()[0];
 
         if (!empty($parentExtractor->getResult())) {
             $this->parsedClassParent = $parentExtractor->getResult()[0];
 
             if (empty($this->parsedClassParent->getNamespace())) {
                 $this->parsedClassParent = new ClassName(
-                    $this->parsedClassNamespace,
+                    $this->parsedClassClassName->getNamespace(),
                     $this->parsedClassParent->getName()
                 );
             }
+        }
+    }
+
+    private function dispatchResult(bool $result, bool $inverse, ClassName $className, ClassName $parentName): void
+    {
+        if (false === ($result xor $inverse)) {
+            $error = $inverse ? ' extends ' : ' does not extend ';
+            $message = $className->getFQDN() . $error . $parentName->getFQDN();
+            $this->eventDispatcher->dispatch(new StatementNotValidEvent($message));
+        } else {
+            echo '-';
         }
     }
 }

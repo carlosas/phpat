@@ -4,7 +4,5 @@ namespace PhpAT\Rule\Type;
 
 interface RuleType
 {
-    public function validate(array $parsedClass, array $params): bool;
-
-    public function getMessageVerb(): string;
+    public function validate(array $parsedClass, array $params, bool $inverse = false): void;
 }
