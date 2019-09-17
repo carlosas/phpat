@@ -11,4 +11,4 @@ install:
 script:
   - composer validate --strict
   - vendor/bin/phpcs --standard=PSR1,PSR12 src/
-  - phpat phpat.yml
+  - php phpat phpat.yml
