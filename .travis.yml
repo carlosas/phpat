@@ -1,0 +1,14 @@
+language: php
+
+php:
+  - 7.1
+  - 7.2
+  - 7.3
+
+install:
+  - composer install --no-interaction
+
+script:
+  - composer validate --strict
+  - vendor/bin/phpcs --standard=PSR1,PSR12 src/
+  - php phpat phpat.yml
