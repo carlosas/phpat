@@ -39,8 +39,7 @@ class Composition implements RuleType
         array $destinationFiles,
         array $destinationExcludedFiles,
         bool $inverse = false
-    ): void
-    {
+    ): void {
         $this->extractParsedClassInfo($parsedClass);
 
         $filesFound = [];
