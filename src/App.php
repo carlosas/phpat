@@ -81,7 +81,12 @@ class App
 
     private function validateStatement(Statement $statement): void
     {
-        $statement->getType()->validate($statement->getOrigin(), $statement->getParams(), $statement->isInverse());
+        $statement->getType()->validate(
+            $statement->getParsedClass(),
+            $statement->getDestination(),
+            $statement->getDestinationExcluded(),
+            $statement->isInverse()
+        );
     }
 
     /**

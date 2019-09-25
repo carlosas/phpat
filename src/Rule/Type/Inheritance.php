@@ -34,11 +34,23 @@ class Inheritance implements RuleType
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function validate(array $parsedClass, array $params, bool $inverse = false): void
+    public function validate(
+        array $parsedClass,
+        array $destinationFiles,
+        array $destinationExcludedFiles,
+        bool $inverse = false
+    ): void
     {
         $this->extractParsedClassInfo($parsedClass);
 
-        $filesFound = $this->finder->findFiles($params['file']);
+        $filesFound = [];
+        foreach ($destinationFiles as $file) {
+            $found = $this->finder->findFiles($file, $destinationExcludedFiles);
+            foreach ($found as $f) {
+                $filesFound[] = $f;
+            }
+        }
+
         $classNameCollector = new ClassNameCollector();
         $this->traverser->addVisitor($classNameCollector);
         /** @var \SplFileInfo $file */

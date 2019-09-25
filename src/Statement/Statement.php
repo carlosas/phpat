@@ -6,29 +6,33 @@ use PhpAT\Rule\Type\RuleType;
 
 /**
  * Class Statement
- * @package PhpAT\Rule
  * @internal
  */
 class Statement
 {
-    private $origin;
+    private $parsedClass;
     private $type;
-    private $params;
     private $inverse;
-    private $errorMessage;
+    private $destination;
+    private $destinationExcluded;
 
-    public function __construct(array $origin, RuleType $type, array $params, bool $inverse, string $errorMessage)
-    {
-        $this->origin = $origin;
+    public function __construct(
+        array $parsedClass,
+        RuleType $type,
+        bool $inverse,
+        array $destination,
+        array $destinationExcluded
+    ) {
+        $this->parsedClass = $parsedClass;
         $this->type = $type;
-        $this->params = $params;
         $this->inverse = $inverse;
-        $this->errorMessage = $errorMessage;
+        $this->destination = $destination;
+        $this->destinationExcluded = $destinationExcluded;
     }
 
-    public function getOrigin(): array
+    public function getParsedClass(): array
     {
-        return $this->origin;
+        return $this->parsedClass;
     }
 
     public function getType(): RuleType
@@ -36,18 +40,18 @@ class Statement
         return $this->type;
     }
 
-    public function getParams(): array
-    {
-        return $this->params;
-    }
-
     public function isInverse(): bool
     {
         return $this->inverse;
     }
 
-    public function getErrorMessage(): string
+    public function getDestination(): array
     {
-        return $this->errorMessage;
+        return $this->destination;
+    }
+
+    public function getDestinationExcluded(): array
+    {
+        return $this->destinationExcluded;
     }
 }

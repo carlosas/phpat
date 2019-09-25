@@ -19,17 +19,13 @@ class StatementBuilder
 
     public function build(Rule $rule): \Generator
     {
-        foreach ($this->findFiles($rule->getSource(), $rule->getExcluded()) as $file) {
-            $errorMsg = $file->getPathname()
-                . ' does not satisfy the rule'
-                . PHP_EOL;
-
+        foreach ($this->findFiles($rule->getOrigin(), $rule->getOriginExcluded()) as $file) {
             yield new Statement(
                 $this->parseFile($file),
                 $rule->getType(),
-                $rule->getParams(),
                 $rule->isInverse(),
-                $errorMsg
+                $rule->getDestination(),
+                $rule->getDestinationExcluded()
             );
         }
     }
@@ -37,9 +33,14 @@ class StatementBuilder
     /**
      * @return \SplFileInfo[]
      */
-    private function findFiles(string $source, array $exclude): array
+    private function findFiles(array $sources, array $exclude): array
     {
-        return $this->fileFinder->findFiles($source, $exclude);
+        $found = [];
+        foreach ($sources as $source) {
+            $found = array_merge($found, $this->fileFinder->findFiles($source, $exclude));
+        }
+
+        return $found;
     }
 
     private function parseFile(\SplFileInfo $file): array

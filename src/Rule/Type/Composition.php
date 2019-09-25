@@ -34,13 +34,18 @@ class Composition implements RuleType
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function validate(array $parsedClass, array $params, bool $inverse = false): void
+    public function validate(
+        array $parsedClass,
+        array $destinationFiles,
+        array $destinationExcludedFiles,
+        bool $inverse = false
+    ): void
     {
         $this->extractParsedClassInfo($parsedClass);
 
         $filesFound = [];
-        foreach ($params['files'] as $file) {
-            $found = $this->finder->findFiles($file);
+        foreach ($destinationFiles as $file) {
+            $found = $this->finder->findFiles($file, $destinationExcludedFiles);
             foreach ($found as $f) {
                 $filesFound[] = $f;
             }
