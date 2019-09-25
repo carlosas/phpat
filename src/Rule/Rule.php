@@ -6,32 +6,38 @@ use PhpAT\Rule\Type\RuleType;
 
 class Rule
 {
-    private $source;
+    private $origin;
+    private $originExcluded;
     private $type;
     private $inverse;
+    private $destination;
+    private $destinationExcluded;
     private $name;
-    private $excluded;
-    private $params;
 
     public function __construct(
-        string $source,
+        array $origin,
+        array $originExcluded,
         RuleType $type,
         bool $inverse,
-        array $params = [],
-        string $name = '',
-        array $excluded = []
+        array $destination,
+        array $destinationExcluded
     ) {
-        $this->source = $source;
+        $this->origin = $origin;
+        $this->originExcluded = $originExcluded;
         $this->type = $type;
         $this->inverse = $inverse;
-        $this->name = $name;
-        $this->excluded = $excluded;
-        $this->params = $params;
+        $this->destination = $destination;
+        $this->destinationExcluded = $destinationExcluded;
     }
 
-    public function getSource(): string
+    public function getOrigin(): array
     {
-        return $this->source;
+        return $this->origin;
+    }
+
+    public function getOriginExcluded(): array
+    {
+        return $this->originExcluded;
     }
 
     public function getType(): RuleType
@@ -39,14 +45,19 @@ class Rule
         return $this->type;
     }
 
-    public function getParams(): array
+    public function isInverse(): bool
     {
-        return $this->params;
+        return $this->inverse;
     }
 
-    public function setName(string $name)
+    public function getDestination(): array
     {
-        $this->name = $name;
+        return $this->destination;
+    }
+
+    public function getDestinationExcluded(): array
+    {
+        return $this->destinationExcluded;
     }
 
     public function getName(): string
@@ -54,13 +65,8 @@ class Rule
         return $this->name;
     }
 
-    public function isInverse(): bool
+    public function setName(string $name): void
     {
-        return $this->inverse;
-    }
-
-    public function getExcluded(): array
-    {
-        return $this->excluded;
+        $this->name = $name;
     }
 }

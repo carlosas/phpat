@@ -41,24 +41,23 @@ class ExampleTest extends ArchitectureTest
     public function testDomainDoesNotDependOnOtherLayers(): Rule
     {
         return $this->newRule
-            ->filesLike('Domain/*')
-            ->excluding('Domain/Shared/Service/KnownBadApproach.php')
-            ->shouldNotHave(Dependency::class)
-            ->withParams([
-                'files' => ['Application/*', 'Infrastructure/*', 'Presentation/*']
-                ])
+            ->classesThat(Selector::havePathname('Domain/*'))
+            ->shouldNotDependOn()
+            ->classesThat(Selector::havePathname('Application/*'))
+            ->andClassesThat(Selector::havePathname('Infrastructure/*'))
+            ->andClassesThat(Selector::havePathname('Presentation/*'))
+            ->excludingClassesThat(Selector::havePathname('Application/Shared/Service/KnownBadApproach.php'))
             ->build();
     }
     
     public function testAllHandlersExtendAbstractCommandHandler(): Rule
     {
         return $this->newRule
-            ->filesLike('Application/*/UseCase/*Handler.php')
-            ->excluding('Application/Shared/UseCase/Different*Handler.php')
-            ->shouldHave(Inheritance::class)
-            ->withParams([
-                'file' => 'Application/Shared/UseCase/AbstractCommandHandler.php'
-                ])
+            ->classesThat(Selector::havePathname('Application/*/UseCase/*Handler.php'))
+            ->excludingClassesThat(Selector::havePathname('Application/Shared/UseCase/Different*Handler.php'))
+            ->andExcludingClassesThat(Selector::havePathname('Application/Shared/UseCase/AbstractCommandHandler.php'))
+            ->shouldExtend()
+            ->classesThat(Selector::havePathname('Application/Shared/UseCase/AbstractCommandHandler.php'))
             ->build();
     }
 }
@@ -69,9 +68,7 @@ class ExampleTest extends ArchitectureTest
 vendor/bin/phpat phpat.yml
 ```
 
----
-
-## Contributing
+# Contributing
 **PHP Architecture Tester** is in a very early stage, contributions are always welcome.
 
-Please take a look to the [Contribution docs](.github/CONTRIBUTING.md) and the [TO-DO list](docs/TO_DO.md).
+Please take a look to the [Contribution docs](.github/CONTRIBUTING.md) and the [open issues](docs/TO_DO.md).

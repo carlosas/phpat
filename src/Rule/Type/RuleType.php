@@ -4,5 +4,10 @@ namespace PhpAT\Rule\Type;
 
 interface RuleType
 {
-    public function validate(array $parsedClass, array $params, bool $inverse = false): void;
+    public function validate(
+        array $parsedClass,
+        array $destinationFiles,
+        array $destinationExcludedFiles,
+        bool $inverse = false
+    ): void;
 }

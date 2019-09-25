@@ -1,6 +1,6 @@
 <?php
 
-use PhpAT\Rule\Type\Inheritance;
+use PhpAT\Rule\Selector;
 use PhpAT\Rule\Rule;
 use PhpAT\Test\ArchitectureTest;
 
@@ -9,12 +9,10 @@ class CollectorsTest extends ArchitectureTest
     public function testCollectorsExtendAbstractCollector(): Rule
     {
         return $this->newRule
-            ->filesLike('Parser/Collector/*Collector.php')
-            ->excluding('Parser/Collector/AbstractCollector.php')
-            ->shouldHave(Inheritance::class)
-            ->withParams([
-                'file' => 'Parser/AbstractCollector.php'
-            ])
+            ->classesThat(Selector::havePathname('Parser/Collector/*Collector.php'))
+            ->excludingClassesThat(Selector::havePathname('Parser/Collector/AbstractCollector.php'))
+            ->shouldExtend()
+            ->classesThat(Selector::havePathname('Parser/AbstractCollector.php'))
             ->build();
     }
 }

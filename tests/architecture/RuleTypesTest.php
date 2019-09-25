@@ -1,6 +1,6 @@
 <?php
 
-use PhpAT\Rule\Type\Composition;
+use PhpAT\Rule\Selector;
 use PhpAT\Rule\Rule;
 use PhpAT\Test\ArchitectureTest;
 
@@ -9,12 +9,10 @@ class RuleTypesTest extends ArchitectureTest
     public function testRuleTypesImplementRuleTypeInterface(): Rule
     {
         return $this->newRule
-            ->filesLike('Rule/Type/*')
-            ->excluding('Rule/Type/RuleType.php')
-            ->shouldHave(Composition::class)
-            ->withParams([
-                'files' => ['Rule/Type/RuleType.php']
-            ])
+            ->classesThat(Selector::havePathname('Rule/Type/*'))
+            ->excludingClassesThat(Selector::havePathname('Rule/Type/RuleType.php'))
+            ->shouldImplement()
+            ->classesThat(Selector::havePathname('Rule/Type/RuleType.php'))
             ->build();
     }
 }
