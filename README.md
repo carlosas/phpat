@@ -1,4 +1,4 @@
-![phpat](./docs/logo.png "phpat logo")
+![phpat](.github/logo.png "phpat logo")
 
 [![Latest Version](https://img.shields.io/packagist/v/carlosas/phpat.svg?style=flat-square)](https://packagist.org/packages/carlosas/phpat)
 [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D_7.1-8892BF.svg?style=flat-square)](https://github.com/carlosas/phpat)
@@ -31,8 +31,7 @@ This could be a test with a couple of rules:
 ```php
 <?php
 
-use PhpAT\Rule\Type\Dependency;
-use PhpAT\Rule\Type\Inheritance;
+use PhpAT\Rule\Selector;
 use PhpAT\Rule\Rule;
 use PhpAT\Test\ArchitectureTest;
 
@@ -69,6 +68,4 @@ vendor/bin/phpat phpat.yml
 ```
 
 # Contributing
-**PHP Architecture Tester** is in a very early stage, contributions are always welcome.
-
-Please take a look to the [Contribution docs](.github/CONTRIBUTING.md) and the [open issues](docs/TO_DO.md).
+**PHP Architecture Tester** is in a very early stage, contributions are welcome. Please take a look to the [Contribution docs](.github/CONTRIBUTING.md).
