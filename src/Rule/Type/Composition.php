@@ -9,7 +9,7 @@ use PhpAT\Parser\Collector\InterfaceCollector;
 use PhpAT\Rule\Event\StatementNotValidEvent;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\Parser;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class Composition implements RuleType
 {
