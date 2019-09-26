@@ -1,17 +1,50 @@
-![phpat](.github/logo.png "phpat logo")
+<p align="center">
+    <img width="500px" src="https://raw.githubusercontent.com/carlosas/phpat/master/.github/logo.png" alt="Logo">
+</p>
+<h1 align="center">PHP Architecture Tester</h1>
+<p align="center">Easy to use architecture testing tool for PHP</p>
+<p align="center">
+	<a>
+		<img src="https://img.shields.io/packagist/v/carlosas/phpat.svg?style=flat-square" alt="Packagist">
+    </a>
+	<a>
+		<img src="https://img.shields.io/badge/php-%3E%3D_7.1-8892BF.svg?style=flat-square" alt="Minimum PHP">
+	</a>
+	<a>
+		<img src="https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square" alt="MIT license">
+	</a>
+	<a>
+		<img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat-square" alt="Contributions welcome">
+	</a>
+	<a href="https://github.com/carlosas/phpat/issues">
+        <img src="https://img.shields.io/github/issues/carlosas/phpat.svg?style=flat-square" alt="Open issues">
+	</a>
+	<a>
+		<img src="http://hits.dwyl.com/carlosas/phpat.svg" alt="Hits">
+	</a>
+</p>
+<br />
 
-[![Latest Version](https://img.shields.io/packagist/v/carlosas/phpat.svg?style=flat-square)](https://packagist.org/packages/carlosas/phpat)
-[![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D_7.1-8892BF.svg?style=flat-square)](https://github.com/carlosas/phpat)
-[![license](https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square&color=brightgreen)](LICENSE)
-[![contributions](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat-square)](https://github.com/carlosas/phpat/issues)
-![HitCount](http://hits.dwyl.com/carlosas/phpat.svg)
+### Introduction 📜
 
-## Installation
+**PHP Architecture Tester** is a tool that helps you keep your project architecture clean.
+
+It provides a natural language abstraction to define your own architecture rules and test them against your software.
+You can also integrate *phpat* easily into your toolchain.
+
+<h2></h2>
+
+### Installation 💽
+
+Just require **phpat** in [Composer](https://getcomposer.org/):
 ```bash
 composer require --dev carlosas/phpat
 ```
 
-## Configuration
+<h2></h2>
+
+### Configuration 🔧
+
 You might want to setup a basic configuration:
 ```yaml
 # phpat.yml
@@ -26,7 +59,10 @@ This is the complete list of options:
 * `files` `src_excluded`: Files you want to be excluded in the tests (empty=none).
 * `tests` `path`: The path where your tests are.
 
-## Test definition
+<h2></h2>
+
+### Test definition 📓
+
 This could be a test with a couple of rules:
 ```php
 <?php
@@ -62,10 +98,15 @@ class ExampleTest extends ArchitectureTest
 }
 ```
 
-## Usage
+<h2></h2>
+
+### Usage 🚀
+
+Run the bin with your configuration file:
 ```bash
 vendor/bin/phpat phpat.yml
 ```
 
-# Contributing
+<h2></h2>
+
 **PHP Architecture Tester** is in a very early stage, contributions are welcome. Please take a look to the [Contribution docs](.github/CONTRIBUTING.md).
