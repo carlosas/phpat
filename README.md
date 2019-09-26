@@ -1,6 +1,6 @@
-<div align="center">
+<p align="center">
     <img width="400px" src="https://raw.githubusercontent.com/carlosas/phpat/master/.github/logo.png" alt="Logo">
-</div>
+</p>
 <h1 align="center">PHP Architecture Tester</h1>
 <p align="center">Easy to use architecture testing tool for PHP</p>
 <p align="center">
