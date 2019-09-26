@@ -23,23 +23,23 @@
 		<img src="http://hits.dwyl.com/carlosas/phpat.svg" alt="Hits">
 	</a>
 </p>
+<br />
 
----
-
-## 📜 Introduction
+### Introduction 📜
 
 **PHP Architecture Tester** is a tool that helps you keep your project architecture clean.
 
 It provides a natural language abstraction to define your own architecture rules and test them against your software.
 You can also integrate *phpat* easily into your toolchain.
 
-## 💽 Installation
+### Installation 💽
 
+Just require **phpat** in [Composer](https://getcomposer.org/):
 ```bash
 composer require --dev carlosas/phpat
 ```
 
-## 🔧 Configuration
+### Configuration 🔧
 
 You might want to setup a basic configuration:
 ```yaml
@@ -55,7 +55,7 @@ This is the complete list of options:
 * `files` `src_excluded`: Files you want to be excluded in the tests (empty=none).
 * `tests` `path`: The path where your tests are.
 
-## 📓 Test definition
+### Test definition 📓
 
 This could be a test with a couple of rules:
 ```php
@@ -92,8 +92,9 @@ class ExampleTest extends ArchitectureTest
 }
 ```
 
-## 🚀 Usage
+### Usage 🚀
 
+Run the bin with your configuration file:
 ```bash
 vendor/bin/phpat phpat.yml
 ```
