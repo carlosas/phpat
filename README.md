@@ -1,8 +1,7 @@
 <p align="center">
     <img width="500px" src="https://raw.githubusercontent.com/carlosas/phpat/master/.github/logo.png" alt="Logo">
 </p>
-<h1 align="center">PHP Architecture Tester</h1>
-<p align="center">Easy to use architecture testing tool for PHP</p>
+<h2 align="center">Easy to use architecture testing tool for PHP</h2>
 <p align="center">
 	<a>
 		<img src="https://img.shields.io/packagist/v/carlosas/phpat.svg?style=flat-square" alt="Packagist">
