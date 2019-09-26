@@ -32,12 +32,16 @@
 It provides a natural language abstraction to define your own architecture rules and test them against your software.
 You can also integrate *phpat* easily into your toolchain.
 
+<h2></h2>
+
 ### Installation 💽
 
 Just require **phpat** in [Composer](https://getcomposer.org/):
 ```bash
 composer require --dev carlosas/phpat
 ```
+
+<h2></h2>
 
 ### Configuration 🔧
 
@@ -54,6 +58,8 @@ This is the complete list of options:
 * `files` `src_included`: Files you want to be tested excluding the rest (empty=all).
 * `files` `src_excluded`: Files you want to be excluded in the tests (empty=none).
 * `tests` `path`: The path where your tests are.
+
+<h2></h2>
 
 ### Test definition 📓
 
@@ -91,6 +97,8 @@ class ExampleTest extends ArchitectureTest
     }
 }
 ```
+
+<h2></h2>
 
 ### Usage 🚀
 
