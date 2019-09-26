@@ -107,8 +107,6 @@ Run the bin with your configuration file:
 vendor/bin/phpat phpat.yml
 ```
 
-<br />
-
----
+<h2></h2>
 
 **PHP Architecture Tester** is in a very early stage, contributions are welcome. Please take a look to the [Contribution docs](.github/CONTRIBUTING.md).
