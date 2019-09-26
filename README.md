@@ -35,7 +35,7 @@ You can also integrate *phpat* easily into your toolchain.
 
 ### Installation 💽
 
-Just require **phpat** in [Composer](https://getcomposer.org/):
+Just require **phpat** with [Composer](https://getcomposer.org/):
 ```bash
 composer require --dev carlosas/phpat
 ```
