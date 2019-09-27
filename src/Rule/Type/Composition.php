@@ -6,7 +6,7 @@ use PhpAT\File\FileFinder;
 use PhpAT\Parser\ClassName;
 use PhpAT\Parser\Collector\ClassNameCollector;
 use PhpAT\Parser\Collector\InterfaceCollector;
-use PhpAT\Rule\Event\StatementNotValidEvent;
+use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\Parser;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -103,7 +103,7 @@ class Composition implements RuleType
         if (false === ($result xor $inverse)) {
             $error = $inverse ? ' implements ' : ' does not implement ';
             $message = $className->getFQDN() . $error . $interfaceName->getFQDN();
-            $this->eventDispatcher->dispatch(new StatementNotValidEvent($message));
+            $this->eventDispatcher->dispatch(StatementNotValidEvent::class, new StatementNotValidEvent($message));
         } else {
             echo '-';
         }

@@ -9,7 +9,7 @@ use PhpAT\Rule\Type\Dependency;
 use PhpAT\Rule\Type\Inheritance;
 use PhpAT\Rule\RuleBuilder;
 use PhpAT\Statement\StatementBuilder;
-use PhpAT\Subscriber\EventSubscriber;
+use PhpAT\Shared\EventSubscriber;
 use PhpAT\Test\FileTestExtractor;
 use PhpAT\Test\TestExtractor;
 use PhpAT\App;

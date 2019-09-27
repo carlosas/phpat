@@ -6,7 +6,7 @@ use PhpAT\Rule\Rule;
 use PhpAT\Rule\RuleCollection;
 use PhpAT\Statement\Statement;
 use PhpAT\Statement\StatementBuilder;
-use PhpAT\Subscriber\EventSubscriber;
+use PhpAT\Shared\EventSubscriber;
 use PhpAT\Test\TestExtractor;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

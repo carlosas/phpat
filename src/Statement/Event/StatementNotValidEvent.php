@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace PhpAT\Rule\Event;
+namespace PhpAT\Statement\Event;
 
-use Symfony\Contracts\EventDispatcher\Event;
+use PhpAT\Shared\EventWithMessage;
 
-class StatementNotValidEvent extends Event
+class StatementNotValidEvent extends EventWithMessage
 {
     /** @var string */
     private $message;

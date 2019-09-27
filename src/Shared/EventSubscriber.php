@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace PhpAT\Subscriber;
+namespace PhpAT\Shared;
 
-use PhpAT\Rule\Event\StatementNotValidEvent;
+use PhpAT\Statement\Event\StatementNotValidEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class EventSubscriber implements EventSubscriberInterface
