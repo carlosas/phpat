@@ -4,17 +4,19 @@ declare(strict_types=1);
 
 namespace PhpAT\DependencyInjection;
 
+use PhpAT\App;
 use PhpAT\File\FileFinder;
 use PhpAT\File\SymfonyFinderAdapter;
+use PhpAT\Output\OutputInterface;
+use PhpAT\Output\StdOutput;
+use PhpAT\Rule\RuleBuilder;
 use PhpAT\Rule\Type\Composition;
 use PhpAT\Rule\Type\Dependency;
 use PhpAT\Rule\Type\Inheritance;
-use PhpAT\Rule\RuleBuilder;
-use PhpAT\Statement\StatementBuilder;
 use PhpAT\Shared\EventSubscriber;
+use PhpAT\Statement\StatementBuilder;
 use PhpAT\Test\FileTestExtractor;
 use PhpAT\Test\TestExtractor;
-use PhpAT\App;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\ParserFactory;
@@ -34,8 +36,8 @@ class Provider
 
     public function __construct(ContainerBuilder $builder, string $autoload, array $argv)
     {
-        $this->builder = $builder;
-        $this->autoload = $autoload;
+        $this->builder       = $builder;
+        $this->autoload      = $autoload;
         $this->configuration = new Configuration(Yaml::parseFile(getcwd() . '/' . ($argv[1] ?? 'phpat.yml')));
     }
 
@@ -47,7 +49,8 @@ class Provider
             ->register(EventDispatcherInterface::class, EventDispatcher::class);
 
         $this->builder
-            ->register(EventSubscriberInterface::class, EventSubscriber::class);
+            ->register(EventSubscriberInterface::class, EventSubscriber::class)
+            ->addArgument(new Reference(OutputInterface::class));
 
         $this->builder
             ->register(FileFinder::class, FileFinder::class)
@@ -61,6 +64,9 @@ class Provider
 
         $this->builder
             ->register(NodeTraverserInterface::class, NodeTraverser::class);
+
+        $this->builder
+            ->register(OutputInterface::class, StdOutput::class);
 
         $this->builder
             ->register(RuleBuilder::class, RuleBuilder::class)
@@ -81,28 +87,31 @@ class Provider
             ->addArgument(new Reference(FileFinder::class))
             ->addArgument($phpParser)
             ->addArgument(new Reference(NodeTraverserInterface::class))
-            ->addArgument(new Reference(EventDispatcherInterface::class));
+            ->addArgument(new Reference(EventDispatcherInterface::class))
+            ->addArgument(new Reference(OutputInterface::class));
 
         $this->builder
             ->register(Inheritance::class, Inheritance::class)
             ->addArgument(new Reference(FileFinder::class))
             ->addArgument($phpParser)
             ->addArgument(new Reference(NodeTraverserInterface::class))
-            ->addArgument(new Reference(EventDispatcherInterface::class));
+            ->addArgument(new Reference(EventDispatcherInterface::class))
+            ->addArgument(new Reference(OutputInterface::class));
 
         $this->builder
             ->register(Composition::class, Composition::class)
             ->addArgument(new Reference(FileFinder::class))
             ->addArgument($phpParser)
             ->addArgument(new Reference(NodeTraverserInterface::class))
-            ->addArgument(new Reference(EventDispatcherInterface::class));
-
+            ->addArgument(new Reference(EventDispatcherInterface::class))
+            ->addArgument(new Reference(OutputInterface::class));
         $this->builder
             ->register('app', App::class)
             ->addArgument(new Reference(TestExtractor::class))
             ->addArgument(new Reference(StatementBuilder::class))
             ->addArgument(new Reference(EventDispatcherInterface::class))
-            ->addArgument(new Reference(EventSubscriberInterface::class));
+            ->addArgument(new Reference(EventSubscriberInterface::class))
+            ->addArgument(new Reference(OutputInterface::class));
 
         return $this->builder;
     }

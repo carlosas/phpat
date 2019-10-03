@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpAT\Rule\Type;
 
 use PhpAT\File\FileFinder;
+use PhpAT\Output\OutputInterface;
 use PhpAT\Parser\ClassName;
 use PhpAT\Parser\Collector\ClassNameCollector;
 use PhpAT\Parser\Collector\ParentCollector;
@@ -23,17 +24,23 @@ class Inheritance implements RuleType
     private $parsedClassClassName;
     /** @var ClassName */
     private $parsedClassParent;
+    /**
+     * @var OutputInterface
+     */
+    private $output;
 
     public function __construct(
         FileFinder $finder,
         Parser $parser,
         NodeTraverserInterface $traverser,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcherInterface $eventDispatcher,
+        OutputInterface $output
     ) {
         $this->finder = $finder;
         $this->parser = $parser;
         $this->traverser = $traverser;
         $this->eventDispatcher = $eventDispatcher;
+        $this->output = $output;
     }
 
     public function validate(
@@ -108,7 +115,7 @@ class Inheritance implements RuleType
             $message = $className->getFQDN() . $error . $parentName->getFQDN();
             $this->eventDispatcher->dispatch(StatementNotValidEvent::class, new StatementNotValidEvent($message));
         } else {
-            echo '-';
+            $this->output->write('-');
         }
     }
 }
