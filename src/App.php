@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace PhpAT;
 
+use PhpAT\Output\OutputInterface;
 use PhpAT\Rule\Rule;
 use PhpAT\Rule\RuleCollection;
+use PhpAT\Shared\EventSubscriber;
 use PhpAT\Statement\Statement;
 use PhpAT\Statement\StatementBuilder;
-use PhpAT\Shared\EventSubscriber;
 use PhpAT\Test\TestExtractor;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -23,17 +24,32 @@ class App
     private $dispatcher;
     /** @var EventSubscriber */
     private $subscriber;
+    /**
+     * @var OutputInterface
+     */
+    private $output;
 
+    /**
+     * App constructor.
+     *
+     * @param TestExtractor            $extractor
+     * @param StatementBuilder         $statementBuilder
+     * @param EventDispatcherInterface $dispatcher
+     * @param EventSubscriberInterface $subscriber
+     * @param OutputInterface          $output
+     */
     public function __construct(
         TestExtractor $extractor,
         StatementBuilder $statementBuilder,
         EventDispatcherInterface $dispatcher,
-        EventSubscriberInterface $subscriber
+        EventSubscriberInterface $subscriber,
+        OutputInterface $output
     ) {
-        $this->extractor = $extractor;
+        $this->extractor        = $extractor;
         $this->statementBuilder = $statementBuilder;
-        $this->dispatcher = $dispatcher;
-        $this->subscriber = $subscriber;
+        $this->dispatcher       = $dispatcher;
+        $this->subscriber       = $subscriber;
+        $this->output           = $output;
     }
 
     /** @throws \Exception */
@@ -57,7 +73,7 @@ class App
                 foreach ($statements as $statement) {
                     $this->validateStatement($statement);
                 }
-                echo PHP_EOL;
+                $this->output->writeLn("");
             }
         } catch (\Exception $e) {
             $this->exposeFatalAndExit($e->getMessage());
@@ -70,15 +86,15 @@ class App
 
     private function exposeLogo(): void
     {
-        echo '---/-------\------|-----\---/--' . PHP_EOL;
-        echo '--/-PHP Architecture Tester/---' . PHP_EOL;
-        echo '-/-----------\----|-------X----' . PHP_EOL;
-        echo PHP_EOL;
+        $this->output->writeLn('---/-------\------|-----\---/--');
+        $this->output->writeLn('--/-PHP Architecture Tester/---');
+        $this->output->writeLn('-/-----------\----|-------X----');
+        $this->output->writeLn("");
     }
 
     private function exposeRuleName(Rule $rule): void
     {
-        echo PHP_EOL . 'RULE: ' . $rule->getName() . PHP_EOL;
+        $this->output->writeLn('RULE: '.$rule->getName());
     }
 
     private function validateStatement(Statement $statement): void
@@ -96,11 +112,12 @@ class App
      */
     private function exposeFatalAndExit(string $message, string $trace = null): void
     {
-        echo ('FATAL ERROR: ' . $message);
+
+        $errormsg = 'FATAL ERROR: '.$message;
         if (!is_null($trace)) {
-            echo ' in ' . $trace;
+            $errormsg .= ' in '.$trace;
         }
-        echo PHP_EOL;
+        $this->output->writeLn($errormsg, $error = true);
 
         throw new \Exception();
     }
