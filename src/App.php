@@ -94,7 +94,7 @@ class App
 
     private function exposeRuleName(Rule $rule): void
     {
-        $this->output->writeLn('RULE: '.$rule->getName());
+        $this->output->writeLn('RULE: ' . $rule->getName());
     }
 
     private function validateStatement(Statement $statement): void
@@ -113,9 +113,9 @@ class App
     private function exposeFatalAndExit(string $message, string $trace = null): void
     {
 
-        $errormsg = 'FATAL ERROR: '.$message;
+        $errormsg = 'FATAL ERROR: ' . $message;
         if (!is_null($trace)) {
-            $errormsg .= ' in '.$trace;
+            $errormsg .= ' in ' . $trace;
         }
         $this->output->writeLn($errormsg, $error = true);
 

@@ -38,7 +38,7 @@ class Provider
     {
         $this->builder       = $builder;
         $this->autoload      = $autoload;
-        $this->configuration = new Configuration(Yaml::parseFile(getcwd().'/'.($argv[1] ?? 'phpat.yml')));
+        $this->configuration = new Configuration(Yaml::parseFile(getcwd() . '/' . ($argv[1] ?? 'phpat.yml')));
     }
 
     public function register(): ContainerBuilder
@@ -75,7 +75,7 @@ class Provider
         $this->builder
             ->register(TestExtractor::class, FileTestExtractor::class)
             ->addArgument(new Reference(RuleBuilder::class))
-            ->addArgument(getcwd().'/'.$this->configuration->getTestsPath());
+            ->addArgument(getcwd() . '/' . $this->configuration->getTestsPath());
 
         $this->builder
             ->register(StatementBuilder::class, StatementBuilder::class)

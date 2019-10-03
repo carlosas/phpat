@@ -30,7 +30,7 @@ class EventSubscriber implements EventSubscriberInterface
 
     public function onStatementNotValidEvent(StatementNotValidEvent $event): void
     {
-        $this->output->writeLn('ERROR: '.$event->getMessage(), $error = true);
+        $this->output->writeLn('ERROR: ' . $event->getMessage(), $error = true);
         $this->errors = true;
     }
 
