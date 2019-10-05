@@ -62,9 +62,9 @@ class EventSubscriber implements EventSubscriberInterface
         $name = $event->getRuleName();
 
         $this->output->write(PHP_EOL, OutputLevel::INFO);
-        $this->output->writeLn('·' . str_repeat('-', strlen($name)+2) . '·', OutputLevel::INFO);
+        $this->output->writeLn('·' . str_repeat('-', strlen($name) + 2) . '·', OutputLevel::INFO);
         $this->output->writeLn('| ' . $event->getRuleName() . ' |', OutputLevel::INFO);
-        $this->output->writeLn('·' . str_repeat('-', strlen($name)+2) . '·', OutputLevel::INFO);
+        $this->output->writeLn('·' . str_repeat('-', strlen($name) + 2) . '·', OutputLevel::INFO);
     }
 
     public function onRuleValidationEndEvent(RuleValidationEndEvent $event): void

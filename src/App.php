@@ -71,7 +71,10 @@ class App
 
         foreach ($rules->getValues() as $rule) {
             $statements = $this->statementBuilder->build($rule);
-            $this->dispatcher->dispatch(RuleValidationStartEvent::class, new RuleValidationStartEvent($rule->getName()));
+            $this->dispatcher->dispatch(
+                RuleValidationStartEvent::class,
+                new RuleValidationStartEvent($rule->getName())
+            );
             /** @var Statement $statement */
             foreach ($statements as $statement) {
                 $this->validateStatement($statement);
