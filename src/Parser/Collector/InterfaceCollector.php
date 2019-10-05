@@ -13,7 +13,7 @@ class InterfaceCollector extends AbstractCollector
     public function leaveNode(Node $node)
     {
         if ($node instanceof Node\Stmt\UseUse) {
-            $this->saveClassDeclaration($node);
+            $this->saveClassUsage($node);
         }
 
         if ($node instanceof Node\Stmt\Class_) {
@@ -39,7 +39,7 @@ class InterfaceCollector extends AbstractCollector
         return new ClassName('', $name);
     }
 
-    private function saveClassDeclaration(Node\Stmt\UseUse $node): void
+    private function saveClassUsage(Node\Stmt\UseUse $node): void
     {
         //TODO: Resolve class aliases
         $this->declaredClasses[] = ClassName::createFromFQDN($node->name->toString());
