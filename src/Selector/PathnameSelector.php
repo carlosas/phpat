@@ -7,10 +7,10 @@ namespace PhpAT\Selector;
 use PhpAT\File\FileFinder;
 
 /**
- * Class HavePathname
+ * Class PathnameSelector
  * @package PhpAT\Selector
  */
-class HavePathname implements SelectorInterface
+class PathnameSelector implements SelectorInterface
 {
     private const DEPENDENCIES = [
         FileFinder::class

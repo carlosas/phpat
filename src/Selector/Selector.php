@@ -6,8 +6,8 @@ namespace PhpAT\Selector;
 
 class Selector
 {
-    public static function havePathname(string $pathname): HavePathname
+    public static function havePathname(string $pathname): PathnameSelector
     {
-        return new HavePathname($pathname);
+        return new PathnameSelector($pathname);
     }
 }
