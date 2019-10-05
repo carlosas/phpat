@@ -7,24 +7,45 @@ namespace PhpAT\Rule;
 use PhpAT\Rule\Type\Composition;
 use PhpAT\Rule\Type\Dependency;
 use PhpAT\Rule\Type\Inheritance;
+use PhpAT\Rule\Type\RuleType;
+use PhpAT\Selector\SelectorInterface;
 use Psr\Container\ContainerInterface;
 
+/**
+ * Class RuleBuilder
+ * @package PhpAT\Rule
+ */
 class RuleBuilder
 {
+    /** @var ContainerInterface */
     private $container;
+    /** @var SelectorInterface[] */
     private $origin = [];
+    /** @var SelectorInterface[] */
     private $originExclude = [];
+    /** @var SelectorInterface[] */
     private $destination = [];
+    /** @var SelectorInterface[] */
     private $destinationExclude = [];
+    /** @var RuleType */
     private $type;
+    /** @var bool */
     private $inverse;
 
+    /**
+     * RuleBuilder constructor.
+     * @param ContainerInterface $container
+     */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
 
-    public function classesThat(string $selector): self
+    /**
+     * @param SelectorInterface $selector
+     * @return RuleBuilder
+     */
+    public function classesThat(SelectorInterface $selector): self
     {
         if (empty($this->type)) {
             $this->origin[] = $selector;
@@ -35,12 +56,20 @@ class RuleBuilder
         return $this;
     }
 
-    public function andClassesThat(string $selector): self
+    /**
+     * @param SelectorInterface $selector
+     * @return RuleBuilder
+     */
+    public function andClassesThat(SelectorInterface $selector): self
     {
         return $this->classesThat($selector);
     }
 
-    public function excludingClassesThat(string $selector): self
+    /**
+     * @param SelectorInterface $selector
+     * @return RuleBuilder
+     */
+    public function excludingClassesThat(SelectorInterface $selector): self
     {
         if (empty($this->type)) {
             $this->originExclude[] = $selector;
@@ -51,41 +80,66 @@ class RuleBuilder
         return $this;
     }
 
-    public function andExcludingClassesThat(string $selector): self
+    /**
+     * @param SelectorInterface $selector
+     * @return RuleBuilder
+     */
+    public function andExcludingClassesThat(SelectorInterface $selector): self
     {
         return $this->excludingClassesThat($selector);
     }
 
+    /**
+     * @return RuleBuilder
+     */
     public function shouldDependOn(): self
     {
         return $this->setType(Dependency::class, false);
     }
 
+    /**
+     * @return RuleBuilder
+     */
     public function shouldNotDependOn(): self
     {
         return $this->setType(Dependency::class, true);
     }
 
+    /**
+     * @return RuleBuilder
+     */
     public function shouldImplement(): self
     {
         return $this->setType(Composition::class, false);
     }
 
+    /**
+     * @return RuleBuilder
+     */
     public function shouldNotImplement(): self
     {
         return $this->setType(Composition::class, true);
     }
 
+    /**
+     * @return RuleBuilder
+     */
     public function shouldExtend(): self
     {
         return $this->setType(Inheritance::class, false);
     }
 
+    /**
+     * @return RuleBuilder
+     */
     public function shouldNotExtend(): self
     {
         return $this->setType(Inheritance::class, true);
     }
 
+    /**
+     * @return RuleBuilder
+     */
     private function setType(string $ruleType, bool $inverse): self
     {
         $this->type = $this->container->get($ruleType);
@@ -94,6 +148,9 @@ class RuleBuilder
         return $this;
     }
 
+    /**
+     * @return Rule
+     */
     public function build(): Rule
     {
         $rule = new Rule(

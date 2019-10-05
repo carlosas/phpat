@@ -13,6 +13,7 @@ use PhpAT\Rule\RuleBuilder;
 use PhpAT\Rule\Type\Composition;
 use PhpAT\Rule\Type\Dependency;
 use PhpAT\Rule\Type\Inheritance;
+use PhpAT\Selector\SelectorResolver;
 use PhpAT\Shared\EventSubscriber;
 use PhpAT\Statement\StatementBuilder;
 use PhpAT\Test\FileTestExtractor;
@@ -28,12 +29,25 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 
+/**
+ * Class Provider
+ * @package PhpAT\DependencyInjection
+ */
 class Provider
 {
+    /** @var ContainerBuilder */
     private $builder;
+    /** @var string */
     private $autoload;
+    /** @var Configuration */
     private $configuration;
 
+    /**
+     * Provider constructor.
+     * @param ContainerBuilder $builder
+     * @param string $autoload
+     * @param array $argv
+     */
     public function __construct(ContainerBuilder $builder, string $autoload, array $argv)
     {
         $this->builder       = $builder;
@@ -41,6 +55,9 @@ class Provider
         $this->configuration = new Configuration(Yaml::parseFile(getcwd() . '/' . ($argv[1] ?? 'phpat.yml')));
     }
 
+    /**
+     * @return ContainerBuilder
+     */
     public function register(): ContainerBuilder
     {
         $phpParser = (new ParserFactory())->create(ParserFactory::ONLY_PHP7);
@@ -78,8 +95,12 @@ class Provider
             ->addArgument(getcwd() . '/' . $this->configuration->getTestsPath());
 
         $this->builder
+            ->register(SelectorResolver::class, SelectorResolver::class)
+            ->addArgument($this->builder);
+
+        $this->builder
             ->register(StatementBuilder::class, StatementBuilder::class)
-            ->addArgument(new Reference(FileFinder::class))
+            ->addArgument(new Reference(SelectorResolver::class))
             ->addArgument($phpParser);
 
         $this->builder
@@ -105,6 +126,7 @@ class Provider
             ->addArgument(new Reference(NodeTraverserInterface::class))
             ->addArgument(new Reference(EventDispatcherInterface::class))
             ->addArgument(new Reference(OutputInterface::class));
+
         $this->builder
             ->register('app', App::class)
             ->addArgument(new Reference(TestExtractor::class))

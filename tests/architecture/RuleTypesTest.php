@@ -1,6 +1,6 @@
 <?php
 
-use PhpAT\Rule\Selector;
+use PhpAT\Selector\Selector;
 use PhpAT\Rule\Rule;
 use PhpAT\Test\ArchitectureTest;
 

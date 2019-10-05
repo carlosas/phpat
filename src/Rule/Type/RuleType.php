@@ -9,7 +9,6 @@ interface RuleType
     public function validate(
         array $parsedClass,
         array $destinationFiles,
-        array $destinationExcludedFiles,
         bool $inverse = false
     ): void;
 }

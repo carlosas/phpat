@@ -46,23 +46,14 @@ class Composition implements RuleType
     public function validate(
         array $parsedClass,
         array $destinationFiles,
-        array $destinationExcludedFiles,
         bool $inverse = false
     ): void {
         $this->extractParsedClassInfo($parsedClass);
 
-        $filesFound = [];
-        foreach ($destinationFiles as $file) {
-            $found = $this->finder->findFiles($file, $destinationExcludedFiles);
-            foreach ($found as $f) {
-                $filesFound[] = $f;
-            }
-        }
-
         $classNameCollector = new ClassNameCollector();
         $this->traverser->addVisitor($classNameCollector);
         /** @var \SplFileInfo $file */
-        foreach ($filesFound as $file) {
+        foreach ($destinationFiles as $file) {
             $parsed = $this->parser->parse(file_get_contents($file->getPathname()));
             $this->traverser->traverse($parsed);
         }
