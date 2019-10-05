@@ -66,8 +66,8 @@ This could be a test with a couple of rules:
 ```php
 <?php
 
-use PhpAT\Rule\Selector;
 use PhpAT\Rule\Rule;
+use PhpAT\Selector\Selector;
 use PhpAT\Test\ArchitectureTest;
 
 class ExampleTest extends ArchitectureTest

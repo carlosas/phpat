@@ -12,48 +12,56 @@ use PhpAT\Rule\Type\RuleType;
  */
 class Statement
 {
+    /** @var array */
     private $parsedClass;
+    /** @var RuleType */
     private $type;
+    /** @var bool */
     private $inverse;
-    private $destination;
-    private $destinationExcluded;
+    /** @var \SplFileInfo[] */
+    private $destinations;
 
     public function __construct(
         array $parsedClass,
         RuleType $type,
         bool $inverse,
-        array $destination,
-        array $destinationExcluded
+        array $destinations
     ) {
         $this->parsedClass = $parsedClass;
         $this->type = $type;
         $this->inverse = $inverse;
-        $this->destination = $destination;
-        $this->destinationExcluded = $destinationExcluded;
+        $this->destinations = $destinations;
     }
 
+    /**
+     * @return array
+     */
     public function getParsedClass(): array
     {
         return $this->parsedClass;
     }
 
+    /**
+     * @return RuleType
+     */
     public function getType(): RuleType
     {
         return $this->type;
     }
 
+    /**
+     * @return bool
+     */
     public function isInverse(): bool
     {
         return $this->inverse;
     }
 
-    public function getDestination(): array
+    /**
+     * @return \SplFileInfo[]
+     */
+    public function getDestinations(): array
     {
-        return $this->destination;
-    }
-
-    public function getDestinationExcluded(): array
-    {
-        return $this->destinationExcluded;
+        return $this->destinations;
     }
 }

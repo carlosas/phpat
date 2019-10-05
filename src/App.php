@@ -24,9 +24,7 @@ class App
     private $dispatcher;
     /** @var EventSubscriber */
     private $subscriber;
-    /**
-     * @var OutputInterface
-     */
+    /** @var OutputInterface */
     private $output;
 
     /**
@@ -101,8 +99,7 @@ class App
     {
         $statement->getType()->validate(
             $statement->getParsedClass(),
-            $statement->getDestination(),
-            $statement->getDestinationExcluded(),
+            $statement->getDestinations(),
             $statement->isInverse()
         );
     }
@@ -112,7 +109,6 @@ class App
      */
     private function exposeFatalAndExit(string $message, string $trace = null): void
     {
-
         $errormsg = 'FATAL ERROR: ' . $message;
         if (!is_null($trace)) {
             $errormsg .= ' in ' . $trace;

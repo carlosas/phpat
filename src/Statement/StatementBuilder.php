@@ -6,45 +6,75 @@ namespace PhpAT\Statement;
 
 use PhpAT\File\FileFinder;
 use PhpAT\Rule\Rule;
+use PhpAT\Selector\SelectorResolver;
 use PhpParser\Parser;
 
 class StatementBuilder
 {
-    private $fileFinder;
+    /** @var SelectorResolver */
+    private $selectorResolver;
+    /** @var Parser */
     private $parser;
 
-    public function __construct(FileFinder $fileFinder, Parser $parser)
+    /**
+     * StatementBuilder constructor.
+     * @param SelectorResolver $selectorResolver
+     * @param Parser $parser
+     */
+    public function __construct(SelectorResolver $selectorResolver, Parser $parser)
     {
-        $this->fileFinder = $fileFinder;
+        $this->selectorResolver = $selectorResolver;
         $this->parser = $parser;
     }
 
+    /**
+     * @param Rule $rule
+     * @return \Generator
+     */
     public function build(Rule $rule): \Generator
     {
-        foreach ($this->findFiles($rule->getOrigin(), $rule->getOriginExcluded()) as $file) {
+        $destinations = $this->selectFiles($rule->getDestination(), $rule->getDestinationExcluded());
+        foreach ($this->selectFiles($rule->getOrigin(), $rule->getOriginExcluded()) as $file) {
             yield new Statement(
                 $this->parseFile($file),
                 $rule->getType(),
                 $rule->isInverse(),
-                $rule->getDestination(),
-                $rule->getDestinationExcluded()
+                $destinations
             );
         }
     }
 
     /**
+     * @param array $included
+     * @param array $excluded
      * @return \SplFileInfo[]
      */
-    private function findFiles(array $sources, array $exclude): array
+    private function selectFiles(array $included, array $excluded): array
     {
-        $found = [];
-        foreach ($sources as $source) {
-            $found = array_merge($found, $this->fileFinder->findFiles($source, $exclude));
+        $filesToValidate = [];
+        foreach ($included as $i) {
+            $filesToValidate = array_merge($filesToValidate, $this->selectorResolver->resolve($i));
         }
 
-        return $found;
+        foreach ($excluded as $e) {
+            $filesToExclude = $this->selectorResolver->resolve($e);
+            foreach ($filesToExclude as $file) {
+                $keys = array_keys($filesToValidate, $file);
+                if (!empty($keys)) {
+                    foreach ($keys as $key) {
+                        unset($filesToValidate[$key]);
+                    }
+                }
+            }
+        }
+
+        return $filesToValidate;
     }
 
+    /**
+     * @param \SplFileInfo $file
+     * @return array
+     */
     private function parseFile(\SplFileInfo $file): array
     {
         $code = file_get_contents($file->getPathname());
