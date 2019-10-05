@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PhpAT\DependencyInjection;
+namespace PhpAT\App;
 
 use PhpAT\App;
 use PhpAT\File\FileFinder;
@@ -14,7 +14,6 @@ use PhpAT\Rule\Type\Composition;
 use PhpAT\Rule\Type\Dependency;
 use PhpAT\Rule\Type\Inheritance;
 use PhpAT\Selector\SelectorResolver;
-use PhpAT\Shared\EventSubscriber;
 use PhpAT\Statement\StatementBuilder;
 use PhpAT\Test\FileTestExtractor;
 use PhpAT\Test\TestExtractor;
@@ -31,7 +30,7 @@ use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class Provider
- * @package PhpAT\DependencyInjection
+ * @package PhpAT\App
  */
 class Provider
 {
@@ -83,7 +82,8 @@ class Provider
             ->register(NodeTraverserInterface::class, NodeTraverser::class);
 
         $this->builder
-            ->register(OutputInterface::class, StdOutput::class);
+            ->register(OutputInterface::class, StdOutput::class)
+            ->addArgument($this->configuration->getVerbosity());
 
         $this->builder
             ->register(RuleBuilder::class, RuleBuilder::class)

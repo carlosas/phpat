@@ -4,7 +4,7 @@ namespace PhpAT\Output;
 
 interface OutputInterface
 {
-    public function write(string $msg, bool $error = false, int $verbose = VerboseLevel::NORMAL): void;
+    public function write(string $msg, int $level = OutputLevel::DEFAULT): void;
 
-    public function writeLn(string $msg, bool $error = false, int $verbose = VerboseLevel::NORMAL): void;
+    public function writeLn(string $msg, int $level = OutputLevel::DEFAULT): void;
 }

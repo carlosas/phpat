@@ -9,7 +9,7 @@ class ProviderTest extends ArchitectureTest
     public function testProviderDependsOnApp(): Rule
     {
         return $this->newRule
-            ->classesThat(Selector::havePathname('DependencyInjection/Provider.php'))
+            ->classesThat(Selector::havePathname('App/Provider.php'))
             ->shouldDependOn()
             ->classesThat(Selector::havePathname('App.php'))
             ->build();
@@ -20,7 +20,7 @@ class ProviderTest extends ArchitectureTest
         return $this->newRule
             ->classesThat(Selector::havePathname('App.php'))
             ->shouldNotDependOn()
-            ->classesThat(Selector::havePathname('DependencyInjection/Provider.php'))
+            ->classesThat(Selector::havePathname('App/Provider.php'))
             ->build();
     }
 }

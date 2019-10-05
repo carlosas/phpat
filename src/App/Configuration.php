@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PhpAT\DependencyInjection;
+namespace PhpAT\App;
 
 class Configuration
 {
@@ -31,5 +31,10 @@ class Configuration
     public function getTestsPath(): string
     {
         return $this->config['tests']['path'] ?? '';
+    }
+
+    public function getVerbosity(): int
+    {
+        return (int) ($this->config['tests']['verbosity'] ?? 1);
     }
 }

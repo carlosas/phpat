@@ -6,7 +6,7 @@ namespace PhpAT\Statement\Event;
 
 use PhpAT\App\Event;
 
-class StatementNotValidEvent extends Event
+class StatementValidEvent extends Event
 {
     /** @var string */
     private $message;
