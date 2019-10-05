@@ -10,6 +10,7 @@ use PhpAT\Parser\ClassName;
 use PhpAT\Parser\Collector\ClassNameCollector;
 use PhpAT\Parser\Collector\ParentCollector;
 use PhpAT\Statement\Event\StatementNotValidEvent;
+use PhpAT\Statement\Event\StatementValidEvent;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\Parser;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -101,12 +102,10 @@ class Inheritance implements RuleType
 
     private function dispatchResult(bool $result, bool $inverse, ClassName $className, ClassName $parentName): void
     {
-        if (false === ($result xor $inverse)) {
-            $error = $inverse ? ' extends ' : ' does not extend ';
-            $message = $className->getFQDN() . $error . $parentName->getFQDN();
-            $this->eventDispatcher->dispatch(StatementNotValidEvent::class, new StatementNotValidEvent($message));
-        } else {
-            $this->output->write('-');
-        }
+        $action = ($result or $inverse) ? ' extends ' : ' does not extend ';
+        $event = ($result xor $inverse) ? StatementValidEvent::class : StatementNotValidEvent::class;
+        $message = $className->getFQDN() . $action . $parentName->getFQDN();
+
+        $this->eventDispatcher->dispatch($event, new $event($message));
     }
 }

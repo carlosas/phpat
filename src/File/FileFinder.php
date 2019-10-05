@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpAT\File;
 
-use PhpAT\DependencyInjection\Configuration;
+use PhpAT\App\Configuration;
 
 class FileFinder
 {

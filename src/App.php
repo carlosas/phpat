@@ -4,10 +4,15 @@ declare(strict_types=1);
 
 namespace PhpAT;
 
+use PhpAT\App\Event\FatalErrorEvent;
+use PhpAT\App\Event\SuiteEndEvent;
+use PhpAT\App\Event\SuiteStartEvent;
 use PhpAT\Output\OutputInterface;
-use PhpAT\Rule\Rule;
+use PhpAT\Output\OutputLevel;
+use PhpAT\Rule\Event\RuleValidationEndEvent;
+use PhpAT\Rule\Event\RuleValidationStartEvent;
 use PhpAT\Rule\RuleCollection;
-use PhpAT\Shared\EventSubscriber;
+use PhpAT\App\EventSubscriber;
 use PhpAT\Statement\Statement;
 use PhpAT\Statement\StatementBuilder;
 use PhpAT\Test\TestExtractor;
@@ -53,46 +58,32 @@ class App
     /** @throws \Exception */
     public function execute(): void
     {
-        try {
-            $this->dispatcher->addSubscriber($this->subscriber);
+        $this->dispatcher->addSubscriber($this->subscriber);
 
-            $testSuite = $this->extractor->execute();
+        $this->dispatcher->dispatch(SuiteStartEvent::class, new SuiteStartEvent());
 
-            $rules = new RuleCollection();
-            foreach ($testSuite->getValues() as $test) {
-                $rules = $rules->merge($test());
-            }
-            $this->exposeLogo();
+        $testSuite = $this->extractor->execute();
 
-            foreach ($rules->getValues() as $rule) {
-                $statements = $this->statementBuilder->build($rule);
-                $this->exposeRuleName($rule);
-                /** @var Statement $statement */
-                foreach ($statements as $statement) {
-                    $this->validateStatement($statement);
-                }
-                $this->output->writeLn("");
-            }
-        } catch (\Exception $e) {
-            $this->exposeFatalAndExit($e->getMessage());
+        $rules = new RuleCollection();
+        foreach ($testSuite->getValues() as $test) {
+            $rules = $rules->merge($test());
         }
 
-        if ($this->subscriber->thereWereErrors()) {
+        foreach ($rules->getValues() as $rule) {
+            $statements = $this->statementBuilder->build($rule);
+            $this->dispatcher->dispatch(RuleValidationStartEvent::class, new RuleValidationStartEvent($rule->getName()));
+            /** @var Statement $statement */
+            foreach ($statements as $statement) {
+                $this->validateStatement($statement);
+            }
+            $this->dispatcher->dispatch(RuleValidationEndEvent::class, new RuleValidationEndEvent());
+        }
+
+        $this->dispatcher->dispatch(SuiteEndEvent::class, new SuiteEndEvent());
+
+        if ($this->subscriber->suiteHadErrors()) {
             throw new \Exception();
         }
-    }
-
-    private function exposeLogo(): void
-    {
-        $this->output->writeLn('---/-------\------|-----\---/--');
-        $this->output->writeLn('--/-PHP Architecture Tester/---');
-        $this->output->writeLn('-/-----------\----|-------X----');
-        $this->output->writeLn("");
-    }
-
-    private function exposeRuleName(Rule $rule): void
-    {
-        $this->output->writeLn('RULE: ' . $rule->getName());
     }
 
     private function validateStatement(Statement $statement): void
@@ -102,19 +93,5 @@ class App
             $statement->getDestinations(),
             $statement->isInverse()
         );
-    }
-
-    /**
-     * @throws \Exception
-     */
-    private function exposeFatalAndExit(string $message, string $trace = null): void
-    {
-        $errormsg = 'FATAL ERROR: ' . $message;
-        if (!is_null($trace)) {
-            $errormsg .= ' in ' . $trace;
-        }
-        $this->output->writeLn($errormsg, $error = true);
-
-        throw new \Exception();
     }
 }

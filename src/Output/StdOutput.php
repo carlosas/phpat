@@ -4,38 +4,36 @@ namespace PhpAT\Output;
 
 class StdOutput implements OutputInterface
 {
+    /** @var resource */
+    private const OK_STREAM = \STDOUT;
+    /** @var resource */
+    private const ERR_STREAM = \STDERR;
 
-    private $okStrem;
-    private $errStrem;
-    /**
-     * @var int
-     */
+    /** @var int */
     private $verbose;
 
     public function __construct($verbose = VerboseLevel::NORMAL)
     {
-        $this->okStrem  = \STDOUT;
-        $this->errStrem = \STDERR;
         $this->verbose  = $verbose;
     }
 
-    public function write(string $msg, bool $error = false, int $verbose = VerboseLevel::NORMAL): void
+    public function write(string $message, int $level = OutputLevel::DEFAULT): void
     {
-        $this->out($msg, $error, $verbose);
+        $this->out($message, $level);
     }
 
-    public function writeLn(string $msg, bool $error = false, int $verbose = VerboseLevel::NORMAL): void
+    public function writeLn(string $message, int $level = OutputLevel::DEFAULT): void
     {
-        $msg .= \PHP_EOL;
-        $this->out($msg, $error, $verbose);
+        $message .= PHP_EOL;
+        $this->out($message, $level);
     }
 
-    private function out(string $msg, bool $error, int $verbose): void
+    private function out(string $message, int $level): void
     {
-        if ($verbose > $this->verbose) {
+        if (!in_array($level, VerboseLevel::OUTPUT_LEVEL[$this->verbose])) {
             return;
         }
-        $stream = $error ? $this->errStrem : $this->okStrem;
-        fwrite($stream, $msg);
+        $stream = $level > OutputLevel::WARNING ? self::ERR_STREAM : self::OK_STREAM;
+        fwrite($stream, $message);
     }
 }

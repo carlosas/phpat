@@ -54,9 +54,10 @@ tests:
 ```
 This is the complete list of options:
 * `files` `src_path`: The root path of your application.
-* `files` `src_included`: Files you want to be tested excluding the rest (empty=all).
-* `files` `src_excluded`: Files you want to be excluded in the tests (empty=none).
+* `files` `src_included`: Files you want to be tested excluding the rest (default=all).
+* `files` `src_excluded`: Files you want to be excluded in the tests (default=none).
 * `tests` `path`: The path where your tests are.
+* `tests` `verbosity`: 0/1/2 output verbosity level (default=1).
 
 <h2></h2>
 
