@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhpAT\Statement;
 
+use PhpAT\File\FileFinder;
 use PhpAT\Rule\Rule;
 use PhpAT\Selector\SelectorResolver;
 use PhpParser\Parser;
@@ -33,6 +34,7 @@ class StatementBuilder
     public function build(Rule $rule): \Generator
     {
         $destinations = $this->selectFiles($rule->getDestination(), $rule->getDestinationExcluded());
+
         foreach ($this->selectFiles($rule->getOrigin(), $rule->getOriginExcluded()) as $file) {
             yield new Statement(
                 $this->parseFile($file),
@@ -57,10 +59,10 @@ class StatementBuilder
 
         foreach ($excluded as $e) {
             $filesToExclude = $this->selectorResolver->resolve($e);
+            /** @var \SplFileInfo $file */
             foreach ($filesToExclude as $file) {
-                $keys = array_keys($filesToValidate, $file);
-                if (!empty($keys)) {
-                    foreach ($keys as $key) {
+                foreach ($filesToValidate as $key => $value) {
+                    if ($this->normalizePath($file->getPathname()) == $this->normalizePath($value->getPathname())) {
                         unset($filesToValidate[$key]);
                     }
                 }
@@ -79,5 +81,10 @@ class StatementBuilder
         $code = file_get_contents($file->getPathname());
 
         return $this->parser->parse($code);
+    }
+
+    private function normalizePath(string $path): string
+    {
+        return ('\\' === \DIRECTORY_SEPARATOR) ? str_replace('\\', '/', $path) : $path;
     }
 }

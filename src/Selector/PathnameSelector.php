@@ -38,6 +38,10 @@ class PathnameSelector implements SelectorInterface
 
     public function select(): array
     {
-        return $this->fileFinder->findFiles($this->pathname);
+        $result = [];
+        foreach ($this->fileFinder->findFiles($this->pathname) as $file) {
+            $result[$file->getPathname()] = $file;
+        };
+        return $result;
     }
 }

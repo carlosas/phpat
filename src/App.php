@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace PhpAT;
 
-use PhpAT\App\Event\FatalErrorEvent;
 use PhpAT\App\Event\SuiteEndEvent;
 use PhpAT\App\Event\SuiteStartEvent;
-use PhpAT\Output\OutputInterface;
-use PhpAT\Output\OutputLevel;
 use PhpAT\Rule\Event\RuleValidationEndEvent;
 use PhpAT\Rule\Event\RuleValidationStartEvent;
 use PhpAT\Rule\RuleCollection;
@@ -29,8 +26,6 @@ class App
     private $dispatcher;
     /** @var EventSubscriber */
     private $subscriber;
-    /** @var OutputInterface */
-    private $output;
 
     /**
      * App constructor.
@@ -39,20 +34,17 @@ class App
      * @param StatementBuilder         $statementBuilder
      * @param EventDispatcherInterface $dispatcher
      * @param EventSubscriberInterface $subscriber
-     * @param OutputInterface          $output
      */
     public function __construct(
         TestExtractor $extractor,
         StatementBuilder $statementBuilder,
         EventDispatcherInterface $dispatcher,
-        EventSubscriberInterface $subscriber,
-        OutputInterface $output
+        EventSubscriberInterface $subscriber
     ) {
         $this->extractor        = $extractor;
         $this->statementBuilder = $statementBuilder;
         $this->dispatcher       = $dispatcher;
         $this->subscriber       = $subscriber;
-        $this->output           = $output;
     }
 
     /** @throws \Exception */

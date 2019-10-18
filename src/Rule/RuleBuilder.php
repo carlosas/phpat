@@ -28,9 +28,9 @@ class RuleBuilder
     /** @var SelectorInterface[] */
     private $destinationExclude = [];
     /** @var RuleType */
-    private $type;
+    private $type = '';
     /** @var bool */
-    private $inverse;
+    private $inverse = false;
 
     /**
      * RuleBuilder constructor.
@@ -172,7 +172,7 @@ class RuleBuilder
         $this->originExclude = [];
         $this->destination = [];
         $this->destinationExclude = [];
-        $this->type = null;
-        $this->inverse = null;
+        $this->type = '';
+        $this->inverse = false;
     }
 }
