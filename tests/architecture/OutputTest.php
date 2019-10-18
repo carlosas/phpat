@@ -6,7 +6,7 @@ use PhpAT\Test\ArchitectureTest;
 
 class OutputTest extends ArchitectureTest
 {
-    public function testOnlyEventSubscriberWritesOutputCollector(): Rule
+    public function testOnlyEventSubscriberWritesOutput(): Rule
     {
         return $this->newRule
             ->classesThat(Selector::havePathname('*'))
