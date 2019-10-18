@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PhpAT\Statement;
 
-use PhpAT\File\FileFinder;
 use PhpAT\Rule\Rule;
 use PhpAT\Selector\SelectorResolver;
 use PhpParser\Parser;

@@ -108,24 +108,21 @@ class Provider
             ->addArgument(new Reference(FileFinder::class))
             ->addArgument($phpParser)
             ->addArgument(new Reference(NodeTraverserInterface::class))
-            ->addArgument(new Reference(EventDispatcherInterface::class))
-            ->addArgument(new Reference(OutputInterface::class));
+            ->addArgument(new Reference(EventDispatcherInterface::class));
 
         $this->builder
             ->register(Inheritance::class, Inheritance::class)
             ->addArgument(new Reference(FileFinder::class))
             ->addArgument($phpParser)
             ->addArgument(new Reference(NodeTraverserInterface::class))
-            ->addArgument(new Reference(EventDispatcherInterface::class))
-            ->addArgument(new Reference(OutputInterface::class));
+            ->addArgument(new Reference(EventDispatcherInterface::class));
 
         $this->builder
             ->register(Composition::class, Composition::class)
             ->addArgument(new Reference(FileFinder::class))
             ->addArgument($phpParser)
             ->addArgument(new Reference(NodeTraverserInterface::class))
-            ->addArgument(new Reference(EventDispatcherInterface::class))
-            ->addArgument(new Reference(OutputInterface::class));
+            ->addArgument(new Reference(EventDispatcherInterface::class));
 
         $this->builder
             ->register('app', App::class)

@@ -69,12 +69,14 @@ class EventSubscriber implements EventSubscriberInterface
 
     public function onRuleValidationEndEvent(RuleValidationEndEvent $event): void
     {
+        $this->output->writeLn(PHP_EOL, OutputLevel::INFO);
+
         if (!$this->errorStorage->lastRuleHadErrors()) {
-            $this->output->writeLn(PHP_EOL . 'OK', OutputLevel::INFO);
+            $this->output->writeLn('OK', OutputLevel::INFO);
         }
 
         foreach ($this->errorStorage->flushErrors() as $error) {
-            $this->output->writeLn(PHP_EOL . 'ERROR: ' . $error, OutputLevel::ERROR);
+            $this->output->writeLn('ERROR: ' . $error, OutputLevel::ERROR);
         }
     }
 
