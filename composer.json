@@ -11,7 +11,7 @@
   ],
   "require": {
     "php": "^7.1",
-    "nikic/php-parser": "4.2.*",
+    "nikic/php-parser": "^4",
     "symfony/dependency-injection": "^2.0.5|^3|^4",
     "symfony/event-dispatcher": "^2.0.5|^3|^4",
     "symfony/finder": "^2.3.0|^3|^4",
