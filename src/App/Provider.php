@@ -101,7 +101,8 @@ class Provider
         $this->builder
             ->register(StatementBuilder::class, StatementBuilder::class)
             ->addArgument(new Reference(SelectorResolver::class))
-            ->addArgument($phpParser);
+            ->addArgument($phpParser)
+            ->addArgument($this->configuration);
 
         $this->builder
             ->register(Dependency::class, Dependency::class)

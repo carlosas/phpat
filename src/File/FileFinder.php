@@ -29,7 +29,7 @@ class FileFinder
         return $this->finder->find(
             $splittedFile[0],
             $splittedFile[1],
-            $this->configuration->getSrcIncluded(),
+            [],
             array_merge($excluded, $this->configuration->getSrcExcluded())
         );
     }

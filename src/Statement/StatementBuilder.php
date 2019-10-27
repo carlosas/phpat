@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpAT\Statement;
 
-use PhpAT\File\FileFinder;
+use PhpAT\App\Configuration;
 use PhpAT\Rule\Rule;
 use PhpAT\Selector\SelectorResolver;
 use PhpParser\Parser;
@@ -15,16 +15,19 @@ class StatementBuilder
     private $selectorResolver;
     /** @var Parser */
     private $parser;
+    /** @var Configuration */
+    private $configuration;
 
     /**
      * StatementBuilder constructor.
      * @param SelectorResolver $selectorResolver
      * @param Parser $parser
      */
-    public function __construct(SelectorResolver $selectorResolver, Parser $parser)
+    public function __construct(SelectorResolver $selectorResolver, Parser $parser, Configuration $configuration)
     {
         $this->selectorResolver = $selectorResolver;
         $this->parser = $parser;
+        $this->configuration = $configuration;
     }
 
     /**
@@ -33,9 +36,23 @@ class StatementBuilder
      */
     public function build(Rule $rule): \Generator
     {
+        $origins = $this->selectFiles($rule->getOrigin(), $rule->getOriginExcluded());
         $destinations = $this->selectFiles($rule->getDestination(), $rule->getDestinationExcluded());
 
-        foreach ($this->selectFiles($rule->getOrigin(), $rule->getOriginExcluded()) as $file) {
+        if (!empty($this->configuration->getSrcIncluded())) {
+            $filteredOrigins = [];
+            foreach ($this->configuration->getSrcIncluded() as $checkOnly) {
+                $checkOnly = $this->configuration->getSrcPath() . $checkOnly;
+                foreach ($origins as $key => $value) {
+                    if ($this->normalizePath($checkOnly) == $this->normalizePath($value->getPathname())) {
+                        $filteredOrigins[] = $origins[$key];
+                    }
+                }
+            }
+            $origins = $filteredOrigins;
+        }
+
+        foreach ($origins as $file) {
             yield new Statement(
                 $this->parseFile($file),
                 $rule->getType(),
