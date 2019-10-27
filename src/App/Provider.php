@@ -51,7 +51,7 @@ class Provider
     {
         $this->builder       = $builder;
         $this->autoload      = $autoload;
-        $this->configuration = new Configuration(Yaml::parseFile(getcwd() . '/' . ($argv[1] ?? 'phpat.yml')));
+        $this->configuration = new Configuration(Yaml::parse(file_get_contents(getcwd() . '/' . ($argv[1] ?? 'phpat.yml'))));
     }
 
     /**
