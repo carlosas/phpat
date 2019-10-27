@@ -9,7 +9,7 @@ use PhpAT\Rule\Type\Dependency;
 use PhpAT\Rule\Type\Inheritance;
 use PhpAT\Rule\Type\RuleType;
 use PhpAT\Selector\SelectorInterface;
-use Psr\Container\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Class RuleBuilder
@@ -17,7 +17,7 @@ use Psr\Container\ContainerInterface;
  */
 class RuleBuilder
 {
-    /** @var ContainerInterface */
+    /** @var ContainerBuilder */
     private $container;
     /** @var SelectorInterface[] */
     private $origin = [];
@@ -34,9 +34,9 @@ class RuleBuilder
 
     /**
      * RuleBuilder constructor.
-     * @param ContainerInterface $container
+     * @param ContainerBuilder $container
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerBuilder $container)
     {
         $this->container = $container;
     }

@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace PhpAT\File;
 
+use Symfony\Component\Finder\Finder as SymfonyFinder;
+
 class SymfonyFinderAdapter implements Finder
 {
     private $finder;
 
-    public function __construct(\Symfony\Component\Finder\Finder $finder)
+    public function __construct(SymfonyFinder $finder)
     {
         $this->finder = $finder;
     }
