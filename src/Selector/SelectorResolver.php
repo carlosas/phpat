@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpAT\Selector;
 
-use Psr\Container\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Class SelectorResolver
@@ -12,14 +12,14 @@ use Psr\Container\ContainerInterface;
  */
 class SelectorResolver
 {
-    /** @var ContainerInterface */
+    /** @var ContainerBuilder */
     private $container;
 
     /**
      * SelectorResolver constructor.
-     * @param ContainerInterface $container
+     * @param ContainerBuilder $container
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerBuilder $container)
     {
         $this->container = $container;
     }
