@@ -42,6 +42,8 @@ class Dependency implements RuleType
         array $destinationFiles,
         bool $inverse = false
     ): void {
+        $this->resetCollectedItems();
+
         $this->extractParsedClassInfo($parsedClass);
 
         $classNameCollector = new ClassNameCollector();
@@ -100,5 +102,11 @@ class Dependency implements RuleType
         $message = $className->getFQDN() . $action . $dependencyName->getFQDN();
 
         $this->eventDispatcher->dispatch($event, new $event($message));
+    }
+
+    private function resetCollectedItems()
+    {
+        $this->parsedClassClassName = null;
+        $this->parsedClassDependencies = null;
     }
 }

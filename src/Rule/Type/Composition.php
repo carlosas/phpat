@@ -43,6 +43,8 @@ class Composition implements RuleType
         array $destinationFiles,
         bool $inverse = false
     ): void {
+        $this->resetCollectedItems();
+
         $this->extractParsedClassInfo($parsedClass);
 
         $classNameCollector = new ClassNameCollector();
@@ -100,5 +102,11 @@ class Composition implements RuleType
         $message = $className->getFQDN() . $action . $interfaceName->getFQDN();
 
         $this->eventDispatcher->dispatch($event, new $event($message));
+    }
+
+    private function resetCollectedItems()
+    {
+        $this->parsedClassClassName = null;
+        $this->parsedClassInterfaces = null;
     }
 }
