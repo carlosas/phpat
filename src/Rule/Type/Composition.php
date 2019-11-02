@@ -97,7 +97,7 @@ class Composition implements RuleType
 
     private function dispatchResult(bool $result, bool $inverse, ClassName $className, ClassName $interfaceName): void
     {
-        $action = ($result or $inverse) ? ' implements ' : ' does not implement ';
+        $action = $result ? ' implements ' : ' does not implement ';
         $event = ($result xor $inverse) ? StatementValidEvent::class : StatementNotValidEvent::class;
         $message = $className->getFQDN() . $action . $interfaceName->getFQDN();
 

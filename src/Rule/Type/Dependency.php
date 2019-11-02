@@ -97,7 +97,7 @@ class Dependency implements RuleType
 
     private function dispatchResult(bool $result, bool $inverse, ClassName $className, ClassName $dependencyName): void
     {
-        $action = ($result or $inverse) ? ' depends on ' : ' does not depend on ';
+        $action = $result ? ' depends on ' : ' does not depend on ';
         $event = ($result xor $inverse) ? StatementValidEvent::class : StatementNotValidEvent::class;
         $message = $className->getFQDN() . $action . $dependencyName->getFQDN();
 

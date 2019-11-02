@@ -97,7 +97,7 @@ class Inheritance implements RuleType
 
     private function dispatchResult(bool $result, bool $inverse, ClassName $className, ClassName $parentName): void
     {
-        $action = ($result or $inverse) ? ' extends ' : ' does not extend ';
+        $action = $result ? ' extends ' : ' does not extend ';
         $event = ($result xor $inverse) ? StatementValidEvent::class : StatementNotValidEvent::class;
         $message = $className->getFQDN() . $action . $parentName->getFQDN();
 
