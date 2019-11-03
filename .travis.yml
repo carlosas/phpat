@@ -12,3 +12,4 @@ script:
   - composer validate --strict
   - vendor/bin/phpcs --standard=PSR1,PSR12 src/
   - php phpat phpat.yml
+  - php phpat tests/functional/PHP7/php7.yaml
