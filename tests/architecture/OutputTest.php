@@ -13,6 +13,7 @@ class OutputTest extends ArchitectureTest
             ->excludingClassesThat(Selector::havePathname('App/EventSubscriber.php'))
             ->excludingClassesThat(Selector::havePathname('App/Provider.php'))
             ->excludingClassesThat(Selector::havePathname('App.php'))
+            ->excludingClassesThat(Selector::havePathname('Output/StdOutput.php'))
             ->shouldNotDependOn()
             ->classesThat(Selector::havePathname('Output/OutputInterface.php'))
             ->build();

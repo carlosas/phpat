@@ -15,11 +15,13 @@ class DependencyTest extends ArchitectureTest
             ->andClassesThat(Selector::havePathname('Dependency/MethodParameter.php'))
             ->andClassesThat(Selector::havePathname('Dependency/MethodReturn.php'))
             ->andClassesThat(Selector::havePathname('Dependency/Instantiation.php'))
-            ->andClassesThat(Selector::havePathname('Dependency/UnusedDeclaration.php'))
-            ->andClassesThat(Selector::havePathname('Dependency/DocBlock.php'))
+            //->andClassesThat(Selector::havePathname('Dependency/UnusedDeclaration.php'))
+            //->andClassesThat(Selector::havePathname('Dependency/DocBlock.php'))
             ->shouldDependOn()
             ->classesThat(Selector::havePathname('SimpleClass.php'))
-            //->andClassesThat(Selector::havePathname('Dependency/DependencyNamespaceSimpleClass.php'))
+            ->classesThat(Selector::havePathname('AnotherSimpleClass.php'))
+            ->andClassesThat(Selector::havePathname('Dependency/DependencyNamespaceSimpleClass.php'))
+            ->andClassesThat(Selector::havePathname('Inheritance/InheritanceNamespaceSimpleClass.php'))
             ->build();
     }
 }
