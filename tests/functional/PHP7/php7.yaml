@@ -1,0 +1,4 @@
+files:
+  src_path: tests/functional/PHP7/fixtures/
+tests:
+  path: tests/functional/PHP7/tests/
