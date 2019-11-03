@@ -9,7 +9,6 @@ use PhpAT\App\Event\SuiteStartEvent;
 use PhpAT\Rule\Event\RuleValidationEndEvent;
 use PhpAT\Rule\Event\RuleValidationStartEvent;
 use PhpAT\Rule\RuleCollection;
-use PhpAT\App\EventSubscriber;
 use PhpAT\Statement\Statement;
 use PhpAT\Statement\StatementBuilder;
 use PhpAT\Test\TestExtractor;
@@ -24,7 +23,7 @@ class App
     private $statementBuilder;
     /** @var EventDispatcherInterface */
     private $dispatcher;
-    /** @var EventSubscriber */
+    /** @var EventSubscriberInterface */
     private $subscriber;
 
     /**
