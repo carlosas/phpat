@@ -15,9 +15,6 @@
 	<a>
 		<img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat-square" alt="Contributions welcome">
 	</a>
-	<a href="https://github.com/carlosas/phpat/issues">
-        <img src="https://img.shields.io/github/issues/carlosas/phpat.svg?style=flat-square" alt="Open issues">
-	</a>
 	<a>
 		<img src="http://hits.dwyl.com/carlosas/phpat.svg" alt="Hits">
 	</a>
