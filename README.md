@@ -28,6 +28,8 @@
 It provides a natural language abstraction to define your own architecture rules and test them against your software.
 You can also integrate *phpat* easily into your toolchain.
 
+Current testeable relations: Dependency, Inheritance, Composition.
+
 <h2></h2>
 
 ### Installation 💽
