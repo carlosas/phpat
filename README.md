@@ -112,5 +112,7 @@ vendor/bin/phpat phpat.yml
 ```
 
 <h2></h2>
+:warning: Launching early stage releases (0.X.X) with different SemVer strategy, this means I'm using *minor* for breaking changes.
+This will change to strict SemVer with the release of `1.0.0`. See [Semantic Versioning](https://semver.org/).
 
 **PHP Architecture Tester** is in a very early stage, contributions are welcome. Please take a look to the [Contribution docs](.github/CONTRIBUTING.md).
