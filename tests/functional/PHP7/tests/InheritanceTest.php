@@ -11,18 +11,18 @@ class InheritanceTest extends ArchitectureTest
     public function testSameNamespaceInheritance(): Rule
     {
         return $this->newRule
-            ->classesThat(Selector::havePathname('Inheritance/InheritanceNamespaceChild.php'))
+            ->classesThat(Selector::havePath('Inheritance/InheritanceNamespaceChild.php'))
             ->mustExtend()
-            ->classesThat(Selector::havePathname('Inheritance/InheritanceNamespaceSimpleClass.php'))
+            ->classesThat(Selector::havePath('Inheritance/InheritanceNamespaceSimpleClass.php'))
             ->build();
     }
 
     public function testDifferentNamespaceInheritance(): Rule
     {
         return $this->newRule
-            ->classesThat(Selector::havePathname('Inheritance/Child.php'))
+            ->classesThat(Selector::havePath('Inheritance/Child.php'))
             ->mustExtend()
-            ->classesThat(Selector::havePathname('SimpleClass.php'))
+            ->classesThat(Selector::havePath('SimpleClass.php'))
             ->build();
     }
 }

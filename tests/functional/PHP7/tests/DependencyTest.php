@@ -11,17 +11,17 @@ class DependencyTest extends ArchitectureTest
     public function testDirectDependency(): Rule
     {
         return $this->newRule
-            ->classesThat(Selector::havePathname('Dependency/Constructor.php'))
-            ->andClassesThat(Selector::havePathname('Dependency/MethodParameter.php'))
-            ->andClassesThat(Selector::havePathname('Dependency/MethodReturn.php'))
-            ->andClassesThat(Selector::havePathname('Dependency/Instantiation.php'))
+            ->classesThat(Selector::havePath('Dependency/Constructor.php'))
+            ->andClassesThat(Selector::havePath('Dependency/MethodParameter.php'))
+            ->andClassesThat(Selector::havePath('Dependency/MethodReturn.php'))
+            ->andClassesThat(Selector::havePath('Dependency/Instantiation.php'))
             //->andClassesThat(Selector::havePathname('Dependency/UnusedDeclaration.php'))
             //->andClassesThat(Selector::havePathname('Dependency/DocBlock.php'))
             ->mustDependOn()
-            ->classesThat(Selector::havePathname('SimpleClass.php'))
-            ->classesThat(Selector::havePathname('AnotherSimpleClass.php'))
-            ->andClassesThat(Selector::havePathname('Dependency/DependencyNamespaceSimpleClass.php'))
-            ->andClassesThat(Selector::havePathname('Inheritance/InheritanceNamespaceSimpleClass.php'))
+            ->classesThat(Selector::havePath('SimpleClass.php'))
+            ->classesThat(Selector::havePath('AnotherSimpleClass.php'))
+            ->andClassesThat(Selector::havePath('Dependency/DependencyNamespaceSimpleClass.php'))
+            ->andClassesThat(Selector::havePath('Inheritance/InheritanceNamespaceSimpleClass.php'))
             ->build();
     }
 }

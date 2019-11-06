@@ -9,10 +9,10 @@ class RuleTypesTest extends ArchitectureTest
     public function testRuleTypesImplementRuleTypeInterface(): Rule
     {
         return $this->newRule
-            ->classesThat(Selector::havePathname('Rule/Type/*'))
-            ->excludingClassesThat(Selector::havePathname('Rule/Type/RuleType.php'))
+            ->classesThat(Selector::havePath('Rule/Type/*'))
+            ->excludingClassesThat(Selector::havePath('Rule/Type/RuleType.php'))
             ->mustImplement()
-            ->classesThat(Selector::havePathname('Rule/Type/RuleType.php'))
+            ->classesThat(Selector::havePath('Rule/Type/RuleType.php'))
             ->build();
     }
 }

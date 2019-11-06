@@ -7,23 +7,23 @@ namespace PhpAT\Selector;
 use PhpAT\File\FileFinder;
 
 /**
- * Class PathnameSelector
+ * Class PathSelector
  * @package PhpAT\Selector
  */
-class PathnameSelector implements SelectorInterface
+class PathSelector implements SelectorInterface
 {
     private const DEPENDENCIES = [
         FileFinder::class
     ];
 
     /** @var string */
-    private $pathname;
+    private $path;
     /** @var FileFinder */
     private $fileFinder;
 
-    public function __construct(string $pathname)
+    public function __construct(string $path)
     {
-        $this->pathname = $pathname;
+        $this->path = $path;
     }
 
     public function getDependencies(): array
@@ -39,7 +39,7 @@ class PathnameSelector implements SelectorInterface
     public function select(): array
     {
         $result = [];
-        foreach ($this->fileFinder->findFiles($this->pathname) as $file) {
+        foreach ($this->fileFinder->findFiles($this->path) as $file) {
             $result[$file->getPathname()] = $file;
         };
         return $result;

@@ -11,19 +11,19 @@ class MixinTest extends ArchitectureTest
     public function testSimpleTraitInclusion(): Rule
     {
         return $this->newRule
-            ->classesThat(Selector::havePathname('Mixin/IncludeTrait.php'))
+            ->classesThat(Selector::havePath('Mixin/IncludeTrait.php'))
             ->mustInclude()
-            ->classesThat(Selector::havePathname('SimpleTrait.php'))
+            ->classesThat(Selector::havePath('SimpleTrait.php'))
             ->build();
     }
 
     public function testMultipleTraitsInclusion(): Rule
     {
         return $this->newRule
-            ->classesThat(Selector::havePathname('Mixin/IncludeMultipleTraits.php'))
+            ->classesThat(Selector::havePath('Mixin/IncludeMultipleTraits.php'))
             ->mustInclude()
-            ->classesThat(Selector::havePathname('SimpleTrait.php'))
-            ->andClassesThat(Selector::havePathname('Mixin/MixinNamespaceSimpleTrait.php'))
+            ->classesThat(Selector::havePath('SimpleTrait.php'))
+            ->andClassesThat(Selector::havePath('Mixin/MixinNamespaceSimpleTrait.php'))
             ->build();
     }
 }

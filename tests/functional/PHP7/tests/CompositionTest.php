@@ -11,19 +11,19 @@ class CompositionTest extends ArchitectureTest
     public function testSimpleInterfaceComposition(): Rule
     {
         return $this->newRule
-            ->classesThat(Selector::havePathname('Composition/Composed.php'))
+            ->classesThat(Selector::havePath('Composition/Composed.php'))
             ->mustImplement()
-            ->classesThat(Selector::havePathname('SimpleInterface.php'))
+            ->classesThat(Selector::havePath('SimpleInterface.php'))
             ->build();
     }
 
     public function testMultipleInterfaceComposition(): Rule
     {
         return $this->newRule
-            ->classesThat(Selector::havePathname('Composition/MultipleComposed.php'))
+            ->classesThat(Selector::havePath('Composition/MultipleComposed.php'))
             ->mustImplement()
-            ->classesThat(Selector::havePathname('SimpleInterface.php'))
-            ->andClassesThat(Selector::havePathname('Composition/CompositionNamespaceSimpleInterface.php'))
+            ->classesThat(Selector::havePath('SimpleInterface.php'))
+            ->andClassesThat(Selector::havePath('Composition/CompositionNamespaceSimpleInterface.php'))
             ->build();
     }
 }
