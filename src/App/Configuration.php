@@ -15,17 +15,17 @@ class Configuration
 
     public function getSrcPath(): string
     {
-        return $this->config['files']['src_path'] ?? '';
+        return $this->config['src']['path'] ?? '';
     }
 
     public function getSrcIncluded(): array
     {
-        return $this->config['files']['src_included'] ?? [];
+        return $this->config['src']['include'] ?? [];
     }
 
     public function getSrcExcluded(): array
     {
-        return $this->config['files']['src_excluded'] ?? [];
+        return $this->config['src']['exclude'] ?? [];
     }
 
     public function getTestsPath(): string
@@ -35,6 +35,6 @@ class Configuration
 
     public function getVerbosity(): int
     {
-        return (int) ($this->config['tests']['verbosity'] ?? 1);
+        return (int) ($this->config['options']['verbosity'] ?? 1);
     }
 }

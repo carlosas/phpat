@@ -57,11 +57,11 @@ tests:
   path: tests/architecture/
 ```
 This is the complete list of options:
-* `files` `src_path`: The root path of your application.
-* `files` `src_included`: Files you want to be tested excluding the rest (default=all).
-* `files` `src_excluded`: Files you want to be excluded in the tests (default=none).
+* `src` `path`: The root path of your application.
+* `src` `include`: Files you want to be tested excluding the rest (default=all).
+* `src` `exclude`: Files you want to be excluded in the tests (default=none).
 * `tests` `path`: The path where your tests are.
-* `tests` `verbosity`: 0/1/2 output verbosity level (default=1).
+* `options` `verbosity`: 0/1/2 output verbosity level (default=1).
 
 <h2></h2>
 
@@ -113,7 +113,7 @@ vendor/bin/phpat phpat.yml
 
 <h2></h2>
 
-⚠ Launching early stage releases (0.X.X) with different SemVer strategy, this means I'm using *minor* for breaking changes.
+⚠ Launching early stage releases (0.x.x) with a different SemVer strategy. We are using *minor* for breaking changes.
 This will change to strict SemVer with the release of `1.0.0`. See [Semantic Versioning](https://semver.org/).
 
 <h2></h2>

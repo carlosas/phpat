@@ -1,4 +1,4 @@
-files:
-  src_path: src/
+src:
+  path: src/
 tests:
   path: tests/architecture/
