@@ -51,8 +51,8 @@ composer require --dev carlosas/phpat
 You might want to setup a basic configuration:
 ```yaml
 # phpat.yml
-files:
-  src_path: src/
+src:
+  path: src/
 tests:
   path: tests/architecture/
 ```
