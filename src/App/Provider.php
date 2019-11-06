@@ -13,6 +13,7 @@ use PhpAT\Rule\RuleBuilder;
 use PhpAT\Rule\Type\Composition;
 use PhpAT\Rule\Type\Dependency;
 use PhpAT\Rule\Type\Inheritance;
+use PhpAT\Rule\Type\Mixin;
 use PhpAT\Selector\SelectorResolver;
 use PhpAT\Statement\StatementBuilder;
 use PhpAT\Test\FileTestExtractor;
@@ -122,6 +123,13 @@ class Provider
 
         $this->builder
             ->register(Composition::class, Composition::class)
+            ->addArgument(new Reference(FileFinder::class))
+            ->addArgument($phpParser)
+            ->addArgument(new Reference(NodeTraverserInterface::class))
+            ->addArgument(new Reference(EventDispatcherInterface::class));
+
+        $this->builder
+            ->register(Mixin::class, Mixin::class)
             ->addArgument(new Reference(FileFinder::class))
             ->addArgument($phpParser)
             ->addArgument(new Reference(NodeTraverserInterface::class))
