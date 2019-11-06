@@ -7,6 +7,7 @@ namespace PhpAT\Rule;
 use PhpAT\Rule\Type\Composition;
 use PhpAT\Rule\Type\Dependency;
 use PhpAT\Rule\Type\Inheritance;
+use PhpAT\Rule\Type\Mixin;
 use PhpAT\Rule\Type\RuleType;
 use PhpAT\Selector\SelectorInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -135,6 +136,22 @@ class RuleBuilder
     public function shouldNotExtend(): self
     {
         return $this->setType(Inheritance::class, true);
+    }
+
+    /**
+     * @return RuleBuilder
+     */
+    public function shouldInclude(): self
+    {
+        return $this->setType(Mixin::class, false);
+    }
+
+    /**
+     * @return RuleBuilder
+     */
+    public function shouldNotInclude(): self
+    {
+        return $this->setType(Mixin::class, true);
     }
 
     /**
