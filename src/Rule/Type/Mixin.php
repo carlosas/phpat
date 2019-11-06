@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpAT\Rule\Type;
 
 use PhpAT\File\FileFinder;
+use PhpAT\Parser\ClassMatcher;
 use PhpAT\Parser\ClassName;
 use PhpAT\Parser\Collector\ClassNameCollector;
 use PhpAT\Parser\Collector\InterfaceCollector;
@@ -74,15 +75,20 @@ class Mixin implements RuleType
 
     private function extractParsedClassInfo(array $parsedClass): void
     {
-        $traitCollector = new TraitCollector();
         $classNameCollector = new ClassNameCollector();
-
-        $this->traverser->addVisitor($traitCollector);
         $this->traverser->addVisitor($classNameCollector);
+        $this->traverser->traverse($parsedClass);
+        $this->traverser->removeVisitor($classNameCollector);
+        $this->parsedClassClassName = $classNameCollector->getResult()[0];
+
+        $matcher = new ClassMatcher();
+        $matcher->saveNamespace($this->parsedClassClassName->getNamespace());
+
+        $traitCollector = new TraitCollector($matcher);
+        $this->traverser->addVisitor($traitCollector);
         $this->traverser->traverse($parsedClass);
         $this->traverser->removeVisitor($traitCollector);
 
-        $this->parsedClassClassName = $classNameCollector->getResult()[0];
         $this->parsedClassTraits = $traitCollector->getResult();
 
         /** @var ClassName $v */

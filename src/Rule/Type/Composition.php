@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpAT\Rule\Type;
 
 use PhpAT\File\FileFinder;
+use PhpAT\Parser\ClassMatcher;
 use PhpAT\Parser\ClassName;
 use PhpAT\Parser\Collector\ClassNameCollector;
 use PhpAT\Parser\Collector\InterfaceCollector;
@@ -73,15 +74,19 @@ class Composition implements RuleType
 
     private function extractParsedClassInfo(array $parsedClass): void
     {
-        $interfaceCollector = new InterfaceCollector();
         $classNameCollector = new ClassNameCollector();
-
-        $this->traverser->addVisitor($interfaceCollector);
         $this->traverser->addVisitor($classNameCollector);
         $this->traverser->traverse($parsedClass);
-        $this->traverser->removeVisitor($interfaceCollector);
-
+        $this->traverser->removeVisitor($classNameCollector);
         $this->parsedClassClassName = $classNameCollector->getResult()[0];
+
+        $matcher = new ClassMatcher();
+        $matcher->saveNamespace($this->parsedClassClassName->getNamespace());
+
+        $interfaceCollector = new InterfaceCollector($matcher);
+        $this->traverser->addVisitor($interfaceCollector);
+        $this->traverser->traverse($parsedClass);
+        $this->traverser->removeVisitor($interfaceCollector);
         $this->parsedClassInterfaces = $interfaceCollector->getResult();
 
         /** @var ClassName $v */

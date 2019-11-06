@@ -74,11 +74,11 @@ class Dependency implements RuleType
 
     private function extractParsedClassInfo(array $parsedClass): void
     {
-        $classNameExtractor = new ClassNameCollector();
-        $this->traverser->addVisitor($classNameExtractor);
+        $classNameCollector = new ClassNameCollector();
+        $this->traverser->addVisitor($classNameCollector);
         $this->traverser->traverse($parsedClass);
-        $this->traverser->removeVisitor($classNameExtractor);
-        $this->parsedClassClassName = $classNameExtractor->getResult()[0];
+        $this->traverser->removeVisitor($classNameCollector);
+        $this->parsedClassClassName = $classNameCollector->getResult()[0];
 
         $matcher = new ClassMatcher();
         $matcher->saveNamespace($this->parsedClassClassName->getNamespace());

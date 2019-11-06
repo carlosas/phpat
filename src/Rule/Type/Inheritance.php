@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpAT\Rule\Type;
 
 use PhpAT\File\FileFinder;
+use PhpAT\Parser\ClassMatcher;
 use PhpAT\Parser\ClassName;
 use PhpAT\Parser\Collector\ClassNameCollector;
 use PhpAT\Parser\Collector\ParentCollector;
@@ -73,18 +74,24 @@ class Inheritance implements RuleType
 
     private function extractParsedClassInfo(array $parsedClass): void
     {
-        $parentExtractor = new ParentCollector();
-        $classNameExtractor = new ClassNameCollector();
-
-        $this->traverser->addVisitor($parentExtractor);
-        $this->traverser->addVisitor($classNameExtractor);
+        $classNameCollector = new ClassNameCollector();
+        $this->traverser->addVisitor($classNameCollector);
         $this->traverser->traverse($parsedClass);
-        $this->traverser->removeVisitor($parentExtractor);
+        $this->traverser->removeVisitor($classNameCollector);
+        $this->parsedClassClassName = $classNameCollector->getResult()[0];
 
-        $this->parsedClassClassName = $classNameExtractor->getResult()[0];
+        $matcher = new ClassMatcher();
+        $matcher->saveNamespace($this->parsedClassClassName->getNamespace());
 
-        if (!empty($parentExtractor->getResult())) {
-            $this->parsedClassParent = $parentExtractor->getResult()[0];
+        $parentCollector = new ParentCollector($matcher);
+        $this->traverser->addVisitor($parentCollector);
+        $this->traverser->traverse($parsedClass);
+        $this->traverser->removeVisitor($parentCollector);
+
+        $this->parsedClassClassName = $parentCollector->getResult()[0];
+
+        if (!empty($parentCollector->getResult())) {
+            $this->parsedClassParent = $parentCollector->getResult()[0];
 
             if (empty($this->parsedClassParent->getNamespace())) {
                 $this->parsedClassParent = new ClassName(
