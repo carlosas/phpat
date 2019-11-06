@@ -6,7 +6,7 @@ There are several ways to help out:
 
 ## Pull Requests
 * The code must follow the [PSR-12 coding standard](https://www.php-fig.org/psr/psr-12/).
-* All code changes should be covered by unit tests
+* All features should be covered by functional tests
 
 ---
 

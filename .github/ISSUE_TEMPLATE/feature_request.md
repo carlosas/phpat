@@ -1,14 +1,12 @@
 ---
-name: Feature request
+name: 🌠 Feature
 about: Suggest an idea for this project
-title: ''
 labels: enhancement
 assignees: carlosas
-
 ---
 
 **Enhancement description**
-A clear and concise description of what you want to happen.
+<!-- Description of what you want to happen. -->
 
-**Solution or approach**
-Description of any alternative solutions or technical approaches you've considered.
+**Suggested approach or solution **
+<!-- Description of any solutions or technical approaches you've considered. -->
