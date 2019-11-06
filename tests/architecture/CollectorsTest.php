@@ -11,7 +11,7 @@ class CollectorsTest extends ArchitectureTest
         return $this->newRule
             ->classesThat(Selector::havePathname('Parser/Collector/*Collector.php'))
             ->excludingClassesThat(Selector::havePathname('Parser/Collector/AbstractCollector.php'))
-            ->shouldExtend()
+            ->mustExtend()
             ->classesThat(Selector::havePathname('Parser/AbstractCollector.php'))
             ->build();
     }

@@ -12,7 +12,7 @@ class CompositionTest extends ArchitectureTest
     {
         return $this->newRule
             ->classesThat(Selector::havePathname('Composition/Composed.php'))
-            ->shouldImplement()
+            ->mustImplement()
             ->classesThat(Selector::havePathname('SimpleInterface.php'))
             ->build();
     }
@@ -21,7 +21,7 @@ class CompositionTest extends ArchitectureTest
     {
         return $this->newRule
             ->classesThat(Selector::havePathname('Composition/MultipleComposed.php'))
-            ->shouldImplement()
+            ->mustImplement()
             ->classesThat(Selector::havePathname('SimpleInterface.php'))
             ->andClassesThat(Selector::havePathname('Composition/CompositionNamespaceSimpleInterface.php'))
             ->build();

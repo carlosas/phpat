@@ -11,7 +11,7 @@ class RuleTypesTest extends ArchitectureTest
         return $this->newRule
             ->classesThat(Selector::havePathname('Rule/Type/*'))
             ->excludingClassesThat(Selector::havePathname('Rule/Type/RuleType.php'))
-            ->shouldImplement()
+            ->mustImplement()
             ->classesThat(Selector::havePathname('Rule/Type/RuleType.php'))
             ->build();
     }

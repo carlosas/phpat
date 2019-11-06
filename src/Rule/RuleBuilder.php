@@ -93,7 +93,7 @@ class RuleBuilder
     /**
      * @return RuleBuilder
      */
-    public function shouldDependOn(): self
+    public function mustDependOn(): self
     {
         return $this->setType(Dependency::class, false);
     }
@@ -101,7 +101,7 @@ class RuleBuilder
     /**
      * @return RuleBuilder
      */
-    public function shouldNotDependOn(): self
+    public function mustNotDependOn(): self
     {
         return $this->setType(Dependency::class, true);
     }
@@ -109,7 +109,7 @@ class RuleBuilder
     /**
      * @return RuleBuilder
      */
-    public function shouldImplement(): self
+    public function mustImplement(): self
     {
         return $this->setType(Composition::class, false);
     }
@@ -117,7 +117,7 @@ class RuleBuilder
     /**
      * @return RuleBuilder
      */
-    public function shouldNotImplement(): self
+    public function mustNotImplement(): self
     {
         return $this->setType(Composition::class, true);
     }
@@ -125,7 +125,7 @@ class RuleBuilder
     /**
      * @return RuleBuilder
      */
-    public function shouldExtend(): self
+    public function mustExtend(): self
     {
         return $this->setType(Inheritance::class, false);
     }
@@ -133,7 +133,7 @@ class RuleBuilder
     /**
      * @return RuleBuilder
      */
-    public function shouldNotExtend(): self
+    public function mustNotExtend(): self
     {
         return $this->setType(Inheritance::class, true);
     }
@@ -141,7 +141,7 @@ class RuleBuilder
     /**
      * @return RuleBuilder
      */
-    public function shouldInclude(): self
+    public function mustInclude(): self
     {
         return $this->setType(Mixin::class, false);
     }
@@ -149,7 +149,7 @@ class RuleBuilder
     /**
      * @return RuleBuilder
      */
-    public function shouldNotInclude(): self
+    public function mustNotInclude(): self
     {
         return $this->setType(Mixin::class, true);
     }

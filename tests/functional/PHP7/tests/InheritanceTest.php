@@ -12,7 +12,7 @@ class InheritanceTest extends ArchitectureTest
     {
         return $this->newRule
             ->classesThat(Selector::havePathname('Inheritance/Child.php'))
-            ->shouldExtend()
+            ->mustExtend()
             ->classesThat(Selector::havePathname('SimpleClass.php'))
             ->build();
     }
@@ -21,7 +21,7 @@ class InheritanceTest extends ArchitectureTest
     {
         return $this->newRule
             ->classesThat(Selector::havePathname('Inheritance/InheritanceNamespaceChild.php'))
-            ->shouldExtend()
+            ->mustExtend()
             ->classesThat(Selector::havePathname('Inheritance/InheritanceNamespaceSimpleClass.php'))
             ->build();
     }

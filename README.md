@@ -81,7 +81,7 @@ class ExampleTest extends ArchitectureTest
     {
         return $this->newRule
             ->classesThat(Selector::havePathname('Domain/*'))
-            ->shouldNotDependOn()
+            ->mustNotDependOn()
             ->classesThat(Selector::havePathname('Application/*'))
             ->andClassesThat(Selector::havePathname('Infrastructure/*'))
             ->andClassesThat(Selector::havePathname('Presentation/*'))
@@ -95,7 +95,7 @@ class ExampleTest extends ArchitectureTest
             ->classesThat(Selector::havePathname('Application/*/UseCase/*Handler.php'))
             ->excludingClassesThat(Selector::havePathname('Application/Shared/UseCase/Different*Handler.php'))
             ->andExcludingClassesThat(Selector::havePathname('Application/Shared/UseCase/AbstractCommandHandler.php'))
-            ->shouldExtend()
+            ->mustExtend()
             ->classesThat(Selector::havePathname('Application/Shared/UseCase/AbstractCommandHandler.php'))
             ->build();
     }

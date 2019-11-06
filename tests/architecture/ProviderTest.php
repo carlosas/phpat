@@ -10,7 +10,7 @@ class ProviderTest extends ArchitectureTest
     {
         return $this->newRule
             ->classesThat(Selector::havePathname('App/Provider.php'))
-            ->shouldDependOn()
+            ->mustDependOn()
             ->classesThat(Selector::havePathname('App.php'))
             ->build();
     }
@@ -19,7 +19,7 @@ class ProviderTest extends ArchitectureTest
     {
         return $this->newRule
             ->classesThat(Selector::havePathname('App.php'))
-            ->shouldNotDependOn()
+            ->mustNotDependOn()
             ->classesThat(Selector::havePathname('App/Provider.php'))
             ->build();
     }
