@@ -28,7 +28,12 @@
 It provides a natural language abstraction to define your own architecture rules and test them against your software.
 You can also integrate *phpat* easily into your toolchain.
 
-Current testeable relations: Dependency, Inheritance, Composition.
+Current supported relations:
+
+* **Dependency**: *SomeClass* depends (or not) on *AnotherClass*
+* **Inheritance**: *SomeClass* extends (or not) *AnotherClass*
+* **Composition**: *SomeClass* implements (or not) *SomeInterface*
+* **Mixin**: *SomeClass* includes (or not) *SomeTrait*
 
 <h2></h2>
 
