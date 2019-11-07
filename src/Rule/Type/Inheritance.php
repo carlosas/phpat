@@ -88,8 +88,6 @@ class Inheritance implements RuleType
         $this->traverser->traverse($parsedClass);
         $this->traverser->removeVisitor($parentCollector);
 
-        $this->parsedClassClassName = $parentCollector->getResult()[0];
-
         if (!empty($parentCollector->getResult())) {
             $this->parsedClassParent = $parentCollector->getResult()[0];
 

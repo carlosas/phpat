@@ -26,4 +26,13 @@ class CompositionTest extends ArchitectureTest
             ->andClassesThat(Selector::havePath('Composition/CompositionNamespaceSimpleInterface.php'))
             ->build();
     }
+
+    public function testClassDoesNotImplement(): Rule
+    {
+        return $this->newRule
+            ->classesThat(Selector::havePath('Composition/CompositionNamespaceSimpleClass.php'))
+            ->mustNotImplement()
+            ->classesThat(Selector::havePath('SimpleInterface.php'))
+            ->build();
+    }
 }

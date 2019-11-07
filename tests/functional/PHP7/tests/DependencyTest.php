@@ -24,4 +24,13 @@ class DependencyTest extends ArchitectureTest
             ->andClassesThat(Selector::havePath('Inheritance/InheritanceNamespaceSimpleClass.php'))
             ->build();
     }
+
+    public function testNotDepends(): Rule
+    {
+        return $this->newRule
+            ->classesThat(Selector::havePath('Dependency/DependencyNamespaceSimpleClass.php'))
+            ->mustNotDependOn()
+            ->classesThat(Selector::havePath('SimpleClass.php'))
+            ->build();
+    }
 }

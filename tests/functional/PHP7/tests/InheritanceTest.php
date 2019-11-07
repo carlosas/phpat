@@ -25,4 +25,13 @@ class InheritanceTest extends ArchitectureTest
             ->classesThat(Selector::havePath('SimpleClass.php'))
             ->build();
     }
+
+    public function testNotExtends(): Rule
+    {
+        return $this->newRule
+            ->classesThat(Selector::havePath('Inheritance/InheritanceNamespaceSimpleClass.php'))
+            ->mustNotExtend()
+            ->classesThat(Selector::havePath('SimpleClass.php'))
+            ->build();
+    }
 }
