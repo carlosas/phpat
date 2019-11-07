@@ -80,23 +80,23 @@ class ExampleTest extends ArchitectureTest
     public function testDomainDoesNotDependOnOtherLayers(): Rule
     {
         return $this->newRule
-            ->classesThat(Selector::havePathname('Domain/*'))
+            ->classesThat(Selector::havePath('Domain/*'))
             ->mustNotDependOn()
-            ->classesThat(Selector::havePathname('Application/*'))
-            ->andClassesThat(Selector::havePathname('Infrastructure/*'))
-            ->andClassesThat(Selector::havePathname('Presentation/*'))
-            ->excludingClassesThat(Selector::havePathname('Application/Shared/Service/KnownBadApproach.php'))
+            ->classesThat(Selector::havePath('Application/*'))
+            ->andClassesThat(Selector::havePath('Infrastructure/*'))
+            ->andClassesThat(Selector::havePath('Presentation/*'))
+            ->excludingClassesThat(Selector::havePath('Application/Shared/Service/KnownBadApproach.php'))
             ->build();
     }
     
     public function testAllHandlersExtendAbstractCommandHandler(): Rule
     {
         return $this->newRule
-            ->classesThat(Selector::havePathname('Application/*/UseCase/*Handler.php'))
-            ->excludingClassesThat(Selector::havePathname('Application/Shared/UseCase/Different*Handler.php'))
-            ->andExcludingClassesThat(Selector::havePathname('Application/Shared/UseCase/AbstractCommandHandler.php'))
+            ->classesThat(Selector::havePath('Application/*/UseCase/*Handler.php'))
+            ->excludingClassesThat(Selector::havePath('Application/Shared/UseCase/Different*Handler.php'))
+            ->andExcludingClassesThat(Selector::havePath('Application/Shared/UseCase/AbstractCommandHandler.php'))
             ->mustExtend()
-            ->classesThat(Selector::havePathname('Application/Shared/UseCase/AbstractCommandHandler.php'))
+            ->classesThat(Selector::havePath('Application/Shared/UseCase/AbstractCommandHandler.php'))
             ->build();
     }
 }
