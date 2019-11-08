@@ -31,22 +31,30 @@ use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class Provider
+ *
  * @package PhpAT\App
  */
 class Provider
 {
-    /** @var ContainerBuilder */
+    /**
+     * @var ContainerBuilder 
+     */
     private $builder;
-    /** @var string */
+    /**
+     * @var string 
+     */
     private $autoload;
-    /** @var Configuration */
+    /**
+     * @var Configuration 
+     */
     private $configuration;
 
     /**
      * Provider constructor.
+     *
      * @param ContainerBuilder $builder
-     * @param string $autoload
-     * @param array $argv
+     * @param string           $autoload
+     * @param array            $argv
      */
     public function __construct(ContainerBuilder $builder, string $autoload, array $argv)
     {

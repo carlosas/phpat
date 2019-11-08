@@ -6,6 +6,7 @@ namespace PhpAT\Selector;
 
 /**
  * Interface SelectorInterface
+ *
  * @package PhpAT\Selector
  */
 interface SelectorInterface

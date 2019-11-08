@@ -18,8 +18,8 @@ class FileFinder
     }
 
     /**
-     * @param string $file
-     * @param array  $excluded
+     * @param  string $file
+     * @param  array  $excluded
      * @return \SplFileInfo[]
      */
     public function findFiles(string $file, array $excluded = []): array

@@ -22,7 +22,9 @@ abstract class ArchitectureTest
         $rules = new RuleCollection();
         foreach (get_class_methods($this) as $method) {
             if (preg_match('/^(test)([A-Za-z0-9])+$/', $method)) {
-                /** @var Rule $rule */
+                /**
+         * @var Rule $rule
+        */
                 $rule = $this->$method();
                 $rule->setName(ltrim(preg_replace('/(?<!\ )[A-Z]/', ' $0', $method), 'test '));
                 $rules->addValue($rule);

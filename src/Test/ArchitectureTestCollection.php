@@ -10,6 +10,7 @@ class ArchitectureTestCollection
 
     /**
      * ArchitectureTestCollection constructor.
+     *
      * @param ArchitectureTest[] $tests
      */
     public function __construct(array $tests = [])

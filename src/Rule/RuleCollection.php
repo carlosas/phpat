@@ -10,6 +10,7 @@ class RuleCollection
 
     /**
      * RuleCollection constructor.
+     *
      * @param Rule[] $rules
      */
     public function __construct(array $rules = [])

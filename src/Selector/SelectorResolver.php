@@ -8,15 +8,19 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Class SelectorResolver
+ *
  * @package PhpAT\Selector
  */
 class SelectorResolver
 {
-    /** @var ContainerBuilder */
+    /**
+     * @var ContainerBuilder 
+     */
     private $container;
 
     /**
      * SelectorResolver constructor.
+     *
      * @param ContainerBuilder $container
      */
     public function __construct(ContainerBuilder $container)
@@ -25,7 +29,7 @@ class SelectorResolver
     }
 
     /**
-     * @param SelectorInterface $selector
+     * @param  SelectorInterface $selector
      * @return array
      */
     public function resolve(SelectorInterface $selector): array

@@ -14,27 +14,43 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Class RuleBuilder
+ *
  * @package PhpAT\Rule
  */
 class RuleBuilder
 {
-    /** @var ContainerBuilder */
+    /**
+     * @var ContainerBuilder 
+     */
     private $container;
-    /** @var SelectorInterface[] */
+    /**
+     * @var SelectorInterface[] 
+     */
     private $origin = [];
-    /** @var SelectorInterface[] */
+    /**
+     * @var SelectorInterface[] 
+     */
     private $originExclude = [];
-    /** @var SelectorInterface[] */
+    /**
+     * @var SelectorInterface[] 
+     */
     private $destination = [];
-    /** @var SelectorInterface[] */
+    /**
+     * @var SelectorInterface[] 
+     */
     private $destinationExclude = [];
-    /** @var RuleType */
+    /**
+     * @var RuleType 
+     */
     private $type = '';
-    /** @var bool */
+    /**
+     * @var bool 
+     */
     private $inverse = false;
 
     /**
      * RuleBuilder constructor.
+     *
      * @param ContainerBuilder $container
      */
     public function __construct(ContainerBuilder $container)
@@ -43,7 +59,7 @@ class RuleBuilder
     }
 
     /**
-     * @param SelectorInterface $selector
+     * @param  SelectorInterface $selector
      * @return RuleBuilder
      */
     public function classesThat(SelectorInterface $selector): self
@@ -58,7 +74,7 @@ class RuleBuilder
     }
 
     /**
-     * @param SelectorInterface $selector
+     * @param  SelectorInterface $selector
      * @return RuleBuilder
      */
     public function andClassesThat(SelectorInterface $selector): self
@@ -67,7 +83,7 @@ class RuleBuilder
     }
 
     /**
-     * @param SelectorInterface $selector
+     * @param  SelectorInterface $selector
      * @return RuleBuilder
      */
     public function excludingClassesThat(SelectorInterface $selector): self
@@ -82,7 +98,7 @@ class RuleBuilder
     }
 
     /**
-     * @param SelectorInterface $selector
+     * @param  SelectorInterface $selector
      * @return RuleBuilder
      */
     public function andExcludingClassesThat(SelectorInterface $selector): self

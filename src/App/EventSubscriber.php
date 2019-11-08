@@ -16,9 +16,13 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class EventSubscriber implements EventSubscriberInterface
 {
-    /** @var OutputInterface */
+    /**
+     * @var OutputInterface 
+     */
     private $output;
-    /** @var ErrorStorage */
+    /**
+     * @var ErrorStorage 
+     */
     private $errorStorage;
 
     public function __construct(OutputInterface $output)

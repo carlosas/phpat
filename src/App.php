@@ -17,13 +17,21 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class App
 {
-    /** @var TestExtractor $extractor */
+    /**
+     * @var TestExtractor $extractor 
+     */
     private $extractor;
-    /** @var StatementBuilder $statementBuilder */
+    /**
+     * @var StatementBuilder $statementBuilder 
+     */
     private $statementBuilder;
-    /** @var EventDispatcherInterface */
+    /**
+     * @var EventDispatcherInterface 
+     */
     private $dispatcher;
-    /** @var EventSubscriberInterface */
+    /**
+     * @var EventSubscriberInterface 
+     */
     private $subscriber;
 
     /**
@@ -46,7 +54,9 @@ class App
         $this->subscriber       = $subscriber;
     }
 
-    /** @throws \Exception */
+    /**
+     * @throws \Exception 
+     */
     public function execute(): void
     {
         $this->dispatcher->addSubscriber($this->subscriber);
@@ -66,7 +76,9 @@ class App
                 RuleValidationStartEvent::class,
                 new RuleValidationStartEvent($rule->getName())
             );
-            /** @var Statement $statement */
+            /**
+             * @var Statement $statement
+            */
             foreach ($statements as $statement) {
                 $this->validateStatement($statement);
             }

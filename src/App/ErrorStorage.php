@@ -6,15 +6,22 @@ namespace PhpAT\App;
 
 /**
  * Class ErrorStorage
+ *
  * @package PhpAT\Shared
  */
 class ErrorStorage
 {
-    /** @var array */
+    /**
+     * @var array 
+     */
     private $errors = [];
-    /** @var bool */
+    /**
+     * @var bool 
+     */
     private $anyRuleHadErrors = false;
-    /** @var bool */
+    /**
+     * @var bool 
+     */
     private $lastRuleHadErrors = false;
 
     /**

@@ -8,6 +8,7 @@ use PhpAT\File\FileFinder;
 
 /**
  * Class PathSelector
+ *
  * @package PhpAT\Selector
  */
 class PathSelector implements SelectorInterface
@@ -16,9 +17,13 @@ class PathSelector implements SelectorInterface
         FileFinder::class
     ];
 
-    /** @var string */
+    /**
+     * @var string 
+     */
     private $path;
-    /** @var FileFinder */
+    /**
+     * @var FileFinder 
+     */
     private $fileFinder;
 
     public function __construct(string $path)

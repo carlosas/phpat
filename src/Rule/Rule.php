@@ -9,33 +9,49 @@ use PhpAT\Selector\SelectorInterface;
 
 /**
  * Class Rule
+ *
  * @package PhpAT\Rule
  */
 class Rule
 {
-    /** @var SelectorInterface[] */
+    /**
+     * @var SelectorInterface[] 
+     */
     private $origin;
-    /** @var SelectorInterface[] */
+    /**
+     * @var SelectorInterface[] 
+     */
     private $originExcluded;
-    /** @var RuleType */
+    /**
+     * @var RuleType 
+     */
     private $type;
-    /** @var bool */
+    /**
+     * @var bool 
+     */
     private $inverse;
-    /** @var SelectorInterface[] */
+    /**
+     * @var SelectorInterface[] 
+     */
     private $destination;
-    /** @var SelectorInterface[] */
+    /**
+     * @var SelectorInterface[] 
+     */
     private $destinationExcluded;
-    /** @var string */
+    /**
+     * @var string 
+     */
     private $name;
 
     /**
      * Rule constructor.
-     * @param array $origin
-     * @param array $originExcluded
+     *
+     * @param array    $origin
+     * @param array    $originExcluded
      * @param RuleType $type
-     * @param bool $inverse
-     * @param array $destination
-     * @param array $destinationExcluded
+     * @param bool     $inverse
+     * @param array    $destination
+     * @param array    $destinationExcluded
      */
     public function __construct(
         array $origin,
