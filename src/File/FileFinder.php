@@ -18,8 +18,8 @@ class FileFinder
     }
 
     /**
-     * @param string $file
-     * @param array  $excluded
+     * @param  string $file
+     * @param  array  $excluded
      * @return \SplFileInfo[]
      */
     public function findFiles(string $file, array $excluded = []): array
@@ -38,7 +38,7 @@ class FileFinder
     {
         $file = $this->configuration->getSrcPath() . $file;
         $pos = strrpos($file, '/');
-        $splittedFile = array(substr($file, 0, $pos), substr($file, $pos + 1));
+        $splittedFile = [substr($file, 0, $pos), substr($file, $pos + 1)];
 
         return $splittedFile;
     }

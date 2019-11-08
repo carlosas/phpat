@@ -20,9 +20,13 @@ class Dependency implements RuleType
     private $traverser;
     private $finder;
     private $parser;
-    /** @var ClassName */
+    /**
+     * @var ClassName
+     */
     private $parsedClassClassName;
-    /** @var ClassName[] */
+    /**
+     * @var ClassName[]
+     */
     private $parsedClassDependencies;
     private $eventDispatcher;
 
@@ -50,7 +54,9 @@ class Dependency implements RuleType
         $classNameCollector = new ClassNameCollector();
         $this->traverser->addVisitor($classNameCollector);
 
-        /** @var \SplFileInfo $file */
+        /**
+         * @var \SplFileInfo $file
+        */
         foreach ($destinationFiles as $file) {
             $parsed = $this->parser->parse(file_get_contents($file->getPathname()));
             $this->traverser->traverse($parsed);
@@ -62,7 +68,9 @@ class Dependency implements RuleType
             return;
         }
 
-        /** @var ClassName $className */
+        /**
+         * @var ClassName $className
+        */
         foreach ($classNameCollector->getResult() as $className) {
             $result = empty($this->parsedClassDependencies)
                 ? false
@@ -89,7 +97,9 @@ class Dependency implements RuleType
         $this->traverser->removeVisitor($dependencyExtractor);
         $this->parsedClassDependencies = $dependencyExtractor->getResult();
 
-        /** @var ClassName $v */
+        /**
+         * @var ClassName $v
+        */
         foreach ($this->parsedClassDependencies as $k => $v) {
             if (empty($v->getNamespace())) {
                 $className = new ClassName($this->parsedClassClassName->getNamespace(), $v->getName());

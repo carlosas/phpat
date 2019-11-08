@@ -25,10 +25,10 @@ class InterfaceCollector extends AbstractCollector
         }
 
         if ($node instanceof Node\Stmt\Class_) {
-            if (isset($node->implements) && !is_null($node->implements)) {
+            if (isset($node->implements) && ($node->implements !== null)) {
                 foreach ($node->implements as $interface) {
                     $found = $this->matcher->findClass($interface->parts);
-                    if (!is_null($found)) {
+                    if ($found !== null) {
                         $this->result[] = ClassName::createFromFQDN($found);
                     }
                 }

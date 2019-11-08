@@ -21,9 +21,13 @@ class Inheritance implements RuleType
     private $finder;
     private $parser;
     private $eventDispatcher;
-    /** @var ClassName */
+    /**
+     * @var ClassName
+     */
     private $parsedClassClassName;
-    /** @var ClassName */
+    /**
+     * @var ClassName
+     */
     private $parsedClassParent;
 
     public function __construct(
@@ -49,7 +53,9 @@ class Inheritance implements RuleType
 
         $classNameCollector = new ClassNameCollector();
         $this->traverser->addVisitor($classNameCollector);
-        /** @var \SplFileInfo $file */
+        /**
+         * @var \SplFileInfo $file
+        */
         foreach ($destinationFiles as $file) {
             $parsedFile = $this->parser->parse(file_get_contents($file->getPathname()));
             $this->traverser->traverse($parsedFile);
@@ -61,10 +67,12 @@ class Inheritance implements RuleType
             return;
         }
 
-        /** @var ClassName $className */
+        /**
+         * @var ClassName $className
+        */
         foreach ($classNameCollector->getResult() as $className) {
             $result = (
-                !is_null($this->parsedClassParent)
+                $this->parsedClassParent !== null
                 && $className->getFQDN() === $this->parsedClassParent->getFQDN()
             );
 

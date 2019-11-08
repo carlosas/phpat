@@ -25,10 +25,10 @@ class TraitCollector extends AbstractCollector
         }
 
         if ($node instanceof Node\Stmt\TraitUse) {
-            if (isset($node->traits) && !is_null($node->traits)) {
+            if (isset($node->traits) && ($node->traits !== null)) {
                 foreach ($node->traits as $trait) {
                     $found = $this->matcher->findClass($trait->parts);
-                    if (!is_null($found)) {
+                    if ($found !== null) {
                         $this->result[] = ClassName::createFromFQDN($found);
                     }
                 }

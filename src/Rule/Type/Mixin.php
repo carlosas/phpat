@@ -22,9 +22,13 @@ class Mixin implements RuleType
     private $traverser;
     private $finder;
     private $parser;
-    /** @var ClassName */
+    /**
+     * @var ClassName
+     */
     private $parsedClassClassName;
-    /** @var ClassName[] */
+    /**
+     * @var ClassName[]
+     */
     private $parsedClassTraits;
     private $eventDispatcher;
 
@@ -51,7 +55,9 @@ class Mixin implements RuleType
 
         $classNameCollector = new ClassNameCollector();
         $this->traverser->addVisitor($classNameCollector);
-        /** @var \SplFileInfo $file */
+        /**
+         * @var \SplFileInfo $file
+        */
         foreach ($destinationFiles as $file) {
             $parsed = $this->parser->parse(file_get_contents($file->getPathname()));
             $this->traverser->traverse($parsed);
@@ -63,7 +69,9 @@ class Mixin implements RuleType
             return;
         }
 
-        /** @var ClassName $className */
+        /**
+         * @var ClassName $className
+        */
         foreach ($classNameCollector->getResult() as $className) {
             $result = empty($this->parsedClassTraits)
                 ? false
@@ -91,7 +99,9 @@ class Mixin implements RuleType
 
         $this->parsedClassTraits = $traitCollector->getResult();
 
-        /** @var ClassName $v */
+        /**
+         * @var ClassName $v
+        */
         foreach ($this->parsedClassTraits as $k => $v) {
             if (empty($v->getNamespace())) {
                 $className = new ClassName($this->parsedClassClassName->getNamespace(), $v->getName());

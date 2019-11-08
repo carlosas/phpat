@@ -11,17 +11,24 @@ use PhpParser\Parser;
 
 class StatementBuilder
 {
-    /** @var SelectorResolver */
+    /**
+     * @var SelectorResolver
+     */
     private $selectorResolver;
-    /** @var Parser */
+    /**
+     * @var Parser
+     */
     private $parser;
-    /** @var Configuration */
+    /**
+     * @var Configuration
+     */
     private $configuration;
 
     /**
      * StatementBuilder constructor.
+     *
      * @param SelectorResolver $selectorResolver
-     * @param Parser $parser
+     * @param Parser           $parser
      */
     public function __construct(SelectorResolver $selectorResolver, Parser $parser, Configuration $configuration)
     {
@@ -31,7 +38,7 @@ class StatementBuilder
     }
 
     /**
-     * @param Rule $rule
+     * @param  Rule $rule
      * @return \Generator
      */
     public function build(Rule $rule): \Generator
@@ -63,8 +70,8 @@ class StatementBuilder
     }
 
     /**
-     * @param array $included
-     * @param array $excluded
+     * @param  array $included
+     * @param  array $excluded
      * @return \SplFileInfo[]
      */
     private function selectFiles(array $included, array $excluded): array
@@ -76,7 +83,9 @@ class StatementBuilder
 
         foreach ($excluded as $e) {
             $filesToExclude = $this->selectorResolver->resolve($e);
-            /** @var \SplFileInfo $file */
+            /**
+             * @var \SplFileInfo $file
+            */
             foreach ($filesToExclude as $file) {
                 foreach ($filesToValidate as $key => $value) {
                     if ($this->normalizePath($file->getPathname()) == $this->normalizePath($value->getPathname())) {
@@ -90,7 +99,7 @@ class StatementBuilder
     }
 
     /**
-     * @param \SplFileInfo $file
+     * @param  \SplFileInfo $file
      * @return array
      */
     private function parseFile(\SplFileInfo $file): array
@@ -102,6 +111,6 @@ class StatementBuilder
 
     private function normalizePath(string $path): string
     {
-        return ('\\' === \DIRECTORY_SEPARATOR) ? str_replace('\\', '/', $path) : $path;
+        return (\DIRECTORY_SEPARATOR === '\\') ? str_replace('\\', '/', $path) : $path;
     }
 }

@@ -8,17 +8,26 @@ use PhpAT\Rule\Type\RuleType;
 
 /**
  * Class Statement
+ *
  * @internal
  */
 class Statement
 {
-    /** @var array */
+    /**
+     * @var array
+     */
     private $parsedClass;
-    /** @var RuleType */
+    /**
+     * @var RuleType
+     */
     private $type;
-    /** @var bool */
+    /**
+     * @var bool
+     */
     private $inverse;
-    /** @var \SplFileInfo[] */
+    /**
+     * @var \SplFileInfo[]
+     */
     private $destinations;
 
     public function __construct(

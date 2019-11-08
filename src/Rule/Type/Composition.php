@@ -21,9 +21,13 @@ class Composition implements RuleType
     private $traverser;
     private $finder;
     private $parser;
-    /** @var ClassName */
+    /**
+     * @var ClassName
+     */
     private $parsedClassClassName;
-    /** @var ClassName[] */
+    /**
+     * @var ClassName[]
+     */
     private $parsedClassInterfaces;
     private $eventDispatcher;
 
@@ -50,7 +54,9 @@ class Composition implements RuleType
 
         $classNameCollector = new ClassNameCollector();
         $this->traverser->addVisitor($classNameCollector);
-        /** @var \SplFileInfo $file */
+        /**
+         * @var \SplFileInfo $file
+        */
         foreach ($destinationFiles as $file) {
             $parsed = $this->parser->parse(file_get_contents($file->getPathname()));
             $this->traverser->traverse($parsed);
@@ -62,7 +68,9 @@ class Composition implements RuleType
             return;
         }
 
-        /** @var ClassName $className */
+        /**
+         * @var ClassName $className
+        */
         foreach ($classNameCollector->getResult() as $className) {
             $result = empty($this->parsedClassInterfaces)
                 ? false
@@ -89,7 +97,9 @@ class Composition implements RuleType
         $this->traverser->removeVisitor($interfaceCollector);
         $this->parsedClassInterfaces = $interfaceCollector->getResult();
 
-        /** @var ClassName $v */
+        /**
+         * @var ClassName $v
+        */
         foreach ($this->parsedClassInterfaces as $k => $v) {
             if (empty($v->getNamespace())) {
                 $className = new ClassName($this->parsedClassClassName->getNamespace(), $v->getName());

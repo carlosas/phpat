@@ -6,6 +6,7 @@ namespace PhpAT\Output;
 
 /**
  * Class OutputLevel
+ *
  * @package PhpAT\Output
  */
 class OutputLevel

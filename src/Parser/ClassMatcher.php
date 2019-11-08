@@ -14,7 +14,7 @@ class ClassMatcher
 
     public function addDeclaration(string $declaration, ?string $alias = null)
     {
-        if (is_null($alias)) {
+        if ($alias === null) {
             $d = explode('\\', $declaration);
             $alias = end($d);
             $declaration = implode('\\', $d);
