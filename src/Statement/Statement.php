@@ -14,19 +14,19 @@ use PhpAT\Rule\Type\RuleType;
 class Statement
 {
     /**
-     * @var array 
+     * @var array
      */
     private $parsedClass;
     /**
-     * @var RuleType 
+     * @var RuleType
      */
     private $type;
     /**
-     * @var bool 
+     * @var bool
      */
     private $inverse;
     /**
-     * @var \SplFileInfo[] 
+     * @var \SplFileInfo[]
      */
     private $destinations;
 

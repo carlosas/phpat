@@ -18,11 +18,11 @@ class PathSelector implements SelectorInterface
     ];
 
     /**
-     * @var string 
+     * @var string
      */
     private $path;
     /**
-     * @var FileFinder 
+     * @var FileFinder
      */
     private $fileFinder;
 

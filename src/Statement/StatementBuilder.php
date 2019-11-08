@@ -12,15 +12,15 @@ use PhpParser\Parser;
 class StatementBuilder
 {
     /**
-     * @var SelectorResolver 
+     * @var SelectorResolver
      */
     private $selectorResolver;
     /**
-     * @var Parser 
+     * @var Parser
      */
     private $parser;
     /**
-     * @var Configuration 
+     * @var Configuration
      */
     private $configuration;
 

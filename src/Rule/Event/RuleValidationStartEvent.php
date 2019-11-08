@@ -9,7 +9,7 @@ use PhpAT\App\Event;
 class RuleValidationStartEvent extends Event
 {
     /**
-     * @var string 
+     * @var string
      */
     private $ruleName;
 

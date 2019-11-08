@@ -15,31 +15,31 @@ use PhpAT\Selector\SelectorInterface;
 class Rule
 {
     /**
-     * @var SelectorInterface[] 
+     * @var SelectorInterface[]
      */
     private $origin;
     /**
-     * @var SelectorInterface[] 
+     * @var SelectorInterface[]
      */
     private $originExcluded;
     /**
-     * @var RuleType 
+     * @var RuleType
      */
     private $type;
     /**
-     * @var bool 
+     * @var bool
      */
     private $inverse;
     /**
-     * @var SelectorInterface[] 
+     * @var SelectorInterface[]
      */
     private $destination;
     /**
-     * @var SelectorInterface[] 
+     * @var SelectorInterface[]
      */
     private $destinationExcluded;
     /**
-     * @var string 
+     * @var string
      */
     private $name;
 

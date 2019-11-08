@@ -9,7 +9,7 @@ use PhpAT\App\Event;
 class StatementValidEvent extends Event
 {
     /**
-     * @var string 
+     * @var string
      */
     private $message;
 

@@ -9,7 +9,7 @@ use PhpAT\App\Event;
 class StatementNotValidEvent extends Event
 {
     /**
-     * @var string 
+     * @var string
      */
     private $message;
 

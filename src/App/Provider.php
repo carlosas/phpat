@@ -37,15 +37,15 @@ use Symfony\Component\Yaml\Yaml;
 class Provider
 {
     /**
-     * @var ContainerBuilder 
+     * @var ContainerBuilder
      */
     private $builder;
     /**
-     * @var string 
+     * @var string
      */
     private $autoload;
     /**
-     * @var Configuration 
+     * @var Configuration
      */
     private $configuration;
 

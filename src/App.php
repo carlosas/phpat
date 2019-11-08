@@ -18,19 +18,19 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class App
 {
     /**
-     * @var TestExtractor $extractor 
+     * @var TestExtractor $extractor
      */
     private $extractor;
     /**
-     * @var StatementBuilder $statementBuilder 
+     * @var StatementBuilder $statementBuilder
      */
     private $statementBuilder;
     /**
-     * @var EventDispatcherInterface 
+     * @var EventDispatcherInterface
      */
     private $dispatcher;
     /**
-     * @var EventSubscriberInterface 
+     * @var EventSubscriberInterface
      */
     private $subscriber;
 
@@ -55,7 +55,7 @@ class App
     }
 
     /**
-     * @throws \Exception 
+     * @throws \Exception
      */
     public function execute(): void
     {

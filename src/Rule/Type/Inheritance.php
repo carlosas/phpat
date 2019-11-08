@@ -22,11 +22,11 @@ class Inheritance implements RuleType
     private $parser;
     private $eventDispatcher;
     /**
-     * @var ClassName 
+     * @var ClassName
      */
     private $parsedClassClassName;
     /**
-     * @var ClassName 
+     * @var ClassName
      */
     private $parsedClassParent;
 

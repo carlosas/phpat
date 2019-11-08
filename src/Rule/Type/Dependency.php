@@ -21,11 +21,11 @@ class Dependency implements RuleType
     private $finder;
     private $parser;
     /**
-     * @var ClassName 
+     * @var ClassName
      */
     private $parsedClassClassName;
     /**
-     * @var ClassName[] 
+     * @var ClassName[]
      */
     private $parsedClassDependencies;
     private $eventDispatcher;

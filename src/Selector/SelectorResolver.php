@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class SelectorResolver
 {
     /**
-     * @var ContainerBuilder 
+     * @var ContainerBuilder
      */
     private $container;
 

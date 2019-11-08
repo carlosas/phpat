@@ -5,16 +5,16 @@ namespace PhpAT\Output;
 class StdOutput implements OutputInterface
 {
     /**
-     * @var resource 
+     * @var resource
      */
     private const OK_STREAM = \STDOUT;
     /**
-     * @var resource 
+     * @var resource
      */
     private const ERR_STREAM = \STDERR;
 
     /**
-     * @var int 
+     * @var int
      */
     private $verbose;
 
