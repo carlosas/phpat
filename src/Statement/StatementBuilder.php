@@ -111,6 +111,6 @@ class StatementBuilder
 
     private function normalizePath(string $path): string
     {
-        return ('\\' === \DIRECTORY_SEPARATOR) ? str_replace('\\', '/', $path) : $path;
+        return (\DIRECTORY_SEPARATOR === '\\') ? str_replace('\\', '/', $path) : $path;
     }
 }

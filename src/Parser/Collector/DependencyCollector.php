@@ -27,7 +27,7 @@ class DependencyCollector extends AbstractCollector
             $this->saveResultIfNotPresent($node->toString());
         } elseif ($node instanceof Node\Name) {
             $found = $this->matcher->findClass($node->parts);
-            if (!is_null($found)) {
+            if ($found !== null) {
                 $this->saveResultIfNotPresent($found);
             }
         }
@@ -35,7 +35,7 @@ class DependencyCollector extends AbstractCollector
 
     private function saveResultIfNotPresent(string $fqdn)
     {
-        if (false === array_search($fqdn, $this->dependencies)) {
+        if (array_search($fqdn, $this->dependencies) === false) {
             $this->dependencies[] = $fqdn;
             $this->result[] = ClassName::createFromFQDN($fqdn);
         }

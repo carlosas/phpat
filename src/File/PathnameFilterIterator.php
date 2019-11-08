@@ -26,7 +26,7 @@ class PathnameFilterIterator extends \FilterIterator
     {
         $filename = $this->current()->getPathname();
 
-        if ('\\' === \DIRECTORY_SEPARATOR) {
+        if (\DIRECTORY_SEPARATOR === '\\') {
             $filename = str_replace('\\', '/', $filename);
         }
 
@@ -42,13 +42,13 @@ class PathnameFilterIterator extends \FilterIterator
 
     protected function isRegex($str): bool
     {
-        return false !== strpos($str, '*');
+        return strpos($str, '*') !== false;
     }
 
     protected function parseRegex(string $str)
     {
         $substrs = explode('*', $str);
-        if (1 === count($substrs)) {
+        if (count($substrs) === 1) {
             return $str;
         }
 

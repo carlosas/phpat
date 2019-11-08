@@ -72,7 +72,7 @@ class Inheritance implements RuleType
         */
         foreach ($classNameCollector->getResult() as $className) {
             $result = (
-                !is_null($this->parsedClassParent)
+                $this->parsedClassParent !== null
                 && $className->getFQDN() === $this->parsedClassParent->getFQDN()
             );
 
