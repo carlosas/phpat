@@ -2,7 +2,6 @@
 
 namespace PhpAT\Rule\Type;
 
-use PhpAT\File\FileFinder;
 use PhpAT\Parser\ClassMatcher;
 use PhpAT\Parser\ClassName;
 use PhpAT\Parser\Collector\ClassNameCollector;
@@ -15,26 +14,27 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class Dependency implements RuleType
 {
+    /** @var NodeTraverserInterface */
     private $traverser;
-    private $finder;
+
+    /** @var Parser */
     private $parser;
-    /**
-     * @var ClassName
-     */
+
+    /** @var ClassName */
     private $parsedClassClassName;
-    /**
-     * @var ClassName[]
-     */
+
+    /** @var ClassName[] */
     private $parsedClassDependencies;
+
+    /** @var EventDispatcherInterface */
     private $eventDispatcher;
 
     public function __construct(
-        FileFinder $finder,
         Parser $parser,
         NodeTraverserInterface $traverser,
         EventDispatcherInterface $eventDispatcher
-    ) {
-        $this->finder = $finder;
+    )
+    {
         $this->parser = $parser;
         $this->traverser = $traverser;
         $this->eventDispatcher = $eventDispatcher;
@@ -44,7 +44,8 @@ class Dependency implements RuleType
         array $parsedClass,
         array $destinationFiles,
         bool $inverse = false
-    ): void {
+    ): void
+    {
         $this->resetCollectedItems();
 
         $this->extractParsedClassInfo($parsedClass);
@@ -52,10 +53,8 @@ class Dependency implements RuleType
         $classNameCollector = new ClassNameCollector();
         $this->traverser->addVisitor($classNameCollector);
 
-        /**
-         * @var \SplFileInfo $file
-        */
         foreach ($destinationFiles as $file) {
+            /** @var \SplFileInfo $file */
             $parsed = $this->parser->parse(file_get_contents($file->getPathname()));
             $this->traverser->traverse($parsed);
         }
@@ -66,10 +65,8 @@ class Dependency implements RuleType
             return;
         }
 
-        /**
-         * @var ClassName $className
-        */
         foreach ($classNameCollector->getResult() as $className) {
+            /** @var ClassName $className */
             $result = empty($this->parsedClassDependencies)
                 ? false
                 : in_array($className->getFQDN(), $this->parsedClassDependencies);
@@ -95,10 +92,8 @@ class Dependency implements RuleType
         $this->traverser->removeVisitor($dependencyExtractor);
         $this->parsedClassDependencies = $dependencyExtractor->getResult();
 
-        /**
-         * @var ClassName $v
-        */
         foreach ($this->parsedClassDependencies as $k => $v) {
+            /** @var ClassName $v */
             if (empty($v->getNamespace())) {
                 $className = new ClassName($this->parsedClassClassName->getNamespace(), $v->getName());
                 $this->parsedClassDependencies[$k] = $className->getFQDN();

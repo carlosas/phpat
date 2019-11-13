@@ -7,7 +7,7 @@ use PhpParser\Node;
 
 class ClassNameCollector extends AbstractCollector
 {
-    public function leaveNode(Node $node)
+    public function leaveNode(Node $node): void
     {
         if ($node instanceof Node\Stmt\Namespace_) {
             foreach ($node->stmts as $stmt) {

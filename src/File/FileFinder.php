@@ -6,7 +6,10 @@ use PhpAT\App\Configuration;
 
 class FileFinder
 {
+    /** @var Finder */
     private $finder;
+
+    /** @var Configuration */
     private $configuration;
 
     public function __construct(Finder $finder, Configuration $configuration)
@@ -15,11 +18,7 @@ class FileFinder
         $this->configuration = $configuration;
     }
 
-    /**
-     * @param  string $file
-     * @param  array  $excluded
-     * @return \SplFileInfo[]
-     */
+    /** @return \SplFileInfo[] */
     public function findFiles(string $file, array $excluded = []): array
     {
         $splittedFile = $this->getSplittedFile($file);
@@ -32,6 +31,7 @@ class FileFinder
         );
     }
 
+    /** @return string[] */
     private function getSplittedFile(string $file): array
     {
         $file = $this->configuration->getSrcPath() . $file;

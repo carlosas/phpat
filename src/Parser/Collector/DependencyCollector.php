@@ -8,10 +8,10 @@ use PhpParser\Node;
 
 class DependencyCollector extends AbstractCollector
 {
-    /**
-     * @var ClassMatcher
-     */
+    /** @var ClassMatcher */
     private $matcher;
+
+    /** @var string[] */
     private $dependencies = [];
 
     public function __construct(ClassMatcher $matcher)

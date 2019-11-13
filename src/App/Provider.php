@@ -27,45 +27,26 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 
-/**
- * Class Provider
- *
- * @package PhpAT\App
- */
 class Provider
 {
-    /**
-     * @var ContainerBuilder
-     */
+    /** @var ContainerBuilder */
     private $builder;
-    /**
-     * @var string
-     */
+
+    /** @var string */
     private $autoload;
-    /**
-     * @var Configuration
-     */
+
+    /** @var Configuration */
     private $configuration;
 
-    /**
-     * Provider constructor.
-     *
-     * @param ContainerBuilder $builder
-     * @param string           $autoload
-     * @param array            $argv
-     */
     public function __construct(ContainerBuilder $builder, string $autoload, array $argv)
     {
-        $this->builder       = $builder;
-        $this->autoload      = $autoload;
+        $this->builder = $builder;
+        $this->autoload = $autoload;
         $this->configuration = new Configuration(
             Yaml::parse(file_get_contents(getcwd() . '/' . ($argv[1] ?? 'phpat.yml')))
         );
     }
 
-    /**
-     * @return ContainerBuilder
-     */
     public function register(): ContainerBuilder
     {
         $phpParser = (new ParserFactory())->create(ParserFactory::ONLY_PHP7);

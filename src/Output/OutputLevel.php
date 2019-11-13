@@ -2,11 +2,6 @@
 
 namespace PhpAT\Output;
 
-/**
- * Class OutputLevel
- *
- * @package PhpAT\Output
- */
 class OutputLevel
 {
     public const DEBUG = 0;

@@ -4,24 +4,16 @@ namespace PhpAT\Selector;
 
 use PhpAT\File\FileFinder;
 
-/**
- * Class PathSelector
- *
- * @package PhpAT\Selector
- */
 class PathSelector implements SelectorInterface
 {
     private const DEPENDENCIES = [
         FileFinder::class
     ];
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $path;
-    /**
-     * @var FileFinder
-     */
+
+    /** @var FileFinder */
     private $fileFinder;
 
     public function __construct(string $path)
@@ -29,6 +21,7 @@ class PathSelector implements SelectorInterface
         $this->path = $path;
     }
 
+    /** @return string[] */
     public function getDependencies(): array
     {
         return self::DEPENDENCIES;
@@ -39,12 +32,13 @@ class PathSelector implements SelectorInterface
         $this->fileFinder = $dependencies[FileFinder::class];
     }
 
+    /** @return \SplFileInfo[] */
     public function select(): array
     {
         $result = [];
         foreach ($this->fileFinder->findFiles($this->path) as $file) {
             $result[$file->getPathname()] = $file;
-        };
+        }
         return $result;
     }
 }

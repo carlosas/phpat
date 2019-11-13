@@ -2,29 +2,17 @@
 
 namespace PhpAT\App;
 
-/**
- * Class ErrorStorage
- *
- * @package PhpAT\Shared
- */
 class ErrorStorage
 {
-    /**
-     * @var array
-     */
+    /** @var string[] */
     private $errors = [];
-    /**
-     * @var bool
-     */
+
+    /** @var bool */
     private $anyRuleHadErrors = false;
-    /**
-     * @var bool
-     */
+
+    /** @var bool */
     private $lastRuleHadErrors = false;
 
-    /**
-     * @param string $message
-     */
     public function addError(string $message): void
     {
         $this->errors[] = $message;
@@ -32,9 +20,6 @@ class ErrorStorage
         $this->anyRuleHadErrors = true;
     }
 
-    /**
-     * @return array
-     */
     public function flushErrors(): array
     {
         $e = $this->errors;
@@ -44,17 +29,11 @@ class ErrorStorage
         return $e;
     }
 
-    /**
-     * @return bool
-     */
     public function anyRuleHadErrors(): bool
     {
         return $this->anyRuleHadErrors;
     }
 
-    /**
-     * @return bool
-     */
     public function lastRuleHadErrors(): bool
     {
         return $this->lastRuleHadErrors;

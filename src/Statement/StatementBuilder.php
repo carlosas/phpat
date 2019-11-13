@@ -4,30 +4,21 @@ namespace PhpAT\Statement;
 
 use PhpAT\App\Configuration;
 use PhpAT\Rule\Rule;
+use PhpAT\Selector\SelectorInterface;
 use PhpAT\Selector\SelectorResolver;
 use PhpParser\Parser;
 
 class StatementBuilder
 {
-    /**
-     * @var SelectorResolver
-     */
+    /** @var SelectorResolver */
     private $selectorResolver;
-    /**
-     * @var Parser
-     */
+
+    /** @var Parser */
     private $parser;
-    /**
-     * @var Configuration
-     */
+
+    /** @var Configuration */
     private $configuration;
 
-    /**
-     * StatementBuilder constructor.
-     *
-     * @param SelectorResolver $selectorResolver
-     * @param Parser           $parser
-     */
     public function __construct(SelectorResolver $selectorResolver, Parser $parser, Configuration $configuration)
     {
         $this->selectorResolver = $selectorResolver;
@@ -35,10 +26,6 @@ class StatementBuilder
         $this->configuration = $configuration;
     }
 
-    /**
-     * @param  Rule $rule
-     * @return \Generator
-     */
     public function build(Rule $rule): \Generator
     {
         $origins = $this->selectFiles($rule->getOrigin(), $rule->getOriginExcluded());
@@ -68,8 +55,8 @@ class StatementBuilder
     }
 
     /**
-     * @param  array $included
-     * @param  array $excluded
+     * @param SelectorInterface[] $included
+     * @param SelectorInterface[] $excluded
      * @return \SplFileInfo[]
      */
     private function selectFiles(array $included, array $excluded): array
@@ -83,7 +70,7 @@ class StatementBuilder
             $filesToExclude = $this->selectorResolver->resolve($e);
             /**
              * @var \SplFileInfo $file
-            */
+             */
             foreach ($filesToExclude as $file) {
                 foreach ($filesToValidate as $key => $value) {
                     if ($this->normalizePath($file->getPathname()) == $this->normalizePath($value->getPathname())) {
@@ -97,6 +84,7 @@ class StatementBuilder
     }
 
     /**
+     * FIXME `Parser#parse` returns Stmt[]|null but this return type is only array. If `null` is returned this method will break.
      * @param  \SplFileInfo $file
      * @return array
      */

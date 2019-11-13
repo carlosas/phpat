@@ -4,23 +4,18 @@ namespace PhpAT\Output;
 
 class StdOutput implements OutputInterface
 {
-    /**
-     * @var resource
-     */
+    /** @var resource */
     private const OK_STREAM = \STDOUT;
-    /**
-     * @var resource
-     */
+
+    /** @var resource */
     private const ERR_STREAM = \STDERR;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $verbose;
 
     public function __construct($verbose = VerboseLevel::NORMAL)
     {
-        $this->verbose  = $verbose;
+        $this->verbose = $verbose;
     }
 
     public function write(string $message, int $level = OutputLevel::DEFAULT): void

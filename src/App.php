@@ -15,46 +15,30 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class App
 {
-    /**
-     * @var TestExtractor $extractor
-     */
+    /** @var TestExtractor */
     private $extractor;
-    /**
-     * @var StatementBuilder $statementBuilder
-     */
+
+    /** @var StatementBuilder */
     private $statementBuilder;
-    /**
-     * @var EventDispatcherInterface
-     */
+
+    /** @var EventDispatcherInterface */
     private $dispatcher;
-    /**
-     * @var EventSubscriberInterface
-     */
+
+    /** @var EventSubscriberInterface */
     private $subscriber;
 
-    /**
-     * App constructor.
-     *
-     * @param TestExtractor            $extractor
-     * @param StatementBuilder         $statementBuilder
-     * @param EventDispatcherInterface $dispatcher
-     * @param EventSubscriberInterface $subscriber
-     */
     public function __construct(
         TestExtractor $extractor,
         StatementBuilder $statementBuilder,
         EventDispatcherInterface $dispatcher,
         EventSubscriberInterface $subscriber
     ) {
-        $this->extractor        = $extractor;
+        $this->extractor = $extractor;
         $this->statementBuilder = $statementBuilder;
-        $this->dispatcher       = $dispatcher;
-        $this->subscriber       = $subscriber;
+        $this->dispatcher = $dispatcher;
+        $this->subscriber = $subscriber;
     }
 
-    /**
-     * @throws \Exception
-     */
     public function execute(): void
     {
         $this->dispatcher->addSubscriber($this->subscriber);
@@ -74,10 +58,8 @@ class App
                 RuleValidationStartEvent::class,
                 new RuleValidationStartEvent($rule->getName())
             );
-            /**
-             * @var Statement $statement
-            */
             foreach ($statements as $statement) {
+                /** @var Statement $statement */
                 $this->validateStatement($statement);
             }
             $this->dispatcher->dispatch(RuleValidationEndEvent::class, new RuleValidationEndEvent());

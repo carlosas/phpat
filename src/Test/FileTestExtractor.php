@@ -6,7 +6,10 @@ use PhpAT\Rule\RuleBuilder;
 
 class FileTestExtractor implements TestExtractor
 {
+    /** @var RuleBuilder */
     private $ruleBuilder;
+
+    /** @var string */
     private $testPath;
 
     public function __construct(RuleBuilder $ruleBuilder, string $testPath)
@@ -27,6 +30,7 @@ class FileTestExtractor implements TestExtractor
         return $tests;
     }
 
+    /** @return string[] */
     private function getTestClasses(): array
     {
         $files = scandir($this->testPath);

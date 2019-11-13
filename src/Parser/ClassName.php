@@ -4,7 +4,10 @@ namespace PhpAT\Parser;
 
 class ClassName
 {
+    /** @var string */
     private $namespace;
+
+    /** @var string */
     private $name;
 
     public function __construct(string $namespace, string $name)
@@ -33,7 +36,7 @@ class ClassName
 
     public function getFQDN(): string
     {
-        return (empty($this->getNamespace()))
+        return empty($this->getNamespace())
             ? $this->getName()
             : $this->getNamespace() . '\\' . $this->getName();
     }

@@ -13,6 +13,7 @@ class SymfonyFinderAdapter implements Finder
         $this->finder = $finder;
     }
 
+    /** @return \SplFileInfo[] */
     public function find(string $filePath, string $fileName, array $include = [], array $exclude = []): array
     {
         $finder = $this->finder->create();

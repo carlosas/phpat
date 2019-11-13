@@ -33,6 +33,6 @@ class Configuration
 
     public function getVerbosity(): int
     {
-        return (int) ($this->config['options']['verbosity'] ?? 1);
+        return (int)($this->config['options']['verbosity'] ?? 1);
     }
 }

@@ -2,11 +2,9 @@
 
 namespace PhpAT\Rule\Type;
 
-use PhpAT\File\FileFinder;
 use PhpAT\Parser\ClassMatcher;
 use PhpAT\Parser\ClassName;
 use PhpAT\Parser\Collector\ClassNameCollector;
-use PhpAT\Parser\Collector\InterfaceCollector;
 use PhpAT\Parser\Collector\TraitCollector;
 use PhpAT\Statement\Event\NoClassesFoundEvent;
 use PhpAT\Statement\Event\StatementNotValidEvent;
@@ -17,26 +15,25 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class Mixin implements RuleType
 {
+    /** @var NodeTraverserInterface */
     private $traverser;
-    private $finder;
+
+    /** @var Parser */
     private $parser;
-    /**
-     * @var ClassName
-     */
+
+    /** @var ClassName */
     private $parsedClassClassName;
-    /**
-     * @var ClassName[]
-     */
+
+    /** @var ClassName[] */
     private $parsedClassTraits;
     private $eventDispatcher;
 
     public function __construct(
-        FileFinder $finder,
         Parser $parser,
         NodeTraverserInterface $traverser,
         EventDispatcherInterface $eventDispatcher
-    ) {
-        $this->finder = $finder;
+    )
+    {
         $this->parser = $parser;
         $this->traverser = $traverser;
         $this->eventDispatcher = $eventDispatcher;
@@ -46,7 +43,8 @@ class Mixin implements RuleType
         array $parsedClass,
         array $destinationFiles,
         bool $inverse = false
-    ): void {
+    ): void
+    {
         $this->resetCollectedItems();
 
         $this->extractParsedClassInfo($parsedClass);
@@ -55,7 +53,7 @@ class Mixin implements RuleType
         $this->traverser->addVisitor($classNameCollector);
         /**
          * @var \SplFileInfo $file
-        */
+         */
         foreach ($destinationFiles as $file) {
             $parsed = $this->parser->parse(file_get_contents($file->getPathname()));
             $this->traverser->traverse($parsed);
@@ -69,7 +67,7 @@ class Mixin implements RuleType
 
         /**
          * @var ClassName $className
-        */
+         */
         foreach ($classNameCollector->getResult() as $className) {
             $result = empty($this->parsedClassTraits)
                 ? false
@@ -99,7 +97,7 @@ class Mixin implements RuleType
 
         /**
          * @var ClassName $v
-        */
+         */
         foreach ($this->parsedClassTraits as $k => $v) {
             if (empty($v->getNamespace())) {
                 $className = new ClassName($this->parsedClassClassName->getNamespace(), $v->getName());

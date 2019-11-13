@@ -7,12 +7,12 @@ class ClassMatcher
     private $namespace = '';
     private $declarations = [];
 
-    public function saveNamespace(string $namespace)
+    public function saveNamespace(string $namespace): void
     {
         $this->namespace = $namespace;
     }
 
-    public function addDeclaration(string $declaration, ?string $alias = null)
+    public function addDeclaration(string $declaration, ?string $alias = null): void
     {
         if ($alias === null) {
             $d = explode('\\', $declaration);

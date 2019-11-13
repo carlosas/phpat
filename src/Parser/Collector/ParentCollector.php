@@ -8,9 +8,7 @@ use PhpParser\Node;
 
 class ParentCollector extends AbstractCollector
 {
-    /**
-     * @var ClassMatcher
-     */
+    /** @var ClassMatcher */
     private $matcher;
 
     public function __construct(ClassMatcher $matcher)

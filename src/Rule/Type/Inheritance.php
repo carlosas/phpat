@@ -2,7 +2,6 @@
 
 namespace PhpAT\Rule\Type;
 
-use PhpAT\File\FileFinder;
 use PhpAT\Parser\ClassMatcher;
 use PhpAT\Parser\ClassName;
 use PhpAT\Parser\Collector\ClassNameCollector;
@@ -15,26 +14,27 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class Inheritance implements RuleType
 {
+    /** @var NodeTraverserInterface */
     private $traverser;
-    private $finder;
+
+    /** @var Parser */
     private $parser;
+
+    /** @var EventDispatcherInterface */
     private $eventDispatcher;
-    /**
-     * @var ClassName
-     */
+
+    /** @var ClassName */
     private $parsedClassClassName;
-    /**
-     * @var ClassName
-     */
+
+    /** @var ClassName */
     private $parsedClassParent;
 
     public function __construct(
-        FileFinder $finder,
         Parser $parser,
         NodeTraverserInterface $traverser,
         EventDispatcherInterface $eventDispatcher
-    ) {
-        $this->finder = $finder;
+    )
+    {
         $this->parser = $parser;
         $this->traverser = $traverser;
         $this->eventDispatcher = $eventDispatcher;
@@ -44,7 +44,8 @@ class Inheritance implements RuleType
         array $parsedClass,
         array $destinationFiles,
         bool $inverse = false
-    ): void {
+    ): void
+    {
         $this->resetCollectedItems();
 
         $this->extractParsedClassInfo($parsedClass);
@@ -53,7 +54,7 @@ class Inheritance implements RuleType
         $this->traverser->addVisitor($classNameCollector);
         /**
          * @var \SplFileInfo $file
-        */
+         */
         foreach ($destinationFiles as $file) {
             $parsedFile = $this->parser->parse(file_get_contents($file->getPathname()));
             $this->traverser->traverse($parsedFile);
@@ -67,7 +68,7 @@ class Inheritance implements RuleType
 
         /**
          * @var ClassName $className
-        */
+         */
         foreach ($classNameCollector->getResult() as $className) {
             $result = (
                 $this->parsedClassParent !== null

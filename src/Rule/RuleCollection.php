@@ -1,18 +1,13 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace PhpAT\Rule;
 
 class RuleCollection
 {
+    /** @var Rule[] */
     private $values = [];
 
-    /**
-     * RuleCollection constructor.
-     *
-     * @param Rule[] $rules
-     */
+    /** @param Rule[] $rules */
     public function __construct(array $rules = [])
     {
         foreach ($rules as $rule) {
@@ -25,9 +20,7 @@ class RuleCollection
         $this->values[] = $rule;
     }
 
-    /**
-     * @return Rule[]
-     */
+    /** @return Rule[] */
     public function getValues(): array
     {
         return $this->values;

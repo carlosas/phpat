@@ -2,7 +2,6 @@
 
 namespace PhpAT\Rule\Type;
 
-use PhpAT\File\FileFinder;
 use PhpAT\Parser\ClassMatcher;
 use PhpAT\Parser\ClassName;
 use PhpAT\Parser\Collector\ClassNameCollector;
@@ -16,26 +15,27 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class Composition implements RuleType
 {
+    /** @var NodeTraverserInterface */
     private $traverser;
-    private $finder;
+
+    /** @var Parser */
     private $parser;
-    /**
-     * @var ClassName
-     */
+
+    /** @var ClassName */
     private $parsedClassClassName;
-    /**
-     * @var ClassName[]
-     */
+
+    /** @var ClassName[] */
     private $parsedClassInterfaces;
+
+    /** @var EventDispatcherInterface */
     private $eventDispatcher;
 
     public function __construct(
-        FileFinder $finder,
         Parser $parser,
         NodeTraverserInterface $traverser,
         EventDispatcherInterface $eventDispatcher
-    ) {
-        $this->finder = $finder;
+    )
+    {
         $this->parser = $parser;
         $this->traverser = $traverser;
         $this->eventDispatcher = $eventDispatcher;
@@ -45,17 +45,17 @@ class Composition implements RuleType
         array $parsedClass,
         array $destinationFiles,
         bool $inverse = false
-    ): void {
+    ): void
+    {
         $this->resetCollectedItems();
 
         $this->extractParsedClassInfo($parsedClass);
 
         $classNameCollector = new ClassNameCollector();
         $this->traverser->addVisitor($classNameCollector);
-        /**
-         * @var \SplFileInfo $file
-        */
+
         foreach ($destinationFiles as $file) {
+            /** @var \SplFileInfo $file */
             $parsed = $this->parser->parse(file_get_contents($file->getPathname()));
             $this->traverser->traverse($parsed);
         }
@@ -66,10 +66,8 @@ class Composition implements RuleType
             return;
         }
 
-        /**
-         * @var ClassName $className
-        */
         foreach ($classNameCollector->getResult() as $className) {
+            /** @var ClassName $className */
             $result = empty($this->parsedClassInterfaces)
                 ? false
                 : in_array($className->getFQDN(), $this->parsedClassInterfaces);
@@ -97,7 +95,7 @@ class Composition implements RuleType
 
         /**
          * @var ClassName $v
-        */
+         */
         foreach ($this->parsedClassInterfaces as $k => $v) {
             if (empty($v->getNamespace())) {
                 $className = new ClassName($this->parsedClassClassName->getNamespace(), $v->getName());
@@ -117,7 +115,7 @@ class Composition implements RuleType
         $this->eventDispatcher->dispatch($event, new $event($message));
     }
 
-    private function resetCollectedItems()
+    private function resetCollectedItems(): void
     {
         $this->parsedClassClassName = null;
         $this->parsedClassInterfaces = null;

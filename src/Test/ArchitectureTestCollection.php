@@ -4,13 +4,10 @@ namespace PhpAT\Test;
 
 class ArchitectureTestCollection
 {
+    /** @var ArchitectureTest[] */
     private $values = [];
 
-    /**
-     * ArchitectureTestCollection constructor.
-     *
-     * @param ArchitectureTest[] $tests
-     */
+    /** @param ArchitectureTest[] $tests */
     public function __construct(array $tests = [])
     {
         foreach ($tests as $test) {
@@ -23,9 +20,7 @@ class ArchitectureTestCollection
         $this->values[] = $test;
     }
 
-    /**
-     * @return ArchitectureTest[]
-     */
+    /** @return ArchitectureTest[] */
     public function getValues(): array
     {
         return $this->values;

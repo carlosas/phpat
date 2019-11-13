@@ -6,9 +6,7 @@ use PhpParser\NodeVisitorAbstract;
 
 class AbstractCollector extends NodeVisitorAbstract
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $result = [];
 
     public function getResult(): array
