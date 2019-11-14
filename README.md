@@ -1,5 +1,5 @@
 <p align="center">
-    <img width="500px" src="https://raw.githubusercontent.com/carlosas/phpat/master/.github/logo.png" alt="Logo">
+    <img width="500px" src="https://raw.githubusercontent.com/carlosas/phpat/master/.github/logo.png" alt="PHP Architecture Tester">
 </p>
 <h2 align="center">Easy to use architecture testing tool for PHP</h2>
 <p align="center">
