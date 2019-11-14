@@ -17,6 +17,11 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class EventSubscriber implements EventSubscriberInterface
 {
     /**
+     * @var float
+     */
+    private $startTime;
+
+    /**
      * @var OutputInterface
      */
     private $output;
@@ -45,6 +50,7 @@ class EventSubscriber implements EventSubscriberInterface
 
     public function onSuiteStartEvent(SuiteStartEvent $event): void
     {
+        $this->startTime = microtime(true);
         $this->output->write(PHP_EOL, OutputLevel::DEFAULT);
         $this->output->writeLn('---/-------\------|-----\---/--', OutputLevel::DEFAULT);
         $this->output->writeLn('--/-PHP Architecture Tester/---', OutputLevel::DEFAULT);
@@ -54,11 +60,9 @@ class EventSubscriber implements EventSubscriberInterface
 
     public function onSuiteEndEvent(SuiteEndEvent $event): void
     {
-        if (!$this->errorStorage->anyRuleHadErrors()) {
-            $this->output->writeLn(PHP_EOL . 'phpat | TESTS PASSED', OutputLevel::DEFAULT);
-        } else {
-            $this->output->writeLn(PHP_EOL . 'phpat | ERRORS FOUND', OutputLevel::DEFAULT);
-        }
+        $reportMsg = (!$this->errorStorage->anyRuleHadErrors()) ? 'TESTS PASSED' : 'ERRORS FOUND';
+        $timeMsg = round(microtime(true) - $this->startTime, 2) . 's';
+        $this->output->writeLn(PHP_EOL . 'phpat | ' . $timeMsg . ' | ' . $reportMsg, OutputLevel::DEFAULT);
     }
 
     public function onRuleValidationStartEvent(RuleValidationStartEvent $event): void
