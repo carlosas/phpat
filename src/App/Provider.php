@@ -85,11 +85,6 @@ class Provider
             ->addArgument($this->configuration);
 
         $this->builder
-            ->register(FileFinder::class, FileFinder::class)
-            ->addArgument(new SymfonyFinderAdapter(new Finder()))
-            ->addArgument($this->configuration);
-
-        $this->builder
             ->register(NodeTraverserInterface::class, NodeTraverser::class);
 
         $this->builder
