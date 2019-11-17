@@ -46,7 +46,7 @@ class DependencyCollector extends AbstractCollector
             if ($found !== null) {
                 $this->saveResultIfNotPresent($found);
             }
-        } elseif ($this->ignoreDocBlocks && $node->getDocComment() !== null) {
+        } elseif (!$this->ignoreDocBlocks && $node->getDocComment() !== null) {
             $doc = $node->getDocComment()->getText();
             $nodes = $this->docParser->parse(new TokenIterator((new Lexer())->tokenize($doc)));
             foreach ($nodes->getTags() as $tag) {
