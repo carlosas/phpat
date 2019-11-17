@@ -16,7 +16,7 @@ class DependencyTest extends ArchitectureTest
             ->andClassesThat(Selector::havePath('Dependency/MethodReturn.php'))
             ->andClassesThat(Selector::havePath('Dependency/Instantiation.php'))
             //->andClassesThat(Selector::havePath('Dependency/UnusedDeclaration.php'))
-            //->andClassesThat(Selector::havePath('Dependency/DocBlock.php'))
+            ->andClassesThat(Selector::havePath('Dependency/DocBlock.php'))
             ->mustDependOn()
             ->classesThat(Selector::havePath('SimpleClass.php'))
             ->classesThat(Selector::havePath('AnotherSimpleClass.php'))

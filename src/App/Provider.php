@@ -21,6 +21,9 @@ use PhpAT\Test\TestExtractor;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\ParserFactory;
+use PHPStan\PhpDocParser\Parser\ConstExprParser;
+use PHPStan\PhpDocParser\Parser\PhpDocParser;
+use PHPStan\PhpDocParser\Parser\TypeParser;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -71,6 +74,7 @@ class Provider
     public function register(): ContainerBuilder
     {
         $phpParser = (new ParserFactory())->create(ParserFactory::ONLY_PHP7);
+        $phpDocParser = new PhpDocParser(new TypeParser(), new ConstExprParser());
 
         $this->builder
             ->register(EventDispatcherInterface::class, EventDispatcher::class);
@@ -89,7 +93,7 @@ class Provider
 
         $this->builder
             ->register(OutputInterface::class, StdOutput::class)
-            ->addArgument($this->configuration->getVerbosity());
+            ->addArgument($this->configuration->getOptVerbosity());
 
         $this->builder
             ->register(RuleBuilder::class, RuleBuilder::class)
@@ -115,7 +119,9 @@ class Provider
             ->addArgument(new Reference(FileFinder::class))
             ->addArgument($phpParser)
             ->addArgument(new Reference(NodeTraverserInterface::class))
-            ->addArgument(new Reference(EventDispatcherInterface::class));
+            ->addArgument($phpDocParser)
+            ->addArgument(new Reference(EventDispatcherInterface::class))
+            ->addArgument($this->configuration->getOptDependencyCheckDocBlocks());
 
         $this->builder
             ->register(Inheritance::class, Inheritance::class)

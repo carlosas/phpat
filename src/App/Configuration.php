@@ -33,8 +33,13 @@ class Configuration
         return $this->config['tests']['path'] ?? '';
     }
 
-    public function getVerbosity(): int
+    public function getOptVerbosity(): int
     {
         return (int) ($this->config['options']['verbosity'] ?? 1);
+    }
+
+    public function getOptDependencyCheckDocBlocks(): bool
+    {
+        return (bool) ($this->config['options']['dependency']['ignore_docblocks'] ?? false);
     }
 }
