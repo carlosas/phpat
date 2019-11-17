@@ -62,7 +62,6 @@ class Inheritance implements RuleType
         }
         $this->traverser->removeVisitor($classNameCollector);
 
-        //TODO: Change to FatalErrorEvent (could not find any class in the test)
         if (empty($classNameCollector->getResult())) {
             return;
         }

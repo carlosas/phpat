@@ -62,6 +62,7 @@ This is the complete list of options:
 * `src` `exclude`: Files you want to be excluded in the tests (default=none).
 * `tests` `path`: The path where your tests are.
 * `options` `verbosity`: 0/1/2 output verbosity level (default=1).
+* `options` `dependency` `ignore_docblocks`: true/false (default=false).
 
 <h2></h2>
 

@@ -13,13 +13,31 @@ use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\Parser;
+use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class Dependency implements RuleType
 {
-    private $traverser;
+    /**
+     * @var FileFinder
+     */
     private $finder;
+    /**
+     * @var Parser
+     */
     private $parser;
+    /**
+     * @var NodeTraverserInterface
+     */
+    private $traverser;
+    /**
+     * @var PhpDocParser
+     */
+    private $docParser;
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
     /**
      * @var ClassName
      */
@@ -28,18 +46,25 @@ class Dependency implements RuleType
      * @var ClassName[]
      */
     private $parsedClassDependencies;
-    private $eventDispatcher;
+    /**
+     * @var bool
+     */
+    private $ignoreDocBlocks;
 
     public function __construct(
         FileFinder $finder,
         Parser $parser,
         NodeTraverserInterface $traverser,
-        EventDispatcherInterface $eventDispatcher
+        PhpDocParser $docParser,
+        EventDispatcherInterface $eventDispatcher,
+        bool $ignoreDocBlocks
     ) {
         $this->finder = $finder;
         $this->parser = $parser;
         $this->traverser = $traverser;
+        $this->docParser = $docParser;
         $this->eventDispatcher = $eventDispatcher;
+        $this->ignoreDocBlocks = $ignoreDocBlocks;
     }
 
     public function validate(
@@ -63,7 +88,6 @@ class Dependency implements RuleType
         }
         $this->traverser->removeVisitor($classNameCollector);
 
-        //TODO: Change to FatalErrorEvent (could not find any class in the test)
         if (empty($classNameCollector->getResult())) {
             return;
         }
@@ -91,7 +115,7 @@ class Dependency implements RuleType
         $matcher = new ClassMatcher();
         $matcher->saveNamespace($this->parsedClassClassName->getNamespace());
 
-        $dependencyExtractor = new DependencyCollector($matcher);
+        $dependencyExtractor = new DependencyCollector($this->docParser, $matcher, $this->ignoreDocBlocks);
         $this->traverser->addVisitor($dependencyExtractor);
         $this->traverser->traverse($parsedClass);
         $this->traverser->removeVisitor($dependencyExtractor);
