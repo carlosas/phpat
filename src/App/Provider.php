@@ -149,7 +149,8 @@ class Provider
             ->addArgument(new Reference(TestExtractor::class))
             ->addArgument(new Reference(StatementBuilder::class))
             ->addArgument(new Reference(EventDispatcherInterface::class))
-            ->addArgument(new Reference(EventSubscriberInterface::class));
+            ->addArgument(new Reference(EventSubscriberInterface::class))
+            ->addArgument($this->configuration->getDryRun());
 
         return $this->builder;
     }

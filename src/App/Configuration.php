@@ -42,4 +42,9 @@ class Configuration
     {
         return (bool) ($this->config['options']['dependency']['ignore_docblocks'] ?? false);
     }
+
+    public function getDryRun(): bool
+    {
+        return (bool) ($this->config['options']['dry-run'] ?? false);
+    }
 }
