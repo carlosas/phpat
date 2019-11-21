@@ -51,7 +51,7 @@ class ArgvInput implements InputInterface
         foreach ($this->args as $arg) {
             if ($onlyArgs || $arg[0] !== '-') {
                 $this->parseArgument($arg);
-            } else if (strlen($arg) === 2 && $arg[1] === '-') {
+            } elseif (strlen($arg) === 2 && $arg[1] === '-') {
                 $onlyArgs = true;
             } else {
                 $this->parseLongOption($arg);
