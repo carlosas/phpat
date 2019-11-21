@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 use PhpAT\App\Provider;
+use PhpAT\Input\ArgvInput;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 $autoload = is_file(__DIR__.'/../../autoload.php')
@@ -17,8 +18,10 @@ if (PHP_VERSION_ID < 70100) {
     exit(1);
 }
 
+$input = new ArgvInput();
+
 $container = new ContainerBuilder();
-$provider  = new Provider($container, $autoload, $argv);
+$provider  = new Provider($container, $autoload, $input);
 $container = $provider->register();
 
 try {
