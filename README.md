@@ -63,6 +63,8 @@ This is the complete list of options:
 * `tests` `path`: The path where your tests are.
 * `options` `verbosity`: 0/1/2 output verbosity level (default=1).
 * `options` `dependency` `ignore_docblocks`: true/false (default=false).
+* `options` `dry-run`: When enabled it won't exit with an error exit code even 
+if the tests failed. Possible values are true/false (default=false).
 
 <h2></h2>
 
