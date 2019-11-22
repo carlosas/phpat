@@ -33,6 +33,10 @@ class App
      * @var EventSubscriberInterface
      */
     private $subscriber;
+    /**
+     * @var bool
+     */
+    private $dryRun;
 
     /**
      * App constructor.
@@ -41,17 +45,20 @@ class App
      * @param StatementBuilder         $statementBuilder
      * @param EventDispatcherInterface $dispatcher
      * @param EventSubscriberInterface $subscriber
+     * @param bool                     $dryRun
      */
     public function __construct(
         TestExtractor $extractor,
         StatementBuilder $statementBuilder,
         EventDispatcherInterface $dispatcher,
-        EventSubscriberInterface $subscriber
+        EventSubscriberInterface $subscriber,
+        bool $dryRun = false
     ) {
         $this->extractor        = $extractor;
         $this->statementBuilder = $statementBuilder;
         $this->dispatcher       = $dispatcher;
         $this->subscriber       = $subscriber;
+        $this->dryRun = $dryRun;
     }
 
     /**
@@ -87,7 +94,7 @@ class App
 
         $this->dispatcher->dispatch(SuiteEndEvent::class, new SuiteEndEvent());
 
-        if ($this->subscriber->suiteHadErrors()) {
+        if ($this->subscriber->suiteHadErrors() && !$this->dryRun) {
             throw new \Exception();
         }
     }

@@ -7,6 +7,7 @@ namespace PhpAT\App;
 use PhpAT\App;
 use PhpAT\File\FileFinder;
 use PhpAT\File\SymfonyFinderAdapter;
+use PhpAT\Input\InputInterface;
 use PhpAT\Output\OutputInterface;
 use PhpAT\Output\StdOutput;
 use PhpAT\Rule\RuleBuilder;
@@ -57,14 +58,17 @@ class Provider
      *
      * @param ContainerBuilder $builder
      * @param string           $autoload
-     * @param array            $argv
+     * @param InputInterface   $input
      */
-    public function __construct(ContainerBuilder $builder, string $autoload, array $argv)
+    public function __construct(ContainerBuilder $builder, string $autoload, InputInterface $input)
     {
         $this->builder       = $builder;
         $this->autoload      = $autoload;
         $this->configuration = new Configuration(
-            Yaml::parse(file_get_contents(getcwd() . '/' . ($argv[1] ?? 'phpat.yml')))
+            array_merge(
+                Yaml::parse(file_get_contents(getcwd() . '/' . ($input->getArgument('config-file', 'phpat.yml')))),
+                ['options' => $input->getOptions()]
+            )
         );
     }
 
@@ -149,7 +153,8 @@ class Provider
             ->addArgument(new Reference(TestExtractor::class))
             ->addArgument(new Reference(StatementBuilder::class))
             ->addArgument(new Reference(EventDispatcherInterface::class))
-            ->addArgument(new Reference(EventSubscriberInterface::class));
+            ->addArgument(new Reference(EventSubscriberInterface::class))
+            ->addArgument($this->configuration->getDryRun());
 
         return $this->builder;
     }
