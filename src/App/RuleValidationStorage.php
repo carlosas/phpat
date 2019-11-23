@@ -4,12 +4,7 @@ declare(strict_types=1);
 
 namespace PhpAT\App;
 
-/**
- * Class ErrorStorage
- *
- * @package PhpAT\Shared
- */
-class ErrorStorage
+class RuleValidationStorage
 {
     /**
      * @var array

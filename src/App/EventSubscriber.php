@@ -28,14 +28,14 @@ class EventSubscriber implements EventSubscriberInterface
      */
     private $output;
     /**
-     * @var ErrorStorage
+     * @var RuleValidationStorage
      */
-    private $errorStorage;
+    private $ruleValidationStorage;
 
     public function __construct(OutputInterface $output)
     {
         $this->output = $output;
-        $this->errorStorage = new ErrorStorage();
+        $this->ruleValidationStorage = new RuleValidationStorage();
     }
 
     public static function getSubscribedEvents(): array
@@ -64,7 +64,7 @@ class EventSubscriber implements EventSubscriberInterface
 
     public function onSuiteEndEvent(SuiteEndEvent $event): void
     {
-        $reportMsg = (!$this->errorStorage->anyRuleHadErrors()) ? 'TESTS PASSED' : 'ERRORS FOUND';
+        $reportMsg = (!$this->ruleValidationStorage->anyRuleHadErrors()) ? 'TESTS PASSED' : 'ERRORS FOUND';
         $timeMsg = round(microtime(true) - $this->startTime, 2) . 's';
         $this->output->writeLn(PHP_EOL . 'phpat | ' . $timeMsg . ' | ' . $reportMsg, OutputLevel::DEFAULT);
     }
@@ -93,11 +93,11 @@ class EventSubscriber implements EventSubscriberInterface
     {
         $this->output->writeLn(PHP_EOL, OutputLevel::INFO);
 
-        if (!$this->errorStorage->lastRuleHadErrors()) {
+        if (!$this->ruleValidationStorage->lastRuleHadErrors()) {
             $this->output->writeLn('OK', OutputLevel::INFO);
         }
 
-        foreach ($this->errorStorage->flushErrors() as $error) {
+        foreach ($this->ruleValidationStorage->flushErrors() as $error) {
             $this->output->writeLn('ERROR: ' . $error, OutputLevel::ERROR);
         }
     }
@@ -112,11 +112,11 @@ class EventSubscriber implements EventSubscriberInterface
     {
         $this->output->write('X', OutputLevel::INFO);
         $this->output->writeLn(' ' . $event->getMessage(), OutputLevel::DEBUG);
-        $this->errorStorage->addError($event->getMessage());
+        $this->ruleValidationStorage->addError($event->getMessage());
     }
 
     public function suiteHadErrors(): bool
     {
-        return $this->errorStorage->anyRuleHadErrors();
+        return $this->ruleValidationStorage->anyRuleHadErrors();
     }
 }
