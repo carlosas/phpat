@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhpAT\Test;
 
+use PhpAT\App\Configuration;
 use PhpAT\Rule\RuleBuilder;
 
 class FileTestExtractor implements TestExtractor
@@ -11,10 +12,10 @@ class FileTestExtractor implements TestExtractor
     private $ruleBuilder;
     private $testPath;
 
-    public function __construct(RuleBuilder $ruleBuilder, string $testPath)
+    public function __construct(RuleBuilder $ruleBuilder)
     {
         $this->ruleBuilder = $ruleBuilder;
-        $this->testPath = $testPath;
+        $this->testPath = getcwd() . '/' . Configuration::getTestsPath();
     }
 
     public function execute(): ArchitectureTestCollection

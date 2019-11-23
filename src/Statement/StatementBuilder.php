@@ -19,10 +19,6 @@ class StatementBuilder
      * @var Parser
      */
     private $parser;
-    /**
-     * @var Configuration
-     */
-    private $configuration;
 
     /**
      * StatementBuilder constructor.
@@ -30,11 +26,10 @@ class StatementBuilder
      * @param SelectorResolver $selectorResolver
      * @param Parser           $parser
      */
-    public function __construct(SelectorResolver $selectorResolver, Parser $parser, Configuration $configuration)
+    public function __construct(SelectorResolver $selectorResolver, Parser $parser)
     {
         $this->selectorResolver = $selectorResolver;
         $this->parser = $parser;
-        $this->configuration = $configuration;
     }
 
     /**
@@ -46,10 +41,10 @@ class StatementBuilder
         $origins = $this->selectFiles($rule->getOrigin(), $rule->getOriginExcluded());
         $destinations = $this->selectFiles($rule->getDestination(), $rule->getDestinationExcluded());
 
-        if (!empty($this->configuration->getSrcIncluded())) {
+        if (!empty(Configuration::getSrcIncluded())) {
             $filteredOrigins = [];
-            foreach ($this->configuration->getSrcIncluded() as $checkOnly) {
-                $checkOnly = $this->configuration->getSrcPath() . $checkOnly;
+            foreach (Configuration::getSrcIncluded() as $checkOnly) {
+                $checkOnly = Configuration::getSrcPath() . $checkOnly;
                 foreach ($origins as $key => $value) {
                     if ($this->normalizePath($checkOnly) == $this->normalizePath($value->getPathname())) {
                         $filteredOrigins[] = $origins[$key];

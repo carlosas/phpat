@@ -9,12 +9,10 @@ use PhpAT\App\Configuration;
 class FileFinder
 {
     private $finder;
-    private $configuration;
 
-    public function __construct(Finder $finder, Configuration $configuration)
+    public function __construct(Finder $finder)
     {
         $this->finder = $finder;
-        $this->configuration = $configuration;
     }
 
     /**
@@ -30,13 +28,13 @@ class FileFinder
             $splittedFile[0],
             $splittedFile[1],
             [],
-            array_merge($excluded, $this->configuration->getSrcExcluded())
+            array_merge($excluded, Configuration::getSrcExcluded())
         );
     }
 
     private function getSplittedFile(string $file): array
     {
-        $file = $this->configuration->getSrcPath() . $file;
+        $file = Configuration::getSrcPath() . $file;
         $pos = strrpos($file, '/');
         $splittedFile = [substr($file, 0, $pos), substr($file, $pos + 1)];
 

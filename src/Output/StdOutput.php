@@ -18,7 +18,7 @@ class StdOutput implements OutputInterface
      */
     private $verbose;
 
-    public function __construct($verbose = VerboseLevel::NORMAL)
+    public function __construct($verbose = VerboseLevel::VERBOSE)
     {
         $this->verbose  = $verbose;
     }
