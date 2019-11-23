@@ -6,45 +6,65 @@ namespace PhpAT\App;
 
 class Configuration
 {
-    private $config;
+    private static $initialized = false;
+    private static $srcPath;
+    private static $srcIncluded;
+    private static $srcExcluded;
+    private static $testsPath;
+    private static $verbosity;
+    private static $dryRun;
+    private static $dependencyIgnoreDocBlocks;
 
-    public function __construct(array $config)
+    public static function init(array $config)
     {
-        $this->config = $config;
+        if (!self::$initialized) {
+            self::process($config);
+        }
     }
 
-    public function getSrcPath(): string
+    private static function process(array $config)
     {
-        return $this->config['src']['path'] ?? '';
+        self::$srcPath = $config['src']['path'] ?? '';
+        self::$srcIncluded = $config['src']['include'] ?? [];
+        self::$srcExcluded = $config['src']['include'] ?? [];
+        self::$testsPath = $config['tests']['path'] ?? '';
+        self::$verbosity = (int) ($config['options']['verbosity'] ?? 1);
+        self::$dryRun = (bool) ($config['options']['dry-run'] ?? false);
+        self::$dependencyIgnoreDocBlocks = (bool) ($config['options']['dependency']['ignore_docblocks'] ?? false);
     }
 
-    public function getSrcIncluded(): array
+    public static function getSrcPath(): string
     {
-        return $this->config['src']['include'] ?? [];
+        return self::$srcPath;
     }
 
-    public function getSrcExcluded(): array
+    public static function getSrcIncluded(): array
     {
-        return $this->config['src']['exclude'] ?? [];
+        return self::$srcIncluded;
     }
 
-    public function getTestsPath(): string
+    public static function getSrcExcluded(): array
     {
-        return $this->config['tests']['path'] ?? '';
+        return self::$srcExcluded;
     }
 
-    public function getOptVerbosity(): int
+    public static function getTestsPath(): string
     {
-        return (int) ($this->config['options']['verbosity'] ?? 1);
+        return self::$testsPath;
     }
 
-    public function getOptDependencyCheckDocBlocks(): bool
+    public static function getVerbosity(): int
     {
-        return (bool) ($this->config['options']['dependency']['ignore_docblocks'] ?? false);
+        return self::$verbosity;
     }
 
-    public function getDryRun(): bool
+    public static function getDryRun(): bool
     {
-        return (bool) ($this->config['options']['dry-run'] ?? false);
+        return self::$dryRun;
+    }
+
+    public static function getDependencyIgnoreDocBlocks(): bool
+    {
+        return self::$dependencyIgnoreDocBlocks;
     }
 }

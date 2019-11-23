@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhpAT;
 
+use PhpAT\App\Configuration;
 use PhpAT\App\Event\SuiteEndEvent;
 use PhpAT\App\Event\SuiteStartEvent;
 use PhpAT\Rule\Event\RuleValidationEndEvent;
@@ -45,20 +46,18 @@ class App
      * @param StatementBuilder         $statementBuilder
      * @param EventDispatcherInterface $dispatcher
      * @param EventSubscriberInterface $subscriber
-     * @param bool                     $dryRun
      */
     public function __construct(
         TestExtractor $extractor,
         StatementBuilder $statementBuilder,
         EventDispatcherInterface $dispatcher,
-        EventSubscriberInterface $subscriber,
-        bool $dryRun = false
+        EventSubscriberInterface $subscriber
     ) {
         $this->extractor        = $extractor;
         $this->statementBuilder = $statementBuilder;
         $this->dispatcher       = $dispatcher;
         $this->subscriber       = $subscriber;
-        $this->dryRun = $dryRun;
+        $this->dryRun           = Configuration::getDryRun();
     }
 
     /**

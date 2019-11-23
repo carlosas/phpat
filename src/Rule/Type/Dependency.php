@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhpAT\Rule\Type;
 
+use PhpAT\App\Configuration;
 use PhpAT\File\FileFinder;
 use PhpAT\Parser\ClassMatcher;
 use PhpAT\Parser\ClassName;
@@ -56,15 +57,14 @@ class Dependency implements RuleType
         Parser $parser,
         NodeTraverserInterface $traverser,
         PhpDocParser $docParser,
-        EventDispatcherInterface $eventDispatcher,
-        bool $ignoreDocBlocks
+        EventDispatcherInterface $eventDispatcher
     ) {
         $this->finder = $finder;
         $this->parser = $parser;
         $this->traverser = $traverser;
         $this->docParser = $docParser;
         $this->eventDispatcher = $eventDispatcher;
-        $this->ignoreDocBlocks = $ignoreDocBlocks;
+        $this->ignoreDocBlocks = Configuration::getDependencyIgnoreDocBlocks();
     }
 
     public function validate(

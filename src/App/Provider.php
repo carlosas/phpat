@@ -49,9 +49,9 @@ class Provider
      */
     private $autoload;
     /**
-     * @var Configuration
+     * @var array
      */
-    private $configuration;
+    private $config;
 
     /**
      * Provider constructor.
@@ -62,13 +62,15 @@ class Provider
      */
     public function __construct(ContainerBuilder $builder, string $autoload, InputInterface $input)
     {
-        $this->builder       = $builder;
-        $this->autoload      = $autoload;
-        $this->configuration = new Configuration(
-            array_merge(
-                Yaml::parse(file_get_contents(getcwd() . '/' . ($input->getArgument('config-file', 'phpat.yml')))),
-                ['options' => $input->getOptions()]
-            )
+        $this->builder  = $builder;
+        $this->autoload = $autoload;
+        $this->config   = array_merge(
+            Yaml::parse(
+                file_get_contents(
+                    getcwd() . '/' . ($input->getArgument('config-file', 'phpat.yml'))
+                )
+            ),
+            ['options' => $input->getOptions()]
         );
     }
 
@@ -77,6 +79,7 @@ class Provider
      */
     public function register(): ContainerBuilder
     {
+        Configuration::init($this->config);
         $phpParser = (new ParserFactory())->create(ParserFactory::ONLY_PHP7);
         $phpDocParser = new PhpDocParser(new TypeParser(), new ConstExprParser());
 
@@ -89,15 +92,13 @@ class Provider
 
         $this->builder
             ->register(FileFinder::class, FileFinder::class)
-            ->addArgument(new SymfonyFinderAdapter(new Finder()))
-            ->addArgument($this->configuration);
+            ->addArgument(new SymfonyFinderAdapter(new Finder()));
 
         $this->builder
             ->register(NodeTraverserInterface::class, NodeTraverser::class);
 
         $this->builder
-            ->register(OutputInterface::class, StdOutput::class)
-            ->addArgument($this->configuration->getOptVerbosity());
+            ->register(OutputInterface::class, StdOutput::class);
 
         $this->builder
             ->register(RuleBuilder::class, RuleBuilder::class)
@@ -105,8 +106,7 @@ class Provider
 
         $this->builder
             ->register(TestExtractor::class, FileTestExtractor::class)
-            ->addArgument(new Reference(RuleBuilder::class))
-            ->addArgument(getcwd() . '/' . $this->configuration->getTestsPath());
+            ->addArgument(new Reference(RuleBuilder::class));
 
         $this->builder
             ->register(SelectorResolver::class, SelectorResolver::class)
@@ -115,8 +115,7 @@ class Provider
         $this->builder
             ->register(StatementBuilder::class, StatementBuilder::class)
             ->addArgument(new Reference(SelectorResolver::class))
-            ->addArgument($phpParser)
-            ->addArgument($this->configuration);
+            ->addArgument($phpParser);
 
         $this->builder
             ->register(Dependency::class, Dependency::class)
@@ -124,8 +123,7 @@ class Provider
             ->addArgument($phpParser)
             ->addArgument(new Reference(NodeTraverserInterface::class))
             ->addArgument($phpDocParser)
-            ->addArgument(new Reference(EventDispatcherInterface::class))
-            ->addArgument($this->configuration->getOptDependencyCheckDocBlocks());
+            ->addArgument(new Reference(EventDispatcherInterface::class));
 
         $this->builder
             ->register(Inheritance::class, Inheritance::class)
@@ -153,8 +151,7 @@ class Provider
             ->addArgument(new Reference(TestExtractor::class))
             ->addArgument(new Reference(StatementBuilder::class))
             ->addArgument(new Reference(EventDispatcherInterface::class))
-            ->addArgument(new Reference(EventSubscriberInterface::class))
-            ->addArgument($this->configuration->getDryRun());
+            ->addArgument(new Reference(EventSubscriberInterface::class));
 
         return $this->builder;
     }
