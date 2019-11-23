@@ -55,8 +55,13 @@ class StatementBuilder
         }
 
         foreach ($origins as $file) {
+            $parsed = $this->parseFile($file);
+            if ($parsed === null) {
+                continue;
+            }
+
             yield new Statement(
-                $this->parseFile($file),
+                $parsed,
                 $rule->getType(),
                 $rule->isInverse(),
                 $destinations
