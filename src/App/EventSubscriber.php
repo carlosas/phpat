@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace PhpAT\App;
 
+use PhpAT\App\Event\FatalErrorEvent;
 use PhpAT\App\Event\SuiteEndEvent;
 use PhpAT\App\Event\SuiteStartEvent;
+use PhpAT\App\Event\WarningEvent;
 use PhpAT\Output\OutputInterface;
 use PhpAT\Output\OutputLevel;
 use PhpAT\Rule\Event\RuleValidationEndEvent;
@@ -41,6 +43,8 @@ class EventSubscriber implements EventSubscriberInterface
         return [
             SuiteStartEvent::class => 'onSuiteStartEvent',
             SuiteEndEvent::class => 'onSuiteEndEvent',
+            WarningEvent::class => 'onWarningEvent',
+            FatalErrorEvent::class => 'onFatalErrorEvent',
             RuleValidationStartEvent::class => 'onRuleValidationStartEvent',
             RuleValidationEndEvent::class => 'onRuleValidationEndEvent',
             StatementValidEvent::class => 'onStatementValidEvent',
@@ -63,6 +67,16 @@ class EventSubscriber implements EventSubscriberInterface
         $reportMsg = (!$this->errorStorage->anyRuleHadErrors()) ? 'TESTS PASSED' : 'ERRORS FOUND';
         $timeMsg = round(microtime(true) - $this->startTime, 2) . 's';
         $this->output->writeLn(PHP_EOL . 'phpat | ' . $timeMsg . ' | ' . $reportMsg, OutputLevel::DEFAULT);
+    }
+
+    public function onWarningEvent(WarningEvent $event): void
+    {
+        $this->output->writeLn('WARNING: ' . $event->getMessage(), OutputLevel::WARNING);
+    }
+
+    public function onFatalErrorEvent(FatalErrorEvent $event): void
+    {
+        $this->output->writeLn('FATAL ERROR: ' . $event->getMessage(), OutputLevel::ERROR);
     }
 
     public function onRuleValidationStartEvent(RuleValidationStartEvent $event): void
