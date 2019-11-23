@@ -2,25 +2,28 @@
 
 namespace PhpAT\Output;
 
+use PhpAT\App\Configuration;
+
 class StdOutput implements OutputInterface
 {
     /**
      * @var resource
      */
-    private const OK_STREAM = \STDOUT;
+    private $okStream = \STDOUT;
     /**
      * @var resource
      */
-    private const ERR_STREAM = \STDERR;
+    private $errStream = \STDERR;
 
     /**
      * @var int
      */
     private $verbose;
 
-    public function __construct($verbose = VerboseLevel::VERBOSE)
+    public function __construct()
     {
-        $this->verbose  = $verbose;
+        $this->verbose = Configuration::getVerbosity();
+        $this->errStream = Configuration::getDryRun() ? \STDOUT : \STDERR;
     }
 
     public function write(string $message, int $level = OutputLevel::DEFAULT): void
@@ -39,7 +42,7 @@ class StdOutput implements OutputInterface
         if (!in_array($level, VerboseLevel::OUTPUT_LEVEL[$this->verbose])) {
             return;
         }
-        $stream = $level > OutputLevel::WARNING ? self::ERR_STREAM : self::OK_STREAM;
+        $stream = $level > OutputLevel::WARNING ? $this->errStream : $this->okStream;
         fwrite($stream, $message);
     }
 }
