@@ -11,6 +11,7 @@ class OutputTest extends ArchitectureTest
         return $this->newRule
             ->classesThat(Selector::havePath('*'))
             ->excludingClassesThat(Selector::havePath('App/EventSubscriber.php'))
+            ->excludingClassesThat(Selector::havePath('App/Event.php'))
             ->excludingClassesThat(Selector::havePath('App/Provider.php'))
             ->excludingClassesThat(Selector::havePath('App.php'))
             ->excludingClassesThat(Selector::havePath('Output/StdOutput.php'))

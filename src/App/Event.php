@@ -2,8 +2,15 @@
 
 namespace PhpAT\App;
 
-use Symfony\Component\EventDispatcher\Event as SymfonyEvent;
+use Symfony\Component\EventDispatcher\Event as ComponentEvent;
+use Symfony\Contracts\EventDispatcher\Event as ContractEvent;
 
-abstract class Event extends SymfonyEvent
-{
+if (class_exists(ContractEvent::class)) {
+    abstract class Event extends ContractEvent
+    {
+    }
+} else {
+    abstract class Event extends ComponentEvent
+    {
+    }
 }

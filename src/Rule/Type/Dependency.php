@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpAT\Rule\Type;
 
 use PhpAT\App\Configuration;
+use PhpAT\App\EventDispatcher;
 use PhpAT\File\FileFinder;
 use PhpAT\Parser\ClassMatcher;
 use PhpAT\Parser\ClassName;
@@ -15,7 +16,6 @@ use PhpAT\Statement\Event\StatementValidEvent;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\Parser;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class Dependency implements RuleType
 {
@@ -36,7 +36,7 @@ class Dependency implements RuleType
      */
     private $docParser;
     /**
-     * @var EventDispatcherInterface
+     * @var EventDispatcher
      */
     private $eventDispatcher;
     /**
@@ -57,7 +57,7 @@ class Dependency implements RuleType
         Parser $parser,
         NodeTraverserInterface $traverser,
         PhpDocParser $docParser,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcher $eventDispatcher
     ) {
         $this->finder = $finder;
         $this->parser = $parser;
@@ -110,6 +110,10 @@ class Dependency implements RuleType
         $this->traverser->addVisitor($classNameCollector);
         $this->traverser->traverse($parsedClass);
         $this->traverser->removeVisitor($classNameCollector);
+
+        if (!isset($classNameCollector->getResult()[0])) {
+            var_dump($parsedClass); die;
+        }
         $this->parsedClassClassName = $classNameCollector->getResult()[0];
 
         $matcher = new ClassMatcher();
@@ -140,7 +144,7 @@ class Dependency implements RuleType
         $event = ($result xor $inverse) ? StatementValidEvent::class : StatementNotValidEvent::class;
         $message = $className->getFQDN() . $action . $dependencyName->getFQDN();
 
-        $this->eventDispatcher->dispatch($event, new $event($message));
+        $this->eventDispatcher->dispatch(new $event($message));
     }
 
     private function resetCollectedItems()

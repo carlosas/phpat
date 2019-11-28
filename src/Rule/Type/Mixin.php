@@ -65,7 +65,7 @@ class Mixin implements RuleType
         $this->traverser->removeVisitor($classNameCollector);
 
         if (empty($classNameCollector->getResult())) {
-            $this->eventDispatcher->dispatch(NoClassesFoundEvent::class, new NoClassesFoundEvent());
+            $this->eventDispatcher->dispatch(new NoClassesFoundEvent(), NoClassesFoundEvent::class);
             return;
         }
 
@@ -118,7 +118,7 @@ class Mixin implements RuleType
         $event = ($result xor $inverse) ? StatementValidEvent::class : StatementNotValidEvent::class;
         $message = $className->getFQDN() . $action . $traitName->getFQDN();
 
-        $this->eventDispatcher->dispatch($event, new $event($message));
+        $this->eventDispatcher->dispatch(new $event($message), $event);
     }
 
     private function resetCollectedItems()

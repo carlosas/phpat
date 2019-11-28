@@ -27,8 +27,7 @@ use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TypeParser;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher as SymfonyEventDispatcher;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
@@ -82,9 +81,7 @@ class Provider
         Configuration::init($this->config);
         $phpParser = (new ParserFactory())->create(ParserFactory::ONLY_PHP7);
         $phpDocParser = new PhpDocParser(new TypeParser(), new ConstExprParser());
-
-        $this->builder
-            ->register(EventDispatcherInterface::class, EventDispatcher::class);
+        $eventDispatcher = new EventDispatcher(new SymfonyEventDispatcher());
 
         $this->builder
             ->register(EventSubscriberInterface::class, EventSubscriber::class)
@@ -123,34 +120,34 @@ class Provider
             ->addArgument($phpParser)
             ->addArgument(new Reference(NodeTraverserInterface::class))
             ->addArgument($phpDocParser)
-            ->addArgument(new Reference(EventDispatcherInterface::class));
+            ->addArgument($eventDispatcher);
 
         $this->builder
             ->register(Inheritance::class, Inheritance::class)
             ->addArgument(new Reference(FileFinder::class))
             ->addArgument($phpParser)
             ->addArgument(new Reference(NodeTraverserInterface::class))
-            ->addArgument(new Reference(EventDispatcherInterface::class));
+            ->addArgument($eventDispatcher);
 
         $this->builder
             ->register(Composition::class, Composition::class)
             ->addArgument(new Reference(FileFinder::class))
             ->addArgument($phpParser)
             ->addArgument(new Reference(NodeTraverserInterface::class))
-            ->addArgument(new Reference(EventDispatcherInterface::class));
+            ->addArgument($eventDispatcher);
 
         $this->builder
             ->register(Mixin::class, Mixin::class)
             ->addArgument(new Reference(FileFinder::class))
             ->addArgument($phpParser)
             ->addArgument(new Reference(NodeTraverserInterface::class))
-            ->addArgument(new Reference(EventDispatcherInterface::class));
+            ->addArgument($eventDispatcher);
 
         $this->builder
             ->register('app', App::class)
             ->addArgument(new Reference(TestExtractor::class))
             ->addArgument(new Reference(StatementBuilder::class))
-            ->addArgument(new Reference(EventDispatcherInterface::class))
+            ->addArgument($eventDispatcher)
             ->addArgument(new Reference(EventSubscriberInterface::class));
 
         return $this->builder;
