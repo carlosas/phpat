@@ -7,13 +7,13 @@ namespace PhpAT;
 use PhpAT\App\Configuration;
 use PhpAT\App\Event\SuiteEndEvent;
 use PhpAT\App\Event\SuiteStartEvent;
+use PhpAT\App\EventDispatcher;
 use PhpAT\Rule\Event\RuleValidationEndEvent;
 use PhpAT\Rule\Event\RuleValidationStartEvent;
 use PhpAT\Rule\RuleCollection;
 use PhpAT\Statement\Statement;
 use PhpAT\Statement\StatementBuilder;
 use PhpAT\Test\TestExtractor;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class App
@@ -27,7 +27,7 @@ class App
      */
     private $statementBuilder;
     /**
-     * @var EventDispatcherInterface
+     * @var EventDispatcher
      */
     private $dispatcher;
     /**
@@ -41,16 +41,15 @@ class App
 
     /**
      * App constructor.
-     *
      * @param TestExtractor            $extractor
      * @param StatementBuilder         $statementBuilder
-     * @param EventDispatcherInterface $dispatcher
+     * @param EventDispatcher          $dispatcher
      * @param EventSubscriberInterface $subscriber
      */
     public function __construct(
         TestExtractor $extractor,
         StatementBuilder $statementBuilder,
-        EventDispatcherInterface $dispatcher,
+        EventDispatcher $dispatcher,
         EventSubscriberInterface $subscriber
     ) {
         $this->extractor        = $extractor;
@@ -67,7 +66,7 @@ class App
     {
         $this->dispatcher->addSubscriber($this->subscriber);
 
-        $this->dispatcher->dispatch(SuiteStartEvent::class, new SuiteStartEvent());
+        $this->dispatcher->dispatch(new SuiteStartEvent());
 
         $testSuite = $this->extractor->execute();
 
@@ -78,20 +77,19 @@ class App
 
         foreach ($rules->getValues() as $rule) {
             $statements = $this->statementBuilder->build($rule);
-            $this->dispatcher->dispatch(
-                RuleValidationStartEvent::class,
-                new RuleValidationStartEvent($rule->getName())
-            );
+
+            $this->dispatcher->dispatch(new RuleValidationStartEvent($rule->getName()));
             /**
              * @var Statement $statement
             */
             foreach ($statements as $statement) {
                 $this->validateStatement($statement);
             }
-            $this->dispatcher->dispatch(RuleValidationEndEvent::class, new RuleValidationEndEvent());
+
+            $this->dispatcher->dispatch(new RuleValidationEndEvent());
         }
 
-        $this->dispatcher->dispatch(SuiteEndEvent::class, new SuiteEndEvent());
+        $this->dispatcher->dispatch(new SuiteEndEvent());
 
         if ($this->subscriber->suiteHadErrors() && !$this->dryRun) {
             throw new \Exception();

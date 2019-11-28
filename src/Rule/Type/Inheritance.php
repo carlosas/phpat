@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhpAT\Rule\Type;
 
+use PhpAT\App\EventDispatcher;
 use PhpAT\File\FileFinder;
 use PhpAT\Parser\ClassMatcher;
 use PhpAT\Parser\ClassName;
@@ -13,7 +14,6 @@ use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\Parser;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class Inheritance implements RuleType
 {
@@ -34,7 +34,7 @@ class Inheritance implements RuleType
         FileFinder $finder,
         Parser $parser,
         NodeTraverserInterface $traverser,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcher $eventDispatcher
     ) {
         $this->finder = $finder;
         $this->parser = $parser;
@@ -113,7 +113,7 @@ class Inheritance implements RuleType
         $event = ($result xor $inverse) ? StatementValidEvent::class : StatementNotValidEvent::class;
         $message = $className->getFQDN() . $action . $parentName->getFQDN();
 
-        $this->eventDispatcher->dispatch($event, new $event($message));
+        $this->eventDispatcher->dispatch(new $event($message));
     }
 
     private function resetCollectedItems()

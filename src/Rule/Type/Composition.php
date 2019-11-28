@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhpAT\Rule\Type;
 
+use PhpAT\App\EventDispatcher;
 use PhpAT\File\FileFinder;
 use PhpAT\Parser\ClassMatcher;
 use PhpAT\Parser\ClassName;
@@ -14,7 +15,6 @@ use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\Parser;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class Composition implements RuleType
 {
@@ -35,7 +35,7 @@ class Composition implements RuleType
         FileFinder $finder,
         Parser $parser,
         NodeTraverserInterface $traverser,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcher $eventDispatcher
     ) {
         $this->finder = $finder;
         $this->parser = $parser;
@@ -64,7 +64,7 @@ class Composition implements RuleType
         $this->traverser->removeVisitor($classNameCollector);
 
         if (empty($classNameCollector->getResult())) {
-            $this->eventDispatcher->dispatch(NoClassesFoundEvent::class, new NoClassesFoundEvent());
+            $this->eventDispatcher->dispatch(new NoClassesFoundEvent());
             return;
         }
 
@@ -116,7 +116,7 @@ class Composition implements RuleType
         $event = ($result xor $inverse) ? StatementValidEvent::class : StatementNotValidEvent::class;
         $message = $className->getFQDN() . $action . $interfaceName->getFQDN();
 
-        $this->eventDispatcher->dispatch($event, new $event($message));
+        $this->eventDispatcher->dispatch(new $event($message));
     }
 
     private function resetCollectedItems()
