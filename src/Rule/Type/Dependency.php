@@ -111,9 +111,6 @@ class Dependency implements RuleType
         $this->traverser->traverse($parsedClass);
         $this->traverser->removeVisitor($classNameCollector);
 
-        if (!isset($classNameCollector->getResult()[0])) {
-            var_dump($parsedClass); die;
-        }
         $this->parsedClassClassName = $classNameCollector->getResult()[0];
 
         $matcher = new ClassMatcher();

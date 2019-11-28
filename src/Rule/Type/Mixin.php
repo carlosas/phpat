@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace PhpAT\Rule\Type;
 
+use PhpAT\App\EventDispatcher;
 use PhpAT\File\FileFinder;
 use PhpAT\Parser\ClassMatcher;
 use PhpAT\Parser\ClassName;
 use PhpAT\Parser\Collector\ClassNameCollector;
-use PhpAT\Parser\Collector\InterfaceCollector;
 use PhpAT\Parser\Collector\TraitCollector;
 use PhpAT\Statement\Event\NoClassesFoundEvent;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\Parser;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class Mixin implements RuleType
 {
@@ -36,7 +35,7 @@ class Mixin implements RuleType
         FileFinder $finder,
         Parser $parser,
         NodeTraverserInterface $traverser,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcher $eventDispatcher
     ) {
         $this->finder = $finder;
         $this->parser = $parser;
@@ -65,7 +64,7 @@ class Mixin implements RuleType
         $this->traverser->removeVisitor($classNameCollector);
 
         if (empty($classNameCollector->getResult())) {
-            $this->eventDispatcher->dispatch(new NoClassesFoundEvent(), NoClassesFoundEvent::class);
+            $this->eventDispatcher->dispatch(new NoClassesFoundEvent());
             return;
         }
 
@@ -118,7 +117,7 @@ class Mixin implements RuleType
         $event = ($result xor $inverse) ? StatementValidEvent::class : StatementNotValidEvent::class;
         $message = $className->getFQDN() . $action . $traitName->getFQDN();
 
-        $this->eventDispatcher->dispatch(new $event($message), $event);
+        $this->eventDispatcher->dispatch(new $event($message));
     }
 
     private function resetCollectedItems()

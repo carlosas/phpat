@@ -1,5 +1,5 @@
 <?php
-
+// phpcs:ignoreFile
 namespace PhpAT\App;
 
 use Symfony\Component\EventDispatcher\Event as ComponentEvent;
