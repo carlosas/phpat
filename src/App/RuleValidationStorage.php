@@ -11,6 +11,10 @@ class RuleValidationStorage
      */
     private $errors = [];
     /**
+     * @var array
+     */
+    private $fatalErrors = [];
+    /**
      * @var bool
      */
     private $anyRuleHadErrors = false;
@@ -26,6 +30,15 @@ class RuleValidationStorage
     {
         $this->errors[] = $message;
         $this->lastRuleHadErrors = true;
+        $this->anyRuleHadErrors = true;
+    }
+
+    /**
+     * @param string $message
+     */
+    public function addFatalError(string $message): void
+    {
+        $this->fatalErrors[] = $message;
         $this->anyRuleHadErrors = true;
     }
 

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace PhpAT\Test;
 
+use PhpAT\App\Event\FatalErrorEvent;
+use PhpAT\App\EventDispatcher;
 use PhpAT\Rule\Rule;
 use PhpAT\Rule\RuleBuilder;
 use PhpAT\Rule\RuleCollection;
@@ -11,10 +13,12 @@ use PhpAT\Rule\RuleCollection;
 abstract class ArchitectureTest
 {
     protected $newRule;
+    private $eventDispatcher;
 
-    final public function __construct(RuleBuilder $builder)
+    final public function __construct(RuleBuilder $builder, EventDispatcher $eventDispatcher)
     {
         $this->newRule = $builder;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     final public function __invoke(): RuleCollection
@@ -22,7 +26,12 @@ abstract class ArchitectureTest
         $rules = new RuleCollection();
         foreach (get_class_methods($this) as $method) {
             if (preg_match('/^(test)([A-Za-z0-9])+$/', $method)) {
-                $rule = $this->invokeTest($method);
+                try {
+                    $rule = $this->invokeTest($method);
+                } catch (\Exception $e) {
+                    $this->eventDispatcher->dispatch(new FatalErrorEvent($e->getMessage()));
+                    continue;
+                }
                 $rule->setName(ltrim(preg_replace('/(?<!\ )[A-Z]/', ' $0', $method), 'test '));
                 $rules->addValue($rule);
             }
@@ -36,12 +45,9 @@ abstract class ArchitectureTest
         $rule = $this->$method();
 
         if (!($rule instanceof Rule)) {
-            $message = sprintf(
-                'An architecture test must return an instance of %s.',
-                Rule::class
-            );
+            $message = $method . ' must return an instance of ' . Rule::class . '.';
             if ($rule instanceof RuleBuilder) {
-                $message .= ' Did you forget to call ->build() at the end of your test?';
+                $message .= ' Did you forget to call build() at the end of your test?';
             }
             throw new \Exception($message);
         }

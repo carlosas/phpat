@@ -77,6 +77,7 @@ class EventSubscriber implements EventSubscriberInterface
     public function onFatalErrorEvent(FatalErrorEvent $event): void
     {
         $this->output->writeLn('FATAL ERROR: ' . $event->getMessage(), OutputLevel::ERROR);
+        $this->ruleValidationStorage->addFatalError($event->getMessage());
     }
 
     public function onRuleValidationStartEvent(RuleValidationStartEvent $event): void
