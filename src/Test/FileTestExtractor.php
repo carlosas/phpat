@@ -5,16 +5,19 @@ declare(strict_types=1);
 namespace PhpAT\Test;
 
 use PhpAT\App\Configuration;
+use PhpAT\App\EventDispatcher;
 use PhpAT\Rule\RuleBuilder;
 
 class FileTestExtractor implements TestExtractor
 {
     private $ruleBuilder;
     private $testPath;
+    private $eventDispatcher;
 
-    public function __construct(RuleBuilder $ruleBuilder)
+    public function __construct(RuleBuilder $ruleBuilder, EventDispatcher $eventDispatcher)
     {
         $this->ruleBuilder = $ruleBuilder;
+        $this->eventDispatcher = $eventDispatcher;
         $this->testPath = getcwd() . '/' . Configuration::getTestsPath();
     }
 
@@ -24,7 +27,7 @@ class FileTestExtractor implements TestExtractor
 
         $testClasses = $this->getTestClasses();
         foreach ($testClasses as $class) {
-            $tests->addValue(new $class($this->ruleBuilder));
+            $tests->addValue(new $class($this->ruleBuilder, $this->eventDispatcher));
         }
 
         return $tests;

@@ -103,7 +103,8 @@ class Provider
 
         $this->builder
             ->register(TestExtractor::class, FileTestExtractor::class)
-            ->addArgument(new Reference(RuleBuilder::class));
+            ->addArgument(new Reference(RuleBuilder::class))
+            ->addArgument($eventDispatcher);
 
         $this->builder
             ->register(SelectorResolver::class, SelectorResolver::class)
