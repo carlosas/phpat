@@ -26,7 +26,7 @@ class Configuration
     {
         self::$srcPath = $config['src']['path'] ?? '';
         self::$srcIncluded = $config['src']['include'] ?? [];
-        self::$srcExcluded = $config['src']['include'] ?? [];
+        self::$srcExcluded = $config['src']['exclude'] ?? [];
         self::$testsPath = $config['tests']['path'] ?? '';
         self::$verbosity = (int) ($config['options']['verbosity'] ?? 1);
         self::$dryRun = (bool) ($config['options']['dry-run'] ?? false);
