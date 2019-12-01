@@ -72,7 +72,7 @@ class Inheritance implements RuleType
         foreach ($classNameCollector->getResult() as $className) {
             $result = (
                 $this->parsedClassParent !== null
-                && $className->getFQDN() === $this->parsedClassParent->getFQDN()
+                && $className->getFQCN() === $this->parsedClassParent->getFQCN()
             );
 
             $this->dispatchResult($result, $inverse, $this->parsedClassClassName, $className);
@@ -111,7 +111,7 @@ class Inheritance implements RuleType
     {
         $action = $result ? ' extends ' : ' does not extend ';
         $event = ($result xor $inverse) ? StatementValidEvent::class : StatementNotValidEvent::class;
-        $message = $className->getFQDN() . $action . $parentName->getFQDN();
+        $message = $className->getFQCN() . $action . $parentName->getFQCN();
 
         $this->eventDispatcher->dispatch(new $event($message));
     }

@@ -98,7 +98,7 @@ class Dependency implements RuleType
         foreach ($classNameCollector->getResult() as $className) {
             $result = empty($this->parsedClassDependencies)
                 ? false
-                : in_array($className->getFQDN(), $this->parsedClassDependencies);
+                : in_array($className->getFQCN(), $this->parsedClassDependencies);
 
             $this->dispatchResult($result, $inverse, $this->parsedClassClassName, $className);
         }
@@ -128,9 +128,9 @@ class Dependency implements RuleType
         foreach ($this->parsedClassDependencies as $k => $v) {
             if (empty($v->getNamespace())) {
                 $className = new ClassName($this->parsedClassClassName->getNamespace(), $v->getName());
-                $this->parsedClassDependencies[$k] = $className->getFQDN();
+                $this->parsedClassDependencies[$k] = $className->getFQCN();
             } else {
-                $this->parsedClassDependencies[$k] = $v->getFQDN();
+                $this->parsedClassDependencies[$k] = $v->getFQCN();
             }
         }
     }
@@ -139,7 +139,7 @@ class Dependency implements RuleType
     {
         $action = $result ? ' depends on ' : ' does not depend on ';
         $event = ($result xor $inverse) ? StatementValidEvent::class : StatementNotValidEvent::class;
-        $message = $className->getFQDN() . $action . $dependencyName->getFQDN();
+        $message = $className->getFQCN() . $action . $dependencyName->getFQCN();
 
         $this->eventDispatcher->dispatch(new $event($message));
     }

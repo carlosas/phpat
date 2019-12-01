@@ -10,6 +10,7 @@ use PhpAT\File\SymfonyFinderAdapter;
 use PhpAT\Input\InputInterface;
 use PhpAT\Output\OutputInterface;
 use PhpAT\Output\StdOutput;
+use PhpAT\Parser\MapBuilder;
 use PhpAT\Rule\RuleBuilder;
 use PhpAT\Rule\Type\Composition;
 use PhpAT\Rule\Type\Dependency;
@@ -95,6 +96,13 @@ class Provider
             ->register(NodeTraverserInterface::class, NodeTraverser::class);
 
         $this->builder
+            ->register(MapBuilder::class, MapBuilder::class)
+            ->addArgument(new Reference(FileFinder::class))
+            ->addArgument($phpParser)
+            ->addArgument(new Reference(NodeTraverserInterface::class))
+            ->addArgument($phpDocParser);
+
+        $this->builder
             ->register(OutputInterface::class, StdOutput::class);
 
         $this->builder
@@ -146,6 +154,7 @@ class Provider
 
         $this->builder
             ->register('app', App::class)
+            ->addArgument(new Reference(MapBuilder::class))
             ->addArgument(new Reference(TestExtractor::class))
             ->addArgument(new Reference(StatementBuilder::class))
             ->addArgument($eventDispatcher)

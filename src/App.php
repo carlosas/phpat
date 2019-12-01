@@ -8,6 +8,7 @@ use PhpAT\App\Configuration;
 use PhpAT\App\Event\SuiteEndEvent;
 use PhpAT\App\Event\SuiteStartEvent;
 use PhpAT\App\EventDispatcher;
+use PhpAT\Parser\MapBuilder;
 use PhpAT\Rule\Event\RuleValidationEndEvent;
 use PhpAT\Rule\Event\RuleValidationStartEvent;
 use PhpAT\Rule\RuleCollection;
@@ -38,15 +39,21 @@ class App
      * @var bool
      */
     private $dryRun;
+    /**
+     * @var MapBuilder
+     */
+    private $mapBuilder;
 
     /**
      * App constructor.
+     * @param MapBuilder               $mapBuilder
      * @param TestExtractor            $extractor
      * @param StatementBuilder         $statementBuilder
      * @param EventDispatcher          $dispatcher
      * @param EventSubscriberInterface $subscriber
      */
     public function __construct(
+        MapBuilder $mapBuilder,
         TestExtractor $extractor,
         StatementBuilder $statementBuilder,
         EventDispatcher $dispatcher,
@@ -57,6 +64,7 @@ class App
         $this->dispatcher       = $dispatcher;
         $this->subscriber       = $subscriber;
         $this->dryRun           = Configuration::getDryRun();
+        $this->mapBuilder       = $mapBuilder;
     }
 
     /**
@@ -64,6 +72,8 @@ class App
      */
     public function execute(): void
     {
+        $this->mapBuilder->build();
+
         $this->dispatcher->addSubscriber($this->subscriber);
 
         $this->dispatcher->dispatch(new SuiteStartEvent());

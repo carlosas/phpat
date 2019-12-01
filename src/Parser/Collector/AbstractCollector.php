@@ -15,4 +15,9 @@ class AbstractCollector extends NodeVisitorAbstract
     {
         return $this->result;
     }
+
+    public function reset(): void
+    {
+        $this->result = [];
+    }
 }

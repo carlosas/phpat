@@ -28,7 +28,7 @@ class ParentCollector extends AbstractCollector
             if (isset($node->extends) && ($node->extends !== null)) {
                 $found = $this->matcher->findClass($node->extends->parts);
                 if ($found !== null) {
-                    $this->result[] = ClassName::createFromFQDN($found);
+                    $this->result[] = ClassName::createFromFQCN($found);
                 }
             }
         }

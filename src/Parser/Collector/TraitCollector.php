@@ -29,7 +29,7 @@ class TraitCollector extends AbstractCollector
                 foreach ($node->traits as $trait) {
                     $found = $this->matcher->findClass($trait->parts);
                     if ($found !== null) {
-                        $this->result[] = ClassName::createFromFQDN($found);
+                        $this->result[] = ClassName::createFromFQCN($found);
                     }
                 }
             }

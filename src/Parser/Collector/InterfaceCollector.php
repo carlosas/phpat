@@ -29,7 +29,7 @@ class InterfaceCollector extends AbstractCollector
                 foreach ($node->implements as $interface) {
                     $found = $this->matcher->findClass($interface->parts);
                     if ($found !== null) {
-                        $this->result[] = ClassName::createFromFQDN($found);
+                        $this->result[] = ClassName::createFromFQCN($found);
                     }
                 }
             }

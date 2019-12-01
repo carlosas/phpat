@@ -74,7 +74,7 @@ class Mixin implements RuleType
         foreach ($classNameCollector->getResult() as $className) {
             $result = empty($this->parsedClassTraits)
                 ? false
-                : in_array($className->getFQDN(), $this->parsedClassTraits);
+                : in_array($className->getFQCN(), $this->parsedClassTraits);
 
             $this->dispatchResult($result, $inverse, $this->parsedClassClassName, $className);
         }
@@ -104,9 +104,9 @@ class Mixin implements RuleType
         foreach ($this->parsedClassTraits as $k => $v) {
             if (empty($v->getNamespace())) {
                 $className = new ClassName($this->parsedClassClassName->getNamespace(), $v->getName());
-                $this->parsedClassTraits[$k] = $className->getFQDN();
+                $this->parsedClassTraits[$k] = $className->getFQCN();
             } else {
-                $this->parsedClassTraits[$k] = $v->getFQDN();
+                $this->parsedClassTraits[$k] = $v->getFQCN();
             }
         }
     }
@@ -115,7 +115,7 @@ class Mixin implements RuleType
     {
         $action = $result ? ' includes ' : ' does not include ';
         $event = ($result xor $inverse) ? StatementValidEvent::class : StatementNotValidEvent::class;
-        $message = $className->getFQDN() . $action . $traitName->getFQDN();
+        $message = $className->getFQCN() . $action . $traitName->getFQCN();
 
         $this->eventDispatcher->dispatch(new $event($message));
     }

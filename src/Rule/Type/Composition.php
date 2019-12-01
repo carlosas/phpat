@@ -74,7 +74,7 @@ class Composition implements RuleType
         foreach ($classNameCollector->getResult() as $className) {
             $result = empty($this->parsedClassInterfaces)
                 ? false
-                : in_array($className->getFQDN(), $this->parsedClassInterfaces);
+                : in_array($className->getFQCN(), $this->parsedClassInterfaces);
 
             $this->dispatchResult($result, $inverse, $this->parsedClassClassName, $className);
         }
@@ -103,9 +103,9 @@ class Composition implements RuleType
         foreach ($this->parsedClassInterfaces as $k => $v) {
             if (empty($v->getNamespace())) {
                 $className = new ClassName($this->parsedClassClassName->getNamespace(), $v->getName());
-                $this->parsedClassInterfaces[$k] = $className->getFQDN();
+                $this->parsedClassInterfaces[$k] = $className->getFQCN();
             } else {
-                $this->parsedClassInterfaces[$k] = $v->getFQDN();
+                $this->parsedClassInterfaces[$k] = $v->getFQCN();
             }
         }
     }
@@ -114,7 +114,7 @@ class Composition implements RuleType
     {
         $action = $result ? ' implements ' : ' does not implement ';
         $event = ($result xor $inverse) ? StatementValidEvent::class : StatementNotValidEvent::class;
-        $message = $className->getFQDN() . $action . $interfaceName->getFQDN();
+        $message = $className->getFQCN() . $action . $interfaceName->getFQCN();
 
         $this->eventDispatcher->dispatch(new $event($message));
     }
