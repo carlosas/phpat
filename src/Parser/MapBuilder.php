@@ -10,6 +10,7 @@ use PhpAT\Parser\Collector\DependencyCollector;
 use PhpAT\Parser\Collector\InterfaceCollector;
 use PhpAT\Parser\Collector\ParentCollector;
 use PhpParser\NodeTraverserInterface;
+use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 
@@ -45,6 +46,10 @@ class MapBuilder
      * @var DependencyCollector
      */
     private $dependencyCollector;
+    /**
+     * @var NameResolver
+     */
+    private $nameResolver;
 
     public function __construct(
         FileFinder $finder,
@@ -55,6 +60,7 @@ class MapBuilder
         $this->finder = $finder;
         $this->parser = $parser;
         $this->traverser = $traverser;
+        $this->nameResolver = new NameResolver();
         $this->classNameCollector = new ClassNameCollector();
         $this->parentCollector = new ParentCollector(new ClassMatcher());
         $this->interfaceCollector = new InterfaceCollector(new ClassMatcher());
@@ -65,9 +71,10 @@ class MapBuilder
     {
         $files = $this->finder->findAllFiles(Configuration::getSrcPath());
 
+        $this->traverser->addVisitor($this->nameResolver);
         $this->traverser->addVisitor($this->classNameCollector);
-        $this->traverser->addVisitor($this->parentCollector);
-        $this->traverser->addVisitor($this->interfaceCollector);
+        //$this->traverser->addVisitor($this->parentCollector);
+        //$this->traverser->addVisitor($this->interfaceCollector);
         $this->traverser->addVisitor($this->dependencyCollector);
 
         /** @var \SplFileInfo $file */
@@ -86,15 +93,16 @@ class MapBuilder
             $this->dependencyCollector->reset();
         }
 
+        $this->traverser->removeVisitor($this->nameResolver);
         $this->traverser->removeVisitor($this->classNameCollector);
         $this->traverser->removeVisitor($this->parentCollector);
         $this->traverser->removeVisitor($this->interfaceCollector);
         $this->traverser->removeVisitor($this->dependencyCollector);
 
         /** @var ClassInfo $classInfo */
-        foreach ($classes ?? [] as $classInfo) {
+        /*foreach ($classes ?? [] as $classInfo) {
             var_dump($classInfo->jsonSerialize());
-        }
+        }*/
     }
 
     private function buildClassInfo(\SplFileInfo $fileInfo): ?ClassInfo
