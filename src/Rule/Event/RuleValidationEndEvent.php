@@ -3,9 +3,8 @@
 declare(strict_types=1);
 
 namespace PhpAT\Rule\Event;
+use PHPAT\EventDispatcher\EventInterface;
 
-use PhpAT\App\Event;
-
-class RuleValidationEndEvent extends Event
+class RuleValidationEndEvent implements EventInterface
 {
 }

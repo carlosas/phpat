@@ -28,5 +28,6 @@ try {
     $app = $container->get('app');
     $app->execute();
 } catch (\Exception $e) {
+    echo $e->getMessage();
     exit(1);
 }
