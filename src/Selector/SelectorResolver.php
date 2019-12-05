@@ -29,10 +29,11 @@ class SelectorResolver
     }
 
     /**
-     * @param  SelectorInterface $selector
-     * @return array
+     * @param SelectorInterface $selector
+     * @param array             $astMap
+     * @return string[]
      */
-    public function resolve(SelectorInterface $selector): array
+    public function resolve(SelectorInterface $selector, array $astMap): array
     {
         foreach ($selector->getDependencies() as $dependency) {
             if ($this->container->has($dependency)) {
@@ -41,6 +42,7 @@ class SelectorResolver
         }
 
         $selector->injectDependencies($d ?? []);
+        $selector->setAstMap($astMap);
 
         return $selector->select();
     }

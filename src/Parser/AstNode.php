@@ -2,7 +2,7 @@
 
 namespace PhpAT\Parser;
 
-class ClassInfo implements \JsonSerializable
+class AstNode implements \JsonSerializable
 {
     /**
      * @var string
@@ -41,7 +41,7 @@ class ClassInfo implements \JsonSerializable
         array $interfaces,
         array $mixins
     ) {
-        $this->filePathname = $fileInfo->getPathname();
+        $this->filePathname = $this->normalizePathname($fileInfo->getPathname());
         $this->className = $className->getFQCN();
         $this->parent = $parent === null ? null : $parent->getFQCN();
         foreach ($dependencies as $cn) {
@@ -64,5 +64,10 @@ class ClassInfo implements \JsonSerializable
             'dependencies' => $this->dependencies,
             'interfaces' => $this->interfaces,
         ];
+    }
+
+    private function normalizePathname(string $pathname): string
+    {
+        return str_replace('\\', '/', $pathname);
     }
 }

@@ -26,6 +26,7 @@ class ClassMatcher
     public function findClass(array $parts): ?string
     {
         $link = $parts[0] ?? [];
+
         if (isset($this->declarations[$link])) {
             array_shift($parts);
             if (empty($parts)) {
@@ -42,8 +43,9 @@ class ClassMatcher
         return null;
     }
 
-    public function getDeclarations(): array
+    public function reset(): void
     {
-        return $this->declarations;
+        $this->namespace = '';
+        $this->declarations = [];
     }
 }

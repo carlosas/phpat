@@ -11,13 +11,13 @@ class AbstractCollector extends NodeVisitorAbstract
      */
     protected $result = [];
 
+    public function beforeTraverse(array $nodes) {
+        $this->result = [];
+        return null;
+    }
+
     public function getResult(): array
     {
         return $this->result;
-    }
-
-    public function reset(): void
-    {
-        $this->result = [];
     }
 }

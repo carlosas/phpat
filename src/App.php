@@ -72,7 +72,7 @@ class App
      */
     public function execute(): void
     {
-        $this->mapBuilder->build();
+        $astMap = $this->mapBuilder->build();
 
         $this->dispatcher->addSubscriber($this->subscriber);
 
@@ -86,14 +86,14 @@ class App
         }
 
         foreach ($rules->getValues() as $rule) {
-            $statements = $this->statementBuilder->build($rule);
+            $statements = $this->statementBuilder->build($rule, $astMap);
 
             $this->dispatcher->dispatch(new RuleValidationStartEvent($rule->getName()));
             /**
              * @var Statement $statement
             */
             foreach ($statements as $statement) {
-                $this->validateStatement($statement);
+                $this->validateStatement($statement, $astMap);
             }
 
             $this->dispatcher->dispatch(new RuleValidationEndEvent());
@@ -106,11 +106,12 @@ class App
         }
     }
 
-    private function validateStatement(Statement $statement): void
+    private function validateStatement(Statement $statement, array $astMap): void
     {
         $statement->getType()->validate(
-            $statement->getParsedClass(),
-            $statement->getDestinations(),
+            $statement->getFqcnOrigin(),
+            $statement->getFqcnDestination(),
+            $astMap,
             $statement->isInverse()
         );
     }

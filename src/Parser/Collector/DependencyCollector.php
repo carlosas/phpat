@@ -37,10 +37,18 @@ class DependencyCollector extends AbstractCollector
 
     public function leaveNode(Node $node)
     {
-        if ($node instanceof Node\Stmt\UseUse) {
+        if ($node instanceof Node\Stmt\Namespace_) {
+            echo "SAVING NAMESPACE: " . $node->name->toString() . PHP_EOL;
+            $this->matcher->saveNamespace($node->name->toString());
+        } elseif ($node instanceof Node\Stmt\UseUse) {
             $this->matcher->addDeclaration($node->name, $node->alias);
         } elseif ($node instanceof Node\Name\FullyQualified) {
             $this->saveResultIfNotPresent($node->toString());
+        } elseif ($node instanceof Node\Name) {
+            $found = $this->matcher->findClass($node->parts);
+            if ($found !== null) {
+                $this->saveResultIfNotPresent($found);
+            }
         } elseif (!$this->ignoreDocBlocks && $node->getDocComment() !== null) {
             $doc = $node->getDocComment()->getText();
             $nodes = $this->docParser->parse(new TokenIterator((new Lexer())->tokenize($doc)));

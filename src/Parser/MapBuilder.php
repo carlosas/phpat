@@ -4,11 +4,11 @@ namespace PhpAT\Parser;
 
 use PhpAT\App\Configuration;
 use PhpAT\File\FileFinder;
-use PhpAT\Parser\Collector\AbstractCollector;
 use PhpAT\Parser\Collector\ClassNameCollector;
 use PhpAT\Parser\Collector\DependencyCollector;
 use PhpAT\Parser\Collector\InterfaceCollector;
 use PhpAT\Parser\Collector\ParentCollector;
+use PhpAT\Parser\Collector\TraitCollector;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
@@ -16,8 +16,6 @@ use PHPStan\PhpDocParser\Parser\PhpDocParser;
 
 class MapBuilder
 {
-    private $namespace = '';
-    private $declarations = [];
     /**
      * @var FileFinder
      */
@@ -65,32 +63,34 @@ class MapBuilder
         $this->parentCollector = new ParentCollector(new ClassMatcher());
         $this->interfaceCollector = new InterfaceCollector(new ClassMatcher());
         $this->dependencyCollector = new DependencyCollector($phpDocParser, new ClassMatcher(), false);
+        $this->traitCollector = new TraitCollector(new ClassMatcher());
     }
 
-    public function build()
+    public function build(): array
     {
         $files = $this->finder->findAllFiles(Configuration::getSrcPath());
 
-        $this->traverser->addVisitor($this->nameResolver);
         $this->traverser->addVisitor($this->classNameCollector);
-        //$this->traverser->addVisitor($this->parentCollector);
-        //$this->traverser->addVisitor($this->interfaceCollector);
+        $this->traverser->addVisitor($this->parentCollector);
+        $this->traverser->addVisitor($this->interfaceCollector);
         $this->traverser->addVisitor($this->dependencyCollector);
 
         /** @var \SplFileInfo $file */
         foreach ($files as $file) {
-            $parsed = $this->parser->parse(file_get_contents($file->getPathname()));
+            $parsed = $this->parser->parse(file_get_contents($this->normalizePathname($file->getPathname())));
+
             $this->traverser->traverse($parsed);
 
-            $classInfo = $this->buildClassInfo($file);
-            if ($classInfo !== null) {
-                $classes[] = $classInfo;
+            $astNode = $this->buildAstNode($file);
+
+            if ($astNode->jsonSerialize()['classname'] === 'Tests\PhpAT\functional\PHP7\fixtures\Dependency\Constructor') {
+                var_dump($astNode->jsonSerialize()); die;
             }
 
-            $this->classNameCollector->reset();
-            $this->parentCollector->reset();
-            $this->interfaceCollector->reset();
-            $this->dependencyCollector->reset();
+
+            if ($astNode !== null) {
+                $astMap[] = $astNode;
+            }
         }
 
         $this->traverser->removeVisitor($this->nameResolver);
@@ -99,27 +99,33 @@ class MapBuilder
         $this->traverser->removeVisitor($this->interfaceCollector);
         $this->traverser->removeVisitor($this->dependencyCollector);
 
-        /** @var ClassInfo $classInfo */
-        /*foreach ($classes ?? [] as $classInfo) {
-            var_dump($classInfo->jsonSerialize());
-        }*/
+        return $astMap ?? [];
     }
 
-    private function buildClassInfo(\SplFileInfo $fileInfo): ?ClassInfo
+    private function buildAstNode(\SplFileInfo $fileInfo): ?AstNode
     {
         if (!isset($this->classNameCollector->getResult()[0])) {
             return null;
         }
 
-        $classInfo = new ClassInfo(
+//        echo '------------------------------------------------' . PHP_EOL;
+//        echo $fileInfo->getPathname() . PHP_EOL;
+//var_dump($this->dependencyCollector->getResult());
+//        echo '------------------------------------------------' . PHP_EOL;
+        $node = new AstNode(
             $fileInfo,
             $this->classNameCollector->getResult()[0],
-            null,
+            $this->parentCollector->getResult()[0] ?? null,
             $this->dependencyCollector->getResult(),
             $this->interfaceCollector->getResult(),
             []
         );
 
-        return $classInfo;
+        return $node;
+    }
+
+    private function normalizePathname(string $pathname): string
+    {
+        return str_replace('\\', '/', $pathname);
     }
 }

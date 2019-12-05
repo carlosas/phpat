@@ -22,6 +22,7 @@ use PhpAT\Test\FileTestExtractor;
 use PhpAT\Test\TestExtractor;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeTraverserInterface;
+use PhpParser\Parser;
 use PhpParser\ParserFactory;
 use PHPStan\PhpDocParser\Parser\ConstExprParser;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
@@ -80,7 +81,7 @@ class Provider
     public function register(): ContainerBuilder
     {
         Configuration::init($this->config);
-        $phpParser = (new ParserFactory())->create(ParserFactory::ONLY_PHP7);
+        $this->builder->set(Parser::class, (new ParserFactory())->create(ParserFactory::ONLY_PHP7));
         $phpDocParser = new PhpDocParser(new TypeParser(), new ConstExprParser());
         $eventDispatcher = new EventDispatcher(new SymfonyEventDispatcher());
 
@@ -98,7 +99,7 @@ class Provider
         $this->builder
             ->register(MapBuilder::class, MapBuilder::class)
             ->addArgument(new Reference(FileFinder::class))
-            ->addArgument($phpParser)
+            ->addArgument(new Reference(Parser::class))
             ->addArgument(new Reference(NodeTraverserInterface::class))
             ->addArgument($phpDocParser);
 
@@ -121,12 +122,12 @@ class Provider
         $this->builder
             ->register(StatementBuilder::class, StatementBuilder::class)
             ->addArgument(new Reference(SelectorResolver::class))
-            ->addArgument($phpParser);
+            ->addArgument(new Reference(Parser::class));
 
         $this->builder
             ->register(Dependency::class, Dependency::class)
             ->addArgument(new Reference(FileFinder::class))
-            ->addArgument($phpParser)
+            ->addArgument(new Reference(Parser::class))
             ->addArgument(new Reference(NodeTraverserInterface::class))
             ->addArgument($phpDocParser)
             ->addArgument($eventDispatcher);
@@ -134,21 +135,21 @@ class Provider
         $this->builder
             ->register(Inheritance::class, Inheritance::class)
             ->addArgument(new Reference(FileFinder::class))
-            ->addArgument($phpParser)
+            ->addArgument(new Reference(Parser::class))
             ->addArgument(new Reference(NodeTraverserInterface::class))
             ->addArgument($eventDispatcher);
 
         $this->builder
             ->register(Composition::class, Composition::class)
             ->addArgument(new Reference(FileFinder::class))
-            ->addArgument($phpParser)
+            ->addArgument(new Reference(Parser::class))
             ->addArgument(new Reference(NodeTraverserInterface::class))
             ->addArgument($eventDispatcher);
 
         $this->builder
             ->register(Mixin::class, Mixin::class)
             ->addArgument(new Reference(FileFinder::class))
-            ->addArgument($phpParser)
+            ->addArgument(new Reference(Parser::class))
             ->addArgument(new Reference(NodeTraverserInterface::class))
             ->addArgument($eventDispatcher);
 
