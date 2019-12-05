@@ -41,7 +41,7 @@ Current supported relations:
 
 Just require **phpat** with [Composer](https://getcomposer.org/):
 ```bash
-composer require --dev carlosas/phpat
+composer require --dev carlosas/phpat:0.5.*
 ```
 
 <h2></h2>
