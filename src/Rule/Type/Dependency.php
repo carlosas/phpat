@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PhpAT\Rule\Type;
 
 use PhpAT\App\Configuration;
-use PhpAT\App\EventDispatcher;
+use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\File\FileFinder;
 use PhpAT\Parser\ClassMatcher;
 use PhpAT\Parser\ClassName;

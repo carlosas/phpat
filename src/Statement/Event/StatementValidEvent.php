@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace PhpAT\Statement\Event;
 
-use PhpAT\App\Event;
+use PHPAT\EventDispatcher\EventInterface;
 
-class StatementValidEvent extends Event
+class StatementValidEvent implements EventInterface
 {
     /**
      * @var string

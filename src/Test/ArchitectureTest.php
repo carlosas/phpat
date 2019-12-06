@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PhpAT\Test;
 
 use PhpAT\App\Event\FatalErrorEvent;
-use PhpAT\App\EventDispatcher;
+use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Rule\Rule;
 use PhpAT\Rule\RuleBuilder;
 use PhpAT\Rule\RuleCollection;

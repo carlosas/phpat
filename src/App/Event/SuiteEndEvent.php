@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace PhpAT\App\Event;
 
-use PhpAT\App\Event;
+use PHPAT\EventDispatcher\EventInterface;
 
-class SuiteEndEvent extends Event
+class SuiteEndEvent implements EventInterface
 {
 }
