@@ -23,7 +23,7 @@ class Rule
      */
     private $originExcluded;
     /**
-     * @var RuleType
+     * @var RuleType|null
      */
     private $type;
     /**
@@ -43,20 +43,10 @@ class Rule
      */
     private $name;
 
-    /**
-     * Rule constructor.
-     *
-     * @param array    $origin
-     * @param array    $originExcluded
-     * @param RuleType $type
-     * @param bool     $inverse
-     * @param array    $destination
-     * @param array    $destinationExcluded
-     */
     public function __construct(
         array $origin,
         array $originExcluded,
-        RuleType $type,
+        ?RuleType $type,
         bool $inverse,
         array $destination,
         array $destinationExcluded
@@ -86,9 +76,9 @@ class Rule
     }
 
     /**
-     * @return RuleType
+     * @return RuleType|null
      */
-    public function getType(): RuleType
+    public function getType(): ?RuleType
     {
         return $this->type;
     }

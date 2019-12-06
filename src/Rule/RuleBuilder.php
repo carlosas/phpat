@@ -10,7 +10,7 @@ use PhpAT\Rule\Type\Inheritance;
 use PhpAT\Rule\Type\Mixin;
 use PhpAT\Rule\Type\RuleType;
 use PhpAT\Selector\SelectorInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Psr\Container\ContainerInterface;
 
 /**
  * Class RuleBuilder
@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class RuleBuilder
 {
     /**
-     * @var ContainerBuilder
+     * @var ContainerInterface
      */
     private $container;
     /**
@@ -40,20 +40,15 @@ class RuleBuilder
      */
     private $destinationExclude = [];
     /**
-     * @var RuleType
+     * @var RuleType|null
      */
-    private $type = '';
+    private $type = null;
     /**
      * @var bool
      */
     private $inverse = false;
 
-    /**
-     * RuleBuilder constructor.
-     *
-     * @param ContainerBuilder $container
-     */
-    public function __construct(ContainerBuilder $container)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
@@ -205,7 +200,7 @@ class RuleBuilder
         $this->originExclude = [];
         $this->destination = [];
         $this->destinationExclude = [];
-        $this->type = '';
+        $this->type = null;
         $this->inverse = false;
     }
 }
