@@ -40,9 +40,21 @@ abstract class ArchitectureTest
         return $rules;
     }
 
+    /**
+     * @param string $method
+     * @return Rule
+     * @throws \Exception
+     */
     private function invokeTest(string $method): Rule
     {
         $rule = $this->$method();
+
+        if ($rule->getType() === null) {
+            $message = $method
+                . ' has no defined type. Please make sure that you call one of the restrictive methods'
+                . ' (e.g. `mustImplement` or `mustNotDependOn`) to declare the type of the rule.';
+            throw new \Exception($message);
+        }
 
         if (!($rule instanceof Rule)) {
             $message = $method . ' must return an instance of ' . Rule::class . '.';
