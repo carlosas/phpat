@@ -40,9 +40,9 @@ class RuleBuilder
      */
     private $destinationExclude = [];
     /**
-     * @var RuleType
+     * @var RuleType|null
      */
-    private $type = '';
+    private $type = null;
     /**
      * @var bool
      */
@@ -186,6 +186,12 @@ class RuleBuilder
      */
     public function build(): Rule
     {
+        if ($this->type === null) {
+            throw new \Exception('
+                Rule has no type. Please make sure that you call one of the restrictive methods
+                (e.g. `mustImplement` or `mustNotDependOn`) to declare the type of the rule.
+            ');
+        }
         $rule = new Rule(
             $this->origin,
             $this->originExclude,
@@ -205,7 +211,7 @@ class RuleBuilder
         $this->originExclude = [];
         $this->destination = [];
         $this->destinationExclude = [];
-        $this->type = '';
+        $this->type = null;
         $this->inverse = false;
     }
 }
