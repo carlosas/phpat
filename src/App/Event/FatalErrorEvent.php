@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace PhpAT\App\Event;
 
-use PhpAT\App\Event;
+use PHPAT\EventDispatcher\EventInterface;
 
-class FatalErrorEvent extends Event
+class FatalErrorEvent implements EventInterface
 {
     /**
      * @var string

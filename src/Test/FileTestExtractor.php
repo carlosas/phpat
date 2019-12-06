@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PhpAT\Test;
 
 use PhpAT\App\Configuration;
-use PhpAT\App\EventDispatcher;
+use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Rule\RuleBuilder;
 
 class FileTestExtractor implements TestExtractor
