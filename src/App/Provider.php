@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace PhpAT\App;
 
 use PhpAT\App;
+use PHPAT\EventDispatcher\EventDispatcher;
+use PHPAT\EventDispatcher\ListenerProvider;
 use PhpAT\File\FileFinder;
 use PhpAT\File\SymfonyFinderAdapter;
 use PhpAT\Input\InputInterface;
@@ -29,8 +31,6 @@ use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TypeParser;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\EventDispatcher\EventDispatcher as SymfonyEventDispatcher;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 
@@ -83,11 +83,12 @@ class Provider
         Configuration::init($this->config);
         $this->builder->set(Parser::class, (new ParserFactory())->create(ParserFactory::ONLY_PHP7));
         $phpDocParser = new PhpDocParser(new TypeParser(), new ConstExprParser());
-        $eventDispatcher = new EventDispatcher(new SymfonyEventDispatcher());
+        $this->builder->set(Parser::class, (new ParserFactory())->create(ParserFactory::ONLY_PHP7));
 
-        $this->builder
-            ->register(EventSubscriberInterface::class, EventSubscriber::class)
-            ->addArgument(new Reference(OutputInterface::class));
+        $this->builder->set(PhpDocParser::class, new PhpDocParser(new TypeParser(), new ConstExprParser()));
+
+        $listenerProvider = (new EventListenerMapper())->populateListenerProvider(new ListenerProvider($this->builder));
+        $this->builder->set(EventDispatcher::class, (new EventDispatcher($listenerProvider)));
 
         $this->builder
             ->register(FileFinder::class, FileFinder::class)
@@ -113,7 +114,7 @@ class Provider
         $this->builder
             ->register(TestExtractor::class, FileTestExtractor::class)
             ->addArgument(new Reference(RuleBuilder::class))
-            ->addArgument($eventDispatcher);
+            ->addArgument(new Reference(EventDispatcher::class));
 
         $this->builder
             ->register(SelectorResolver::class, SelectorResolver::class)
@@ -129,37 +130,39 @@ class Provider
             ->addArgument(new Reference(FileFinder::class))
             ->addArgument(new Reference(Parser::class))
             ->addArgument(new Reference(NodeTraverserInterface::class))
-            ->addArgument($phpDocParser)
-            ->addArgument($eventDispatcher);
+            ->addArgument(new Reference(PhpDocParser::class))
+            ->addArgument(new Reference(EventDispatcher::class));
 
         $this->builder
             ->register(Inheritance::class, Inheritance::class)
             ->addArgument(new Reference(FileFinder::class))
             ->addArgument(new Reference(Parser::class))
             ->addArgument(new Reference(NodeTraverserInterface::class))
-            ->addArgument($eventDispatcher);
+            ->addArgument(new Reference(EventDispatcher::class));
 
         $this->builder
             ->register(Composition::class, Composition::class)
             ->addArgument(new Reference(FileFinder::class))
             ->addArgument(new Reference(Parser::class))
             ->addArgument(new Reference(NodeTraverserInterface::class))
-            ->addArgument($eventDispatcher);
+            ->addArgument(new Reference(EventDispatcher::class));
 
         $this->builder
             ->register(Mixin::class, Mixin::class)
             ->addArgument(new Reference(FileFinder::class))
             ->addArgument(new Reference(Parser::class))
             ->addArgument(new Reference(NodeTraverserInterface::class))
-            ->addArgument($eventDispatcher);
+            ->addArgument(new Reference(EventDispatcher::class));
 
         $this->builder
             ->register('app', App::class)
             ->addArgument(new Reference(MapBuilder::class))
             ->addArgument(new Reference(TestExtractor::class))
             ->addArgument(new Reference(StatementBuilder::class))
-            ->addArgument($eventDispatcher)
-            ->addArgument(new Reference(EventSubscriberInterface::class));
+            ->addArgument(new Reference(EventDispatcher::class));
+
+        $listenerProvider = new \PhpAT\App\ListenerProvider($this->builder);
+        $this->builder->merge($listenerProvider->register());
 
         return $this->builder;
     }

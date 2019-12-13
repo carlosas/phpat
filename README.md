@@ -23,9 +23,9 @@
 
 ### Introduction 📜
 
-**PHP Architecture Tester** is a tool that helps you keep your project architecture clean.
+**PHP Architecture Tester** is a static analysis tool to verify architectural requirements.
 
-It provides a natural language abstraction to define your own architecture rules and test them against your software.
+It provides a natural language abstraction to define your own architectural rules and test them against your software.
 You can also integrate *phpat* easily into your toolchain.
 
 Current supported relations:
@@ -41,7 +41,7 @@ Current supported relations:
 
 Just require **phpat** with [Composer](https://getcomposer.org/):
 ```bash
-composer require --dev carlosas/phpat
+composer require --dev carlosas/phpat:0.5.*
 ```
 
 <h2></h2>
@@ -62,8 +62,8 @@ This is the complete list of options:
 * `src` `exclude`: Files you want to be excluded in the tests (default=none).
 * `tests` `path`: The path where your tests are.
 * `options` `verbosity`: 0/1/2 output verbosity level (default=1).
-* `options` `dependency` `ignore_docblocks`: true/false ignore dependencies on docblocks (default=false).
 * `options` `dry-run`: true/false report failed suite without error exit code (default=false).
+* `options` `dependency` `ignore_docblocks`: true/false ignore dependencies on docblocks (default=false).
 
 <h2></h2>
 

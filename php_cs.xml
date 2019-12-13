@@ -17,7 +17,6 @@
     <rule ref="Generic.NamingConventions.ConstructorName"/>
     <rule ref="Generic.PHP.DeprecatedFunctions"/>
     <rule ref="Generic.PHP.LowerCaseKeyword"/>
-    <rule ref="Generic.Strings.UnnecessaryStringConcat"/>
     <rule ref="Generic.WhiteSpace.IncrementDecrementSpacing"/>
     <rule ref="Zend.Files.ClosingTag"/>
     <rule ref="Generic.ControlStructures.InlineControlStructure">

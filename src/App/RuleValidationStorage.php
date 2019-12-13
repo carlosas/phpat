@@ -9,47 +9,60 @@ class RuleValidationStorage
     /**
      * @var array
      */
-    private $errors = [];
+    private static $errors = [];
     /**
      * @var array
      */
-    private $fatalErrors = [];
+    private static $fatalErrors = [];
     /**
      * @var bool
      */
-    private $anyRuleHadErrors = false;
+    private static $anyRuleHadErrors = false;
     /**
      * @var bool
      */
-    private $lastRuleHadErrors = false;
+    private static $lastRuleHadErrors = false;
 
     /**
-     * @param string $message
+     * @var float
      */
-    public function addError(string $message): void
+    private static $startTime = 0;
+
+    /**
+     * @param float $time
+     */
+    public static function setStartTime(float $time): void
     {
-        $this->errors[] = $message;
-        $this->lastRuleHadErrors = true;
-        $this->anyRuleHadErrors = true;
+        self::$startTime = $time;
     }
 
     /**
      * @param string $message
      */
-    public function addFatalError(string $message): void
+    public static function addError(string $message): void
     {
-        $this->fatalErrors[] = $message;
-        $this->anyRuleHadErrors = true;
+        self::$errors[] = $message;
+        self::$lastRuleHadErrors = true;
+        self::$anyRuleHadErrors = true;
+    }
+
+    /**
+     * @param string $message
+     */
+    public static function addFatalError(string $message): void
+    {
+        self::$fatalErrors[] = $message;
+        self::$anyRuleHadErrors = true;
     }
 
     /**
      * @return array
      */
-    public function flushErrors(): array
+    public static function flushErrors(): array
     {
-        $e = $this->errors;
-        $this->errors = [];
-        $this->lastRuleHadErrors = false;
+        $e = self::$errors;
+        self::$errors = [];
+        self::$lastRuleHadErrors = false;
 
         return $e;
     }
@@ -57,16 +70,24 @@ class RuleValidationStorage
     /**
      * @return bool
      */
-    public function anyRuleHadErrors(): bool
+    public static function anyRuleHadErrors(): bool
     {
-        return $this->anyRuleHadErrors;
+        return self::$anyRuleHadErrors;
     }
 
     /**
      * @return bool
      */
-    public function lastRuleHadErrors(): bool
+    public static function lastRuleHadErrors(): bool
     {
-        return $this->lastRuleHadErrors;
+        return self::$lastRuleHadErrors;
+    }
+
+    /**
+     * @return float
+     */
+    public static function getStartTime(): float
+    {
+        return (float) self::$startTime;
     }
 }

@@ -7,15 +7,15 @@ namespace PhpAT;
 use PhpAT\App\Configuration;
 use PhpAT\App\Event\SuiteEndEvent;
 use PhpAT\App\Event\SuiteStartEvent;
-use PhpAT\App\EventDispatcher;
 use PhpAT\Parser\MapBuilder;
+use PhpAT\App\RuleValidationStorage;
+use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Rule\Event\RuleValidationEndEvent;
 use PhpAT\Rule\Event\RuleValidationStartEvent;
 use PhpAT\Rule\RuleCollection;
 use PhpAT\Statement\Statement;
 use PhpAT\Statement\StatementBuilder;
 use PhpAT\Test\TestExtractor;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class App
 {
@@ -32,10 +32,6 @@ class App
      */
     private $dispatcher;
     /**
-     * @var EventSubscriberInterface
-     */
-    private $subscriber;
-    /**
      * @var bool
      */
     private $dryRun;
@@ -49,20 +45,17 @@ class App
      * @param MapBuilder               $mapBuilder
      * @param TestExtractor            $extractor
      * @param StatementBuilder         $statementBuilder
-     * @param EventDispatcher          $dispatcher
-     * @param EventSubscriberInterface $subscriber
+     * @param EventDispatcher       $dispatcher
      */
     public function __construct(
         MapBuilder $mapBuilder,
         TestExtractor $extractor,
         StatementBuilder $statementBuilder,
-        EventDispatcher $dispatcher,
-        EventSubscriberInterface $subscriber
+        EventDispatcher $dispatcher
     ) {
         $this->extractor        = $extractor;
         $this->statementBuilder = $statementBuilder;
         $this->dispatcher       = $dispatcher;
-        $this->subscriber       = $subscriber;
         $this->dryRun           = Configuration::getDryRun();
         $this->mapBuilder       = $mapBuilder;
     }
@@ -73,8 +66,6 @@ class App
     public function execute(): void
     {
         $astMap = $this->mapBuilder->build();
-
-        $this->dispatcher->addSubscriber($this->subscriber);
 
         $this->dispatcher->dispatch(new SuiteStartEvent());
 
@@ -101,7 +92,7 @@ class App
 
         $this->dispatcher->dispatch(new SuiteEndEvent());
 
-        if ($this->subscriber->suiteHadErrors() && !$this->dryRun) {
+        if (RuleValidationStorage::anyRuleHadErrors() && !$this->dryRun) {
             throw new \Exception();
         }
     }
