@@ -4,6 +4,7 @@ namespace PhpAT\Parser;
 
 use PhpAT\App\Configuration;
 use PhpAT\File\FileFinder;
+use PhpAT\Parser\Collector\AstNodesCollector;
 use PhpAT\Parser\Collector\ClassNameCollector;
 use PhpAT\Parser\Collector\DependencyCollector;
 use PhpAT\Parser\Collector\InterfaceCollector;
@@ -29,25 +30,9 @@ class MapBuilder
      */
     private $traverser;
     /**
-     * @var ClassNameCollector
+     * @var AstNodesCollector
      */
-    private $classNameCollector;
-    /**
-     * @var ParentCollector
-     */
-    private $parentCollector;
-    /**
-     * @var InterfaceCollector
-     */
-    private $interfaceCollector;
-    /**
-     * @var DependencyCollector
-     */
-    private $dependencyCollector;
-    /**
-     * @var NameResolver
-     */
-    private $nameResolver;
+    private $astNodesCollector;
 
     public function __construct(
         FileFinder $finder,
@@ -58,70 +43,36 @@ class MapBuilder
         $this->finder = $finder;
         $this->parser = $parser;
         $this->traverser = $traverser;
-        $this->nameResolver = new NameResolver();
-        $this->classNameCollector = new ClassNameCollector();
-        $this->parentCollector = new ParentCollector(new ClassMatcher());
-        $this->interfaceCollector = new InterfaceCollector(new ClassMatcher());
-        $this->dependencyCollector = new DependencyCollector($phpDocParser, new ClassMatcher(), false);
-        $this->traitCollector = new TraitCollector(new ClassMatcher());
+        $this->astNodesCollector = new AstNodesCollector($phpDocParser, new ClassMatcher(), false);
     }
 
     public function build(): array
     {
+        $this->traverser->addVisitor($this->astNodesCollector);
+
         $files = $this->finder->findAllFiles(Configuration::getSrcPath());
 
-        $this->traverser->addVisitor($this->classNameCollector);
-        $this->traverser->addVisitor($this->parentCollector);
-        $this->traverser->addVisitor($this->interfaceCollector);
-        $this->traverser->addVisitor($this->dependencyCollector);
-
-        /** @var \SplFileInfo $file */
-        foreach ($files as $file) {
-            $parsed = $this->parser->parse(file_get_contents($this->normalizePathname($file->getPathname())));
+        /** @var \SplFileInfo $fileInfo */
+        foreach ($files as $fileInfo) {
+            $parsed = $this->parser->parse(file_get_contents($this->normalizePathname($fileInfo->getPathname())));
 
             $this->traverser->traverse($parsed);
 
-            $astNode = $this->buildAstNode($file);
+            $astMap[] = new AstNode(
+                $fileInfo,
+                $this->astNodesCollector->getClassNames()[0],
+                $this->astNodesCollector->getParents()[0] ?? null,
+                $this->astNodesCollector->getDependencies(),
+                $this->astNodesCollector->getInterfaces(),
+                $this->astNodesCollector->getTraits()
+            );
 
-            if ($astNode->jsonSerialize()['classname'] === 'Tests\PhpAT\functional\PHP7\fixtures\Dependency\Constructor') {
-                var_dump($astNode->jsonSerialize()); die;
-            }
-
-
-            if ($astNode !== null) {
-                $astMap[] = $astNode;
-            }
+            $this->astNodesCollector->reset();
         }
 
-        $this->traverser->removeVisitor($this->nameResolver);
-        $this->traverser->removeVisitor($this->classNameCollector);
-        $this->traverser->removeVisitor($this->parentCollector);
-        $this->traverser->removeVisitor($this->interfaceCollector);
-        $this->traverser->removeVisitor($this->dependencyCollector);
+        $this->traverser->removeVisitor($this->astNodesCollector);
 
         return $astMap ?? [];
-    }
-
-    private function buildAstNode(\SplFileInfo $fileInfo): ?AstNode
-    {
-        if (!isset($this->classNameCollector->getResult()[0])) {
-            return null;
-        }
-
-//        echo '------------------------------------------------' . PHP_EOL;
-//        echo $fileInfo->getPathname() . PHP_EOL;
-//var_dump($this->dependencyCollector->getResult());
-//        echo '------------------------------------------------' . PHP_EOL;
-        $node = new AstNode(
-            $fileInfo,
-            $this->classNameCollector->getResult()[0],
-            $this->parentCollector->getResult()[0] ?? null,
-            $this->dependencyCollector->getResult(),
-            $this->interfaceCollector->getResult(),
-            []
-        );
-
-        return $node;
     }
 
     private function normalizePathname(string $pathname): string
