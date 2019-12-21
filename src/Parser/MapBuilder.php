@@ -5,13 +5,7 @@ namespace PhpAT\Parser;
 use PhpAT\App\Configuration;
 use PhpAT\File\FileFinder;
 use PhpAT\Parser\Collector\AstNodesCollector;
-use PhpAT\Parser\Collector\ClassNameCollector;
-use PhpAT\Parser\Collector\DependencyCollector;
-use PhpAT\Parser\Collector\InterfaceCollector;
-use PhpAT\Parser\Collector\ParentCollector;
-use PhpAT\Parser\Collector\TraitCollector;
 use PhpParser\NodeTraverserInterface;
-use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 
@@ -71,7 +65,7 @@ class MapBuilder
         }
 
         $this->traverser->removeVisitor($this->astNodesCollector);
-
+var_dump($astMap); die;
         return $astMap ?? [];
     }
 

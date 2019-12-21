@@ -64,13 +64,13 @@ class Dependency implements RuleType
     ): void {
         /** @var AstNode $node */
         foreach ($astMap as $node) {
-            if ($node->jsonSerialize()['classname'] === $fqcnOrigin) {
-                $deps = $node->jsonSerialize()['dependencies'] ?? [];
-                $result = in_array($fqcnDestination, $deps);
+            if ($node->getClassName() === $fqcnOrigin) {
+                $result = in_array($fqcnDestination, $node->getDependencies());
                 $this->dispatchResult($result, $inverse, $fqcnOrigin, $fqcnDestination);
             }
-
         }
+
+        return;
     }
 
     private function dispatchResult(bool $result, bool $inverse, string $fqcnOrigin, string $fqcnDestination): void

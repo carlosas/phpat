@@ -17,7 +17,6 @@ class ClassMatcher
         if ($alias === null) {
             $d = explode('\\', $declaration);
             $alias = end($d);
-            $declaration = implode('\\', $d);
         }
 
         $this->declarations[$alias] = $declaration;
@@ -26,16 +25,14 @@ class ClassMatcher
     public function findClass(array $parts): ?string
     {
         $link = $parts[0] ?? [];
-
         if (isset($this->declarations[$link])) {
             array_shift($parts);
             if (empty($parts)) {
                 return $this->declarations[$link];
             }
-
             return $this->declarations[$link] . '\\' . implode('\\', $parts);
         }
-
+        //TODO: si el primer caracter es "\" no meter el namespace
         if (count($parts) === 1) {
             return $this->namespace . '\\' . $parts[0];
         }

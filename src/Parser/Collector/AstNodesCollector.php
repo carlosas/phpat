@@ -5,11 +5,12 @@ namespace PhpAT\Parser\Collector;
 use PhpAT\Parser\ClassMatcher;
 use PhpAT\Parser\ClassName;
 use PhpParser\Node;
+use PhpParser\NodeVisitorAbstract;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 
-class AstNodesCollector extends AbstractCollector
+class AstNodesCollector extends NodeVisitorAbstract
 {
     /**
      * @var ClassMatcher
@@ -47,6 +48,10 @@ class AstNodesCollector extends AbstractCollector
      * @var array
      */
     private $traits = [];
+    /**
+     * @var Node
+     */
+    protected $previousNode;
 
     public function __construct(PhpDocParser $docParser, ClassMatcher $matcher, bool $ignoreDocBlocks)
     {
@@ -55,7 +60,7 @@ class AstNodesCollector extends AbstractCollector
         $this->ignoreDocBlocks = $ignoreDocBlocks;
     }
 
-    public function leaveNode(Node $node)
+    public function enterNode(Node $node)
     {
         if ($node instanceof Node\Stmt\Namespace_) {
             $this->matcher->saveNamespace($node->name->toString());
@@ -65,24 +70,7 @@ class AstNodesCollector extends AbstractCollector
                 }
             }
         } elseif ($node instanceof Node\Stmt\UseUse) {
-            $this->matcher->addDeclaration($node->name, $node->alias);
-        } elseif ($node instanceof Node\Name\FullyQualified) {
-            $this->saveDependencyIfNotPresent($node->toString());
-        } elseif ($node instanceof Node\Name) {
-            $found = $this->matcher->findClass($node->parts);
-            if ($found !== null) {
-                $this->saveDependencyIfNotPresent($found);
-            }
-        } elseif (!$this->ignoreDocBlocks && $node->getDocComment() !== null) {
-            $doc = $node->getDocComment()->getText();
-            $nodes = $this->docParser->parse(new TokenIterator((new Lexer())->tokenize($doc)));
-            foreach ($nodes->getTags() as $tag) {
-                if (isset($tag->value->type->name)) {
-                    $type = $tag->value->type->name;
-                    $class = $this->matcher->findClass(explode('\\', $type)) ?? $type;
-                    $this->saveDependencyIfNotPresent($class);
-                }
-            }
+            $this->matcher->addDeclaration($node->name->toString(), $node->alias);
         } elseif ($node instanceof Node\Stmt\Class_) {
             if (isset($node->implements) && ($node->implements !== null)) {
                 foreach ($node->implements as $interface) {
@@ -98,6 +86,27 @@ class AstNodesCollector extends AbstractCollector
                     $this->parents[] = ClassName::createFromFQCN($found);
                 }
             }
+        } elseif ($node instanceof Node\Name\FullyQualified) {
+            $this->saveDependencyIfNotPresent($node->toString());
+        } elseif (
+            $node instanceof Node\Name
+            && ($this->previousNode !== null && get_class($this->previousNode) != Node\Name::class)
+            && ($this->previousNode !== null && get_class($this->previousNode) != Node\Stmt\Use_::class)
+        ) {
+            $found = $this->matcher->findClass($node->parts);
+            if ($found !== null) {
+                $this->saveDependencyIfNotPresent($found);
+            }
+        } elseif (!$this->ignoreDocBlocks && $node->getDocComment() !== null) {
+            $doc = $node->getDocComment()->getText();
+            $nodes = $this->docParser->parse(new TokenIterator((new Lexer())->tokenize($doc)));
+            foreach ($nodes->getTags() as $tag) {
+                if (isset($tag->value->type->name)) {
+                    $type = $tag->value->type->name;
+                    $class = $this->matcher->findClass(explode('\\', $type)) ?? $type;
+                    $this->saveDependencyIfNotPresent($class);
+                }
+            }
         } elseif ($node instanceof Node\Stmt\TraitUse) {
             if (isset($node->traits) && ($node->traits !== null)) {
                 foreach ($node->traits as $trait) {
@@ -108,6 +117,11 @@ class AstNodesCollector extends AbstractCollector
                 }
             }
         }
+    }
+
+    public function leaveNode(Node $node)
+    {
+        $this->previousNode = $node;
     }
 
     public function reset(): void
@@ -124,7 +138,7 @@ class AstNodesCollector extends AbstractCollector
      */
     public function getClassNames(): array
     {
-        return $this->classNames;
+        return $this->classNames ?? [];
     }
 
     /**
@@ -132,7 +146,7 @@ class AstNodesCollector extends AbstractCollector
      */
     public function getDependencies(): array
     {
-        return $this->dependencies;
+        return $this->dependencies ?? [];
     }
 
     /**
@@ -140,7 +154,7 @@ class AstNodesCollector extends AbstractCollector
      */
     public function getInterfaces(): array
     {
-        return $this->interfaces;
+        return $this->interfaces ?? [];
     }
 
     /**
@@ -148,7 +162,7 @@ class AstNodesCollector extends AbstractCollector
      */
     public function getParents(): array
     {
-        return $this->parents;
+        return $this->parents ?? [];
     }
 
     /**
@@ -156,7 +170,7 @@ class AstNodesCollector extends AbstractCollector
      */
     public function getTraits(): array
     {
-        return $this->traits;
+        return $this->traits ?? [];
     }
 
     private function saveDependencyIfNotPresent(string $fqcn)

@@ -55,14 +55,62 @@ class AstNode implements \JsonSerializable
         }
     }
 
+    /**
+     * @return string
+     */
+    public function getClassName(): string
+    {
+        return $this->className;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getDependencies(): array
+    {
+        return $this->dependencies ?? [];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getInterfaces(): array
+    {
+        return $this->interfaces ?? [];
+    }
+
+    /**
+     * @return string
+     */
+    public function getParent(): string
+    {
+        return $this->parent ?? '';
+    }
+
+    /**
+     * @return string
+     */
+    public function getFilePathname(): string
+    {
+        return $this->filePathname;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getMixins(): array
+    {
+        return $this->mixins ?? [];
+    }
+
     public function jsonSerialize(): array
     {
         return [
-            'pathname' => $this->filePathname,
-            'classname' => $this->className,
-            'parent' => $this->parent,
-            'dependencies' => $this->dependencies,
-            'interfaces' => $this->interfaces,
+            'pathname' => $this->getFilePathname(),
+            'classname' => $this->getClassName(),
+            'parent' => $this->getParent(),
+            'dependencies' => $this->getDependencies(),
+            'interfaces' => $this->getInterfaces(),
         ];
     }
 
