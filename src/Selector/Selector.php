@@ -15,4 +15,9 @@ class Selector
     {
         return new ClassNameSelector($fqcn);
     }
+
+    public static function implementInterface(string $fqcn): ImplementSelector
+    {
+        return new ImplementSelector($fqcn);
+    }
 }
