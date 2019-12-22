@@ -68,10 +68,4 @@ class Inheritance implements RuleType
 
         $this->eventDispatcher->dispatch(new $event($message));
     }
-
-    private function resetCollectedItems()
-    {
-        $this->parsedClassClassName = null;
-        $this->parsedClassParent = null;
-    }
 }

@@ -6,6 +6,7 @@ namespace PhpAT\Rule\Type;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\File\FileFinder;
+use PhpAT\Parser\AstNode;
 use PhpAT\Parser\ClassMatcher;
 use PhpAT\Parser\ClassName;
 use PhpAT\Parser\Collector\ClassNameCollector;
@@ -44,85 +45,28 @@ class Mixin implements RuleType
     }
 
     public function validate(
-        array $parsedClass,
-        array $destinationFiles,
+        string $fqcnOrigin,
+        string $fqcnDestination,
+        array $astMap,
         bool $inverse = false
     ): void {
-        $this->resetCollectedItems();
-
-        $this->extractParsedClassInfo($parsedClass);
-
-        $classNameCollector = new ClassNameCollector();
-        $this->traverser->addVisitor($classNameCollector);
-        /**
-         * @var \SplFileInfo $file
-        */
-        foreach ($destinationFiles as $file) {
-            $parsed = $this->parser->parse(file_get_contents($file->getPathname()));
-            $this->traverser->traverse($parsed);
-        }
-        $this->traverser->removeVisitor($classNameCollector);
-
-        if (empty($classNameCollector->getResult())) {
-            $this->eventDispatcher->dispatch(new NoClassesFoundEvent());
-            return;
-        }
-
-        /**
-         * @var ClassName $className
-        */
-        foreach ($classNameCollector->getResult() as $className) {
-            $result = empty($this->parsedClassTraits)
-                ? false
-                : in_array($className->getFQCN(), $this->parsedClassTraits);
-
-            $this->dispatchResult($result, $inverse, $this->parsedClassClassName, $className);
-        }
-    }
-
-    private function extractParsedClassInfo(array $parsedClass): void
-    {
-        $classNameCollector = new ClassNameCollector();
-        $this->traverser->addVisitor($classNameCollector);
-        $this->traverser->traverse($parsedClass);
-        $this->traverser->removeVisitor($classNameCollector);
-        $this->parsedClassClassName = $classNameCollector->getResult()[0];
-
-        $matcher = new ClassMatcher();
-        $matcher->saveNamespace($this->parsedClassClassName->getNamespace());
-
-        $traitCollector = new TraitCollector($matcher);
-        $this->traverser->addVisitor($traitCollector);
-        $this->traverser->traverse($parsedClass);
-        $this->traverser->removeVisitor($traitCollector);
-
-        $this->parsedClassTraits = $traitCollector->getResult();
-
-        /**
-         * @var ClassName $v
-        */
-        foreach ($this->parsedClassTraits as $k => $v) {
-            if (empty($v->getNamespace())) {
-                $className = new ClassName($this->parsedClassClassName->getNamespace(), $v->getName());
-                $this->parsedClassTraits[$k] = $className->getFQCN();
-            } else {
-                $this->parsedClassTraits[$k] = $v->getFQCN();
+        /** @var AstNode $node */
+        foreach ($astMap as $node) {
+            if ($node->getClassName() === $fqcnOrigin) {
+                $result = in_array($fqcnDestination, $node->getMixins());
+                $this->dispatchResult($result, $inverse, $fqcnOrigin, $fqcnDestination);
             }
         }
+
+        return;
     }
 
-    private function dispatchResult(bool $result, bool $inverse, ClassName $className, ClassName $traitName): void
+    private function dispatchResult(bool $result, bool $inverse, string $fqcnOrigin, string $fqcnDestination): void
     {
         $action = $result ? ' includes ' : ' does not include ';
         $event = ($result xor $inverse) ? StatementValidEvent::class : StatementNotValidEvent::class;
-        $message = $className->getFQCN() . $action . $traitName->getFQCN();
+        $message = $fqcnOrigin . $action . $fqcnDestination;
 
         $this->eventDispatcher->dispatch(new $event($message));
-    }
-
-    private function resetCollectedItems()
-    {
-        $this->parsedClassClassName = null;
-        $this->parsedClassTraits = null;
     }
 }

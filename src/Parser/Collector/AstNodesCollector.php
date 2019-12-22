@@ -60,6 +60,10 @@ class AstNodesCollector extends NodeVisitorAbstract
         $this->ignoreDocBlocks = $ignoreDocBlocks;
     }
 
+    public function beforeTraverse(array $nodes) {
+        $this->reset();
+    }
+
     public function enterNode(Node $node)
     {
         if ($node instanceof Node\Stmt\Namespace_) {
@@ -127,9 +131,11 @@ class AstNodesCollector extends NodeVisitorAbstract
     public function reset(): void
     {
         $this->classNames = [];
+        $this->stringDependencies = [];
         $this->dependencies = [];
         $this->interfaces = [];
         $this->parents = [];
+        $this->traits = [];
         $this->matcher->reset();
     }
 

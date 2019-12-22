@@ -38,7 +38,6 @@ class DependencyCollector extends AbstractCollector
     public function leaveNode(Node $node)
     {
         if ($node instanceof Node\Stmt\Namespace_) {
-            echo "SAVING NAMESPACE: " . $node->name->toString() . PHP_EOL;
             $this->matcher->saveNamespace($node->name->toString());
         } elseif ($node instanceof Node\Stmt\UseUse) {
             $this->matcher->addDeclaration($node->name, $node->alias);

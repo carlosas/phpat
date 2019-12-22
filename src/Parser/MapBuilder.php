@@ -65,7 +65,7 @@ class MapBuilder
         }
 
         $this->traverser->removeVisitor($this->astNodesCollector);
-var_dump($astMap); die;
+
         return $astMap ?? [];
     }
 
