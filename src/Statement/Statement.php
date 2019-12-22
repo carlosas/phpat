@@ -14,10 +14,6 @@ use PhpAT\Rule\Type\RuleType;
 class Statement
 {
     /**
-     * @var array
-     */
-    private $parsedClass;
-    /**
      * @var RuleType
      */
     private $type;
@@ -26,28 +22,24 @@ class Statement
      */
     private $inverse;
     /**
-     * @var \SplFileInfo[]
+     * @var string
      */
-    private $destinations;
+    private $fqcnOrigin;
+    /**
+     * @var string
+     */
+    private $fqcnDestination;
 
     public function __construct(
-        array $parsedClass,
+        string $fqcnOrigin,
         RuleType $type,
         bool $inverse,
-        array $destinations
+        string $fqcnDestination
     ) {
-        $this->parsedClass = $parsedClass;
+        $this->fqcnOrigin = $fqcnOrigin;
         $this->type = $type;
         $this->inverse = $inverse;
-        $this->destinations = $destinations;
-    }
-
-    /**
-     * @return array
-     */
-    public function getParsedClass(): array
-    {
-        return $this->parsedClass;
+        $this->fqcnDestination = $fqcnDestination;
     }
 
     /**
@@ -67,10 +59,18 @@ class Statement
     }
 
     /**
-     * @return \SplFileInfo[]
+     * @return string
      */
-    public function getDestinations(): array
+    public function getFqcnOrigin(): string
     {
-        return $this->destinations;
+        return $this->fqcnOrigin;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFqcnDestination(): string
+    {
+        return $this->fqcnDestination;
     }
 }

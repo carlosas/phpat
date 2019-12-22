@@ -13,9 +13,9 @@ class ClassName
         $this->name = $name;
     }
 
-    public static function createFromFQDN(string $fqdn): self
+    public static function createFromFQCN(string $fqcn): self
     {
-        $parts = explode('\\', $fqdn);
+        $parts = explode('\\', $fqcn);
         $name = array_pop($parts);
 
         return new self(implode('\\', $parts), $name);
@@ -31,7 +31,7 @@ class ClassName
         return $this->name;
     }
 
-    public function getFQDN(): string
+    public function getFQCN(): string
     {
         return (empty($this->getNamespace()))
             ? $this->getName()

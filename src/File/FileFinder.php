@@ -32,6 +32,12 @@ class FileFinder
         );
     }
 
+    public function findAllFiles(string $path): array
+    {
+        //array_merge(Configuration::getSrcExcluded())
+        return $this->finder->find($path, '*.php', [], []);
+    }
+
     private function getSplittedFile(string $file): array
     {
         $file = Configuration::getSrcPath() . $file;

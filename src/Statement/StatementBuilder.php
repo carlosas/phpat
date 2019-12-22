@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpAT\Statement;
 
 use PhpAT\App\Configuration;
+use PhpAT\Parser\AstNode;
 use PhpAT\Rule\Rule;
 use PhpAT\Selector\SelectorResolver;
 use PhpParser\Parser;
@@ -33,13 +34,14 @@ class StatementBuilder
     }
 
     /**
-     * @param  Rule $rule
+     * @param Rule  $rule
+     * @param AstNode[] $astMap
      * @return \Generator
      */
-    public function build(Rule $rule): \Generator
+    public function build(Rule $rule, array $astMap): \Generator
     {
-        $origins = $this->selectFiles($rule->getOrigin(), $rule->getOriginExcluded());
-        $destinations = $this->selectFiles($rule->getDestination(), $rule->getDestinationExcluded());
+        $origins = $this->selectClassNames($rule->getOrigin(), $rule->getOriginExcluded(), $astMap);
+        $destinations = $this->selectClassNames($rule->getDestination(), $rule->getDestinationExcluded(), $astMap);
 
         if (!empty(Configuration::getSrcIncluded())) {
             $filteredOrigins = [];
@@ -54,59 +56,42 @@ class StatementBuilder
             $origins = $filteredOrigins;
         }
 
-        foreach ($origins as $file) {
-            $parsed = $this->parseFile($file);
-            if ($parsed === null) {
-                continue;
+        foreach ($origins as $originClassName) {
+            foreach ($destinations as $destinationClassName) {
+                yield new Statement(
+                    $originClassName,
+                    $rule->getType(),
+                    $rule->isInverse(),
+                    $destinationClassName
+                );
             }
-
-            yield new Statement(
-                $parsed,
-                $rule->getType(),
-                $rule->isInverse(),
-                $destinations
-            );
         }
     }
 
     /**
      * @param  array $included
      * @param  array $excluded
-     * @return \SplFileInfo[]
+     * @return string[]
      */
-    private function selectFiles(array $included, array $excluded): array
+    private function selectClassNames(array $included, array $excluded, array $astMap): array
     {
-        $filesToValidate = [];
+        $classNamesToValidate = [];
         foreach ($included as $i) {
-            $filesToValidate = array_merge($filesToValidate, $this->selectorResolver->resolve($i));
+            $classNamesToValidate = array_merge($classNamesToValidate, $this->selectorResolver->resolve($i, $astMap));
         }
 
         foreach ($excluded as $e) {
-            $filesToExclude = $this->selectorResolver->resolve($e);
-            /**
-             * @var \SplFileInfo $file
-            */
-            foreach ($filesToExclude as $file) {
-                foreach ($filesToValidate as $key => $value) {
-                    if ($this->normalizePath($file->getPathname()) == $this->normalizePath($value->getPathname())) {
-                        unset($filesToValidate[$key]);
+            $classNamesToExclude = $this->selectorResolver->resolve($e, $astMap);
+            foreach ($classNamesToExclude as $file) {
+                foreach ($classNamesToValidate as $key => $value) {
+                    if ($this->normalizePath($file) == $this->normalizePath($value)) {
+                        unset($classNamesToValidate[$key]);
                     }
                 }
             }
         }
 
-        return $filesToValidate;
-    }
-
-    /**
-     * @param  \SplFileInfo $file
-     * @return array
-     */
-    private function parseFile(\SplFileInfo $file): array
-    {
-        $code = file_get_contents($file->getPathname());
-
-        return $this->parser->parse($code);
+        return $classNamesToValidate;
     }
 
     private function normalizePath(string $path): string

@@ -15,5 +15,7 @@ interface SelectorInterface
 
     public function injectDependencies(array $dependencies);
 
+    public function setAstMap(array $astMap);
+
     public function select(): array;
 }

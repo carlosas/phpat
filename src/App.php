@@ -7,6 +7,7 @@ namespace PhpAT;
 use PhpAT\App\Configuration;
 use PhpAT\App\Event\SuiteEndEvent;
 use PhpAT\App\Event\SuiteStartEvent;
+use PhpAT\Parser\MapBuilder;
 use PhpAT\App\RuleValidationStorage;
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Rule\Event\RuleValidationEndEvent;
@@ -34,14 +35,20 @@ class App
      * @var bool
      */
     private $dryRun;
+    /**
+     * @var MapBuilder
+     */
+    private $mapBuilder;
 
     /**
      * App constructor.
+     * @param MapBuilder               $mapBuilder
      * @param TestExtractor            $extractor
      * @param StatementBuilder         $statementBuilder
      * @param EventDispatcher       $dispatcher
      */
     public function __construct(
+        MapBuilder $mapBuilder,
         TestExtractor $extractor,
         StatementBuilder $statementBuilder,
         EventDispatcher $dispatcher
@@ -50,6 +57,7 @@ class App
         $this->statementBuilder = $statementBuilder;
         $this->dispatcher       = $dispatcher;
         $this->dryRun           = Configuration::getDryRun();
+        $this->mapBuilder       = $mapBuilder;
     }
 
     /**
@@ -57,6 +65,8 @@ class App
      */
     public function execute(): void
     {
+        $astMap = $this->mapBuilder->build();
+
         $this->dispatcher->dispatch(new SuiteStartEvent());
 
         $testSuite = $this->extractor->execute();
@@ -67,14 +77,14 @@ class App
         }
 
         foreach ($rules->getValues() as $rule) {
-            $statements = $this->statementBuilder->build($rule);
+            $statements = $this->statementBuilder->build($rule, $astMap);
 
             $this->dispatcher->dispatch(new RuleValidationStartEvent($rule->getName()));
             /**
              * @var Statement $statement
             */
             foreach ($statements as $statement) {
-                $this->validateStatement($statement);
+                $this->validateStatement($statement, $astMap);
             }
 
             $this->dispatcher->dispatch(new RuleValidationEndEvent());
@@ -87,11 +97,12 @@ class App
         }
     }
 
-    private function validateStatement(Statement $statement): void
+    private function validateStatement(Statement $statement, array $astMap): void
     {
         $statement->getType()->validate(
-            $statement->getParsedClass(),
-            $statement->getDestinations(),
+            $statement->getFqcnOrigin(),
+            $statement->getFqcnDestination(),
+            $astMap,
             $statement->isInverse()
         );
     }

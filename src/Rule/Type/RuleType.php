@@ -7,8 +7,9 @@ namespace PhpAT\Rule\Type;
 interface RuleType
 {
     public function validate(
-        array $parsedClass,
-        array $destinationFiles,
+        string $fqcnOrigin,
+        string $fqcnDestination,
+        array $astMap,
         bool $inverse = false
     ): void;
 }
