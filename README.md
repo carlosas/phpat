@@ -97,7 +97,7 @@ class ExampleTest extends ArchitectureTest
     {
         return $this->newRule
             ->classesThat(Selector::haveClassName('App\Application\*\UseCase\*Handler'))
-            ->excludingClassesThat(Selector::havePath('Application/Shared/UseCase/Different*Handler.php'))
+            ->excludingClassesThat(Selector::extendClass('App\Application\Shared\UseCase\DifferentHandler'))
             ->andExcludingClassesThat(Selector::haveClassName(\App\Application\Shared\UseCase\AbstractCommandHandler::class))
             ->mustExtend()
             ->classesThat(Selector::havePath('Application/Shared/UseCase/AbstractCommandHandler.php'))
