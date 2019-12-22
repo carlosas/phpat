@@ -9,9 +9,9 @@ class OutputTest extends ArchitectureTest
     public function testOnlyEventSubscriberWritesOutput(): Rule
     {
         return $this->newRule
-            ->classesThat(Selector::havePath('*'))
+            ->classesThat(Selector::haveClassName('*'))
             ->excludingClassesThat(Selector::havePath('*/Event/Listener/*Listener.php'))
-            ->excludingClassesThat(Selector::havePath('App/Provider.php'))
+            ->excludingClassesThat(Selector::haveClassName('PhpAT\App\Provider'))
             ->excludingClassesThat(Selector::havePath('App/ListenerProvider.php'))
             ->excludingClassesThat(Selector::havePath('App.php'))
             ->excludingClassesThat(Selector::havePath('Output/StdOutput.php'))

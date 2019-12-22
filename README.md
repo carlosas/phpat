@@ -41,7 +41,7 @@ Current supported relations:
 
 Just require **phpat** with [Composer](https://getcomposer.org/):
 ```bash
-composer require --dev carlosas/phpat:0.5.*
+composer require --dev carlosas/phpat
 ```
 
 <h2></h2>
@@ -87,16 +87,16 @@ class ExampleTest extends ArchitectureTest
             ->classesThat(Selector::havePath('Application/*'))
             ->andClassesThat(Selector::havePath('Infrastructure/*'))
             ->andClassesThat(Selector::havePath('Presentation/*'))
-            ->excludingClassesThat(Selector::havePath('Application/Shared/Service/KnownBadApproach.php'))
+            ->excludingClassesThat(Selector::haveClassName('App\Application\Shared\Service\KnownBadApproach'))
             ->build();
     }
     
     public function testAllHandlersExtendAbstractCommandHandler(): Rule
     {
         return $this->newRule
-            ->classesThat(Selector::havePath('Application/*/UseCase/*Handler.php'))
+            ->classesThat(Selector::haveClassName('App\Application\*\UseCase\*Handler'))
             ->excludingClassesThat(Selector::havePath('Application/Shared/UseCase/Different*Handler.php'))
-            ->andExcludingClassesThat(Selector::havePath('Application/Shared/UseCase/AbstractCommandHandler.php'))
+            ->andExcludingClassesThat(Selector::haveClassName('App\Application\Shared\UseCase\AbstractCommandHandler'))
             ->mustExtend()
             ->classesThat(Selector::havePath('Application/Shared/UseCase/AbstractCommandHandler.php'))
             ->build();
