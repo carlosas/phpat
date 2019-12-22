@@ -18,6 +18,10 @@ if (PHP_VERSION_ID < 70100) {
     exit(1);
 }
 
+error_reporting(E_ALL);
+ini_set('display_errors', 'stderr'); // send php warnings to stderr
+gc_disable(); // performance boost
+
 $input = new ArgvInput();
 
 $container = new ContainerBuilder();
