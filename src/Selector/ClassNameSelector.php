@@ -65,7 +65,9 @@ class ClassNameSelector implements SelectorInterface
     {
         $pattern = preg_replace_callback(
             '/([^*])/',
-            function($m) {return preg_quote($m[0], '/');},
+            function ($m) {
+                return preg_quote($m[0], '/');
+            },
             $pattern
         );
         $pattern = str_replace('*', '.*', $pattern);
