@@ -20,4 +20,9 @@ class Selector
     {
         return new ImplementSelector($fqcn);
     }
+
+    public static function extendClass(string $fqcn): ExtendSelector
+    {
+        return new ExtendSelector($fqcn);
+    }
 }
