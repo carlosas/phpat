@@ -25,4 +25,9 @@ class Selector
     {
         return new ExtendSelector($fqcn);
     }
+
+    public static function includeTrait(string $fqcn): IncludeSelector
+    {
+        return new IncludeSelector($fqcn);
+    }
 }
