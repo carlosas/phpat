@@ -1,9 +1,7 @@
 <?php
 
-namespace PhpAT\Parser\Collector;
+namespace PhpAT\Parser;
 
-use PhpAT\Parser\ClassMatcher;
-use PhpAT\Parser\ClassName;
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 use PHPStan\PhpDocParser\Lexer\Lexer;
@@ -60,7 +58,8 @@ class AstNodesCollector extends NodeVisitorAbstract
         $this->ignoreDocBlocks = $ignoreDocBlocks;
     }
 
-    public function beforeTraverse(array $nodes) {
+    public function beforeTraverse(array $nodes)
+    {
         $this->reset();
     }
 

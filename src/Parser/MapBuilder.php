@@ -4,7 +4,6 @@ namespace PhpAT\Parser;
 
 use PhpAT\App\Configuration;
 use PhpAT\File\FileFinder;
-use PhpAT\Parser\Collector\AstNodesCollector;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\Parser;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
@@ -37,7 +36,11 @@ class MapBuilder
         $this->finder = $finder;
         $this->parser = $parser;
         $this->traverser = $traverser;
-        $this->astNodesCollector = new AstNodesCollector($phpDocParser, new ClassMatcher(), false);
+        $this->astNodesCollector = new AstNodesCollector(
+            $phpDocParser,
+            new ClassMatcher(),
+            Configuration::getDependencyIgnoreDocBlocks()
+        );
     }
 
     public function build(): array

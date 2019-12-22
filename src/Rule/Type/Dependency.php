@@ -36,10 +36,6 @@ class Dependency implements RuleType
      * @var EventDispatcher
      */
     private $eventDispatcher;
-    /**
-     * @var bool
-     */
-    private $ignoreDocBlocks;
 
     public function __construct(
         FileFinder $finder,

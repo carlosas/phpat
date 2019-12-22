@@ -6,10 +6,7 @@ namespace PhpAT\Selector;
 
 use PhpAT\File\FileFinder;
 use PhpAT\Parser\AstNode;
-use PhpAT\Parser\ClassName;
-use PhpAT\Parser\Collector\ClassNameCollector;
 use PhpParser\NodeTraverserInterface;
-use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
 
 /**
@@ -77,17 +74,12 @@ class PathSelector implements SelectorInterface
     public function select(): array
     {
         foreach ($this->fileFinder->findFiles($this->path) as $file) {
-            $nameResolver = new NameResolver();
-            $classNameCollector = new ClassNameCollector();
             $filePathname = str_replace('\\', '/', $file->getPathname());
-            $parsed = $this->parser->parse(file_get_contents($filePathname));
-            $this->traverser->addVisitor($nameResolver);
-            $this->traverser->addVisitor($classNameCollector);
-            $this->traverser->traverse($parsed);
 
-            /** @var ClassName $name */
-            foreach ($classNameCollector->getResult() as $name) {
-                $result[$name->getFQCN()] = $name->getFQCN();
+            foreach ($this->astMap as $astNode) {
+                if ($astNode->getFilePathname() === $filePathname) {
+                    $result[$astNode->getClassName()] = $astNode->getClassName();
+                }
             }
         }
 

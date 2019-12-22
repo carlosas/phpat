@@ -7,11 +7,6 @@ namespace PhpAT\Rule\Type;
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\File\FileFinder;
 use PhpAT\Parser\AstNode;
-use PhpAT\Parser\ClassMatcher;
-use PhpAT\Parser\ClassName;
-use PhpAT\Parser\Collector\ClassNameCollector;
-use PhpAT\Parser\Collector\TraitCollector;
-use PhpAT\Statement\Event\NoClassesFoundEvent;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
 use PhpParser\NodeTraverserInterface;
@@ -22,14 +17,6 @@ class Mixin implements RuleType
     private $traverser;
     private $finder;
     private $parser;
-    /**
-     * @var ClassName
-     */
-    private $parsedClassClassName;
-    /**
-     * @var ClassName[]
-     */
-    private $parsedClassTraits;
     private $eventDispatcher;
 
     public function __construct(
