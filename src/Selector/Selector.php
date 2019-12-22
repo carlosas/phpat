@@ -10,4 +10,9 @@ class Selector
     {
         return new PathSelector($path);
     }
+
+    public static function haveClassName(string $fqcn): ClassNameSelector
+    {
+        return new ClassNameSelector($fqcn);
+    }
 }
