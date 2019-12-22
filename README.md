@@ -76,6 +76,7 @@ This could be a test with a couple of rules:
 use PhpAT\Rule\Rule;
 use PhpAT\Selector\Selector;
 use PhpAT\Test\ArchitectureTest;
+use App\Domain\WeirdInterface;
 
 class ExampleTest extends ArchitectureTest
 {
@@ -83,6 +84,7 @@ class ExampleTest extends ArchitectureTest
     {
         return $this->newRule
             ->classesThat(Selector::havePath('Domain/*'))
+            ->excludingClassesThat(Selector::implementInterface(WeirdInterface::class))
             ->mustNotDependOn()
             ->classesThat(Selector::havePath('Application/*'))
             ->andClassesThat(Selector::havePath('Infrastructure/*'))
@@ -96,7 +98,7 @@ class ExampleTest extends ArchitectureTest
         return $this->newRule
             ->classesThat(Selector::haveClassName('App\Application\*\UseCase\*Handler'))
             ->excludingClassesThat(Selector::havePath('Application/Shared/UseCase/Different*Handler.php'))
-            ->andExcludingClassesThat(Selector::haveClassName('App\Application\Shared\UseCase\AbstractCommandHandler'))
+            ->andExcludingClassesThat(Selector::haveClassName(\App\Application\Shared\UseCase\AbstractCommandHandler::class))
             ->mustExtend()
             ->classesThat(Selector::havePath('Application/Shared/UseCase/AbstractCommandHandler.php'))
             ->build();

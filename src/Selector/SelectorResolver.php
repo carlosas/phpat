@@ -31,7 +31,8 @@ class SelectorResolver
     /**
      * @param SelectorInterface $selector
      * @param array             $astMap
-     * @return string[]
+     * @return array
+     * @throws \Exception
      */
     public function resolve(SelectorInterface $selector, array $astMap): array
     {

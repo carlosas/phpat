@@ -12,7 +12,7 @@ class RuleTypesTest extends ArchitectureTest
             ->classesThat(Selector::havePath('Rule/Type/*'))
             ->excludingClassesThat(Selector::havePath('Rule/Type/RuleType.php'))
             ->mustImplement()
-            ->classesThat(Selector::havePath('Rule/Type/RuleType.php'))
+            ->classesThat(Selector::haveClassName('PhpAT\Rule\Type\RuleType'))
             ->build();
     }
 }

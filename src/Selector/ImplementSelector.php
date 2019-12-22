@@ -6,20 +6,20 @@ namespace PhpAT\Selector;
 
 use PhpAT\Parser\AstNode;
 
-class ClassNameSelector implements SelectorInterface
+class ImplementSelector implements SelectorInterface
 {
     /**
      * @var string
      */
-    private $fqcn;
+    private $interfaceName;
     /**
      * @var AstNode[]
      */
     private $astMap;
 
-    public function __construct(string $fqcn)
+    public function __construct(string $interfaceName)
     {
-        $this->fqcn = $fqcn;
+        $this->interfaceName = $interfaceName;
     }
 
     public function getDependencies(): array
@@ -45,8 +45,10 @@ class ClassNameSelector implements SelectorInterface
     public function select(): array
     {
         foreach ($this->astMap as $astNode) {
-            if ($this->matchesPattern($astNode->getClassName(), $this->fqcn)) {
-                $result[$astNode->getClassName()] = $astNode->getClassName();
+            foreach ($astNode->getInterfaces() as $interface) {
+                if ($this->matchesPattern($interface, $this->interfaceName)) {
+                    $result[$astNode->getClassName()] = $astNode->getClassName();
+                }
             }
         }
 
