@@ -7,7 +7,7 @@
 		<img src="https://img.shields.io/packagist/v/carlosas/phpat.svg?style=flat-square" alt="Packagist">
     </a>
 	<a>
-		<img src="https://img.shields.io/badge/php-%3E%3D_7.1-8892BF.svg?style=flat-square" alt="Minimum PHP">
+		<img src="https://img.shields.io/badge/php-%3E%3D_7.2-8892BF.svg?style=flat-square" alt="Minimum PHP">
 	</a>
 	<a>
 		<img src="https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square" alt="MIT license">
