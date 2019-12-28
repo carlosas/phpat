@@ -65,14 +65,12 @@ class Provider
     {
         $this->builder  = $builder;
         $this->autoload = $autoload;
-        $this->config   = array_merge(
-            Yaml::parse(
-                file_get_contents(
-                    getcwd() . '/' . ($input->getArgument('config-file', 'phpat.yml'))
-                )
-            ),
-            ['options' => $input->getOptions()]
+        $this->config = Yaml::parse(
+            file_get_contents(
+                getcwd() . '/' . ($input->getArgument('config-file', 'phpat.yml'))
+            )
         );
+        $this->config['options'] = array_merge($this->config['options'] ?? [], $input->getOptions());
     }
 
     /**

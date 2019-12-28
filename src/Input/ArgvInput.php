@@ -14,7 +14,7 @@ class ArgvInput implements InputInterface
     private $parsedOptions = [];
 
     private static $possibleOptions = [
-        '--dry-run'
+        '--dry-run' => 'bool'
     ];
 
     private static $possibleArguments = [
@@ -66,10 +66,11 @@ class ArgvInput implements InputInterface
             : [$arg, true]
         ;
 
-        if (!in_array($option, self::$possibleOptions, true)) {
+        if (!in_array($option, array_keys(self::$possibleOptions), true)) {
             return;
         }
 
+        settype($value, self::$possibleOptions[$option]);
         $this->parsedOptions[substr($option, 2)] = $value;
     }
 

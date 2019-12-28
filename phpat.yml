@@ -3,4 +3,4 @@ src:
 tests:
   path: tests/architecture/
 options:
-  verbose: 2
+  verbosity: 2
