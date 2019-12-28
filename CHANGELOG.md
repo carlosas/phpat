@@ -5,6 +5,9 @@ All notable changes to this project will be documented in this file.
 - Added `Selector::implementInterface` to select classes that implement a certain interface
 - Added `Selector::extendClass` to select classes that extend a certain class
 - Added `Selector::includeTrait` to select classes that include a certain trait
+- Added some PHP configurations (error_reporting, display_errors, gc_disable)
+- Added verbosity as a cli command option
+- Fixed options being ignored in configuration files
 
 ## 0.5.1
 - Added `Selector::haveClassName` to select classes by fully qualified names
