@@ -14,7 +14,8 @@ class ArgvInput implements InputInterface
     private $parsedOptions = [];
 
     private static $possibleOptions = [
-        '--dry-run' => 'bool'
+        '--dry-run' => 'bool',
+        '--verbosity' => 'int'
     ];
 
     private static $possibleArguments = [
