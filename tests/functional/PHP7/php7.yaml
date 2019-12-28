@@ -1,6 +1,0 @@
-src:
-  path: tests/functional/PHP7/fixtures/
-tests:
-  path: tests/functional/PHP7/tests/
-options:
-  verbosity: 2
