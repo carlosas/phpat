@@ -32,8 +32,12 @@ class ClassMatcher
             }
             return $this->declarations[$link] . '\\' . implode('\\', $parts);
         }
-        //TODO: si el primer caracter es "\" no meter el namespace
+
         if (count($parts) === 1) {
+            if (class_exists($parts[0]) || interface_exists($parts[0])) {
+                return $parts[0];
+            }
+
             return $this->namespace . '\\' . $parts[0];
         }
 
