@@ -37,6 +37,7 @@ class StatementBuilder
      * @param Rule  $rule
      * @param AstNode[] $astMap
      * @return \Generator
+     * @throws \Exception
      */
     public function build(Rule $rule, array $astMap): \Generator
     {
@@ -57,21 +58,21 @@ class StatementBuilder
         }
 
         foreach ($origins as $originClassName) {
-            foreach ($destinations as $destinationClassName) {
-                yield new Statement(
-                    $originClassName,
-                    $rule->getType(),
-                    $rule->isInverse(),
-                    $destinationClassName
-                );
-            }
+            yield new Statement(
+                $originClassName,
+                $rule->getType(),
+                $rule->isInverse(),
+                $destinations
+            );
         }
     }
 
     /**
-     * @param  array $included
-     * @param  array $excluded
+     * @param array $included
+     * @param array $excluded
+     * @param array $astMap
      * @return string[]
+     * @throws \Exception
      */
     private function selectClassNames(array $included, array $excluded, array $astMap): array
     {

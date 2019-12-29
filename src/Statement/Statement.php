@@ -28,18 +28,18 @@ class Statement
     /**
      * @var string
      */
-    private $fqcnDestination;
+    private $fqcnDestinations;
 
     public function __construct(
         string $fqcnOrigin,
         RuleType $type,
         bool $inverse,
-        string $fqcnDestination
+        array $fqcnDestinations
     ) {
         $this->fqcnOrigin = $fqcnOrigin;
         $this->type = $type;
         $this->inverse = $inverse;
-        $this->fqcnDestination = $fqcnDestination;
+        $this->fqcnDestinations = $fqcnDestinations;
     }
 
     /**
@@ -67,10 +67,10 @@ class Statement
     }
 
     /**
-     * @return string
+     * @return string[]
      */
-    public function getFqcnDestination(): string
+    public function getFqcnDestinations(): array
     {
-        return $this->fqcnDestination;
+        return $this->fqcnDestinations;
     }
 }

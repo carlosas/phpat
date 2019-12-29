@@ -14,10 +14,10 @@ use PhpAT\Output\OutputInterface;
 use PhpAT\Output\StdOutput;
 use PhpAT\Parser\MapBuilder;
 use PhpAT\Rule\RuleBuilder;
-use PhpAT\Rule\Type\Composition;
-use PhpAT\Rule\Type\Dependency;
-use PhpAT\Rule\Type\Inheritance;
-use PhpAT\Rule\Type\Mixin;
+use PhpAT\Rule\Type\Composition\MustImplement;
+use PhpAT\Rule\Type\Dependency\MustDepend;
+use PhpAT\Rule\Type\Inheritance\MustExtend;
+use PhpAT\Rule\Type\Mixin\MustInclude;
 use PhpAT\Selector\SelectorResolver;
 use PhpAT\Statement\StatementBuilder;
 use PhpAT\Test\FileTestExtractor;
@@ -124,32 +124,20 @@ class Provider
             ->addArgument(new Reference(Parser::class));
 
         $this->builder
-            ->register(Dependency::class, Dependency::class)
-            ->addArgument(new Reference(FileFinder::class))
-            ->addArgument(new Reference(Parser::class))
-            ->addArgument(new Reference(NodeTraverserInterface::class))
+            ->register(MustDepend::class, MustDepend::class)
             ->addArgument(new Reference(PhpDocParser::class))
             ->addArgument(new Reference(EventDispatcher::class));
 
         $this->builder
-            ->register(Inheritance::class, Inheritance::class)
-            ->addArgument(new Reference(FileFinder::class))
-            ->addArgument(new Reference(Parser::class))
-            ->addArgument(new Reference(NodeTraverserInterface::class))
+            ->register(MustExtend::class, MustExtend::class)
             ->addArgument(new Reference(EventDispatcher::class));
 
         $this->builder
-            ->register(Composition::class, Composition::class)
-            ->addArgument(new Reference(FileFinder::class))
-            ->addArgument(new Reference(Parser::class))
-            ->addArgument(new Reference(NodeTraverserInterface::class))
+            ->register(MustImplement::class, MustImplement::class)
             ->addArgument(new Reference(EventDispatcher::class));
 
         $this->builder
-            ->register(Mixin::class, Mixin::class)
-            ->addArgument(new Reference(FileFinder::class))
-            ->addArgument(new Reference(Parser::class))
-            ->addArgument(new Reference(NodeTraverserInterface::class))
+            ->register(MustInclude::class, MustInclude::class)
             ->addArgument(new Reference(EventDispatcher::class));
 
         $this->builder

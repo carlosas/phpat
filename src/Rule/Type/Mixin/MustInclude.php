@@ -2,46 +2,37 @@
 
 declare(strict_types=1);
 
-namespace PhpAT\Rule\Type;
+namespace PhpAT\Rule\Type\Mixin;
 
 use PHPAT\EventDispatcher\EventDispatcher;
-use PhpAT\File\FileFinder;
 use PhpAT\Parser\AstNode;
+use PhpAT\Rule\Type\RuleType;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
-use PhpParser\NodeTraverserInterface;
-use PhpParser\Parser;
 
-class Composition implements RuleType
+class MustInclude implements RuleType
 {
-    private $traverser;
-    private $finder;
-    private $parser;
     private $eventDispatcher;
 
     public function __construct(
-        FileFinder $finder,
-        Parser $parser,
-        NodeTraverserInterface $traverser,
         EventDispatcher $eventDispatcher
     ) {
-        $this->finder = $finder;
-        $this->parser = $parser;
-        $this->traverser = $traverser;
         $this->eventDispatcher = $eventDispatcher;
     }
 
     public function validate(
         string $fqcnOrigin,
-        string $fqcnDestination,
+        array $fqcnDestinations,
         array $astMap,
         bool $inverse = false
     ): void {
         /** @var AstNode $node */
         foreach ($astMap as $node) {
             if ($node->getClassName() === $fqcnOrigin) {
-                $result = in_array($fqcnDestination, $node->getInterfaces());
-                $this->dispatchResult($result, $inverse, $fqcnOrigin, $fqcnDestination);
+                foreach ($fqcnDestinations as $destination) {
+                    $result = in_array($destination, $node->getMixins());
+                    $this->dispatchResult($result, $inverse, $fqcnOrigin, $destination);
+                }
             }
         }
 
@@ -50,7 +41,7 @@ class Composition implements RuleType
 
     private function dispatchResult(bool $result, bool $inverse, string $fqcnOrigin, string $fqcnDestination): void
     {
-        $action = $result ? ' implements ' : ' does not implement ';
+        $action = $result ? ' includes ' : ' does not include ';
         $event = ($result xor $inverse) ? StatementValidEvent::class : StatementNotValidEvent::class;
         $message = $fqcnOrigin . $action . $fqcnDestination;
 

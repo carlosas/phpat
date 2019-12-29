@@ -106,7 +106,7 @@ class RuleBuilder
      */
     public function mustDependOn(): self
     {
-        return $this->setType(Dependency::class, false);
+        return $this->setType(Dependency\MustDepend::class, false);
     }
 
     /**
@@ -114,7 +114,7 @@ class RuleBuilder
      */
     public function mustNotDependOn(): self
     {
-        return $this->setType(Dependency::class, true);
+        return $this->setType(Dependency\MustDepend::class, true);
     }
 
     /**
@@ -122,7 +122,7 @@ class RuleBuilder
      */
     public function mustImplement(): self
     {
-        return $this->setType(Composition::class, false);
+        return $this->setType(Composition\MustImplement::class, false);
     }
 
     /**
@@ -130,7 +130,7 @@ class RuleBuilder
      */
     public function mustNotImplement(): self
     {
-        return $this->setType(Composition::class, true);
+        return $this->setType(Composition\MustImplement::class, true);
     }
 
     /**
@@ -138,7 +138,7 @@ class RuleBuilder
      */
     public function mustExtend(): self
     {
-        return $this->setType(Inheritance::class, false);
+        return $this->setType(Inheritance\MustExtend::class, false);
     }
 
     /**
@@ -146,7 +146,7 @@ class RuleBuilder
      */
     public function mustNotExtend(): self
     {
-        return $this->setType(Inheritance::class, true);
+        return $this->setType(Inheritance\MustExtend::class, true);
     }
 
     /**
@@ -154,7 +154,7 @@ class RuleBuilder
      */
     public function mustInclude(): self
     {
-        return $this->setType(Mixin::class, false);
+        return $this->setType(Mixin\MustInclude::class, false);
     }
 
     /**
@@ -162,10 +162,12 @@ class RuleBuilder
      */
     public function mustNotInclude(): self
     {
-        return $this->setType(Mixin::class, true);
+        return $this->setType(Mixin\MustInclude::class, true);
     }
 
     /**
+     * @param string $ruleType
+     * @param bool   $inverse
      * @return RuleBuilder
      */
     private function setType(string $ruleType, bool $inverse): self

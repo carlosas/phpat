@@ -101,7 +101,7 @@ class App
     {
         $statement->getType()->validate(
             $statement->getFqcnOrigin(),
-            $statement->getFqcnDestination(),
+            $statement->getFqcnDestinations(),
             $astMap,
             $statement->isInverse()
         );

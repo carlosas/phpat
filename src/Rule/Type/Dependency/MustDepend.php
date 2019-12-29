@@ -2,32 +2,17 @@
 
 declare(strict_types=1);
 
-namespace PhpAT\Rule\Type;
+namespace PhpAT\Rule\Type\Dependency;
 
-use PhpAT\App\Configuration;
 use PHPAT\EventDispatcher\EventDispatcher;
-use PhpAT\File\FileFinder;
 use PhpAT\Parser\AstNode;
+use PhpAT\Rule\Type\RuleType;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
-use PhpParser\NodeTraverserInterface;
-use PhpParser\Parser;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 
-class Dependency implements RuleType
+class MustDepend implements RuleType
 {
-    /**
-     * @var FileFinder
-     */
-    private $finder;
-    /**
-     * @var Parser
-     */
-    private $parser;
-    /**
-     * @var NodeTraverserInterface
-     */
-    private $traverser;
     /**
      * @var PhpDocParser
      */
@@ -38,31 +23,26 @@ class Dependency implements RuleType
     private $eventDispatcher;
 
     public function __construct(
-        FileFinder $finder,
-        Parser $parser,
-        NodeTraverserInterface $traverser,
         PhpDocParser $docParser,
         EventDispatcher $eventDispatcher
     ) {
-        $this->finder = $finder;
-        $this->parser = $parser;
-        $this->traverser = $traverser;
         $this->docParser = $docParser;
         $this->eventDispatcher = $eventDispatcher;
-        $this->ignoreDocBlocks = Configuration::getDependencyIgnoreDocBlocks();
     }
 
     public function validate(
         string $fqcnOrigin,
-        string $fqcnDestination,
+        array $fqcnDestinations,
         array $astMap,
         bool $inverse = false
     ): void {
         /** @var AstNode $node */
         foreach ($astMap as $node) {
             if ($node->getClassName() === $fqcnOrigin) {
-                $result = in_array($fqcnDestination, $node->getDependencies());
-                $this->dispatchResult($result, $inverse, $fqcnOrigin, $fqcnDestination);
+                foreach ($fqcnDestinations as $destination) {
+                    $result = in_array($destination, $node->getDependencies());
+                    $this->dispatchResult($result, $inverse, $fqcnOrigin, $destination);
+                }
             }
         }
 

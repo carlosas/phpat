@@ -8,7 +8,7 @@ interface RuleType
 {
     public function validate(
         string $fqcnOrigin,
-        string $fqcnDestination,
+        array $fqcnDestinations,
         array $astMap,
         bool $inverse = false
     ): void;
