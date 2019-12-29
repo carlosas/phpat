@@ -168,6 +168,14 @@ class RuleBuilder
     /**
      * @return RuleBuilder
      */
+    public function canOnlyExtend(): self
+    {
+        return $this->setType(Inheritance\CanOnlyExtend::class, false);
+    }
+
+    /**
+     * @return RuleBuilder
+     */
     public function mustInclude(): self
     {
         return $this->setType(Mixin\MustInclude::class, false);

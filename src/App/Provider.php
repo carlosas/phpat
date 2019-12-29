@@ -136,6 +136,10 @@ class Provider
             ->addArgument(new Reference(EventDispatcher::class));
 
         $this->builder
+            ->register(Inheritance\CanOnlyExtend::class, Inheritance\CanOnlyExtend::class)
+            ->addArgument(new Reference(EventDispatcher::class));
+
+        $this->builder
             ->register(Composition\MustImplement::class, Composition\MustImplement::class)
             ->addArgument(new Reference(EventDispatcher::class));
 
