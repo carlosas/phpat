@@ -190,6 +190,14 @@ class RuleBuilder
     }
 
     /**
+     * @return RuleBuilder
+     */
+    public function canOnlyInclude(): self
+    {
+        return $this->setType(Mixin\CanOnlyInclude::class, false);
+    }
+
+    /**
      * @param string $ruleType
      * @param bool   $inverse
      * @return RuleBuilder

@@ -152,6 +152,10 @@ class Provider
             ->addArgument(new Reference(EventDispatcher::class));
 
         $this->builder
+            ->register(Mixin\CanOnlyInclude::class, Mixin\CanOnlyInclude::class)
+            ->addArgument(new Reference(EventDispatcher::class));
+
+        $this->builder
             ->register('app', App::class)
             ->addArgument(new Reference(MapBuilder::class))
             ->addArgument(new Reference(TestExtractor::class))
