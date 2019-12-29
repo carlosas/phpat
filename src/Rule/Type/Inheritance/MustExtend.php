@@ -28,11 +28,13 @@ class MustExtend implements RuleType
     ): void {
         /** @var AstNode $node */
         foreach ($astMap as $node) {
-            if ($node->getClassName() === $fqcnOrigin) {
-                foreach ($fqcnDestinations as $destination) {
-                    $result = $destination === $node->getParent();
-                    $this->dispatchResult($result, $inverse, $fqcnOrigin, $destination);
-                }
+            if ($node->getClassName() !== $fqcnOrigin) {
+                continue;
+            }
+
+            foreach ($fqcnDestinations as $destination) {
+                $result = $destination === $node->getParent();
+                $this->dispatchResult($result, $inverse, $fqcnOrigin, $destination);
             }
         }
 

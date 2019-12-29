@@ -28,11 +28,13 @@ class MustImplement implements RuleType
     ): void {
         /** @var AstNode $node */
         foreach ($astMap as $node) {
+            if ($node->getClassName() !== $fqcnOrigin) {
+                continue;
+            }
+
             foreach ($fqcnDestinations as $destination) {
-                if ($node->getClassName() === $fqcnOrigin) {
-                    $result = in_array($destination, $node->getInterfaces());
-                    $this->dispatchResult($result, $inverse, $fqcnOrigin, $destination);
-                }
+                $result = in_array($destination, $node->getInterfaces());
+                $this->dispatchResult($result, $inverse, $fqcnOrigin, $destination);
             }
         }
 
