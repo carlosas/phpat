@@ -38,11 +38,13 @@ class MustDepend implements RuleType
     ): void {
         /** @var AstNode $node */
         foreach ($astMap as $node) {
-            if ($node->getClassName() === $fqcnOrigin) {
-                foreach ($fqcnDestinations as $destination) {
-                    $result = in_array($destination, $node->getDependencies());
-                    $this->dispatchResult($result, $inverse, $fqcnOrigin, $destination);
-                }
+            if ($node->getClassName() !== $fqcnOrigin) {
+                continue;
+            }
+
+            foreach ($fqcnDestinations as $destination) {
+                $result = in_array($destination, $node->getDependencies());
+                $this->dispatchResult($result, $inverse, $fqcnOrigin, $destination);
             }
         }
 
