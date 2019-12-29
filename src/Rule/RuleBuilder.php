@@ -136,6 +136,14 @@ class RuleBuilder
     /**
      * @return RuleBuilder
      */
+    public function canOnlyImplement(): self
+    {
+        return $this->setType(CanOnlyImplement::class, false);
+    }
+
+    /**
+     * @return RuleBuilder
+     */
     public function mustExtend(): self
     {
         return $this->setType(Inheritance\MustExtend::class, false);

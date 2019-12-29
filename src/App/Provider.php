@@ -15,6 +15,7 @@ use PhpAT\Output\StdOutput;
 use PhpAT\Parser\MapBuilder;
 use PhpAT\Rule\RuleBuilder;
 use PhpAT\Rule\Type\Composition\MustImplement;
+use PhpAT\Rule\Type\Composition\CanOnlyImplement;
 use PhpAT\Rule\Type\Dependency\MustDepend;
 use PhpAT\Rule\Type\Inheritance\MustExtend;
 use PhpAT\Rule\Type\Mixin\MustInclude;
@@ -134,6 +135,10 @@ class Provider
 
         $this->builder
             ->register(MustImplement::class, MustImplement::class)
+            ->addArgument(new Reference(EventDispatcher::class));
+
+        $this->builder
+            ->register(CanOnlyImplement::class, CanOnlyImplement::class)
             ->addArgument(new Reference(EventDispatcher::class));
 
         $this->builder
