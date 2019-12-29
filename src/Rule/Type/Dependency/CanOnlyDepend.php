@@ -28,23 +28,25 @@ class CanOnlyDepend implements RuleType
     ): void {
         /** @var AstNode $node */
         foreach ($astMap as $node) {
-            if ($node->getClassName() === $fqcnOrigin) {
-                $dependencies = $node->getDependencies();
-                foreach ($dependencies as $key => $value) {
-                    if (in_array($value, $fqcnDestinations)) {
-                        unset($dependencies[$key]);
-                    }
-                }
+            if ($node->getClassName() !== $fqcnOrigin) {
+                continue;
+            }
 
-                if (empty($dependencies)) {
-                    $this->dispatchResult(true, $fqcnOrigin);
-
-                    return;
+            $dependencies = $node->getDependencies();
+            foreach ($dependencies as $key => $value) {
+                if (in_array($value, $fqcnDestinations)) {
+                    unset($dependencies[$key]);
                 }
+            }
 
-                foreach ($dependencies as $dependency) {
-                    $this->dispatchResult(false, $fqcnOrigin, $dependency);
-                }
+            if (empty($dependencies)) {
+                $this->dispatchResult(true, $fqcnOrigin);
+
+                return;
+            }
+
+            foreach ($dependencies as $dependency) {
+                $this->dispatchResult(false, $fqcnOrigin, $dependency);
             }
         }
 

@@ -28,23 +28,25 @@ class CanOnlyInclude implements RuleType
     ): void {
         /** @var AstNode $node */
         foreach ($astMap as $node) {
-            if ($node->getClassName() === $fqcnOrigin) {
-                $mixins = $node->getMixins();
-                foreach ($mixins as $key => $value) {
-                    if (in_array($value, $fqcnDestinations)) {
-                        unset($mixins[$key]);
-                    }
-                }
+            if ($node->getClassName() !== $fqcnOrigin) {
+                continue;
+            }
 
-                if (empty($mixins)) {
-                    $this->dispatchResult(true, $fqcnOrigin);
-
-                    return;
+            $mixins = $node->getMixins();
+            foreach ($mixins as $key => $value) {
+                if (in_array($value, $fqcnDestinations)) {
+                    unset($mixins[$key]);
                 }
+            }
 
-                foreach ($mixins as $mixin) {
-                    $this->dispatchResult(false, $fqcnOrigin, $mixin);
-                }
+            if (empty($mixins)) {
+                $this->dispatchResult(true, $fqcnOrigin);
+
+                return;
+            }
+
+            foreach ($mixins as $mixin) {
+                $this->dispatchResult(false, $fqcnOrigin, $mixin);
             }
         }
 

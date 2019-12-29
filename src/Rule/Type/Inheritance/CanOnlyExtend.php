@@ -28,16 +28,17 @@ class CanOnlyExtend implements RuleType
     ): void {
         /** @var AstNode $node */
         foreach ($astMap as $node) {
-            if ($node->getClassName() === $fqcnOrigin) {
-                $parent = $node->getParent();
-                if (!in_array($parent, $fqcnDestinations)) {
-                    $this->dispatchResult(false, $fqcnOrigin, $parent);
-
-                    return;
-                }
-
-                $this->dispatchResult(true, $fqcnOrigin);
+            if ($node->getClassName() !== $fqcnOrigin) {
+                continue;
             }
+            $parent = $node->getParent();
+            if (!in_array($parent, $fqcnDestinations)) {
+                $this->dispatchResult(false, $fqcnOrigin, $parent);
+
+                return;
+            }
+
+            $this->dispatchResult(true, $fqcnOrigin);
         }
 
         return;

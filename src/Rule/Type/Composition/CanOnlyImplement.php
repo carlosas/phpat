@@ -28,23 +28,25 @@ class CanOnlyImplement implements RuleType
     ): void {
         /** @var AstNode $node */
         foreach ($astMap as $node) {
-            if ($node->getClassName() === $fqcnOrigin) {
-                $implemented = $node->getInterfaces();
-                foreach ($implemented as $key => $value) {
-                    if (in_array($value, $fqcnDestinations)) {
-                        unset($implemented[$key]);
-                    }
-                }
+            if ($node->getClassName() !== $fqcnOrigin) {
+                continue;
+            }
 
-                if (empty($implemented)) {
-                    $this->dispatchResult(true, $fqcnOrigin);
-
-                    return;
+            $implemented = $node->getInterfaces();
+            foreach ($implemented as $key => $value) {
+                if (in_array($value, $fqcnDestinations)) {
+                    unset($implemented[$key]);
                 }
+            }
 
-                foreach ($implemented as $interface) {
-                    $this->dispatchResult(false, $fqcnOrigin, $interface);
-                }
+            if (empty($implemented)) {
+                $this->dispatchResult(true, $fqcnOrigin);
+
+                return;
+            }
+
+            foreach ($implemented as $interface) {
+                $this->dispatchResult(false, $fqcnOrigin, $interface);
             }
         }
 
