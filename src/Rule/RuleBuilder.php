@@ -138,7 +138,7 @@ class RuleBuilder
      */
     public function canOnlyImplement(): self
     {
-        return $this->setType(CanOnlyImplement::class, false);
+        return $this->setType(Composition\CanOnlyImplement::class, false);
     }
 
     /**
