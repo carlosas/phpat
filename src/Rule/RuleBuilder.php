@@ -120,6 +120,14 @@ class RuleBuilder
     /**
      * @return RuleBuilder
      */
+    public function canOnlyDependOn(): self
+    {
+        return $this->setType(Dependency\CanOnlyDepend::class, false);
+    }
+
+    /**
+     * @return RuleBuilder
+     */
     public function mustImplement(): self
     {
         return $this->setType(Composition\MustImplement::class, false);

@@ -9,24 +9,17 @@ use PhpAT\Parser\AstNode;
 use PhpAT\Rule\Type\RuleType;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
-use PHPStan\PhpDocParser\Parser\PhpDocParser;
 
 class MustDepend implements RuleType
 {
-    /**
-     * @var PhpDocParser
-     */
-    private $docParser;
     /**
      * @var EventDispatcher
      */
     private $eventDispatcher;
 
     public function __construct(
-        PhpDocParser $docParser,
         EventDispatcher $eventDispatcher
     ) {
-        $this->docParser = $docParser;
         $this->eventDispatcher = $eventDispatcher;
     }
 
