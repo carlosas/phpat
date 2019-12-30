@@ -14,10 +14,10 @@ use PhpAT\Output\OutputInterface;
 use PhpAT\Output\StdOutput;
 use PhpAT\Parser\MapBuilder;
 use PhpAT\Rule\RuleBuilder;
-use PhpAT\Rule\Type\Composition\MustImplement;
-use PhpAT\Rule\Type\Dependency\MustDepend;
-use PhpAT\Rule\Type\Inheritance\MustExtend;
-use PhpAT\Rule\Type\Mixin\MustInclude;
+use PhpAT\Rule\Type\Composition;
+use PhpAT\Rule\Type\Dependency;
+use PhpAT\Rule\Type\Inheritance;
+use PhpAT\Rule\Type\Mixin;
 use PhpAT\Selector\SelectorResolver;
 use PhpAT\Statement\StatementBuilder;
 use PhpAT\Test\FileTestExtractor;
@@ -124,20 +124,47 @@ class Provider
             ->addArgument(new Reference(Parser::class));
 
         $this->builder
-            ->register(MustDepend::class, MustDepend::class)
-            ->addArgument(new Reference(PhpDocParser::class))
+            ->register(Dependency\MustDepend::class, Dependency\MustDepend::class)
             ->addArgument(new Reference(EventDispatcher::class));
 
         $this->builder
-            ->register(MustExtend::class, MustExtend::class)
+            ->register(Dependency\MustOnlyDepend::class, Dependency\MustOnlyDepend::class)
             ->addArgument(new Reference(EventDispatcher::class));
 
         $this->builder
-            ->register(MustImplement::class, MustImplement::class)
+            ->register(Dependency\CanOnlyDepend::class, Dependency\CanOnlyDepend::class)
             ->addArgument(new Reference(EventDispatcher::class));
 
         $this->builder
-            ->register(MustInclude::class, MustInclude::class)
+            ->register(Inheritance\MustExtend::class, Inheritance\MustExtend::class)
+            ->addArgument(new Reference(EventDispatcher::class));
+
+        $this->builder
+            ->register(Inheritance\CanOnlyExtend::class, Inheritance\CanOnlyExtend::class)
+            ->addArgument(new Reference(EventDispatcher::class));
+
+        $this->builder
+            ->register(Composition\MustImplement::class, Composition\MustImplement::class)
+            ->addArgument(new Reference(EventDispatcher::class));
+
+        $this->builder
+            ->register(Composition\MustOnlyImplement::class, Composition\MustOnlyImplement::class)
+            ->addArgument(new Reference(EventDispatcher::class));
+
+        $this->builder
+            ->register(Composition\CanOnlyImplement::class, Composition\CanOnlyImplement::class)
+            ->addArgument(new Reference(EventDispatcher::class));
+
+        $this->builder
+            ->register(Mixin\MustInclude::class, Mixin\MustInclude::class)
+            ->addArgument(new Reference(EventDispatcher::class));
+
+        $this->builder
+            ->register(Mixin\MustOnlyInclude::class, Mixin\MustOnlyInclude::class)
+            ->addArgument(new Reference(EventDispatcher::class));
+
+        $this->builder
+            ->register(Mixin\CanOnlyInclude::class, Mixin\CanOnlyInclude::class)
             ->addArgument(new Reference(EventDispatcher::class));
 
         $this->builder

@@ -120,6 +120,22 @@ class RuleBuilder
     /**
      * @return RuleBuilder
      */
+    public function mustOnlyDependOn(): self
+    {
+        return $this->setType(Dependency\MustOnlyDepend::class, false);
+    }
+
+    /**
+     * @return RuleBuilder
+     */
+    public function canOnlyDependOn(): self
+    {
+        return $this->setType(Dependency\CanOnlyDepend::class, false);
+    }
+
+    /**
+     * @return RuleBuilder
+     */
     public function mustImplement(): self
     {
         return $this->setType(Composition\MustImplement::class, false);
@@ -131,6 +147,22 @@ class RuleBuilder
     public function mustNotImplement(): self
     {
         return $this->setType(Composition\MustImplement::class, true);
+    }
+
+    /**
+     * @return RuleBuilder
+     */
+    public function mustOnlyImplement(): self
+    {
+        return $this->setType(Composition\MustOnlyImplement::class, false);
+    }
+
+    /**
+     * @return RuleBuilder
+     */
+    public function canOnlyImplement(): self
+    {
+        return $this->setType(Composition\CanOnlyImplement::class, false);
     }
 
     /**
@@ -152,6 +184,14 @@ class RuleBuilder
     /**
      * @return RuleBuilder
      */
+    public function canOnlyExtend(): self
+    {
+        return $this->setType(Inheritance\CanOnlyExtend::class, false);
+    }
+
+    /**
+     * @return RuleBuilder
+     */
     public function mustInclude(): self
     {
         return $this->setType(Mixin\MustInclude::class, false);
@@ -163,6 +203,22 @@ class RuleBuilder
     public function mustNotInclude(): self
     {
         return $this->setType(Mixin\MustInclude::class, true);
+    }
+
+    /**
+     * @return RuleBuilder
+     */
+    public function mustOnlyInclude(): self
+    {
+        return $this->setType(Mixin\MustOnlyInclude::class, false);
+    }
+
+    /**
+     * @return RuleBuilder
+     */
+    public function canOnlyInclude(): self
+    {
+        return $this->setType(Mixin\CanOnlyInclude::class, false);
     }
 
     /**
