@@ -36,12 +36,12 @@ class MustOnlyImplement implements RuleType
             foreach ($fqcnDestinations as $fqcnDestination) {
                 $result = array_search($fqcnDestination, $implemented, true);
 
-                if ($result === false) {
-                    $this->dispatchSelectedResult(false, $fqcnOrigin, $fqcnDestination);
+                if ($result !== false) {
+                    $this->dispatchSelectedResult(true, $fqcnOrigin, $fqcnDestination);
+                    unset($implemented[$result]);
                     continue;
                 }
-                $this->dispatchSelectedResult(true, $fqcnOrigin, $fqcnDestination);
-                unset($implemented[$result]);
+                $this->dispatchSelectedResult(false, $fqcnOrigin, $fqcnDestination);
             }
 
             if (empty($implemented)) {
