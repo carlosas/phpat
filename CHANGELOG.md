@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.5.3
+- Added `CanOnlyImplement` and `MustOnlyImplement` rule types
+- Added `CanOnlyInclude` and `MustOnlyInclude` rule type
+- Added `CanOnlyDepend` and `MustOnlyDepend` rule types
+- Added `CanOnlyExtend` rule type
+- Modified statements now check all the defined relations of a class
+- Fixed native PHP classes not correctly found
+
 ## 0.5.2
 - Added `Selector::implementInterface` to select classes that implement a certain interface
 - Added `Selector::extendClass` to select classes that extend a certain class
