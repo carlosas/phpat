@@ -128,6 +128,10 @@ class Provider
             ->addArgument(new Reference(EventDispatcher::class));
 
         $this->builder
+            ->register(Dependency\MustOnlyDepend::class, Dependency\MustOnlyDepend::class)
+            ->addArgument(new Reference(EventDispatcher::class));
+
+        $this->builder
             ->register(Dependency\CanOnlyDepend::class, Dependency\CanOnlyDepend::class)
             ->addArgument(new Reference(EventDispatcher::class));
 
