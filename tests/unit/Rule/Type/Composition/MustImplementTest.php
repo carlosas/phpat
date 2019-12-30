@@ -50,7 +50,7 @@ class MustImplementTest extends TestCase
             ['Example\ClassExample', ['Example\InterfaceExample'], $this->getAstMap(), false, [true]],
             ['Example\ClassExample', ['Example\InterfaceExample'], $this->getAstMap(), false, [true]],
             ['Example\ClassExample', ['NotARealInterface'], $this->getAstMap(), true, [true]],
-            //it fails because Example\AnotherInterface is also implemented
+            //it fails because Example\InterfaceExample is implemented
             ['Example\ClassExample', ['Example\InterfaceExample'], $this->getAstMap(), true, [false]],
             //it fails because NotARealInterface is not implemented
             ['Example\ClassExample', ['NotARealInterface'], $this->getAstMap(), false, [false]],

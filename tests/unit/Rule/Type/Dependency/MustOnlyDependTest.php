@@ -1,16 +1,16 @@
 <?php
 
-namespace Tests\PhpAT\unit\Rule\Type\Composition;
+namespace Tests\PhpAT\unit\Rule\Type\Dependency;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
 use PhpAT\Parser\ClassName;
-use PhpAT\Rule\Type\Composition\MustOnlyImplement;
+use PhpAT\Rule\Type\Dependency\MustOnlyDepend;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
 use PHPUnit\Framework\TestCase;
 
-class MustOnlyImplementTest extends TestCase
+class MustOnlyDependTest extends TestCase
 {
     /**
      * @dataProvider dataProvider
@@ -29,7 +29,7 @@ class MustOnlyImplementTest extends TestCase
     ): void
     {
         $eventDispatcherMock = $this->createMock(EventDispatcher::class);
-        $class = new MustOnlyImplement($eventDispatcherMock);
+        $class = new MustOnlyDepend($eventDispatcherMock);
 
         foreach ($expectedEvents as $valid) {
             $eventType = $valid ? StatementValidEvent::class : StatementNotValidEvent::class;
@@ -49,23 +49,23 @@ class MustOnlyImplementTest extends TestCase
         return [
             [
                 'Example\ClassExample',
-                ['Example\InterfaceExample', 'Example\AnotherInterface'],
+                ['Example\AnotherClassExample', 'Vendor\ThirdPartyExample'],
                 $this->getAstMap(),
                 false,
                 [true, true, true]
             ],
-            //it fails because it does not implement NotImplementedInterface
+            //it fails because it does not depend on NotAClass
             [
                 'Example\ClassExample',
-                ['Example\InterfaceExample', 'Example\AnotherInterface', 'NotImplementedInterface'],
+                ['Example\AnotherClassExample', 'Vendor\ThirdPartyExample', 'NotAClass'],
                 $this->getAstMap(),
                 false,
                 [true, true, false, true]
             ],
-            //it fails because Example\AnotherInterface is also implemented
-            ['Example\ClassExample', ['Example\InterfaceExample'], $this->getAstMap(), false, [true, false]],
-            //it fails because there implements 2 that are not listed and does not implement NotARealInterface
-            ['Example\ClassExample', ['NotARealInterface'], $this->getAstMap(), false, [false, false, false]],
+            //it fails because it also depend on Vendor\ThirdPartyExample
+            ['Example\ClassExample', ['Example\AnotherClassExample'], $this->getAstMap(), false, [true, false]],
+            //it fails because there are 2 dependencies not listed and it does not depend on NotARealClass
+            ['Example\ClassExample', ['NotARealClass'], $this->getAstMap(), false, [false, false, false]],
         ];
     }
 
