@@ -208,6 +208,14 @@ class RuleBuilder
     /**
      * @return RuleBuilder
      */
+    public function mustOnlyInclude(): self
+    {
+        return $this->setType(Mixin\MustOnlyInclude::class, false);
+    }
+
+    /**
+     * @return RuleBuilder
+     */
     public function canOnlyInclude(): self
     {
         return $this->setType(Mixin\CanOnlyInclude::class, false);
