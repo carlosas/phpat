@@ -14,5 +14,6 @@ before_script:
 script:
   - composer validate --strict
   - php phpcs.phar --standard=php_cs.xml src/
+  - vendor/bin/phpunit tests/unit/
   - php phpat phpat.yml
   - php phpat tests/functional/functional.yaml
