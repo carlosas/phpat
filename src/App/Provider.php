@@ -144,6 +144,10 @@ class Provider
             ->addArgument(new Reference(EventDispatcher::class));
 
         $this->builder
+            ->register(Composition\MustOnlyImplement::class, Composition\MustOnlyImplement::class)
+            ->addArgument(new Reference(EventDispatcher::class));
+
+        $this->builder
             ->register(Composition\CanOnlyImplement::class, Composition\CanOnlyImplement::class)
             ->addArgument(new Reference(EventDispatcher::class));
 

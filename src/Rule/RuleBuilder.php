@@ -144,6 +144,14 @@ class RuleBuilder
     /**
      * @return RuleBuilder
      */
+    public function mustOnlyImplement(): self
+    {
+        return $this->setType(Composition\MustOnlyImplement::class, false);
+    }
+
+    /**
+     * @return RuleBuilder
+     */
     public function canOnlyImplement(): self
     {
         return $this->setType(Composition\CanOnlyImplement::class, false);
