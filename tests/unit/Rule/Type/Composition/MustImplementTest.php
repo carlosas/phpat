@@ -8,96 +8,76 @@ use PhpAT\Parser\ClassName;
 use PhpAT\Rule\Type\Composition\MustImplement;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class MustImplementTest extends TestCase
 {
-    /** @var MustImplement */
-    private $class;
-    /** @var MockObject */
-    private $eventDispatcherMock;
-
-    public function setUp(): void
-    {
-        $this->eventDispatcherMock = $this->createMock(EventDispatcher::class);
-        $this->class = new MustImplement($this->eventDispatcherMock);
-    }
-
     /**
-     * @dataProvider getSuccessCases
+     * @dataProvider dataProvider
+     * @param int    $expectedSuccessEvents
+     * @param int    $expectedFailureEvents
      * @param string $fqcnOrigin
      * @param array  $fqcnDestinations
      * @param array  $astMap
      * @param bool   $inverse
      */
-    public function testDispatchesSuccess(
+    public function testDispatchesCorrectEvents(
+        int $expectedSuccessEvents,
+        int $expectedFailureEvents,
         string $fqcnOrigin,
         array $fqcnDestinations,
         array $astMap,
         bool $inverse = false
     ): void
     {
-        $this->eventDispatcherMock
-            ->expects($this->once())
-            ->method('dispatch')
-            ->with($this->isInstanceOf(StatementValidEvent::class));
+        $eventDispatcherMock = $this->createMock(EventDispatcher::class);
+        $class = new MustImplement($eventDispatcherMock);
 
-        $this->class->validate($fqcnOrigin, $fqcnDestinations, $astMap, $inverse);
+        for ($i=0; $i<$expectedSuccessEvents; $i++) {
+            $consecutive[] = $this->isInstanceOf(StatementValidEvent::class);
+        }
+        for ($i=0; $i<$expectedFailureEvents; $i++) {
+            $consecutive[] = $this->isInstanceOf(StatementNotValidEvent::class);
+        }
+
+        $eventDispatcherMock
+            ->expects($this->exactly($expectedSuccessEvents + $expectedFailureEvents))
+            ->method('dispatch')
+            ->withConsecutive($consecutive??[]);
+
+        $class->validate($fqcnOrigin, $fqcnDestinations, $astMap, $inverse);
     }
 
-    /**
-     * @dataProvider getFailureCases
-     * @param string $fqcnOrigin
-     * @param array  $fqcnDestinations
-     * @param array  $astMap
-     * @param bool   $inverse
-     */
-    public function testDispatchesFailure(
-        string $fqcnOrigin,
-        array $fqcnDestinations,
-        array $astMap,
-        bool $inverse = false
-    ): void
-    {
-        $this->eventDispatcherMock
-            ->expects($this->once())
-            ->method('dispatch')
-            ->with($this->isInstanceOf(StatementNotValidEvent::class));
-
-        $this->class->validate($fqcnOrigin, $fqcnDestinations, $astMap, $inverse);
-    }
-
-    public function getSuccessCases(): array
+    public function dataProvider(): array
     {
         return [
-            [ 'Example\ClassExample', ['Example\InterfaceExample'], $this->getAstMap(), false ],
-            [ 'Example\ClassExample', ['NotARealInterface'], $this->getAstMap(), true ],
-        ];
-    }
-
-    public function getFailureCases(): array
-    {
-        return [
-            [ 'Example\ClassExample', ['Example\InterfaceExample'], $this->getAstMap(), true ],
-            [ 'Example\ClassExample', ['NotARealInterface'], $this->getAstMap(), false ],
-        ];
+            [1, 0, 'Example\ClassExample', ['Example\InterfaceExample'], $this->getAstMap(), false],
+            [1, 0, 'Example\ClassExample', ['Example\InterfaceExample'], $this->getAstMap(), false],
+            [1, 0, 'Example\ClassExample', ['NotARealInterface'], $this->getAstMap(), true],
+            //it fails because Example\AnotherInterface is also implemented
+            [0, 1, 'Example\ClassExample', ['Example\InterfaceExample'], $this->getAstMap(), true],
+            //it fails because NotARealInterface is not implemented
+            [0, 1, 'Example\ClassExample', ['NotARealInterface'], $this->getAstMap(), false],
+       ];
     }
 
     private function getAstMap(): array
     {
         return [
             new AstNode(
-                new \SplFileInfo('folder/Example/ClassExample.php'),
-                new ClassName('Example', 'ClassExample'),
-                new ClassName('Example', 'ParentClassExample'),
+                new \SplFileInfo('folder/Example/ClassExample.php'), //File
+                new ClassName('Example', 'ClassExample'), //Classname
+                new ClassName('Example', 'ParentClassExample'), //Parent
                 [
-                    new ClassName('Example', 'AnotherClassExample'),
-                    new ClassName('Vendor', 'ThirdPartyExample')
+                    new ClassName('Example', 'AnotherClassExample'), //Dependency
+                    new ClassName('Vendor', 'ThirdPartyExample') //Dependency
                 ],
-                [new ClassName('Example', 'InterfaceExample')],
-                [new ClassName('Example', 'TraitExample')]
+                [
+                    new ClassName('Example', 'InterfaceExample'), //Interface
+                    new ClassName('Example', 'AnotherInterface') //Interface
+                ],
+                [new ClassName('Example', 'TraitExample')] //Trait
             )
-        ];
+       ];
     }
 }
