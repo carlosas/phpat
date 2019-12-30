@@ -28,13 +28,7 @@
 It provides a natural language abstraction to define your own architectural rules and test them against your software.
 You can also integrate *phpat* easily into your toolchain.
 
-Current supported relations:
-
-* **Dependency**: *SomeClass* depends (or not) on *AnotherClass*
-* **Inheritance**: *SomeClass* extends (or not) *AnotherClass*
-* **Composition**: *SomeClass* implements (or not) *SomeInterface*
-* **Mixin**: *SomeClass* includes (or not) *SomeTrait*
-
+There are four groups of supported assertions: **Dependency**, **Inheritance**, **Composition** and **Mixin**.
 <h2></h2>
 
 ### Installation 💽
@@ -69,6 +63,12 @@ This is the complete list of options:
 
 ### Test definition 📓
 
+There are different ways to choose which classes will intervene in a rule (called Selectors) and many different possibles assertions (called RuleTypes).
+Check the complete list of both here:
+
+* [Selectors](doc/SELECTORS.md)
+* [RuleTypes](doc/RULE_TYPES.md)
+
 This could be a test with a couple of rules:
 ```php
 <?php
@@ -76,32 +76,30 @@ This could be a test with a couple of rules:
 use PhpAT\Rule\Rule;
 use PhpAT\Selector\Selector;
 use PhpAT\Test\ArchitectureTest;
-use App\Domain\WeirdInterface;
+use App\Domain\BlackMagicInterface;
 
 class ExampleTest extends ArchitectureTest
 {
     public function testDomainDoesNotDependOnOtherLayers(): Rule
     {
         return $this->newRule
+            ->classesThat(Selector::haveClassName('App\Domain\*'))
+            ->excludingClassesThat(Selector::implementInterface(BlackMagicInterface::class))
+            ->canOnlyDependOn()
             ->classesThat(Selector::havePath('Domain/*'))
-            ->excludingClassesThat(Selector::implementInterface(WeirdInterface::class))
-            ->mustNotDependOn()
-            ->classesThat(Selector::havePath('Application/*'))
-            ->andClassesThat(Selector::havePath('Infrastructure/*'))
-            ->andClassesThat(Selector::havePath('Presentation/*'))
-            ->excludingClassesThat(Selector::haveClassName('App\Application\Shared\Service\KnownBadApproach'))
+            ->andClassesThat(Selector::haveClassName('App\Application\Shared\Service\KnownBadApproach'))
             ->build();
     }
     
     public function testAllHandlersExtendAbstractCommandHandler(): Rule
     {
         return $this->newRule
-            ->classesThat(Selector::haveClassName('App\Application\*\UseCase\*Handler'))
+            ->classesThat(Selector::havePath('Application/*/UseCase/*Handler.php'))
             ->excludingClassesThat(Selector::extendClass('App\Application\Shared\UseCase\DifferentHandler'))
             ->andExcludingClassesThat(Selector::includeTrait('App\Legacy\LegacyTrait'))
             ->andExcludingClassesThat(Selector::haveClassName(\App\Application\Shared\UseCase\AbstractCommandHandler::class))
             ->mustExtend()
-            ->classesThat(Selector::havePath('Application/Shared/UseCase/AbstractCommandHandler.php'))
+            ->classesThat(Selector::haveClassName('App\Application\Shared\UseCase\AbstractCommandHandler'))
             ->build();
     }
 }
