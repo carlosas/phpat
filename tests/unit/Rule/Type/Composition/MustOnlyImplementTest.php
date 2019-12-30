@@ -37,9 +37,9 @@ class MustOnlyImplementTest extends TestCase
         }
 
         $eventDispatcherMock
-            ->expects($this->exactly(count($consecutive)))
+            ->expects($this->exactly(count($consecutive??[])))
             ->method('dispatch')
-            ->withConsecutive(...$consecutive);
+            ->withConsecutive(...$consecutive??[]);
 
         $class->validate($fqcnOrigin, $fqcnDestinations, $astMap, $inverse);
     }

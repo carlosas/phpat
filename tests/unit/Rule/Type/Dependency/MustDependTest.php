@@ -10,7 +10,7 @@ use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
 use PHPUnit\Framework\TestCase;
 
-class MustImplementTest extends TestCase
+class MustDependTest extends TestCase
 {
     /**
      * @dataProvider dataProvider
@@ -37,9 +37,9 @@ class MustImplementTest extends TestCase
         }
 
         $eventDispatcherMock
-            ->expects($this->exactly(count($consecutive)))
+            ->expects($this->exactly(count($consecutive??[])))
             ->method('dispatch')
-            ->withConsecutive(...$consecutive);
+            ->withConsecutive(...$consecutive??[]);
 
         $class->validate($fqcnOrigin, $fqcnDestinations, $astMap, $inverse);
     }

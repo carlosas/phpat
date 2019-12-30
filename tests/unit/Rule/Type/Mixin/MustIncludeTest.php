@@ -1,16 +1,16 @@
 <?php
 
-namespace Tests\PhpAT\unit\Rule\Type\Composition;
+namespace Tests\PhpAT\unit\Rule\Type\Mixin;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
 use PhpAT\Parser\ClassName;
-use PhpAT\Rule\Type\Composition\CanOnlyImplement;
+use PhpAT\Rule\Type\Mixin\MustInclude;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
 use PHPUnit\Framework\TestCase;
 
-class CanOnlyImplementTest extends TestCase
+class MustIncludeTest extends TestCase
 {
     /**
      * @dataProvider dataProvider
@@ -29,7 +29,7 @@ class CanOnlyImplementTest extends TestCase
     ): void
     {
         $eventDispatcherMock = $this->createMock(EventDispatcher::class);
-        $class = new CanOnlyImplement($eventDispatcherMock);
+        $class = new MustInclude($eventDispatcherMock);
 
         foreach ($expectedEvents as $valid) {
             $eventType = $valid ? StatementValidEvent::class : StatementNotValidEvent::class;
@@ -47,29 +47,15 @@ class CanOnlyImplementTest extends TestCase
     public function dataProvider(): array
     {
         return [
-            [
-                'Example\ClassExample',
-                ['Example\InterfaceExample', 'Example\AnotherInterface'],
-                $this->getAstMap(),
-                false,
-                [true]
-            ],
-            [
-                'Example\ClassExample',
-                [
-                    'Example\InterfaceExample',
-                    'Example\AnotherInterface',
-                    'NotImplementedInterface'
-                ],
-                $this->getAstMap(),
-                false,
-                [true]
-            ],
-            //it fails because Example\AnotherInterface is also implemented
-            ['Example\ClassExample', ['Example\InterfaceExample'], $this->getAstMap(), false, [false]],
-            //it fails because there are 2 interface implementations not listed
-            ['Example\ClassExample', ['NotARealInterface'], $this->getAstMap(), false, [false, false]],
-        ];
+            ['Example\ClassExample', ['Example\TraitExample'], $this->getAstMap(), false, [true]],
+            ['Example\ClassExample', ['NotARealTrait'], $this->getAstMap(), true, [true]],
+            //it does not dispatch any event because there is nothing to check
+            ['Example\ClassExample', [], $this->getAstMap(), false, []],
+            //it fails because it does not include NotARealTrait
+            ['Example\ClassExample', ['NotARealTrait'], $this->getAstMap(), false, [false]],
+            //it fails twice because it does not include any of both classes
+            ['Example\ClassExample', ['NopesOne', 'NopesTwo'], $this->getAstMap(), false, [false, false]],
+       ];
     }
 
     private function getAstMap(): array
@@ -89,6 +75,6 @@ class CanOnlyImplementTest extends TestCase
                 ],
                 [new ClassName('Example', 'TraitExample')] //Trait
             )
-        ];
+       ];
     }
 }
