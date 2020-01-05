@@ -16,12 +16,12 @@ class Compiler
     /**
      * @var string[]
      */
-    const EXCLUDED_FILES = ['phpat', 'build.php', 'src/Compiler.php'];
+    protected const EXCLUDED_FILES = ['phpat', 'build.php', 'src/Compiler.php'];
 
     /**
      * @var string
      */
-    const PHPUNIT_PATTERN = '/^\/?vendor\/phpunit\/?(.*)?/';
+    protected const PHPUNIT_PATTERN = '/^\/?vendor\/phpunit\/?(.*)?/';
 
     /**
      * @var string[]
@@ -38,7 +38,7 @@ class Compiler
      */
     protected $file;
 
-    function __construct(array $paths, string $name = 'phpat.phar')
+    public function __construct(array $paths, string $name = 'phpat.phar')
     {
         $this->name = $name;
         $this->paths = $paths;
