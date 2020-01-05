@@ -8,8 +8,6 @@ class ArgvInput implements InputInterface
 {
     private $args;
 
-    private $parsed = false;
-
     private $parsedArguments = [];
     private $parsedOptions = [];
 
@@ -27,21 +25,21 @@ class ArgvInput implements InputInterface
     public function __construct()
     {
         $this->args = $_SERVER['argv'];
+        $this->parse();
     }
 
     public function getOptions(): array
     {
-        if (!$this->parsed) {
-            $this->parse();
-        }
         return $this->parsedOptions;
+    }
+
+    public function getOption(string $name, $default = null)
+    {
+        return $this->parsedOptions[$name] ?? $default;
     }
 
     public function getArgument(string $name, $default = null): ?string
     {
-        if (!$this->parsed) {
-            $this->parse();
-        }
         return $this->parsedArguments[$name] ?? $default;
     }
 
