@@ -128,6 +128,7 @@ class Compiler
     protected function addBinaryToPhar(Phar $phar): void
     {
         $bin = file_get_contents($this->paths['binary']);
+
         $bin = str_replace("#!/usr/bin/env php\n", '', $bin);
 
         $phar->addFromString('phpat', $bin);
