@@ -88,7 +88,7 @@ class Compiler
     protected function addSrcFilesToPhar(Phar $phar): void
     {
         foreach ($this->getFilesFrom($this->paths['src']) as $path => $file) {
-            if (in_array($file, self::EXCLUDED_FILES, true) || $file->isDir()) {
+            if (in_array($path, self::EXCLUDED_FILES, true) || $file->isDir()) {
                 continue;
             }
 
