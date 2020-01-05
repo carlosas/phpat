@@ -32,6 +32,23 @@ try {
     $app = $container->get('app');
     $app->execute();
 } catch (\Exception $e) {
-    echo $e->getMessage();
+    $redBgWhiteText = "\033[41m\033[1;37m";
+    $formattingReset = "\033[0m";
+
+    echo sprintf(
+        "%s\n\n\tAn error occurred while running phpat.\n%s\n",
+        $redBgWhiteText,
+        $formattingReset
+    );
+    do {
+        $limitedErrorMessage = implode("\n", str_split($e->getMessage(), 80));
+        echo sprintf(
+            "=================\n%s\n\nIn %s:%d\n%s",
+            $limitedErrorMessage,
+            $e->getFile(),
+            $e->getLine(),
+            $e->getTraceAsString()
+        );
+    } while ($e = $e->getPrevious());
     exit(1);
 }
