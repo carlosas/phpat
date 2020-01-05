@@ -13,10 +13,14 @@ $autoload = is_file(__DIR__.'/../../autoload.php')
 
 require $autoload;
 
-if (PHP_VERSION_ID < 70100) {
-    \fwrite(\STDERR, 'Required at least PHP version 7.1.0 but your version is '.PHP_VERSION.PHP_EOL);
+if (PHP_VERSION_ID < 70200) {
+    \fwrite(\STDERR, 'Required at least PHP version 7.2.0 but your version is '.PHP_VERSION.PHP_EOL);
     exit(1);
 }
+
+error_reporting(E_ALL);
+ini_set('display_errors', 'stderr'); // send php warnings to stderr
+gc_disable(); // performance boost
 
 $input = new ArgvInput();
 
@@ -46,6 +50,5 @@ try {
             $e->getTraceAsString()
         );
     } while ($e = $e->getPrevious());
-
     exit(1);
 }

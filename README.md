@@ -7,7 +7,7 @@
 		<img src="https://img.shields.io/packagist/v/carlosas/phpat.svg?style=flat-square" alt="Packagist">
     </a>
 	<a>
-		<img src="https://img.shields.io/badge/php-%3E%3D_7.1-8892BF.svg?style=flat-square" alt="Minimum PHP">
+		<img src="https://img.shields.io/badge/php-%3E%3D_7.2-8892BF.svg?style=flat-square" alt="Minimum PHP">
 	</a>
 	<a>
 		<img src="https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square" alt="MIT license">
@@ -23,18 +23,12 @@
 
 ### Introduction 📜
 
-**PHP Architecture Tester** is a tool that helps you keep your project architecture clean.
+**PHP Architecture Tester** is a static analysis tool to verify architectural requirements.
 
-It provides a natural language abstraction to define your own architecture rules and test them against your software.
+It provides a natural language abstraction to define your own architectural rules and test them against your software.
 You can also integrate *phpat* easily into your toolchain.
 
-Current supported relations:
-
-* **Dependency**: *SomeClass* depends (or not) on *AnotherClass*
-* **Inheritance**: *SomeClass* extends (or not) *AnotherClass*
-* **Composition**: *SomeClass* implements (or not) *SomeInterface*
-* **Mixin**: *SomeClass* includes (or not) *SomeTrait*
-
+There are four groups of supported assertions: **Dependency**, **Inheritance**, **Composition** and **Mixin**.
 <h2></h2>
 
 ### Installation 💽
@@ -62,12 +56,18 @@ This is the complete list of options:
 * `src` `exclude`: Files you want to be excluded in the tests (default=none).
 * `tests` `path`: The path where your tests are.
 * `options` `verbosity`: 0/1/2 output verbosity level (default=1).
-* `options` `dependency` `ignore_docblocks`: true/false ignore dependencies on docblocks (default=false).
 * `options` `dry-run`: true/false report failed suite without error exit code (default=false).
+* `options` `dependency` `ignore_docblocks`: true/false ignore dependencies on docblocks (default=false).
 
 <h2></h2>
 
 ### Test definition 📓
+
+There are different ways to choose which classes will intervene in a rule (called Selectors) and many different possibles assertions (called RuleTypes).
+Check the complete list of both here:
+
+* [Selectors](doc/SELECTORS.md)
+* [RuleTypes](doc/RULE_TYPES.md)
 
 This could be a test with a couple of rules:
 ```php
@@ -76,18 +76,18 @@ This could be a test with a couple of rules:
 use PhpAT\Rule\Rule;
 use PhpAT\Selector\Selector;
 use PhpAT\Test\ArchitectureTest;
+use App\Domain\BlackMagicInterface;
 
 class ExampleTest extends ArchitectureTest
 {
     public function testDomainDoesNotDependOnOtherLayers(): Rule
     {
         return $this->newRule
+            ->classesThat(Selector::haveClassName('App\Domain\*'))
+            ->excludingClassesThat(Selector::implementInterface(BlackMagicInterface::class))
+            ->canOnlyDependOn()
             ->classesThat(Selector::havePath('Domain/*'))
-            ->mustNotDependOn()
-            ->classesThat(Selector::havePath('Application/*'))
-            ->andClassesThat(Selector::havePath('Infrastructure/*'))
-            ->andClassesThat(Selector::havePath('Presentation/*'))
-            ->excludingClassesThat(Selector::havePath('Application/Shared/Service/KnownBadApproach.php'))
+            ->andClassesThat(Selector::haveClassName('App\Application\Shared\Service\KnownBadApproach'))
             ->build();
     }
     
@@ -95,10 +95,11 @@ class ExampleTest extends ArchitectureTest
     {
         return $this->newRule
             ->classesThat(Selector::havePath('Application/*/UseCase/*Handler.php'))
-            ->excludingClassesThat(Selector::havePath('Application/Shared/UseCase/Different*Handler.php'))
-            ->andExcludingClassesThat(Selector::havePath('Application/Shared/UseCase/AbstractCommandHandler.php'))
+            ->excludingClassesThat(Selector::extendClass('App\Application\Shared\UseCase\DifferentHandler'))
+            ->andExcludingClassesThat(Selector::includeTrait('App\Legacy\LegacyTrait'))
+            ->andExcludingClassesThat(Selector::haveClassName(\App\Application\Shared\UseCase\AbstractCommandHandler::class))
             ->mustExtend()
-            ->classesThat(Selector::havePath('Application/Shared/UseCase/AbstractCommandHandler.php'))
+            ->classesThat(Selector::haveClassName('App\Application\Shared\UseCase\AbstractCommandHandler'))
             ->build();
     }
 }

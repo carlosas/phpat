@@ -1,0 +1,6 @@
+src:
+  path: tests/functional/fixtures/
+tests:
+  path: tests/functional/tests/
+options:
+  verbosity: 2

@@ -10,7 +10,7 @@ use PhpAT\Rule\Type\Inheritance;
 use PhpAT\Rule\Type\Mixin;
 use PhpAT\Rule\Type\RuleType;
 use PhpAT\Selector\SelectorInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Psr\Container\ContainerInterface;
 
 /**
  * Class RuleBuilder
@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class RuleBuilder
 {
     /**
-     * @var ContainerBuilder
+     * @var ContainerInterface
      */
     private $container;
     /**
@@ -40,20 +40,15 @@ class RuleBuilder
      */
     private $destinationExclude = [];
     /**
-     * @var RuleType
+     * @var RuleType|null
      */
-    private $type = '';
+    private $type = null;
     /**
      * @var bool
      */
     private $inverse = false;
 
-    /**
-     * RuleBuilder constructor.
-     *
-     * @param ContainerBuilder $container
-     */
-    public function __construct(ContainerBuilder $container)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
@@ -111,7 +106,7 @@ class RuleBuilder
      */
     public function mustDependOn(): self
     {
-        return $this->setType(Dependency::class, false);
+        return $this->setType(Dependency\MustDepend::class, false);
     }
 
     /**
@@ -119,7 +114,23 @@ class RuleBuilder
      */
     public function mustNotDependOn(): self
     {
-        return $this->setType(Dependency::class, true);
+        return $this->setType(Dependency\MustDepend::class, true);
+    }
+
+    /**
+     * @return RuleBuilder
+     */
+    public function mustOnlyDependOn(): self
+    {
+        return $this->setType(Dependency\MustOnlyDepend::class, false);
+    }
+
+    /**
+     * @return RuleBuilder
+     */
+    public function canOnlyDependOn(): self
+    {
+        return $this->setType(Dependency\CanOnlyDepend::class, false);
     }
 
     /**
@@ -127,7 +138,7 @@ class RuleBuilder
      */
     public function mustImplement(): self
     {
-        return $this->setType(Composition::class, false);
+        return $this->setType(Composition\MustImplement::class, false);
     }
 
     /**
@@ -135,7 +146,23 @@ class RuleBuilder
      */
     public function mustNotImplement(): self
     {
-        return $this->setType(Composition::class, true);
+        return $this->setType(Composition\MustImplement::class, true);
+    }
+
+    /**
+     * @return RuleBuilder
+     */
+    public function mustOnlyImplement(): self
+    {
+        return $this->setType(Composition\MustOnlyImplement::class, false);
+    }
+
+    /**
+     * @return RuleBuilder
+     */
+    public function canOnlyImplement(): self
+    {
+        return $this->setType(Composition\CanOnlyImplement::class, false);
     }
 
     /**
@@ -143,7 +170,7 @@ class RuleBuilder
      */
     public function mustExtend(): self
     {
-        return $this->setType(Inheritance::class, false);
+        return $this->setType(Inheritance\MustExtend::class, false);
     }
 
     /**
@@ -151,7 +178,15 @@ class RuleBuilder
      */
     public function mustNotExtend(): self
     {
-        return $this->setType(Inheritance::class, true);
+        return $this->setType(Inheritance\MustExtend::class, true);
+    }
+
+    /**
+     * @return RuleBuilder
+     */
+    public function canOnlyExtend(): self
+    {
+        return $this->setType(Inheritance\CanOnlyExtend::class, false);
     }
 
     /**
@@ -159,7 +194,7 @@ class RuleBuilder
      */
     public function mustInclude(): self
     {
-        return $this->setType(Mixin::class, false);
+        return $this->setType(Mixin\MustInclude::class, false);
     }
 
     /**
@@ -167,10 +202,28 @@ class RuleBuilder
      */
     public function mustNotInclude(): self
     {
-        return $this->setType(Mixin::class, true);
+        return $this->setType(Mixin\MustInclude::class, true);
     }
 
     /**
+     * @return RuleBuilder
+     */
+    public function mustOnlyInclude(): self
+    {
+        return $this->setType(Mixin\MustOnlyInclude::class, false);
+    }
+
+    /**
+     * @return RuleBuilder
+     */
+    public function canOnlyInclude(): self
+    {
+        return $this->setType(Mixin\CanOnlyInclude::class, false);
+    }
+
+    /**
+     * @param string $ruleType
+     * @param bool   $inverse
      * @return RuleBuilder
      */
     private function setType(string $ruleType, bool $inverse): self
@@ -205,7 +258,7 @@ class RuleBuilder
         $this->originExclude = [];
         $this->destination = [];
         $this->destinationExclude = [];
-        $this->type = '';
+        $this->type = null;
         $this->inverse = false;
     }
 }

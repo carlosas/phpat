@@ -17,7 +17,6 @@ class ClassMatcher
         if ($alias === null) {
             $d = explode('\\', $declaration);
             $alias = end($d);
-            $declaration = implode('\\', $d);
         }
 
         $this->declarations[$alias] = $declaration;
@@ -31,19 +30,23 @@ class ClassMatcher
             if (empty($parts)) {
                 return $this->declarations[$link];
             }
-
             return $this->declarations[$link] . '\\' . implode('\\', $parts);
         }
 
         if (count($parts) === 1) {
+            if (class_exists($parts[0]) || interface_exists($parts[0])) {
+                return $parts[0];
+            }
+
             return $this->namespace . '\\' . $parts[0];
         }
 
         return null;
     }
 
-    public function getDeclarations(): array
+    public function reset(): void
     {
-        return $this->declarations;
+        $this->namespace = '';
+        $this->declarations = [];
     }
 }

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace PhpAT\Rule\Event;
 
-use PhpAT\App\Event;
+use PHPAT\EventDispatcher\EventInterface;
 
-class RuleValidationStartEvent extends Event
+class RuleValidationStartEvent implements EventInterface
 {
     /**
      * @var string

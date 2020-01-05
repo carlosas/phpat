@@ -2,3 +2,5 @@ src:
   path: src/
 tests:
   path: tests/architecture/
+options:
+  verbosity: 2
