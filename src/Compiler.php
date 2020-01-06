@@ -14,14 +14,24 @@ use RecursiveIteratorIterator;
 class Compiler
 {
     /**
+     * A list of relative file paths that should be excluded from the Phar
+     *
      * @var string[]
      */
-    protected const EXCLUDED_FILES = ['phpat', 'build.php', 'src/Compiler.php'];
+    protected const EXCLUDED_FILES = [
+        'phpat',
+        'build.php',
+        'src/Compiler.php'
+    ];
 
     /**
-     * @var string
+     * A list of patterns that will cause a matched file path to be excluded
+     *
+     * @var string[]
      */
-    protected const PHPUNIT_PATTERN = '/^\/?vendor\/phpunit\/?(.*)?/';
+    protected const EXCLUDED_PATTERNS = [
+        '/^\/?vendor\/phpunit\/?(.*)?/'
+    ];
 
     /**
      * @var string[]
@@ -53,8 +63,8 @@ class Compiler
 
         $phar->startBuffering();
 
-        $this->addSrcFilesToPhar($phar);
-        $this->addVendorFilesToPhar($phar);
+        $this->iterateDirectory($phar, $this->paths['src']);
+        $this->iterateDirectory($phar, $this->paths['vendor']);
         $this->addBinaryToPhar($phar);
 
         $stub = $this->getStub();
@@ -85,21 +95,30 @@ class Compiler
         }
     }
 
-    protected function addSrcFilesToPhar(Phar $phar): void
+    protected function fileIsValid(string $path, SplFileInfo $file): bool
     {
-        foreach ($this->getFilesFrom($this->paths['src']) as $path => $file) {
-            if (in_array($path, self::EXCLUDED_FILES, true) || $file->isDir()) {
-                continue;
+        if (! $file->isDir() && ! in_array($path, self::EXCLUDED_FILES, true)) {
+            $isValid = true;
+
+            foreach (self::EXCLUDED_PATTERNS as $pattern) {
+                if (preg_match($pattern, $path)) {
+                    $isValid = false;
+                    break;
+                }
             }
 
-            $this->addFileToPhar($phar, $path, $file);
+            return $isValid;
         }
+
+        return false;
     }
 
-    protected function addVendorFilesToPhar(Phar $phar): void
+    protected function iterateDirectory(Phar $phar, string $directory): void
     {
-        foreach ($this->getFilesFrom($this->paths['vendor']) as $path => $file) {
-            if (preg_match(self::PHPUNIT_PATTERN, $path) || $file->isDir()) {
+        $iterator = $this->getFilesFrom($directory);
+
+        foreach ($iterator as $path => $file) {
+            if (! $this->fileIsValid($path, $file)) {
                 continue;
             }
 
