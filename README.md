@@ -116,8 +116,8 @@ vendor/bin/phpat phpat.yml
 
 <h2></h2>
 
-⚠ Launching early stage releases (0.x.x) with a different SemVer strategy. We are using *minor* for breaking changes.
-This will change to strict SemVer with the release of `1.0.0`. See [Semantic Versioning](https://semver.org/).
+⚠ Launching early stage releases (0.x.x) could break the API according to [Semantic Versioning 2.0](https://semver.org/). We are using *minor* for breaking changes.
+This will change with the release of the stable `1.0.0` version.
 
 <h2></h2>
 
