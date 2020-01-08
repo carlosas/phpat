@@ -32,7 +32,8 @@ try {
     $container = $provider->register();
 
     $app = $container->get('app');
-    $app->execute();
+    $result = $app->execute();
+    exit($result === true ? 0 : 1);
 } catch (\Throwable $e) {
     $redBgWhiteText = "\033[41m\033[1;37m";
     $formattingReset = "\033[0m";
