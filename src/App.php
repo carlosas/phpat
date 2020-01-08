@@ -63,7 +63,7 @@ class App
     /**
      * @throws \Exception
      */
-    public function execute(): void
+    public function execute(): bool
     {
         $astMap = $this->mapBuilder->build();
 
@@ -92,9 +92,7 @@ class App
 
         $this->dispatcher->dispatch(new SuiteEndEvent());
 
-        if (RuleValidationStorage::anyRuleHadErrors() && !$this->dryRun) {
-            throw new \Exception();
-        }
+        return RuleValidationStorage::anyRuleHadErrors() && !$this->dryRun;
     }
 
     private function validateStatement(Statement $statement, array $astMap): void
