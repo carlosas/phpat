@@ -55,9 +55,10 @@ class MapBuilder
 
             $this->traverser->traverse($parsed);
 
-            $astMap[] = new AstNode(
+            $className = $this->astNodesCollector->getClassNames()[0];
+            $astMap[$className->getFQCN()] = new AstNode(
                 $fileInfo,
-                $this->astNodesCollector->getClassNames()[0],
+                $className,
                 $this->astNodesCollector->getParents()[0] ?? null,
                 $this->astNodesCollector->getDependencies(),
                 $this->astNodesCollector->getInterfaces(),

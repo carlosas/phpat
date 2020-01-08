@@ -7,6 +7,7 @@ namespace PhpAT\Statement;
 use PhpAT\App\Configuration;
 use PhpAT\Parser\AstNode;
 use PhpAT\Rule\Rule;
+use PhpAT\Selector\SelectorInterface;
 use PhpAT\Selector\SelectorResolver;
 use PhpParser\Parser;
 
@@ -41,15 +42,18 @@ class StatementBuilder
      */
     public function build(Rule $rule, array $astMap): \Generator
     {
-        $origins = $this->selectClassNames($rule->getOrigin(), $rule->getOriginExcluded(), $astMap);
-        $destinations = $this->selectClassNames($rule->getDestination(), $rule->getDestinationExcluded(), $astMap);
+        $origins = $this->getNamesFromSelectors($rule->getOrigin(), $rule->getOriginExcluded(), $astMap);
+        $destinations = $this->getNamesFromSelectors($rule->getDestination(), $rule->getDestinationExcluded(), $astMap);
 
         if (!empty(Configuration::getSrcIncluded())) {
             $filteredOrigins = [];
             foreach (Configuration::getSrcIncluded() as $checkOnly) {
                 $checkOnly = Configuration::getSrcPath() . $checkOnly;
                 foreach ($origins as $key => $value) {
-                    if ($this->normalizePath($checkOnly) == $this->normalizePath($value->getPathname())) {
+                    if (
+                        isset($astMap[$value])
+                        && $this->normalizePath($checkOnly) == $this->normalizePath($astMap[$value]->getFilePathname())
+                    ) {
                         $filteredOrigins[] = $origins[$key];
                     }
                 }
@@ -68,13 +72,13 @@ class StatementBuilder
     }
 
     /**
-     * @param array $included
-     * @param array $excluded
+     * @param SelectorInterface[] $included
+     * @param SelectorInterface[] $excluded
      * @param array $astMap
      * @return string[]
      * @throws \Exception
      */
-    private function selectClassNames(array $included, array $excluded, array $astMap): array
+    private function getNamesFromSelectors(array $included, array $excluded, array $astMap): array
     {
         $classNamesToValidate = [];
         foreach ($included as $i) {
