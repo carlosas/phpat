@@ -32,10 +32,6 @@ class App
      */
     private $dispatcher;
     /**
-     * @var bool
-     */
-    private $dryRun;
-    /**
      * @var MapBuilder
      */
     private $mapBuilder;
@@ -56,7 +52,6 @@ class App
         $this->extractor        = $extractor;
         $this->statementBuilder = $statementBuilder;
         $this->dispatcher       = $dispatcher;
-        $this->dryRun           = Configuration::getDryRun();
         $this->mapBuilder       = $mapBuilder;
     }
 
@@ -92,7 +87,7 @@ class App
 
         $this->dispatcher->dispatch(new SuiteEndEvent());
 
-        return RuleValidationStorage::anyRuleHadErrors() && !$this->dryRun;
+        return !RuleValidationStorage::anyRuleHadErrors() || Configuration::getDryRun();
     }
 
     private function validateStatement(Statement $statement, array $astMap): void
