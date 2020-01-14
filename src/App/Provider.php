@@ -174,17 +174,16 @@ class Provider
 
     private function getConfigFilePath(InputInterface $input): string
     {
-        $path = getcwd() . '/' . ($input->getArgument('config-file', 'phpat.yml'));
-
+        $path = getcwd() . '/' . ($input->getArgument('config-file', 'phpat.yaml'));
         if (file_exists($path)) {
             return file_get_contents($path);
         }
 
-        $path = getcwd() . '/phpat.yaml';
+        $path = getcwd() . '/phpat.yml';
         if (file_exists($path)) {
             return file_get_contents($path);
         }
 
-        throw new \LogicException('Create configuration file `phpat.yaml` first.');
+        throw new \LogicException('Create a configuration file `phpat.yaml` first.');
     }
 }

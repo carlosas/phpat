@@ -44,7 +44,7 @@ composer require --dev carlosas/phpat
 
 You might want to setup a basic configuration:
 ```yaml
-# phpat.yml
+# phpat.yaml
 src:
   path: src/
 tests:
@@ -111,7 +111,7 @@ class ExampleTest extends ArchitectureTest
 
 Run the bin with your configuration file:
 ```bash
-vendor/bin/phpat phpat.yml
+vendor/bin/phpat phpat.yaml
 ```
 
 <h2></h2>
