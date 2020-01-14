@@ -55,10 +55,9 @@ class Provider
      * Provider constructor.
      *
      * @param ContainerBuilder $builder
-     * @param string           $autoload
      * @param InputInterface   $input
      */
-    public function __construct(ContainerBuilder $builder, string $autoload, InputInterface $input)
+    public function __construct(ContainerBuilder $builder, InputInterface $input)
     {
         $this->builder  = $builder;
         $this->config = Yaml::parse($this->getConfigFilePath($input));
@@ -174,17 +173,16 @@ class Provider
 
     private function getConfigFilePath(InputInterface $input): string
     {
-        $path = getcwd() . '/' . ($input->getArgument('config-file', 'phpat.yml'));
-
+        $path = getcwd() . '/' . ($input->getArgument('config-file', 'phpat.yaml'));
         if (file_exists($path)) {
             return file_get_contents($path);
         }
 
-        $path = getcwd() . '/phpat.yaml';
+        $path = getcwd() . '/phpat.yml';
         if (file_exists($path)) {
             return file_get_contents($path);
         }
 
-        throw new \LogicException('Create configuration file `phpat.yaml` first.');
+        throw new \LogicException('Create a configuration file `phpat.yaml` first.');
     }
 }
