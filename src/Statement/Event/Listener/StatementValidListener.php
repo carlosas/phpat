@@ -20,7 +20,7 @@ class StatementValidListener implements EventListenerInterface
 
     public function __invoke(EventInterface $event)
     {
-        $this->output->write('·', OutputLevel::INFO);
+        $this->output->write('.', OutputLevel::INFO);
         $this->output->writeLn(' ' . $event->getMessage(), OutputLevel::DEBUG);
     }
 }
