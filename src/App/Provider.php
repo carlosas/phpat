@@ -65,11 +65,7 @@ class Provider
     {
         $this->builder  = $builder;
         $this->autoload = $autoload;
-        $this->config = Yaml::parse(
-            file_get_contents(
-                getcwd() . '/' . ($input->getArgument('config-file', 'phpat.yml'))
-            )
-        );
+        $this->config = Yaml::parse($this->getConfigFilePath($input));
         $this->config['options'] = array_merge($this->config['options'] ?? [], $input->getOptions());
     }
 
@@ -178,5 +174,21 @@ class Provider
         $this->builder->merge($listenerProvider->register());
 
         return $this->builder;
+    }
+
+    private function getConfigFilePath(InputInterface $input): string
+    {
+        $path = getcwd() . '/' . ($input->getArgument('config-file', 'phpat.yml'));
+
+        if (file_exists($path)) {
+            return file_get_contents($path);
+        }
+
+        $path = getcwd() . '/phpat.yaml';
+        if (file_exists($path)) {
+            return file_get_contents($path);
+        }
+
+        throw new \LogicException('Create configuration file `phpat.yaml` first.');
     }
 }
