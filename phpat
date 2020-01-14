@@ -28,7 +28,7 @@ try {
     gc_disable();
 
     $container = new ContainerBuilder();
-    $provider  = new Provider($container, $autoload, $input);
+    $provider  = new Provider($container, $input);
     $container = $provider->register();
 
     $app = $container->get('app');

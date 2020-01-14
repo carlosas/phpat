@@ -55,10 +55,9 @@ class Provider
      * Provider constructor.
      *
      * @param ContainerBuilder $builder
-     * @param string           $autoload
      * @param InputInterface   $input
      */
-    public function __construct(ContainerBuilder $builder, string $autoload, InputInterface $input)
+    public function __construct(ContainerBuilder $builder, InputInterface $input)
     {
         $this->builder  = $builder;
         $this->config = Yaml::parse($this->getConfigFilePath($input));
