@@ -1,6 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.5.6
+- Fixed false exception message shown on violated rules report
+
+## 0.5.4
+- Added dry-run to internal errors
+- Modified fatal error handler
+- Modified executable to match php version requirement
+- Fixed _include_ option
+
 ## 0.5.3
 - Added `CanOnlyImplement` and `MustOnlyImplement` rule types
 - Added `CanOnlyInclude` and `MustOnlyInclude` rule type
