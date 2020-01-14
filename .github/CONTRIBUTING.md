@@ -5,8 +5,9 @@ There are several ways to help out:
 * Write patches for open bug/feature issues
 
 ## Pull Requests
+* Meaningful modifications, for typos or superfluous changes open an issue
 * The code must follow the [PSR-12 coding standard](https://www.php-fig.org/psr/psr-12/).
-* All features should be covered by functional tests
+* All features should be covered by tests if possible
 
 ---
 
