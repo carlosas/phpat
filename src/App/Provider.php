@@ -45,10 +45,7 @@ class Provider
      * @var ContainerBuilder
      */
     private $builder;
-    /**
-     * @var string
-     */
-    private $autoload;
+
     /**
      * @var array
      */
@@ -64,7 +61,6 @@ class Provider
     public function __construct(ContainerBuilder $builder, string $autoload, InputInterface $input)
     {
         $this->builder  = $builder;
-        $this->autoload = $autoload;
         $this->config = Yaml::parse($this->getConfigFilePath($input));
         $this->config['options'] = array_merge($this->config['options'] ?? [], $input->getOptions());
     }
