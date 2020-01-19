@@ -28,7 +28,7 @@ class FileFinder
             $splittedFile[0],
             $splittedFile[1],
             [],
-            array_merge($excluded, Configuration::getSrcExcluded())
+            $excluded
         );
     }
 
