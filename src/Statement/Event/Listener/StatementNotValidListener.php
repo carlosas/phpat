@@ -8,7 +8,6 @@ use PhpAT\App\RuleValidationStorage;
 use PHPAT\EventDispatcher\EventInterface;
 use PHPAT\EventDispatcher\EventListenerInterface;
 use PhpAT\Output\OutputInterface;
-use PhpAT\Output\OutputLevel;
 
 class StatementNotValidListener implements EventListenerInterface
 {
@@ -21,8 +20,7 @@ class StatementNotValidListener implements EventListenerInterface
 
     public function __invoke(EventInterface $event)
     {
-        $this->output->write('X', OutputLevel::INFO);
-        $this->output->writeLn(' ' . $event->getMessage(), OutputLevel::DEBUG);
+        $this->output->statementNotValid($event->getMessage());
         RuleValidationStorage::addError($event->getMessage());
     }
 }
