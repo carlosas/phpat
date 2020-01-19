@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\PhpAT\functional\tests;
+namespace Tests\PhpAT\functional\architecture;
 
 use PhpAT\Rule\Rule;
 use PhpAT\Selector\Selector;
