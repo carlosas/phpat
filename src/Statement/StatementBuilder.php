@@ -7,6 +7,7 @@ namespace PhpAT\Statement;
 use PhpAT\App\Configuration;
 use PhpAT\Parser\AstNode;
 use PhpAT\Rule\Rule;
+use PhpAT\Selector\PathSelector;
 use PhpAT\Selector\SelectorInterface;
 use PhpAT\Selector\SelectorResolver;
 use PhpParser\Parser;
@@ -42,19 +43,30 @@ class StatementBuilder
      */
     public function build(Rule $rule, array $astMap): \Generator
     {
-        $origins = $this->getNamesFromSelectors($rule->getOrigin(), $rule->getOriginExcluded(), $astMap);
+        if (!empty(Configuration::getSrcExcluded())) {
+            foreach (Configuration::getSrcExcluded() as $exc) {
+                $originExcluded[] = new PathSelector($exc);
+            }
+        }
+
+        $originExcluded = array_merge($rule->getOriginExcluded(), $originExcluded ?? []);
+        $origins = $this->getNamesFromSelectors($rule->getOrigin(), $originExcluded, $astMap);
         $destinations = $this->getNamesFromSelectors($rule->getDestination(), $rule->getDestinationExcluded(), $astMap);
 
         if (!empty(Configuration::getSrcIncluded())) {
             $filteredOrigins = [];
-            foreach (Configuration::getSrcIncluded() as $checkOnly) {
-                $checkOnly = Configuration::getSrcPath() . $checkOnly;
-                foreach ($origins as $key => $value) {
-                    if (
-                        isset($astMap[$value])
-                        && $this->normalizePath($checkOnly) == $this->normalizePath($astMap[$value]->getFilePathname())
-                    ) {
-                        $filteredOrigins[] = $origins[$key];
+            foreach (Configuration::getSrcIncluded() as $inc) {
+                $resolvedIncludeRow[] = $this->getNamesFromSelectors([new PathSelector($inc)], [], $astMap);
+            }
+            foreach ($resolvedIncludeRow as $includedClasses) {
+                foreach ($includedClasses as $includedClassName) {
+                    foreach ($origins as $key => $value) {
+                        if (
+                            isset($astMap[$value])
+                            && $includedClassName == $astMap[$value]->getClassName()
+                        ) {
+                            $filteredOrigins[] = $origins[$key];
+                        }
                     }
                 }
             }
