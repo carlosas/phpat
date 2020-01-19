@@ -22,9 +22,9 @@ class ArgvInput implements InputInterface
 
     private $currentArgument = 0;
 
-    public function __construct()
+    public function __construct(array $args)
     {
-        $this->args = $_SERVER['argv'];
+        $this->args = $args;
         $this->parse();
     }
 

@@ -19,45 +19,50 @@ use Symfony\Component\DependencyInjection\Reference;
 class ListenerProvider
 {
     private $builder;
+    /**
+     * @var OutputInterface
+     */
+    private $output;
 
-    public function __construct(ContainerBuilder $builder)
+    public function __construct(ContainerBuilder $builder, OutputInterface $output)
     {
         $this->builder  = $builder;
+        $this->output = $output;
     }
 
     public function register(): ContainerBuilder
     {
         $this->builder
             ->register(SuiteStartListener::class, SuiteStartListener::class)
-            ->addArgument(new Reference(OutputInterface::class));
+            ->addArgument($this->output);
 
         $this->builder
             ->register(SuiteEndListener::class, SuiteEndListener::class)
-            ->addArgument(new Reference(OutputInterface::class));
+            ->addArgument($this->output);
 
         $this->builder
             ->register(WarningListener::class, WarningListener::class)
-            ->addArgument(new Reference(OutputInterface::class));
+            ->addArgument($this->output);
 
         $this->builder
             ->register(FatalErrorListener::class, FatalErrorListener::class)
-            ->addArgument(new Reference(OutputInterface::class));
+            ->addArgument($this->output);
 
         $this->builder
             ->register(RuleValidationStartListener::class, RuleValidationStartListener::class)
-            ->addArgument(new Reference(OutputInterface::class));
+            ->addArgument($this->output);
 
         $this->builder
             ->register(RuleValidationEndListener::class, RuleValidationEndListener::class)
-            ->addArgument(new Reference(OutputInterface::class));
+            ->addArgument($this->output);
 
         $this->builder
             ->register(StatementValidListener::class, StatementValidListener::class)
-            ->addArgument(new Reference(OutputInterface::class));
+            ->addArgument($this->output);
 
         $this->builder
             ->register(StatementNotValidListener::class, StatementNotValidListener::class)
-            ->addArgument(new Reference(OutputInterface::class));
+            ->addArgument($this->output);
 
         return $this->builder;
     }

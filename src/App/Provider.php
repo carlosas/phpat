@@ -9,9 +9,7 @@ use PHPAT\EventDispatcher\EventDispatcher;
 use PHPAT\EventDispatcher\ListenerProvider;
 use PhpAT\File\FileFinder;
 use PhpAT\File\SymfonyFinderAdapter;
-use PhpAT\Input\InputInterface;
 use PhpAT\Output\OutputInterface;
-use PhpAT\Output\StdOutput;
 use PhpAT\Parser\MapBuilder;
 use PhpAT\Rule\RuleBuilder;
 use PhpAT\Rule\Type\Composition;
@@ -32,7 +30,6 @@ use PHPStan\PhpDocParser\Parser\TypeParser;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class Provider
@@ -47,21 +44,21 @@ class Provider
     private $builder;
 
     /**
-     * @var array
+     * @var OutputInterface
      */
-    private $config;
+    private $output;
 
     /**
      * Provider constructor.
-     *
      * @param ContainerBuilder $builder
-     * @param InputInterface   $input
+     * @param array            $config
+     * @param OutputInterface  $output
      */
-    public function __construct(ContainerBuilder $builder, InputInterface $input)
+    public function __construct(ContainerBuilder $builder, array $config, OutputInterface $output)
     {
+        Configuration::init($config);
         $this->builder  = $builder;
-        $this->config = Yaml::parse($this->getConfigFilePath($input));
-        $this->config['options'] = array_merge($this->config['options'] ?? [], $input->getOptions());
+        $this->output = $output;
     }
 
     /**
@@ -69,7 +66,6 @@ class Provider
      */
     public function register(): ContainerBuilder
     {
-        Configuration::init($this->config);
         $this->builder->set(Parser::class, (new ParserFactory())->create(ParserFactory::ONLY_PHP7));
         $phpDocParser = new PhpDocParser(new TypeParser(), new ConstExprParser());
         $this->builder->set(Parser::class, (new ParserFactory())->create(ParserFactory::ONLY_PHP7));
@@ -92,9 +88,6 @@ class Provider
             ->addArgument(new Reference(Parser::class))
             ->addArgument(new Reference(NodeTraverserInterface::class))
             ->addArgument($phpDocParser);
-
-        $this->builder
-            ->register(OutputInterface::class, StdOutput::class);
 
         $this->builder
             ->register(RuleBuilder::class, RuleBuilder::class)
@@ -165,24 +158,9 @@ class Provider
             ->addArgument(new Reference(StatementBuilder::class))
             ->addArgument(new Reference(EventDispatcher::class));
 
-        $listenerProvider = new \PhpAT\App\ListenerProvider($this->builder);
+        $listenerProvider = new \PhpAT\App\ListenerProvider($this->builder, $this->output);
         $this->builder->merge($listenerProvider->register());
 
         return $this->builder;
-    }
-
-    private function getConfigFilePath(InputInterface $input): string
-    {
-        $path = getcwd() . '/' . ($input->getArgument('config-file', 'phpat.yaml'));
-        if (file_exists($path)) {
-            return file_get_contents($path);
-        }
-
-        $path = getcwd() . '/phpat.yml';
-        if (file_exists($path)) {
-            return file_get_contents($path);
-        }
-
-        throw new \LogicException('Create a configuration file `phpat.yaml` first.');
     }
 }

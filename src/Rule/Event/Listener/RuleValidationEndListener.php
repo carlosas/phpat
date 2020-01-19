@@ -21,14 +21,6 @@ class RuleValidationEndListener implements EventListenerInterface
 
     public function __invoke(EventInterface $event)
     {
-        $this->output->writeLn(PHP_EOL, OutputLevel::INFO);
-
-        if (!RuleValidationStorage::lastRuleHadErrors()) {
-            $this->output->writeLn('OK', OutputLevel::INFO);
-        }
-
-        foreach (RuleValidationStorage::flushErrors() as $error) {
-            $this->output->writeLn('ERROR: ' . $error, OutputLevel::ERROR);
-        }
+        $this->output->ruleValidationEnd(RuleValidationStorage::flushErrors());
     }
 }

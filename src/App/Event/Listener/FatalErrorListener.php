@@ -8,7 +8,6 @@ use PhpAT\App\RuleValidationStorage;
 use PHPAT\EventDispatcher\EventInterface;
 use PHPAT\EventDispatcher\EventListenerInterface;
 use PhpAT\Output\OutputInterface;
-use PhpAT\Output\OutputLevel;
 
 class FatalErrorListener implements EventListenerInterface
 {
@@ -21,7 +20,7 @@ class FatalErrorListener implements EventListenerInterface
 
     public function __invoke(EventInterface $event)
     {
-        $this->output->writeLn('FATAL ERROR: ' . $event->getMessage(), OutputLevel::ERROR);
+        $this->output->fatalError($event->getMessage());
         RuleValidationStorage::addFatalError($event->getMessage());
     }
 }

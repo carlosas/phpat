@@ -8,5 +8,7 @@ interface InputInterface
 {
     public function getArgument(string $name, $default = null): ?string;
 
+    public function getOption(string $name, $default = null);
+
     public function getOptions(): array;
 }
