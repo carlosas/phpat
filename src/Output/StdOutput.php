@@ -2,8 +2,6 @@
 
 namespace PhpAT\Output;
 
-use PhpAT\App\Configuration;
-
 class StdOutput implements OutputInterface
 {
     /**
@@ -20,10 +18,10 @@ class StdOutput implements OutputInterface
      */
     private $verbose;
 
-    public function __construct()
+    public function __construct(int $verbosity, bool $dryRun)
     {
-        $this->verbose = Configuration::getVerbosity();
-        $this->errStream = Configuration::getDryRun() ? \STDOUT : \STDERR;
+        $this->verbose = $verbosity;
+        $this->errStream = $dryRun ? \STDOUT : \STDERR;
     }
 
     public function write(string $message, int $level = OutputLevel::DEFAULT): void
