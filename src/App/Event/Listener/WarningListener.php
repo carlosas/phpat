@@ -21,6 +21,6 @@ class WarningListener implements EventListenerInterface
 
     public function __invoke(EventInterface $event)
     {
-        $this->output->writeLn('WARNING: ' . $event->getMessage(), OutputLevel::WARNING);
+        $this->output->warning($event->getMessage());
     }
 }
