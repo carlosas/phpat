@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.5.7
+- Added support for `*` on _include_ and _exclude_ options
+- Fixed ignored _include_ option when using other than PathSelector
+- Modified command now looks for default `phpat.yaml` or `phpat.yml` files
+- Modified success report character from `·` to `.`
+
 ## 0.5.6
 - Fixed false exception message shown on violated rules report
 
