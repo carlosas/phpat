@@ -67,11 +67,8 @@ class Provider
     public function register(): ContainerBuilder
     {
         $this->builder->set(Parser::class, (new ParserFactory())->create(ParserFactory::ONLY_PHP7));
-        $phpDocParser = new PhpDocParser(new TypeParser(), new ConstExprParser());
         $this->builder->set(Parser::class, (new ParserFactory())->create(ParserFactory::ONLY_PHP7));
-
         $this->builder->set(PhpDocParser::class, new PhpDocParser(new TypeParser(), new ConstExprParser()));
-
         $listenerProvider = (new EventListenerMapper())->populateListenerProvider(new ListenerProvider($this->builder));
         $this->builder->set(EventDispatcher::class, (new EventDispatcher($listenerProvider)));
 
@@ -87,7 +84,7 @@ class Provider
             ->addArgument(new Reference(FileFinder::class))
             ->addArgument(new Reference(Parser::class))
             ->addArgument(new Reference(NodeTraverserInterface::class))
-            ->addArgument($phpDocParser);
+            ->addArgument(new Reference(PhpDocParser::class));
 
         $this->builder
             ->register(RuleBuilder::class, RuleBuilder::class)
