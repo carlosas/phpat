@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace PhpAT\Rule\Type\Mixin;
+namespace PhpAT\Rule\Assertion\Dependency;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
-use PhpAT\Rule\Type\RuleType;
+use PhpAT\Rule\Assertion\Assertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
 
-class CanOnlyInclude implements RuleType
+class CanOnlyDepend implements Assertion
 {
     private $eventDispatcher;
 
@@ -32,21 +32,21 @@ class CanOnlyInclude implements RuleType
                 continue;
             }
 
-            $mixins = $node->getMixins();
-            foreach ($mixins as $key => $value) {
+            $dependencies = $node->getDependencies();
+            foreach ($dependencies as $key => $value) {
                 if (in_array($value, $fqcnDestinations)) {
-                    unset($mixins[$key]);
+                    unset($dependencies[$key]);
                 }
             }
 
-            if (empty($mixins)) {
+            if (empty($dependencies)) {
                 $this->dispatchResult(true, $fqcnOrigin);
 
                 return;
             }
 
-            foreach ($mixins as $mixin) {
-                $this->dispatchResult(false, $fqcnOrigin, $mixin);
+            foreach ($dependencies as $dependency) {
+                $this->dispatchResult(false, $fqcnOrigin, $dependency);
             }
         }
 
@@ -56,8 +56,8 @@ class CanOnlyInclude implements RuleType
     private function dispatchResult(bool $result, string $fqcnOrigin, string $fqcnDestination = ''): void
     {
         $message = $result
-            ? $fqcnOrigin . ' does not include non-selected traits'
-            : $fqcnOrigin . ' includes ' . $fqcnDestination;
+            ? $fqcnOrigin . ' does not depend on non-selected classes'
+            : $fqcnOrigin . ' depends on ' . $fqcnDestination;
         $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
 
         $this->eventDispatcher->dispatch(new $event($message));

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace PhpAT\Rule\Type;
+namespace PhpAT\Rule\Assertion;
 
-interface RuleType
+interface Assertion
 {
     public function validate(
         string $fqcnOrigin,

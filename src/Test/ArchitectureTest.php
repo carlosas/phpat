@@ -49,7 +49,7 @@ abstract class ArchitectureTest
     {
         $rule = $this->$method();
 
-        if ($rule->getType() === null) {
+        if ($rule->getAssertion() === null) {
             $message = $method
                 . ' has no defined type. Please make sure that you call one of the restrictive methods'
                 . ' (e.g. `mustImplement` or `mustNotDependOn`) to declare the type of the rule.';

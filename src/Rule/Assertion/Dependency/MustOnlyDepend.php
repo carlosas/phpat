@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace PhpAT\Rule\Type\Composition;
+namespace PhpAT\Rule\Assertion\Dependency;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
-use PhpAT\Rule\Type\RuleType;
+use PhpAT\Rule\Assertion\Assertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
 
-class MustOnlyImplement implements RuleType
+class MustOnlyDepend implements Assertion
 {
     private $eventDispatcher;
 
@@ -32,26 +32,26 @@ class MustOnlyImplement implements RuleType
                 continue;
             }
 
-            $implemented = $node->getInterfaces();
+            $dependencies = $node->getDependencies();
             foreach ($fqcnDestinations as $fqcnDestination) {
-                $result = array_search($fqcnDestination, $implemented, true);
+                $result = array_search($fqcnDestination, $dependencies, true);
 
-                if ($result !== false) {
-                    $this->dispatchSelectedResult(true, $fqcnOrigin, $fqcnDestination);
-                    unset($implemented[$result]);
+                if ($result === false) {
+                    $this->dispatchSelectedResult(false, $fqcnOrigin, $fqcnDestination);
                     continue;
                 }
-                $this->dispatchSelectedResult(false, $fqcnOrigin, $fqcnDestination);
+                $this->dispatchSelectedResult(true, $fqcnOrigin, $fqcnDestination);
+                unset($dependencies[$result]);
             }
 
-            if (empty($implemented)) {
+            if (empty($dependencies)) {
                 $this->dispatchOthersResult(true, $fqcnOrigin);
 
                 return;
             }
 
-            foreach ($implemented as $interface) {
-                $this->dispatchOthersResult(false, $fqcnOrigin, $interface);
+            foreach ($dependencies as $dependency) {
+                $this->dispatchOthersResult(false, $fqcnOrigin, $dependency);
             }
         }
 
@@ -60,7 +60,7 @@ class MustOnlyImplement implements RuleType
 
     private function dispatchSelectedResult(bool $result, string $fqcnOrigin, string $fqcnDestination): void
     {
-        $action = $result ? ' implements ' : ' does not implement ';
+        $action = $result ? ' depends on ' : ' does not depend on ';
         $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
         $message = $fqcnOrigin . $action . $fqcnDestination;
 
@@ -70,8 +70,8 @@ class MustOnlyImplement implements RuleType
     private function dispatchOthersResult(bool $result, string $fqcnOrigin, string $fqcnDestination = ''): void
     {
         $message = $result
-            ? $fqcnOrigin . ' does not implement non-selected interfaces'
-            : $fqcnOrigin . ' implements ' . $fqcnDestination;
+            ? $fqcnOrigin . ' does not depend on non-selected classes'
+            : $fqcnOrigin . ' depends ' . $fqcnDestination;
         $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
 
         $this->eventDispatcher->dispatch(new $event($message));

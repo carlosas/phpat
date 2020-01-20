@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpAT\Statement;
 
-use PhpAT\Rule\Type\RuleType;
+use PhpAT\Rule\Assertion\Assertion;
 
 /**
  * Class Statement
@@ -14,9 +14,9 @@ use PhpAT\Rule\Type\RuleType;
 class Statement
 {
     /**
-     * @var RuleType
+     * @var Assertion
      */
-    private $type;
+    private $assertion;
     /**
      * @var bool
      */
@@ -32,22 +32,22 @@ class Statement
 
     public function __construct(
         string $fqcnOrigin,
-        RuleType $type,
+        Assertion $assertion,
         bool $inverse,
         array $fqcnDestinations
     ) {
         $this->fqcnOrigin = $fqcnOrigin;
-        $this->type = $type;
+        $this->assertion = $assertion;
         $this->inverse = $inverse;
         $this->fqcnDestinations = $fqcnDestinations;
     }
 
     /**
-     * @return RuleType
+     * @return Assertion
      */
-    public function getType(): RuleType
+    public function getAssertion(): Assertion
     {
-        return $this->type;
+        return $this->assertion;
     }
 
     /**

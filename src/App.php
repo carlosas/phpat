@@ -92,7 +92,7 @@ class App
 
     private function validateStatement(Statement $statement, array $astMap): void
     {
-        $statement->getType()->validate(
+        $statement->getAssertion()->validate(
             $statement->getFqcnOrigin(),
             $statement->getFqcnDestinations(),
             $astMap,
