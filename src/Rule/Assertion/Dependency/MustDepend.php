@@ -2,16 +2,19 @@
 
 declare(strict_types=1);
 
-namespace PhpAT\Rule\Type\Composition;
+namespace PhpAT\Rule\Assertion\Dependency;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
-use PhpAT\Rule\Type\RuleType;
+use PhpAT\Rule\Assertion\Assertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
 
-class MustImplement implements RuleType
+class MustDepend implements Assertion
 {
+    /**
+     * @var EventDispatcher
+     */
     private $eventDispatcher;
 
     public function __construct(
@@ -33,7 +36,7 @@ class MustImplement implements RuleType
             }
 
             foreach ($fqcnDestinations as $destination) {
-                $result = in_array($destination, $node->getInterfaces());
+                $result = in_array($destination, $node->getDependencies());
                 $this->dispatchResult($result, $inverse, $fqcnOrigin, $destination);
             }
         }
@@ -43,7 +46,7 @@ class MustImplement implements RuleType
 
     private function dispatchResult(bool $result, bool $inverse, string $fqcnOrigin, string $fqcnDestination): void
     {
-        $action = $result ? ' implements ' : ' does not implement ';
+        $action = $result ? ' depends on ' : ' does not depend on ';
         $event = ($result xor $inverse) ? StatementValidEvent::class : StatementNotValidEvent::class;
         $message = $fqcnOrigin . $action . $fqcnDestination;
 

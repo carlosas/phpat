@@ -31,7 +31,7 @@ class AstNode implements \JsonSerializable
     /**
      * @var string
      */
-    private $type;
+    private $assertion;
 
     public function __construct(
         \SplFileInfo $fileInfo,

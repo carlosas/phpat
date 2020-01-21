@@ -12,10 +12,10 @@ use PhpAT\File\SymfonyFinderAdapter;
 use PhpAT\Output\OutputInterface;
 use PhpAT\Parser\MapBuilder;
 use PhpAT\Rule\RuleBuilder;
-use PhpAT\Rule\Type\Composition;
-use PhpAT\Rule\Type\Dependency;
-use PhpAT\Rule\Type\Inheritance;
-use PhpAT\Rule\Type\Mixin;
+use PhpAT\Rule\Assertion\Composition;
+use PhpAT\Rule\Assertion\Dependency;
+use PhpAT\Rule\Assertion\Inheritance;
+use PhpAT\Rule\Assertion\Mixin;
 use PhpAT\Selector\SelectorResolver;
 use PhpAT\Statement\StatementBuilder;
 use PhpAT\Test\FileTestExtractor;
@@ -67,11 +67,8 @@ class Provider
     public function register(): ContainerBuilder
     {
         $this->builder->set(Parser::class, (new ParserFactory())->create(ParserFactory::ONLY_PHP7));
-        $phpDocParser = new PhpDocParser(new TypeParser(), new ConstExprParser());
         $this->builder->set(Parser::class, (new ParserFactory())->create(ParserFactory::ONLY_PHP7));
-
         $this->builder->set(PhpDocParser::class, new PhpDocParser(new TypeParser(), new ConstExprParser()));
-
         $listenerProvider = (new EventListenerMapper())->populateListenerProvider(new ListenerProvider($this->builder));
         $this->builder->set(EventDispatcher::class, (new EventDispatcher($listenerProvider)));
 
@@ -87,7 +84,7 @@ class Provider
             ->addArgument(new Reference(FileFinder::class))
             ->addArgument(new Reference(Parser::class))
             ->addArgument(new Reference(NodeTraverserInterface::class))
-            ->addArgument($phpDocParser);
+            ->addArgument(new Reference(PhpDocParser::class));
 
         $this->builder
             ->register(RuleBuilder::class, RuleBuilder::class)

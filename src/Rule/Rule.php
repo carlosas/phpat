@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpAT\Rule;
 
-use PhpAT\Rule\Type\RuleType;
+use PhpAT\Rule\Assertion\Assertion;
 use PhpAT\Selector\SelectorInterface;
 
 /**
@@ -23,9 +23,9 @@ class Rule
      */
     private $originExcluded;
     /**
-     * @var RuleType|null
+     * @var Assertion|null
      */
-    private $type;
+    private $assertion;
     /**
      * @var bool
      */
@@ -46,14 +46,14 @@ class Rule
     public function __construct(
         array $origin,
         array $originExcluded,
-        ?RuleType $type,
+        ?Assertion $assertion,
         bool $inverse,
         array $destination,
         array $destinationExcluded
     ) {
         $this->origin = $origin;
         $this->originExcluded = $originExcluded;
-        $this->type = $type;
+        $this->assertion = $assertion;
         $this->inverse = $inverse;
         $this->destination = $destination;
         $this->destinationExcluded = $destinationExcluded;
@@ -76,11 +76,11 @@ class Rule
     }
 
     /**
-     * @return RuleType|null
+     * @return Assertion|null
      */
-    public function getType(): ?RuleType
+    public function getAssertion(): ?Assertion
     {
-        return $this->type;
+        return $this->assertion;
     }
 
     /**

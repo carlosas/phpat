@@ -4,15 +4,15 @@ use PhpAT\Selector\Selector;
 use PhpAT\Rule\Rule;
 use PhpAT\Test\ArchitectureTest;
 
-class RuleTypesTest extends ArchitectureTest
+class AssertionsTest extends ArchitectureTest
 {
-    public function testRuleTypesImplementRuleTypeInterface(): Rule
+    public function testAssertionsImplementAssertionInterface(): Rule
     {
         return $this->newRule
-            ->classesThat(Selector::havePath('Rule/Type/*'))
-            ->excludingClassesThat(Selector::havePath('Rule/Type/RuleType.php'))
+            ->classesThat(Selector::havePath('Rule/Assertion/*'))
+            ->excludingClassesThat(Selector::havePath('Rule/Assertion/Assertion.php'))
             ->mustImplement()
-            ->classesThat(Selector::haveClassName('PhpAT\Rule\Type\RuleType'))
+            ->classesThat(Selector::haveClassName('PhpAT\Rule\Assertion\Assertion'))
             ->build();
     }
 }

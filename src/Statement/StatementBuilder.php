@@ -76,7 +76,7 @@ class StatementBuilder
         foreach ($origins as $originClassName) {
             yield new Statement(
                 $originClassName,
-                $rule->getType(),
+                $rule->getAssertion(),
                 $rule->isInverse(),
                 $destinations
             );

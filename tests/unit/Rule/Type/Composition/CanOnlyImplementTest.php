@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests\PhpAT\unit\Rule\Type\Composition;
+namespace Tests\PhpAT\unit\Rule\Assertion\Composition;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
 use PhpAT\Parser\ClassName;
-use PhpAT\Rule\Type\Composition\CanOnlyImplement;
+use PhpAT\Rule\Assertion\Composition\CanOnlyImplement;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
 use PHPUnit\Framework\TestCase;

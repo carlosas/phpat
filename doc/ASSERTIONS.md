@@ -1,8 +1,8 @@
-# RuleTypes
+# Assertions
 
-RuleType are the type of assertion that can be done on the selected classes.
+Assertion are the type of verification that can be done in the selected classes.
 
-There are four groups of RuleTypes: Dependency, Inheritance, Composition and Mixin.
+There are four groups of assertions: Dependency, Inheritance, Composition and Mixin.
 
 ## Dependency
 

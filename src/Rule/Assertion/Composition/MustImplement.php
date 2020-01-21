@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace PhpAT\Rule\Type\Inheritance;
+namespace PhpAT\Rule\Assertion\Composition;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
-use PhpAT\Rule\Type\RuleType;
+use PhpAT\Rule\Assertion\Assertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
 
-class MustExtend implements RuleType
+class MustImplement implements Assertion
 {
     private $eventDispatcher;
 
@@ -33,7 +33,7 @@ class MustExtend implements RuleType
             }
 
             foreach ($fqcnDestinations as $destination) {
-                $result = $destination === $node->getParent();
+                $result = in_array($destination, $node->getInterfaces());
                 $this->dispatchResult($result, $inverse, $fqcnOrigin, $destination);
             }
         }
@@ -43,7 +43,7 @@ class MustExtend implements RuleType
 
     private function dispatchResult(bool $result, bool $inverse, string $fqcnOrigin, string $fqcnDestination): void
     {
-        $action = $result ? ' extends ' : ' does not extend ';
+        $action = $result ? ' implements ' : ' does not implement ';
         $event = ($result xor $inverse) ? StatementValidEvent::class : StatementNotValidEvent::class;
         $message = $fqcnOrigin . $action . $fqcnDestination;
 

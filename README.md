@@ -63,11 +63,11 @@ This is the complete list of options:
 
 ### Test definition 📓
 
-There are different ways to choose which classes will intervene in a rule (called Selectors) and many different possibles assertions (called RuleTypes).
+There are different ways to choose which classes will intervene in a rule (called Selectors) and many different possibles Assertions.
 Check the complete list of both here:
 
 * [Selectors](doc/SELECTORS.md)
-* [RuleTypes](doc/RULE_TYPES.md)
+* [Assertions](doc/ASSERTIONS.md)
 
 This could be a test with a couple of rules:
 ```php

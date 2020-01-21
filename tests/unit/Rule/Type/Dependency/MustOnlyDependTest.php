@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests\PhpAT\unit\Rule\Type\Dependency;
+namespace Tests\PhpAT\unit\Rule\Assertion\Dependency;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
 use PhpAT\Parser\ClassName;
-use PhpAT\Rule\Type\Dependency\MustOnlyDepend;
+use PhpAT\Rule\Assertion\Dependency\MustOnlyDepend;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
 use PHPUnit\Framework\TestCase;

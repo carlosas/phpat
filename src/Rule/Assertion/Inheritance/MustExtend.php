@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace PhpAT\Rule\Type\Inheritance;
+namespace PhpAT\Rule\Assertion\Inheritance;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
-use PhpAT\Rule\Type\RuleType;
+use PhpAT\Rule\Assertion\Assertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
 
-class CanOnlyExtend implements RuleType
+class MustExtend implements Assertion
 {
     private $eventDispatcher;
 
@@ -24,32 +24,28 @@ class CanOnlyExtend implements RuleType
         string $fqcnOrigin,
         array $fqcnDestinations,
         array $astMap,
-        bool $inverse = false //ignored
+        bool $inverse = false
     ): void {
         /** @var AstNode $node */
         foreach ($astMap as $node) {
             if ($node->getClassName() !== $fqcnOrigin) {
                 continue;
             }
-            $parent = $node->getParent();
-            if (!in_array($parent, $fqcnDestinations)) {
-                $this->dispatchResult(false, $fqcnOrigin, $parent);
 
-                return;
+            foreach ($fqcnDestinations as $destination) {
+                $result = $destination === $node->getParent();
+                $this->dispatchResult($result, $inverse, $fqcnOrigin, $destination);
             }
-
-            $this->dispatchResult(true, $fqcnOrigin);
         }
 
         return;
     }
 
-    private function dispatchResult(bool $result, string $fqcnOrigin, string $fqcnDestination = ''): void
+    private function dispatchResult(bool $result, bool $inverse, string $fqcnOrigin, string $fqcnDestination): void
     {
-        $message = $result
-            ? $fqcnOrigin . ' does not extend non-selected classes'
-            : $fqcnOrigin . ' extends ' . $fqcnDestination;
-        $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
+        $action = $result ? ' extends ' : ' does not extend ';
+        $event = ($result xor $inverse) ? StatementValidEvent::class : StatementNotValidEvent::class;
+        $message = $fqcnOrigin . $action . $fqcnDestination;
 
         $this->eventDispatcher->dispatch(new $event($message));
     }

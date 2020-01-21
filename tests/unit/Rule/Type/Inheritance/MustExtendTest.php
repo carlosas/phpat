@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests\PhpAT\unit\Rule\Type\Inheritance;
+namespace Tests\PhpAT\unit\Rule\Assertion\Inheritance;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
 use PhpAT\Parser\ClassName;
-use PhpAT\Rule\Type\Inheritance\MustExtend;
+use PhpAT\Rule\Assertion\Inheritance\MustExtend;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
 use PHPUnit\Framework\TestCase;

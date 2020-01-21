@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace PhpAT\Rule;
 
-use PhpAT\Rule\Type\Composition;
-use PhpAT\Rule\Type\Dependency;
-use PhpAT\Rule\Type\Inheritance;
-use PhpAT\Rule\Type\Mixin;
-use PhpAT\Rule\Type\RuleType;
+use PhpAT\Rule\Assertion\Composition;
+use PhpAT\Rule\Assertion\Dependency;
+use PhpAT\Rule\Assertion\Inheritance;
+use PhpAT\Rule\Assertion\Mixin;
+use PhpAT\Rule\Assertion\Assertion;
 use PhpAT\Selector\SelectorInterface;
 use Psr\Container\ContainerInterface;
 
@@ -40,9 +40,9 @@ class RuleBuilder
      */
     private $destinationExclude = [];
     /**
-     * @var RuleType|null
+     * @var Assertion|null
      */
-    private $type = null;
+    private $assertion = null;
     /**
      * @var bool
      */
@@ -59,7 +59,7 @@ class RuleBuilder
      */
     public function classesThat(SelectorInterface $selector): self
     {
-        if (empty($this->type)) {
+        if (empty($this->assertion)) {
             $this->origin[] = $selector;
         } else {
             $this->destination[] = $selector;
@@ -83,7 +83,7 @@ class RuleBuilder
      */
     public function excludingClassesThat(SelectorInterface $selector): self
     {
-        if (empty($this->type)) {
+        if (empty($this->assertion)) {
             $this->originExclude[] = $selector;
         } else {
             $this->destinationExclude[] = $selector;
@@ -106,7 +106,7 @@ class RuleBuilder
      */
     public function mustDependOn(): self
     {
-        return $this->setType(Dependency\MustDepend::class, false);
+        return $this->setAssertion(Dependency\MustDepend::class, false);
     }
 
     /**
@@ -114,7 +114,7 @@ class RuleBuilder
      */
     public function mustNotDependOn(): self
     {
-        return $this->setType(Dependency\MustDepend::class, true);
+        return $this->setAssertion(Dependency\MustDepend::class, true);
     }
 
     /**
@@ -122,7 +122,7 @@ class RuleBuilder
      */
     public function mustOnlyDependOn(): self
     {
-        return $this->setType(Dependency\MustOnlyDepend::class, false);
+        return $this->setAssertion(Dependency\MustOnlyDepend::class, false);
     }
 
     /**
@@ -130,7 +130,7 @@ class RuleBuilder
      */
     public function canOnlyDependOn(): self
     {
-        return $this->setType(Dependency\CanOnlyDepend::class, false);
+        return $this->setAssertion(Dependency\CanOnlyDepend::class, false);
     }
 
     /**
@@ -138,7 +138,7 @@ class RuleBuilder
      */
     public function mustImplement(): self
     {
-        return $this->setType(Composition\MustImplement::class, false);
+        return $this->setAssertion(Composition\MustImplement::class, false);
     }
 
     /**
@@ -146,7 +146,7 @@ class RuleBuilder
      */
     public function mustNotImplement(): self
     {
-        return $this->setType(Composition\MustImplement::class, true);
+        return $this->setAssertion(Composition\MustImplement::class, true);
     }
 
     /**
@@ -154,7 +154,7 @@ class RuleBuilder
      */
     public function mustOnlyImplement(): self
     {
-        return $this->setType(Composition\MustOnlyImplement::class, false);
+        return $this->setAssertion(Composition\MustOnlyImplement::class, false);
     }
 
     /**
@@ -162,7 +162,7 @@ class RuleBuilder
      */
     public function canOnlyImplement(): self
     {
-        return $this->setType(Composition\CanOnlyImplement::class, false);
+        return $this->setAssertion(Composition\CanOnlyImplement::class, false);
     }
 
     /**
@@ -170,7 +170,7 @@ class RuleBuilder
      */
     public function mustExtend(): self
     {
-        return $this->setType(Inheritance\MustExtend::class, false);
+        return $this->setAssertion(Inheritance\MustExtend::class, false);
     }
 
     /**
@@ -178,7 +178,7 @@ class RuleBuilder
      */
     public function mustNotExtend(): self
     {
-        return $this->setType(Inheritance\MustExtend::class, true);
+        return $this->setAssertion(Inheritance\MustExtend::class, true);
     }
 
     /**
@@ -186,7 +186,7 @@ class RuleBuilder
      */
     public function canOnlyExtend(): self
     {
-        return $this->setType(Inheritance\CanOnlyExtend::class, false);
+        return $this->setAssertion(Inheritance\CanOnlyExtend::class, false);
     }
 
     /**
@@ -194,7 +194,7 @@ class RuleBuilder
      */
     public function mustInclude(): self
     {
-        return $this->setType(Mixin\MustInclude::class, false);
+        return $this->setAssertion(Mixin\MustInclude::class, false);
     }
 
     /**
@@ -202,7 +202,7 @@ class RuleBuilder
      */
     public function mustNotInclude(): self
     {
-        return $this->setType(Mixin\MustInclude::class, true);
+        return $this->setAssertion(Mixin\MustInclude::class, true);
     }
 
     /**
@@ -210,7 +210,7 @@ class RuleBuilder
      */
     public function mustOnlyInclude(): self
     {
-        return $this->setType(Mixin\MustOnlyInclude::class, false);
+        return $this->setAssertion(Mixin\MustOnlyInclude::class, false);
     }
 
     /**
@@ -218,17 +218,17 @@ class RuleBuilder
      */
     public function canOnlyInclude(): self
     {
-        return $this->setType(Mixin\CanOnlyInclude::class, false);
+        return $this->setAssertion(Mixin\CanOnlyInclude::class, false);
     }
 
     /**
-     * @param string $ruleType
+     * @param string $assertion
      * @param bool   $inverse
      * @return RuleBuilder
      */
-    private function setType(string $ruleType, bool $inverse): self
+    private function setAssertion(string $assertion, bool $inverse): self
     {
-        $this->type = $this->container->get($ruleType);
+        $this->assertion = $this->container->get($assertion);
         $this->inverse = $inverse;
 
         return $this;
@@ -242,7 +242,7 @@ class RuleBuilder
         $rule = new Rule(
             $this->origin,
             $this->originExclude,
-            $this->type,
+            $this->assertion,
             $this->inverse,
             $this->destination,
             $this->destinationExclude
@@ -258,7 +258,7 @@ class RuleBuilder
         $this->originExclude = [];
         $this->destination = [];
         $this->destinationExclude = [];
-        $this->type = null;
+        $this->assertion = null;
         $this->inverse = false;
     }
 }

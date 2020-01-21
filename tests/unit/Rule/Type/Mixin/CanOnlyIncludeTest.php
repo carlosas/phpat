@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests\PhpAT\unit\Rule\Type\Mixin;
+namespace Tests\PhpAT\unit\Rule\Assertion\Mixin;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
 use PhpAT\Parser\ClassName;
-use PhpAT\Rule\Type\Mixin\CanOnlyInclude;
+use PhpAT\Rule\Assertion\Mixin\CanOnlyInclude;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
 use PHPUnit\Framework\TestCase;

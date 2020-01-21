@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace PhpAT\Rule\Type\Dependency;
+namespace PhpAT\Rule\Assertion\Inheritance;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
-use PhpAT\Rule\Type\RuleType;
+use PhpAT\Rule\Assertion\Assertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
 
-class CanOnlyDepend implements RuleType
+class CanOnlyExtend implements Assertion
 {
     private $eventDispatcher;
 
@@ -31,23 +31,14 @@ class CanOnlyDepend implements RuleType
             if ($node->getClassName() !== $fqcnOrigin) {
                 continue;
             }
-
-            $dependencies = $node->getDependencies();
-            foreach ($dependencies as $key => $value) {
-                if (in_array($value, $fqcnDestinations)) {
-                    unset($dependencies[$key]);
-                }
-            }
-
-            if (empty($dependencies)) {
-                $this->dispatchResult(true, $fqcnOrigin);
+            $parent = $node->getParent();
+            if (!in_array($parent, $fqcnDestinations)) {
+                $this->dispatchResult(false, $fqcnOrigin, $parent);
 
                 return;
             }
 
-            foreach ($dependencies as $dependency) {
-                $this->dispatchResult(false, $fqcnOrigin, $dependency);
-            }
+            $this->dispatchResult(true, $fqcnOrigin);
         }
 
         return;
@@ -56,8 +47,8 @@ class CanOnlyDepend implements RuleType
     private function dispatchResult(bool $result, string $fqcnOrigin, string $fqcnDestination = ''): void
     {
         $message = $result
-            ? $fqcnOrigin . ' does not depend on non-selected classes'
-            : $fqcnOrigin . ' depends on ' . $fqcnDestination;
+            ? $fqcnOrigin . ' does not extend non-selected classes'
+            : $fqcnOrigin . ' extends ' . $fqcnDestination;
         $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
 
         $this->eventDispatcher->dispatch(new $event($message));
