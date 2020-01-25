@@ -26,6 +26,10 @@ class DependencyCollector extends NodeVisitorAbstract
      * @var ClassMatcher
      */
     private $matcher;
+    /**
+     * @var string
+     */
+    private $previousNodeType;
 
     public function __construct(PhpDocParser $docParser, ClassMatcher $matcher, bool $ignoreDocBlocks = false)
     {
@@ -53,7 +57,14 @@ class DependencyCollector extends NodeVisitorAbstract
 
     public function leaveNode(Node $node)
     {
-        if ($node instanceof Node\Name\FullyQualified && !function_exists($node->toString())) {
+        if (
+            $node instanceof Node\Name\FullyQualified
+            && (
+                class_exists($node->toString())
+                || interface_exists($node->toString())
+                || trait_exists($node->toString())
+            )
+        ) {
             $this->addDependency($node->toString());
         }
 
@@ -70,6 +81,8 @@ class DependencyCollector extends NodeVisitorAbstract
                 }
             }
         }
+        
+        $this->previousNodeType = get_class($node);
     }
 
     /**
