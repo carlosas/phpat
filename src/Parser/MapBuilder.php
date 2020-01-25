@@ -4,7 +4,10 @@ namespace PhpAT\Parser;
 
 use PhpAT\App\Configuration;
 use PhpAT\File\FileFinder;
+use PhpParser\ErrorHandler\Throwing;
+use PhpParser\NameContext;
 use PhpParser\NodeTraverserInterface;
+use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 
@@ -23,9 +26,9 @@ class MapBuilder
      */
     private $traverser;
     /**
-     * @var AstNodesCollector
+     * @var PhpDocParser
      */
-    private $astNodesCollector;
+    private $phpDocParser;
 
     public function __construct(
         FileFinder $finder,
@@ -36,16 +39,23 @@ class MapBuilder
         $this->finder = $finder;
         $this->parser = $parser;
         $this->traverser = $traverser;
-        $this->astNodesCollector = new AstNodesCollector(
-            $phpDocParser,
-            new ClassMatcher(),
-            Configuration::getDependencyIgnoreDocBlocks()
-        );
+        $this->phpDocParser = $phpDocParser;
     }
 
     public function build(): array
     {
-        $this->traverser->addVisitor($this->astNodesCollector);
+        $nameResolver = new NameResolver();
+        $this->traverser->addVisitor($nameResolver);
+        $nameCollector = new NameCollector();
+        $this->traverser->addVisitor($nameCollector);
+        $interfaceCollector = new InterfaceCollector();
+        $this->traverser->addVisitor($interfaceCollector);
+        $traitCollector = new TraitCollector();
+        $this->traverser->addVisitor($traitCollector);
+        $parentCollector = new ParentCollector();
+        $this->traverser->addVisitor($parentCollector);
+        $dependencyCollector = new DependencyCollector($this->phpDocParser, new ClassMatcher(), Configuration::getDependencyIgnoreDocBlocks());
+        $this->traverser->addVisitor($dependencyCollector);
 
         $files = $this->finder->findAllFiles(Configuration::getSrcPath());
 
@@ -55,20 +65,15 @@ class MapBuilder
 
             $this->traverser->traverse($parsed);
 
-            $className = $this->astNodesCollector->getClassNames()[0];
-            $astMap[$className->getFQCN()] = new AstNode(
+            $astMap[$nameCollector->getNameString()] = new AstNode(
                 $fileInfo,
-                $className,
-                $this->astNodesCollector->getParents()[0] ?? null,
-                $this->astNodesCollector->getDependencies(),
-                $this->astNodesCollector->getInterfaces(),
-                $this->astNodesCollector->getTraits()
+                $nameCollector->getName(),
+                $parentCollector->getParent(),
+                $dependencyCollector->getDependencies(),
+                $interfaceCollector->getInterfaces(),
+                $traitCollector->getTraits()
             );
-
-            $this->astNodesCollector->reset();
         }
-
-        $this->traverser->removeVisitor($this->astNodesCollector);
 
         return $astMap ?? [];
     }

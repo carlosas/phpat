@@ -34,11 +34,17 @@ class ClassMatcher
         }
 
         if (count($parts) === 1) {
-            if (class_exists($parts[0]) || interface_exists($parts[0])) {
-                return $parts[0];
+            $name = $parts[0];
+
+            if (function_exists($name)) {
+                return null;
             }
 
-            return $this->namespace . '\\' . $parts[0];
+            if (class_exists($name) || interface_exists($name)) {
+                return $name;
+            }
+
+            return $this->namespace . '\\' . $name;
         }
 
         return null;

@@ -15,8 +15,8 @@ class DocBlock
         /** @var AliasedClass $b */
         $b = 2;
         /** @var DependencyNamespaceSimpleClass $c */
-        $c = 2;
+        $c = 3;
         /** @var Inheritance\InheritanceNamespaceSimpleClass $d */
-        $d = 2;
+        $d = 4;
     }
 }
