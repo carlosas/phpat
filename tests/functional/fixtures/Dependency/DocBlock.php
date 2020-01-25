@@ -19,4 +19,19 @@ class DocBlock
         /** @var Inheritance\InheritanceNamespaceSimpleClass $d */
         $d = 4;
     }
+
+    public function shouldNotBeCatched()
+    {
+        /** @var string $a */
+        $a = 1;
+        /** @var int $b */
+        $b = 2;
+        /** @var bool $c */
+        $c = 3;
+        /** @var null $d */
+        $d = 4;
+
+        $e = (int) is_null($d);
+        $e = (int) \is_null($d);
+    }
 }

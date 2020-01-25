@@ -53,7 +53,7 @@ class DependencyCollector extends NodeVisitorAbstract
 
     public function leaveNode(Node $node)
     {
-        if ($node instanceof Node\Name\FullyQualified) {
+        if ($node instanceof Node\Name\FullyQualified && !function_exists($node->toString())) {
             $this->addDependency($node->toString());
         }
 
