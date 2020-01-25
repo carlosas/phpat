@@ -19,10 +19,8 @@ class ParentCollector extends NodeVisitorAbstract
 
     public function leaveNode(Node $node)
     {
-        if (!is_null($node->extends ?? null) && !empty($node->extends)) {
-            if ($node->extends instanceof Node\Name\FullyQualified) {
-                $this->parent = ClassName::createFromFQCN($node->extends->toString());
-            }
+        if (isset($node->extends) && $node->extends instanceof Node\Name\FullyQualified) {
+            $this->parent = ClassName::createFromFQCN($node->extends->toString());
         }
     }
 

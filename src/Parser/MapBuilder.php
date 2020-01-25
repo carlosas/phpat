@@ -54,7 +54,11 @@ class MapBuilder
         $this->traverser->addVisitor($traitCollector);
         $parentCollector = new ParentCollector();
         $this->traverser->addVisitor($parentCollector);
-        $dependencyCollector = new DependencyCollector($this->phpDocParser, new ClassMatcher(), Configuration::getDependencyIgnoreDocBlocks());
+        $dependencyCollector = new DependencyCollector(
+            $this->phpDocParser,
+            new ClassMatcher(),
+            Configuration::getDependencyIgnoreDocBlocks()
+        );
         $this->traverser->addVisitor($dependencyCollector);
 
         $files = $this->finder->findAllFiles(Configuration::getSrcPath());

@@ -36,6 +36,6 @@ class NameCollector extends NodeVisitorAbstract
      */
     public function getNameString(): ?string
     {
-        return is_null($this->getName()) ? null : $this->getName()->getFQCN();
+        return ($this->getName() === null) ? null : $this->getName()->getFQCN();
     }
 }

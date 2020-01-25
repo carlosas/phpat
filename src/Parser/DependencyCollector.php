@@ -26,10 +26,6 @@ class DependencyCollector extends NodeVisitorAbstract
      * @var ClassMatcher
      */
     private $matcher;
-    /**
-     * @var string
-     */
-    private $previousNodeType;
 
     public function __construct(PhpDocParser $docParser, ClassMatcher $matcher, bool $ignoreDocBlocks = false)
     {
@@ -75,14 +71,12 @@ class DependencyCollector extends NodeVisitorAbstract
                 if (isset($tag->value->type->name)) {
                     $type = $tag->value->type->name;
                     $class = $this->matcher->findClass(explode('\\', $type));
-                    if (!is_null($class)) {
+                    if ($class !== null) {
                         $this->addDependency($class);
                     }
                 }
             }
         }
-        
-        $this->previousNodeType = get_class($node);
     }
 
     /**

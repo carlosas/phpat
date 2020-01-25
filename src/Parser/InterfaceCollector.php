@@ -19,7 +19,7 @@ class InterfaceCollector extends NodeVisitorAbstract
 
     public function leaveNode(Node $node)
     {
-        if (!is_null($node->implements ?? null) && !empty($node->implements)) {
+        if (isset($node->implements) && !empty($node->implements)) {
             foreach ($node->implements as $implements) {
                 if ($implements instanceof Node\Name\FullyQualified) {
                     $this->addInterface($implements->toString());
