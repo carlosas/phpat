@@ -8,7 +8,7 @@ use PhpParser\NodeVisitorAbstract;
 class InterfaceCollector extends NodeVisitorAbstract
 {
     /**
-     * @var array
+     * @return ClassName[]
      */
     private $interfaces = [];
 
@@ -22,17 +22,24 @@ class InterfaceCollector extends NodeVisitorAbstract
         if (!is_null($node->implements ?? null) && !empty($node->implements)) {
             foreach ($node->implements as $implements) {
                 if ($implements instanceof Node\Name\FullyQualified) {
-                    $this->interfaces[] = ClassName::createFromFQCN($implements->toString());
+                    $this->addInterface($implements->toString());
                 }
             }
         }
     }
 
     /**
-     * @return array
+     * @return ClassName[]
      */
     public function getInterfaces(): array
     {
         return $this->interfaces;
+    }
+
+    private function addInterface(string $fqcn): void
+    {
+        if (!isset($this->interfaces[$fqcn])) {
+            $this->interfaces[$fqcn] = ClassName::createFromFQCN($fqcn);
+        }
     }
 }

@@ -11,7 +11,7 @@ use PHPStan\PhpDocParser\Parser\TokenIterator;
 class DependencyCollector extends NodeVisitorAbstract
 {
     /**
-     * @var array
+     * @return ClassName[]
      */
     private $dependencies = [];
     /**
@@ -54,7 +54,7 @@ class DependencyCollector extends NodeVisitorAbstract
     public function leaveNode(Node $node)
     {
         if ($node instanceof Node\Name\FullyQualified) {
-            $this->dependencies[] = ClassName::createFromFQCN($node->toString());
+            $this->addDependency($node->toString());
         }
 
         if (!$this->ignoreDocBlocks && $node->getDocComment() !== null) {
@@ -65,7 +65,7 @@ class DependencyCollector extends NodeVisitorAbstract
                     $type = $tag->value->type->name;
                     $class = $this->matcher->findClass(explode('\\', $type));
                     if (!is_null($class)) {
-                        $this->dependencies[] = ClassName::createFromFQCN($class);
+                        $this->addDependency($class);
                     }
                 }
             }
@@ -73,10 +73,17 @@ class DependencyCollector extends NodeVisitorAbstract
     }
 
     /**
-     * @return array
+     * @return ClassName[]
      */
     public function getDependencies(): array
     {
         return $this->dependencies;
+    }
+
+    private function addDependency(string $fqcn): void
+    {
+        if (!isset($this->dependencies[$fqcn])) {
+            $this->dependencies[$fqcn] = ClassName::createFromFQCN($fqcn);
+        }
     }
 }

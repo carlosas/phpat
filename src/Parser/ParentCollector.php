@@ -7,15 +7,13 @@ use PhpParser\NodeVisitorAbstract;
 
 class ParentCollector extends NodeVisitorAbstract
 {
-    private $previousNode;
     /**
-     * @var ClassName
+     * @var ClassName|null
      */
     private $parent = null;
 
     public function beforeTraverse(array $nodes)
     {
-        $this->previousNode = null;
         $this->parent = null;
     }
 
@@ -26,8 +24,6 @@ class ParentCollector extends NodeVisitorAbstract
                 $this->parent = ClassName::createFromFQCN($node->extends->toString());
             }
         }
-
-        $this->previousNode = $node;
     }
 
     /**

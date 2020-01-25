@@ -33,4 +33,16 @@ class DependencyTest extends ArchitectureTest
             ->classesThat(Selector::havePath('SimpleClass.php'))
             ->build();
     }
+
+    public function testDocblocksDoNotDependOnWeirdos(): Rule
+    {
+        return $this->newRule
+            ->classesThat(Selector::havePath('Dependency/DocBlock.php'))
+            ->mustOnlyDependOn()
+            ->classesThat(Selector::havePath('SimpleClass.php'))
+            ->andClassesThat(Selector::havePath('AnotherSimpleClass.php'))
+            ->andClassesThat(Selector::havePath('Dependency/DependencyNamespaceSimpleClass.php'))
+            ->andClassesThat(Selector::havePath('Inheritance/InheritanceNamespaceSimpleClass.php'))
+            ->build();
+    }
 }

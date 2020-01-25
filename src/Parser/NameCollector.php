@@ -8,7 +8,7 @@ use PhpParser\NodeVisitorAbstract;
 class NameCollector extends NodeVisitorAbstract
 {
     /**
-     * @var ClassName
+     * @var ClassName|null
      */
     private $name = null;
 
