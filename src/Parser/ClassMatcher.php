@@ -33,18 +33,20 @@ class ClassMatcher
             return $this->declarations[$link] . '\\' . implode('\\', $parts);
         }
 
-        if (count($parts) === 1) {
-            $name = $parts[0];
+        if (count($parts) > 1) {
+            return null;
+        }
 
-            if (function_exists($name)) {
-                return null;
-            }
-
-            if (class_exists($name) || interface_exists($name)) {
-                return $name;
-            }
-
-            return $this->namespace . '\\' . $name;
+        $name = $parts[0];
+        if (function_exists($name)) {
+            return null;
+        }
+        if (class_exists($name) || interface_exists($name)) {
+            return $name;
+        }
+        $namespacedName = $this->namespace . '\\' . $name;
+        if (class_exists($namespacedName) || interface_exists($namespacedName) || trait_exists($namespacedName)) {
+            return $namespacedName;
         }
 
         return null;
