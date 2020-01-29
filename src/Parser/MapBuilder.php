@@ -7,7 +7,6 @@ use PhpAT\File\FileFinder;
 use PhpParser\ErrorHandler\Throwing;
 use PhpParser\NameContext;
 use PhpParser\NodeTraverserInterface;
-use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 
@@ -44,7 +43,8 @@ class MapBuilder
 
     public function build(): array
     {
-        $nameResolver = new NameResolver();
+        $context = new NameContext(new Throwing());
+        $nameResolver = new CustomNameResolver($context);
         $this->traverser->addVisitor($nameResolver);
         $nameCollector = new NameCollector();
         $this->traverser->addVisitor($nameCollector);
@@ -56,7 +56,7 @@ class MapBuilder
         $this->traverser->addVisitor($parentCollector);
         $dependencyCollector = new DependencyCollector(
             $this->phpDocParser,
-            new ClassMatcher(),
+            $context,
             Configuration::getDependencyIgnoreDocBlocks()
         );
         $this->traverser->addVisitor($dependencyCollector);

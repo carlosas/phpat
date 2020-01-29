@@ -2,6 +2,7 @@
 
 namespace PhpAT\Parser;
 
+use PhpParser\NameContext;
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 use PHPStan\PhpDocParser\Lexer\Lexer;
@@ -23,44 +24,25 @@ class DependencyCollector extends NodeVisitorAbstract
      */
     private $ignoreDocBlocks;
     /**
-     * @var ClassMatcher
+     * @var NameContext
      */
-    private $matcher;
+    private $context;
 
-    public function __construct(PhpDocParser $docParser, ClassMatcher $matcher, bool $ignoreDocBlocks = false)
+    public function __construct(PhpDocParser $docParser, NameContext &$nameContext, bool $ignoreDocBlocks = false)
     {
         $this->docParser = $docParser;
         $this->ignoreDocBlocks = $ignoreDocBlocks;
-        $this->matcher = $matcher;
+        $this->context = $nameContext;
     }
 
     public function beforeTraverse(array $nodes)
     {
         $this->dependencies = [];
-        $this->matcher->reset();
-    }
-
-    public function enterNode(Node $node)
-    {
-        if ($node instanceof Node\Stmt\Namespace_) {
-            $this->matcher->saveNamespace($node->name->toString());
-        }
-
-        if ($node instanceof Node\Stmt\UseUse) {
-            $this->matcher->addDeclaration(implode('\\', $node->name->parts), $node->getAlias()->name);
-        }
     }
 
     public function leaveNode(Node $node)
     {
-        if (
-            $node instanceof Node\Name\FullyQualified
-            && (
-                class_exists($node->toString())
-                || interface_exists($node->toString())
-                || trait_exists($node->toString())
-            )
-        ) {
+        if ($node instanceof Node\Name\FullyQualified) {
             $this->addDependency($node->toString());
         }
 
@@ -69,8 +51,11 @@ class DependencyCollector extends NodeVisitorAbstract
             $nodes = $this->docParser->parse(new TokenIterator((new Lexer())->tokenize($doc)));
             foreach ($nodes->getTags() as $tag) {
                 if (isset($tag->value->type->name)) {
-                    $type = $tag->value->type->name;
-                    $class = $this->matcher->findClass(explode('\\', $type));
+                    $name = $tag->value->type->name;
+                    $nameNode = strpos($name, '\\') === 0
+                        ? new Node\Name\FullyQualified($name)
+                        : new Node\Name($name);
+                    $class = $this->context->getResolvedClassName($nameNode);
                     if ($class !== null) {
                         $this->addDependency($class);
                     }
@@ -89,8 +74,13 @@ class DependencyCollector extends NodeVisitorAbstract
 
     private function addDependency(string $fqcn): void
     {
-        if (!isset($this->dependencies[$fqcn])) {
+        if (!isset($this->dependencies[$fqcn]) && $this->isAutoloaded($fqcn)) {
             $this->dependencies[$fqcn] = ClassName::createFromFQCN($fqcn);
         }
+    }
+
+    private function isAutoloaded(string $fqcn): bool
+    {
+        return class_exists($fqcn) || interface_exists($fqcn) || trait_exists($fqcn);
     }
 }
