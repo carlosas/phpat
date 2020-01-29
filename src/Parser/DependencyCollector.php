@@ -74,8 +74,9 @@ class DependencyCollector extends NodeVisitorAbstract
 
     private function addDependency(string $fqcn): void
     {
-        if (!isset($this->dependencies[$fqcn]) && $this->isAutoloaded($fqcn)) {
-            $this->dependencies[$fqcn] = ClassName::createFromFQCN($fqcn);
+        $class = ClassName::createFromFQCN($fqcn);
+        if (!isset($this->dependencies[$fqcn]) && $this->isAutoloaded($fqcn) && $class->getNamespace() !== '') {
+            $this->dependencies[$fqcn] = $class;
         }
     }
 
