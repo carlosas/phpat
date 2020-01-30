@@ -71,7 +71,7 @@ class MustOnlyDepend implements Assertion
     {
         $message = $result
             ? $fqcnOrigin . ' does not depend on non-selected classes'
-            : $fqcnOrigin . ' depends ' . $fqcnDestination;
+            : $fqcnOrigin . ' depends on ' . $fqcnDestination;
         $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
 
         $this->eventDispatcher->dispatch(new $event($message));
