@@ -65,6 +65,18 @@ class DependencyTest extends ArchitectureTest
             ->build();
     }
 
+    public function testGroupUseDeclarationGetResolved(): Rule
+    {
+        return $this->newRule
+            ->classesThat(Selector::havePath('Dependency/GroupUse.php'))
+            ->mustDependOn()
+            ->classesThat(Selector::havePath('SimpleClass.php'))
+            ->andClassesThat(Selector::havePath('AnotherSimpleClass.php'))
+            ->andClassesThat(Selector::havePath('Dependency/DependencyNamespaceSimpleClass.php'))
+            ->andClassesThat(Selector::havePath('Inheritance/InheritanceNamespaceSimpleClass.php'))
+            ->build();
+    }
+
     public function testDocblocksDoNotDependOnOtherStuff(): Rule
     {
         return $this->newRule
