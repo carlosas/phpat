@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.5.8
+- Add warnings when selectors do not find any class
+- Fix group use declarations
+- Fix some functions and primitive types resolved as classes
+- Ignore dependencies without namespace (predefined PHP classes)
+
 ## 0.5.7
 - Added support for `*` on _include_ and _exclude_ options
 - Fixed ignored _include_ option when using other than PathSelector
