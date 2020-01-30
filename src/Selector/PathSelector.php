@@ -85,4 +85,12 @@ class PathSelector implements SelectorInterface
 
         return $result ?? [];
     }
+
+    /**
+     * @return string
+     */
+    public function getParameter(): string
+    {
+        return $this->path;
+    }
 }

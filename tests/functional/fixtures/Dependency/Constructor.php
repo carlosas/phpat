@@ -14,5 +14,6 @@ class Constructor
         DependencyNamespaceSimpleClass $dependencyNamespaceSimpleClass,
         Inheritance\InheritanceNamespaceSimpleClass $inheritanceNamespaceSimpleClass
     ) {
+        throw new \BadMethodCallException();
     }
 }

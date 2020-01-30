@@ -55,6 +55,14 @@ class IncludeSelector implements SelectorInterface
         return $result ?? [];
     }
 
+    /**
+     * @return string
+     */
+    public function getParameter(): string
+    {
+        return $this->traitName;
+    }
+
     private function matchesPattern(string $className, string $pattern): bool
     {
         $pattern = preg_replace_callback(

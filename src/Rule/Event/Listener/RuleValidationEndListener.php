@@ -21,6 +21,6 @@ class RuleValidationEndListener implements EventListenerInterface
 
     public function __invoke(EventInterface $event)
     {
-        $this->output->ruleValidationEnd(RuleValidationStorage::flushErrors());
+        $this->output->ruleValidationEnd(RuleValidationStorage::flushErrors(), RuleValidationStorage::flushWarnings());
     }
 }

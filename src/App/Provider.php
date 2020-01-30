@@ -97,7 +97,8 @@ class Provider
 
         $this->builder
             ->register(SelectorResolver::class, SelectorResolver::class)
-            ->addArgument($this->builder);
+            ->addArgument($this->builder)
+            ->addArgument(new Reference(EventDispatcher::class));
 
         $this->builder
             ->register(StatementBuilder::class, StatementBuilder::class)

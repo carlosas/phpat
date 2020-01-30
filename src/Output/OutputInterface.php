@@ -10,7 +10,7 @@ interface OutputInterface
 
     public function ruleValidationStart(string $ruleName): void;
 
-    public function ruleValidationEnd(array $errorMessages): void;
+    public function ruleValidationEnd(array $errorMessages, array $warningMessages): void;
 
     public function statementValid(string $message): void;
 

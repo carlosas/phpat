@@ -9,6 +9,10 @@ class RuleValidationStorage
     /**
      * @var array
      */
+    private static $warnings = [];
+    /**
+     * @var array
+     */
     private static $errors = [];
     /**
      * @var array
@@ -39,6 +43,14 @@ class RuleValidationStorage
     /**
      * @param string $message
      */
+    public static function addWarning(string $message): void
+    {
+        self::$warnings[] = $message;
+    }
+
+    /**
+     * @param string $message
+     */
     public static function addError(string $message): void
     {
         self::$errors[] = $message;
@@ -53,6 +65,17 @@ class RuleValidationStorage
     {
         self::$fatalErrors[] = $message;
         self::$anyRuleHadErrors = true;
+    }
+
+    /**
+     * @return array
+     */
+    public static function flushWarnings(): array
+    {
+        $w = self::$warnings;
+        self::$warnings = [];
+
+        return $w;
     }
 
     /**

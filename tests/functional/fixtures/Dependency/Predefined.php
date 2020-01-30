@@ -2,19 +2,13 @@
 
 namespace Tests\PhpAT\functional\fixtures\Dependency;
 
-use Tests\PhpAT\functional\fixtures\SimpleClass;
-
-class SelfStatic
+class Predefined
 {
-    public function doSomething(): self
+    /**
+     * @throws \Exception
+     */
+    public function doSomething()
     {
-        return $this;
-    }
-
-    public function shouldNotBeCatched(): self
-    {
-        $a = new SimpleClass();
-
-        return static::doSomething();
+        throw new \BadMethodCallException();
     }
 }

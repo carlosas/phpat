@@ -3,34 +3,18 @@
 namespace Tests\PhpAT\functional\fixtures\Dependency;
 
 use Tests\PhpAT\functional\fixtures\SimpleClass;
-use Tests\PhpAT\functional\fixtures\AnotherSimpleClass as AliasedClass;
-use Tests\PhpAT\functional\fixtures\Inheritance;
 
-class DocBlock
+class SelfStatic
 {
-    public function doSomething()
+    public function doSomething(): self
     {
-        /** @var SimpleClass $a */
-        $a = 1;
-        /** @var AliasedClass $b */
-        $b = 2;
-        /** @var DependencyNamespaceSimpleClass $c */
-        $c = 3;
-        /** @var Inheritance\InheritanceNamespaceSimpleClass $d */
-        $d = 4;
+        return $this;
     }
 
-    public function shouldNotBeCatched()
+    public function shouldNotBeCatched(): self
     {
-        /** @var string $a */
-        $a = 1;
-        /** @var int $b */
-        $b = 2;
-        /** @var \int $b */
-        $b = 2;
-        /** @var bool $c */
-        $c = 3;
-        /** @var null $d */
-        $d = 4;
+        $a = new SimpleClass();
+
+        return static::doSomething();
     }
 }

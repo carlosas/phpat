@@ -18,4 +18,6 @@ interface SelectorInterface
     public function setAstMap(array $astMap);
 
     public function select(): array;
+
+    public function getParameter(): string;
 }

@@ -48,9 +48,13 @@ class StdOutput implements OutputInterface
         $this->writeLn(str_repeat('-', strlen($ruleName) + 4), OutputLevel::INFO);
     }
 
-    public function ruleValidationEnd(array $errorMessages): void
+    public function ruleValidationEnd(array $errorMessages, array $warningMessages): void
     {
         $this->writeLn('', OutputLevel::INFO);
+        foreach ($warningMessages as $warning) {
+            $this->writeLn('WARNING: ' . $warning, OutputLevel::WARNING);
+        }
+
         if (empty($errorMessages)) {
             $this->writeLn('OK', OutputLevel::INFO);
         }
