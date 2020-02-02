@@ -1,9 +1,10 @@
 <?php
 
-namespace PhpAT\Parser;
+namespace PhpAT\Parser\Ast;
 
 use PhpAT\App\Configuration;
 use PhpAT\File\FileFinder;
+use PhpAT\Parser\AstNode;
 use PhpParser\ErrorHandler\Throwing;
 use PhpParser\NameContext;
 use PhpParser\NodeTraverserInterface;
@@ -43,8 +44,8 @@ class MapBuilder
 
     public function build(): array
     {
-        $context = new NameContext(new Throwing());
-        $nameResolver = new CustomNameResolver($context);
+        $nameContext = new NameContext(new Throwing());
+        $nameResolver = new NameResolver($nameContext);
         $this->traverser->addVisitor($nameResolver);
         $nameCollector = new NameCollector();
         $this->traverser->addVisitor($nameCollector);
@@ -56,7 +57,7 @@ class MapBuilder
         $this->traverser->addVisitor($parentCollector);
         $dependencyCollector = new DependencyCollector(
             $this->phpDocParser,
-            $context,
+            $nameContext,
             Configuration::getDependencyIgnoreDocBlocks()
         );
         $this->traverser->addVisitor($dependencyCollector);
@@ -72,10 +73,12 @@ class MapBuilder
             $astMap[$nameCollector->getNameString()] = new AstNode(
                 $fileInfo,
                 $nameCollector->getName(),
-                $parentCollector->getParent(),
-                $dependencyCollector->getDependencies(),
-                $interfaceCollector->getInterfaces(),
-                $traitCollector->getTraits()
+                array_merge(
+                    $parentCollector->getResults(),
+                    $dependencyCollector->getResults(),
+                    $interfaceCollector->getResults(),
+                    $traitCollector->getResults()
+                )
             );
         }
 

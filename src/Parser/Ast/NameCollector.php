@@ -1,21 +1,15 @@
 <?php
 
-namespace PhpAT\Parser;
+namespace PhpAT\Parser\Ast;
 
+use PhpAT\Parser\ClassName;
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 
 class NameCollector extends NodeVisitorAbstract
 {
-    /**
-     * @var ClassName|null
-     */
+    /** @var ClassName|null */
     private $name = null;
-
-    public function beforeTraverse(array $nodes)
-    {
-        $this->name = null;
-    }
 
     public function leaveNode(Node $node)
     {
@@ -31,6 +25,7 @@ class NameCollector extends NodeVisitorAbstract
     {
         return $this->name;
     }
+
     /**
      * @return string|null
      */

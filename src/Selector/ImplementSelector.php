@@ -5,21 +5,22 @@ declare(strict_types=1);
 namespace PhpAT\Selector;
 
 use PhpAT\Parser\AstNode;
+use PhpAT\Parser\Relation\Composition;
 
 class ImplementSelector implements SelectorInterface
 {
     /**
      * @var string
      */
-    private $interfaceName;
+    private $fqcn;
     /**
      * @var AstNode[]
      */
     private $astMap;
 
-    public function __construct(string $interfaceName)
+    public function __construct(string $fqcn)
     {
-        $this->interfaceName = $interfaceName;
+        $this->fqcn = $fqcn;
     }
 
     public function getDependencies(): array
@@ -45,8 +46,11 @@ class ImplementSelector implements SelectorInterface
     public function select(): array
     {
         foreach ($this->astMap as $astNode) {
-            foreach ($astNode->getInterfaces() as $interface) {
-                if ($this->matchesPattern($interface, $this->interfaceName)) {
+            foreach ($astNode->getRelations() as $relation) {
+                if (
+                    $relation instanceof Composition
+                    && $this->matchesPattern($relation->relatedClass->getFQCN(), $this->fqcn)
+                ) {
                     $result[$astNode->getClassName()] = $astNode->getClassName();
                 }
             }
@@ -60,7 +64,7 @@ class ImplementSelector implements SelectorInterface
      */
     public function getParameter(): string
     {
-        return $this->interfaceName;
+        return $this->fqcn;
     }
 
     private function matchesPattern(string $className, string $pattern): bool

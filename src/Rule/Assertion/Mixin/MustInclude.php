@@ -6,6 +6,7 @@ namespace PhpAT\Rule\Assertion\Mixin;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
+use PhpAT\Parser\Relation\Mixin;
 use PhpAT\Rule\Assertion\Assertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
@@ -32,13 +33,25 @@ class MustInclude implements Assertion
                 continue;
             }
 
+            $mixins = $this->getMixins($node);
             foreach ($fqcnDestinations as $destination) {
-                $result = in_array($destination, $node->getMixins());
+                $result = in_array($destination, $mixins);
                 $this->dispatchResult($result, $inverse, $fqcnOrigin, $destination);
             }
         }
 
         return;
+    }
+
+    private function getMixins(AstNode $node): array
+    {
+        foreach ($node->getRelations() as $relation) {
+            if ($relation instanceof Mixin) {
+                $mixins[] = $relation->relatedClass->getFQCN();
+            }
+        }
+
+        return $mixins ?? [];
     }
 
     private function dispatchResult(bool $result, bool $inverse, string $fqcnOrigin, string $fqcnDestination): void

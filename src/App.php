@@ -7,7 +7,7 @@ namespace PhpAT;
 use PhpAT\App\Configuration;
 use PhpAT\App\Event\SuiteEndEvent;
 use PhpAT\App\Event\SuiteStartEvent;
-use PhpAT\Parser\MapBuilder;
+use PhpAT\Parser\Ast\MapBuilder;
 use PhpAT\App\RuleValidationStorage;
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Rule\Event\RuleValidationEndEvent;

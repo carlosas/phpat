@@ -1,20 +1,17 @@
 <?php
 
-namespace PhpAT\Parser;
+namespace PhpAT\Parser\Ast;
 
+use PhpAT\Parser\ClassName;
+use PhpAT\Parser\Relation\Dependency;
 use PhpParser\NameContext;
 use PhpParser\Node;
-use PhpParser\NodeVisitorAbstract;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 
-class DependencyCollector extends NodeVisitorAbstract
+class DependencyCollector extends AbstractRelationCollector
 {
-    /**
-     * @return ClassName[]
-     */
-    private $dependencies = [];
     /**
      * @var PhpDocParser
      */
@@ -26,24 +23,29 @@ class DependencyCollector extends NodeVisitorAbstract
     /**
      * @var NameContext
      */
-    private $context;
+    private $nameContext;
+    /**
+     * @var string[]
+     */
+    private $found = [];
 
     public function __construct(PhpDocParser $docParser, NameContext &$nameContext, bool $ignoreDocBlocks = false)
     {
         $this->docParser = $docParser;
         $this->ignoreDocBlocks = $ignoreDocBlocks;
-        $this->context = $nameContext;
+        $this->nameContext = $nameContext;
     }
 
     public function beforeTraverse(array $nodes)
     {
-        $this->dependencies = [];
+        parent::beforeTraverse($nodes);
+        $this->found = [];
     }
 
     public function leaveNode(Node $node)
     {
         if ($node instanceof Node\Name\FullyQualified) {
-            $this->addDependency($node->toString());
+            $this->addDependency($node->getLine(), $node->toString());
         }
 
         if (!$this->ignoreDocBlocks && $node->getDocComment() !== null) {
@@ -55,28 +57,21 @@ class DependencyCollector extends NodeVisitorAbstract
                     $nameNode = strpos($name, '\\') === 0
                         ? new Node\Name\FullyQualified($name)
                         : new Node\Name($name);
-                    $class = $this->context->getResolvedClassName($nameNode);
+                    $class = $this->nameContext->getResolvedClassName($nameNode);
                     if ($class !== null) {
-                        $this->addDependency($class);
+                        $this->addDependency($node->getLine(), $class);
                     }
                 }
             }
         }
     }
 
-    /**
-     * @return ClassName[]
-     */
-    public function getDependencies(): array
-    {
-        return $this->dependencies;
-    }
-
-    private function addDependency(string $fqcn): void
+    private function addDependency(int $line, string $fqcn): void
     {
         $class = ClassName::createFromFQCN($fqcn);
-        if (!isset($this->dependencies[$fqcn]) && $this->isAutoloaded($fqcn) && $class->getNamespace() !== '') {
-            $this->dependencies[$fqcn] = $class;
+        if (!array_key_exists($fqcn, $this->found) && $this->isAutoloaded($fqcn) && $class->getNamespace() !== '') {
+            $this->found[$fqcn] = $class->getFQCN();
+            $this->results[] = new Dependency($line, $class);
         }
     }
 

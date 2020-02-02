@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpAT\Selector;
 
 use PhpAT\Parser\AstNode;
+use PhpAT\Parser\Relation\Inheritance;
 
 class ExtendSelector implements SelectorInterface
 {
@@ -45,8 +46,13 @@ class ExtendSelector implements SelectorInterface
     public function select(): array
     {
         foreach ($this->astMap as $astNode) {
-            if ($this->matchesPattern($astNode->getParent(), $this->fqcn)) {
-                $result[$astNode->getClassName()] = $astNode->getClassName();
+            foreach ($astNode->getRelations() as $relation) {
+                if (
+                    $relation instanceof Inheritance
+                    && $this->matchesPattern($relation->relatedClass->getFQCN(), $this->fqcn)
+                ) {
+                    $result[$astNode->getClassName()] = $astNode->getClassName();
+                }
             }
         }
 
