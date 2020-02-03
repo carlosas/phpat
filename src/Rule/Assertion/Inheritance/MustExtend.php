@@ -6,6 +6,7 @@ namespace PhpAT\Rule\Assertion\Inheritance;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
+use PhpAT\Parser\Relation\Inheritance;
 use PhpAT\Rule\Assertion\Assertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
@@ -33,12 +34,23 @@ class MustExtend implements Assertion
             }
 
             foreach ($fqcnDestinations as $destination) {
-                $result = $destination === $node->getParent();
+                $result = $destination === $this->getParent($node);
                 $this->dispatchResult($result, $inverse, $fqcnOrigin, $destination);
             }
         }
 
         return;
+    }
+
+    private function getParent(AstNode $node): ?string
+    {
+        foreach ($node->getRelations() as $relation) {
+            if ($relation instanceof Inheritance) {
+                return $relation->relatedClass->getFQCN();
+            }
+        }
+
+        return null;
     }
 
     private function dispatchResult(bool $result, bool $inverse, string $fqcnOrigin, string $fqcnDestination): void

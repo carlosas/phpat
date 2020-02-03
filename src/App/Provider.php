@@ -10,7 +10,7 @@ use PHPAT\EventDispatcher\ListenerProvider;
 use PhpAT\File\FileFinder;
 use PhpAT\File\SymfonyFinderAdapter;
 use PhpAT\Output\OutputInterface;
-use PhpAT\Parser\MapBuilder;
+use PhpAT\Parser\Ast\MapBuilder;
 use PhpAT\Rule\RuleBuilder;
 use PhpAT\Rule\Assertion\Composition;
 use PhpAT\Rule\Assertion\Dependency;

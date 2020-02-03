@@ -6,9 +6,11 @@ namespace PhpAT\Rule\Assertion\Composition;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
+use PhpAT\Parser\Relation\Composition;
 use PhpAT\Rule\Assertion\Assertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
+use PhpParser\Node;
 
 class MustOnlyImplement implements Assertion
 {
@@ -32,30 +34,42 @@ class MustOnlyImplement implements Assertion
                 continue;
             }
 
-            $implemented = $node->getInterfaces();
+            $interfaces = $this->getInterfaces($node);
+
             foreach ($fqcnDestinations as $fqcnDestination) {
-                $result = array_search($fqcnDestination, $implemented, true);
+                $result = array_search($fqcnDestination, $interfaces, true);
 
                 if ($result !== false) {
                     $this->dispatchSelectedResult(true, $fqcnOrigin, $fqcnDestination);
-                    unset($implemented[$result]);
+                    unset($interfaces[$result]);
                     continue;
                 }
                 $this->dispatchSelectedResult(false, $fqcnOrigin, $fqcnDestination);
             }
 
-            if (empty($implemented)) {
+            if (empty($interfaces)) {
                 $this->dispatchOthersResult(true, $fqcnOrigin);
 
                 return;
             }
 
-            foreach ($implemented as $interface) {
+            foreach ($interfaces as $interface) {
                 $this->dispatchOthersResult(false, $fqcnOrigin, $interface);
             }
         }
 
         return;
+    }
+
+    private function getInterfaces(AstNode $node): array
+    {
+        foreach ($node->getRelations() as $relation) {
+            if ($relation instanceof Composition) {
+                $interfaces[] = $relation->relatedClass->getFQCN();
+            }
+        }
+
+        return $interfaces ?? [];
     }
 
     private function dispatchSelectedResult(bool $result, string $fqcnOrigin, string $fqcnDestination): void

@@ -6,6 +6,7 @@ namespace PhpAT\Rule\Assertion\Composition;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
+use PhpAT\Parser\Relation\Composition;
 use PhpAT\Rule\Assertion\Assertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
@@ -32,25 +33,37 @@ class CanOnlyImplement implements Assertion
                 continue;
             }
 
-            $implemented = $node->getInterfaces();
-            foreach ($implemented as $key => $value) {
+            $interfaces = $this->getInterfaces($node);
+
+            foreach ($interfaces as $key => $value) {
                 if (in_array($value, $fqcnDestinations)) {
-                    unset($implemented[$key]);
+                    unset($interfaces[$key]);
                 }
             }
 
-            if (empty($implemented)) {
+            if (empty($interfaces)) {
                 $this->dispatchResult(true, $fqcnOrigin);
 
                 return;
             }
 
-            foreach ($implemented as $interface) {
+            foreach ($interfaces as $interface) {
                 $this->dispatchResult(false, $fqcnOrigin, $interface);
             }
         }
 
         return;
+    }
+
+    private function getInterfaces(AstNode $node): array
+    {
+        foreach ($node->getRelations() as $relation) {
+            if ($relation instanceof Composition) {
+                $interfaces[] = $relation->relatedClass->getFQCN();
+            }
+        }
+
+        return $interfaces ?? [];
     }
 
     private function dispatchResult(bool $result, string $fqcnOrigin, string $fqcnDestination = ''): void

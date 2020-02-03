@@ -6,6 +6,7 @@ namespace PhpAT\Rule\Assertion\Dependency;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
+use PhpAT\Parser\Relation\Dependency;
 use PhpAT\Rule\Assertion\Assertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
@@ -32,7 +33,7 @@ class MustOnlyDepend implements Assertion
                 continue;
             }
 
-            $dependencies = $node->getDependencies();
+            $dependencies = $this->getDependencies($node);
             foreach ($fqcnDestinations as $fqcnDestination) {
                 $result = array_search($fqcnDestination, $dependencies, true);
 
@@ -56,6 +57,17 @@ class MustOnlyDepend implements Assertion
         }
 
         return;
+    }
+
+    private function getDependencies(AstNode $node): array
+    {
+        foreach ($node->getRelations() as $relation) {
+            if ($relation instanceof Dependency) {
+                $dependencies[] = $relation->relatedClass->getFQCN();
+            }
+        }
+
+        return $dependencies ?? [];
     }
 
     private function dispatchSelectedResult(bool $result, string $fqcnOrigin, string $fqcnDestination): void

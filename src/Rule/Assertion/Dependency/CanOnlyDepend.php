@@ -6,6 +6,7 @@ namespace PhpAT\Rule\Assertion\Dependency;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
+use PhpAT\Parser\Relation\Dependency;
 use PhpAT\Rule\Assertion\Assertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
@@ -32,7 +33,8 @@ class CanOnlyDepend implements Assertion
                 continue;
             }
 
-            $dependencies = $node->getDependencies();
+            $dependencies = $this->getDependencies($node);
+
             foreach ($dependencies as $key => $value) {
                 if (in_array($value, $fqcnDestinations)) {
                     unset($dependencies[$key]);
@@ -51,6 +53,17 @@ class CanOnlyDepend implements Assertion
         }
 
         return;
+    }
+
+    private function getDependencies(AstNode $node): array
+    {
+        foreach ($node->getRelations() as $relation) {
+            if ($relation instanceof Dependency) {
+                $dependencies[] = $relation->relatedClass->getFQCN();
+            }
+        }
+
+        return $dependencies ?? [];
     }
 
     private function dispatchResult(bool $result, string $fqcnOrigin, string $fqcnDestination = ''): void

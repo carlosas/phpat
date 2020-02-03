@@ -5,21 +5,22 @@ declare(strict_types=1);
 namespace PhpAT\Selector;
 
 use PhpAT\Parser\AstNode;
+use PhpAT\Parser\Relation\Mixin;
 
 class IncludeSelector implements SelectorInterface
 {
     /**
      * @var string
      */
-    private $traitName;
+    private $fqcn;
     /**
      * @var AstNode[]
      */
     private $astMap;
 
-    public function __construct(string $traitName)
+    public function __construct(string $fqcn)
     {
-        $this->traitName = $traitName;
+        $this->fqcn = $fqcn;
     }
 
     public function getDependencies(): array
@@ -45,8 +46,11 @@ class IncludeSelector implements SelectorInterface
     public function select(): array
     {
         foreach ($this->astMap as $astNode) {
-            foreach ($astNode->getMixins() as $trait) {
-                if ($this->matchesPattern($trait, $this->traitName)) {
+            foreach ($astNode->getRelations() as $relation) {
+                if (
+                    $relation instanceof Mixin
+                    && $this->matchesPattern($relation->relatedClass->getFQCN(), $this->fqcn)
+                ) {
                     $result[$astNode->getClassName()] = $astNode->getClassName();
                 }
             }
@@ -60,7 +64,7 @@ class IncludeSelector implements SelectorInterface
      */
     public function getParameter(): string
     {
-        return $this->traitName;
+        return $this->fqcn;
     }
 
     private function matchesPattern(string $className, string $pattern): bool

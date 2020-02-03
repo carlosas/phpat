@@ -2,57 +2,31 @@
 
 namespace PhpAT\Parser;
 
+use PhpAT\Parser\Relation\AbstractRelation;
+
 class AstNode implements \JsonSerializable
 {
     /**
      * @var string
      */
-    private $className;
-    /**
-     * @var string[]
-     */
-    private $dependencies;
-    /**
-     * @var string[]
-     */
-    private $interfaces;
-    /**
-     * @var string
-     */
-    private $parent;
-    /**
-     * @var string
-     */
     private $filePathname;
     /**
-     * @var string[]
-     */
-    private $mixins;
-    /**
      * @var string
      */
-    private $assertion;
+    private $className;
+    /**
+     * @var AbstractRelation[]
+     */
+    private $relations;
 
     public function __construct(
         \SplFileInfo $fileInfo,
         ClassName $className,
-        ?ClassName $parent,
-        array $dependencies,
-        array $interfaces,
-        array $mixins
+        array $relations
     ) {
         $this->filePathname = $this->normalizePathname($fileInfo->getPathname());
         $this->className = $className->getFQCN();
-        $this->parent = $parent === null ? null : $parent->getFQCN();
-        foreach ($dependencies as $cn) {
-            $this->dependencies[] = $cn->getFQCN();
-        }
-        foreach ($interfaces as $cn) {
-            $this->interfaces[] = $cn->getFQCN();
-        }
-        foreach ($mixins as $cn) {
-            $this->mixins[] = $cn->getFQCN();
-        }
+        $this->relations = $relations;
     }
 
     /**
@@ -64,30 +38,6 @@ class AstNode implements \JsonSerializable
     }
 
     /**
-     * @return string[]
-     */
-    public function getDependencies(): array
-    {
-        return $this->dependencies ?? [];
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getInterfaces(): array
-    {
-        return $this->interfaces ?? [];
-    }
-
-    /**
-     * @return string
-     */
-    public function getParent(): string
-    {
-        return $this->parent ?? '';
-    }
-
-    /**
      * @return string
      */
     public function getFilePathname(): string
@@ -96,11 +46,11 @@ class AstNode implements \JsonSerializable
     }
 
     /**
-     * @return string[]
+     * @return AbstractRelation[]
      */
-    public function getMixins(): array
+    public function getRelations(): array
     {
-        return $this->mixins ?? [];
+        return $this->relations;
     }
 
     public function jsonSerialize(): array
@@ -108,9 +58,7 @@ class AstNode implements \JsonSerializable
         return [
             'pathname' => $this->getFilePathname(),
             'classname' => $this->getClassName(),
-            'parent' => $this->getParent(),
-            'dependencies' => $this->getDependencies(),
-            'interfaces' => $this->getInterfaces(),
+            'relations' => $this->getRelations(),
         ];
     }
 
