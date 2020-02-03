@@ -5,6 +5,10 @@ namespace Tests\PhpAT\unit\Rule\Assertion\Dependency;
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
 use PhpAT\Parser\ClassName;
+use PhpAT\Parser\Relation\Composition;
+use PhpAT\Parser\Relation\Dependency;
+use PhpAT\Parser\Relation\Inheritance;
+use PhpAT\Parser\Relation\Mixin;
 use PhpAT\Rule\Assertion\Dependency\MustOnlyDepend;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
@@ -75,16 +79,14 @@ class MustOnlyDependTest extends TestCase
             new AstNode(
                 new \SplFileInfo('folder/Example/ClassExample.php'), //File
                 new ClassName('Example', 'ClassExample'), //Classname
-                new ClassName('Example', 'ParentClassExample'), //Parent
                 [
-                    new ClassName('Example', 'AnotherClassExample'), //Dependency
-                    new ClassName('Vendor', 'ThirdPartyExample') //Dependency
-                ],
-                [
-                    new ClassName('Example', 'InterfaceExample'), //Interface
-                    new ClassName('Example', 'AnotherInterface') //Interface
-                ],
-                [new ClassName('Example', 'TraitExample')] //Trait
+                    new Inheritance(0, new ClassName('Example', 'ParentClassExample')),
+                    new Dependency(0, new ClassName('Example', 'AnotherClassExample')),
+                    new Dependency(0, new ClassName('Vendor', 'ThirdPartyExample')),
+                    new Composition(0, new ClassName('Example', 'InterfaceExample')),
+                    new Composition(0, new ClassName('Example', 'AnotherInterface')),
+                    new Mixin(0, new ClassName('Example', 'TraitExample'))
+                ]
             )
         ];
     }
