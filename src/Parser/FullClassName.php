@@ -2,7 +2,7 @@
 
 namespace PhpAT\Parser;
 
-class ClassName
+class FullClassName implements ClassLike
 {
     private $namespace;
     private $name;
@@ -36,5 +36,10 @@ class ClassName
         return (empty($this->getNamespace()))
             ? $this->getName()
             : $this->getNamespace() . '\\' . $this->getName();
+    }
+
+    public function matches(string $name): bool
+    {
+        return $this->getFQCN() === $name;
     }
 }

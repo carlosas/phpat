@@ -2,7 +2,7 @@
 
 namespace PhpAT\Parser\Ast;
 
-use PhpAT\Parser\ClassName;
+use PhpAT\Parser\FullClassName;
 use PhpAT\Parser\Relation\Mixin;
 use PhpParser\Node;
 
@@ -33,7 +33,7 @@ class TraitCollector extends AbstractRelationCollector
     private function addTrait(int $line, string $fqcn): void
     {
         if (!array_key_exists($fqcn, $this->found)) {
-            $class = ClassName::createFromFQCN($fqcn);
+            $class = FullClassName::createFromFQCN($fqcn);
             $this->found[$fqcn] = $class->getFQCN();
             $this->results[] = new Mixin($line, $class);
         }

@@ -4,7 +4,7 @@ namespace Tests\PhpAT\unit\Rule\Assertion\Mixin;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
-use PhpAT\Parser\ClassName;
+use PhpAT\Parser\FullClassName;
 use PhpAT\Parser\Relation\Composition;
 use PhpAT\Parser\Relation\Dependency;
 use PhpAT\Parser\Relation\Inheritance;
@@ -67,14 +67,14 @@ class MustIncludeTest extends TestCase
         return [
             new AstNode(
                 new \SplFileInfo('folder/Example/ClassExample.php'),
-                new ClassName('Example', 'ClassExample'),
+                new FullClassName('Example', 'ClassExample'),
                 [
-                    new Inheritance(0, new ClassName('Example', 'ParentClassExample')),
-                    new Dependency(0, new ClassName('Example', 'AnotherClassExample')),
-                    new Dependency(0, new ClassName('Vendor', 'ThirdPartyExample')),
-                    new Composition(0, new ClassName('Example', 'InterfaceExample')),
-                    new Composition(0, new ClassName('Example', 'AnotherInterface')),
-                    new Mixin(0, new ClassName('Example', 'TraitExample'))
+                    new Inheritance(0, new FullClassName('Example', 'ParentClassExample')),
+                    new Dependency(0, new FullClassName('Example', 'AnotherClassExample')),
+                    new Dependency(0, new FullClassName('Vendor', 'ThirdPartyExample')),
+                    new Composition(0, new FullClassName('Example', 'InterfaceExample')),
+                    new Composition(0, new FullClassName('Example', 'AnotherInterface')),
+                    new Mixin(0, new FullClassName('Example', 'TraitExample'))
                 ]
             )
        ];

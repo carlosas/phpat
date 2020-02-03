@@ -2,26 +2,26 @@
 
 namespace PhpAT\Parser\Ast;
 
-use PhpAT\Parser\ClassName;
+use PhpAT\Parser\FullClassName;
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 
 class NameCollector extends NodeVisitorAbstract
 {
-    /** @var ClassName|null */
+    /** @var FullClassName|null */
     private $name = null;
 
     public function leaveNode(Node $node)
     {
         if ($node instanceof Node\Stmt\ClassLike) {
-            $this->name = ClassName::createFromFQCN($node->namespacedName->toString());
+            $this->name = FullClassName::createFromFQCN($node->namespacedName->toString());
         }
     }
 
     /**
-     * @return ClassName|null
+     * @return FullClassName|null
      */
-    public function getName(): ?ClassName
+    public function getName(): ?FullClassName
     {
         return $this->name;
     }

@@ -2,11 +2,11 @@
 
 namespace PhpAT\Parser\Relation;
 
-use PhpAT\Parser\ClassName;
+use PhpAT\Parser\FullClassName;
 
 class Composition extends AbstractRelation
 {
-    public function __construct(int $line, ClassName $relatedClass)
+    public function __construct(int $line, FullClassName $relatedClass)
     {
         parent::__construct($line, $relatedClass);
     }
