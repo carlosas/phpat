@@ -6,6 +6,8 @@ namespace PhpAT\Statement;
 
 use PhpAT\App\Configuration;
 use PhpAT\Parser\AstNode;
+use PhpAT\Parser\ClassLike;
+use PhpAT\Parser\FullClassName;
 use PhpAT\Rule\Rule;
 use PhpAT\Selector\PathSelector;
 use PhpAT\Selector\SelectorInterface;
@@ -43,35 +45,12 @@ class StatementBuilder
      */
     public function build(Rule $rule, array $astMap): \Generator
     {
-        if (!empty(Configuration::getSrcExcluded())) {
-            foreach (Configuration::getSrcExcluded() as $exc) {
-                $originExcluded[] = new PathSelector($exc);
-            }
-        }
-
-        $originExcluded = array_merge($rule->getOriginExcluded(), $originExcluded ?? []);
-        $origins = $this->getNamesFromSelectors($rule->getOrigin(), $originExcluded, $astMap);
-        $destinations = $this->getNamesFromSelectors($rule->getDestination(), $rule->getDestinationExcluded(), $astMap);
-
-        if (!empty(Configuration::getSrcIncluded())) {
-            $filteredOrigins = [];
-            foreach (Configuration::getSrcIncluded() as $inc) {
-                $resolvedIncludeRow[] = $this->getNamesFromSelectors([new PathSelector($inc)], [], $astMap);
-            }
-            foreach ($resolvedIncludeRow as $includedClasses) {
-                foreach ($includedClasses as $includedClassName) {
-                    foreach ($origins as $key => $value) {
-                        if (
-                            isset($astMap[$value])
-                            && $includedClassName == $astMap[$value]->getClassName()
-                        ) {
-                            $filteredOrigins[] = $origins[$key];
-                        }
-                    }
-                }
-            }
-            $origins = $filteredOrigins;
-        }
+        $origins = $this->selectOrigins($rule->getOrigin(), $rule->getOriginExcluded(), $astMap);
+        $destinations = $this->selectDestinations(
+            $rule->getDestination(),
+            $rule->getDestinationExcluded(),
+            $astMap
+        );
 
         foreach ($origins as $originClassName) {
             yield new Statement(
@@ -84,35 +63,83 @@ class StatementBuilder
     }
 
     /**
-     * @param SelectorInterface[] $included
-     * @param SelectorInterface[] $excluded
+     * @param array $included
+     * @param array $excluded
      * @param array $astMap
-     * @return string[]
-     * @throws \Exception
+     * @return FullClassName[]
      */
-    private function getNamesFromSelectors(array $included, array $excluded, array $astMap): array
+    private function selectOrigins(array $includedInRule, array $excludedInRule, array $astMap): array
     {
         $classNamesToValidate = [];
-        foreach ($included as $i) {
+
+        foreach ($includedInRule as $i) {
             $classNamesToValidate = array_merge($classNamesToValidate, $this->selectorResolver->resolve($i, $astMap));
         }
-
-        foreach ($excluded as $e) {
-            $classNamesToExclude = $this->selectorResolver->resolve($e, $astMap);
-            foreach ($classNamesToExclude as $file) {
+        foreach (Configuration::getSrcExcluded() as $exc) {
+            $excludedInConfig[] = new PathSelector($exc);
+        }
+        $excludedSelectors = array_merge($excludedInRule, $excludedInConfig ?? []);
+        foreach ($excludedSelectors as $excludedSelector) {
+            foreach ($this->selectorResolver->resolve($excludedSelector, $astMap) as $excludedClassName) {
                 foreach ($classNamesToValidate as $key => $value) {
-                    if ($this->normalizePath($file) == $this->normalizePath($value)) {
+                    if ($excludedClassName == $value) {
                         unset($classNamesToValidate[$key]);
                     }
                 }
             }
         }
 
+        if (!empty(Configuration::getSrcIncluded())) {
+            $filteredClassNames = [];
+
+            foreach (Configuration::getSrcIncluded() as $inc) {
+                echo "-----------------------" . PHP_EOL;
+                $resolvedIncludeRow[] = $this->selectorResolver->resolve(new PathSelector($inc), $astMap);
+            }
+
+            foreach ($resolvedIncludeRow as $includedClasses) {
+                foreach ($includedClasses as $includedClassName) {
+                    foreach ($classNamesToValidate as $key => $value) {
+                        if (
+                            isset($astMap[$value])
+                            && $includedClassName == $astMap[$value]->getClassName()
+                        ) {
+                            $filteredClassNames[] = $classNamesToValidate[$key];
+                        }
+                    }
+                }
+            }
+            $classNamesToValidate = $filteredClassNames;
+        }
+
         return $classNamesToValidate;
     }
 
-    private function normalizePath(string $path): string
+    /**
+     * @param SelectorInterface[] $included
+     * @param SelectorInterface[] $excluded
+     * @param array $astMap
+     * @return ClassLike[]
+     * @throws \Exception
+     */
+    private function selectDestinations(array $included, array $excluded, array $astMap): array
     {
-        return (\DIRECTORY_SEPARATOR === '\\') ? str_replace('\\', '/', $path) : $path;
+        $classNames = [];
+        foreach ($included as $i) {
+            $classNames = array_merge($classNames, $this->selectorResolver->resolve($i, $astMap));
+        }
+
+        foreach ($excluded as $e) {
+            $classNamesToExclude = $this->selectorResolver->resolve($e, $astMap);
+            foreach ($classNamesToExclude as $file) {
+                foreach ($classNames as $key => $value) {
+                    if ($file == $value) {
+                        unset($classNames[$key]);
+                    }
+                }
+            }
+        }
+
+        return $classNames;
     }
 }

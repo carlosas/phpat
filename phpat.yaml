@@ -1,5 +1,7 @@
 src:
   path: src/
+  include:
+    - Rule/
 tests:
   path: tests/architecture/
 options:
