@@ -1,3 +1,7 @@
+<p align="center">
+    <img width="500px" src="https://raw.githubusercontent.com/carlosas/phpat/master/.github/contributing.png" alt="Contributing">
+</p>
+
 # Contributing
 There are several ways to help out:
 * Create an [issue](https://github.com/carlosas/phpat/issues/) on GitHub if you have found a bug or have an idea for a feature
