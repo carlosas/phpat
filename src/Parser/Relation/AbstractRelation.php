@@ -2,16 +2,16 @@
 
 namespace PhpAT\Parser\Relation;
 
-use PhpAT\Parser\ClassName;
+use PhpAT\Parser\FullClassName;
 
 class AbstractRelation
 {
-    /** @var ClassName */
+    /** @var FullClassName */
     public $relatedClass;
     /** @var int */
     public $line;
 
-    public function __construct(int $line, ClassName $relatedClass)
+    public function __construct(int $line, FullClassName $relatedClass)
     {
         $this->line = $line;
         $this->relatedClass = $relatedClass;

@@ -21,7 +21,7 @@ class AstNode implements \JsonSerializable
 
     public function __construct(
         \SplFileInfo $fileInfo,
-        ClassName $className,
+        FullClassName $className,
         array $relations
     ) {
         $this->filePathname = $this->normalizePathname($fileInfo->getPathname());

@@ -2,7 +2,7 @@
 
 namespace PhpAT\Parser\Ast;
 
-use PhpAT\Parser\ClassName;
+use PhpAT\Parser\FullClassName;
 use PhpAT\Parser\Relation\Dependency;
 use PhpParser\NameContext;
 use PhpParser\Node;
@@ -68,7 +68,7 @@ class DependencyCollector extends AbstractRelationCollector
 
     private function addDependency(int $line, string $fqcn): void
     {
-        $class = ClassName::createFromFQCN($fqcn);
+        $class = FullClassName::createFromFQCN($fqcn);
         if (!array_key_exists($fqcn, $this->found) && $this->isAutoloaded($fqcn) && $class->getNamespace() !== '') {
             $this->found[$fqcn] = $class->getFQCN();
             $this->results[] = new Dependency($line, $class);
