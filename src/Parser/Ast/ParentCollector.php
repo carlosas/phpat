@@ -11,7 +11,10 @@ class ParentCollector extends AbstractRelationCollector
     public function leaveNode(Node $node)
     {
         if (isset($node->extends) && $node->extends instanceof Node\Name\FullyQualified) {
-            $this->results[] = new Inheritance($node->getLine(), FullClassName::createFromFQCN($node->extends->toString()));
+            $this->results[] = new Inheritance(
+                $node->getLine(),
+                FullClassName::createFromFQCN($node->extends->toString())
+            );
         }
     }
 }
