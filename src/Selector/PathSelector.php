@@ -73,8 +73,6 @@ class PathSelector implements SelectorInterface
      */
     public function select(): array
     {
-        var_dump($this->path);
-        
         foreach ($this->fileFinder->findFiles($this->path) as $file) {
             $filePathname = str_replace('\\', '/', $file->getPathname());
 

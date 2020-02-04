@@ -75,6 +75,7 @@ class StatementBuilder
         foreach ($includedInRule as $i) {
             $classNamesToValidate = array_merge($classNamesToValidate, $this->selectorResolver->resolve($i, $astMap));
         }
+
         foreach (Configuration::getSrcExcluded() as $exc) {
             $excludedInConfig[] = new PathSelector($exc);
         }
@@ -93,7 +94,6 @@ class StatementBuilder
             $filteredClassNames = [];
 
             foreach (Configuration::getSrcIncluded() as $inc) {
-                echo "-----------------------" . PHP_EOL;
                 $resolvedIncludeRow[] = $this->selectorResolver->resolve(new PathSelector($inc), $astMap);
             }
 
