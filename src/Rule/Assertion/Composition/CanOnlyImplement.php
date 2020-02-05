@@ -6,6 +6,7 @@ namespace PhpAT\Rule\Assertion\Composition;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
+use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\Relation\Composition;
 use PhpAT\Rule\Assertion\Assertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
@@ -21,34 +22,39 @@ class CanOnlyImplement implements Assertion
         $this->eventDispatcher = $eventDispatcher;
     }
 
+    /**
+     * @param ClassLike   $origin
+     * @param ClassLike[] $destinations
+     * @param array       $astMap
+     * @param bool        $inverse
+     */
     public function validate(
-        string $fqcnOrigin,
-        array $fqcnDestinations,
+        ClassLike $origin,
+        array $destinations,
         array $astMap,
         bool $inverse = false //ignored
     ): void {
-        /** @var AstNode $node */
-        foreach ($astMap as $node) {
-            if ($node->getClassName() !== $fqcnOrigin) {
-                continue;
-            }
+        $matchingNodes = $this->filterMatchingNodes($origin, $astMap);
 
+        foreach ($matchingNodes as $node) {
             $interfaces = $this->getInterfaces($node);
 
             foreach ($interfaces as $key => $value) {
-                if (in_array($value, $fqcnDestinations)) {
-                    unset($interfaces[$key]);
+                foreach ($destinations as $destination) {
+                    if ($destination->matches($value)) {
+                        unset($interfaces[$key]);
+                    }
                 }
             }
 
             if (empty($interfaces)) {
-                $this->dispatchResult(true, $fqcnOrigin);
+                $this->dispatchResult(true, $origin->toString());
 
                 return;
             }
 
             foreach ($interfaces as $interface) {
-                $this->dispatchResult(false, $fqcnOrigin, $interface);
+                $this->dispatchResult(false, $origin->toString(), $interface);
             }
         }
 
@@ -74,5 +80,17 @@ class CanOnlyImplement implements Assertion
         $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
 
         $this->eventDispatcher->dispatch(new $event($message));
+    }
+
+    private function filterMatchingNodes(ClassLike $origin, array $astMap)
+    {
+        /** @var AstNode $node */
+        foreach ($astMap as $node) {
+            if ($origin->matches($node->getClassName())) {
+                $found[] = $node;
+            }
+        }
+
+        return $found ?? [];
     }
 }

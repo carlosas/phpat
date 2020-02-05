@@ -15,4 +15,9 @@ class RegexClassName implements ClassLike
     {
         return preg_match($this->regex, $name);
     }
+
+    public function toString(): string
+    {
+        return $this->regex;
+    }
 }

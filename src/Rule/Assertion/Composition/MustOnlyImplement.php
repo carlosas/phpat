@@ -6,11 +6,11 @@ namespace PhpAT\Rule\Assertion\Composition;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
+use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\Relation\Composition;
 use PhpAT\Rule\Assertion\Assertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
-use PhpParser\Node;
 
 class MustOnlyImplement implements Assertion
 {
@@ -22,39 +22,42 @@ class MustOnlyImplement implements Assertion
         $this->eventDispatcher = $eventDispatcher;
     }
 
+    /**
+     * @param ClassLike   $origin
+     * @param ClassLike[] $destinations
+     * @param array       $astMap
+     * @param bool        $inverse
+     */
     public function validate(
-        string $fqcnOrigin,
-        array $fqcnDestinations,
+        ClassLike $origin,
+        array $destinations,
         array $astMap,
         bool $inverse = false //ignored
     ): void {
-        /** @var AstNode $node */
-        foreach ($astMap as $node) {
-            if ($node->getClassName() !== $fqcnOrigin) {
-                continue;
-            }
+        $matchingNodes = $this->filterMatchingNodes($origin, $astMap);
 
+        foreach ($matchingNodes as $node) {
             $interfaces = $this->getInterfaces($node);
 
-            foreach ($fqcnDestinations as $fqcnDestination) {
-                $result = array_search($fqcnDestination, $interfaces, true);
-
-                if ($result !== false) {
-                    $this->dispatchSelectedResult(true, $fqcnOrigin, $fqcnDestination);
-                    unset($interfaces[$result]);
-                    continue;
+            foreach ($interfaces as $key => $interface) {
+                foreach ($destinations as $destination) {
+                    if ($destination->matches($interface)) {
+                        $this->dispatchSelectedResult(true, $origin->toString(), $interface);
+                        unset($interfaces[$key]);
+                        continue;
+                    }
+                    $this->dispatchSelectedResult(false, $origin->toString(), $interface);
                 }
-                $this->dispatchSelectedResult(false, $fqcnOrigin, $fqcnDestination);
             }
 
             if (empty($interfaces)) {
-                $this->dispatchOthersResult(true, $fqcnOrigin);
+                $this->dispatchOthersResult(true, $origin->toString());
 
                 return;
             }
 
             foreach ($interfaces as $interface) {
-                $this->dispatchOthersResult(false, $fqcnOrigin, $interface);
+                $this->dispatchOthersResult(false, $origin->toString(), $interface);
             }
         }
 
@@ -89,5 +92,17 @@ class MustOnlyImplement implements Assertion
         $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
 
         $this->eventDispatcher->dispatch(new $event($message));
+    }
+
+    private function filterMatchingNodes(ClassLike $origin, array $astMap)
+    {
+        /** @var AstNode $node */
+        foreach ($astMap as $node) {
+            if ($origin->matches($node->getClassName())) {
+                $found[] = $node;
+            }
+        }
+
+        return $found ?? [];
     }
 }

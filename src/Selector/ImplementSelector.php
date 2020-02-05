@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace PhpAT\Selector;
 
 use PhpAT\Parser\AstNode;
+use PhpAT\Parser\ClassLike;
+use PhpAT\Parser\FullClassName;
 use PhpAT\Parser\Relation\Composition;
 
 class ImplementSelector implements SelectorInterface
@@ -41,7 +43,7 @@ class ImplementSelector implements SelectorInterface
     }
 
     /**
-     * @return string[]
+     * @return ClassLike[]
      */
     public function select(): array
     {
@@ -51,7 +53,7 @@ class ImplementSelector implements SelectorInterface
                     $relation instanceof Composition
                     && $this->matchesPattern($relation->relatedClass->getFQCN(), $this->fqcn)
                 ) {
-                    $result[$astNode->getClassName()] = $astNode->getClassName();
+                    $result[$astNode->getClassName()] = FullClassName::createFromFQCN($astNode->getClassName());
                 }
             }
         }

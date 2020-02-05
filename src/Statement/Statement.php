@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhpAT\Statement;
 
+use PhpAT\Parser\ClassLike;
 use PhpAT\Rule\Assertion\Assertion;
 
 /**
@@ -22,24 +23,24 @@ class Statement
      */
     private $inverse;
     /**
-     * @var string
+     * @var ClassLike
      */
-    private $fqcnOrigin;
+    private $origin;
     /**
-     * @var string
+     * @var ClassLike[]
      */
-    private $fqcnDestinations;
+    private $destinations;
 
     public function __construct(
-        string $fqcnOrigin,
+        ClassLike $origin,
         Assertion $assertion,
         bool $inverse,
-        array $fqcnDestinations
+        array $destinations
     ) {
-        $this->fqcnOrigin = $fqcnOrigin;
+        $this->origin = $origin;
         $this->assertion = $assertion;
         $this->inverse = $inverse;
-        $this->fqcnDestinations = $fqcnDestinations;
+        $this->destinations = $destinations;
     }
 
     /**
@@ -59,18 +60,18 @@ class Statement
     }
 
     /**
-     * @return string
+     * @return ClassLike
      */
-    public function getFqcnOrigin(): string
+    public function getOrigin(): ClassLike
     {
-        return $this->fqcnOrigin;
+        return $this->origin;
     }
 
     /**
-     * @return string[]
+     * @return ClassLike[]
      */
-    public function getFqcnDestinations(): array
+    public function getDestinations(): array
     {
-        return $this->fqcnDestinations;
+        return $this->destinations;
     }
 }

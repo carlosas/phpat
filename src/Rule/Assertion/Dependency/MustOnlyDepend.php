@@ -6,6 +6,7 @@ namespace PhpAT\Rule\Assertion\Dependency;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
+use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\Relation\Dependency;
 use PhpAT\Rule\Assertion\Assertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
@@ -21,38 +22,43 @@ class MustOnlyDepend implements Assertion
         $this->eventDispatcher = $eventDispatcher;
     }
 
+    /**
+     * @param ClassLike   $origin
+     * @param ClassLike[] $destinations
+     * @param array       $astMap
+     * @param bool        $inverse
+     */
     public function validate(
-        string $fqcnOrigin,
-        array $fqcnDestinations,
+        ClassLike $origin,
+        array $destinations,
         array $astMap,
         bool $inverse = false //ignored
     ): void {
-        /** @var AstNode $node */
-        foreach ($astMap as $node) {
-            if ($node->getClassName() !== $fqcnOrigin) {
-                continue;
-            }
+        $matchingNodes = $this->filterMatchingNodes($origin, $astMap);
 
+        foreach ($matchingNodes as $node) {
             $dependencies = $this->getDependencies($node);
-            foreach ($fqcnDestinations as $fqcnDestination) {
-                $result = array_search($fqcnDestination, $dependencies, true);
 
-                if ($result === false) {
-                    $this->dispatchSelectedResult(false, $fqcnOrigin, $fqcnDestination);
-                    continue;
+            foreach ($dependencies as $key => $dependency) {
+                foreach ($destinations as $destination) {
+                    if ($destination->matches($dependency)) {
+                        $this->dispatchSelectedResult(true, $origin->toString(), $dependency);
+                        unset($dependencies[$key]);
+                        continue;
+                    }
+                    $this->dispatchSelectedResult(false, $origin->toString(), $dependency);
                 }
-                $this->dispatchSelectedResult(true, $fqcnOrigin, $fqcnDestination);
-                unset($dependencies[$result]);
             }
+
 
             if (empty($dependencies)) {
-                $this->dispatchOthersResult(true, $fqcnOrigin);
+                $this->dispatchOthersResult(true, $origin->toString());
 
                 return;
             }
 
             foreach ($dependencies as $dependency) {
-                $this->dispatchOthersResult(false, $fqcnOrigin, $dependency);
+                $this->dispatchOthersResult(false, $origin->toString(), $dependency);
             }
         }
 
@@ -87,5 +93,17 @@ class MustOnlyDepend implements Assertion
         $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
 
         $this->eventDispatcher->dispatch(new $event($message));
+    }
+
+    private function filterMatchingNodes(ClassLike $origin, array $astMap)
+    {
+        /** @var AstNode $node */
+        foreach ($astMap as $node) {
+            if ($origin->matches($node->getClassName())) {
+                $found[] = $node;
+            }
+        }
+
+        return $found ?? [];
     }
 }

@@ -42,4 +42,9 @@ class FullClassName implements ClassLike
     {
         return $this->getFQCN() === $name;
     }
+
+    public function toString(): string
+    {
+        return $this->getFQCN();
+    }
 }

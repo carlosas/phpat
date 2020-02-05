@@ -66,7 +66,7 @@ class StatementBuilder
      * @param array $included
      * @param array $excluded
      * @param array $astMap
-     * @return FullClassName[]
+     * @return ClassLike[]
      */
     private function selectOrigins(array $includedInRule, array $excludedInRule, array $astMap): array
     {
@@ -81,9 +81,11 @@ class StatementBuilder
         }
         $excludedSelectors = array_merge($excludedInRule, $excludedInConfig ?? []);
         foreach ($excludedSelectors as $excludedSelector) {
+            /** @var ClassLike $excludedClassName */
             foreach ($this->selectorResolver->resolve($excludedSelector, $astMap) as $excludedClassName) {
+                /** @var ClassLike $value */
                 foreach ($classNamesToValidate as $key => $value) {
-                    if ($excludedClassName == $value) {
+                    if ($value->matches($excludedClassName->toString())) {
                         unset($classNamesToValidate[$key]);
                     }
                 }
@@ -96,15 +98,16 @@ class StatementBuilder
             foreach (Configuration::getSrcIncluded() as $inc) {
                 $resolvedIncludeRow[] = $this->selectorResolver->resolve(new PathSelector($inc), $astMap);
             }
-
             foreach ($resolvedIncludeRow as $includedClasses) {
+                /** @var ClassLike $includedClassName */
                 foreach ($includedClasses as $includedClassName) {
+                    /** @var ClassLike $value */
                     foreach ($classNamesToValidate as $key => $value) {
                         if (
-                            isset($astMap[$value])
-                            && $includedClassName == $astMap[$value]->getClassName()
+                            isset($astMap[$value->toString()])
+                            && $includedClassName->matches($astMap[$value->toString()]->getClassName())
                         ) {
-                            $filteredClassNames[] = $classNamesToValidate[$key];
+                            $filteredClassNames[$key] = $value;
                         }
                     }
                 }

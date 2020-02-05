@@ -6,6 +6,7 @@ namespace PhpAT\Rule\Assertion\Composition;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
+use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\Relation\Composition;
 use PhpAT\Rule\Assertion\Assertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
@@ -21,22 +22,26 @@ class MustImplement implements Assertion
         $this->eventDispatcher = $eventDispatcher;
     }
 
+    /**
+     * @param ClassLike   $origin
+     * @param ClassLike[] $destinations
+     * @param array       $astMap
+     * @param bool        $inverse
+     */
     public function validate(
-        string $fqcnOrigin,
-        array $fqcnDestinations,
+        ClassLike $origin,
+        array $destinations,
         array $astMap,
         bool $inverse = false
     ): void {
-        /** @var AstNode $node */
-        foreach ($astMap as $node) {
-            if ($node->getClassName() !== $fqcnOrigin) {
-                continue;
-            }
+        $matchingNodes = $this->filterMatchingNodes($origin, $astMap);
 
+        foreach ($matchingNodes as $node) {
             $interfaces = $this->getInterfaces($node);
-            foreach ($fqcnDestinations as $destination) {
-                $result = in_array($destination, $interfaces);
-                $this->dispatchResult($result, $inverse, $fqcnOrigin, $destination);
+            foreach ($interfaces as $interface) {
+                foreach ($destinations as $destination) {
+                    $this->dispatchResult($destination->matches($interface), $inverse, $origin->toString(), $interface);
+                }
             }
         }
 
@@ -61,5 +66,16 @@ class MustImplement implements Assertion
         $message = $fqcnOrigin . $action . $fqcnDestination;
 
         $this->eventDispatcher->dispatch(new $event($message));
+    }
+
+    private function filterMatchingNodes(ClassLike $origin, array $astMap)
+    {
+        /** @var AstNode $node */
+        foreach ($astMap as $node) {
+            if ($origin->matches($node->getClassName())) {
+                $found[] = $node;
+            }
+        }
+        return $found ?? [];
     }
 }

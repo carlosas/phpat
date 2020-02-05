@@ -6,6 +6,7 @@ namespace PhpAT\Rule\Assertion\Dependency;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
+use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\Relation\Dependency;
 use PhpAT\Rule\Assertion\Assertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
@@ -24,22 +25,31 @@ class MustDepend implements Assertion
         $this->eventDispatcher = $eventDispatcher;
     }
 
+    /**
+     * @param ClassLike   $origin
+     * @param ClassLike[] $destinations
+     * @param array       $astMap
+     * @param bool        $inverse
+     */
     public function validate(
-        string $fqcnOrigin,
-        array $fqcnDestinations,
+        ClassLike $origin,
+        array $destinations,
         array $astMap,
         bool $inverse = false
     ): void {
-        /** @var AstNode $node */
-        foreach ($astMap as $node) {
-            if ($node->getClassName() !== $fqcnOrigin) {
-                continue;
-            }
+        $matchingNodes = $this->filterMatchingNodes($origin, $astMap);
 
+        foreach ($matchingNodes as $node) {
             $dependencies = $this->getDependencies($node);
-            foreach ($fqcnDestinations as $destination) {
-                $result = in_array($destination, $dependencies);
-                $this->dispatchResult($result, $inverse, $fqcnOrigin, $destination);
+            foreach ($dependencies as $dependency) {
+                foreach ($destinations as $destination) {
+                    $this->dispatchResult(
+                        $destination->matches($dependency),
+                        $inverse,
+                        $origin->toString(),
+                        $dependency
+                    );
+                }
             }
         }
 
@@ -64,5 +74,16 @@ class MustDepend implements Assertion
         $message = $fqcnOrigin . $action . $fqcnDestination;
 
         $this->eventDispatcher->dispatch(new $event($message));
+    }
+
+    private function filterMatchingNodes(ClassLike $origin, array $astMap)
+    {
+        /** @var AstNode $node */
+        foreach ($astMap as $node) {
+            if ($origin->matches($node->getClassName())) {
+                $found[] = $node;
+            }
+        }
+        return $found ?? [];
     }
 }

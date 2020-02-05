@@ -6,6 +6,7 @@ namespace PhpAT\Rule\Assertion\Mixin;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
+use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\Relation\Mixin;
 use PhpAT\Rule\Assertion\Assertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
@@ -21,38 +22,43 @@ class MustOnlyInclude implements Assertion
         $this->eventDispatcher = $eventDispatcher;
     }
 
+    /**
+     * @param ClassLike   $origin
+     * @param ClassLike[] $destinations
+     * @param array       $astMap
+     * @param bool        $inverse
+     */
     public function validate(
-        string $fqcnOrigin,
-        array $fqcnDestinations,
+        ClassLike $origin,
+        array $destinations,
         array $astMap,
         bool $inverse = false //ignored
     ): void {
-        /** @var AstNode $node */
-        foreach ($astMap as $node) {
-            if ($node->getClassName() !== $fqcnOrigin) {
-                continue;
-            }
+        $matchingNodes = $this->filterMatchingNodes($origin, $astMap);
 
+        foreach ($matchingNodes as $node) {
             $mixins = $this->getMixins($node);
-            foreach ($fqcnDestinations as $fqcnDestination) {
-                $result = array_search($fqcnDestination, $mixins, true);
 
-                if ($result === false) {
-                    $this->dispatchSelectedResult(false, $fqcnOrigin, $fqcnDestination);
-                    continue;
+            foreach ($mixins as $key => $mixin) {
+                foreach ($destinations as $destination) {
+                    if ($destination->matches($mixin)) {
+                        $this->dispatchSelectedResult(true, $origin->toString(), $mixin);
+                        unset($mixins[$key]);
+                        continue;
+                    }
+                    $this->dispatchSelectedResult(false, $origin->toString(), $mixin);
                 }
-                $this->dispatchSelectedResult(true, $fqcnOrigin, $fqcnDestination);
-                unset($mixins[$result]);
             }
+
 
             if (empty($mixins)) {
-                $this->dispatchOthersResult(true, $fqcnOrigin);
+                $this->dispatchOthersResult(true, $origin->toString());
 
                 return;
             }
 
             foreach ($mixins as $mixin) {
-                $this->dispatchOthersResult(false, $fqcnOrigin, $mixin);
+                $this->dispatchOthersResult(false, $origin->toString(), $mixin);
             }
         }
 
@@ -87,5 +93,17 @@ class MustOnlyInclude implements Assertion
         $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
 
         $this->eventDispatcher->dispatch(new $event($message));
+    }
+
+    private function filterMatchingNodes(ClassLike $origin, array $astMap)
+    {
+        /** @var AstNode $node */
+        foreach ($astMap as $node) {
+            if ($origin->matches($node->getClassName())) {
+                $found[] = $node;
+            }
+        }
+
+        return $found ?? [];
     }
 }
