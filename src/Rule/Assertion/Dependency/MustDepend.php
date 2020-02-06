@@ -41,15 +41,9 @@ class MustDepend implements Assertion
 
         foreach ($matchingNodes as $node) {
             $dependencies = $this->getDependencies($node);
-            foreach ($dependencies as $dependency) {
-                foreach ($destinations as $destination) {
-                    $this->dispatchResult(
-                        $destination->matches($dependency),
-                        $inverse,
-                        $origin->toString(),
-                        $dependency
-                    );
-                }
+            foreach ($destinations as $destination) {
+                $matches = $this->matches($destination, $dependencies);
+                $this->dispatchResult($matches ?? false, $inverse, $origin->toString(), $destination->toString());
             }
         }
 
@@ -65,6 +59,17 @@ class MustDepend implements Assertion
         }
 
         return $dependencies ?? [];
+    }
+
+    private function matches(ClassLike $destination, array $dependencies): bool
+    {
+        foreach ($dependencies as $dependency) {
+            if ($destination->matches($dependency)) {
+                $matches = true;
+            }
+        }
+
+        return $matches ?? false;
     }
 
     private function dispatchResult(bool $result, bool $inverse, string $fqcnOrigin, string $fqcnDestination): void

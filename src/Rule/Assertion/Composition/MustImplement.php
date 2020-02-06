@@ -38,10 +38,9 @@ class MustImplement implements Assertion
 
         foreach ($matchingNodes as $node) {
             $interfaces = $this->getInterfaces($node);
-            foreach ($interfaces as $interface) {
-                foreach ($destinations as $destination) {
-                    $this->dispatchResult($destination->matches($interface), $inverse, $origin->toString(), $interface);
-                }
+            foreach ($destinations as $destination) {
+                $matches = $this->matches($destination, $interfaces);
+                $this->dispatchResult($matches ?? false, $inverse, $origin->toString(), $destination->toString());
             }
         }
 
@@ -57,6 +56,17 @@ class MustImplement implements Assertion
         }
 
         return $interfaces ?? [];
+    }
+
+    private function matches(ClassLike $destination, array $interfaces): bool
+    {
+        foreach ($interfaces as $interface) {
+            if ($destination->matches($interface)) {
+                $matches = true;
+            }
+        }
+
+        return $matches ?? false;
     }
 
     private function dispatchResult(bool $result, bool $inverse, string $fqcnOrigin, string $fqcnDestination): void

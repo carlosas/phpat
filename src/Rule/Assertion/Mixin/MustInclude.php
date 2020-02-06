@@ -38,10 +38,9 @@ class MustInclude implements Assertion
 
         foreach ($matchingNodes as $node) {
             $mixins = $this->getMixins($node);
-            foreach ($mixins as $mixin) {
-                foreach ($destinations as $destination) {
-                    $this->dispatchResult($destination->matches($mixin), $inverse, $origin->toString(), $mixin);
-                }
+            foreach ($destinations as $destination) {
+                $matches = $this->matches($destination, $mixins);
+                $this->dispatchResult($matches ?? false, $inverse, $origin->toString(), $destination->toString());
             }
         }
 
@@ -57,6 +56,17 @@ class MustInclude implements Assertion
         }
 
         return $mixins ?? [];
+    }
+
+    private function matches(ClassLike $destination, array $mixins): bool
+    {
+        foreach ($mixins as $mixin) {
+            if ($destination->matches($mixin)) {
+                $matches = true;
+            }
+        }
+
+        return $matches ?? false;
     }
 
     private function dispatchResult(bool $result, bool $inverse, string $fqcnOrigin, string $fqcnDestination): void
