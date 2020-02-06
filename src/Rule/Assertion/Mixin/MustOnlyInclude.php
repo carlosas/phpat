@@ -46,7 +46,6 @@ class MustOnlyInclude implements Assertion
                         unset($mixins[$key]);
                         continue;
                     }
-                    $this->dispatchSelectedResult(false, $origin->toString(), $mixin);
                 }
             }
 

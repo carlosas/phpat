@@ -46,7 +46,6 @@ class MustOnlyImplement implements Assertion
                         unset($interfaces[$key]);
                         continue;
                     }
-                    $this->dispatchSelectedResult(false, $origin->toString(), $interface);
                 }
             }
 

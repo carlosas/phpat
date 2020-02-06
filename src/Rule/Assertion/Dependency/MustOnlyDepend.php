@@ -46,10 +46,8 @@ class MustOnlyDepend implements Assertion
                         unset($dependencies[$key]);
                         continue;
                     }
-                    $this->dispatchSelectedResult(false, $origin->toString(), $dependency);
                 }
             }
-
 
             if (empty($dependencies)) {
                 $this->dispatchOthersResult(true, $origin->toString());

@@ -37,9 +37,11 @@ class MustExtend implements Assertion
         $matchingNodes = $this->filterMatchingNodes($origin, $astMap);
 
         foreach ($matchingNodes as $node) {
+            $parent = $this->getParent($node);
             foreach ($destinations as $destination) {
+                $matches = ($parent !== null && $destination->matches($parent));
                 $this->dispatchResult(
-                    $destination->matches($this->getParent($node)),
+                    $matches,
                     $inverse,
                     $origin->toString(),
                     $destination->toString()
