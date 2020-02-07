@@ -4,6 +4,7 @@ namespace Tests\PhpAT\unit\Rule\Assertion\Mixin;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
+use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\FullClassName;
 use PhpAT\Parser\Relation\Composition;
 use PhpAT\Parser\Relation\Dependency;
@@ -18,15 +19,15 @@ class CanOnlyIncludeTest extends TestCase
 {
     /**
      * @dataProvider dataProvider
-     * @param string $fqcnOrigin
-     * @param array  $fqcnDestinations
-     * @param array  $astMap
-     * @param bool   $inverse
-     * @param array  $expectedEvents
+     * @param ClassLike   $origin
+     * @param ClassLike[] $destinations
+     * @param array       $astMap
+     * @param bool        $inverse
+     * @param array       $expectedEvents
      */
     public function testDispatchesCorrectEvents(
-        string $fqcnOrigin,
-        array $fqcnDestinations,
+        ClassLike $origin,
+        array $destinations,
         array $astMap,
         bool $inverse,
         array $expectedEvents
@@ -45,16 +46,37 @@ class CanOnlyIncludeTest extends TestCase
             ->method('dispatch')
             ->withConsecutive(...$consecutive??[]);
 
-        $class->validate($fqcnOrigin, $fqcnDestinations, $astMap, $inverse);
+        $class->validate($origin, $destinations, $astMap, $inverse);
     }
 
     public function dataProvider(): array
     {
         return [
-            ['Example\ClassExample', ['Example\TraitExample'], $this->getAstMap(), false, [true]],
-            ['Example\ClassExample', ['Example\TraitExample', 'AnotherTrait'], $this->getAstMap(), false, [true]],
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [FullClassName::createFromFQCN('Example\TraitExample')],
+                $this->getAstMap(),
+                false,
+                [true]
+            ],
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [
+                    FullClassName::createFromFQCN('Example\TraitExample'),
+                    FullClassName::createFromFQCN('AnotherTrait')
+                ],
+                $this->getAstMap(),
+                false,
+                [true]
+            ],
             //it fails because it includes Example\TraitExample
-            ['Example\ClassExample', ['AnotherTrait'], $this->getAstMap(), false, [false]],
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [FullClassName::createFromFQCN('AnotherTrait')],
+                $this->getAstMap(),
+                false,
+                [false]
+            ],
         ];
     }
 
