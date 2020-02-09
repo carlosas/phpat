@@ -60,7 +60,7 @@ class MustOnlyImplementTest extends TestCase
                 ],
                 $this->getAstMap(),
                 false,
-                [true, true, true]
+                [true, true]
             ],
             //it fails because it does not implement NotImplementedInterface
             [
@@ -72,7 +72,7 @@ class MustOnlyImplementTest extends TestCase
                 ],
                 $this->getAstMap(),
                 false,
-                [true, true, false, true]
+                [true, true, false]
             ],
             //it fails because Example\AnotherInterface is also implemented
             [
@@ -82,7 +82,7 @@ class MustOnlyImplementTest extends TestCase
                 false,
                 [true, false]
             ],
-            //it fails because there implements 2 that are not listed and does not implement NotARealInterface
+            //it fails because it implements 2 that are not listed and does not implement NotARealInterface
             [
                 FullClassName::createFromFQCN('Example\ClassExample'),
                 [FullClassName::createFromFQCN('NotARealInterface')],

@@ -38,25 +38,24 @@ class MustOnlyDepend implements Assertion
 
         foreach ($matchingNodes as $node) {
             $dependencies = $this->getDependencies($node);
+            $destinationsNotMatched = $destinations;
 
-            foreach ($dependencies as $key => $dependency) {
-                foreach ($destinations as $destination) {
+            foreach ($dependencies as $depkey => $dependency) {
+                foreach ($destinations as $dkey => $destination) {
                     if ($destination->matches($dependency)) {
-                        $this->dispatchSelectedResult(true, $origin->toString(), $dependency);
-                        unset($dependencies[$key]);
-                        continue;
+                        $this->dispatchResult(true, true, $origin->toString(), $dependency);
+                        unset($dependencies[$depkey]);
+                        unset($destinationsNotMatched[$dkey]);
                     }
                 }
             }
 
-            if (empty($dependencies)) {
-                $this->dispatchOthersResult(true, $origin->toString());
-
-                return;
+            foreach ($dependencies as $dependency) {
+                $this->dispatchResult(true, false, $origin->toString(), $dependency);
             }
 
-            foreach ($dependencies as $dependency) {
-                $this->dispatchOthersResult(false, $origin->toString(), $dependency);
+            foreach ($destinationsNotMatched as $destination) {
+                $this->dispatchResult(false, true, $origin->toString(), $destination->toString());
             }
         }
 
@@ -74,21 +73,11 @@ class MustOnlyDepend implements Assertion
         return $dependencies ?? [];
     }
 
-    private function dispatchSelectedResult(bool $result, string $fqcnOrigin, string $fqcnDestination): void
+    private function dispatchResult(bool $result, bool $should, string $fqcnOrigin, string $fqcnDestination): void
     {
         $action = $result ? ' depends on ' : ' does not depend on ';
-        $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
+        $event = ($result xor $should) ? StatementNotValidEvent::class : StatementValidEvent::class;
         $message = $fqcnOrigin . $action . $fqcnDestination;
-
-        $this->eventDispatcher->dispatch(new $event($message));
-    }
-
-    private function dispatchOthersResult(bool $result, string $fqcnOrigin, string $fqcnDestination = ''): void
-    {
-        $message = $result
-            ? $fqcnOrigin . ' does not depend on non-selected classes'
-            : $fqcnOrigin . ' depends on ' . $fqcnDestination;
-        $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
 
         $this->eventDispatcher->dispatch(new $event($message));
     }

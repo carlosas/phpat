@@ -60,7 +60,7 @@ class MustOnlyIncludeTest extends TestCase
                 ],
                 $this->getAstMap(),
                 false,
-                [true, true, true]
+                [true, true]
             ],
             //it fails because it does not depend on NotAClass
             [
@@ -72,7 +72,7 @@ class MustOnlyIncludeTest extends TestCase
                 ],
                 $this->getAstMap(),
                 false,
-                [true, true, false, true]
+                [true, true, false]
             ],
             //it fails because it also depend on Vendor\ThirdPartyExample
             [

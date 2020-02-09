@@ -38,26 +38,23 @@ class MustOnlyInclude implements Assertion
 
         foreach ($matchingNodes as $node) {
             $mixins = $this->getMixins($node);
-
-            foreach ($mixins as $key => $mixin) {
-                foreach ($destinations as $destination) {
+            $destinationsNotMatched = $destinations;
+            foreach ($mixins as $mkey => $mixin) {
+                foreach ($destinations as $dkey => $destination) {
                     if ($destination->matches($mixin)) {
-                        $this->dispatchSelectedResult(true, $origin->toString(), $mixin);
-                        unset($mixins[$key]);
-                        continue;
+                        $this->dispatchResult(true, true, $origin->toString(), $mixin);
+                        unset($mixins[$mkey]);
+                        unset($destinationsNotMatched[$dkey]);
                     }
                 }
             }
 
-
-            if (empty($mixins)) {
-                $this->dispatchOthersResult(true, $origin->toString());
-
-                return;
+            foreach ($mixins as $mixin) {
+                $this->dispatchResult(true, false, $origin->toString(), $mixin);
             }
 
-            foreach ($mixins as $mixin) {
-                $this->dispatchOthersResult(false, $origin->toString(), $mixin);
+            foreach ($destinationsNotMatched as $destination) {
+                $this->dispatchResult(false, true, $origin->toString(), $destination->toString());
             }
         }
 
@@ -75,21 +72,11 @@ class MustOnlyInclude implements Assertion
         return $mixins ?? [];
     }
 
-    private function dispatchSelectedResult(bool $result, string $fqcnOrigin, string $fqcnDestination): void
+    private function dispatchResult(bool $result, bool $should, string $fqcnOrigin, string $fqcnDestination): void
     {
         $action = $result ? ' includes ' : ' does not include ';
-        $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
+        $event = ($result xor $should) ? StatementNotValidEvent::class : StatementValidEvent::class;
         $message = $fqcnOrigin . $action . $fqcnDestination;
-
-        $this->eventDispatcher->dispatch(new $event($message));
-    }
-
-    private function dispatchOthersResult(bool $result, string $fqcnOrigin, string $fqcnDestination = ''): void
-    {
-        $message = $result
-            ? $fqcnOrigin . ' does not include non-selected traits'
-            : $fqcnOrigin . ' includes ' . $fqcnDestination;
-        $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
 
         $this->eventDispatcher->dispatch(new $event($message));
     }
