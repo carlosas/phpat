@@ -14,7 +14,7 @@ use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
 use PHPUnit\Framework\TestCase;
 
-class MustIncludeTest extends TestCase
+class MustNotIncludeTest extends TestCase
 {
     /**
      * @dataProvider dataProvider
