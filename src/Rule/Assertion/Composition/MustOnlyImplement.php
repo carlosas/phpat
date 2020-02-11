@@ -6,11 +6,11 @@ namespace PhpAT\Rule\Assertion\Composition;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
+use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\Relation\Composition;
 use PhpAT\Rule\Assertion\Assertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
-use PhpParser\Node;
 
 class MustOnlyImplement implements Assertion
 {
@@ -22,39 +22,39 @@ class MustOnlyImplement implements Assertion
         $this->eventDispatcher = $eventDispatcher;
     }
 
+    /**
+     * @param ClassLike   $origin
+     * @param ClassLike[] $destinations
+     * @param array       $astMap
+     * @param bool        $inverse
+     */
     public function validate(
-        string $fqcnOrigin,
-        array $fqcnDestinations,
+        ClassLike $origin,
+        array $destinations,
         array $astMap,
         bool $inverse = false //ignored
     ): void {
-        /** @var AstNode $node */
-        foreach ($astMap as $node) {
-            if ($node->getClassName() !== $fqcnOrigin) {
-                continue;
-            }
+        $matchingNodes = $this->filterMatchingNodes($origin, $astMap);
 
+        foreach ($matchingNodes as $node) {
             $interfaces = $this->getInterfaces($node);
-
-            foreach ($fqcnDestinations as $fqcnDestination) {
-                $result = array_search($fqcnDestination, $interfaces, true);
-
-                if ($result !== false) {
-                    $this->dispatchSelectedResult(true, $fqcnOrigin, $fqcnDestination);
-                    unset($interfaces[$result]);
-                    continue;
+            $destinationsNotMatched = $destinations;
+            foreach ($interfaces as $ikey => $interface) {
+                foreach ($destinations as $dkey => $destination) {
+                    if ($destination->matches($interface)) {
+                        $this->dispatchResult(true, true, $origin->toString(), $interface);
+                        unset($interfaces[$ikey]);
+                        unset($destinationsNotMatched[$dkey]);
+                    }
                 }
-                $this->dispatchSelectedResult(false, $fqcnOrigin, $fqcnDestination);
-            }
-
-            if (empty($interfaces)) {
-                $this->dispatchOthersResult(true, $fqcnOrigin);
-
-                return;
             }
 
             foreach ($interfaces as $interface) {
-                $this->dispatchOthersResult(false, $fqcnOrigin, $interface);
+                $this->dispatchResult(true, false, $origin->toString(), $interface);
+            }
+
+            foreach ($destinationsNotMatched as $destination) {
+                $this->dispatchResult(false, true, $origin->toString(), $destination->toString());
             }
         }
 
@@ -72,22 +72,24 @@ class MustOnlyImplement implements Assertion
         return $interfaces ?? [];
     }
 
-    private function dispatchSelectedResult(bool $result, string $fqcnOrigin, string $fqcnDestination): void
+    private function dispatchResult(bool $result, bool $should, string $fqcnOrigin, string $fqcnDestination): void
     {
         $action = $result ? ' implements ' : ' does not implement ';
-        $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
+        $event = ($result xor $should) ? StatementNotValidEvent::class : StatementValidEvent::class;
         $message = $fqcnOrigin . $action . $fqcnDestination;
 
         $this->eventDispatcher->dispatch(new $event($message));
     }
 
-    private function dispatchOthersResult(bool $result, string $fqcnOrigin, string $fqcnDestination = ''): void
+    private function filterMatchingNodes(ClassLike $origin, array $astMap)
     {
-        $message = $result
-            ? $fqcnOrigin . ' does not implement non-selected interfaces'
-            : $fqcnOrigin . ' implements ' . $fqcnDestination;
-        $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
+        /** @var AstNode $node */
+        foreach ($astMap as $node) {
+            if ($origin->matches($node->getClassName())) {
+                $found[] = $node;
+            }
+        }
 
-        $this->eventDispatcher->dispatch(new $event($message));
+        return $found ?? [];
     }
 }

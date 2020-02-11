@@ -2,10 +2,14 @@
 
 namespace Tests\PhpAT\functional\architecture;
 
+use PHPAT\EventDispatcher\EventInterface;
 use PhpAT\Rule\Rule;
 use PhpAT\Selector\Selector;
 use PhpAT\Test\ArchitectureTest;
+use Tests\PhpAT\functional\fixtures\Inheritance\InheritanceNamespaceSimpleClass;
 use Tests\PhpAT\functional\fixtures\SimpleClass;
+use Tests\PhpAT\functional\fixtures\SimpleInterface;
+use Tests\PhpAT\functional\fixtures\SimpleTrait;
 
 class DependencyTest extends ArchitectureTest
 {
@@ -82,10 +86,13 @@ class DependencyTest extends ArchitectureTest
         return $this->newRule
             ->classesThat(Selector::havePath('Dependency/DocBlock.php'))
             ->mustOnlyDependOn()
-            ->classesThat(Selector::havePath('SimpleClass.php'))
+            ->classesThat(Selector::haveClassName('Tests\PhpAT\functional\fixtures\Simple*'))
+            ->excludingClassesThat(Selector::haveClassName(SimpleTrait::class))
+            ->excludingClassesThat(Selector::haveClassName(SimpleInterface::class))
+            ->classesThat(Selector::haveClassName('Tests\PhpAT\functional\fixtures\Simple*'))
             ->andClassesThat(Selector::havePath('AnotherSimpleClass.php'))
             ->andClassesThat(Selector::havePath('Dependency/DependencyNamespaceSimpleClass.php'))
-            ->andClassesThat(Selector::havePath('Inheritance/InheritanceNamespaceSimpleClass.php'))
+            ->andClassesThat(Selector::haveClassName(InheritanceNamespaceSimpleClass::class))
             ->build();
     }
 }

@@ -6,6 +6,7 @@ namespace PhpAT\Rule\Assertion\Mixin;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
+use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\Relation\Mixin;
 use PhpAT\Rule\Assertion\Assertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
@@ -21,38 +22,39 @@ class MustOnlyInclude implements Assertion
         $this->eventDispatcher = $eventDispatcher;
     }
 
+    /**
+     * @param ClassLike   $origin
+     * @param ClassLike[] $destinations
+     * @param array       $astMap
+     * @param bool        $inverse
+     */
     public function validate(
-        string $fqcnOrigin,
-        array $fqcnDestinations,
+        ClassLike $origin,
+        array $destinations,
         array $astMap,
         bool $inverse = false //ignored
     ): void {
-        /** @var AstNode $node */
-        foreach ($astMap as $node) {
-            if ($node->getClassName() !== $fqcnOrigin) {
-                continue;
-            }
+        $matchingNodes = $this->filterMatchingNodes($origin, $astMap);
 
+        foreach ($matchingNodes as $node) {
             $mixins = $this->getMixins($node);
-            foreach ($fqcnDestinations as $fqcnDestination) {
-                $result = array_search($fqcnDestination, $mixins, true);
-
-                if ($result === false) {
-                    $this->dispatchSelectedResult(false, $fqcnOrigin, $fqcnDestination);
-                    continue;
+            $destinationsNotMatched = $destinations;
+            foreach ($mixins as $mkey => $mixin) {
+                foreach ($destinations as $dkey => $destination) {
+                    if ($destination->matches($mixin)) {
+                        $this->dispatchResult(true, true, $origin->toString(), $mixin);
+                        unset($mixins[$mkey]);
+                        unset($destinationsNotMatched[$dkey]);
+                    }
                 }
-                $this->dispatchSelectedResult(true, $fqcnOrigin, $fqcnDestination);
-                unset($mixins[$result]);
-            }
-
-            if (empty($mixins)) {
-                $this->dispatchOthersResult(true, $fqcnOrigin);
-
-                return;
             }
 
             foreach ($mixins as $mixin) {
-                $this->dispatchOthersResult(false, $fqcnOrigin, $mixin);
+                $this->dispatchResult(true, false, $origin->toString(), $mixin);
+            }
+
+            foreach ($destinationsNotMatched as $destination) {
+                $this->dispatchResult(false, true, $origin->toString(), $destination->toString());
             }
         }
 
@@ -70,22 +72,24 @@ class MustOnlyInclude implements Assertion
         return $mixins ?? [];
     }
 
-    private function dispatchSelectedResult(bool $result, string $fqcnOrigin, string $fqcnDestination): void
+    private function dispatchResult(bool $result, bool $should, string $fqcnOrigin, string $fqcnDestination): void
     {
         $action = $result ? ' includes ' : ' does not include ';
-        $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
+        $event = ($result xor $should) ? StatementNotValidEvent::class : StatementValidEvent::class;
         $message = $fqcnOrigin . $action . $fqcnDestination;
 
         $this->eventDispatcher->dispatch(new $event($message));
     }
 
-    private function dispatchOthersResult(bool $result, string $fqcnOrigin, string $fqcnDestination = ''): void
+    private function filterMatchingNodes(ClassLike $origin, array $astMap)
     {
-        $message = $result
-            ? $fqcnOrigin . ' does not include non-selected traits'
-            : $fqcnOrigin . ' includes ' . $fqcnDestination;
-        $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
+        /** @var AstNode $node */
+        foreach ($astMap as $node) {
+            if ($origin->matches($node->getClassName())) {
+                $found[] = $node;
+            }
+        }
 
-        $this->eventDispatcher->dispatch(new $event($message));
+        return $found ?? [];
     }
 }

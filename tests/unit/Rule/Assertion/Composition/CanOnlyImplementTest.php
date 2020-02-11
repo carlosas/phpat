@@ -4,6 +4,7 @@ namespace Tests\PhpAT\unit\Rule\Assertion\Composition;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
+use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\FullClassName;
 use PhpAT\Parser\Relation\Composition;
 use PhpAT\Parser\Relation\Dependency;
@@ -18,15 +19,15 @@ class CanOnlyImplementTest extends TestCase
 {
     /**
      * @dataProvider dataProvider
-     * @param string $fqcnOrigin
-     * @param array  $fqcnDestinations
-     * @param array  $astMap
-     * @param bool   $inverse
-     * @param array  $expectedEvents
+     * @param ClassLike   $origin
+     * @param ClassLike[] $destinations
+     * @param array       $astMap
+     * @param bool        $inverse
+     * @param array       $expectedEvents
      */
     public function testDispatchesCorrectEvents(
-        string $fqcnOrigin,
-        array $fqcnDestinations,
+        ClassLike $origin,
+        array $destinations,
         array $astMap,
         bool $inverse,
         array $expectedEvents
@@ -45,34 +46,49 @@ class CanOnlyImplementTest extends TestCase
             ->method('dispatch')
             ->withConsecutive(...$consecutive??[]);
 
-        $class->validate($fqcnOrigin, $fqcnDestinations, $astMap, $inverse);
+        $class->validate($origin, $destinations, $astMap, $inverse);
     }
 
     public function dataProvider(): array
     {
         return [
             [
-                'Example\ClassExample',
-                ['Example\InterfaceExample', 'Example\AnotherInterface'],
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [
+                    FullClassName::createFromFQCN('Example\InterfaceExample'),
+                    FullClassName::createFromFQCN('Example\AnotherInterface')
+                ],
                 $this->getAstMap(),
                 false,
                 [true]
             ],
             [
-                'Example\ClassExample',
+                FullClassName::createFromFQCN('Example\ClassExample'),
                 [
-                    'Example\InterfaceExample',
-                    'Example\AnotherInterface',
-                    'NotImplementedInterface'
+                    FullClassName::createFromFQCN('Example\InterfaceExample'),
+                    FullClassName::createFromFQCN('Example\AnotherInterface'),
+                    FullClassName::createFromFQCN('NotImplementedInterface')
                 ],
                 $this->getAstMap(),
                 false,
                 [true]
             ],
             //it fails because Example\AnotherInterface is also implemented
-            ['Example\ClassExample', ['Example\InterfaceExample'], $this->getAstMap(), false, [false]],
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [FullClassName::createFromFQCN('Example\InterfaceExample')],
+                $this->getAstMap(),
+                false,
+                [false]
+            ],
             //it fails because there are 2 interface implementations not listed
-            ['Example\ClassExample', ['NotARealInterface'], $this->getAstMap(), false, [false, false]],
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [FullClassName::createFromFQCN('NotARealInterface')],
+                $this->getAstMap(),
+                false,
+                [false, false]
+            ],
         ];
     }
 

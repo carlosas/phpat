@@ -1,39 +1,40 @@
 <?php
 
-namespace Tests\PhpAT\unit\Rule\Assertion\Composition;
+namespace Tests\PhpAT\unit\Rule\Assertion\Inheritance;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
+use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\FullClassName;
 use PhpAT\Parser\Relation\Composition;
 use PhpAT\Parser\Relation\Dependency;
 use PhpAT\Parser\Relation\Inheritance;
 use PhpAT\Parser\Relation\Mixin;
-use PhpAT\Rule\Assertion\Composition\MustImplement;
+use PhpAT\Rule\Assertion\Inheritance\MustExtend;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
 use PHPUnit\Framework\TestCase;
 
-class MustImplementTest extends TestCase
+class MustExtendTest extends TestCase
 {
     /**
      * @dataProvider dataProvider
-     * @param string $fqcnOrigin
-     * @param array  $fqcnDestinations
-     * @param array  $astMap
-     * @param bool   $inverse
-     * @param array  $expectedEvents
+     * @param ClassLike   $origin
+     * @param ClassLike[] $destinations
+     * @param array       $astMap
+     * @param bool        $inverse
+     * @param array       $expectedEvents
      */
     public function testDispatchesCorrectEvents(
-        string $fqcnOrigin,
-        array $fqcnDestinations,
+        ClassLike $origin,
+        array $destinations,
         array $astMap,
         bool $inverse,
         array $expectedEvents
     ): void
     {
         $eventDispatcherMock = $this->createMock(EventDispatcher::class);
-        $class = new MustImplement($eventDispatcherMock);
+        $class = new MustExtend($eventDispatcherMock);
 
         foreach ($expectedEvents as $valid) {
             $eventType = $valid ? StatementValidEvent::class : StatementNotValidEvent::class;
@@ -45,21 +46,42 @@ class MustImplementTest extends TestCase
             ->method('dispatch')
             ->withConsecutive(...$consecutive??[]);
 
-        $class->validate($fqcnOrigin, $fqcnDestinations, $astMap, $inverse);
+        $class->validate($origin, $destinations, $astMap, $inverse);
     }
 
     public function dataProvider(): array
     {
         return [
-            ['Example\ClassExample', ['Example\InterfaceExample'], $this->getAstMap(), false, [true]],
-            ['Example\ClassExample', ['Example\InterfaceExample'], $this->getAstMap(), false, [true]],
-            ['Example\ClassExample', ['NotARealInterface'], $this->getAstMap(), true, [true]],
-            //it fails because Example\InterfaceExample is implemented
-            ['Example\ClassExample', ['Example\InterfaceExample'], $this->getAstMap(), true, [false]],
-            //it fails because NotARealInterface is not implemented
-            ['Example\ClassExample', ['NotARealInterface'], $this->getAstMap(), false, [false]],
-            //it fails twice because both are not implemented
-            ['Example\ClassExample', ['NopesOne', 'NopesTwo'], $this->getAstMap(), false, [false, false]],
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [FullClassName::createFromFQCN('Example\ParentClassExample')],
+                $this->getAstMap(),
+                false,
+                [true]
+            ],
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [FullClassName::createFromFQCN('NotARealParent')],
+                $this->getAstMap(),
+                true,
+                [true]
+            ],
+            //it fails because it extends Example\ParentClassExample
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [FullClassName::createFromFQCN('Example\ParentClassExample')],
+                $this->getAstMap(),
+                true,
+                [false]
+            ],
+            //it fails because it does not extend NotARealParent
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [FullClassName::createFromFQCN('NotARealParent')],
+                $this->getAstMap(),
+                false,
+                [false]
+            ],
        ];
     }
 

@@ -6,6 +6,8 @@ namespace PhpAT\Selector;
 
 use PhpAT\File\FileFinder;
 use PhpAT\Parser\AstNode;
+use PhpAT\Parser\ClassLike;
+use PhpAT\Parser\FullClassName;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\Parser;
 
@@ -69,7 +71,7 @@ class PathSelector implements SelectorInterface
     }
 
     /**
-     * @return string[]
+     * @return ClassLike[]
      */
     public function select(): array
     {
@@ -78,7 +80,7 @@ class PathSelector implements SelectorInterface
 
             foreach ($this->astMap as $astNode) {
                 if ($astNode->getFilePathname() === $filePathname) {
-                    $result[$astNode->getClassName()] = $astNode->getClassName();
+                    $result[$astNode->getClassName()] = FullClassName::createFromFQCN($astNode->getClassName());
                 }
             }
         }

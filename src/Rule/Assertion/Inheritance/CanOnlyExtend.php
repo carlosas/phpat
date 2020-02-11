@@ -6,6 +6,7 @@ namespace PhpAT\Rule\Assertion\Inheritance;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
+use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\Relation\Inheritance;
 use PhpAT\Rule\Assertion\Assertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
@@ -21,21 +22,32 @@ class CanOnlyExtend implements Assertion
         $this->eventDispatcher = $eventDispatcher;
     }
 
+    /**
+     * @param ClassLike   $origin
+     * @param ClassLike[] $destinations
+     * @param array       $astMap
+     * @param bool        $inverse
+     */
     public function validate(
-        string $fqcnOrigin,
-        array $fqcnDestinations,
+        ClassLike $origin,
+        array $destinations,
         array $astMap,
         bool $inverse = false //ignored
     ): void {
-        /** @var AstNode $node */
-        foreach ($astMap as $node) {
-            if ($node->getClassName() !== $fqcnOrigin) {
-                continue;
+        $matchingNodes = $this->filterMatchingNodes($origin, $astMap);
+
+        foreach ($matchingNodes as $node) {
+            $parent = $this->getParent($node);
+
+            if ($parent === null) {
+                $this->dispatchResult(true, $origin->toString(), '');
+
+                return;
             }
 
-            $parent = $this->getParent($node);
-            $success = $parent === null || in_array($parent, $fqcnDestinations);
-            $this->dispatchResult($success, $fqcnOrigin, $parent);
+            foreach ($destinations as $destination) {
+                $this->dispatchResult($destination->matches($parent), $origin->toString(), $parent);
+            }
 
             return;
         }
@@ -60,5 +72,17 @@ class CanOnlyExtend implements Assertion
         $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
 
         $this->eventDispatcher->dispatch(new $event($message));
+    }
+
+    private function filterMatchingNodes(ClassLike $origin, array $astMap)
+    {
+        /** @var AstNode $node */
+        foreach ($astMap as $node) {
+            if ($origin->matches($node->getClassName())) {
+                $found[] = $node;
+            }
+        }
+
+        return $found ?? [];
     }
 }

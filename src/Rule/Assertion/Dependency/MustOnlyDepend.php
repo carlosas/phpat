@@ -6,6 +6,7 @@ namespace PhpAT\Rule\Assertion\Dependency;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
+use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\Relation\Dependency;
 use PhpAT\Rule\Assertion\Assertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
@@ -21,38 +22,40 @@ class MustOnlyDepend implements Assertion
         $this->eventDispatcher = $eventDispatcher;
     }
 
+    /**
+     * @param ClassLike   $origin
+     * @param ClassLike[] $destinations
+     * @param array       $astMap
+     * @param bool        $inverse
+     */
     public function validate(
-        string $fqcnOrigin,
-        array $fqcnDestinations,
+        ClassLike $origin,
+        array $destinations,
         array $astMap,
         bool $inverse = false //ignored
     ): void {
-        /** @var AstNode $node */
-        foreach ($astMap as $node) {
-            if ($node->getClassName() !== $fqcnOrigin) {
-                continue;
-            }
+        $matchingNodes = $this->filterMatchingNodes($origin, $astMap);
 
+        foreach ($matchingNodes as $node) {
             $dependencies = $this->getDependencies($node);
-            foreach ($fqcnDestinations as $fqcnDestination) {
-                $result = array_search($fqcnDestination, $dependencies, true);
+            $destinationsNotMatched = $destinations;
 
-                if ($result === false) {
-                    $this->dispatchSelectedResult(false, $fqcnOrigin, $fqcnDestination);
-                    continue;
+            foreach ($dependencies as $depkey => $dependency) {
+                foreach ($destinations as $dkey => $destination) {
+                    if ($destination->matches($dependency)) {
+                        $this->dispatchResult(true, true, $origin->toString(), $dependency);
+                        unset($dependencies[$depkey]);
+                        unset($destinationsNotMatched[$dkey]);
+                    }
                 }
-                $this->dispatchSelectedResult(true, $fqcnOrigin, $fqcnDestination);
-                unset($dependencies[$result]);
-            }
-
-            if (empty($dependencies)) {
-                $this->dispatchOthersResult(true, $fqcnOrigin);
-
-                return;
             }
 
             foreach ($dependencies as $dependency) {
-                $this->dispatchOthersResult(false, $fqcnOrigin, $dependency);
+                $this->dispatchResult(true, false, $origin->toString(), $dependency);
+            }
+
+            foreach ($destinationsNotMatched as $destination) {
+                $this->dispatchResult(false, true, $origin->toString(), $destination->toString());
             }
         }
 
@@ -70,22 +73,24 @@ class MustOnlyDepend implements Assertion
         return $dependencies ?? [];
     }
 
-    private function dispatchSelectedResult(bool $result, string $fqcnOrigin, string $fqcnDestination): void
+    private function dispatchResult(bool $result, bool $should, string $fqcnOrigin, string $fqcnDestination): void
     {
         $action = $result ? ' depends on ' : ' does not depend on ';
-        $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
+        $event = ($result xor $should) ? StatementNotValidEvent::class : StatementValidEvent::class;
         $message = $fqcnOrigin . $action . $fqcnDestination;
 
         $this->eventDispatcher->dispatch(new $event($message));
     }
 
-    private function dispatchOthersResult(bool $result, string $fqcnOrigin, string $fqcnDestination = ''): void
+    private function filterMatchingNodes(ClassLike $origin, array $astMap)
     {
-        $message = $result
-            ? $fqcnOrigin . ' does not depend on non-selected classes'
-            : $fqcnOrigin . ' depends on ' . $fqcnDestination;
-        $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
+        /** @var AstNode $node */
+        foreach ($astMap as $node) {
+            if ($origin->matches($node->getClassName())) {
+                $found[] = $node;
+            }
+        }
 
-        $this->eventDispatcher->dispatch(new $event($message));
+        return $found ?? [];
     }
 }

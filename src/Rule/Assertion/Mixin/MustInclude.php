@@ -6,6 +6,7 @@ namespace PhpAT\Rule\Assertion\Mixin;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
+use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\Relation\Mixin;
 use PhpAT\Rule\Assertion\Assertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
@@ -21,22 +22,25 @@ class MustInclude implements Assertion
         $this->eventDispatcher = $eventDispatcher;
     }
 
+    /**
+     * @param ClassLike   $origin
+     * @param ClassLike[] $destinations
+     * @param array       $astMap
+     * @param bool        $inverse
+     */
     public function validate(
-        string $fqcnOrigin,
-        array $fqcnDestinations,
+        ClassLike $origin,
+        array $destinations,
         array $astMap,
         bool $inverse = false
     ): void {
-        /** @var AstNode $node */
-        foreach ($astMap as $node) {
-            if ($node->getClassName() !== $fqcnOrigin) {
-                continue;
-            }
+        $matchingNodes = $this->filterMatchingNodes($origin, $astMap);
 
+        foreach ($matchingNodes as $node) {
             $mixins = $this->getMixins($node);
-            foreach ($fqcnDestinations as $destination) {
-                $result = in_array($destination, $mixins);
-                $this->dispatchResult($result, $inverse, $fqcnOrigin, $destination);
+            foreach ($destinations as $destination) {
+                $matches = $this->matches($destination, $mixins);
+                $this->dispatchResult($matches ?? false, $inverse, $origin->toString(), $destination->toString());
             }
         }
 
@@ -54,6 +58,17 @@ class MustInclude implements Assertion
         return $mixins ?? [];
     }
 
+    private function matches(ClassLike $destination, array $mixins): bool
+    {
+        foreach ($mixins as $mixin) {
+            if ($destination->matches($mixin)) {
+                $matches = true;
+            }
+        }
+
+        return $matches ?? false;
+    }
+
     private function dispatchResult(bool $result, bool $inverse, string $fqcnOrigin, string $fqcnDestination): void
     {
         $action = $result ? ' includes ' : ' does not include ';
@@ -61,5 +76,16 @@ class MustInclude implements Assertion
         $message = $fqcnOrigin . $action . $fqcnDestination;
 
         $this->eventDispatcher->dispatch(new $event($message));
+    }
+
+    private function filterMatchingNodes(ClassLike $origin, array $astMap)
+    {
+        /** @var AstNode $node */
+        foreach ($astMap as $node) {
+            if ($origin->matches($node->getClassName())) {
+                $found[] = $node;
+            }
+        }
+        return $found ?? [];
     }
 }

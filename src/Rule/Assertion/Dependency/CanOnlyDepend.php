@@ -6,6 +6,7 @@ namespace PhpAT\Rule\Assertion\Dependency;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
+use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\Relation\Dependency;
 use PhpAT\Rule\Assertion\Assertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
@@ -21,34 +22,39 @@ class CanOnlyDepend implements Assertion
         $this->eventDispatcher = $eventDispatcher;
     }
 
+    /**
+     * @param ClassLike   $origin
+     * @param ClassLike[] $destinations
+     * @param array       $astMap
+     * @param bool        $inverse
+     */
     public function validate(
-        string $fqcnOrigin,
-        array $fqcnDestinations,
+        ClassLike $origin,
+        array $destinations,
         array $astMap,
         bool $inverse = false //ignored
     ): void {
-        /** @var AstNode $node */
-        foreach ($astMap as $node) {
-            if ($node->getClassName() !== $fqcnOrigin) {
-                continue;
-            }
+        $matchingNodes = $this->filterMatchingNodes($origin, $astMap);
 
+        foreach ($matchingNodes as $node) {
             $dependencies = $this->getDependencies($node);
 
             foreach ($dependencies as $key => $value) {
-                if (in_array($value, $fqcnDestinations)) {
-                    unset($dependencies[$key]);
+                foreach ($destinations as $destination) {
+                    if ($destination->matches($value)) {
+                        unset($dependencies[$key]);
+                    }
                 }
             }
 
             if (empty($dependencies)) {
-                $this->dispatchResult(true, $fqcnOrigin);
+                $this->dispatchResult(true, $origin->toString());
 
                 return;
             }
 
             foreach ($dependencies as $dependency) {
-                $this->dispatchResult(false, $fqcnOrigin, $dependency);
+                $this->dispatchResult(false, $origin->toString(), $dependency);
             }
         }
 
@@ -74,5 +80,17 @@ class CanOnlyDepend implements Assertion
         $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
 
         $this->eventDispatcher->dispatch(new $event($message));
+    }
+
+    private function filterMatchingNodes(ClassLike $origin, array $astMap)
+    {
+        /** @var AstNode $node */
+        foreach ($astMap as $node) {
+            if ($origin->matches($node->getClassName())) {
+                $found[] = $node;
+            }
+        }
+
+        return $found ?? [];
     }
 }

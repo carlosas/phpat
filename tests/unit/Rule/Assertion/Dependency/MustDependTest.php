@@ -1,39 +1,40 @@
 <?php
 
-namespace Tests\PhpAT\unit\Rule\Assertion\Composition;
+namespace Tests\PhpAT\unit\Rule\Assertion\Dependency;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
+use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\FullClassName;
 use PhpAT\Parser\Relation\Composition;
 use PhpAT\Parser\Relation\Dependency;
 use PhpAT\Parser\Relation\Inheritance;
 use PhpAT\Parser\Relation\Mixin;
-use PhpAT\Rule\Assertion\Composition\MustOnlyImplement;
+use PhpAT\Rule\Assertion\Dependency\MustDepend;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
 use PHPUnit\Framework\TestCase;
 
-class MustOnlyImplementTest extends TestCase
+class MustDependTest extends TestCase
 {
     /**
      * @dataProvider dataProvider
-     * @param string $fqcnOrigin
-     * @param array  $fqcnDestinations
-     * @param array  $astMap
-     * @param bool   $inverse
-     * @param array  $expectedEvents
+     * @param ClassLike   $origin
+     * @param ClassLike[] $destinations
+     * @param array       $astMap
+     * @param bool        $inverse
+     * @param array       $expectedEvents
      */
     public function testDispatchesCorrectEvents(
-        string $fqcnOrigin,
-        array $fqcnDestinations,
+        ClassLike $origin,
+        array $destinations,
         array $astMap,
         bool $inverse,
         array $expectedEvents
     ): void
     {
         $eventDispatcherMock = $this->createMock(EventDispatcher::class);
-        $class = new MustOnlyImplement($eventDispatcherMock);
+        $class = new MustDepend($eventDispatcherMock);
 
         foreach ($expectedEvents as $valid) {
             $eventType = $valid ? StatementValidEvent::class : StatementNotValidEvent::class;
@@ -45,32 +46,53 @@ class MustOnlyImplementTest extends TestCase
             ->method('dispatch')
             ->withConsecutive(...$consecutive??[]);
 
-        $class->validate($fqcnOrigin, $fqcnDestinations, $astMap, $inverse);
+        $class->validate($origin, $destinations, $astMap, $inverse);
     }
 
     public function dataProvider(): array
     {
         return [
             [
-                'Example\ClassExample',
-                ['Example\InterfaceExample', 'Example\AnotherInterface'],
-                $this->getAstMap(),
-                false,
-                [true, true, true]
-            ],
-            //it fails because it does not implement NotImplementedInterface
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [FullClassName::createFromFQCN('Example\AnotherClassExample')], $this->getAstMap(), false, [true]],
             [
-                'Example\ClassExample',
-                ['Example\InterfaceExample', 'Example\AnotherInterface', 'NotImplementedInterface'],
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [FullClassName::createFromFQCN('Vendor\ThirdPartyExample')], $this->getAstMap(), false, [true]],
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [FullClassName::createFromFQCN('NotARealClass')],
+                $this->getAstMap(),
+                true,
+                [true]
+            ],
+            //it fails because it depends on Example\AnotherClassExample
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [FullClassName::createFromFQCN('Example\AnotherClassExample')],
+                $this->getAstMap(),
+                true,
+                [false]
+            ],
+            //it fails because it does not depend on NotARealClass
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [FullClassName::createFromFQCN('NotARealClass')],
                 $this->getAstMap(),
                 false,
-                [true, true, false, true]
+                [false]
             ],
-            //it fails because Example\AnotherInterface is also implemented
-            ['Example\ClassExample', ['Example\InterfaceExample'], $this->getAstMap(), false, [true, false]],
-            //it fails because there implements 2 that are not listed and does not implement NotARealInterface
-            ['Example\ClassExample', ['NotARealInterface'], $this->getAstMap(), false, [false, false, false]],
-        ];
+            //it fails twice because it does not depend on any of both classes
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [
+                    FullClassName::createFromFQCN('NopesOne'),
+                    FullClassName::createFromFQCN('NopesTwo')
+                ],
+                $this->getAstMap(),
+                false,
+                [false, false]
+            ],
+       ];
     }
 
     private function getAstMap(): array
@@ -88,6 +110,6 @@ class MustOnlyImplementTest extends TestCase
                     new Mixin(0, new FullClassName('Example', 'TraitExample'))
                 ]
             )
-        ];
+       ];
     }
 }
