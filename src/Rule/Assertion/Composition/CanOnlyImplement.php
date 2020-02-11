@@ -26,13 +26,11 @@ class CanOnlyImplement implements Assertion
      * @param ClassLike   $origin
      * @param ClassLike[] $destinations
      * @param array       $astMap
-     * @param bool        $inverse
      */
     public function validate(
         ClassLike $origin,
         array $destinations,
-        array $astMap,
-        bool $inverse = false //ignored
+        array $astMap
     ): void {
         $matchingNodes = $this->filterMatchingNodes($origin, $astMap);
 

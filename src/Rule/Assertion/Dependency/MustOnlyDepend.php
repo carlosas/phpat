@@ -7,6 +7,7 @@ namespace PhpAT\Rule\Assertion\Dependency;
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
 use PhpAT\Parser\ClassLike;
+use PhpAT\Parser\FullClassName;
 use PhpAT\Parser\Relation\Dependency;
 use PhpAT\Rule\Assertion\Assertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
@@ -26,13 +27,11 @@ class MustOnlyDepend implements Assertion
      * @param ClassLike   $origin
      * @param ClassLike[] $destinations
      * @param array       $astMap
-     * @param bool        $inverse
      */
     public function validate(
         ClassLike $origin,
         array $destinations,
-        array $astMap,
-        bool $inverse = false //ignored
+        array $astMap
     ): void {
         $matchingNodes = $this->filterMatchingNodes($origin, $astMap);
 
@@ -41,10 +40,12 @@ class MustOnlyDepend implements Assertion
 
             foreach ($dependencies as $key => $dependency) {
                 foreach ($destinations as $destination) {
-                    if ($destination->matches($dependency)) {
-                        $this->dispatchSelectedResult(true, $origin->toString(), $dependency);
-                        unset($dependencies[$key]);
-                        continue;
+                    if ($destination instanceof FullClassName) {
+                        if ($destination->matches($dependency)) {
+                            $this->dispatchSelectedResult(true, $origin->toString(), $dependency);
+                            unset($dependencies[$key]);
+                            continue;
+                        }
                     }
                 }
             }

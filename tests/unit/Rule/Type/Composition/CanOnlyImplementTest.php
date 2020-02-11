@@ -21,14 +21,12 @@ class CanOnlyImplementTest extends TestCase
      * @param string $fqcnOrigin
      * @param array  $fqcnDestinations
      * @param array  $astMap
-     * @param bool   $inverse
      * @param array  $expectedEvents
      */
     public function testDispatchesCorrectEvents(
         string $fqcnOrigin,
         array $fqcnDestinations,
         array $astMap,
-        bool $inverse,
         array $expectedEvents
     ): void
     {
@@ -45,7 +43,7 @@ class CanOnlyImplementTest extends TestCase
             ->method('dispatch')
             ->withConsecutive(...$consecutive??[]);
 
-        $class->validate($fqcnOrigin, $fqcnDestinations, $astMap, $inverse);
+        $class->validate($fqcnOrigin, $fqcnDestinations, $astMap);
     }
 
     public function dataProvider(): array
@@ -55,7 +53,6 @@ class CanOnlyImplementTest extends TestCase
                 'Example\ClassExample',
                 ['Example\InterfaceExample', 'Example\AnotherInterface'],
                 $this->getAstMap(),
-                false,
                 [true]
             ],
             [
@@ -66,13 +63,12 @@ class CanOnlyImplementTest extends TestCase
                     'NotImplementedInterface'
                 ],
                 $this->getAstMap(),
-                false,
                 [true]
             ],
             //it fails because Example\AnotherInterface is also implemented
-            ['Example\ClassExample', ['Example\InterfaceExample'], $this->getAstMap(), false, [false]],
+            ['Example\ClassExample', ['Example\InterfaceExample'], $this->getAstMap(),[false]],
             //it fails because there are 2 interface implementations not listed
-            ['Example\ClassExample', ['NotARealInterface'], $this->getAstMap(), false, [false, false]],
+            ['Example\ClassExample', ['NotARealInterface'], $this->getAstMap(), [false, false]],
         ];
     }
 

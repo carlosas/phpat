@@ -21,14 +21,12 @@ class MustOnlyIncludeTest extends TestCase
      * @param string $fqcnOrigin
      * @param array  $fqcnDestinations
      * @param array  $astMap
-     * @param bool   $inverse
      * @param array  $expectedEvents
      */
     public function testDispatchesCorrectEvents(
         string $fqcnOrigin,
         array $fqcnDestinations,
         array $astMap,
-        bool $inverse,
         array $expectedEvents
     ): void
     {
@@ -46,7 +44,7 @@ class MustOnlyIncludeTest extends TestCase
             ->method('dispatch')
             ->withConsecutive(...$consecutive??[]);
 
-        $class->validate($fqcnOrigin, $fqcnDestinations, $astMap, $inverse);
+        $class->validate($fqcnOrigin, $fqcnDestinations, $astMap);
     }
 
     public function dataProvider(): array
@@ -56,7 +54,6 @@ class MustOnlyIncludeTest extends TestCase
                 'Example\ClassExample',
                 ['Example\AnotherClassExample', 'Vendor\ThirdPartyExample'],
                 $this->getAstMap(),
-                false,
                 [true, true, true]
             ],
             //it fails because it does not depend on NotAClass
@@ -64,13 +61,12 @@ class MustOnlyIncludeTest extends TestCase
                 'Example\ClassExample',
                 ['Example\AnotherClassExample', 'Vendor\ThirdPartyExample', 'NotAClass'],
                 $this->getAstMap(),
-                false,
                 [true, true, false, true]
             ],
             //it fails because it also depend on Vendor\ThirdPartyExample
-            ['Example\ClassExample', ['Example\AnotherClassExample'], $this->getAstMap(), false, [true, false]],
+            ['Example\ClassExample', ['Example\AnotherClassExample'], $this->getAstMap(), [true, false]],
             //it fails because there are 2 dependencies not listed and it does not depend on NotARealClass
-            ['Example\ClassExample', ['NotARealClass'], $this->getAstMap(), false, [false, false, false]],
+            ['Example\ClassExample', ['NotARealClass'], $this->getAstMap(), [false, false, false]],
         ];
     }
 

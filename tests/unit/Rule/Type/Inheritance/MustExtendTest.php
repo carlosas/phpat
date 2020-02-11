@@ -21,14 +21,12 @@ class MustExtendTest extends TestCase
      * @param string $fqcnOrigin
      * @param array  $fqcnDestinations
      * @param array  $astMap
-     * @param bool   $inverse
      * @param array  $expectedEvents
      */
     public function testDispatchesCorrectEvents(
         string $fqcnOrigin,
         array $fqcnDestinations,
         array $astMap,
-        bool $inverse,
         array $expectedEvents
     ): void
     {
@@ -45,18 +43,15 @@ class MustExtendTest extends TestCase
             ->method('dispatch')
             ->withConsecutive(...$consecutive??[]);
 
-        $class->validate($fqcnOrigin, $fqcnDestinations, $astMap, $inverse);
+        $class->validate($fqcnOrigin, $fqcnDestinations, $astMap);
     }
 
     public function dataProvider(): array
     {
         return [
-            ['Example\ClassExample', ['Example\ParentClassExample'], $this->getAstMap(), false, [true]],
-            ['Example\ClassExample', ['NotARealParent'], $this->getAstMap(), true, [true]],
-            //it fails because it extends Example\ParentClassExample
-            ['Example\ClassExample', ['Example\ParentClassExample'], $this->getAstMap(), true, [false]],
-            //it fails because it does not extend NotARealParent
-            ['Example\ClassExample', ['NotARealParent'], $this->getAstMap(), false, [false]],
+            ['Example\ClassExample', ['Example\ParentClassExample'], $this->getAstMap(), [true]],
+            //it fails because it does not extends NotARealParent
+            ['Example\ClassExample', ['NotARealParent'], $this->getAstMap(), [false]],
        ];
     }
 

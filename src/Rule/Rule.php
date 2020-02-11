@@ -27,10 +27,6 @@ class Rule
      */
     private $assertion;
     /**
-     * @var bool
-     */
-    private $inverse;
-    /**
      * @var SelectorInterface[]
      */
     private $destination;
@@ -47,14 +43,12 @@ class Rule
         array $origin,
         array $originExcluded,
         ?Assertion $assertion,
-        bool $inverse,
         array $destination,
         array $destinationExcluded
     ) {
         $this->origin = $origin;
         $this->originExcluded = $originExcluded;
         $this->assertion = $assertion;
-        $this->inverse = $inverse;
         $this->destination = $destination;
         $this->destinationExcluded = $destinationExcluded;
     }
@@ -81,14 +75,6 @@ class Rule
     public function getAssertion(): ?Assertion
     {
         return $this->assertion;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isInverse(): bool
-    {
-        return $this->inverse;
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\PhpAT\unit\Rule\Assertion\Dependency;
+namespace Tests\PhpAT\unit\Rule\Assertion\Inheritance;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
@@ -9,12 +9,12 @@ use PhpAT\Parser\Relation\Composition;
 use PhpAT\Parser\Relation\Dependency;
 use PhpAT\Parser\Relation\Inheritance;
 use PhpAT\Parser\Relation\Mixin;
-use PhpAT\Rule\Assertion\Dependency\MustOnlyDepend;
+use PhpAT\Rule\Assertion\Inheritance\MustExtend;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
 use PHPUnit\Framework\TestCase;
 
-class MustOnlyDependTest extends TestCase
+class MustNotExtendTest extends TestCase
 {
     /**
      * @dataProvider dataProvider
@@ -31,7 +31,7 @@ class MustOnlyDependTest extends TestCase
     ): void
     {
         $eventDispatcherMock = $this->createMock(EventDispatcher::class);
-        $class = new MustOnlyDepend($eventDispatcherMock);
+        $class = new MustExtend($eventDispatcherMock);
 
         foreach ($expectedEvents as $valid) {
             $eventType = $valid ? StatementValidEvent::class : StatementNotValidEvent::class;
@@ -49,32 +49,18 @@ class MustOnlyDependTest extends TestCase
     public function dataProvider(): array
     {
         return [
-            [
-                'Example\ClassExample',
-                ['Example\AnotherClassExample', 'Vendor\ThirdPartyExample'],
-                $this->getAstMap(),
-                [true, true, true]
-            ],
-            //it fails because it does not depend on NotAClass
-            [
-                'Example\ClassExample',
-                ['Example\AnotherClassExample', 'Vendor\ThirdPartyExample', 'NotAClass'],
-                $this->getAstMap(),
-                [true, true, false, true]
-            ],
-            //it fails because it also depend on Vendor\ThirdPartyExample
-            ['Example\ClassExample', ['Example\AnotherClassExample'], $this->getAstMap(), [true, false]],
-            //it fails because there are 2 dependencies not listed and it does not depend on NotARealClass
-            ['Example\ClassExample', ['NotARealClass'], $this->getAstMap(), [false, false, false]],
-        ];
+            ['Example\ClassExample', ['NotARealParent'], $this->getAstMap(), [true]],
+            //it fails because it extends Example\ParentClassExample
+            ['Example\ClassExample', ['Example\ParentClassExample'], $this->getAstMap(), [false]],
+       ];
     }
 
     private function getAstMap(): array
     {
         return [
             new AstNode(
-                new \SplFileInfo('folder/Example/ClassExample.php'), //File
-                new FullClassName('Example', 'ClassExample'), //Classname
+                new \SplFileInfo('folder/Example/ClassExample.php'),
+                new FullClassName('Example', 'ClassExample'),
                 [
                     new Inheritance(0, new FullClassName('Example', 'ParentClassExample')),
                     new Dependency(0, new FullClassName('Example', 'AnotherClassExample')),
@@ -84,6 +70,6 @@ class MustOnlyDependTest extends TestCase
                     new Mixin(0, new FullClassName('Example', 'TraitExample'))
                 ]
             )
-        ];
+       ];
     }
 }

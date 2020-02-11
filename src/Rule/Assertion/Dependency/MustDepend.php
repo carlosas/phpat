@@ -7,6 +7,8 @@ namespace PhpAT\Rule\Assertion\Dependency;
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
 use PhpAT\Parser\ClassLike;
+use PhpAT\Parser\FullClassName;
+use PhpAT\Parser\RegexClassName;
 use PhpAT\Parser\Relation\Dependency;
 use PhpAT\Rule\Assertion\Assertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
@@ -29,21 +31,21 @@ class MustDepend implements Assertion
      * @param ClassLike   $origin
      * @param ClassLike[] $destinations
      * @param array       $astMap
-     * @param bool        $inverse
      */
     public function validate(
         ClassLike $origin,
         array $destinations,
-        array $astMap,
-        bool $inverse = false
+        array $astMap
     ): void {
         $matchingNodes = $this->filterMatchingNodes($origin, $astMap);
 
         foreach ($matchingNodes as $node) {
             $dependencies = $this->getDependencies($node);
             foreach ($destinations as $destination) {
-                $matches = $this->matches($destination, $dependencies);
-                $this->dispatchResult($matches ?? false, $inverse, $origin->toString(), $destination->toString());
+                if ($destination instanceof FullClassName) {
+                    $matches = $this->matches($destination, $dependencies);
+                    $this->dispatchResult($matches, $origin->toString(), $destination->toString());
+                }
             }
         }
 
@@ -72,10 +74,10 @@ class MustDepend implements Assertion
         return $matches ?? false;
     }
 
-    private function dispatchResult(bool $result, bool $inverse, string $fqcnOrigin, string $fqcnDestination): void
+    private function dispatchResult(bool $result, string $fqcnOrigin, string $fqcnDestination): void
     {
         $action = $result ? ' depends on ' : ' does not depend on ';
-        $event = ($result xor $inverse) ? StatementValidEvent::class : StatementNotValidEvent::class;
+        $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
         $message = $fqcnOrigin . $action . $fqcnDestination;
 
         $this->eventDispatcher->dispatch(new $event($message));

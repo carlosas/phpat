@@ -7,13 +7,18 @@ namespace PhpAT\Rule\Assertion\Dependency;
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
 use PhpAT\Parser\ClassLike;
+use PhpAT\Parser\FullClassName;
+use PhpAT\Parser\RegexClassName;
 use PhpAT\Parser\Relation\Dependency;
 use PhpAT\Rule\Assertion\Assertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
 
-class CanOnlyDepend implements Assertion
+class MustNotDepend implements Assertion
 {
+    /**
+     * @var EventDispatcher
+     */
     private $eventDispatcher;
 
     public function __construct(
@@ -36,23 +41,9 @@ class CanOnlyDepend implements Assertion
 
         foreach ($matchingNodes as $node) {
             $dependencies = $this->getDependencies($node);
-
-            foreach ($dependencies as $key => $value) {
-                foreach ($destinations as $destination) {
-                    if ($destination->matches($value)) {
-                        unset($dependencies[$key]);
-                    }
-                }
-            }
-
-            if (empty($dependencies)) {
-                $this->dispatchResult(true, $origin->toString());
-
-                return;
-            }
-
-            foreach ($dependencies as $dependency) {
-                $this->dispatchResult(false, $origin->toString(), $dependency);
+            foreach ($destinations as $destination) {
+                $matches = $this->matches($destination, $dependencies);
+                $this->dispatchResult($matches, $origin->toString(), $destination->toString());
             }
         }
 
@@ -70,12 +61,22 @@ class CanOnlyDepend implements Assertion
         return $dependencies ?? [];
     }
 
-    private function dispatchResult(bool $result, string $fqcnOrigin, string $fqcnDestination = ''): void
+    private function matches(ClassLike $destination, array $dependencies): bool
     {
-        $message = $result
-            ? $fqcnOrigin . ' does not depend on non-selected classes'
-            : $fqcnOrigin . ' depends on ' . $fqcnDestination;
-        $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
+        foreach ($dependencies as $dependency) {
+            if ($destination->matches($dependency)) {
+                $matches = true;
+            }
+        }
+
+        return $matches ?? false;
+    }
+
+    private function dispatchResult(bool $result, string $fqcnOrigin, string $fqcnDestination): void
+    {
+        $action = $result ? ' depends on ' : ' does not depend on ';
+        $event = $result ? StatementNotValidEvent::class : StatementValidEvent::class;
+        $message = $fqcnOrigin . $action . $fqcnDestination;
 
         $this->eventDispatcher->dispatch(new $event($message));
     }
@@ -88,7 +89,6 @@ class CanOnlyDepend implements Assertion
                 $found[] = $node;
             }
         }
-
         return $found ?? [];
     }
 }

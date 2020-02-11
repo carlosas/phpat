@@ -21,14 +21,12 @@ class MustImplementTest extends TestCase
      * @param string $fqcnOrigin
      * @param array  $fqcnDestinations
      * @param array  $astMap
-     * @param bool   $inverse
      * @param array  $expectedEvents
      */
     public function testDispatchesCorrectEvents(
         string $fqcnOrigin,
         array $fqcnDestinations,
         array $astMap,
-        bool $inverse,
         array $expectedEvents
     ): void
     {
@@ -45,21 +43,19 @@ class MustImplementTest extends TestCase
             ->method('dispatch')
             ->withConsecutive(...$consecutive??[]);
 
-        $class->validate($fqcnOrigin, $fqcnDestinations, $astMap, $inverse);
+        $class->validate($fqcnOrigin, $fqcnDestinations, $astMap);
     }
 
     public function dataProvider(): array
     {
         return [
-            ['Example\ClassExample', ['Example\InterfaceExample'], $this->getAstMap(), false, [true]],
-            ['Example\ClassExample', ['Example\InterfaceExample'], $this->getAstMap(), false, [true]],
-            ['Example\ClassExample', ['NotARealInterface'], $this->getAstMap(), true, [true]],
-            //it fails because Example\InterfaceExample is implemented
-            ['Example\ClassExample', ['Example\InterfaceExample'], $this->getAstMap(), true, [false]],
+            ['Example\ClassExample', ['Example\InterfaceExample'], $this->getAstMap(), [true]],
+            ['Example\ClassExample', ['Example\InterfaceExample'], $this->getAstMap(), [true]],
+            ['Example\ClassExample', ['Example\InterfaceExample'], $this->getAstMap(), [true]],
             //it fails because NotARealInterface is not implemented
-            ['Example\ClassExample', ['NotARealInterface'], $this->getAstMap(), false, [false]],
+            ['Example\ClassExample', ['NotARealInterface'], $this->getAstMap(), [false]],
             //it fails twice because both are not implemented
-            ['Example\ClassExample', ['NopesOne', 'NopesTwo'], $this->getAstMap(), false, [false, false]],
+            ['Example\ClassExample', ['NopesOne', 'NopesTwo'], $this->getAstMap(), [false, false]],
        ];
     }
 

@@ -21,14 +21,12 @@ class CanOnlyExtendTest extends TestCase
      * @param string $fqcnOrigin
      * @param array  $fqcnDestinations
      * @param array  $astMap
-     * @param bool   $inverse
      * @param array  $expectedEvents
      */
     public function testDispatchesCorrectEvents(
         string $fqcnOrigin,
         array $fqcnDestinations,
         array $astMap,
-        bool $inverse,
         array $expectedEvents
     ): void
     {
@@ -45,17 +43,17 @@ class CanOnlyExtendTest extends TestCase
             ->method('dispatch')
             ->withConsecutive(...$consecutive??[]);
 
-        $class->validate($fqcnOrigin, $fqcnDestinations, $astMap, $inverse);
+        $class->validate($fqcnOrigin, $fqcnDestinations, $astMap);
     }
 
     public function dataProvider(): array
     {
         return [
-            ['Example\ClassExample', ['Example\ParentClassExample'], $this->getAstMap(), false, [true]],
+            ['Example\ClassExample', ['Example\ParentClassExample'], $this->getAstMap(), [true]],
             //it fails because it does not extend Example\AnotherClass
-            ['Example\ClassExample', ['Example\AnotherClass'], $this->getAstMap(), false, [false]],
+            ['Example\ClassExample', ['Example\AnotherClass'], $this->getAstMap(), [false]],
             //it fails because it extends from a class not listed
-            ['Example\ClassExample', ['NotARealParent'], $this->getAstMap(), false, [false]],
+            ['Example\ClassExample', ['NotARealParent'], $this->getAstMap(), [false]],
         ];
     }
 

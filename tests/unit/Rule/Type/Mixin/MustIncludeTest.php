@@ -21,14 +21,12 @@ class MustIncludeTest extends TestCase
      * @param string $fqcnOrigin
      * @param array  $fqcnDestinations
      * @param array  $astMap
-     * @param bool   $inverse
      * @param array  $expectedEvents
      */
     public function testDispatchesCorrectEvents(
         string $fqcnOrigin,
         array $fqcnDestinations,
         array $astMap,
-        bool $inverse,
         array $expectedEvents
     ): void
     {
@@ -45,20 +43,18 @@ class MustIncludeTest extends TestCase
             ->method('dispatch')
             ->withConsecutive(...$consecutive??[]);
 
-        $class->validate($fqcnOrigin, $fqcnDestinations, $astMap, $inverse);
+        $class->validate($fqcnOrigin, $fqcnDestinations, $astMap);
     }
 
     public function dataProvider(): array
     {
         return [
-            ['Example\ClassExample', ['Example\TraitExample'], $this->getAstMap(), false, [true]],
-            ['Example\ClassExample', ['NotARealTrait'], $this->getAstMap(), true, [true]],
+            ['Example\ClassExample', ['NotARealTrait'], $this->getAstMap(), [true]],
+            ['Example\ClassExample', ['NopesOne', 'NopesTwo'], $this->getAstMap(), [true, true]],
             //it does not dispatch any event because there is nothing to check
             ['Example\ClassExample', [], $this->getAstMap(), false, []],
-            //it fails because it does not include NotARealTrait
-            ['Example\ClassExample', ['NotARealTrait'], $this->getAstMap(), false, [false]],
-            //it fails twice because it does not include any of both classes
-            ['Example\ClassExample', ['NopesOne', 'NopesTwo'], $this->getAstMap(), false, [false, false]],
+            //it fails because it includes Example\TraitExample
+            ['Example\ClassExample', ['Example\TraitExample'], $this->getAstMap(), [false]],
        ];
     }
 

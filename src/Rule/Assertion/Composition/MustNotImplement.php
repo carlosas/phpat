@@ -2,17 +2,18 @@
 
 declare(strict_types=1);
 
-namespace PhpAT\Rule\Assertion\Inheritance;
+namespace PhpAT\Rule\Assertion\Composition;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
 use PhpAT\Parser\ClassLike;
-use PhpAT\Parser\Relation\Inheritance;
+use PhpAT\Parser\FullClassName;
+use PhpAT\Parser\Relation\Composition;
 use PhpAT\Rule\Assertion\Assertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
 
-class CanOnlyExtend implements Assertion
+class MustNotImplement implements Assertion
 {
     private $eventDispatcher;
 
@@ -35,39 +36,45 @@ class CanOnlyExtend implements Assertion
         $matchingNodes = $this->filterMatchingNodes($origin, $astMap);
 
         foreach ($matchingNodes as $node) {
-            $parent = $this->getParent($node);
-
-            if ($parent === null) {
-                $this->dispatchResult(true, $origin->toString(), '');
-
-                return;
-            }
-
+            $interfaces = $this->getInterfaces($node);
             foreach ($destinations as $destination) {
-                $this->dispatchResult($destination->matches($parent), $origin->toString(), $parent);
+                if ($destination instanceof FullClassName) {
+                    $matches = $this->matches($destination, $interfaces);
+                    $this->dispatchResult($matches, $origin->toString(), $destination->toString());
+                }
             }
-
-            return;
         }
+
+        return;
     }
 
-    private function getParent(AstNode $node): ?string
+    private function getInterfaces(AstNode $node): array
     {
         foreach ($node->getRelations() as $relation) {
-            if ($relation instanceof Inheritance) {
-                return $relation->relatedClass->getFQCN();
+            if ($relation instanceof Composition) {
+                $interfaces[] = $relation->relatedClass->getFQCN();
             }
         }
 
-        return null;
+        return $interfaces ?? [];
     }
 
-    private function dispatchResult(bool $result, string $fqcnOrigin, string $fqcnDestination = ''): void
+    private function matches(ClassLike $destination, array $interfaces): bool
     {
-        $message = $result
-            ? $fqcnOrigin . ' does not extend non-selected classes'
-            : $fqcnOrigin . ' extends ' . $fqcnDestination;
-        $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
+        foreach ($interfaces as $interface) {
+            if ($destination->matches($interface)) {
+                $matches = true;
+            }
+        }
+
+        return $matches ?? false;
+    }
+
+    private function dispatchResult(bool $result, string $fqcnOrigin, string $fqcnDestination): void
+    {
+        $action = $result ? ' implements ' : ' does not implement ';
+        $event = $result ? StatementNotValidEvent::class : StatementValidEvent::class;
+        $message = $fqcnOrigin . $action . $fqcnDestination;
 
         $this->eventDispatcher->dispatch(new $event($message));
     }
@@ -80,7 +87,6 @@ class CanOnlyExtend implements Assertion
                 $found[] = $node;
             }
         }
-
         return $found ?? [];
     }
 }

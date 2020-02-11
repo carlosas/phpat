@@ -21,14 +21,12 @@ class MustDependTest extends TestCase
      * @param string $fqcnOrigin
      * @param array  $fqcnDestinations
      * @param array  $astMap
-     * @param bool   $inverse
      * @param array  $expectedEvents
      */
     public function testDispatchesCorrectEvents(
         string $fqcnOrigin,
         array $fqcnDestinations,
         array $astMap,
-        bool $inverse,
         array $expectedEvents
     ): void
     {
@@ -45,21 +43,24 @@ class MustDependTest extends TestCase
             ->method('dispatch')
             ->withConsecutive(...$consecutive??[]);
 
-        $class->validate($fqcnOrigin, $fqcnDestinations, $astMap, $inverse);
+        $class->validate($fqcnOrigin, $fqcnDestinations, $astMap);
     }
 
     public function dataProvider(): array
     {
         return [
-            ['Example\ClassExample', ['Example\AnotherClassExample'], $this->getAstMap(), false, [true]],
-            ['Example\ClassExample', ['Vendor\ThirdPartyExample'], $this->getAstMap(), false, [true]],
-            ['Example\ClassExample', ['NotARealClass'], $this->getAstMap(), true, [true]],
-            //it fails because it depends on Example\AnotherClassExample
-            ['Example\ClassExample', ['Example\AnotherClassExample'], $this->getAstMap(), true, [false]],
+            ['Example\ClassExample', ['Example\AnotherClassExample'], $this->getAstMap(), [true]],
+            ['Example\ClassExample', ['Vendor\ThirdPartyExample'], $this->getAstMap(), [true]],
+            [
+                'Example\ClassExample',
+                ['Example\AnotherClassExample', 'Vendor\ThirdPartyExample'],
+                $this->getAstMap(),
+                [true, true]
+            ],
             //it fails because it does not depend on NotARealClass
-            ['Example\ClassExample', ['NotARealClass'], $this->getAstMap(), false, [false]],
+            ['Example\ClassExample', ['NotARealClass'], $this->getAstMap(), [false]],
             //it fails twice because it does not depend on any of both classes
-            ['Example\ClassExample', ['NopesOne', 'NopesTwo'], $this->getAstMap(), false, [false, false]],
+            ['Example\ClassExample', ['NopesOne', 'NopesTwo'], $this->getAstMap(), [false, false]],
        ];
     }
 

@@ -7,6 +7,7 @@ namespace PhpAT\Rule\Assertion\Mixin;
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
 use PhpAT\Parser\ClassLike;
+use PhpAT\Parser\FullClassName;
 use PhpAT\Parser\Relation\Mixin;
 use PhpAT\Rule\Assertion\Assertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
@@ -26,21 +27,21 @@ class MustInclude implements Assertion
      * @param ClassLike   $origin
      * @param ClassLike[] $destinations
      * @param array       $astMap
-     * @param bool        $inverse
      */
     public function validate(
         ClassLike $origin,
         array $destinations,
-        array $astMap,
-        bool $inverse = false
+        array $astMap
     ): void {
         $matchingNodes = $this->filterMatchingNodes($origin, $astMap);
 
         foreach ($matchingNodes as $node) {
             $mixins = $this->getMixins($node);
             foreach ($destinations as $destination) {
-                $matches = $this->matches($destination, $mixins);
-                $this->dispatchResult($matches ?? false, $inverse, $origin->toString(), $destination->toString());
+                if ($destination instanceof FullClassName) {
+                    $matches = $this->matches($destination, $mixins);
+                    $this->dispatchResult($matches, $origin->toString(), $destination->toString());
+                }
             }
         }
 
@@ -69,10 +70,10 @@ class MustInclude implements Assertion
         return $matches ?? false;
     }
 
-    private function dispatchResult(bool $result, bool $inverse, string $fqcnOrigin, string $fqcnDestination): void
+    private function dispatchResult(bool $result, string $fqcnOrigin, string $fqcnDestination): void
     {
         $action = $result ? ' includes ' : ' does not include ';
-        $event = ($result xor $inverse) ? StatementValidEvent::class : StatementNotValidEvent::class;
+        $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
         $message = $fqcnOrigin . $action . $fqcnDestination;
 
         $this->eventDispatcher->dispatch(new $event($message));

@@ -56,7 +56,6 @@ class StatementBuilder
             yield new Statement(
                 $originClassName,
                 $rule->getAssertion(),
-                $rule->isInverse(),
                 $destinations
             );
         }

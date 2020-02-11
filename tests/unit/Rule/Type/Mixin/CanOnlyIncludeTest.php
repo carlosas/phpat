@@ -21,14 +21,12 @@ class CanOnlyIncludeTest extends TestCase
      * @param string $fqcnOrigin
      * @param array  $fqcnDestinations
      * @param array  $astMap
-     * @param bool   $inverse
      * @param array  $expectedEvents
      */
     public function testDispatchesCorrectEvents(
         string $fqcnOrigin,
         array $fqcnDestinations,
         array $astMap,
-        bool $inverse,
         array $expectedEvents
     ): void
     {
@@ -45,16 +43,16 @@ class CanOnlyIncludeTest extends TestCase
             ->method('dispatch')
             ->withConsecutive(...$consecutive??[]);
 
-        $class->validate($fqcnOrigin, $fqcnDestinations, $astMap, $inverse);
+        $class->validate($fqcnOrigin, $fqcnDestinations, $astMap);
     }
 
     public function dataProvider(): array
     {
         return [
-            ['Example\ClassExample', ['Example\TraitExample'], $this->getAstMap(), false, [true]],
-            ['Example\ClassExample', ['Example\TraitExample', 'AnotherTrait'], $this->getAstMap(), false, [true]],
+            ['Example\ClassExample', ['Example\TraitExample'], $this->getAstMap(), [true]],
+            ['Example\ClassExample', ['Example\TraitExample', 'AnotherTrait'], $this->getAstMap(), [true]],
             //it fails because it includes Example\TraitExample
-            ['Example\ClassExample', ['AnotherTrait'], $this->getAstMap(), false, [false]],
+            ['Example\ClassExample', ['AnotherTrait'], $this->getAstMap(), [false]],
         ];
     }
 

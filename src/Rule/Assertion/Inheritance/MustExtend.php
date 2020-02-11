@@ -7,6 +7,7 @@ namespace PhpAT\Rule\Assertion\Inheritance;
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
 use PhpAT\Parser\ClassLike;
+use PhpAT\Parser\FullClassName;
 use PhpAT\Parser\Relation\Inheritance;
 use PhpAT\Rule\Assertion\Assertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
@@ -26,26 +27,25 @@ class MustExtend implements Assertion
      * @param ClassLike   $origin
      * @param ClassLike[] $destinations
      * @param array       $astMap
-     * @param bool        $inverse
      */
     public function validate(
         ClassLike $origin,
         array $destinations,
-        array $astMap,
-        bool $inverse = false
+        array $astMap
     ): void {
         $matchingNodes = $this->filterMatchingNodes($origin, $astMap);
 
         foreach ($matchingNodes as $node) {
             $parent = $this->getParent($node);
             foreach ($destinations as $destination) {
-                $matches = ($parent !== null && $destination->matches($parent));
-                $this->dispatchResult(
-                    $matches,
-                    $inverse,
-                    $origin->toString(),
-                    $destination->toString()
-                );
+                if ($destination instanceof FullClassName) {
+                    $matches = ($parent !== null && $destination->matches($parent));
+                    $this->dispatchResult(
+                        $matches,
+                        $origin->toString(),
+                        $destination->toString()
+                    );
+                }
             }
         }
 
@@ -63,10 +63,10 @@ class MustExtend implements Assertion
         return null;
     }
 
-    private function dispatchResult(bool $result, bool $inverse, string $fqcnOrigin, string $fqcnDestination): void
+    private function dispatchResult(bool $result, string $fqcnOrigin, string $fqcnDestination): void
     {
         $action = $result ? ' extends ' : ' does not extend ';
-        $event = ($result xor $inverse) ? StatementValidEvent::class : StatementNotValidEvent::class;
+        $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
         $message = $fqcnOrigin . $action . $fqcnDestination;
 
         $this->eventDispatcher->dispatch(new $event($message));

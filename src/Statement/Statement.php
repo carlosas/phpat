@@ -19,10 +19,6 @@ class Statement
      */
     private $assertion;
     /**
-     * @var bool
-     */
-    private $inverse;
-    /**
      * @var ClassLike
      */
     private $origin;
@@ -34,12 +30,10 @@ class Statement
     public function __construct(
         ClassLike $origin,
         Assertion $assertion,
-        bool $inverse,
         array $destinations
     ) {
         $this->origin = $origin;
         $this->assertion = $assertion;
-        $this->inverse = $inverse;
         $this->destinations = $destinations;
     }
 
@@ -49,14 +43,6 @@ class Statement
     public function getAssertion(): Assertion
     {
         return $this->assertion;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isInverse(): bool
-    {
-        return $this->inverse;
     }
 
     /**
