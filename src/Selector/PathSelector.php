@@ -80,7 +80,7 @@ class PathSelector implements SelectorInterface
 
             foreach ($this->astMap as $astNode) {
                 if ($astNode->getFilePathname() === $filePathname) {
-                    $result[$astNode->getClassName()] = FullClassName::createFromFQCN($astNode->getClassName());
+                    $result[] = FullClassName::createFromFQCN($astNode->getClassName());
                 }
             }
         }
