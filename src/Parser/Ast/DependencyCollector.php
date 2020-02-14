@@ -4,8 +4,11 @@ namespace PhpAT\Parser\Ast;
 
 use PhpAT\Parser\FullClassName;
 use PhpAT\Parser\Relation\Dependency;
+use PhpParser\Comment\Doc;
 use PhpParser\NameContext;
 use PhpParser\Node;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use PHPStan\PhpDocParser\Ast\Type;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
@@ -28,12 +31,21 @@ class DependencyCollector extends AbstractRelationCollector
      * @var string[]
      */
     private $found = [];
+    /**
+     * @var PhpDocTypeResolver
+     */
+    private $docTypeResolver;
 
-    public function __construct(PhpDocParser $docParser, NameContext &$nameContext, bool $ignoreDocBlocks = false)
-    {
+    public function __construct(
+        PhpDocParser $docParser,
+        PhpDocTypeResolver $docTypeResolver,
+        NameContext &$nameContext,
+        bool $ignoreDocBlocks = false
+    ) {
         $this->docParser = $docParser;
-        $this->ignoreDocBlocks = $ignoreDocBlocks;
+        $this->docTypeResolver = $docTypeResolver;
         $this->nameContext = $nameContext;
+        $this->ignoreDocBlocks = $ignoreDocBlocks;
     }
 
     public function beforeTraverse(array $nodes)
@@ -49,19 +61,8 @@ class DependencyCollector extends AbstractRelationCollector
         }
 
         if (!$this->ignoreDocBlocks && $node->getDocComment() !== null) {
-            $doc = $node->getDocComment()->getText();
-            $nodes = $this->docParser->parse(new TokenIterator((new Lexer())->tokenize($doc)));
-            foreach ($nodes->getTags() as $tag) {
-                if (isset($tag->value->type->name)) {
-                    $name = $tag->value->type->name;
-                    $nameNode = strpos($name, '\\') === 0
-                        ? new Node\Name\FullyQualified($name)
-                        : new Node\Name($name);
-                    $class = $this->nameContext->getResolvedClassName($nameNode);
-                    if ($class !== null) {
-                        $this->addDependency($node->getLine(), $class);
-                    }
-                }
+            foreach ($this->extractDocClassNames($node->getDocComment()) as $class) {
+                $this->addDependency($node->getLine(), $class);
             }
         }
     }
@@ -78,5 +79,26 @@ class DependencyCollector extends AbstractRelationCollector
     private function isAutoloaded(string $fqcn): bool
     {
         return class_exists($fqcn) || interface_exists($fqcn) || trait_exists($fqcn);
+    }
+
+    private function extractDocClassNames(Doc $doc): array
+    {
+        $nodes = $this->docParser->parse(new TokenIterator((new Lexer())->tokenize($doc->getText())));
+        foreach ($nodes->getTags() as $tag) {
+            if (isset($tag->value->type)) {
+                $names = $this->docTypeResolver->resolve($tag->value->type);
+                foreach ($names as $name) {
+                    $nameNode = strpos($name, '\\') === 0
+                        ? new Node\Name\FullyQualified($name)
+                        : new Node\Name($name);
+                    $class    = $this->nameContext->getResolvedClassName($nameNode);
+                    if ($class !== null) {
+                        $result[] = $class;
+                    }
+                }
+            }
+        }
+
+        return $result ?? [];
     }
 }

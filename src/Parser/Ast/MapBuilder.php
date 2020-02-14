@@ -57,6 +57,7 @@ class MapBuilder
         $this->traverser->addVisitor($parentCollector);
         $dependencyCollector = new DependencyCollector(
             $this->phpDocParser,
+            new PhpDocTypeResolver(),
             $nameContext,
             Configuration::getDependencyIgnoreDocBlocks()
         );

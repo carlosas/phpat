@@ -8,13 +8,13 @@ use PhpAT\Test\ArchitectureTest;
 
 class RuleTest extends ArchitectureTest
 {
-    public function testRuleDependOnlyOnAssertionAndSelector(): Rule
+    public function testRuleDependsOnlyOnAssertionAndSelector(): Rule
     {
         return $this->newRule
             ->classesThat(Selector::haveClassName(Rule::class))
             ->mustOnlyDependOn()
             ->classesThat(Selector::haveClassName(AbstractAssertion::class))
-            //->andClassesThat(Selector::haveClassName(SelectorInterface::class))
+            ->andClassesThat(Selector::haveClassName(SelectorInterface::class))
             ->build();
     }
 }

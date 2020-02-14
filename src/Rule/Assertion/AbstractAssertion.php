@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace PhpAT\Rule\Assertion;
 
-use PhpAT\App\Event\WarningEvent;
 use PhpAT\Parser\AstNode;
 use PhpAT\Parser\ClassLike;
-use PhpAT\Parser\FullClassName;
 use PhpAT\Parser\Relation\Composition;
 use PhpAT\Parser\Relation\Dependency;
 use PhpAT\Parser\Relation\Inheritance;
@@ -23,7 +21,6 @@ abstract class AbstractAssertion
      * @param ClassLike   $origin
      * @param ClassLike[] $destinations
      * @param array       $astMap
-     * @param bool        $inverse
      */
     abstract public function validate(ClassLike $origin, array $destinations, array $astMap): void;
 
