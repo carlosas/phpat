@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace PhpAT\Rule;
 
-use PhpAT\Rule\Assertion\Assertion;
+use PhpAT\Rule\Assertion\AbstractAssertion;
+use PhpAT\Rule\Assertion\Dependency\MustDepend;
 use PhpAT\Selector\SelectorInterface;
 
 /**
@@ -23,13 +24,9 @@ class Rule
      */
     private $originExcluded;
     /**
-     * @var Assertion|null
+     * @var AbstractAssertion|null
      */
     private $assertion;
-    /**
-     * @var bool
-     */
-    private $inverse;
     /**
      * @var SelectorInterface[]
      */
@@ -46,15 +43,13 @@ class Rule
     public function __construct(
         array $origin,
         array $originExcluded,
-        ?Assertion $assertion,
-        bool $inverse,
+        ?AbstractAssertion $assertion,
         array $destination,
         array $destinationExcluded
     ) {
         $this->origin = $origin;
         $this->originExcluded = $originExcluded;
         $this->assertion = $assertion;
-        $this->inverse = $inverse;
         $this->destination = $destination;
         $this->destinationExcluded = $destinationExcluded;
     }
@@ -76,19 +71,11 @@ class Rule
     }
 
     /**
-     * @return Assertion|null
+     * @return AbstractAssertion|null
      */
-    public function getAssertion(): ?Assertion
+    public function getAssertion(): ?AbstractAssertion
     {
         return $this->assertion;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isInverse(): bool
-    {
-        return $this->inverse;
     }
 
     /**

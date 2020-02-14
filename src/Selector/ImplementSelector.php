@@ -53,7 +53,7 @@ class ImplementSelector implements SelectorInterface
                     $relation instanceof Composition
                     && $this->matchesPattern($relation->relatedClass->getFQCN(), $this->fqcn)
                 ) {
-                    $result[$astNode->getClassName()] = FullClassName::createFromFQCN($astNode->getClassName());
+                    $result[] = FullClassName::createFromFQCN($astNode->getClassName());
                 }
             }
         }

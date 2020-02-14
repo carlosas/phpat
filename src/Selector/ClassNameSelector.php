@@ -7,6 +7,7 @@ namespace PhpAT\Selector;
 use PhpAT\Parser\AstNode;
 use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\FullClassName;
+use PhpAT\Parser\RegexClassName;
 
 class ClassNameSelector implements SelectorInterface
 {
@@ -48,8 +49,12 @@ class ClassNameSelector implements SelectorInterface
     {
         foreach ($this->astMap as $astNode) {
             if ($this->matchesPattern($astNode->getClassName(), $this->fqcn)) {
-                $result[$astNode->getClassName()] = FullClassName::createFromFQCN($astNode->getClassName());
+                $result[] = FullClassName::createFromFQCN($astNode->getClassName());
             }
+        }
+
+        if ($this->isRegex($this->fqcn)) {
+            $result[] = new RegexClassName($this->fqcn);
         }
 
         return $result ?? [];
@@ -61,6 +66,11 @@ class ClassNameSelector implements SelectorInterface
     public function getParameter(): string
     {
         return $this->fqcn;
+    }
+
+    private function isRegex($str): bool
+    {
+        return strpos($str, '*') !== false;
     }
 
     private function matchesPattern(string $className, string $pattern): bool

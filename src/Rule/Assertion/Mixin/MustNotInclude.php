@@ -10,7 +10,7 @@ use PhpAT\Rule\Assertion\AbstractAssertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
 
-class MustInclude extends AbstractAssertion
+class MustNotInclude extends AbstractAssertion
 {
     public function __construct(
         EventDispatcher $eventDispatcher
@@ -58,7 +58,7 @@ class MustInclude extends AbstractAssertion
     private function dispatchResult(bool $result, string $fqcnOrigin, string $fqcnDestination): void
     {
         $action = $result ? ' includes ' : ' does not include ';
-        $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
+        $event = $result ? StatementNotValidEvent::class : StatementValidEvent::class;
         $message = $fqcnOrigin . $action . $fqcnDestination;
 
         $this->eventDispatcher->dispatch(new $event($message));

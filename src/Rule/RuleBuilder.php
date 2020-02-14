@@ -8,7 +8,7 @@ use PhpAT\Rule\Assertion\Composition;
 use PhpAT\Rule\Assertion\Dependency;
 use PhpAT\Rule\Assertion\Inheritance;
 use PhpAT\Rule\Assertion\Mixin;
-use PhpAT\Rule\Assertion\Assertion;
+use PhpAT\Rule\Assertion\AbstractAssertion;
 use PhpAT\Selector\SelectorInterface;
 use Psr\Container\ContainerInterface;
 
@@ -40,13 +40,9 @@ class RuleBuilder
      */
     private $destinationExclude = [];
     /**
-     * @var Assertion|null
+     * @var AbstractAssertion|null
      */
     private $assertion = null;
-    /**
-     * @var bool
-     */
-    private $inverse = false;
 
     public function __construct(ContainerInterface $container)
     {
@@ -106,7 +102,7 @@ class RuleBuilder
      */
     public function mustDependOn(): self
     {
-        return $this->setAssertion(Dependency\MustDepend::class, false);
+        return $this->setAssertion(Dependency\MustDepend::class);
     }
 
     /**
@@ -114,7 +110,7 @@ class RuleBuilder
      */
     public function mustNotDependOn(): self
     {
-        return $this->setAssertion(Dependency\MustDepend::class, true);
+        return $this->setAssertion(Dependency\MustNotDepend::class);
     }
 
     /**
@@ -122,7 +118,7 @@ class RuleBuilder
      */
     public function mustOnlyDependOn(): self
     {
-        return $this->setAssertion(Dependency\MustOnlyDepend::class, false);
+        return $this->setAssertion(Dependency\MustOnlyDepend::class);
     }
 
     /**
@@ -130,7 +126,7 @@ class RuleBuilder
      */
     public function canOnlyDependOn(): self
     {
-        return $this->setAssertion(Dependency\CanOnlyDepend::class, false);
+        return $this->setAssertion(Dependency\CanOnlyDepend::class);
     }
 
     /**
@@ -138,7 +134,7 @@ class RuleBuilder
      */
     public function mustImplement(): self
     {
-        return $this->setAssertion(Composition\MustImplement::class, false);
+        return $this->setAssertion(Composition\MustImplement::class);
     }
 
     /**
@@ -146,7 +142,7 @@ class RuleBuilder
      */
     public function mustNotImplement(): self
     {
-        return $this->setAssertion(Composition\MustImplement::class, true);
+        return $this->setAssertion(Composition\MustNotImplement::class);
     }
 
     /**
@@ -154,7 +150,7 @@ class RuleBuilder
      */
     public function mustOnlyImplement(): self
     {
-        return $this->setAssertion(Composition\MustOnlyImplement::class, false);
+        return $this->setAssertion(Composition\MustOnlyImplement::class);
     }
 
     /**
@@ -162,7 +158,7 @@ class RuleBuilder
      */
     public function canOnlyImplement(): self
     {
-        return $this->setAssertion(Composition\CanOnlyImplement::class, false);
+        return $this->setAssertion(Composition\CanOnlyImplement::class);
     }
 
     /**
@@ -170,7 +166,7 @@ class RuleBuilder
      */
     public function mustExtend(): self
     {
-        return $this->setAssertion(Inheritance\MustExtend::class, false);
+        return $this->setAssertion(Inheritance\MustExtend::class);
     }
 
     /**
@@ -178,7 +174,7 @@ class RuleBuilder
      */
     public function mustNotExtend(): self
     {
-        return $this->setAssertion(Inheritance\MustExtend::class, true);
+        return $this->setAssertion(Inheritance\MustNotExtend::class);
     }
 
     /**
@@ -186,7 +182,7 @@ class RuleBuilder
      */
     public function canOnlyExtend(): self
     {
-        return $this->setAssertion(Inheritance\CanOnlyExtend::class, false);
+        return $this->setAssertion(Inheritance\CanOnlyExtend::class);
     }
 
     /**
@@ -194,7 +190,7 @@ class RuleBuilder
      */
     public function mustInclude(): self
     {
-        return $this->setAssertion(Mixin\MustInclude::class, false);
+        return $this->setAssertion(Mixin\MustInclude::class);
     }
 
     /**
@@ -202,7 +198,7 @@ class RuleBuilder
      */
     public function mustNotInclude(): self
     {
-        return $this->setAssertion(Mixin\MustInclude::class, true);
+        return $this->setAssertion(Mixin\MustNotInclude::class);
     }
 
     /**
@@ -210,7 +206,7 @@ class RuleBuilder
      */
     public function mustOnlyInclude(): self
     {
-        return $this->setAssertion(Mixin\MustOnlyInclude::class, false);
+        return $this->setAssertion(Mixin\MustOnlyInclude::class);
     }
 
     /**
@@ -218,18 +214,16 @@ class RuleBuilder
      */
     public function canOnlyInclude(): self
     {
-        return $this->setAssertion(Mixin\CanOnlyInclude::class, false);
+        return $this->setAssertion(Mixin\CanOnlyInclude::class);
     }
 
     /**
      * @param string $assertion
-     * @param bool   $inverse
      * @return RuleBuilder
      */
-    private function setAssertion(string $assertion, bool $inverse): self
+    private function setAssertion(string $assertion): self
     {
         $this->assertion = $this->container->get($assertion);
-        $this->inverse = $inverse;
 
         return $this;
     }
@@ -243,7 +237,6 @@ class RuleBuilder
             $this->origin,
             $this->originExclude,
             $this->assertion,
-            $this->inverse,
             $this->destination,
             $this->destinationExclude
         );
@@ -259,6 +252,5 @@ class RuleBuilder
         $this->destination = [];
         $this->destinationExclude = [];
         $this->assertion = null;
-        $this->inverse = false;
     }
 }

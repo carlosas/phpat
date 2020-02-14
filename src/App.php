@@ -95,8 +95,7 @@ class App
         $statement->getAssertion()->validate(
             $statement->getOrigin(),
             $statement->getDestinations(),
-            $astMap,
-            $statement->isInverse()
+            $astMap
         );
     }
 }

@@ -22,14 +22,12 @@ class CanOnlyDependTest extends TestCase
      * @param ClassLike   $origin
      * @param ClassLike[] $destinations
      * @param array       $astMap
-     * @param bool        $inverse
-     * @param array       $expectedEvents
+     * @param array  $expectedEvents
      */
     public function testDispatchesCorrectEvents(
         ClassLike $origin,
         array $destinations,
         array $astMap,
-        bool $inverse,
         array $expectedEvents
     ): void
     {
@@ -46,7 +44,7 @@ class CanOnlyDependTest extends TestCase
             ->method('dispatch')
             ->withConsecutive(...$consecutive??[]);
 
-        $class->validate($origin, $destinations, $astMap, $inverse);
+        $class->validate($origin, $destinations, $astMap);
     }
 
     public function dataProvider(): array
@@ -59,7 +57,6 @@ class CanOnlyDependTest extends TestCase
                     FullClassName::createFromFQCN('Vendor\ThirdPartyExample')
                 ],
                 $this->getAstMap(),
-                false,
                 [true]
             ],
             [
@@ -70,7 +67,6 @@ class CanOnlyDependTest extends TestCase
                     FullClassName::createFromFQCN('ItDoesNotMatter')
                 ],
                 $this->getAstMap(),
-                false,
                 [true]
             ],
             //it fails because it also depends on Vendor\ThirdPartyExample
@@ -78,15 +74,14 @@ class CanOnlyDependTest extends TestCase
                 FullClassName::createFromFQCN('Example\ClassExample'),
                 [FullClassName::createFromFQCN('Example\AnotherClassExample')],
                 $this->getAstMap(),
-                false,
                 [false]],
             //it fails because there are 2 dependencies not listed
             [
                 FullClassName::createFromFQCN('Example\ClassExample'),
                 [FullClassName::createFromFQCN('NotARealClass')],
                 $this->getAstMap(),
-                false,
-                [false, false]
+                [false,
+                false]
             ],
         ];
     }

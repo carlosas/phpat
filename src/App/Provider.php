@@ -103,10 +103,14 @@ class Provider
         $this->builder
             ->register(StatementBuilder::class, StatementBuilder::class)
             ->addArgument(new Reference(SelectorResolver::class))
-            ->addArgument(new Reference(Parser::class));
+            ->addArgument(new Reference(EventDispatcher::class));
 
         $this->builder
             ->register(Dependency\MustDepend::class, Dependency\MustDepend::class)
+            ->addArgument(new Reference(EventDispatcher::class));
+
+        $this->builder
+            ->register(Dependency\MustNotDepend::class, Dependency\MustNotDepend::class)
             ->addArgument(new Reference(EventDispatcher::class));
 
         $this->builder
@@ -122,11 +126,19 @@ class Provider
             ->addArgument(new Reference(EventDispatcher::class));
 
         $this->builder
+            ->register(Inheritance\MustNotExtend::class, Inheritance\MustNotExtend::class)
+            ->addArgument(new Reference(EventDispatcher::class));
+
+        $this->builder
             ->register(Inheritance\CanOnlyExtend::class, Inheritance\CanOnlyExtend::class)
             ->addArgument(new Reference(EventDispatcher::class));
 
         $this->builder
             ->register(Composition\MustImplement::class, Composition\MustImplement::class)
+            ->addArgument(new Reference(EventDispatcher::class));
+
+        $this->builder
+            ->register(Composition\MustNotImplement::class, Composition\MustNotImplement::class)
             ->addArgument(new Reference(EventDispatcher::class));
 
         $this->builder
@@ -139,6 +151,10 @@ class Provider
 
         $this->builder
             ->register(Mixin\MustInclude::class, Mixin\MustInclude::class)
+            ->addArgument(new Reference(EventDispatcher::class));
+
+        $this->builder
+            ->register(Mixin\MustNotInclude::class, Mixin\MustNotInclude::class)
             ->addArgument(new Reference(EventDispatcher::class));
 
         $this->builder

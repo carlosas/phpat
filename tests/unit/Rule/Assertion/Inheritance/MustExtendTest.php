@@ -22,14 +22,12 @@ class MustExtendTest extends TestCase
      * @param ClassLike   $origin
      * @param ClassLike[] $destinations
      * @param array       $astMap
-     * @param bool        $inverse
-     * @param array       $expectedEvents
+     * @param array  $expectedEvents
      */
     public function testDispatchesCorrectEvents(
         ClassLike $origin,
         array $destinations,
         array $astMap,
-        bool $inverse,
         array $expectedEvents
     ): void
     {
@@ -46,7 +44,7 @@ class MustExtendTest extends TestCase
             ->method('dispatch')
             ->withConsecutive(...$consecutive??[]);
 
-        $class->validate($origin, $destinations, $astMap, $inverse);
+        $class->validate($origin, $destinations, $astMap);
     }
 
     public function dataProvider(): array
@@ -56,32 +54,15 @@ class MustExtendTest extends TestCase
                 FullClassName::createFromFQCN('Example\ClassExample'),
                 [FullClassName::createFromFQCN('Example\ParentClassExample')],
                 $this->getAstMap(),
-                false,
                 [true]
             ],
+            //it fails because it does not extends NotARealParent
             [
                 FullClassName::createFromFQCN('Example\ClassExample'),
                 [FullClassName::createFromFQCN('NotARealParent')],
                 $this->getAstMap(),
-                true,
-                [true]
-            ],
-            //it fails because it extends Example\ParentClassExample
-            [
-                FullClassName::createFromFQCN('Example\ClassExample'),
-                [FullClassName::createFromFQCN('Example\ParentClassExample')],
-                $this->getAstMap(),
-                true,
                 [false]
-            ],
-            //it fails because it does not extend NotARealParent
-            [
-                FullClassName::createFromFQCN('Example\ClassExample'),
-                [FullClassName::createFromFQCN('NotARealParent')],
-                $this->getAstMap(),
-                false,
-                [false]
-            ],
+            ]
        ];
     }
 

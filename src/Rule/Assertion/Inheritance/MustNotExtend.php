@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PhpAT\Rule\Assertion\Mixin;
+namespace PhpAT\Rule\Assertion\Inheritance;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\ClassLike;
@@ -10,7 +10,7 @@ use PhpAT\Rule\Assertion\AbstractAssertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
 
-class MustInclude extends AbstractAssertion
+class MustNotExtend extends AbstractAssertion
 {
     public function __construct(
         EventDispatcher $eventDispatcher
@@ -36,29 +36,26 @@ class MustInclude extends AbstractAssertion
         $matchingNodes = $this->filterMatchingNodes($origin, $astMap);
 
         foreach ($matchingNodes as $node) {
-            $mixins = $this->getTraits($node);
+            $parent = $this->getParent($node);
             foreach ($destinations as $destination) {
-                $matches = $this->matches($destination, $mixins);
-                $this->dispatchResult($matches, $node->getClassName(), $destination->toString());
+                if ($parent === null) {
+                    $this->dispatchResult(false, $node->getClassName(), $destination->toString());
+                    continue;
+                }
+
+                $this->dispatchResult(
+                    $destination->matches($parent),
+                    $node->getClassName(),
+                    $destination->toString()
+                );
             }
         }
     }
 
-    private function matches(ClassLike $destination, array $mixins): bool
+    private function dispatchResult(bool $extends, string $fqcnOrigin, string $fqcnDestination): void
     {
-        foreach ($mixins as $mixin) {
-            if ($destination->matches($mixin)) {
-                $matches = true;
-            }
-        }
-
-        return $matches ?? false;
-    }
-
-    private function dispatchResult(bool $result, string $fqcnOrigin, string $fqcnDestination): void
-    {
-        $action = $result ? ' includes ' : ' does not include ';
-        $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
+        $action = $extends ? ' extends ' : ' does not extend ';
+        $event = $extends ? StatementNotValidEvent::class : StatementValidEvent::class;
         $message = $fqcnOrigin . $action . $fqcnDestination;
 
         $this->eventDispatcher->dispatch(new $event($message));

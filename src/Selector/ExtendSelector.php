@@ -53,7 +53,7 @@ class ExtendSelector implements SelectorInterface
                     $relation instanceof Inheritance
                     && $this->matchesPattern($relation->relatedClass->getFQCN(), $this->fqcn)
                 ) {
-                    $result[$astNode->getClassName()] = FullClassName::createFromFQCN($astNode->getClassName());
+                    $result[] = FullClassName::createFromFQCN($astNode->getClassName());
                 }
             }
         }

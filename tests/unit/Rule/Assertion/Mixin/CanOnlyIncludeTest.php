@@ -22,14 +22,12 @@ class CanOnlyIncludeTest extends TestCase
      * @param ClassLike   $origin
      * @param ClassLike[] $destinations
      * @param array       $astMap
-     * @param bool        $inverse
-     * @param array       $expectedEvents
+     * @param array  $expectedEvents
      */
     public function testDispatchesCorrectEvents(
         ClassLike $origin,
         array $destinations,
         array $astMap,
-        bool $inverse,
         array $expectedEvents
     ): void
     {
@@ -46,7 +44,7 @@ class CanOnlyIncludeTest extends TestCase
             ->method('dispatch')
             ->withConsecutive(...$consecutive??[]);
 
-        $class->validate($origin, $destinations, $astMap, $inverse);
+        $class->validate($origin, $destinations, $astMap);
     }
 
     public function dataProvider(): array
@@ -54,9 +52,7 @@ class CanOnlyIncludeTest extends TestCase
         return [
             [
                 FullClassName::createFromFQCN('Example\ClassExample'),
-                [FullClassName::createFromFQCN('Example\TraitExample')],
-                $this->getAstMap(),
-                false,
+                [FullClassName::createFromFQCN('Example\TraitExample')], $this->getAstMap(),
                 [true]
             ],
             [
@@ -64,9 +60,7 @@ class CanOnlyIncludeTest extends TestCase
                 [
                     FullClassName::createFromFQCN('Example\TraitExample'),
                     FullClassName::createFromFQCN('AnotherTrait')
-                ],
-                $this->getAstMap(),
-                false,
+                ], $this->getAstMap(),
                 [true]
             ],
             //it fails because it includes Example\TraitExample
@@ -74,7 +68,6 @@ class CanOnlyIncludeTest extends TestCase
                 FullClassName::createFromFQCN('Example\ClassExample'),
                 [FullClassName::createFromFQCN('AnotherTrait')],
                 $this->getAstMap(),
-                false,
                 [false]
             ],
         ];

@@ -39,13 +39,13 @@ class SelectorResolver
      * @param SelectorInterface $selector
      * @param array             $astMap
      * @return array
-     * @throws \Exception
      */
     public function resolve(SelectorInterface $selector, array $astMap): array
     {
         foreach ($selector->getDependencies() as $dependency) {
-            if ($this->container->has($dependency)) {
+            try {
                 $d[$dependency] = $this->container->get($dependency);
+            } catch (\Throwable $e) {
             }
         }
 

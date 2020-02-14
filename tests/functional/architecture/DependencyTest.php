@@ -53,10 +53,10 @@ class DependencyTest extends ArchitectureTest
         return $this->newRule
             ->andClassesThat(Selector::havePath('Dependency/Predefined.php'))
             ->mustOnlyDependOn()
-            ->classesThat(Selector::haveClassName(\Exception::class))
-            ->classesThat(Selector::haveClassName('\Exception'))
-            ->classesThat(Selector::haveClassName(\BadMethodCallException::class))
-            ->classesThat(Selector::haveClassName('\BadMethodCallException'))
+            ->classesThat(Selector::haveClassName(\Exception::class)) //should warn
+            ->classesThat(Selector::haveClassName('\Exception')) //should warn
+            ->classesThat(Selector::haveClassName(\BadMethodCallException::class)) //should warn
+            ->classesThat(Selector::haveClassName('\BadMethodCallException')) //should warn
             ->build();
     }
 
@@ -86,10 +86,8 @@ class DependencyTest extends ArchitectureTest
         return $this->newRule
             ->classesThat(Selector::havePath('Dependency/DocBlock.php'))
             ->mustOnlyDependOn()
-            ->classesThat(Selector::haveClassName('Tests\PhpAT\functional\fixtures\Simple*'))
-            ->excludingClassesThat(Selector::haveClassName(SimpleTrait::class))
-            ->excludingClassesThat(Selector::haveClassName(SimpleInterface::class))
-            ->classesThat(Selector::haveClassName('Tests\PhpAT\functional\fixtures\Simple*'))
+            ->classesThat(Selector::haveClassName(SimpleClass::class))
+            ->andClassesThat(Selector::haveClassName('Tests\PhpAT\functional\fixtures\Simple*')) //should warn
             ->andClassesThat(Selector::havePath('AnotherSimpleClass.php'))
             ->andClassesThat(Selector::havePath('Dependency/DependencyNamespaceSimpleClass.php'))
             ->andClassesThat(Selector::haveClassName(InheritanceNamespaceSimpleClass::class))

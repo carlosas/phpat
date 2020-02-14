@@ -22,14 +22,12 @@ class MustOnlyImplementTest extends TestCase
      * @param ClassLike   $origin
      * @param ClassLike[] $destinations
      * @param array       $astMap
-     * @param bool        $inverse
      * @param array       $expectedEvents
      */
     public function testDispatchesCorrectEvents(
         ClassLike $origin,
         array $destinations,
         array $astMap,
-        bool $inverse,
         array $expectedEvents
     ): void
     {
@@ -46,7 +44,7 @@ class MustOnlyImplementTest extends TestCase
             ->method('dispatch')
             ->withConsecutive(...$consecutive??[]);
 
-        $class->validate($origin, $destinations, $astMap, $inverse);
+        $class->validate($origin, $destinations, $astMap);
     }
 
     public function dataProvider(): array
@@ -59,8 +57,7 @@ class MustOnlyImplementTest extends TestCase
                     FullClassName::createFromFQCN('Example\AnotherInterface')
                 ],
                 $this->getAstMap(),
-                false,
-                [true, true]
+                [true, true, true]
             ],
             //it fails because it does not implement NotImplementedInterface
             [
@@ -71,15 +68,13 @@ class MustOnlyImplementTest extends TestCase
                     FullClassName::createFromFQCN('NotImplementedInterface')
                 ],
                 $this->getAstMap(),
-                false,
-                [true, true, false]
+                [true, true, false, true]
             ],
             //it fails because Example\AnotherInterface is also implemented
             [
                 FullClassName::createFromFQCN('Example\ClassExample'),
                 [FullClassName::createFromFQCN('Example\InterfaceExample')],
                 $this->getAstMap(),
-                false,
                 [true, false]
             ],
             //it fails because it implements 2 that are not listed and does not implement NotARealInterface
@@ -87,7 +82,6 @@ class MustOnlyImplementTest extends TestCase
                 FullClassName::createFromFQCN('Example\ClassExample'),
                 [FullClassName::createFromFQCN('NotARealInterface')],
                 $this->getAstMap(),
-                false,
                 [false, false, false]
             ],
         ];

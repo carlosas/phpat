@@ -47,6 +47,7 @@ abstract class ArchitectureTest
      */
     private function invokeTest(string $method): Rule
     {
+        /** @var Rule $rule */
         $rule = $this->$method();
 
         if ($rule->getAssertion() === null) {

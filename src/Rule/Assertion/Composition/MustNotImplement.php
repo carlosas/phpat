@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PhpAT\Rule\Assertion\Mixin;
+namespace PhpAT\Rule\Assertion\Composition;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\ClassLike;
@@ -10,7 +10,7 @@ use PhpAT\Rule\Assertion\AbstractAssertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
 
-class MustInclude extends AbstractAssertion
+class MustNotImplement extends AbstractAssertion
 {
     public function __construct(
         EventDispatcher $eventDispatcher
@@ -36,18 +36,18 @@ class MustInclude extends AbstractAssertion
         $matchingNodes = $this->filterMatchingNodes($origin, $astMap);
 
         foreach ($matchingNodes as $node) {
-            $mixins = $this->getTraits($node);
+            $interfaces = $this->getInterfaces($node);
             foreach ($destinations as $destination) {
-                $matches = $this->matches($destination, $mixins);
+                $matches = $this->matches($destination, $interfaces);
                 $this->dispatchResult($matches, $node->getClassName(), $destination->toString());
             }
         }
     }
 
-    private function matches(ClassLike $destination, array $mixins): bool
+    private function matches(ClassLike $destination, array $interfaces): bool
     {
-        foreach ($mixins as $mixin) {
-            if ($destination->matches($mixin)) {
+        foreach ($interfaces as $interface) {
+            if ($destination->matches($interface)) {
                 $matches = true;
             }
         }
@@ -57,8 +57,8 @@ class MustInclude extends AbstractAssertion
 
     private function dispatchResult(bool $result, string $fqcnOrigin, string $fqcnDestination): void
     {
-        $action = $result ? ' includes ' : ' does not include ';
-        $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
+        $action = $result ? ' implements ' : ' does not implement ';
+        $event = $result ? StatementNotValidEvent::class : StatementValidEvent::class;
         $message = $fqcnOrigin . $action . $fqcnDestination;
 
         $this->eventDispatcher->dispatch(new $event($message));

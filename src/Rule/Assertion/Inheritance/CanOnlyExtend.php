@@ -5,34 +5,33 @@ declare(strict_types=1);
 namespace PhpAT\Rule\Assertion\Inheritance;
 
 use PHPAT\EventDispatcher\EventDispatcher;
-use PhpAT\Parser\AstNode;
 use PhpAT\Parser\ClassLike;
-use PhpAT\Parser\Relation\Inheritance;
-use PhpAT\Rule\Assertion\Assertion;
+use PhpAT\Rule\Assertion\AbstractAssertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
 
-class CanOnlyExtend implements Assertion
+class CanOnlyExtend extends AbstractAssertion
 {
-    private $eventDispatcher;
-
     public function __construct(
         EventDispatcher $eventDispatcher
     ) {
         $this->eventDispatcher = $eventDispatcher;
     }
 
+    public function acceptsRegex(): bool
+    {
+        return true;
+    }
+
     /**
      * @param ClassLike   $origin
      * @param ClassLike[] $destinations
      * @param array       $astMap
-     * @param bool        $inverse
      */
     public function validate(
         ClassLike $origin,
         array $destinations,
-        array $astMap,
-        bool $inverse = false //ignored
+        array $astMap
     ): void {
         $matchingNodes = $this->filterMatchingNodes($origin, $astMap);
 
@@ -40,28 +39,21 @@ class CanOnlyExtend implements Assertion
             $parent = $this->getParent($node);
 
             if ($parent === null) {
-                $this->dispatchResult(true, $origin->toString(), '');
+                $this->dispatchResult(true, $node->getClassName());
 
-                return;
+                continue;
             }
 
             foreach ($destinations as $destination) {
-                $this->dispatchResult($destination->matches($parent), $origin->toString(), $parent);
+                if ($destination->matches($parent)) {
+                    $this->dispatchResult(true, $node->getClassName());
+
+                    continue 2;
+                }
             }
 
-            return;
+            $this->dispatchResult(false, $node->getClassName(), $parent);
         }
-    }
-
-    private function getParent(AstNode $node): ?string
-    {
-        foreach ($node->getRelations() as $relation) {
-            if ($relation instanceof Inheritance) {
-                return $relation->relatedClass->getFQCN();
-            }
-        }
-
-        return null;
     }
 
     private function dispatchResult(bool $result, string $fqcnOrigin, string $fqcnDestination = ''): void
@@ -72,17 +64,5 @@ class CanOnlyExtend implements Assertion
         $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
 
         $this->eventDispatcher->dispatch(new $event($message));
-    }
-
-    private function filterMatchingNodes(ClassLike $origin, array $astMap)
-    {
-        /** @var AstNode $node */
-        foreach ($astMap as $node) {
-            if ($origin->matches($node->getClassName())) {
-                $found[] = $node;
-            }
-        }
-
-        return $found ?? [];
     }
 }

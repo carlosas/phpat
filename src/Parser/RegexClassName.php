@@ -13,7 +13,16 @@ class RegexClassName implements ClassLike
 
     public function matches(string $name): bool
     {
-        return preg_match($this->regex, $name);
+        $pattern = preg_replace_callback(
+            '/([^*])/',
+            function ($m) {
+                return preg_quote($m[0], '/');
+            },
+            $this->regex
+        );
+        $pattern = str_replace('*', '.*', $pattern);
+
+        return (bool) preg_match('/^' . $pattern . '$/i', $name);
     }
 
     public function toString(): string

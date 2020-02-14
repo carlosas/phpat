@@ -5,91 +5,80 @@ declare(strict_types=1);
 namespace PhpAT\Rule\Assertion\Mixin;
 
 use PHPAT\EventDispatcher\EventDispatcher;
-use PhpAT\Parser\AstNode;
 use PhpAT\Parser\ClassLike;
-use PhpAT\Parser\Relation\Mixin;
-use PhpAT\Rule\Assertion\Assertion;
+use PhpAT\Rule\Assertion\AbstractAssertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
 
-class MustOnlyInclude implements Assertion
+class MustOnlyInclude extends AbstractAssertion
 {
-    private $eventDispatcher;
-
     public function __construct(
         EventDispatcher $eventDispatcher
     ) {
         $this->eventDispatcher = $eventDispatcher;
     }
 
+    public function acceptsRegex(): bool
+    {
+        return false;
+    }
+
     /**
      * @param ClassLike   $origin
      * @param ClassLike[] $destinations
      * @param array       $astMap
-     * @param bool        $inverse
      */
     public function validate(
         ClassLike $origin,
         array $destinations,
-        array $astMap,
-        bool $inverse = false //ignored
+        array $astMap
     ): void {
         $matchingNodes = $this->filterMatchingNodes($origin, $astMap);
 
         foreach ($matchingNodes as $node) {
-            $mixins = $this->getMixins($node);
+            $mixins = $this->getTraits($node);
             $destinationsNotMatched = $destinations;
-            foreach ($mixins as $mkey => $mixin) {
+
+            foreach ($mixins as $key => $mixin) {
                 foreach ($destinations as $dkey => $destination) {
                     if ($destination->matches($mixin)) {
-                        $this->dispatchResult(true, true, $origin->toString(), $mixin);
-                        unset($mixins[$mkey]);
+                        $this->dispatchResult(true, $node->getClassName(), $mixin);
+                        unset($mixins[$key]);
                         unset($destinationsNotMatched[$dkey]);
+                        break;
                     }
                 }
             }
 
+            foreach ($destinationsNotMatched as $notMatched) {
+                $this->dispatchResult(false, $node->getClassName(), $notMatched->toString());
+            }
+
+            if (empty($mixins)) {
+                $this->dispatchOthersResult(false, $node->getClassName());
+            }
             foreach ($mixins as $mixin) {
-                $this->dispatchResult(true, false, $origin->toString(), $mixin);
-            }
-
-            foreach ($destinationsNotMatched as $destination) {
-                $this->dispatchResult(false, true, $origin->toString(), $destination->toString());
+                $this->dispatchOthersResult(true, $node->getClassName(), $mixin);
             }
         }
-
-        return;
     }
 
-    private function getMixins(AstNode $node): array
+    private function dispatchResult(bool $includes, string $fqcnOrigin, string $fqcnDestination): void
     {
-        foreach ($node->getRelations() as $relation) {
-            if ($relation instanceof Mixin) {
-                $mixins[] = $relation->relatedClass->getFQCN();
-            }
-        }
-
-        return $mixins ?? [];
-    }
-
-    private function dispatchResult(bool $result, bool $should, string $fqcnOrigin, string $fqcnDestination): void
-    {
-        $action = $result ? ' includes ' : ' does not include ';
-        $event = ($result xor $should) ? StatementNotValidEvent::class : StatementValidEvent::class;
+        $action = $includes ? ' includes ' : ' does not include ';
+        $event = $includes ? StatementValidEvent::class : StatementNotValidEvent::class;
         $message = $fqcnOrigin . $action . $fqcnDestination;
 
         $this->eventDispatcher->dispatch(new $event($message));
     }
 
-    private function filterMatchingNodes(ClassLike $origin, array $astMap)
+    private function dispatchOthersResult(bool $includes, string $fqcnOrigin, string $fqcnDestination = ''): void
     {
-        /** @var AstNode $node */
-        foreach ($astMap as $node) {
-            if ($origin->matches($node->getClassName())) {
-                $found[] = $node;
-            }
-        }
+        $message = $includes ?
+            $fqcnOrigin . ' includes ' . $fqcnDestination
+            : $fqcnOrigin . ' does not include non-selected classes';
+        $event = $includes ? StatementNotValidEvent::class : StatementValidEvent::class;
 
-        return $found ?? [];
+        $this->eventDispatcher->dispatch(new $event($message));
     }
 }

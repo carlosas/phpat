@@ -22,14 +22,12 @@ class CanOnlyImplementTest extends TestCase
      * @param ClassLike   $origin
      * @param ClassLike[] $destinations
      * @param array       $astMap
-     * @param bool        $inverse
-     * @param array       $expectedEvents
+     * @param array  $expectedEvents
      */
     public function testDispatchesCorrectEvents(
         ClassLike $origin,
         array $destinations,
         array $astMap,
-        bool $inverse,
         array $expectedEvents
     ): void
     {
@@ -46,7 +44,7 @@ class CanOnlyImplementTest extends TestCase
             ->method('dispatch')
             ->withConsecutive(...$consecutive??[]);
 
-        $class->validate($origin, $destinations, $astMap, $inverse);
+        $class->validate($origin, $destinations, $astMap);
     }
 
     public function dataProvider(): array
@@ -59,7 +57,6 @@ class CanOnlyImplementTest extends TestCase
                     FullClassName::createFromFQCN('Example\AnotherInterface')
                 ],
                 $this->getAstMap(),
-                false,
                 [true]
             ],
             [
@@ -70,24 +67,20 @@ class CanOnlyImplementTest extends TestCase
                     FullClassName::createFromFQCN('NotImplementedInterface')
                 ],
                 $this->getAstMap(),
-                false,
                 [true]
             ],
             //it fails because Example\AnotherInterface is also implemented
             [
                 FullClassName::createFromFQCN('Example\ClassExample'),
-                [FullClassName::createFromFQCN('Example\InterfaceExample')],
-                $this->getAstMap(),
-                false,
-                [false]
+                [FullClassName::createFromFQCN('Example\InterfaceExample')], $this->getAstMap(),[false]
             ],
             //it fails because there are 2 interface implementations not listed
             [
                 FullClassName::createFromFQCN('Example\ClassExample'),
                 [FullClassName::createFromFQCN('NotARealInterface')],
                 $this->getAstMap(),
-                false,
-                [false, false]
+                [false,
+                false]
             ],
         ];
     }
