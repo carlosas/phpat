@@ -61,8 +61,7 @@ class DependencyCollector extends AbstractRelationCollector
         }
 
         if (!$this->ignoreDocBlocks && $node->getDocComment() !== null) {
-            foreach ($this->extractDocClassNames($node->getDocComment()) as $class)
-            {
+            foreach ($this->extractDocClassNames($node->getDocComment()) as $class) {
                 $this->addDependency($node->getLine(), $class);
             }
         }

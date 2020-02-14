@@ -1,6 +1,5 @@
 <?php
 
-
 namespace PhpAT\Parser\Ast;
 
 use PHPStan\PhpDocParser\Ast\Type;
