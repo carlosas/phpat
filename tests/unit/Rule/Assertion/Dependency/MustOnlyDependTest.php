@@ -1,9 +1,10 @@
 <?php
 
-namespace Tests\PhpAT\unit\Rule\Assertion\Mixin;
+namespace Tests\PhpAT\unit\Rule\Assertion\Dependency;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
+use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\FullClassName;
 use PhpAT\Parser\Relation\Composition;
 use PhpAT\Parser\Relation\Dependency;
@@ -14,23 +15,22 @@ use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
 use PHPUnit\Framework\TestCase;
 
-class MustOnlyIncludeTest extends TestCase
+class MustOnlyDependTest extends TestCase
 {
     /**
      * @dataProvider dataProvider
-     * @param string $fqcnOrigin
-     * @param array  $fqcnDestinations
-     * @param array  $astMap
-     * @param array  $expectedEvents
+     * @param ClassLike   $origin
+     * @param ClassLike[] $destinations
+     * @param array       $astMap
+     * @param array       $expectedEvents
      */
     public function testDispatchesCorrectEvents(
-        string $fqcnOrigin,
-        array $fqcnDestinations,
+        ClassLike $origin,
+        array $destinations,
         array $astMap,
         array $expectedEvents
     ): void
     {
-        $this->assertTrue(true); return;
         $eventDispatcherMock = $this->createMock(EventDispatcher::class);
         $class = new MustOnlyDepend($eventDispatcherMock);
 
@@ -44,29 +44,47 @@ class MustOnlyIncludeTest extends TestCase
             ->method('dispatch')
             ->withConsecutive(...$consecutive??[]);
 
-        $class->validate($fqcnOrigin, $fqcnDestinations, $astMap);
+        $class->validate($origin, $destinations, $astMap);
     }
 
     public function dataProvider(): array
     {
         return [
             [
-                'Example\ClassExample',
-                ['Example\AnotherClassExample', 'Vendor\ThirdPartyExample'],
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [
+                    FullClassName::createFromFQCN('Example\AnotherClassExample'),
+                    FullClassName::createFromFQCN('Vendor\ThirdPartyExample')
+                ],
                 $this->getAstMap(),
                 [true, true, true]
             ],
             //it fails because it does not depend on NotAClass
             [
-                'Example\ClassExample',
-                ['Example\AnotherClassExample', 'Vendor\ThirdPartyExample', 'NotAClass'],
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [
+                    FullClassName::createFromFQCN('Example\AnotherClassExample'),
+                    FullClassName::createFromFQCN('Vendor\ThirdPartyExample'),
+                    FullClassName::createFromFQCN('NotAClass')
+                ],
                 $this->getAstMap(),
                 [true, true, false, true]
             ],
             //it fails because it also depend on Vendor\ThirdPartyExample
-            ['Example\ClassExample', ['Example\AnotherClassExample'], $this->getAstMap(), [true, false]],
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [
+                    FullClassName::createFromFQCN('Example\AnotherClassExample')
+                ], $this->getAstMap(),
+                [true, false]
+            ],
             //it fails because there are 2 dependencies not listed and it does not depend on NotARealClass
-            ['Example\ClassExample', ['NotARealClass'], $this->getAstMap(), [false, false, false]],
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [FullClassName::createFromFQCN('NotARealClass')],
+                $this->getAstMap(),
+                [false, false, false]
+            ],
         ];
     }
 
@@ -74,8 +92,8 @@ class MustOnlyIncludeTest extends TestCase
     {
         return [
             new AstNode(
-                new \SplFileInfo('folder/Example/ClassExample.php'),
-                new FullClassName('Example', 'ClassExample'),
+                new \SplFileInfo('folder/Example/ClassExample.php'), //File
+                new FullClassName('Example', 'ClassExample'), //Classname
                 [
                     new Inheritance(0, new FullClassName('Example', 'ParentClassExample')),
                     new Dependency(0, new FullClassName('Example', 'AnotherClassExample')),

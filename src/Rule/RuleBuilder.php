@@ -8,7 +8,7 @@ use PhpAT\Rule\Assertion\Composition;
 use PhpAT\Rule\Assertion\Dependency;
 use PhpAT\Rule\Assertion\Inheritance;
 use PhpAT\Rule\Assertion\Mixin;
-use PhpAT\Rule\Assertion\Assertion;
+use PhpAT\Rule\Assertion\AbstractAssertion;
 use PhpAT\Selector\SelectorInterface;
 use Psr\Container\ContainerInterface;
 
@@ -40,7 +40,7 @@ class RuleBuilder
      */
     private $destinationExclude = [];
     /**
-     * @var Assertion|null
+     * @var AbstractAssertion|null
      */
     private $assertion = null;
 

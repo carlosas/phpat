@@ -103,7 +103,7 @@ class Provider
         $this->builder
             ->register(StatementBuilder::class, StatementBuilder::class)
             ->addArgument(new Reference(SelectorResolver::class))
-            ->addArgument(new Reference(Parser::class));
+            ->addArgument(new Reference(EventDispatcher::class));
 
         $this->builder
             ->register(Dependency\MustDepend::class, Dependency\MustDepend::class)

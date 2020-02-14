@@ -5,22 +5,22 @@ declare(strict_types=1);
 namespace PhpAT\Rule\Assertion\Mixin;
 
 use PHPAT\EventDispatcher\EventDispatcher;
-use PhpAT\Parser\AstNode;
 use PhpAT\Parser\ClassLike;
-use PhpAT\Parser\FullClassName;
-use PhpAT\Parser\Relation\Mixin;
-use PhpAT\Rule\Assertion\Assertion;
+use PhpAT\Rule\Assertion\AbstractAssertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
 
-class MustNotInclude implements Assertion
+class MustNotInclude extends AbstractAssertion
 {
-    private $eventDispatcher;
-
     public function __construct(
         EventDispatcher $eventDispatcher
     ) {
         $this->eventDispatcher = $eventDispatcher;
+    }
+
+    public function acceptsRegex(): bool
+    {
+        return false;
     }
 
     /**
@@ -36,27 +36,12 @@ class MustNotInclude implements Assertion
         $matchingNodes = $this->filterMatchingNodes($origin, $astMap);
 
         foreach ($matchingNodes as $node) {
-            $mixins = $this->getMixins($node);
+            $mixins = $this->getTraits($node);
             foreach ($destinations as $destination) {
-                if ($destination instanceof FullClassName) {
-                    $matches = $this->matches($destination, $mixins);
-                    $this->dispatchResult($matches, $origin->toString(), $destination->toString());
-                }
+                $matches = $this->matches($destination, $mixins);
+                $this->dispatchResult($matches, $node->getClassName(), $destination->toString());
             }
         }
-
-        return;
-    }
-
-    private function getMixins(AstNode $node): array
-    {
-        foreach ($node->getRelations() as $relation) {
-            if ($relation instanceof Mixin) {
-                $mixins[] = $relation->relatedClass->getFQCN();
-            }
-        }
-
-        return $mixins ?? [];
     }
 
     private function matches(ClassLike $destination, array $mixins): bool
@@ -77,16 +62,5 @@ class MustNotInclude implements Assertion
         $message = $fqcnOrigin . $action . $fqcnDestination;
 
         $this->eventDispatcher->dispatch(new $event($message));
-    }
-
-    private function filterMatchingNodes(ClassLike $origin, array $astMap)
-    {
-        /** @var AstNode $node */
-        foreach ($astMap as $node) {
-            if ($origin->matches($node->getClassName())) {
-                $found[] = $node;
-            }
-        }
-        return $found ?? [];
     }
 }

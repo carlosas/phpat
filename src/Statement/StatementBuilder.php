@@ -5,14 +5,17 @@ declare(strict_types=1);
 namespace PhpAT\Statement;
 
 use PhpAT\App\Configuration;
+use PhpAT\App\Event\WarningEvent;
 use PhpAT\Parser\AstNode;
 use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\FullClassName;
+use PhpAT\Parser\RegexClassName;
+use PhpAT\Rule\Assertion\AbstractAssertion;
 use PhpAT\Rule\Rule;
 use PhpAT\Selector\PathSelector;
 use PhpAT\Selector\SelectorInterface;
 use PhpAT\Selector\SelectorResolver;
-use PhpParser\Parser;
+use Psr\EventDispatcher\EventDispatcherInterface;
 
 class StatementBuilder
 {
@@ -21,20 +24,19 @@ class StatementBuilder
      */
     private $selectorResolver;
     /**
-     * @var Parser
+     * @var EventDispatcherInterface
      */
-    private $parser;
+    private $eventDispatcher;
 
     /**
      * StatementBuilder constructor.
-     *
-     * @param SelectorResolver $selectorResolver
-     * @param Parser           $parser
+     * @param SelectorResolver         $selectorResolver
+     * @param EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(SelectorResolver $selectorResolver, Parser $parser)
+    public function __construct(SelectorResolver $selectorResolver, EventDispatcherInterface $eventDispatcher)
     {
         $this->selectorResolver = $selectorResolver;
-        $this->parser = $parser;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -49,6 +51,7 @@ class StatementBuilder
         $destinations = $this->selectDestinations(
             $rule->getDestination(),
             $rule->getDestinationExcluded(),
+            $rule->getAssertion(),
             $astMap
         );
 
@@ -62,10 +65,11 @@ class StatementBuilder
     }
 
     /**
-     * @param array $included
-     * @param array $excluded
+     * @param array $includedInRule
+     * @param array $excludedInRule
      * @param array $astMap
      * @return ClassLike[]
+     * @throws \Exception
      */
     private function selectOrigins(array $includedInRule, array $excludedInRule, array $astMap): array
     {
@@ -124,24 +128,37 @@ class StatementBuilder
      * @return ClassLike[]
      * @throws \Exception
      */
-    private function selectDestinations(array $included, array $excluded, array $astMap): array
+    private function selectDestinations(array $included, array $excluded, AbstractAssertion $assertion, array $astMap): array
     {
-        $classNames = [];
+        $classLikeNames = [];
         foreach ($included as $i) {
-            $classNames = array_merge($classNames, $this->selectorResolver->resolve($i, $astMap));
+            if ($this->isRegex($i->getParameter()) && $assertion->acceptsRegex() === false) {
+                $assertionName = substr(get_class($assertion), strrpos(get_class($assertion), '\\') + 1);
+                $message = '(' . $assertionName . ') Using expresion as a destination selector. Ignoring: '
+                    . $i->getParameter();
+                $this->eventDispatcher->dispatch(new WarningEvent($message));
+                continue;
+            }
+
+            $classLikeNames = array_merge($classLikeNames, $this->selectorResolver->resolve($i, $astMap));
         }
 
         foreach ($excluded as $e) {
             $classNamesToExclude = $this->selectorResolver->resolve($e, $astMap);
             foreach ($classNamesToExclude as $file) {
-                foreach ($classNames as $key => $value) {
+                foreach ($classLikeNames as $key => $value) {
                     if ($file == $value) {
-                        unset($classNames[$key]);
+                        unset($classLikeNames[$key]);
                     }
                 }
             }
         }
 
-        return $classNames;
+        return array_values($classLikeNames);
+    }
+
+    private function isRegex($str): bool
+    {
+        return strpos($str, '*') !== false;
     }
 }

@@ -1,37 +1,38 @@
 <?php
 
-namespace Tests\PhpAT\unit\Rule\Assertion\Mixin;
+namespace Tests\PhpAT\unit\Rule\Assertion\Dependency;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
+use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\FullClassName;
 use PhpAT\Parser\Relation\Composition;
 use PhpAT\Parser\Relation\Dependency;
 use PhpAT\Parser\Relation\Inheritance;
 use PhpAT\Parser\Relation\Mixin;
-use PhpAT\Rule\Assertion\Mixin\CanOnlyInclude;
+use PhpAT\Rule\Assertion\Dependency\CanOnlyDepend;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
 use PHPUnit\Framework\TestCase;
 
-class CanOnlyIncludeTest extends TestCase
+class CanOnlyDependTest extends TestCase
 {
     /**
      * @dataProvider dataProvider
-     * @param string $fqcnOrigin
-     * @param array  $fqcnDestinations
-     * @param array  $astMap
+     * @param ClassLike   $origin
+     * @param ClassLike[] $destinations
+     * @param array       $astMap
      * @param array  $expectedEvents
      */
     public function testDispatchesCorrectEvents(
-        string $fqcnOrigin,
-        array $fqcnDestinations,
+        ClassLike $origin,
+        array $destinations,
         array $astMap,
         array $expectedEvents
     ): void
     {
         $eventDispatcherMock = $this->createMock(EventDispatcher::class);
-        $class = new CanOnlyInclude($eventDispatcherMock);
+        $class = new CanOnlyDepend($eventDispatcherMock);
 
         foreach ($expectedEvents as $valid) {
             $eventType = $valid ? StatementValidEvent::class : StatementNotValidEvent::class;
@@ -43,16 +44,45 @@ class CanOnlyIncludeTest extends TestCase
             ->method('dispatch')
             ->withConsecutive(...$consecutive??[]);
 
-        $class->validate($fqcnOrigin, $fqcnDestinations, $astMap);
+        $class->validate($origin, $destinations, $astMap);
     }
 
     public function dataProvider(): array
     {
         return [
-            ['Example\ClassExample', ['Example\TraitExample'], $this->getAstMap(), [true]],
-            ['Example\ClassExample', ['Example\TraitExample', 'AnotherTrait'], $this->getAstMap(), [true]],
-            //it fails because it includes Example\TraitExample
-            ['Example\ClassExample', ['AnotherTrait'], $this->getAstMap(), [false]],
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [
+                    FullClassName::createFromFQCN('Example\AnotherClassExample'),
+                    FullClassName::createFromFQCN('Vendor\ThirdPartyExample')
+                ],
+                $this->getAstMap(),
+                [true]
+            ],
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [
+                    FullClassName::createFromFQCN('Example\AnotherClassExample'),
+                    FullClassName::createFromFQCN('Vendor\ThirdPartyExample'),
+                    FullClassName::createFromFQCN('ItDoesNotMatter')
+                ],
+                $this->getAstMap(),
+                [true]
+            ],
+            //it fails because it also depends on Vendor\ThirdPartyExample
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [FullClassName::createFromFQCN('Example\AnotherClassExample')],
+                $this->getAstMap(),
+                [false]],
+            //it fails because there are 2 dependencies not listed
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [FullClassName::createFromFQCN('NotARealClass')],
+                $this->getAstMap(),
+                [false,
+                false]
+            ],
         ];
     }
 

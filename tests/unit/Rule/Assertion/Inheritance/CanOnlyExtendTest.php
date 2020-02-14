@@ -4,6 +4,7 @@ namespace Tests\PhpAT\unit\Rule\Assertion\Inheritance;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
+use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\FullClassName;
 use PhpAT\Parser\Relation\Composition;
 use PhpAT\Parser\Relation\Dependency;
@@ -18,14 +19,14 @@ class CanOnlyExtendTest extends TestCase
 {
     /**
      * @dataProvider dataProvider
-     * @param string $fqcnOrigin
-     * @param array  $fqcnDestinations
-     * @param array  $astMap
+     * @param ClassLike   $origin
+     * @param ClassLike[] $destinations
+     * @param array       $astMap
      * @param array  $expectedEvents
      */
     public function testDispatchesCorrectEvents(
-        string $fqcnOrigin,
-        array $fqcnDestinations,
+        ClassLike $origin,
+        array $destinations,
         array $astMap,
         array $expectedEvents
     ): void
@@ -43,17 +44,31 @@ class CanOnlyExtendTest extends TestCase
             ->method('dispatch')
             ->withConsecutive(...$consecutive??[]);
 
-        $class->validate($fqcnOrigin, $fqcnDestinations, $astMap);
+        $class->validate($origin, $destinations, $astMap);
     }
 
     public function dataProvider(): array
     {
         return [
-            ['Example\ClassExample', ['Example\ParentClassExample'], $this->getAstMap(), [true]],
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [FullClassName::createFromFQCN('Example\ParentClassExample')], $this->getAstMap(),
+                [true]
+            ],
             //it fails because it does not extend Example\AnotherClass
-            ['Example\ClassExample', ['Example\AnotherClass'], $this->getAstMap(), [false]],
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [FullClassName::createFromFQCN('Example\AnotherClass')],
+                $this->getAstMap(),
+                [false]
+            ],
             //it fails because it extends from a class not listed
-            ['Example\ClassExample', ['NotARealParent'], $this->getAstMap(), [false]],
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [FullClassName::createFromFQCN('NotARealParent')],
+                $this->getAstMap(),
+                [false]
+            ],
         ];
     }
 

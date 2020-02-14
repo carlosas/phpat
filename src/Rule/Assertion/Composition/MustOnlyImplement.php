@@ -5,22 +5,22 @@ declare(strict_types=1);
 namespace PhpAT\Rule\Assertion\Composition;
 
 use PHPAT\EventDispatcher\EventDispatcher;
-use PhpAT\Parser\AstNode;
 use PhpAT\Parser\ClassLike;
-use PhpAT\Parser\FullClassName;
-use PhpAT\Parser\Relation\Composition;
-use PhpAT\Rule\Assertion\Assertion;
+use PhpAT\Rule\Assertion\AbstractAssertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
 
-class MustOnlyImplement implements Assertion
+class MustOnlyImplement extends AbstractAssertion
 {
-    private $eventDispatcher;
-
     public function __construct(
         EventDispatcher $eventDispatcher
     ) {
         $this->eventDispatcher = $eventDispatcher;
+    }
+
+    public function acceptsRegex(): bool
+    {
+        return false;
     }
 
     /**
@@ -37,72 +37,48 @@ class MustOnlyImplement implements Assertion
 
         foreach ($matchingNodes as $node) {
             $interfaces = $this->getInterfaces($node);
+            $destinationsNotMatched = $destinations;
 
             foreach ($interfaces as $key => $interface) {
-                foreach ($destinations as $destination) {
-                    if ($destination instanceof FullClassName) {
-                        if ($destination->matches($interface)) {
-                            $this->dispatchSelectedResult(true, $origin->toString(), $interface);
-                            unset($interfaces[$key]);
-                            continue;
-                        }
+                foreach ($destinations as $dkey => $destination) {
+                    if ($destination->matches($interface)) {
+                        $this->dispatchResult(true, $node->getClassName(), $interface);
+                        unset($interfaces[$key]);
+                        unset($destinationsNotMatched[$dkey]);
+                        break;
                     }
                 }
             }
 
+            foreach ($destinationsNotMatched as $notMatched) {
+                $this->dispatchResult(false, $node->getClassName(), $notMatched->toString());
+            }
+
             if (empty($interfaces)) {
-                $this->dispatchOthersResult(true, $origin->toString());
-
-                return;
+                $this->dispatchOthersResult(false, $node->getClassName());
             }
-
             foreach ($interfaces as $interface) {
-                $this->dispatchOthersResult(false, $origin->toString(), $interface);
+                $this->dispatchOthersResult(true, $node->getClassName(), $interface);
             }
         }
-
-        return;
     }
 
-    private function getInterfaces(AstNode $node): array
+    private function dispatchResult(bool $implements, string $fqcnOrigin, string $fqcnDestination): void
     {
-        foreach ($node->getRelations() as $relation) {
-            if ($relation instanceof Composition) {
-                $interfaces[] = $relation->relatedClass->getFQCN();
-            }
-        }
-
-        return $interfaces ?? [];
-    }
-
-    private function dispatchSelectedResult(bool $result, string $fqcnOrigin, string $fqcnDestination): void
-    {
-        $action = $result ? ' implements ' : ' does not implement ';
-        $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
+        $action = $implements ? ' implements ' : ' does not implement ';
+        $event = $implements ? StatementValidEvent::class : StatementNotValidEvent::class;
         $message = $fqcnOrigin . $action . $fqcnDestination;
 
         $this->eventDispatcher->dispatch(new $event($message));
     }
 
-    private function dispatchOthersResult(bool $result, string $fqcnOrigin, string $fqcnDestination = ''): void
+    private function dispatchOthersResult(bool $implements, string $fqcnOrigin, string $fqcnDestination = ''): void
     {
-        $message = $result
-            ? $fqcnOrigin . ' does not implement non-selected interfaces'
-            : $fqcnOrigin . ' implements ' . $fqcnDestination;
-        $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
+        $message = $implements ?
+            $fqcnOrigin . ' implements ' . $fqcnDestination
+            : $fqcnOrigin . ' does not implement non-selected classes';
+        $event = $implements ? StatementNotValidEvent::class : StatementValidEvent::class;
 
         $this->eventDispatcher->dispatch(new $event($message));
-    }
-
-    private function filterMatchingNodes(ClassLike $origin, array $astMap)
-    {
-        /** @var AstNode $node */
-        foreach ($astMap as $node) {
-            if ($origin->matches($node->getClassName())) {
-                $found[] = $node;
-            }
-        }
-
-        return $found ?? [];
     }
 }

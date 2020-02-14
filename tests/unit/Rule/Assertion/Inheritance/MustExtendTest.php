@@ -1,37 +1,38 @@
 <?php
 
-namespace Tests\PhpAT\unit\Rule\Assertion\Dependency;
+namespace Tests\PhpAT\unit\Rule\Assertion\Inheritance;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
+use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\FullClassName;
 use PhpAT\Parser\Relation\Composition;
 use PhpAT\Parser\Relation\Dependency;
 use PhpAT\Parser\Relation\Inheritance;
 use PhpAT\Parser\Relation\Mixin;
-use PhpAT\Rule\Assertion\Dependency\CanOnlyDepend;
+use PhpAT\Rule\Assertion\Inheritance\MustExtend;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
 use PHPUnit\Framework\TestCase;
 
-class CanOnlyDependTest extends TestCase
+class MustExtendTest extends TestCase
 {
     /**
      * @dataProvider dataProvider
-     * @param string $fqcnOrigin
-     * @param array  $fqcnDestinations
-     * @param array  $astMap
+     * @param ClassLike   $origin
+     * @param ClassLike[] $destinations
+     * @param array       $astMap
      * @param array  $expectedEvents
      */
     public function testDispatchesCorrectEvents(
-        string $fqcnOrigin,
-        array $fqcnDestinations,
+        ClassLike $origin,
+        array $destinations,
         array $astMap,
         array $expectedEvents
     ): void
     {
         $eventDispatcherMock = $this->createMock(EventDispatcher::class);
-        $class = new CanOnlyDepend($eventDispatcherMock);
+        $class = new MustExtend($eventDispatcherMock);
 
         foreach ($expectedEvents as $valid) {
             $eventType = $valid ? StatementValidEvent::class : StatementNotValidEvent::class;
@@ -43,29 +44,16 @@ class CanOnlyDependTest extends TestCase
             ->method('dispatch')
             ->withConsecutive(...$consecutive??[]);
 
-        $class->validate($fqcnOrigin, $fqcnDestinations, $astMap);
+        $class->validate($origin, $destinations, $astMap);
     }
 
     public function dataProvider(): array
     {
         return [
-            [
-                'Example\ClassExample',
-                ['Example\AnotherClassExample', 'Vendor\ThirdPartyExample'],
-                $this->getAstMap(),
-                [true]
-            ],
-            [
-                'Example\ClassExample',
-                ['Example\AnotherClassExample', 'Vendor\ThirdPartyExample', 'ItDoesNotMatter'],
-                $this->getAstMap(),
-                [true]
-            ],
-            //it fails because it also depends on Vendor\ThirdPartyExample
-            ['Example\ClassExample', ['Example\AnotherClassExample'], $this->getAstMap(), [false]],
-            //it fails because there are 2 dependencies not listed
-            ['Example\ClassExample', ['NotARealClass'], $this->getAstMap(), [false, false]],
-        ];
+            ['Example\ClassExample', ['Example\ParentClassExample'], $this->getAstMap(), [true]],
+            //it fails because it does not extends NotARealParent
+            ['Example\ClassExample', ['NotARealParent'], $this->getAstMap(), [false]],
+       ];
     }
 
     private function getAstMap(): array
@@ -83,6 +71,6 @@ class CanOnlyDependTest extends TestCase
                     new Mixin(0, new FullClassName('Example', 'TraitExample'))
                 ]
             )
-        ];
+       ];
     }
 }

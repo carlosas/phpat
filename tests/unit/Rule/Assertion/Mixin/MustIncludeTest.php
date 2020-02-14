@@ -4,6 +4,7 @@ namespace Tests\PhpAT\unit\Rule\Assertion\Mixin;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
+use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\FullClassName;
 use PhpAT\Parser\Relation\Composition;
 use PhpAT\Parser\Relation\Dependency;
@@ -18,14 +19,14 @@ class MustIncludeTest extends TestCase
 {
     /**
      * @dataProvider dataProvider
-     * @param string $fqcnOrigin
-     * @param array  $fqcnDestinations
-     * @param array  $astMap
+     * @param ClassLike   $origin
+     * @param ClassLike[] $destinations
+     * @param array       $astMap
      * @param array  $expectedEvents
      */
     public function testDispatchesCorrectEvents(
-        string $fqcnOrigin,
-        array $fqcnDestinations,
+        ClassLike $origin,
+        array $destinations,
         array $astMap,
         array $expectedEvents
     ): void
@@ -43,14 +44,24 @@ class MustIncludeTest extends TestCase
             ->method('dispatch')
             ->withConsecutive(...$consecutive??[]);
 
-        $class->validate($fqcnOrigin, $fqcnDestinations, $astMap);
+        $class->validate($origin, $destinations, $astMap);
     }
 
     public function dataProvider(): array
     {
         return [
-            ['Example\ClassExample', ['NotARealTrait'], $this->getAstMap(), [true]],
-            ['Example\ClassExample', ['NopesOne', 'NopesTwo'], $this->getAstMap(), [true, true]],
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [FullClassName::createFromFQCN('NotARealTrait')], $this->getAstMap(),
+                [true]
+            ],
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [FullClassName::createFromFQCN('NopesOne', 'NopesTwo')],
+                $this->getAstMap(),
+                [true,
+                true]
+            ],
             //it does not dispatch any event because there is nothing to check
             ['Example\ClassExample', [], $this->getAstMap(), false, []],
             //it fails because it includes Example\TraitExample

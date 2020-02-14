@@ -4,6 +4,7 @@ namespace Tests\PhpAT\unit\Rule\Assertion\Composition;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
+use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\FullClassName;
 use PhpAT\Parser\Relation\Composition;
 use PhpAT\Parser\Relation\Dependency;
@@ -18,14 +19,14 @@ class MustImplementTest extends TestCase
 {
     /**
      * @dataProvider dataProvider
-     * @param string $fqcnOrigin
-     * @param array  $fqcnDestinations
-     * @param array  $astMap
+     * @param ClassLike   $origin
+     * @param ClassLike[] $destinations
+     * @param array       $astMap
      * @param array  $expectedEvents
      */
     public function testDispatchesCorrectEvents(
-        string $fqcnOrigin,
-        array $fqcnDestinations,
+        ClassLike $origin,
+        array $destinations,
         array $astMap,
         array $expectedEvents
     ): void
@@ -43,7 +44,7 @@ class MustImplementTest extends TestCase
             ->method('dispatch')
             ->withConsecutive(...$consecutive??[]);
 
-        $class->validate($fqcnOrigin, $fqcnDestinations, $astMap);
+        $class->validate($origin, $destinations, $astMap);
     }
 
     public function dataProvider(): array
@@ -53,9 +54,23 @@ class MustImplementTest extends TestCase
             ['Example\ClassExample', ['Example\InterfaceExample'], $this->getAstMap(), [true]],
             ['Example\ClassExample', ['Example\InterfaceExample'], $this->getAstMap(), [true]],
             //it fails because NotARealInterface is not implemented
-            ['Example\ClassExample', ['NotARealInterface'], $this->getAstMap(), [false]],
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [FullClassName::createFromFQCN('NotARealInterface')],
+                $this->getAstMap(),
+                [false]
+            ],
             //it fails twice because both are not implemented
-            ['Example\ClassExample', ['NopesOne', 'NopesTwo'], $this->getAstMap(), [false, false]],
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [
+                    FullClassName::createFromFQCN('NopesOne'),
+                    FullClassName::createFromFQCN('NopesTwo')
+                ],
+                $this->getAstMap(),
+                [false,
+                false]
+            ],
        ];
     }
 

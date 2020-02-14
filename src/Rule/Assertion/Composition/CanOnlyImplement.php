@@ -5,21 +5,22 @@ declare(strict_types=1);
 namespace PhpAT\Rule\Assertion\Composition;
 
 use PHPAT\EventDispatcher\EventDispatcher;
-use PhpAT\Parser\AstNode;
 use PhpAT\Parser\ClassLike;
-use PhpAT\Parser\Relation\Composition;
-use PhpAT\Rule\Assertion\Assertion;
+use PhpAT\Rule\Assertion\AbstractAssertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
 
-class CanOnlyImplement implements Assertion
+class CanOnlyImplement extends AbstractAssertion
 {
-    private $eventDispatcher;
-
     public function __construct(
         EventDispatcher $eventDispatcher
     ) {
         $this->eventDispatcher = $eventDispatcher;
+    }
+
+    public function acceptsRegex(): bool
+    {
+        return true;
     }
 
     /**
@@ -46,28 +47,15 @@ class CanOnlyImplement implements Assertion
             }
 
             if (empty($interfaces)) {
-                $this->dispatchResult(true, $origin->toString());
+                $this->dispatchResult(true, $node->getClassName());
 
-                return;
+                continue;
             }
 
             foreach ($interfaces as $interface) {
-                $this->dispatchResult(false, $origin->toString(), $interface);
+                $this->dispatchResult(false, $node->getClassName(), $interface);
             }
         }
-
-        return;
-    }
-
-    private function getInterfaces(AstNode $node): array
-    {
-        foreach ($node->getRelations() as $relation) {
-            if ($relation instanceof Composition) {
-                $interfaces[] = $relation->relatedClass->getFQCN();
-            }
-        }
-
-        return $interfaces ?? [];
     }
 
     private function dispatchResult(bool $result, string $fqcnOrigin, string $fqcnDestination = ''): void
@@ -78,17 +66,5 @@ class CanOnlyImplement implements Assertion
         $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
 
         $this->eventDispatcher->dispatch(new $event($message));
-    }
-
-    private function filterMatchingNodes(ClassLike $origin, array $astMap)
-    {
-        /** @var AstNode $node */
-        foreach ($astMap as $node) {
-            if ($origin->matches($node->getClassName())) {
-                $found[] = $node;
-            }
-        }
-
-        return $found ?? [];
     }
 }

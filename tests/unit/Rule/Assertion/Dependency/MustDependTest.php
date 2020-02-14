@@ -4,6 +4,7 @@ namespace Tests\PhpAT\unit\Rule\Assertion\Dependency;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
+use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\FullClassName;
 use PhpAT\Parser\Relation\Composition;
 use PhpAT\Parser\Relation\Dependency;
@@ -18,14 +19,14 @@ class MustDependTest extends TestCase
 {
     /**
      * @dataProvider dataProvider
-     * @param string $fqcnOrigin
-     * @param array  $fqcnDestinations
-     * @param array  $astMap
+     * @param ClassLike   $origin
+     * @param ClassLike[] $destinations
+     * @param array       $astMap
      * @param array  $expectedEvents
      */
     public function testDispatchesCorrectEvents(
-        string $fqcnOrigin,
-        array $fqcnDestinations,
+        ClassLike $origin,
+        array $destinations,
         array $astMap,
         array $expectedEvents
     ): void
@@ -43,24 +44,51 @@ class MustDependTest extends TestCase
             ->method('dispatch')
             ->withConsecutive(...$consecutive??[]);
 
-        $class->validate($fqcnOrigin, $fqcnDestinations, $astMap);
+        $class->validate($origin, $destinations, $astMap);
     }
 
     public function dataProvider(): array
     {
         return [
-            ['Example\ClassExample', ['Example\AnotherClassExample'], $this->getAstMap(), [true]],
-            ['Example\ClassExample', ['Vendor\ThirdPartyExample'], $this->getAstMap(), [true]],
             [
-                'Example\ClassExample',
-                ['Example\AnotherClassExample', 'Vendor\ThirdPartyExample'],
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [FullClassName::createFromFQCN('Example\AnotherClassExample')], $this->getAstMap(), false, [true]],
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [FullClassName::createFromFQCN('Vendor\ThirdPartyExample')], $this->getAstMap(), false, [true]],
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [FullClassName::createFromFQCN('NotARealClass')],
                 $this->getAstMap(),
-                [true, true]
+                true,
+                [true]
+            ],
+            //it fails because it depends on Example\AnotherClassExample
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [FullClassName::createFromFQCN('Example\AnotherClassExample')],
+                $this->getAstMap(),
+                true,
+                [false]
             ],
             //it fails because it does not depend on NotARealClass
-            ['Example\ClassExample', ['NotARealClass'], $this->getAstMap(), [false]],
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [FullClassName::createFromFQCN('NotARealClass')],
+                $this->getAstMap(),
+                [false]
+            ],
             //it fails twice because it does not depend on any of both classes
-            ['Example\ClassExample', ['NopesOne', 'NopesTwo'], $this->getAstMap(), [false, false]],
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [
+                    FullClassName::createFromFQCN('NopesOne'),
+                    FullClassName::createFromFQCN('NopesTwo')
+                ],
+                $this->getAstMap(),
+                [false,
+                false]
+            ],
        ];
     }
 

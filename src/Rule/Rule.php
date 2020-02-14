@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace PhpAT\Rule;
 
-use PhpAT\Rule\Assertion\Assertion;
+use PhpAT\Rule\Assertion\AbstractAssertion;
+use PhpAT\Rule\Assertion\Dependency\MustDepend;
 use PhpAT\Selector\SelectorInterface;
 
 /**
@@ -23,7 +24,7 @@ class Rule
      */
     private $originExcluded;
     /**
-     * @var Assertion|null
+     * @var AbstractAssertion|null
      */
     private $assertion;
     /**
@@ -42,7 +43,7 @@ class Rule
     public function __construct(
         array $origin,
         array $originExcluded,
-        ?Assertion $assertion,
+        ?AbstractAssertion $assertion,
         array $destination,
         array $destinationExcluded
     ) {
@@ -70,9 +71,9 @@ class Rule
     }
 
     /**
-     * @return Assertion|null
+     * @return AbstractAssertion|null
      */
-    public function getAssertion(): ?Assertion
+    public function getAssertion(): ?AbstractAssertion
     {
         return $this->assertion;
     }

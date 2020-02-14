@@ -53,6 +53,10 @@ class ClassNameSelector implements SelectorInterface
             }
         }
 
+        if ($this->isRegex($this->fqcn)) {
+            $result[] = new RegexClassName($this->fqcn);
+        }
+
         return $result ?? [];
     }
 
@@ -62,6 +66,11 @@ class ClassNameSelector implements SelectorInterface
     public function getParameter(): string
     {
         return $this->fqcn;
+    }
+
+    private function isRegex($str): bool
+    {
+        return strpos($str, '*') !== false;
     }
 
     private function matchesPattern(string $className, string $pattern): bool

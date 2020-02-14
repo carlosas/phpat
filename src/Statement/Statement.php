@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PhpAT\Statement;
 
 use PhpAT\Parser\ClassLike;
-use PhpAT\Rule\Assertion\Assertion;
+use PhpAT\Rule\Assertion\AbstractAssertion;
 
 /**
  * Class Statement
@@ -15,7 +15,7 @@ use PhpAT\Rule\Assertion\Assertion;
 class Statement
 {
     /**
-     * @var Assertion
+     * @var AbstractAssertion
      */
     private $assertion;
     /**
@@ -29,7 +29,7 @@ class Statement
 
     public function __construct(
         ClassLike $origin,
-        Assertion $assertion,
+        AbstractAssertion $assertion,
         array $destinations
     ) {
         $this->origin = $origin;
@@ -38,9 +38,9 @@ class Statement
     }
 
     /**
-     * @return Assertion
+     * @return AbstractAssertion
      */
-    public function getAssertion(): Assertion
+    public function getAssertion(): AbstractAssertion
     {
         return $this->assertion;
     }

@@ -10,9 +10,9 @@ class AssertionsTest extends ArchitectureTest
     {
         return $this->newRule
             ->classesThat(Selector::havePath('Rule/Assertion/*'))
-            ->excludingClassesThat(Selector::havePath('Rule/Assertion/Assertion.php'))
-            ->mustImplement()
-            ->classesThat(Selector::haveClassName('PhpAT\Rule\Assertion\Assertion'))
+            ->excludingClassesThat(Selector::havePath('Rule/Assertion/AbstractAssertion.php'))
+            ->mustExtend()
+            ->classesThat(Selector::haveClassName('PhpAT\Rule\Assertion\AbstractAssertion'))
             ->build();
     }
 }

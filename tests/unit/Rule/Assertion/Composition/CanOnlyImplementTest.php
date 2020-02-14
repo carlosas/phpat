@@ -1,37 +1,38 @@
 <?php
 
-namespace Tests\PhpAT\unit\Rule\Assertion\Inheritance;
+namespace Tests\PhpAT\unit\Rule\Assertion\Composition;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
+use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\FullClassName;
 use PhpAT\Parser\Relation\Composition;
 use PhpAT\Parser\Relation\Dependency;
 use PhpAT\Parser\Relation\Inheritance;
 use PhpAT\Parser\Relation\Mixin;
-use PhpAT\Rule\Assertion\Inheritance\MustExtend;
+use PhpAT\Rule\Assertion\Composition\CanOnlyImplement;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
 use PHPUnit\Framework\TestCase;
 
-class MustExtendTest extends TestCase
+class CanOnlyImplementTest extends TestCase
 {
     /**
      * @dataProvider dataProvider
-     * @param string $fqcnOrigin
-     * @param array  $fqcnDestinations
-     * @param array  $astMap
+     * @param ClassLike   $origin
+     * @param ClassLike[] $destinations
+     * @param array       $astMap
      * @param array  $expectedEvents
      */
     public function testDispatchesCorrectEvents(
-        string $fqcnOrigin,
-        array $fqcnDestinations,
+        ClassLike $origin,
+        array $destinations,
         array $astMap,
         array $expectedEvents
     ): void
     {
         $eventDispatcherMock = $this->createMock(EventDispatcher::class);
-        $class = new MustExtend($eventDispatcherMock);
+        $class = new CanOnlyImplement($eventDispatcherMock);
 
         foreach ($expectedEvents as $valid) {
             $eventType = $valid ? StatementValidEvent::class : StatementNotValidEvent::class;
@@ -43,16 +44,45 @@ class MustExtendTest extends TestCase
             ->method('dispatch')
             ->withConsecutive(...$consecutive??[]);
 
-        $class->validate($fqcnOrigin, $fqcnDestinations, $astMap);
+        $class->validate($origin, $destinations, $astMap);
     }
 
     public function dataProvider(): array
     {
         return [
-            ['Example\ClassExample', ['Example\ParentClassExample'], $this->getAstMap(), [true]],
-            //it fails because it does not extends NotARealParent
-            ['Example\ClassExample', ['NotARealParent'], $this->getAstMap(), [false]],
-       ];
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [
+                    FullClassName::createFromFQCN('Example\InterfaceExample'),
+                    FullClassName::createFromFQCN('Example\AnotherInterface')
+                ],
+                $this->getAstMap(),
+                [true]
+            ],
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [
+                    FullClassName::createFromFQCN('Example\InterfaceExample'),
+                    FullClassName::createFromFQCN('Example\AnotherInterface'),
+                    FullClassName::createFromFQCN('NotImplementedInterface')
+                ],
+                $this->getAstMap(),
+                [true]
+            ],
+            //it fails because Example\AnotherInterface is also implemented
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [FullClassName::createFromFQCN('Example\InterfaceExample')], $this->getAstMap(),[false]
+            ],
+            //it fails because there are 2 interface implementations not listed
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [FullClassName::createFromFQCN('NotARealInterface')],
+                $this->getAstMap(),
+                [false,
+                false]
+            ],
+        ];
     }
 
     private function getAstMap(): array
@@ -70,6 +100,6 @@ class MustExtendTest extends TestCase
                     new Mixin(0, new FullClassName('Example', 'TraitExample'))
                 ]
             )
-       ];
+        ];
     }
 }
