@@ -25,9 +25,9 @@ abstract class AbstractAssertion
      * @param array       $astMap
      * @param bool        $inverse
      */
-    public abstract function validate(ClassLike $origin, array $destinations, array $astMap): void;
+    abstract public function validate(ClassLike $origin, array $destinations, array $astMap): void;
 
-    public abstract function acceptsRegex(): bool;
+    abstract public function acceptsRegex(): bool;
 
     /**
      * @param ClassLike $origin

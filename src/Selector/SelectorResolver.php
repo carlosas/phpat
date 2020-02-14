@@ -45,7 +45,8 @@ class SelectorResolver
         foreach ($selector->getDependencies() as $dependency) {
             try {
                 $d[$dependency] = $this->container->get($dependency);
-            } catch (\Throwable $e) {}
+            } catch (\Throwable $e) {
+            }
         }
 
         $selector->injectDependencies($d ?? []);

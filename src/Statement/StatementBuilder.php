@@ -128,8 +128,12 @@ class StatementBuilder
      * @return ClassLike[]
      * @throws \Exception
      */
-    private function selectDestinations(array $included, array $excluded, AbstractAssertion $assertion, array $astMap): array
-    {
+    private function selectDestinations(
+        array $included,
+        array $excluded,
+        AbstractAssertion $assertion,
+        array $astMap
+    ): array {
         $classLikeNames = [];
         foreach ($included as $i) {
             if ($this->isRegex($i->getParameter()) && $assertion->acceptsRegex() === false) {
