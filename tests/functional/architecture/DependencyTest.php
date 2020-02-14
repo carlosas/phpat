@@ -6,6 +6,7 @@ use PHPAT\EventDispatcher\EventInterface;
 use PhpAT\Rule\Rule;
 use PhpAT\Selector\Selector;
 use PhpAT\Test\ArchitectureTest;
+use Tests\PhpAT\functional\fixtures\DummyException;
 use Tests\PhpAT\functional\fixtures\Inheritance\InheritanceNamespaceSimpleClass;
 use Tests\PhpAT\functional\fixtures\SimpleClass;
 use Tests\PhpAT\functional\fixtures\SimpleInterface;
@@ -91,6 +92,7 @@ class DependencyTest extends ArchitectureTest
             ->andClassesThat(Selector::havePath('AnotherSimpleClass.php'))
             ->andClassesThat(Selector::havePath('Dependency/DependencyNamespaceSimpleClass.php'))
             ->andClassesThat(Selector::haveClassName(InheritanceNamespaceSimpleClass::class))
+            ->andClassesThat(Selector::haveClassName(DummyException::class))
             ->build();
     }
 }
