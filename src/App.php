@@ -60,9 +60,9 @@ class App
      */
     public function execute(): bool
     {
-        $astMap = $this->mapBuilder->build();
-
         $this->dispatcher->dispatch(new SuiteStartEvent());
+
+        $astMap = $this->mapBuilder->build();
 
         $testSuite = $this->extractor->execute();
 
