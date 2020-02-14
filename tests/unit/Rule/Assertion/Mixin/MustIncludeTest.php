@@ -52,20 +52,37 @@ class MustIncludeTest extends TestCase
         return [
             [
                 FullClassName::createFromFQCN('Example\ClassExample'),
-                [FullClassName::createFromFQCN('NotARealTrait')], $this->getAstMap(),
+                [FullClassName::createFromFQCN('Example\TraitExample')],
+                $this->getAstMap(),
                 [true]
             ],
+            //it fails because NotATrait is not included
             [
                 FullClassName::createFromFQCN('Example\ClassExample'),
-                [FullClassName::createFromFQCN('NopesOne', 'NopesTwo')],
+                [
+                    FullClassName::createFromFQCN('Example\TraitExample'),
+                    FullClassName::createFromFQCN('NotATrait')
+                ],
                 $this->getAstMap(),
-                [true,
-                true]
+                [true, false]
             ],
-            //it does not dispatch any event because there is nothing to check
-            ['Example\ClassExample', [], $this->getAstMap(), false, []],
-            //it fails because it includes Example\TraitExample
-            ['Example\ClassExample', ['Example\TraitExample'], $this->getAstMap(), [false]],
+            //it fails because NotATrait is not included
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [FullClassName::createFromFQCN('NotATrait')],
+                $this->getAstMap(),
+                [false]
+            ],
+            //it fails twice because any of them are included
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [
+                    FullClassName::createFromFQCN('NopesOne'),
+                    FullClassName::createFromFQCN('NopesTwo')
+                ],
+                $this->getAstMap(),
+                [false, false]
+            ]
        ];
     }
 

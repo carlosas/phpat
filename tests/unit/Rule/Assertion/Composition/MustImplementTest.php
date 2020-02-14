@@ -22,7 +22,7 @@ class MustImplementTest extends TestCase
      * @param ClassLike   $origin
      * @param ClassLike[] $destinations
      * @param array       $astMap
-     * @param array  $expectedEvents
+     * @param array       $expectedEvents
      */
     public function testDispatchesCorrectEvents(
         ClassLike $origin,
@@ -50,9 +50,27 @@ class MustImplementTest extends TestCase
     public function dataProvider(): array
     {
         return [
-            ['Example\ClassExample', ['Example\InterfaceExample'], $this->getAstMap(), [true]],
-            ['Example\ClassExample', ['Example\InterfaceExample'], $this->getAstMap(), [true]],
-            ['Example\ClassExample', ['Example\InterfaceExample'], $this->getAstMap(), [true]],
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [FullClassName::createFromFQCN('Example\InterfaceExample')],
+                $this->getAstMap(),
+                [true]
+            ],
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [FullClassName::createFromFQCN('Example\AnotherInterface')],
+                $this->getAstMap(),
+                [true]
+            ],
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [
+                    FullClassName::createFromFQCN('Example\InterfaceExample'),
+                    FullClassName::createFromFQCN('Example\AnotherInterface')
+                ],
+                $this->getAstMap(),
+                [true, true]
+            ],
             //it fails because NotARealInterface is not implemented
             [
                 FullClassName::createFromFQCN('Example\ClassExample'),
@@ -60,7 +78,7 @@ class MustImplementTest extends TestCase
                 $this->getAstMap(),
                 [false]
             ],
-            //it fails twice because both are not implemented
+            //it fails twice because any of them are implemented
             [
                 FullClassName::createFromFQCN('Example\ClassExample'),
                 [
@@ -68,9 +86,8 @@ class MustImplementTest extends TestCase
                     FullClassName::createFromFQCN('NopesTwo')
                 ],
                 $this->getAstMap(),
-                [false,
-                false]
-            ],
+                [false, false]
+            ]
        ];
     }
 

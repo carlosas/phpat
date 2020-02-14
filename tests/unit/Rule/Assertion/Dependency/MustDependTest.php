@@ -52,24 +52,24 @@ class MustDependTest extends TestCase
         return [
             [
                 FullClassName::createFromFQCN('Example\ClassExample'),
-                [FullClassName::createFromFQCN('Example\AnotherClassExample')], $this->getAstMap(), false, [true]],
-            [
-                FullClassName::createFromFQCN('Example\ClassExample'),
-                [FullClassName::createFromFQCN('Vendor\ThirdPartyExample')], $this->getAstMap(), false, [true]],
-            [
-                FullClassName::createFromFQCN('Example\ClassExample'),
-                [FullClassName::createFromFQCN('NotARealClass')],
-                $this->getAstMap(),
-                true,
-                [true]
-            ],
-            //it fails because it depends on Example\AnotherClassExample
-            [
-                FullClassName::createFromFQCN('Example\ClassExample'),
                 [FullClassName::createFromFQCN('Example\AnotherClassExample')],
                 $this->getAstMap(),
-                true,
-                [false]
+                [true]
+            ],
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [FullClassName::createFromFQCN('Vendor\ThirdPartyExample')],
+                $this->getAstMap(),
+                [true]
+            ],
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [
+                    FullClassName::createFromFQCN('Example\AnotherClassExample'),
+                    FullClassName::createFromFQCN('Vendor\ThirdPartyExample')
+                ],
+                $this->getAstMap(),
+                [true, true]
             ],
             //it fails because it does not depend on NotARealClass
             [
@@ -77,6 +77,16 @@ class MustDependTest extends TestCase
                 [FullClassName::createFromFQCN('NotARealClass')],
                 $this->getAstMap(),
                 [false]
+            ],
+            //it fails because it does not depend on NotARealClass
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [
+                    FullClassName::createFromFQCN('Example\AnotherClassExample'),
+                    FullClassName::createFromFQCN('NotARealClass')
+                ],
+                $this->getAstMap(),
+                [true, false]
             ],
             //it fails twice because it does not depend on any of both classes
             [
@@ -86,8 +96,7 @@ class MustDependTest extends TestCase
                     FullClassName::createFromFQCN('NopesTwo')
                 ],
                 $this->getAstMap(),
-                [false,
-                false]
+                [false, false]
             ],
        ];
     }

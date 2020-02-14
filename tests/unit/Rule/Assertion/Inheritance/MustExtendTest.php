@@ -50,9 +50,19 @@ class MustExtendTest extends TestCase
     public function dataProvider(): array
     {
         return [
-            ['Example\ClassExample', ['Example\ParentClassExample'], $this->getAstMap(), [true]],
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [FullClassName::createFromFQCN('Example\ParentClassExample')],
+                $this->getAstMap(),
+                [true]
+            ],
             //it fails because it does not extends NotARealParent
-            ['Example\ClassExample', ['NotARealParent'], $this->getAstMap(), [false]],
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [FullClassName::createFromFQCN('NotARealParent')],
+                $this->getAstMap(),
+                [false]
+            ]
        ];
     }
 

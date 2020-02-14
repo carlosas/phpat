@@ -4,12 +4,13 @@ namespace Tests\PhpAT\unit\Rule\Assertion\Mixin;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
+use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\FullClassName;
 use PhpAT\Parser\Relation\Composition;
 use PhpAT\Parser\Relation\Dependency;
 use PhpAT\Parser\Relation\Inheritance;
 use PhpAT\Parser\Relation\Mixin;
-use PhpAT\Rule\Assertion\Mixin\MustInclude;
+use PhpAT\Rule\Assertion\Mixin\MustNotInclude;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
 use PHPUnit\Framework\TestCase;
@@ -18,20 +19,20 @@ class MustNotIncludeTest extends TestCase
 {
     /**
      * @dataProvider dataProvider
-     * @param string $fqcnOrigin
-     * @param array  $fqcnDestinations
-     * @param array  $astMap
+     * @param ClassLike   $origin
+     * @param ClassLike[] $destinations
+     * @param array       $astMap
      * @param array  $expectedEvents
      */
     public function testDispatchesCorrectEvents(
-        string $fqcnOrigin,
-        array $fqcnDestinations,
+        ClassLike $origin,
+        array $destinations,
         array $astMap,
         array $expectedEvents
     ): void
     {
         $eventDispatcherMock = $this->createMock(EventDispatcher::class);
-        $class = new MustInclude($eventDispatcherMock);
+        $class = new MustNotInclude($eventDispatcherMock);
 
         foreach ($expectedEvents as $valid) {
             $eventType = $valid ? StatementValidEvent::class : StatementNotValidEvent::class;
@@ -43,20 +44,38 @@ class MustNotIncludeTest extends TestCase
             ->method('dispatch')
             ->withConsecutive(...$consecutive??[]);
 
-        $class->validate($fqcnOrigin, $fqcnDestinations, $astMap);
+        $class->validate($origin, $destinations, $astMap);
     }
 
     public function dataProvider(): array
     {
         return [
-            ['Example\ClassExample', ['Example\TraitExample'], $this->getAstMap(), false, [true]],
-            ['Example\ClassExample', ['NotARealTrait'], $this->getAstMap(), true, [true]],
-            //it does not dispatch any event because there is nothing to check
-            ['Example\ClassExample', [], $this->getAstMap(), false, []],
-            //it fails because it does not include NotARealTrait
-            ['Example\ClassExample', ['NotARealTrait'], $this->getAstMap(), false, [false]],
-            //it fails twice because it does not include any of both classes
-            ['Example\ClassExample', ['NopesOne', 'NopesTwo'], $this->getAstMap(), false, [false, false]],
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [
+                    FullClassName::createFromFQCN('NopesOne'),
+                    FullClassName::createFromFQCN('NopesTwo')
+                ],
+                $this->getAstMap(),
+                [true, true]
+            ],
+            //it fails because Example\TraitExample is included
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [
+                    FullClassName::createFromFQCN('NotATrait'),
+                    FullClassName::createFromFQCN('Example\TraitExample')
+                ],
+                $this->getAstMap(),
+                [true, false]
+            ],
+            //it fails because Example\TraitExample is included
+            [
+            FullClassName::createFromFQCN('Example\ClassExample'),
+                [FullClassName::createFromFQCN('Example\TraitExample')],
+                $this->getAstMap(),
+                [false]
+            ]
        ];
     }
 
