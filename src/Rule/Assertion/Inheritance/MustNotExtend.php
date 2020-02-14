@@ -38,9 +38,13 @@ class MustNotExtend extends AbstractAssertion
         foreach ($matchingNodes as $node) {
             $parent = $this->getParent($node);
             foreach ($destinations as $destination) {
-                $matches = ($parent !== null && $destination->matches($parent));
+                if ($parent === null) {
+                    $this->dispatchResult(false, $node->getClassName(), $destination->toString());
+                    continue;
+                }
+
                 $this->dispatchResult(
-                    $matches,
+                    $destination->matches($parent),
                     $node->getClassName(),
                     $destination->toString()
                 );
@@ -48,10 +52,10 @@ class MustNotExtend extends AbstractAssertion
         }
     }
 
-    private function dispatchResult(bool $result, string $fqcnOrigin, string $fqcnDestination): void
+    private function dispatchResult(bool $extends, string $fqcnOrigin, string $fqcnDestination): void
     {
-        $action = $result ? ' extends ' : ' does not extend ';
-        $event = $result ? StatementNotValidEvent::class : StatementValidEvent::class;
+        $action = $extends ? ' extends ' : ' does not extend ';
+        $event = $extends ? StatementNotValidEvent::class : StatementValidEvent::class;
         $message = $fqcnOrigin . $action . $fqcnDestination;
 
         $this->eventDispatcher->dispatch(new $event($message));
