@@ -15,4 +15,13 @@ class AssertionsTest extends ArchitectureTest
             ->classesThat(Selector::haveClassName('PhpAT\Rule\Assertion\AbstractAssertion'))
             ->build();
     }
+
+    public function testAssertionsDoNotDependFromPhpParser(): Rule
+    {
+        return $this->newRule
+            ->classesThat(Selector::havePath('Rule/Assertion/*'))
+            ->mustNotDependOn()
+            ->classesThat(Selector::haveClassName('PhpParser\*'))
+            ->build();
+    }
 }

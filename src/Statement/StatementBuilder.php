@@ -124,6 +124,7 @@ class StatementBuilder
     /**
      * @param SelectorInterface[] $included
      * @param SelectorInterface[] $excluded
+     * @param AbstractAssertion $assertion
      * @param array $astMap
      * @return ClassLike[]
      * @throws \Exception
@@ -138,8 +139,7 @@ class StatementBuilder
         foreach ($included as $i) {
             if ($this->isRegex($i->getParameter()) && $assertion->acceptsRegex() === false) {
                 $assertionName = substr(get_class($assertion), strrpos(get_class($assertion), '\\') + 1);
-                $message = '(' . $assertionName . ') Using expresion as a destination selector. Ignoring: '
-                    . $i->getParameter();
+                $message = $assertionName . ' can not assert regex selectors. Ignoring: ' . $i->getParameter();
                 $this->eventDispatcher->dispatch(new WarningEvent($message));
                 continue;
             }

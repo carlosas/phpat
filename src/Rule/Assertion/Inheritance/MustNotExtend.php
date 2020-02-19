@@ -20,7 +20,7 @@ class MustNotExtend extends AbstractAssertion
 
     public function acceptsRegex(): bool
     {
-        return false;
+        return true;
     }
 
     /**
