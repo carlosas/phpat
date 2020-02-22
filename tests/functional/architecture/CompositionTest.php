@@ -5,6 +5,7 @@ namespace Tests\PhpAT\functional\architecture;
 use PhpAT\Rule\Rule;
 use PhpAT\Selector\Selector;
 use PhpAT\Test\ArchitectureTest;
+use Tests\PhpAT\functional\fixtures\ClassWithAnonymousClass;
 
 class CompositionTest extends ArchitectureTest
 {
@@ -31,6 +32,15 @@ class CompositionTest extends ArchitectureTest
     {
         return $this->newRule
             ->classesThat(Selector::havePath('Composition/CompositionNamespaceSimpleClass.php'))
+            ->mustNotImplement()
+            ->classesThat(Selector::havePath('SimpleInterface.php'))
+            ->build();
+    }
+
+    public function testAnonymousClassInterfacesIgnored(): Rule
+    {
+        return $this->newRule
+            ->classesThat(Selector::haveClassName(ClassWithAnonymousClass::class))
             ->mustNotImplement()
             ->classesThat(Selector::havePath('SimpleInterface.php'))
             ->build();

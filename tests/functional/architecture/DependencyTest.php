@@ -6,6 +6,7 @@ use PHPAT\EventDispatcher\EventInterface;
 use PhpAT\Rule\Rule;
 use PhpAT\Selector\Selector;
 use PhpAT\Test\ArchitectureTest;
+use Tests\PhpAT\functional\fixtures\ClassWithAnonymousClass;
 use Tests\PhpAT\functional\fixtures\DummyException;
 use Tests\PhpAT\functional\fixtures\Inheritance\InheritanceNamespaceSimpleClass;
 use Tests\PhpAT\functional\fixtures\SimpleClass;
@@ -79,6 +80,17 @@ class DependencyTest extends ArchitectureTest
             ->andClassesThat(Selector::havePath('AnotherSimpleClass.php'))
             ->andClassesThat(Selector::havePath('Dependency/DependencyNamespaceSimpleClass.php'))
             ->andClassesThat(Selector::havePath('Inheritance/InheritanceNamespaceSimpleClass.php'))
+            ->build();
+    }
+
+    public function testAnonymousClassHasDependency(): Rule
+    {
+        return $this->newRule
+            ->classesThat(Selector::haveClassName(ClassWithAnonymousClass::class))
+            ->mustOnlyDependOn()
+            ->classesThat(Selector::havePath('SimpleClass.php'))
+            ->classesThat(Selector::havePath('AnotherSimpleClass.php'))
+            ->classesThat(Selector::havePath('SimpleInterface.php'))
             ->build();
     }
 

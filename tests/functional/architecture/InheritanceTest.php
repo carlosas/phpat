@@ -5,6 +5,7 @@ namespace Tests\PhpAT\functional\architecture;
 use PhpAT\Rule\Rule;
 use PhpAT\Selector\Selector;
 use PhpAT\Test\ArchitectureTest;
+use Tests\PhpAT\functional\fixtures\ClassWithAnonymousClass;
 
 class InheritanceTest extends ArchitectureTest
 {
@@ -30,6 +31,15 @@ class InheritanceTest extends ArchitectureTest
     {
         return $this->newRule
             ->classesThat(Selector::havePath('Inheritance/InheritanceNamespaceSimpleClass.php'))
+            ->mustNotExtend()
+            ->classesThat(Selector::havePath('SimpleClass.php'))
+            ->build();
+    }
+
+    public function testAnonymousClassParentIgnored(): Rule
+    {
+        return $this->newRule
+            ->classesThat(Selector::haveClassName(ClassWithAnonymousClass::class))
             ->mustNotExtend()
             ->classesThat(Selector::havePath('SimpleClass.php'))
             ->build();
