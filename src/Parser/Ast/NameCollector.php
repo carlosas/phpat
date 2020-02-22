@@ -13,7 +13,7 @@ class NameCollector extends NodeVisitorAbstract
 
     public function leaveNode(Node $node)
     {
-        if ($node instanceof Node\Stmt\ClassLike) {
+        if ($node instanceof Node\Stmt\ClassLike && isset($node->namespacedName)) {
             $this->name = FullClassName::createFromFQCN($node->namespacedName->toString());
         }
     }

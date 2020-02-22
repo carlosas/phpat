@@ -21,7 +21,7 @@ class InterfaceCollector extends AbstractRelationCollector
 
     public function leaveNode(Node $node)
     {
-        if (isset($node->implements) && !empty($node->implements)) {
+        if (isset($node->namespacedName) && isset($node->implements) && !empty($node->implements)) {
             foreach ($node->implements as $implements) {
                 if ($implements instanceof Node\Name\FullyQualified) {
                     $this->addInterface($node->getLine(), $implements->toString());
