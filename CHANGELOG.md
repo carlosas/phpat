@@ -1,6 +1,18 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.6.0
+- Add selection out of the src scope using full or partial class names
+```
+return $this->newRule
+    ->classesThat(Selector::haveClassName('App\*'))
+    ->mustNotDependOn()
+    ->classesThat(Selector::haveClassName('Symfony\*'))
+```
+- Add warnings when using regex class names with affirmative `must` assertions
+- Fix some docblock types not resolved
+- Fix error while using anonymous classes
+
 ## 0.5.8
 - Add warnings when selectors do not find any class
 - Fix group use declarations
