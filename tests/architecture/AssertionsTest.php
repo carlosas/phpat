@@ -16,12 +16,13 @@ class AssertionsTest extends ArchitectureTest
             ->build();
     }
 
-    public function testAssertionsDoNotDependFromPhpParser(): Rule
+    public function testAssertionsDoNotDependofVendors(): Rule
     {
         return $this->newRule
             ->classesThat(Selector::havePath('Rule/Assertion/*'))
-            ->mustNotDependOn()
-            ->classesThat(Selector::haveClassName('PhpParser\*'))
+            ->canOnlyDependOn()
+            ->classesThat(Selector::haveClassName('PhpAT\*'))
+            ->classesThat(Selector::haveClassName('Psr\*'))
             ->build();
     }
 }
