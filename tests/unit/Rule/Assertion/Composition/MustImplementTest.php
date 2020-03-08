@@ -6,6 +6,7 @@ use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\AstNode;
 use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\FullClassName;
+use PhpAT\Parser\RegexClassName;
 use PhpAT\Parser\Relation\Composition;
 use PhpAT\Parser\Relation\Dependency;
 use PhpAT\Parser\Relation\Inheritance;
@@ -75,6 +76,17 @@ class MustImplementTest extends TestCase
                 [],
                 $this->getAstMap(),
                 [true, true]
+            ],
+            //it fails because regex Example\Another* is excluded
+            [
+                FullClassName::createFromFQCN('Example\ClassExample'),
+                [
+                    FullClassName::createFromFQCN('Example\InterfaceExample'),
+                    FullClassName::createFromFQCN('Example\AnotherInterface')
+                ],
+                [new RegexClassName('Example\Another*')],
+                $this->getAstMap(),
+                [true, false]
             ],
             //it fails because NotARealInterface is not implemented
             [
