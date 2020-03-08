@@ -95,6 +95,7 @@ class App
         $statement->getAssertion()->validate(
             $statement->getOrigin(),
             $statement->getDestinations(),
+            $statement->getExcludedDestinations(),
             $astMap
         );
     }
