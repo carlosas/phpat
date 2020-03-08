@@ -49,11 +49,16 @@ class MustOnlyImplement extends AbstractAssertion
                     $this->dispatchResult(false, $node->getClassName(), $destination->toString());
                 }
             }
+            $success = true;
             foreach ($interfaces as $interface) {
-                $matches = $this->relationMatchesDestinations($interface, $included, $excluded);
-                if ($matches === false) {
-                    $this->dispatchOthersResult(false, $node->getClassName(), $interface);
+                $result = $this->relationMatchesDestinations($interface, $included, $excluded);
+                if ($result->matched() === false) {
+                    $success = false;
+                    $this->dispatchOthersResult(true, $node->getClassName(), $interface);
                 }
+            }
+            if ($success === true) {
+                $this->dispatchOthersResult(false, $node->getClassName());
             }
         }
     }

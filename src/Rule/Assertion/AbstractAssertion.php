@@ -138,7 +138,7 @@ abstract class AbstractAssertion
 
         foreach ($relations as $rel) {
             if ($destination->matches($rel)) {
-                $m[] = $rel->toString();
+                $m[] = $rel;
             }
         }
 
