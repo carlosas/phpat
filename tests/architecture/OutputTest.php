@@ -4,7 +4,7 @@ use PhpAT\Selector\Selector;
 use PhpAT\Rule\Rule;
 use PhpAT\Test\ArchitectureTest;
 
-class OutputTest extends ArchitectureTest
+final class OutputTest extends ArchitectureTest
 {
     public function testOnlyEventSubscriberWritesOutput(): Rule
     {

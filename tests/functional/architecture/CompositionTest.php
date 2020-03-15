@@ -7,7 +7,7 @@ use PhpAT\Selector\Selector;
 use PhpAT\Test\ArchitectureTest;
 use Tests\PhpAT\functional\fixtures\ClassWithAnonymousClass;
 
-class CompositionTest extends ArchitectureTest
+final class CompositionTest extends ArchitectureTest
 {
     public function testSimpleInterfaceComposition(): Rule
     {

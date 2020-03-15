@@ -4,7 +4,7 @@ use PhpAT\Selector\Selector;
 use PhpAT\Rule\Rule;
 use PhpAT\Test\ArchitectureTest;
 
-class AssertionsTest extends ArchitectureTest
+final class AssertionsTest extends ArchitectureTest
 {
     public function testAssertionsImplementAssertionInterface(): Rule
     {

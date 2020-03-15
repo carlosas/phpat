@@ -13,7 +13,7 @@ use Tests\PhpAT\functional\fixtures\SimpleClass;
 use Tests\PhpAT\functional\fixtures\SimpleInterface;
 use Tests\PhpAT\functional\fixtures\SimpleTrait;
 
-class DependencyTest extends ArchitectureTest
+final class DependencyTest extends ArchitectureTest
 {
     public function testDirectDependency(): Rule
     {

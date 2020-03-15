@@ -7,7 +7,7 @@ use PhpAT\Selector\Selector;
 use PhpAT\Test\ArchitectureTest;
 use Tests\PhpAT\functional\fixtures\ClassWithAnonymousClass;
 
-class InheritanceTest extends ArchitectureTest
+final class InheritanceTest extends ArchitectureTest
 {
     public function testSameNamespaceInheritance(): Rule
     {

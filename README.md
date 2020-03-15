@@ -78,7 +78,7 @@ use PhpAT\Selector\Selector;
 use PhpAT\Test\ArchitectureTest;
 use App\Domain\BlackMagicInterface;
 
-class ExampleTest extends ArchitectureTest
+final class ExampleTest extends ArchitectureTest
 {
     public function testDomainDoesNotDependOnOtherLayers(): Rule
     {
@@ -90,7 +90,7 @@ class ExampleTest extends ArchitectureTest
             ->andClassesThat(Selector::haveClassName('App\Application\Shared\Service\KnownBadApproach'))
             ->build();
     }
-    
+
     public function testAllHandlersExtendAbstractCommandHandler(): Rule
     {
         return $this->newRule

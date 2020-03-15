@@ -6,7 +6,7 @@ use PhpAT\Rule\Rule;
 use PhpAT\Selector\Selector;
 use PhpAT\Test\ArchitectureTest;
 
-class MixinTest extends ArchitectureTest
+final class MixinTest extends ArchitectureTest
 {
     public function testSimpleTraitInclusion(): Rule
     {

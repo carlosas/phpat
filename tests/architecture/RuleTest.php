@@ -6,7 +6,7 @@ use PhpAT\Rule\Assertion\AbstractAssertion;
 use PhpAT\Rule\Rule;
 use PhpAT\Test\ArchitectureTest;
 
-class RuleTest extends ArchitectureTest
+final class RuleTest extends ArchitectureTest
 {
     public function testRuleDependsOnlyOnAssertionAndSelector(): Rule
     {

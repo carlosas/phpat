@@ -4,7 +4,7 @@ use PhpAT\Selector\Selector;
 use PhpAT\Rule\Rule;
 use PhpAT\Test\ArchitectureTest;
 
-class ProviderTest extends ArchitectureTest
+final class ProviderTest extends ArchitectureTest
 {
     public function testProviderDependsOnApp(): Rule
     {
