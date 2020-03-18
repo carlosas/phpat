@@ -25,40 +25,40 @@ class MustOnlyDepend extends AbstractAssertion
 
     /**
      * @param ClassLike   $origin
-     * @param ClassLike[] $destinations
+     * @param ClassLike[] $included
+     * @param ClassLike[] $excluded
      * @param array       $astMap
      */
     public function validate(
         ClassLike $origin,
-        array $destinations,
+        array $included,
+        array $excluded,
         array $astMap
     ): void {
         $matchingNodes = $this->filterMatchingNodes($origin, $astMap);
 
         foreach ($matchingNodes as $node) {
             $dependencies = $this->getDependencies($node);
-            $destinationsNotMatched = $destinations;
-
-            foreach ($dependencies as $key => $dependency) {
-                foreach ($destinations as $dkey => $destination) {
-                    if ($destination->matches($dependency)) {
-                        $this->dispatchResult(true, $node->getClassName(), $dependency);
-                        unset($dependencies[$key]);
-                        unset($destinationsNotMatched[$dkey]);
-                        break;
+            foreach ($included as $destination) {
+                $result = $this->destinationMatchesRelations($destination, $excluded, $dependencies);
+                if ($result->matched() === true) {
+                    foreach ($result->getMatches() as $match) {
+                        $this->dispatchResult(true, $node->getClassName(), $match);
                     }
+                } else {
+                    $this->dispatchResult(false, $node->getClassName(), $destination->toString());
                 }
             }
-
-            foreach ($destinationsNotMatched as $notMatched) {
-                $this->dispatchResult(false, $node->getClassName(), $notMatched->toString());
-            }
-
-            if (empty($dependencies)) {
-                $this->dispatchOthersResult(false, $node->getClassName());
-            }
+            $success = true;
             foreach ($dependencies as $dependency) {
-                $this->dispatchOthersResult(true, $node->getClassName(), $dependency);
+                $result = $this->relationMatchesDestinations($dependency, $included, $excluded);
+                if ($result->matched() === false) {
+                    $success = false;
+                    $this->dispatchOthersResult(true, $node->getClassName(), $dependency);
+                }
+            }
+            if ($success === true) {
+                $this->dispatchOthersResult(false, $node->getClassName());
             }
         }
     }
