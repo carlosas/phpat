@@ -18,3 +18,9 @@ With `Selector::extendClass()` you can select classes that extend a certain clas
 
 ### `IncludeSelector`
 With `Selector::includeTrait()` you can select classes that include a certain trait.
+
+### `ComposerSourceSelector`
+With `Selector::areAutoloadableFromComposer()` you can select classes that are declared as sources in the given `composer.json` file
+
+### `ComposerDependencySelector`
+With `Selector::areDependenciesFromComposer()` you can select classes that are declared composer dependencies of the given `composer.json` and `composer.lock` combination.
