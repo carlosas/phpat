@@ -31,7 +31,7 @@ class Selector
         return new IncludeSelector($fqcn);
     }
 
-    public static function areComposerDependencies(
+    public static function areDependenciesFromComposer(
         string $composerJson,
         string $composerLock,
         bool $includeDev = false
@@ -39,8 +39,10 @@ class Selector
         return new ComposerDependencySelector($composerJson, $composerLock, $includeDev);
     }
 
-    public static function areComposerSource(string $composerJson, bool $includeDev = false): ComposerSourceSelector
-    {
+    public static function areAutoloadableFromComposer(
+        string $composerJson,
+        bool $includeDev = false
+    ): ComposerSourceSelector {
         return new ComposerSourceSelector($composerJson, $includeDev);
     }
 }

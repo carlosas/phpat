@@ -9,7 +9,6 @@ use PHPUnit\Framework\TestCase;
 
 class ComposerDependencySelectorTest extends TestCase
 {
-
     public function testExtractsDependencies(): void
     {
         $selected = $this->select(false);

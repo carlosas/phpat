@@ -9,7 +9,6 @@ use PHPUnit\Framework\TestCase;
 
 class ComposerSourceSelectorTest extends TestCase
 {
-
     public function testExtractsSourceDirectories(): void
     {
         $source = $this->select(false);
@@ -34,7 +33,6 @@ class ComposerSourceSelectorTest extends TestCase
         return (new ComposerSourceSelector(__DIR__ . '/Mock/composer.json', $includeDev))->select();
     }
 
-
     /** @param ClassLike[] $selected */
     private function oneSelectedMatches(array $selected, string $classToMatch): bool
     {
@@ -46,5 +44,4 @@ class ComposerSourceSelectorTest extends TestCase
 
         return false;
     }
-
 }
