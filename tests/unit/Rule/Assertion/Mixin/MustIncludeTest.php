@@ -20,13 +20,15 @@ class MustIncludeTest extends TestCase
     /**
      * @dataProvider dataProvider
      * @param ClassLike   $origin
-     * @param ClassLike[] $destinations
+     * @param ClassLike[] $included
+     * @param ClassLike[] $excluded
      * @param array       $astMap
-     * @param array  $expectedEvents
+     * @param bool[]      $expectedEvents
      */
     public function testDispatchesCorrectEvents(
         ClassLike $origin,
-        array $destinations,
+        array $included,
+        array $excluded,
         array $astMap,
         array $expectedEvents
     ): void
@@ -44,7 +46,7 @@ class MustIncludeTest extends TestCase
             ->method('dispatch')
             ->withConsecutive(...$consecutive??[]);
 
-        $class->validate($origin, $destinations, $astMap);
+        $class->validate($origin, $included, $excluded, $astMap);
     }
 
     public function dataProvider(): array
@@ -53,6 +55,7 @@ class MustIncludeTest extends TestCase
             [
                 FullClassName::createFromFQCN('Example\ClassExample'),
                 [FullClassName::createFromFQCN('Example\TraitExample')],
+                [],
                 $this->getAstMap(),
                 [true]
             ],
@@ -63,6 +66,7 @@ class MustIncludeTest extends TestCase
                     FullClassName::createFromFQCN('Example\TraitExample'),
                     FullClassName::createFromFQCN('NotATrait')
                 ],
+                [],
                 $this->getAstMap(),
                 [true, false]
             ],
@@ -70,6 +74,7 @@ class MustIncludeTest extends TestCase
             [
                 FullClassName::createFromFQCN('Example\ClassExample'),
                 [FullClassName::createFromFQCN('NotATrait')],
+                [],
                 $this->getAstMap(),
                 [false]
             ],
@@ -80,6 +85,7 @@ class MustIncludeTest extends TestCase
                     FullClassName::createFromFQCN('NopesOne'),
                     FullClassName::createFromFQCN('NopesTwo')
                 ],
+                [],
                 $this->getAstMap(),
                 [false, false]
             ]
