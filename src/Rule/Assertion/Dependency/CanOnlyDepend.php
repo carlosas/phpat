@@ -57,7 +57,7 @@ class CanOnlyDepend extends AbstractAssertion
     private function dispatchResult(bool $result, string $fqcnOrigin, string $fqcnDestination = ''): void
     {
         $message = $result
-            ? $fqcnOrigin . ' does not depend on non-selected classes'
+            ? $fqcnOrigin . ' does not depend on forbidden classes'
             : $fqcnOrigin . ' depends on ' . $fqcnDestination;
         $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
 

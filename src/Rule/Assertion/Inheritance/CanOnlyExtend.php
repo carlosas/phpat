@@ -53,7 +53,7 @@ class CanOnlyExtend extends AbstractAssertion
     private function dispatchResult(bool $result, string $fqcnOrigin, string $fqcnDestination = ''): void
     {
         $message = $result
-            ? $fqcnOrigin . ' does not extend non-selected classes'
+            ? $fqcnOrigin . ' does not extend forbidden classes'
             : $fqcnOrigin . ' extends ' . $fqcnDestination;
         $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
 

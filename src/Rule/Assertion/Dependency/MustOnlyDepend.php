@@ -76,7 +76,7 @@ class MustOnlyDepend extends AbstractAssertion
     {
         $message = $depends ?
             $fqcnOrigin . ' depends on ' . $fqcnDestination
-            : $fqcnOrigin . ' does not depend on non-selected classes';
+            : $fqcnOrigin . ' does not depend on forbidden classes';
         $event = $depends ? StatementNotValidEvent::class : StatementValidEvent::class;
 
         $this->eventDispatcher->dispatch(new $event($message));

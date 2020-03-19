@@ -76,7 +76,7 @@ class MustOnlyInclude extends AbstractAssertion
     {
         $message = $includes ?
             $fqcnOrigin . ' includes ' . $fqcnDestination
-            : $fqcnOrigin . ' does not include non-selected classes';
+            : $fqcnOrigin . ' does not include forbidden classes';
         $event = $includes ? StatementNotValidEvent::class : StatementValidEvent::class;
 
         $this->eventDispatcher->dispatch(new $event($message));

@@ -76,7 +76,7 @@ class MustOnlyImplement extends AbstractAssertion
     {
         $message = $implements ?
             $fqcnOrigin . ' implements ' . $fqcnDestination
-            : $fqcnOrigin . ' does not implement non-selected classes';
+            : $fqcnOrigin . ' does not implement forbidden classes';
         $event = $implements ? StatementNotValidEvent::class : StatementValidEvent::class;
 
         $this->eventDispatcher->dispatch(new $event($message));
