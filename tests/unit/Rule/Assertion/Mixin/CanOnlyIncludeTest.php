@@ -20,13 +20,15 @@ class CanOnlyIncludeTest extends TestCase
     /**
      * @dataProvider dataProvider
      * @param ClassLike   $origin
-     * @param ClassLike[] $destinations
+     * @param ClassLike[] $included
+     * @param ClassLike[] $excluded
      * @param array       $astMap
-     * @param array  $expectedEvents
+     * @param bool[]      $expectedEvents
      */
     public function testDispatchesCorrectEvents(
         ClassLike $origin,
-        array $destinations,
+        array $included,
+        array $excluded,
         array $astMap,
         array $expectedEvents
     ): void
@@ -44,7 +46,7 @@ class CanOnlyIncludeTest extends TestCase
             ->method('dispatch')
             ->withConsecutive(...$consecutive??[]);
 
-        $class->validate($origin, $destinations, $astMap);
+        $class->validate($origin, $included, $excluded, $astMap);
     }
 
     public function dataProvider(): array
@@ -52,7 +54,9 @@ class CanOnlyIncludeTest extends TestCase
         return [
             [
                 FullClassName::createFromFQCN('Example\ClassExample'),
-                [FullClassName::createFromFQCN('Example\TraitExample')], $this->getAstMap(),
+                [FullClassName::createFromFQCN('Example\TraitExample')],
+                [],
+                $this->getAstMap(),
                 [true]
             ],
             [
@@ -60,13 +64,16 @@ class CanOnlyIncludeTest extends TestCase
                 [
                     FullClassName::createFromFQCN('Example\TraitExample'),
                     FullClassName::createFromFQCN('AnotherTrait')
-                ], $this->getAstMap(),
+                ],
+                [],
+                $this->getAstMap(),
                 [true]
             ],
             //it fails because it includes Example\TraitExample
             [
                 FullClassName::createFromFQCN('Example\ClassExample'),
                 [FullClassName::createFromFQCN('AnotherTrait')],
+                [],
                 $this->getAstMap(),
                 [false]
             ],

@@ -25,35 +25,31 @@ class CanOnlyInclude extends AbstractAssertion
 
     /**
      * @param ClassLike   $origin
-     * @param ClassLike[] $destinations
+     * @param ClassLike[] $included
+     * @param ClassLike[] $excluded
      * @param array       $astMap
      */
     public function validate(
         ClassLike $origin,
-        array $destinations,
+        array $included,
+        array $excluded,
         array $astMap
     ): void {
         $matchingNodes = $this->filterMatchingNodes($origin, $astMap);
 
         foreach ($matchingNodes as $node) {
-            $mixins = $this->getTraits($node);
-
-            foreach ($mixins as $key => $value) {
-                foreach ($destinations as $destination) {
-                    if ($destination->matches($value)) {
-                        unset($mixins[$key]);
-                    }
+            $traits = $this->getTraits($node);
+            $success = true;
+            foreach ($traits as $key => $trait) {
+                $result = $this->relationMatchesDestinations($trait, $included, $excluded);
+                if ($result->matched() === false) {
+                    $success = false;
+                    $this->dispatchResult(false, $node->getClassName(), $trait);
                 }
             }
 
-            if (empty($mixins)) {
+            if ($success === true) {
                 $this->dispatchResult(true, $node->getClassName());
-
-                continue;
-            }
-
-            foreach ($mixins as $mixin) {
-                $this->dispatchResult(false, $node->getClassName(), $mixin);
             }
         }
     }
@@ -61,7 +57,7 @@ class CanOnlyInclude extends AbstractAssertion
     private function dispatchResult(bool $result, string $fqcnOrigin, string $fqcnDestination = ''): void
     {
         $message = $result
-            ? $fqcnOrigin . ' does not include non-selected traits'
+            ? $fqcnOrigin . ' does not include forbidden traits'
             : $fqcnOrigin . ' includes ' . $fqcnDestination;
         $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
 

@@ -26,15 +26,21 @@ class Statement
      * @var ClassLike[]
      */
     private $destinations;
+    /**
+     * @var ClassLike[]
+     */
+    private $excludedDestinations;
 
     public function __construct(
         ClassLike $origin,
         AbstractAssertion $assertion,
-        array $destinations
+        array $destinations,
+        array $excludedDestinations
     ) {
         $this->origin = $origin;
         $this->assertion = $assertion;
         $this->destinations = $destinations;
+        $this->excludedDestinations = $excludedDestinations;
     }
 
     /**
@@ -59,5 +65,13 @@ class Statement
     public function getDestinations(): array
     {
         return $this->destinations;
+    }
+
+    /**
+     * @return ClassLike[]
+     */
+    public function getExcludedDestinations(): array
+    {
+        return $this->excludedDestinations;
     }
 }

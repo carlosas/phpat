@@ -25,35 +25,31 @@ class CanOnlyDepend extends AbstractAssertion
 
     /**
      * @param ClassLike   $origin
-     * @param ClassLike[] $destinations
+     * @param ClassLike[] $included
+     * @param ClassLike[] $excluded
      * @param array       $astMap
      */
     public function validate(
         ClassLike $origin,
-        array $destinations,
+        array $included,
+        array $excluded,
         array $astMap
     ): void {
         $matchingNodes = $this->filterMatchingNodes($origin, $astMap);
 
         foreach ($matchingNodes as $node) {
             $dependencies = $this->getDependencies($node);
-
-            foreach ($dependencies as $key => $value) {
-                foreach ($destinations as $destination) {
-                    if ($destination->matches($value)) {
-                        unset($dependencies[$key]);
-                    }
+            $success = true;
+            foreach ($dependencies as $key => $dependency) {
+                $result = $this->relationMatchesDestinations($dependency, $included, $excluded);
+                if ($result->matched() === false) {
+                    $success = false;
+                    $this->dispatchResult(false, $node->getClassName(), $dependency);
                 }
             }
 
-            if (empty($dependencies)) {
+            if ($success === true) {
                 $this->dispatchResult(true, $node->getClassName());
-
-                continue;
-            }
-
-            foreach ($dependencies as $dependency) {
-                $this->dispatchResult(false, $node->getClassName(), $dependency);
             }
         }
     }
@@ -61,7 +57,7 @@ class CanOnlyDepend extends AbstractAssertion
     private function dispatchResult(bool $result, string $fqcnOrigin, string $fqcnDestination = ''): void
     {
         $message = $result
-            ? $fqcnOrigin . ' does not depend on non-selected classes'
+            ? $fqcnOrigin . ' does not depend on forbidden classes'
             : $fqcnOrigin . ' depends on ' . $fqcnDestination;
         $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
 

@@ -25,42 +25,45 @@ class MustInclude extends AbstractAssertion
 
     /**
      * @param ClassLike   $origin
-     * @param ClassLike[] $destinations
+     * @param ClassLike[] $included
+     * @param ClassLike[] $excluded
      * @param array       $astMap
      */
     public function validate(
         ClassLike $origin,
-        array $destinations,
+        array $included,
+        array $excluded,
         array $astMap
     ): void {
         $matchingNodes = $this->filterMatchingNodes($origin, $astMap);
 
         foreach ($matchingNodes as $node) {
-            $mixins = $this->getTraits($node);
-            foreach ($destinations as $destination) {
-                $matches = $this->matches($destination, $mixins);
-                $this->dispatchResult($matches, $node->getClassName(), $destination->toString());
+            $traits = $this->getTraits($node);
+
+            foreach ($included as $destination) {
+                $result = $this->destinationMatchesRelations($destination, $excluded, $traits);
+                if ($result->matched() === true) {
+                    foreach ($result->getMatches() as $match) {
+                        $this->dispatchResult(true, $node->getClassName(), $match);
+                    }
+                } else {
+                    $this->dispatchResult(false, $node->getClassName(), $destination->toString());
+                }
             }
         }
-    }
-
-    private function matches(ClassLike $destination, array $mixins): bool
-    {
-        foreach ($mixins as $mixin) {
-            if ($destination->matches($mixin)) {
-                $matches = true;
-            }
-        }
-
-        return $matches ?? false;
     }
 
     private function dispatchResult(bool $result, string $fqcnOrigin, string $fqcnDestination): void
     {
         $action = $result ? ' includes ' : ' does not include ';
-        $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
+        $event = $this->getEventClassName($result);
         $message = $fqcnOrigin . $action . $fqcnDestination;
 
         $this->eventDispatcher->dispatch(new $event($message));
+    }
+
+    protected function getEventClassName(bool $includes): string
+    {
+        return $includes ? StatementValidEvent::class : StatementNotValidEvent::class;
     }
 }

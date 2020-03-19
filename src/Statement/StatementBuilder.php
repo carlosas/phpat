@@ -50,6 +50,10 @@ class StatementBuilder
         $origins = $this->selectOrigins($rule->getOrigin(), $rule->getOriginExcluded(), $astMap);
         $destinations = $this->selectDestinations(
             $rule->getDestination(),
+            $rule->getAssertion(),
+            $astMap
+        );
+        $excludedDestinations = $this->selectDestinations(
             $rule->getDestinationExcluded(),
             $rule->getAssertion(),
             $astMap
@@ -59,7 +63,8 @@ class StatementBuilder
             yield new Statement(
                 $originClassName,
                 $rule->getAssertion(),
-                $destinations
+                $destinations,
+                $excludedDestinations
             );
         }
     }
@@ -122,40 +127,27 @@ class StatementBuilder
     }
 
     /**
-     * @param SelectorInterface[] $included
-     * @param SelectorInterface[] $excluded
+     * @param SelectorInterface[] $selectors
      * @param AbstractAssertion $assertion
      * @param array $astMap
      * @return ClassLike[]
      * @throws \Exception
      */
     private function selectDestinations(
-        array $included,
-        array $excluded,
+        array $selectors,
         AbstractAssertion $assertion,
         array $astMap
     ): array {
         $classLikeNames = [];
-        foreach ($included as $i) {
-            if ($this->isRegex($i->getParameter()) && $assertion->acceptsRegex() === false) {
+        foreach ($selectors as $s) {
+            if ($this->isRegex($s->getParameter()) && $assertion->acceptsRegex() === false) {
                 $assertionName = substr(get_class($assertion), strrpos(get_class($assertion), '\\') + 1);
-                $message = $assertionName . ' can not assert regex selectors. Ignoring: ' . $i->getParameter();
+                $message = $assertionName . ' can not assert regex selectors. Ignoring: ' . $s->getParameter();
                 $this->eventDispatcher->dispatch(new WarningEvent($message));
                 continue;
             }
 
-            $classLikeNames = array_merge($classLikeNames, $this->selectorResolver->resolve($i, $astMap));
-        }
-
-        foreach ($excluded as $e) {
-            $classNamesToExclude = $this->selectorResolver->resolve($e, $astMap);
-            foreach ($classNamesToExclude as $file) {
-                foreach ($classLikeNames as $key => $value) {
-                    if ($file == $value) {
-                        unset($classLikeNames[$key]);
-                    }
-                }
-            }
+            $classLikeNames = array_merge($classLikeNames, $this->selectorResolver->resolve($s, $astMap));
         }
 
         return array_values($classLikeNames);

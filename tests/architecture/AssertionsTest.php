@@ -10,13 +10,15 @@ class AssertionsTest extends ArchitectureTest
     {
         return $this->newRule
             ->classesThat(Selector::havePath('Rule/Assertion/*'))
+            ->excludingClassesThat(Selector::haveClassName('PhpAT\Rule\Assertion\*\MustNot*'))
+            ->excludingClassesThat(Selector::havePath('Rule/Assertion/MatchResult.php'))
             ->excludingClassesThat(Selector::havePath('Rule/Assertion/AbstractAssertion.php'))
             ->mustExtend()
             ->classesThat(Selector::haveClassName('PhpAT\Rule\Assertion\AbstractAssertion'))
             ->build();
     }
 
-    public function testAssertionsDoNotDependofVendors(): Rule
+    public function testAssertionsDoNotDependOnVendors(): Rule
     {
         return $this->newRule
             ->classesThat(Selector::havePath('Rule/Assertion/*'))

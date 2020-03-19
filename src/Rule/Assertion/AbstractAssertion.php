@@ -20,9 +20,10 @@ abstract class AbstractAssertion
     /**
      * @param ClassLike   $origin
      * @param ClassLike[] $destinations
+     * @param ClassLike[] $excluded
      * @param array       $astMap
      */
-    abstract public function validate(ClassLike $origin, array $destinations, array $astMap): void;
+    abstract public function validate(ClassLike $origin, array $destinations, array $excluded, array $astMap): void;
 
     abstract public function acceptsRegex(): bool;
 
@@ -93,5 +94,54 @@ abstract class AbstractAssertion
         }
 
         return $mixins ?? [];
+    }
+
+    /**
+     * @param string      $relation
+     * @param ClassLike[] $destinations
+     * @param ClassLike[] $excluded
+     * @return MatchResult
+     */
+    protected function relationMatchesDestinations(string $relation, array $destinations, array $excluded): MatchResult
+    {
+        foreach ($excluded as $exc) {
+            if ($exc->matches($relation)) {
+                return new MatchResult(false, []);
+            }
+        }
+
+        foreach ($destinations as $des) {
+            if ($des->matches($relation)) {
+                $m[] = $des->toString();
+            }
+        }
+
+        return new MatchResult(!empty($m), $m ?? []);
+    }
+
+    /**
+     * @param ClassLike   $destination
+     * @param ClassLike[] $excluded
+     * @param string[] $relations
+     * @return MatchResult
+     */
+    protected function destinationMatchesRelations(
+        ClassLike $destination,
+        array $excluded,
+        array $relations
+    ): MatchResult {
+        foreach ($excluded as $exc) {
+            if ($exc->matches($destination->toString()) || $destination->matches($exc->toString())) {
+                return new MatchResult(false, []);
+            }
+        }
+
+        foreach ($relations as $rel) {
+            if ($destination->matches($rel)) {
+                $m[] = $rel;
+            }
+        }
+
+        return new MatchResult(!empty($m), $m ?? []);
     }
 }

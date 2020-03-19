@@ -20,13 +20,15 @@ class MustOnlyIncludeTest extends TestCase
     /**
      * @dataProvider dataProvider
      * @param ClassLike   $origin
-     * @param ClassLike[] $destinations
+     * @param ClassLike[] $included
+     * @param ClassLike[] $excluded
      * @param array       $astMap
-     * @param array       $expectedEvents
+     * @param bool[]      $expectedEvents
      */
     public function testDispatchesCorrectEvents(
         ClassLike $origin,
-        array $destinations,
+        array $included,
+        array $excluded,
         array $astMap,
         array $expectedEvents
     ): void
@@ -44,7 +46,7 @@ class MustOnlyIncludeTest extends TestCase
             ->method('dispatch')
             ->withConsecutive(...$consecutive??[]);
 
-        $class->validate($origin, $destinations, $astMap);
+        $class->validate($origin, $included, $excluded, $astMap);
     }
 
     public function dataProvider(): array
@@ -56,6 +58,7 @@ class MustOnlyIncludeTest extends TestCase
                     FullClassName::createFromFQCN('Example\AnotherClassExample'),
                     FullClassName::createFromFQCN('Vendor\ThirdPartyExample')
                 ],
+                [],
                 $this->getAstMap(),
                 [true, true, true]
             ],
@@ -67,6 +70,7 @@ class MustOnlyIncludeTest extends TestCase
                     FullClassName::createFromFQCN('Vendor\ThirdPartyExample'),
                     FullClassName::createFromFQCN('NotAClass')
                 ],
+                [],
                 $this->getAstMap(),
                 [true, true, false, true]
             ],
@@ -74,6 +78,7 @@ class MustOnlyIncludeTest extends TestCase
             [
                 FullClassName::createFromFQCN('Example\ClassExample'),
                 [FullClassName::createFromFQCN('Example\AnotherClassExample')],
+                [],
                 $this->getAstMap(),
                 [true, false]
             ],
@@ -81,6 +86,7 @@ class MustOnlyIncludeTest extends TestCase
             [
                 FullClassName::createFromFQCN('Example\ClassExample'),
                 [FullClassName::createFromFQCN('NotARealClass')],
+                [],
                 $this->getAstMap(),
                 [false, false, false]
             ],

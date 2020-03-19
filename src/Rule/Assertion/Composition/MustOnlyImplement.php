@@ -25,40 +25,40 @@ class MustOnlyImplement extends AbstractAssertion
 
     /**
      * @param ClassLike   $origin
-     * @param ClassLike[] $destinations
+     * @param ClassLike[] $included
+     * @param ClassLike[] $excluded
      * @param array       $astMap
      */
     public function validate(
         ClassLike $origin,
-        array $destinations,
+        array $included,
+        array $excluded,
         array $astMap
     ): void {
         $matchingNodes = $this->filterMatchingNodes($origin, $astMap);
 
         foreach ($matchingNodes as $node) {
             $interfaces = $this->getInterfaces($node);
-            $destinationsNotMatched = $destinations;
-
-            foreach ($interfaces as $key => $interface) {
-                foreach ($destinations as $dkey => $destination) {
-                    if ($destination->matches($interface)) {
-                        $this->dispatchResult(true, $node->getClassName(), $interface);
-                        unset($interfaces[$key]);
-                        unset($destinationsNotMatched[$dkey]);
-                        break;
+            foreach ($included as $destination) {
+                $result = $this->destinationMatchesRelations($destination, $excluded, $interfaces);
+                if ($result->matched() === true) {
+                    foreach ($result->getMatches() as $match) {
+                        $this->dispatchResult(true, $node->getClassName(), $match);
                     }
+                } else {
+                    $this->dispatchResult(false, $node->getClassName(), $destination->toString());
                 }
             }
-
-            foreach ($destinationsNotMatched as $notMatched) {
-                $this->dispatchResult(false, $node->getClassName(), $notMatched->toString());
-            }
-
-            if (empty($interfaces)) {
-                $this->dispatchOthersResult(false, $node->getClassName());
-            }
+            $success = true;
             foreach ($interfaces as $interface) {
-                $this->dispatchOthersResult(true, $node->getClassName(), $interface);
+                $result = $this->relationMatchesDestinations($interface, $included, $excluded);
+                if ($result->matched() === false) {
+                    $success = false;
+                    $this->dispatchOthersResult(true, $node->getClassName(), $interface);
+                }
+            }
+            if ($success === true) {
+                $this->dispatchOthersResult(false, $node->getClassName());
             }
         }
     }
@@ -76,7 +76,7 @@ class MustOnlyImplement extends AbstractAssertion
     {
         $message = $implements ?
             $fqcnOrigin . ' implements ' . $fqcnDestination
-            : $fqcnOrigin . ' does not implement non-selected classes';
+            : $fqcnOrigin . ' does not implement forbidden classes';
         $event = $implements ? StatementNotValidEvent::class : StatementValidEvent::class;
 
         $this->eventDispatcher->dispatch(new $event($message));

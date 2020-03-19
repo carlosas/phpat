@@ -25,41 +25,38 @@ class CanOnlyExtend extends AbstractAssertion
 
     /**
      * @param ClassLike   $origin
-     * @param ClassLike[] $destinations
+     * @param ClassLike[] $included
+     * @param ClassLike[] $excluded
      * @param array       $astMap
      */
     public function validate(
         ClassLike $origin,
-        array $destinations,
+        array $included,
+        array $excluded,
         array $astMap
     ): void {
         $matchingNodes = $this->filterMatchingNodes($origin, $astMap);
 
         foreach ($matchingNodes as $node) {
             $parent = $this->getParent($node);
-
             if ($parent === null) {
                 $this->dispatchResult(true, $node->getClassName());
-
                 continue;
             }
 
-            foreach ($destinations as $destination) {
-                if ($destination->matches($parent)) {
-                    $this->dispatchResult(true, $node->getClassName());
-
-                    continue 2;
-                }
+            $result = $this->relationMatchesDestinations($parent, $included, $excluded);
+            if ($result->matched() === false) {
+                $this->dispatchResult(false, $node->getClassName(), $parent);
+            } else {
+                $this->dispatchResult(true, $node->getClassName());
             }
-
-            $this->dispatchResult(false, $node->getClassName(), $parent);
         }
     }
 
     private function dispatchResult(bool $result, string $fqcnOrigin, string $fqcnDestination = ''): void
     {
         $message = $result
-            ? $fqcnOrigin . ' does not extend non-selected classes'
+            ? $fqcnOrigin . ' does not extend forbidden classes'
             : $fqcnOrigin . ' extends ' . $fqcnDestination;
         $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
 
