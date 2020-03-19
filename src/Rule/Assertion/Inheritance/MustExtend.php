@@ -40,6 +40,11 @@ class MustExtend extends AbstractAssertion
         foreach ($matchingNodes as $node) {
             $parent = $this->getParent($node);
             foreach ($included as $destination) {
+                if ($parent === null) {
+                    $this->dispatchResult(false, $node->getClassName(), $destination->toString());
+                    continue;
+                }
+
                 $result = $this->destinationMatchesRelations($destination, $excluded, [$parent]);
                 if ($result->matched() === true) {
                     foreach ($result->getMatches() as $match) {

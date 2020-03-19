@@ -39,7 +39,10 @@ class CanOnlyExtend extends AbstractAssertion
 
         foreach ($matchingNodes as $node) {
             $parent = $this->getParent($node);
-            $success = true;
+            if ($parent === null) {
+                $this->dispatchResult(true, $node->getClassName());
+                continue;
+            }
 
             $result = $this->relationMatchesDestinations($parent, $included, $excluded);
             if ($result->matched() === false) {
