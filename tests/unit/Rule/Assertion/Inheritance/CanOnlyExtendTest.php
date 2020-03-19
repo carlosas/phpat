@@ -20,13 +20,15 @@ class CanOnlyExtendTest extends TestCase
     /**
      * @dataProvider dataProvider
      * @param ClassLike   $origin
-     * @param ClassLike[] $destinations
+     * @param ClassLike[] $included
+     * @param ClassLike[] $excluded
      * @param array       $astMap
      * @param array  $expectedEvents
      */
     public function testDispatchesCorrectEvents(
         ClassLike $origin,
-        array $destinations,
+        array $included,
+        array $excluded,
         array $astMap,
         array $expectedEvents
     ): void
@@ -44,7 +46,7 @@ class CanOnlyExtendTest extends TestCase
             ->method('dispatch')
             ->withConsecutive(...$consecutive??[]);
 
-        $class->validate($origin, $destinations, $astMap);
+        $class->validate($origin, $included, $excluded, $astMap);
     }
 
     public function dataProvider(): array
@@ -52,13 +54,16 @@ class CanOnlyExtendTest extends TestCase
         return [
             [
                 FullClassName::createFromFQCN('Example\ClassExample'),
-                [FullClassName::createFromFQCN('Example\ParentClassExample')], $this->getAstMap(),
+                [FullClassName::createFromFQCN('Example\ParentClassExample')],
+                [],
+                $this->getAstMap(),
                 [true]
             ],
             //it fails because it does not extend Example\AnotherClass
             [
                 FullClassName::createFromFQCN('Example\ClassExample'),
                 [FullClassName::createFromFQCN('Example\AnotherClass')],
+                [],
                 $this->getAstMap(),
                 [false]
             ],
@@ -66,6 +71,7 @@ class CanOnlyExtendTest extends TestCase
             [
                 FullClassName::createFromFQCN('Example\ClassExample'),
                 [FullClassName::createFromFQCN('NotARealParent')],
+                [],
                 $this->getAstMap(),
                 [false]
             ],

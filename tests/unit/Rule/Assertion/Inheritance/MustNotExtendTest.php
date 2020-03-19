@@ -21,13 +21,15 @@ class MustNotExtendTest extends TestCase
     /**
      * @dataProvider dataProvider
      * @param ClassLike   $origin
-     * @param ClassLike[] $destinations
+     * @param ClassLike[] $included
+     * @param ClassLike[] $excluded
      * @param array       $astMap
      * @param array  $expectedEvents
      */
     public function testDispatchesCorrectEvents(
         ClassLike $origin,
-        array $destinations,
+        array $included,
+        array $excluded,
         array $astMap,
         array $expectedEvents
     ): void
@@ -45,7 +47,7 @@ class MustNotExtendTest extends TestCase
             ->method('dispatch')
             ->withConsecutive(...$consecutive??[]);
 
-        $class->validate($origin, $destinations, $astMap);
+        $class->validate($origin, $included, $excluded, $astMap);
     }
 
     public function dataProvider(): array
@@ -54,6 +56,7 @@ class MustNotExtendTest extends TestCase
             [
                 FullClassName::createFromFQCN('Example\ClassExample'),
                 [FullClassName::createFromFQCN('NotARealParent')],
+                [],
                 $this->getAstMap(),
                 [true]
             ],
@@ -61,6 +64,7 @@ class MustNotExtendTest extends TestCase
             [
                 FullClassName::createFromFQCN('Example\ClassExample'),
                 [FullClassName::createFromFQCN('Example\ParentClassExample')],
+                [],
                 $this->getAstMap(),
                 [false]
             ]
