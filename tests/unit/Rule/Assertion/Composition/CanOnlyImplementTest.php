@@ -87,8 +87,7 @@ class CanOnlyImplementTest extends TestCase
                 [FullClassName::createFromFQCN('NotARealInterface')],
                 [],
                 $this->getAstMap(),
-                [false,
-                false]
+                [false, false]
             ],
         ];
     }
