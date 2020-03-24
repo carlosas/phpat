@@ -7,17 +7,20 @@ namespace PhpAT\Test;
 use PhpAT\App\Configuration;
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Rule\RuleBuilder;
+use PhpAT\Test\Parser\YamlTestParser;
 
 class FileTestExtractor implements TestExtractor
 {
     private $ruleBuilder;
     private $testPath;
     private $eventDispatcher;
+    private $yamlTestParser;
 
-    public function __construct(RuleBuilder $ruleBuilder, EventDispatcher $eventDispatcher)
+    public function __construct(RuleBuilder $ruleBuilder, EventDispatcher $eventDispatcher, YamlTestParser $yamlTestParser)
     {
         $this->ruleBuilder = $ruleBuilder;
         $this->eventDispatcher = $eventDispatcher;
+        $this->yamlTestParser = $yamlTestParser;
         $this->testPath = getcwd() . '/' . Configuration::getTestsPath();
     }
 
@@ -26,8 +29,9 @@ class FileTestExtractor implements TestExtractor
         $tests = new ArchitectureTestCollection();
 
         $testClasses = $this->getTestClasses();
+
         foreach ($testClasses as $class) {
-            $tests->addValue(new $class($this->ruleBuilder, $this->eventDispatcher));
+            $tests->addValue($class);
         }
 
         return $tests;
@@ -39,17 +43,20 @@ class FileTestExtractor implements TestExtractor
         if (!$files) {
             return [];
         }
+        $classes = [];
 
         foreach ($files as $file) {
             if (preg_match('/^([.A-Za-z\/])+(\.php)$/', $file)) {
                 include $this->testPath . '/' . $file;
             }
+            if (preg_match('/^([.A-Za-z\/])+(\.yaml)$/', $file)) {
+                $classes[] = $this->yamlTestParser->parseFile($this->testPath . $file);
+            }
         }
 
-        $classes = [];
         foreach (get_declared_classes() as $declaredClass) {
             if (get_parent_class($declaredClass) == ArchitectureTest::class) {
-                $classes[] = $declaredClass;
+                $classes[] = new $declaredClass($this->ruleBuilder, $this->eventDispatcher);
             }
         }
 

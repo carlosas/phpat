@@ -1,8 +1,8 @@
 <?php
 
-declare(strict_types=1);
 
 namespace PhpAT\Test;
+
 
 use PhpAT\App\Event\FatalErrorEvent;
 use PHPAT\EventDispatcher\EventDispatcher;
@@ -10,21 +10,23 @@ use PhpAT\Rule\Rule;
 use PhpAT\Rule\RuleBuilder;
 use PhpAT\Rule\RuleCollection;
 
-abstract class ArchitectureTest implements TestInterface
+abstract class ArchitectureYamlTest implements TestInterface
 {
     protected $newRule;
     private $eventDispatcher;
+    private $methods;
 
-    final public function __construct(RuleBuilder $builder, EventDispatcher $eventDispatcher)
+    final public function __construct(array $methods, RuleBuilder $builder, EventDispatcher $eventDispatcher)
     {
         $this->newRule = $builder;
         $this->eventDispatcher = $eventDispatcher;
+        $this->methods = $methods;
     }
 
     final public function __invoke(): RuleCollection
     {
         $rules = new RuleCollection();
-        foreach (get_class_methods($this) as $method) {
+        foreach ($this->methods as $method) {
             if (preg_match('/^(test)([A-Za-z0-9])+$/', $method)) {
                 try {
                     $rule = $this->invokeTest($method);
@@ -48,17 +50,17 @@ abstract class ArchitectureTest implements TestInterface
     private function invokeTest(string $method): Rule
     {
         /** @var Rule $rule */
-        $rule = $this->$method();
+        $rule = call_user_func($this->$method);
 
         if ($rule->getAssertion() === null) {
             $message = $method
-                . ' has no defined type. Please make sure that you call one of the restrictive methods'
-                . ' (e.g. `mustImplement` or `mustNotDependOn`) to declare the type of the rule.';
+                .' has no defined type. Please make sure that you call one of the restrictive methods'
+                .' (e.g. `mustImplement` or `mustNotDependOn`) to declare the type of the rule.';
             throw new \Exception($message);
         }
 
         if (!($rule instanceof Rule)) {
-            $message = $method . ' must return an instance of ' . Rule::class . '.';
+            $message = $method.' must return an instance of '.Rule::class.'.';
             if ($rule instanceof RuleBuilder) {
                 $message .= ' Did you forget to call build() at the end of your test?';
             }

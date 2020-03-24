@@ -11,7 +11,7 @@ class ArchitectureTestCollection
     /**
      * ArchitectureTestCollection constructor.
      *
-     * @param ArchitectureTest[] $tests
+     * @param TestInterface[] $tests
      */
     public function __construct(array $tests = [])
     {
@@ -20,13 +20,13 @@ class ArchitectureTestCollection
         }
     }
 
-    public function addValue(ArchitectureTest $test): void
+    public function addValue(TestInterface $test): void
     {
         $this->values[] = $test;
     }
 
     /**
-     * @return ArchitectureTest[]
+     * @return TestInterface[]
      */
     public function getValues(): array
     {
