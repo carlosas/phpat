@@ -13,7 +13,7 @@ class ComposerTest extends ArchitectureTest
         return $this->newRule
             ->classesThat(Selector::areAutoloadableFromComposer(__DIR__ . '/../../composer.json'))
             ->canOnlyDependOn()
-            ->classesThat(Selector::areDependenciesFromComposer(__DIR__ . '/../../composer.json', __DIR__ . '/../../composer.lock'))
+            ->classesThat(Selector::areAutoloadableFromComposer(__DIR__ . '/../../composer.json'))
             ->build();
     }
 }
