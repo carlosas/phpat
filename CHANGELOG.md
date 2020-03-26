@@ -10,6 +10,7 @@ $this->newRule
     ->mustNotDependOn()
     ->classesThat(Selector::areDependenciesFromComposer('file-composer-json', 'file-composer-lock', true))
 ```
+
 ## 0.6.0
 - Add selection out of the src scope using full or partial class names
 ```
