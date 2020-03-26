@@ -1,10 +1,19 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.6.1
+- Fix exclusions ignored in non-ast classes
+- Add `ComposerSourceSelector` and `ComposerDependencySelector`
+```
+$this->newRule
+    ->classesThat(Selector::areAutoloadableFromComposer('file-composer-json', false))
+    ->mustNotDependOn()
+    ->classesThat(Selector::areDependenciesFromComposer('file-composer-json', 'file-composer-lock', true))
+```
 ## 0.6.0
 - Add selection out of the src scope using full or partial class names
 ```
-return $this->newRule
+$this->newRule
     ->classesThat(Selector::haveClassName('App\*'))
     ->mustNotDependOn()
     ->classesThat(Selector::haveClassName('Symfony\*'))
