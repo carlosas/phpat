@@ -7,6 +7,7 @@ namespace PhpAT\Test;
 use PhpAT\App\Configuration;
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Rule\RuleBuilder;
+use PhpAT\Test\Parser\XmlTestParser;
 use PhpAT\Test\Parser\YamlTestParser;
 
 class FileTestExtractor implements TestExtractor
@@ -15,12 +16,18 @@ class FileTestExtractor implements TestExtractor
     private $testPath;
     private $eventDispatcher;
     private $yamlTestParser;
+    private $xmlTestParser;
 
-    public function __construct(RuleBuilder $ruleBuilder, EventDispatcher $eventDispatcher, YamlTestParser $yamlTestParser)
-    {
+    public function __construct(
+        RuleBuilder $ruleBuilder,
+        EventDispatcher $eventDispatcher,
+        YamlTestParser $yamlTestParser,
+        XmlTestParser $xmlTestParser
+    ) {
         $this->ruleBuilder = $ruleBuilder;
         $this->eventDispatcher = $eventDispatcher;
         $this->yamlTestParser = $yamlTestParser;
+        $this->xmlTestParser = $xmlTestParser;
         $this->testPath = getcwd() . '/' . Configuration::getTestsPath();
     }
 
@@ -51,6 +58,9 @@ class FileTestExtractor implements TestExtractor
             }
             if (preg_match('/^([.A-Za-z\/])+(\.yaml)$/', $file)) {
                 $classes[] = $this->yamlTestParser->parseFile($this->testPath . $file);
+            }
+            if (preg_match('/^([.A-Za-z\/])+(\.xml)$/', $file)) {
+                $classes[] = $this->xmlTestParser->parseFile($this->testPath . $file);
             }
         }
 

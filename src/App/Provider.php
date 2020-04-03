@@ -19,6 +19,7 @@ use PhpAT\Rule\Assertion\Mixin;
 use PhpAT\Selector\SelectorResolver;
 use PhpAT\Statement\StatementBuilder;
 use PhpAT\Test\FileTestExtractor;
+use PhpAT\Test\Parser\XmlTestParser;
 use PhpAT\Test\Parser\YamlTestParser;
 use PhpAT\Test\TestExtractor;
 use PhpParser\NodeTraverser;
@@ -95,10 +96,16 @@ class Provider
             ->register(TestExtractor::class, FileTestExtractor::class)
             ->addArgument(new Reference(RuleBuilder::class))
             ->addArgument(new Reference(EventDispatcher::class))
-            ->addArgument(new Reference(YamlTestParser::class));
+            ->addArgument(new Reference(YamlTestParser::class))
+            ->addArgument(new Reference(XmlTestParser::class));
 
         $this->builder
             ->register(YamlTestParser::class, YamlTestParser::class)
+            ->addArgument(new Reference(RuleBuilder::class))
+            ->addArgument(new Reference(EventDispatcher::class));
+
+        $this->builder
+            ->register(XmlTestParser::class, XmlTestParser::class)
             ->addArgument(new Reference(RuleBuilder::class))
             ->addArgument(new Reference(EventDispatcher::class));
 

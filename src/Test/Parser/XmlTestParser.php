@@ -10,9 +10,8 @@ use PhpAT\Selector\Selector;
 use PhpAT\Selector\SelectorInterface;
 use PhpAT\Test\ArchitectureYamlTest;
 use PhpAT\Test\TestInterface;
-use Symfony\Component\Yaml\Yaml;
 
-class YamlTestParser
+class XmlTestParser
 {
     private $ruleBuilder;
     private $eventDispatcher;
@@ -25,9 +24,13 @@ class YamlTestParser
 
     public function parseFile(string $pathToFile): ArchitectureYamlTest
     {
-        $fileContents = Yaml::parse(file_get_contents($pathToFile));
-        $rules = $fileContents['rules'];
-        $methods = array_keys($rules);
+        $fileContents = simplexml_load_file($pathToFile);
+        $rules = $fileContents->test;
+        $methods = [];
+        foreach ($rules as $rule) {
+            $methods[] = trim((string) $rule['name']);
+        }
+
         $class = new class (
             $methods,
             $this->ruleBuilder,
@@ -35,61 +38,60 @@ class YamlTestParser
         ) extends ArchitectureYamlTest implements TestInterface {
         };
 
-        foreach ($rules as $key => $rule) {
+        foreach ($rules as $rule) {
             $parsedRule = $this->parseRule($rule);
-            $class->{$key} = function () use ($parsedRule) {
+            $class->{trim((string) $rule['name'])} = function () use ($parsedRule) {
                 return $parsedRule;
             };
         }
         return $class;
     }
 
-    private function parseRule(array $rule): Rule
+    private function parseRule(\SimpleXMLElement $rule): Rule
     {
-        foreach ($rule as $statement) {
-            foreach ($statement as $statementName => $options) {
-                switch ($statementName) {
-                    case 'classes':
-                        $this->buildClasses($options);
-                        break;
-                    case 'excluding':
-                        $this->buildExcluding($options);
-                        break;
-                    case 'assert':
-                        $this->buildAssertion($options);
-                        break;
-                    default:
-                        $this->eventDispatcher->dispatch(
-                            new FatalErrorEvent('Statement ' . $statementName . 'is not implemented')
-                        );
-                        break;
-                }
-            }
+
+        if ($rule->classes->count() != 2) {
+            $this->eventDispatcher->dispatch(
+                new FatalErrorEvent('Rule must have 2 <classes>')
+            );
         }
+
+        if ($rule->assert->count() != 1) {
+            $this->eventDispatcher->dispatch(
+                new FatalErrorEvent('Rule must have 1 <assert>')
+            );
+        }
+
+        $this->buildClasses($rule->classes[0]);
+        if ($rule->excluding[0]) {
+            $this->buildExcluding($rule->excluding[0]);
+        }
+        $this->buildAssertion(trim((string) $rule->assert));
+        $this->buildClasses($rule->classes[1]);
+        if ($rule->excluding[1]) {
+            $this->buildExcluding($rule->excluding[1]);
+        }
+
         return $this->ruleBuilder->build();
     }
 
-    private function buildClasses(array $options): void
+    private function buildClasses(\SimpleXMLElement $options): void
     {
-        foreach ($options as $index => $option) {
-            foreach ($option as $selector => $selectorRule) {
-                $builtSelector = $this->buildSelector($selector, $selectorRule);
-                $index === 0 ?
-                    $this->ruleBuilder->classesThat($builtSelector) :
-                    $this->ruleBuilder->andClassesThat($builtSelector);
-            }
+        $selectors = $options->selector;
+
+        foreach ($selectors as $selector) {
+            $builtSelector = $this->buildSelector(trim((string) $selector['type']), trim((string) $selector));
+            $this->ruleBuilder->classesThat($builtSelector);
         }
     }
 
-    private function buildExcluding(array $options): void
+    private function buildExcluding(\SimpleXMLElement $options): void
     {
-        foreach ($options as $index => $option) {
-            foreach ($option as $selector => $selectorRule) {
-                $builtSelector = $this->buildSelector($selector, $selectorRule);
-                $index === 0 ?
-                    $this->ruleBuilder->excludingClassesThat($builtSelector) :
-                    $this->ruleBuilder->andExcludingClassesThat($builtSelector);
-            }
+        $selectors = $options->selector;
+
+        foreach ($selectors as $selector) {
+            $builtSelector = $this->buildSelector(trim((string) $selector['type']), trim((string) $selector));
+            $this->ruleBuilder->excludingClassesThat($builtSelector);
         }
     }
 
