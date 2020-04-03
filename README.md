@@ -4,19 +4,20 @@
 <h2 align="center">Easy to use architecture testing tool for PHP</h2>
 <p align="center">
 	<a>
-		<img src="https://img.shields.io/packagist/v/carlosas/phpat.svg?style=flat-square" alt="Packagist">
+		<img src="https://img.shields.io/packagist/v/carlosas/phpat?label=version&style=for-the-badge" alt="Version">
     </a>
 	<a>
-		<img src="https://img.shields.io/badge/php-%3E%3D_7.2-8892BF.svg?style=flat-square" alt="Minimum PHP">
+		<img src="https://img.shields.io/packagist/php-v/carlosas/phpat?style=for-the-badge" alt="PHP Version">
 	</a>
 	<a>
-		<img src="https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square" alt="MIT license">
+		<img src="https://img.shields.io/packagist/dt/carlosas/phpat?style=for-the-badge" alt="Downloads">
+	</a>
+	<br />
+	<a>
+		<img src="https://img.shields.io/github/license/carlosas/phpat?style=for-the-badge" alt="License">
 	</a>
 	<a>
-		<img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat-square" alt="Contributions welcome">
-	</a>
-	<a>
-		<img src="http://hits.dwyl.com/carlosas/phpat.svg" alt="Hits">
+		<img src="https://img.shields.io/badge/contributions-welcome-green.svg?style=for-the-badge" alt="Contributions welcome">
 	</a>
 </p>
 <br />

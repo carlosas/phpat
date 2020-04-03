@@ -10,14 +10,13 @@ use PhpAT\Parser\RegexClassName;
 
 class ComposerSourceSelector implements SelectorInterface
 {
-
     /** @var string */
     private $composerJson;
 
     /** @var AstNode[] */
     private $astMap;
 
-    protected $includeDev;
+    private $includeDev;
 
     public function __construct(string $composerJson, bool $includeDev)
     {

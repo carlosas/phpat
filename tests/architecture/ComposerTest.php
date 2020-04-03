@@ -13,7 +13,19 @@ class ComposerTest extends ArchitectureTest
         return $this->newRule
             ->classesThat(Selector::areAutoloadableFromComposer(__DIR__ . '/../../composer.json'))
             ->canOnlyDependOn()
+            ->classesThat(Selector::areAutoloadableFromComposer(__DIR__ . '/../../composer.json'))
             ->classesThat(Selector::areDependenciesFromComposer(__DIR__ . '/../../composer.json', __DIR__ . '/../../composer.lock'))
+            ->build();
+    }
+
+    public function testAssertionsDoNotDependOnVendors(): Rule
+    {
+        return $this->newRule
+            ->classesThat(Selector::haveClassName('PhpAT\Rule\Assertion\*'))
+            ->mustNotDependOn()
+            ->classesThat(Selector::areDependenciesFromComposer(__DIR__ . '/../../composer.json', __DIR__ . '/../../composer.lock'))
+            ->excludingClassesThat(Selector::haveClassName('PHPAT\*'))
+            ->andExcludingClassesThat(Selector::haveClassName('Psr\*'))
             ->build();
     }
 }

@@ -15,10 +15,10 @@ class ComposerDependencySelectorTest extends TestCase
         $this->assertTrue($this->oneSelectedMatches($selected, 'Safe\\Foo'));
     }
 
-    public function testIncludesOwnNamespaces(): void
+    public function testDoesNotIncludeOwnNamespaces(): void
     {
         $selected = $this->select(false);
-        $this->assertTrue($this->oneSelectedMatches($selected, 'Source\\Namespace\\Foo'));
+        $this->assertFalse($this->oneSelectedMatches($selected, 'Source\\Namespace\\Foo'));
     }
 
     /** @param ClassLike[] $selected */
