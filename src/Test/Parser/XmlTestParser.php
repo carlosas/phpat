@@ -8,7 +8,7 @@ use PhpAT\Rule\Rule;
 use PhpAT\Rule\RuleBuilder;
 use PhpAT\Selector\Selector;
 use PhpAT\Selector\SelectorInterface;
-use PhpAT\Test\ArchitectureYamlTest;
+use PhpAT\Test\ArchitectureFileTest;
 use PhpAT\Test\TestInterface;
 
 class XmlTestParser
@@ -22,7 +22,7 @@ class XmlTestParser
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function parseFile(string $pathToFile): ArchitectureYamlTest
+    public function parseFile(string $pathToFile): ArchitectureFileTest
     {
         $fileContents = simplexml_load_file($pathToFile);
         $rules = $fileContents->test;
@@ -31,12 +31,11 @@ class XmlTestParser
             $methods[] = trim((string) $rule['name']);
         }
 
-        $class = new class (
+        $class = new ArchitectureFileTest (
             $methods,
             $this->ruleBuilder,
             $this->eventDispatcher
-        ) extends ArchitectureYamlTest implements TestInterface {
-        };
+        );
 
         foreach ($rules as $rule) {
             $parsedRule = $this->parseRule($rule);
