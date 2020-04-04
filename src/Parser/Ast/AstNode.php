@@ -1,7 +1,8 @@
 <?php
 
-namespace PhpAT\Parser;
+namespace PhpAT\Parser\Ast;
 
+use PhpAT\Parser\FullClassName;
 use PhpAT\Parser\Relation\AbstractRelation;
 
 class AstNode implements \JsonSerializable

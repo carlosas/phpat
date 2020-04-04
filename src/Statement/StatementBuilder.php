@@ -6,7 +6,7 @@ namespace PhpAT\Statement;
 
 use PhpAT\App\Configuration;
 use PhpAT\App\Event\WarningEvent;
-use PhpAT\Parser\AstNode;
+use PhpAT\Parser\Ast\AstNode;
 use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\FullClassName;
 use PhpAT\Parser\RegexClassName;

@@ -9,7 +9,7 @@ use PhpAT\Parser\Ast\Collector\InterfaceCollector;
 use PhpAT\Parser\Ast\Collector\NameCollector;
 use PhpAT\Parser\Ast\Collector\ParentCollector;
 use PhpAT\Parser\Ast\Collector\TraitCollector;
-use PhpAT\Parser\AstNode;
+use PhpAT\Parser\Ast\AstNode;
 use PhpParser\ErrorHandler\Throwing;
 use PhpParser\NameContext;
 use PhpParser\NodeTraverserInterface;

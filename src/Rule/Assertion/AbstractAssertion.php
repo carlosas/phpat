@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpAT\Rule\Assertion;
 
-use PhpAT\Parser\AstNode;
+use PhpAT\Parser\Ast\AstNode;
 use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\Relation\Composition;
 use PhpAT\Parser\Relation\Dependency;
