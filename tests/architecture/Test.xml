@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<rules>
+<rules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="https://raw.githubusercontent.com/faguaron/phpat/YAML/src/Test/Test.xsd">
     <test name="testAssertionsImplementAssertionInterface">
         <classes>
             <selector type="havePath">Rule/Assertion/*</selector>
