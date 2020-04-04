@@ -8,7 +8,7 @@ use PhpAT\Rule\Rule;
 use PhpAT\Rule\RuleBuilder;
 use PhpAT\Rule\RuleCollection;
 
-class ArchitectureFileTest implements TestInterface
+class ArchitectureMarkupTest implements TestInterface
 {
     protected $newRule;
     private $eventDispatcher;

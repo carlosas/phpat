@@ -8,7 +8,7 @@ use PhpAT\Rule\Rule;
 use PhpAT\Rule\RuleBuilder;
 use PhpAT\Selector\Selector;
 use PhpAT\Selector\SelectorInterface;
-use PhpAT\Test\ArchitectureFileTest;
+use PhpAT\Test\ArchitectureMarkupTest;
 use Symfony\Component\Yaml\Yaml;
 
 class YamlTestParser
@@ -22,12 +22,12 @@ class YamlTestParser
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function parseFile(string $pathToFile): ArchitectureFileTest
+    public function parseFile(string $pathToFile): ArchitectureMarkupTest
     {
         $fileContents = Yaml::parse(file_get_contents($pathToFile));
         $rules = $fileContents['rules'];
         $methods = array_keys($rules);
-        $class = new ArchitectureFileTest(
+        $class = new ArchitectureMarkupTest(
             $methods,
             $this->ruleBuilder,
             $this->eventDispatcher

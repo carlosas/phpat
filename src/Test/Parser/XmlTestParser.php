@@ -8,7 +8,7 @@ use PhpAT\Rule\Rule;
 use PhpAT\Rule\RuleBuilder;
 use PhpAT\Selector\Selector;
 use PhpAT\Selector\SelectorInterface;
-use PhpAT\Test\ArchitectureFileTest;
+use PhpAT\Test\ArchitectureMarkupTest;
 use PhpAT\Test\TestInterface;
 
 class XmlTestParser
@@ -22,7 +22,7 @@ class XmlTestParser
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function parseFile(string $pathToFile): ArchitectureFileTest
+    public function parseFile(string $pathToFile): ArchitectureMarkupTest
     {
         $fileContents = simplexml_load_file($pathToFile);
         $rules = $fileContents->test;
@@ -31,7 +31,7 @@ class XmlTestParser
             $methods[] = trim((string) $rule['name']);
         }
 
-        $class = new ArchitectureFileTest(
+        $class = new ArchitectureMarkupTest(
             $methods,
             $this->ruleBuilder,
             $this->eventDispatcher
