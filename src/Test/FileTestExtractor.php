@@ -56,7 +56,7 @@ class FileTestExtractor implements TestExtractor
             if (preg_match('/^([.A-Za-z\/])+(\.php)$/', $file)) {
                 include $this->testPath . '/' . $file;
             }
-            if (preg_match('/^([.A-Za-z\/])+(\.yaml)$/', $file)) {
+            if (preg_match('/^([.A-Za-z\/])+((\.yaml)|(\.yml))$/', $file)) {
                 $classes[] = $this->yamlTestParser->parseFile($this->testPath . $file);
             }
             if (preg_match('/^([.A-Za-z\/])+(\.xml)$/', $file)) {

@@ -52,15 +52,15 @@ class ArchitectureFileTest implements TestInterface
 
         if ($rule->getAssertion() === null) {
             $message = $method
-                . ' has no defined type. Please make sure that you call one of the restrictive methods'
-                . ' (e.g. `mustImplement` or `mustNotDependOn`) to declare the type of the rule.';
+                . ' is not defined. Please make sure that you define one of the assertion methods'
+                . '(e.g. `mustImplement` or `mustNotDependOn`) to declare the assertion of the rule.';
             throw new \Exception($message);
         }
 
         if (!($rule instanceof Rule)) {
             $message = $method . ' must return an instance of ' . Rule::class . '.';
             if ($rule instanceof RuleBuilder) {
-                $message .= ' Did you forget to call build() at the end of your test?';
+                $message .= 'build() not called before on parser';
             }
             throw new \Exception($message);
         }

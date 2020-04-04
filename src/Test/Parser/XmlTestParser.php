@@ -31,7 +31,7 @@ class XmlTestParser
             $methods[] = trim((string) $rule['name']);
         }
 
-        $class = new ArchitectureFileTest (
+        $class = new ArchitectureFileTest(
             $methods,
             $this->ruleBuilder,
             $this->eventDispatcher
