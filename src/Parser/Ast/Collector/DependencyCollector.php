@@ -1,14 +1,13 @@
 <?php
 
-namespace PhpAT\Parser\Ast;
+namespace PhpAT\Parser\Ast\Collector;
 
+use PhpAT\Parser\Ast\PhpDocTypeResolver;
 use PhpAT\Parser\FullClassName;
 use PhpAT\Parser\Relation\Dependency;
 use PhpParser\Comment\Doc;
 use PhpParser\NameContext;
 use PhpParser\Node;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use PHPStan\PhpDocParser\Ast\Type;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;

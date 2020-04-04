@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpAT\Parser\Ast;
+namespace PhpAT\Parser\Ast\Collector;
 
 use PhpAT\Parser\FullClassName;
 use PhpAT\Parser\Relation\Composition;

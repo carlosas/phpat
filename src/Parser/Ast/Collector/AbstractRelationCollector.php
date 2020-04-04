@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpAT\Parser\Ast;
+namespace PhpAT\Parser\Ast\Collector;
 
 use PhpAT\Parser\Relation\AbstractRelation;
 use PhpParser\NodeVisitorAbstract;
