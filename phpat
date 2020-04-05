@@ -3,6 +3,7 @@
 
 declare(strict_types=1);
 
+use PhpAT\App\Exception\FatalErrorException;
 use PhpAT\App\Provider;
 use PhpAT\Input\ArgvInput;
 use PhpAT\Output\StdOutput;
@@ -46,6 +47,8 @@ try {
     $app = $container->get('app');
     $result = $app->execute();
     exit($result === true ? 0 : 1);
+} catch (FatalErrorException $e) {
+    exit($errCode);
 } catch (\Throwable $e) {
     $redBgWhiteText = "\033[41m\033[1;37m";
     $formattingReset = "\033[0m";
