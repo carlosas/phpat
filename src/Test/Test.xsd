@@ -26,7 +26,7 @@
     </xs:element>
     <xs:element name="assert" type="xs:string">
     </xs:element>
-    <xs:element name="test">
+    <xs:element name="rule">
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="classes"/>
@@ -38,10 +38,10 @@
             <xs:attribute type="xs:string" name="name" use="required"/>
         </xs:complexType>
     </xs:element>
-    <xs:element name="rules">
+    <xs:element name="test">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="test" maxOccurs="unbounded"/>
+                <xs:element ref="rule" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
