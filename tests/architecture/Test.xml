@@ -15,7 +15,7 @@
             <selector type="haveClassName">PhpAT\Rule\Assertion\AbstractAssertion</selector>
         </classes>
     </rule>
-    <rule>
+    <rule name="testAssertionsDoNotDependOnVendors">
         <classes>
             <selector type="havePath">Rule/Assertion/*</selector>
         </classes>

@@ -25,7 +25,7 @@ class XmlTestParser
     public function parseFile(string $pathToFile): ArchitectureMarkupTest
     {
         $fileContents = simplexml_load_file($pathToFile);
-        $rules = $fileContents->test;
+        $rules = $fileContents->rule;
         $methods = [];
         foreach ($rules as $rule) {
             $methods[] = trim((string) $rule['name']);
