@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpAT\Selector;
 
 use PhpAT\Parser\Ast\AstNode;
+use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\FullClassName;
 use PhpAT\Parser\Relation\Mixin;
@@ -16,9 +17,9 @@ class IncludeSelector implements SelectorInterface
      */
     private $fqcn;
     /**
-     * @var AstNode[]
+     * @var ReferenceMap
      */
-    private $astMap;
+    private $map;
 
     public function __construct(string $fqcn)
     {
@@ -35,11 +36,11 @@ class IncludeSelector implements SelectorInterface
     }
 
     /**
-     * @param AstNode[] $astMap
+     * @param ReferenceMap $map
      */
-    public function setAstMap(array $astMap): void
+    public function setReferenceMap(ReferenceMap $map): void
     {
-        $this->astMap = $astMap;
+        $this->map = $map;
     }
 
     /**
@@ -47,7 +48,7 @@ class IncludeSelector implements SelectorInterface
      */
     public function select(): array
     {
-        foreach ($this->astMap as $astNode) {
+        foreach ($this->map->getSrcNodes() as $astNode) {
             foreach ($astNode->getRelations() as $relation) {
                 if (
                     $relation instanceof Mixin

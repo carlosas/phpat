@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpAT\Rule\Assertion;
 
 use PhpAT\Parser\Ast\AstNode;
+use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\Relation\Composition;
 use PhpAT\Parser\Relation\Dependency;
@@ -18,24 +19,23 @@ abstract class AbstractAssertion
     protected $eventDispatcher;
 
     /**
-     * @param ClassLike   $origin
-     * @param ClassLike[] $destinations
-     * @param ClassLike[] $excluded
-     * @param array       $astMap
+     * @param ClassLike    $origin
+     * @param ClassLike[]  $destinations
+     * @param ClassLike[]  $excluded
+     * @param ReferenceMap $map
      */
-    abstract public function validate(ClassLike $origin, array $destinations, array $excluded, array $astMap): void;
+    abstract public function validate(ClassLike $origin, array $destinations, array $excluded, ReferenceMap $map): void;
 
     abstract public function acceptsRegex(): bool;
 
     /**
-     * @param ClassLike $origin
-     * @param array     $astMap
+     * @param ClassLike    $origin
+     * @param ReferenceMap $map
      * @return AstNode[]
      */
-    protected function filterMatchingNodes(ClassLike $origin, array $astMap): array
+    protected function filterMatchingNodes(ClassLike $origin, ReferenceMap $map): array
     {
-        /** @var AstNode $node */
-        foreach ($astMap as $node) {
+        foreach ($map->getSrcNodes() as $node) {
             if ($origin->matches($node->getClassName())) {
                 $found[] = $node;
             }

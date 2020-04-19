@@ -4,6 +4,7 @@ namespace Tests\PhpAT\unit\Rule\Assertion\Mixin;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\Ast\AstNode;
+use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\FullClassName;
 use PhpAT\Parser\Relation\Composition;
@@ -22,14 +23,14 @@ class MustIncludeTest extends TestCase
      * @param ClassLike   $origin
      * @param ClassLike[] $included
      * @param ClassLike[] $excluded
-     * @param array       $astMap
+     * @param ReferenceMap $map
      * @param bool[]      $expectedEvents
      */
     public function testDispatchesCorrectEvents(
         ClassLike $origin,
         array $included,
         array $excluded,
-        array $astMap,
+        ReferenceMap $map,
         array $expectedEvents
     ): void
     {
@@ -46,7 +47,7 @@ class MustIncludeTest extends TestCase
             ->method('dispatch')
             ->withConsecutive(...$consecutive??[]);
 
-        $class->validate($origin, $included, $excluded, $astMap);
+        $class->validate($origin, $included, $excluded, $map);
     }
 
     public function dataProvider(): array
@@ -56,7 +57,7 @@ class MustIncludeTest extends TestCase
                 FullClassName::createFromFQCN('Example\ClassExample'),
                 [FullClassName::createFromFQCN('Example\TraitExample')],
                 [],
-                $this->getAstMap(),
+                $this->getMap(),
                 [true]
             ],
             //it fails because NotATrait is not included
@@ -67,7 +68,7 @@ class MustIncludeTest extends TestCase
                     FullClassName::createFromFQCN('NotATrait')
                 ],
                 [],
-                $this->getAstMap(),
+                $this->getMap(),
                 [true, false]
             ],
             //it fails because NotATrait is not included
@@ -75,7 +76,7 @@ class MustIncludeTest extends TestCase
                 FullClassName::createFromFQCN('Example\ClassExample'),
                 [FullClassName::createFromFQCN('NotATrait')],
                 [],
-                $this->getAstMap(),
+                $this->getMap(),
                 [false]
             ],
             //it fails twice because any of them are included
@@ -86,13 +87,13 @@ class MustIncludeTest extends TestCase
                     FullClassName::createFromFQCN('NopesTwo')
                 ],
                 [],
-                $this->getAstMap(),
+                $this->getMap(),
                 [false, false]
             ]
        ];
     }
 
-    private function getAstMap(): array
+    private function getMap(): array
     {
         return [
             new AstNode(

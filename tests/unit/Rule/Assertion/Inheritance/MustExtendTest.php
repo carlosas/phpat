@@ -4,6 +4,7 @@ namespace Tests\PhpAT\unit\Rule\Assertion\Inheritance;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\Ast\AstNode;
+use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\FullClassName;
 use PhpAT\Parser\Relation\Composition;
@@ -22,14 +23,14 @@ class MustExtendTest extends TestCase
      * @param ClassLike   $origin
      * @param ClassLike[] $included
      * @param ClassLike[] $excluded
-     * @param array       $astMap
+     * @param ReferenceMap $map
      * @param array  $expectedEvents
      */
     public function testDispatchesCorrectEvents(
         ClassLike $origin,
         array $included,
         array $excluded,
-        array $astMap,
+        ReferenceMap $map,
         array $expectedEvents
     ): void
     {
@@ -46,7 +47,7 @@ class MustExtendTest extends TestCase
             ->method('dispatch')
             ->withConsecutive(...$consecutive??[]);
 
-        $class->validate($origin, $included, $excluded, $astMap);
+        $class->validate($origin, $included, $excluded, $map);
     }
 
     public function dataProvider(): array
@@ -56,7 +57,7 @@ class MustExtendTest extends TestCase
                 FullClassName::createFromFQCN('Example\ClassExample'),
                 [FullClassName::createFromFQCN('Example\ParentClassExample')],
                 [],
-                $this->getAstMap(),
+                $this->getMap(),
                 [true]
             ],
             //it fails because it does not extends NotARealParent
@@ -64,13 +65,13 @@ class MustExtendTest extends TestCase
                 FullClassName::createFromFQCN('Example\ClassExample'),
                 [FullClassName::createFromFQCN('NotARealParent')],
                 [],
-                $this->getAstMap(),
+                $this->getMap(),
                 [false]
             ]
        ];
     }
 
-    private function getAstMap(): array
+    private function getMap(): array
     {
         return [
             new AstNode(

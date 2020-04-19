@@ -4,6 +4,7 @@ namespace Tests\PhpAT\unit\Rule\Assertion\Dependency;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\Ast\AstNode;
+use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\FullClassName;
 use PhpAT\Parser\Relation\Composition;
@@ -22,14 +23,14 @@ class MustOnlyDependTest extends TestCase
      * @param ClassLike   $origin
      * @param ClassLike[] $included
      * @param ClassLike[] $excluded
-     * @param array       $astMap
+     * @param ReferenceMap $map
      * @param bool[]      $expectedEvents
      */
     public function testDispatchesCorrectEvents(
         ClassLike $origin,
         array $included,
         array $excluded,
-        array $astMap,
+        ReferenceMap $map,
         array $expectedEvents
     ): void
     {
@@ -46,7 +47,7 @@ class MustOnlyDependTest extends TestCase
             ->method('dispatch')
             ->withConsecutive(...$consecutive??[]);
 
-        $class->validate($origin, $included, $excluded, $astMap);
+        $class->validate($origin, $included, $excluded, $map);
     }
 
     public function dataProvider(): array
@@ -59,7 +60,7 @@ class MustOnlyDependTest extends TestCase
                     FullClassName::createFromFQCN('Vendor\ThirdPartyExample')
                 ],
                 [],
-                $this->getAstMap(),
+                $this->getMap(),
                 [true, true, true]
             ],
             //it fails because it does not depend on NotAClass
@@ -71,7 +72,7 @@ class MustOnlyDependTest extends TestCase
                     FullClassName::createFromFQCN('NotAClass')
                 ],
                 [],
-                $this->getAstMap(),
+                $this->getMap(),
                 [true, true, false, true]
             ],
             //it fails because it also depend on Vendor\ThirdPartyExample
@@ -81,7 +82,7 @@ class MustOnlyDependTest extends TestCase
                     FullClassName::createFromFQCN('Example\AnotherClassExample')
                 ],
                 [],
-                $this->getAstMap(),
+                $this->getMap(),
                 [true, false]
             ],
             //it fails because there are 2 dependencies not listed and it does not depend on NotARealClass
@@ -89,13 +90,13 @@ class MustOnlyDependTest extends TestCase
                 FullClassName::createFromFQCN('Example\ClassExample'),
                 [FullClassName::createFromFQCN('NotARealClass')],
                 [],
-                $this->getAstMap(),
+                $this->getMap(),
                 [false, false, false]
             ],
         ];
     }
 
-    private function getAstMap(): array
+    private function getMap(): array
     {
         return [
             new AstNode(

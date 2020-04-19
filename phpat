@@ -50,6 +50,7 @@ try {
 } catch (FatalErrorException $e) {
     exit($errCode);
 } catch (\Throwable $e) {
+var_dump($e->getMessage()); die;
     $redBgWhiteText = "\033[41m\033[1;37m";
     $formattingReset = "\033[0m";
 

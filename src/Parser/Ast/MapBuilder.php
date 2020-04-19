@@ -9,12 +9,13 @@ use PhpAT\Parser\Ast\Collector\InterfaceCollector;
 use PhpAT\Parser\Ast\Collector\NameCollector;
 use PhpAT\Parser\Ast\Collector\ParentCollector;
 use PhpAT\Parser\Ast\Collector\TraitCollector;
-use PhpAT\Parser\Ast\AstNode;
+use PhpAT\Parser\ComposerFileParser;
 use PhpParser\ErrorHandler\Throwing;
 use PhpParser\NameContext;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\Parser;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
+use Psr\EventDispatcher\EventDispatcherInterface;
 
 class MapBuilder
 {
@@ -34,22 +35,39 @@ class MapBuilder
      * @var PhpDocParser
      */
     private $phpDocParser;
+    /**
+     * @var ComposerFileParser
+     */
+    private $composerParser;
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
 
     public function __construct(
         FileFinder $finder,
         Parser $parser,
         NodeTraverserInterface $traverser,
-        PhpDocParser $phpDocParser
+        ComposerFileParser $composerParser,
+        PhpDocParser $phpDocParser,
+        EventDispatcherInterface $eventDispatcher
     ) {
         $this->finder = $finder;
         $this->parser = $parser;
         $this->traverser = $traverser;
+        $this->composerParser = $composerParser;
         $this->phpDocParser = $phpDocParser;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function build(): array
+    public function build(): ReferenceMap
     {
-        $nameContext = new NameContext(new Throwing());
+        return new ReferenceMap($this->buildSrcMap(), $this->buildComposerMap());
+    }
+
+    private function buildSrcMap(): array
+    {
+        $nameContext  = new NameContext(new Throwing());
         $nameResolver = new NameResolver($nameContext);
         $this->traverser->addVisitor($nameResolver);
         $nameCollector = new NameCollector();
@@ -68,7 +86,7 @@ class MapBuilder
         );
         $this->traverser->addVisitor($dependencyCollector);
 
-        $files = $this->finder->findAllFiles(Configuration::getSrcPath());
+        $files = $this->finder->findPhpFilesInPath(Configuration::getSrcPath());
 
         /** @var \SplFileInfo $fileInfo */
         foreach ($files as $fileInfo) {
@@ -76,7 +94,7 @@ class MapBuilder
 
             $this->traverser->traverse($parsed);
 
-            $astMap[$nameCollector->getNameString()] = new AstNode(
+            $srcMap[$nameCollector->getNameString()] = new AstNode(
                 $fileInfo,
                 $nameCollector->getName(),
                 array_merge(
@@ -88,7 +106,17 @@ class MapBuilder
             );
         }
 
-        return $astMap ?? [];
+        return $srcMap ?? [];
+    }
+
+    private function buildComposerMap(): array
+    {
+        $result = [];
+        foreach (Configuration::getComposerFiles() as $name => $files) {
+            $result[$name] = $this->composerParser->parse($files['file'], $files['lock']);
+        }
+
+        return $result;
     }
 
     private function normalizePathname(string $pathname): string

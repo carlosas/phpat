@@ -4,6 +4,7 @@ namespace Tests\PhpAT\unit\Rule\Assertion\Composition;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\Ast\AstNode;
+use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\FullClassName;
 use PhpAT\Parser\Relation\Composition;
@@ -22,14 +23,14 @@ class CanOnlyImplementTest extends TestCase
      * @param ClassLike   $origin
      * @param ClassLike[] $included
      * @param ClassLike[] $excluded
-     * @param array       $astMap
+     * @param ReferenceMap $map
      * @param bool[]      $expectedEvents
      */
     public function testDispatchesCorrectEvents(
         ClassLike $origin,
         array $included,
         array $excluded,
-        array $astMap,
+        ReferenceMap $map,
         array $expectedEvents
     ): void
     {
@@ -46,7 +47,7 @@ class CanOnlyImplementTest extends TestCase
             ->method('dispatch')
             ->withConsecutive(...$consecutive??[]);
 
-        $class->validate($origin, $included, $excluded, $astMap);
+        $class->validate($origin, $included, $excluded, $map);
     }
 
     public function dataProvider(): array
@@ -59,7 +60,7 @@ class CanOnlyImplementTest extends TestCase
                     FullClassName::createFromFQCN('Example\AnotherInterface')
                 ],
                 [],
-                $this->getAstMap(),
+                $this->getMap(),
                 [true]
             ],
             [
@@ -70,7 +71,7 @@ class CanOnlyImplementTest extends TestCase
                     FullClassName::createFromFQCN('NotImplementedInterface')
                 ],
                 [],
-                $this->getAstMap(),
+                $this->getMap(),
                 [true]
             ],
             //it fails because Example\AnotherInterface is also implemented
@@ -78,7 +79,7 @@ class CanOnlyImplementTest extends TestCase
                 FullClassName::createFromFQCN('Example\ClassExample'),
                 [FullClassName::createFromFQCN('Example\InterfaceExample')],
                 [],
-                $this->getAstMap(),
+                $this->getMap(),
                 [false]
             ],
             //it fails because there are 2 interface implementations not listed
@@ -86,13 +87,13 @@ class CanOnlyImplementTest extends TestCase
                 FullClassName::createFromFQCN('Example\ClassExample'),
                 [FullClassName::createFromFQCN('NotARealInterface')],
                 [],
-                $this->getAstMap(),
+                $this->getMap(),
                 [false, false]
             ],
         ];
     }
 
-    private function getAstMap(): array
+    private function getMap(): array
     {
         return [
             new AstNode(

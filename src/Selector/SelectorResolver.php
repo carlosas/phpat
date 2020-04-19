@@ -6,6 +6,7 @@ namespace PhpAT\Selector;
 
 use PhpAT\App\Event\WarningEvent;
 use PHPAT\EventDispatcher\EventDispatcher;
+use PhpAT\Parser\Ast\ReferenceMap;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
@@ -37,10 +38,10 @@ class SelectorResolver
 
     /**
      * @param SelectorInterface $selector
-     * @param array             $astMap
+     * @param ReferenceMap      $map
      * @return array
      */
-    public function resolve(SelectorInterface $selector, array $astMap): array
+    public function resolve(SelectorInterface $selector, ReferenceMap $map): array
     {
         foreach ($selector->getDependencies() as $dependency) {
             try {
@@ -50,7 +51,7 @@ class SelectorResolver
         }
 
         $selector->injectDependencies($d ?? []);
-        $selector->setAstMap($astMap);
+        $selector->setReferenceMap($map);
         $selected = $selector->select();
 
         if (empty($selected)) {

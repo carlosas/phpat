@@ -5,23 +5,20 @@ declare(strict_types=1);
 namespace PhpAT\Selector;
 
 use PhpAT\Parser\Ast\AstNode;
+use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\RegexClassName;
 
 class ComposerSourceSelector implements SelectorInterface
 {
+    /** @var ReferenceMap */
+    private $map;
     /** @var string */
-    private $composerJson;
+    private $composerAlias;
 
-    /** @var AstNode[] */
-    private $astMap;
-
-    private $includeDev;
-
-    public function __construct(string $composerJson, bool $includeDev)
+    public function __construct(string $composerFileAlias)
     {
-        $this->composerJson = $composerJson;
-        $this->includeDev = $includeDev;
+        $this->composerAlias = $composerFileAlias;
     }
 
     public function getDependencies(): array
@@ -33,40 +30,25 @@ class ComposerSourceSelector implements SelectorInterface
     {
     }
 
-    /** @param AstNode[] $astMap */
-    public function setAstMap(array $astMap)
+    /** @param ReferenceMap $map */
+    public function setReferenceMap(ReferenceMap $map): void
     {
-        $this->astMap = $astMap;
+        $this->map = $map;
     }
 
     /** @return ClassLike[] */
     public function select(): array
     {
-        $data = json_decode(file_get_contents($this->composerJson), true);
-
-        $namespaces = array_merge(
-            array_keys($data['autoload']['psr-0'] ?? []),
-            array_keys($data['autoload']['psr-4'] ?? [])
-        );
-
-        if ($this->includeDev) {
-            $namespaces = array_merge(
-                $namespaces,
-                array_keys($data['autoload-dev']['psr-0'] ?? []),
-                array_keys($data['autoload-dev']['psr-4'] ?? [])
-            );
+        $module = $this->map->getComposerMap()[$this->composerAlias] ?? null;
+        if ($module === null) {
+            return [];
         }
 
-        return array_map(
-            function (string $namespace) {
-                return new RegexClassName($namespace . '*');
-            },
-            $namespaces
-        );
+        return $module->getMainAutoloadNamespaces();
     }
 
     public function getParameter(): string
     {
-        return $this->composerJson;
+        return $this->composerAlias;
     }
 }

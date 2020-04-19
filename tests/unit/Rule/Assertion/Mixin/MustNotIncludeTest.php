@@ -4,6 +4,7 @@ namespace Tests\PhpAT\unit\Rule\Assertion\Mixin;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\Ast\AstNode;
+use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\FullClassName;
 use PhpAT\Parser\Relation\Composition;
@@ -22,14 +23,14 @@ class MustNotIncludeTest extends TestCase
      * @param ClassLike   $origin
      * @param ClassLike[] $included
      * @param ClassLike[] $excluded
-     * @param array       $astMap
+     * @param ReferenceMap $map
      * @param bool[]      $expectedEvents
      */
     public function testDispatchesCorrectEvents(
         ClassLike $origin,
         array $included,
         array $excluded,
-        array $astMap,
+        ReferenceMap $map,
         array $expectedEvents
     ): void
     {
@@ -46,7 +47,7 @@ class MustNotIncludeTest extends TestCase
             ->method('dispatch')
             ->withConsecutive(...$consecutive??[]);
 
-        $class->validate($origin, $included, $excluded, $astMap);
+        $class->validate($origin, $included, $excluded, $map);
     }
 
     public function dataProvider(): array
@@ -59,7 +60,7 @@ class MustNotIncludeTest extends TestCase
                     FullClassName::createFromFQCN('NopesTwo')
                 ],
                 [],
-                $this->getAstMap(),
+                $this->getMap(),
                 [true, true]
             ],
             //it fails because Example\TraitExample is included
@@ -70,7 +71,7 @@ class MustNotIncludeTest extends TestCase
                     FullClassName::createFromFQCN('Example\TraitExample')
                 ],
                 [],
-                $this->getAstMap(),
+                $this->getMap(),
                 [true, false]
             ],
             //it fails because Example\TraitExample is included
@@ -78,13 +79,13 @@ class MustNotIncludeTest extends TestCase
                 FullClassName::createFromFQCN('Example\ClassExample'),
                 [FullClassName::createFromFQCN('Example\TraitExample')],
                 [],
-                $this->getAstMap(),
+                $this->getMap(),
                 [false]
             ]
        ];
     }
 
-    private function getAstMap(): array
+    private function getMap(): array
     {
         return [
             new AstNode(

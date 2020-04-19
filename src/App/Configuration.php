@@ -10,6 +10,7 @@ class Configuration
     private static $srcPath;
     private static $srcIncluded;
     private static $srcExcluded;
+    private static $composerFiles;
     private static $testsPath;
     private static $verbosity;
     private static $dryRun;
@@ -27,6 +28,7 @@ class Configuration
         self::$srcPath = $config['src']['path'] ?? '';
         self::$srcIncluded = $config['src']['include'] ?? [];
         self::$srcExcluded = $config['src']['exclude'] ?? [];
+        self::$composerFiles = $config['composer'] ?? [];
         self::$testsPath = $config['tests']['path'] ?? '';
         self::$verbosity = (int) ($config['options']['verbosity'] ?? 1);
         self::$dryRun = (bool) ($config['options']['dry-run'] ?? false);
@@ -46,6 +48,11 @@ class Configuration
     public static function getSrcExcluded(): array
     {
         return self::$srcExcluded;
+    }
+
+    public static function getComposerFiles(): array
+    {
+        return self::$composerFiles;
     }
 
     public static function getTestsPath(): string

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Tests\PhpAT\unit\Selector;
 
-use PhpAT\Selector\ComposerFileParser;
+use PhpAT\Parser\ComposerFileParser;
 use PHPUnit\Framework\TestCase;
 
 class ComposerFileParserTest extends TestCase
