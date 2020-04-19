@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PhpAT\Selector;
 
 use PhpAT\File\FileFinder;
-use PhpAT\Parser\AstNode;
+use PhpAT\Parser\Ast\AstNode;
 use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\FullClassName;
 use PhpParser\NodeTraverserInterface;
