@@ -40,6 +40,7 @@ abstract class AbstractAssertion
                 $found[] = $node;
             }
         }
+
         return $found ?? [];
     }
 

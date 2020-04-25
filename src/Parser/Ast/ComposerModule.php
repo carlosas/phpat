@@ -3,9 +3,6 @@
 namespace PhpAT\Parser\Ast;
 
 use PhpAT\Parser\ClassLike;
-use PhpAT\Parser\FullClassName;
-use PhpAT\Parser\RegexClassName;
-use PhpAT\Parser\Relation\AbstractRelation;
 
 class ComposerModule
 {

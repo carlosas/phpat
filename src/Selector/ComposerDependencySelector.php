@@ -44,14 +44,7 @@ class ComposerDependencySelector implements SelectorInterface
             return [];
         }
 
-        $namespaceMap = array_filter(
-            array_map(
-                function (array $deps) {
-                    return array_merge($deps['main'], $deps['dev']);
-                },
-                $module->getAllPackagesNamespaces()
-            )
-        );
+        $namespaceMap = array_filter($module->getAllPackagesNamespaces());
 
         $result = [];
         foreach ($module->getDeepDependencies() as $direct => $indirects) {
@@ -61,7 +54,6 @@ class ComposerDependencySelector implements SelectorInterface
             }
         }
 
-        //TODO: duplicated values
         return array_merge(...array_values(array_filter($result)));
     }
 

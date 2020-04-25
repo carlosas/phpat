@@ -3,37 +3,54 @@ declare(strict_types=1);
 
 namespace Tests\PhpAT\unit\Selector;
 
+use PhpAT\Parser\Ast\ComposerModule;
+use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\ClassLike;
+use PhpAT\Parser\RegexClassName;
 use PhpAT\Selector\ComposerSourceSelector;
 use PHPUnit\Framework\TestCase;
 
 class ComposerSourceSelectorTest extends TestCase
 {
-    public function testExtractsSourceDirectories(): void
+    /** @var ComposerSourceSelector */
+    private $class;
+
+    protected function setUp(): void
     {
-        $source = $this->select(false);
-        $this->assertTrue($this->oneSelectedMatches($source, 'Source\\Namespace\\Foo'));
+        $map = new ReferenceMap(
+            [],
+            [
+                'somealias' => new ComposerModule(
+                    [new RegexClassName('Source\Namespace\*')],
+                    [new RegexClassName('Test\Namespace\*')],
+                    [],
+                    [],
+                    [],
+                    []
+                )
+            ]
+        );
+        $this->class = new ComposerSourceSelector('somealias');
+        $this->class->setReferenceMap($map);
     }
 
-    public function testDoesNotExtractTestDirectoriesByDefault(): void
+    public function testSelectsSourceDirectories(): void
     {
-        $source = $this->select(false);
-        $this->assertFalse($this->oneSelectedMatches($source, 'Test\\Namespace\\Foo'));
+        $selected = $this->class->select();
+        $this->assertTrue($this->oneSelectedMatches($selected, 'Source\\Namespace\\Foo'));
     }
 
-    public function testExtractsTestDirectoriesIfSpecified(): void
+    public function testDoesNotSelectDevDirectories(): void
     {
-        $source = $this->select(true);
-        $this->assertTrue($this->oneSelectedMatches($source, 'Test\\Namespace\\Foo'));
+        $selected = $this->class->select();
+        $this->assertFalse($this->oneSelectedMatches($selected, 'Test\\Namespace\\Foo'));
     }
 
-    /** @return ClassLike[] $selected */
-    private function select(bool $includeDev): array
-    {
-        return (new ComposerSourceSelector(__DIR__ . '/Mock/composer.json', $includeDev))->select();
-    }
-
-    /** @param ClassLike[] $selected */
+    /**
+     * @param ClassLike[] $selected
+     * @param string $classToMatch
+     * @return bool
+     */
     private function oneSelectedMatches(array $selected, string $classToMatch): bool
     {
         foreach ($selected as $classLike) {

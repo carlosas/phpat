@@ -123,14 +123,9 @@ class ComposerFileParser
     public function getAllPackagesNamespaces(): array
     {
         foreach ($this->lockedPackages as $package) {
-            $allPackages[$package['name']] = [
-                'main' => $this->convertNamespacesToClassLike(
-                    $this->extractNamespaces($package, self::MAIN_SUFFIX)
-                ),
-                'dev' => $this->convertNamespacesToClassLike(
-                    $this->extractNamespaces($package, self::DEV_SUFFIX)
-                )
-            ];
+            $allPackages[$package['name']] = $this->convertNamespacesToClassLike(
+                $this->extractNamespaces($package, self::MAIN_SUFFIX)
+            );
         }
 
         return $allPackages ?? [];
