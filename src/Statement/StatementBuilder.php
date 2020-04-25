@@ -106,7 +106,7 @@ class StatementBuilder
             foreach (Configuration::getSrcIncluded() as $inc) {
                 $resolvedIncludeRow[] = $this->selectorResolver->resolve(new PathSelector($inc), $astMap);
             }
-            foreach ($resolvedIncludeRow as $includedClasses) {
+            foreach ($resolvedIncludeRow ?? [] as $includedClasses) {
                 /** @var ClassLike $includedClassName */
                 foreach ($includedClasses as $includedClassName) {
                     /** @var ClassLike $value */
