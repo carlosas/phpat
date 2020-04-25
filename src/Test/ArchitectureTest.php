@@ -43,26 +43,24 @@ abstract class ArchitectureTest implements TestInterface
     /**
      * @param string $method
      * @return Rule
-     * @throws \Exception
      */
-    private function invokeTest(string $method): Rule
+    protected function invokeTest(string $method): Rule
     {
         /** @var Rule $rule */
         $rule = $this->$method();
 
         if ($rule->getAssertion() === null) {
             $message = $method
-                . ' has no defined type. Please make sure that you call one of the restrictive methods'
-                . ' (e.g. `mustImplement` or `mustNotDependOn`) to declare the type of the rule.';
-            throw new \Exception($message);
+                . ' is not properly defined. Please make sure that you define one of the assertion methods'
+                . '(e.g. `mustImplement` or `mustNotDependOn`) to declare the assertion of the rule.';
+
+            $this->eventDispatcher->dispatch(new FatalErrorEvent($message));
         }
 
         if (!($rule instanceof Rule)) {
             $message = $method . ' must return an instance of ' . Rule::class . '.';
-            if ($rule instanceof RuleBuilder) {
-                $message .= ' Did you forget to call build() at the end of your test?';
-            }
-            throw new \Exception($message);
+
+            $this->eventDispatcher->dispatch(new FatalErrorEvent($message));
         }
 
         return $rule;

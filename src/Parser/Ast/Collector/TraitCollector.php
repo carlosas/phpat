@@ -17,6 +17,8 @@ class TraitCollector extends AbstractRelationCollector
     {
         parent::beforeTraverse($nodes);
         $this->found = [];
+
+        return $nodes;
     }
 
     public function leaveNode(Node $node)
@@ -28,6 +30,8 @@ class TraitCollector extends AbstractRelationCollector
                 }
             }
         }
+
+        return $node;
     }
 
     private function addTrait(int $line, string $fqcn): void

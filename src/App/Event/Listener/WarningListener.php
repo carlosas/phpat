@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace PhpAT\App\Event\Listener;
 
+use PhpAT\App\Event\WarningEvent;
 use PhpAT\App\RuleValidationStorage;
 use PHPAT\EventDispatcher\EventInterface;
 use PHPAT\EventDispatcher\EventListenerInterface;
 use PhpAT\Output\OutputInterface;
-use PhpAT\Output\OutputLevel;
 
 class WarningListener implements EventListenerInterface
 {
@@ -21,6 +21,7 @@ class WarningListener implements EventListenerInterface
 
     public function __invoke(EventInterface $event)
     {
+        /** @var WarningEvent $event */
         RuleValidationStorage::addWarning($event->getMessage());
     }
 }

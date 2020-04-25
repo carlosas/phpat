@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhpAT\App\Event\Listener;
 
+use PhpAT\App\Event\FatalErrorEvent;
 use PhpAT\App\Exception\FatalErrorException;
 use PHPAT\EventDispatcher\EventInterface;
 use PHPAT\EventDispatcher\EventListenerInterface;
@@ -20,7 +21,9 @@ class FatalErrorListener implements EventListenerInterface
 
     public function __invoke(EventInterface $event)
     {
+        /** @var FatalErrorEvent $event */
         $this->output->fatalError($event->getMessage());
+
         throw new FatalErrorException();
     }
 }

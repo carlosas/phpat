@@ -10,6 +10,7 @@ use PhpAT\Parser\RegexClassName;
 
 class ComposerDependencySelector implements SelectorInterface
 {
+    private $astMap;
     /** @var ComposerFileParser */
     private $composer;
     /**

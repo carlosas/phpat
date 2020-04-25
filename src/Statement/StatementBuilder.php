@@ -153,7 +153,7 @@ class StatementBuilder
         return array_values($classLikeNames);
     }
 
-    private function isRegex($str): bool
+    private function isRegex(string $str): bool
     {
         return strpos($str, '*') !== false;
     }

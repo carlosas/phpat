@@ -20,5 +20,7 @@ class ParentCollector extends AbstractRelationCollector
                 FullClassName::createFromFQCN($node->extends->toString())
             );
         }
+
+        return $node;
     }
 }

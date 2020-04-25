@@ -13,6 +13,8 @@ abstract class AbstractRelationCollector extends NodeVisitorAbstract
     public function beforeTraverse(array $nodes)
     {
         $this->results = [];
+
+        return $nodes;
     }
 
     /**

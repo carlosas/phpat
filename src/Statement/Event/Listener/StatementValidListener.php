@@ -7,6 +7,7 @@ namespace PhpAT\Statement\Event\Listener;
 use PHPAT\EventDispatcher\EventInterface;
 use PHPAT\EventDispatcher\EventListenerInterface;
 use PhpAT\Output\OutputInterface;
+use PhpAT\Statement\Event\StatementValidEvent;
 
 class StatementValidListener implements EventListenerInterface
 {
@@ -19,6 +20,7 @@ class StatementValidListener implements EventListenerInterface
 
     public function __invoke(EventInterface $event)
     {
+        /** @var StatementValidEvent $event */
         $this->output->statementValid($event->getMessage());
     }
 }
