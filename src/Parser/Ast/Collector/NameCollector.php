@@ -16,6 +16,8 @@ class NameCollector extends NodeVisitorAbstract
         if ($node instanceof Node\Stmt\ClassLike && isset($node->namespacedName)) {
             $this->name = FullClassName::createFromFQCN($node->namespacedName->toString());
         }
+
+        return $node;
     }
 
     /**
