@@ -48,7 +48,6 @@ class XmlTestParser
 
     private function parseRule(\SimpleXMLElement $rule): Rule
     {
-
         if ($rule->classes->count() != 2) {
             $this->eventDispatcher->dispatch(
                 new FatalErrorEvent('Rule must have 2 <classes>')
