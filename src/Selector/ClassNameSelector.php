@@ -69,7 +69,7 @@ class ClassNameSelector implements SelectorInterface
         return $this->fqcn;
     }
 
-    private function isRegex($str): bool
+    private function isRegex(string $str): bool
     {
         return strpos($str, '*') !== false;
     }

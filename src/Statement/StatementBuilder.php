@@ -107,7 +107,7 @@ class StatementBuilder
             foreach (Configuration::getSrcIncluded() as $inc) {
                 $resolvedIncludeRow[] = $this->selectorResolver->resolve(new PathSelector($inc), $map);
             }
-            foreach ($resolvedIncludeRow as $includedClasses) {
+            foreach ($resolvedIncludeRow ?? [] as $includedClasses) {
                 /** @var ClassLike $includedClassName */
                 foreach ($includedClasses as $includedClassName) {
                     /** @var ClassLike $value */
@@ -154,7 +154,7 @@ class StatementBuilder
         return array_values($classLikeNames);
     }
 
-    private function isRegex($str): bool
+    private function isRegex(string $str): bool
     {
         return strpos($str, '*') !== false;
     }

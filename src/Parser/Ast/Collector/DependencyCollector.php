@@ -51,6 +51,8 @@ class DependencyCollector extends AbstractRelationCollector
     {
         parent::beforeTraverse($nodes);
         $this->found = [];
+
+        return $nodes;
     }
 
     public function leaveNode(Node $node)
@@ -64,6 +66,8 @@ class DependencyCollector extends AbstractRelationCollector
                 $this->addDependency($node->getLine(), $class);
             }
         }
+
+        return $node;
     }
 
     private function addDependency(int $line, string $fqcn): void

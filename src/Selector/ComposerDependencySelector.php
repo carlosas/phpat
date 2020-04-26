@@ -11,6 +11,7 @@ use PhpAT\Parser\RegexClassName;
 
 class ComposerDependencySelector implements SelectorInterface
 {
+    private $astMap;
     /** @var ReferenceMap */
     private $map;
     /** @var string */

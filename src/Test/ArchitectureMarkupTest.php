@@ -43,7 +43,6 @@ class ArchitectureMarkupTest implements TestInterface
     /**
      * @param string $method
      * @return Rule
-     * @throws \Exception
      */
     private function invokeTest(string $method): Rule
     {
@@ -52,17 +51,16 @@ class ArchitectureMarkupTest implements TestInterface
 
         if ($rule->getAssertion() === null) {
             $message = $method
-                . ' is not defined. Please make sure that you define one of the assertion methods'
+                . ' is not properly defined. Please make sure that you define one of the assertion methods'
                 . '(e.g. `mustImplement` or `mustNotDependOn`) to declare the assertion of the rule.';
-            throw new \Exception($message);
+
+            $this->eventDispatcher->dispatch(new FatalErrorEvent($message));
         }
 
         if (!($rule instanceof Rule)) {
             $message = $method . ' must return an instance of ' . Rule::class . '.';
-            if ($rule instanceof RuleBuilder) {
-                $message .= 'build() not called before on parser';
-            }
-            throw new \Exception($message);
+
+            $this->eventDispatcher->dispatch(new FatalErrorEvent($message));
         }
 
         return $rule;

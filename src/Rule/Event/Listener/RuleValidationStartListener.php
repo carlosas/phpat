@@ -7,6 +7,7 @@ namespace PhpAT\Rule\Event\Listener;
 use PHPAT\EventDispatcher\EventInterface;
 use PHPAT\EventDispatcher\EventListenerInterface;
 use PhpAT\Output\OutputInterface;
+use PhpAT\Rule\Event\RuleValidationStartEvent;
 
 class RuleValidationStartListener implements EventListenerInterface
 {
@@ -19,6 +20,7 @@ class RuleValidationStartListener implements EventListenerInterface
 
     public function __invoke(EventInterface $event)
     {
+        /** @var RuleValidationStartEvent $event */
         $this->output->ruleValidationStart($event->getRuleName());
     }
 }

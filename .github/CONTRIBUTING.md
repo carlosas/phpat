@@ -10,9 +10,15 @@ There are several ways to help out:
 
 ## Pull Requests
 * Meaningful modifications, for typos or superfluous changes open an issue
-* The code must follow the [PSR-12 coding standard](https://www.php-fig.org/psr/psr-12/).
 * All features should be covered by tests if possible
-
+* All tests and coding standard checks should pass
+```bash
+composer validate --strict
+vendor/bin/phpcs --standard=php_cs.xml src/
+vendor/bin/phpunit tests/unit/
+php phpat
+php phpat tests/functional/functional.yaml
+```
 ---
 
 ## Code of conduct

@@ -9,7 +9,7 @@ class Context
 {
     /** @var NameContext */
     public $class;
-    /** @var \SplFileInfo */
+    /** @var \SplFileInfo|null */
     public $file;
 
     public function __construct()
