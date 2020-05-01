@@ -1,9 +1,5 @@
 src:
   path: src/
-composer:
-  main:
-    file: composer.json
-    lock: composer.lock
 tests:
   path: tests/architecture/
 options:
