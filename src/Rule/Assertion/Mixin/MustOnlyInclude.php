@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpAT\Rule\Assertion\Mixin;
 
 use PHPAT\EventDispatcher\EventDispatcher;
+use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\ClassLike;
 use PhpAT\Rule\Assertion\AbstractAssertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
@@ -24,18 +25,18 @@ class MustOnlyInclude extends AbstractAssertion
     }
 
     /**
-     * @param ClassLike   $origin
-     * @param ClassLike[] $included
-     * @param ClassLike[] $excluded
-     * @param array       $astMap
+     * @param ClassLike    $origin
+     * @param ClassLike[]  $included
+     * @param ClassLike[]  $excluded
+     * @param ReferenceMap $map
      */
     public function validate(
         ClassLike $origin,
         array $included,
         array $excluded,
-        array $astMap
+        ReferenceMap $map
     ): void {
-        $matchingNodes = $this->filterMatchingNodes($origin, $astMap);
+        $matchingNodes = $this->filterMatchingNodes($origin, $map);
 
         foreach ($matchingNodes as $node) {
             $traits = $this->getTraits($node);

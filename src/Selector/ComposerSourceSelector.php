@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpAT\Selector;
 
-use PhpAT\Parser\Ast\AstNode;
+use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\RegexClassName;
 
@@ -13,15 +13,15 @@ class ComposerSourceSelector implements SelectorInterface
     /** @var string */
     private $composerJson;
 
-    /** @var AstNode[] */
-    private $astMap;
+    /** @var ReferenceMap */
+    private $map;
 
     private $includeDev;
 
     public function __construct(string $composerJson, bool $includeDev)
     {
         $this->composerJson = $composerJson;
-        $this->includeDev = $includeDev;
+        $this->includeDev   = $includeDev;
     }
 
     public function getDependencies(): array
@@ -33,10 +33,10 @@ class ComposerSourceSelector implements SelectorInterface
     {
     }
 
-    /** @param AstNode[] $astMap */
-    public function setAstMap(array $astMap)
+    /** @param ReferenceMap $map */
+    public function setReferenceMap(ReferenceMap $map): void
     {
-        $this->astMap = $astMap;
+        $this->map = $map;
     }
 
     /** @return ClassLike[] */

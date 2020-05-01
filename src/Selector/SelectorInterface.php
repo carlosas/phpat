@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace PhpAT\Selector;
 
+use PhpAT\Parser\Ast\ReferenceMap;
+
 /**
  * Interface SelectorInterface
  *
@@ -15,7 +17,7 @@ interface SelectorInterface
 
     public function injectDependencies(array $dependencies);
 
-    public function setAstMap(array $astMap);
+    public function setReferenceMap(ReferenceMap $map): void;
 
     public function select(): array;
 

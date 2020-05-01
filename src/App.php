@@ -10,6 +10,7 @@ use PhpAT\App\Event\SuiteStartEvent;
 use PhpAT\Parser\Ast\MapBuilder;
 use PhpAT\App\RuleValidationStorage;
 use PHPAT\EventDispatcher\EventDispatcher;
+use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Rule\Event\RuleValidationEndEvent;
 use PhpAT\Rule\Event\RuleValidationStartEvent;
 use PhpAT\Rule\RuleCollection;
@@ -62,7 +63,7 @@ class App
     {
         $this->dispatcher->dispatch(new SuiteStartEvent());
 
-        $astMap = $this->mapBuilder->build();
+        $map = $this->mapBuilder->build();
 
         $testSuite = $this->extractor->execute();
 
@@ -72,14 +73,14 @@ class App
         }
 
         foreach ($rules->getValues() as $rule) {
-            $statements = $this->statementBuilder->build($rule, $astMap);
+            $statements = $this->statementBuilder->build($rule, $map);
 
             $this->dispatcher->dispatch(new RuleValidationStartEvent($rule->getName()));
             /**
              * @var Statement $statement
             */
             foreach ($statements as $statement) {
-                $this->validateStatement($statement, $astMap);
+                $this->validateStatement($statement, $map);
             }
 
             $this->dispatcher->dispatch(new RuleValidationEndEvent());
@@ -90,13 +91,13 @@ class App
         return !RuleValidationStorage::anyRuleHadErrors() || Configuration::getDryRun();
     }
 
-    private function validateStatement(Statement $statement, array $astMap): void
+    private function validateStatement(Statement $statement, ReferenceMap $map): void
     {
         $statement->getAssertion()->validate(
             $statement->getOrigin(),
             $statement->getDestinations(),
             $statement->getExcludedDestinations(),
-            $astMap
+            $map
         );
     }
 }

@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace PhpAT\Selector;
 
-use PhpAT\Parser\Ast\AstNode;
+use PhpAT\Parser\Ast\SrcNode;
+use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\FullClassName;
 use PhpAT\Parser\Relation\Inheritance;
@@ -16,9 +17,9 @@ class ExtendSelector implements SelectorInterface
      */
     private $fqcn;
     /**
-     * @var AstNode[]
+     * @var ReferenceMap
      */
-    private $astMap;
+    private $map;
 
     public function __construct(string $fqcn)
     {
@@ -35,11 +36,11 @@ class ExtendSelector implements SelectorInterface
     }
 
     /**
-     * @param AstNode[] $astMap
+     * @param ReferenceMap $map
      */
-    public function setAstMap(array $astMap): void
+    public function setReferenceMap(ReferenceMap $map): void
     {
-        $this->astMap = $astMap;
+        $this->map = $map;
     }
 
     /**
@@ -47,13 +48,13 @@ class ExtendSelector implements SelectorInterface
      */
     public function select(): array
     {
-        foreach ($this->astMap as $astNode) {
-            foreach ($astNode->getRelations() as $relation) {
+        foreach ($this->map->getSrcNodes() as $srcNode) {
+            foreach ($srcNode->getRelations() as $relation) {
                 if (
                     $relation instanceof Inheritance
                     && $this->matchesPattern($relation->relatedClass->getFQCN(), $this->fqcn)
                 ) {
-                    $result[] = FullClassName::createFromFQCN($astNode->getClassName());
+                    $result[] = FullClassName::createFromFQCN($srcNode->getClassName());
                 }
             }
         }

@@ -11,6 +11,7 @@ use PhpAT\File\FileFinder;
 use PhpAT\File\SymfonyFinderAdapter;
 use PhpAT\Output\OutputInterface;
 use PhpAT\Parser\Ast\MapBuilder;
+use PhpAT\Selector\ComposerFileParser;
 use PhpAT\Rule\RuleBuilder;
 use PhpAT\Rule\Assertion\Composition;
 use PhpAT\Rule\Assertion\Dependency;
@@ -86,7 +87,8 @@ class Provider
             ->addArgument(new Reference(FileFinder::class))
             ->addArgument(new Reference(Parser::class))
             ->addArgument(new Reference(NodeTraverserInterface::class))
-            ->addArgument(new Reference(PhpDocParser::class));
+            ->addArgument(new Reference(PhpDocParser::class))
+            ->addArgument(new Reference(EventDispatcher::class));
 
         $this->builder
             ->register(RuleBuilder::class, RuleBuilder::class)

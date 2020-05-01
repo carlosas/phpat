@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace PhpAT\Selector;
 
-use PhpAT\Parser\Ast\AstNode;
+use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\RegexClassName;
 
 class ComposerDependencySelector implements SelectorInterface
 {
-    private $astMap;
+    /** @var ReferenceMap */
+    private $map;
     /** @var ComposerFileParser */
     private $composer;
     /**
@@ -33,10 +34,10 @@ class ComposerDependencySelector implements SelectorInterface
     {
     }
 
-    /** @param AstNode[] $astMap */
-    public function setAstMap(array $astMap)
+    /** @param ReferenceMap $map */
+    public function setReferenceMap(ReferenceMap $map): void
     {
-        $this->astMap = $astMap;
+        $this->map = $map;
     }
 
     /** @return ClassLike[] */

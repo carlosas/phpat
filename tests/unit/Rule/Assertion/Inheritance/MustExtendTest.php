@@ -2,51 +2,15 @@
 
 namespace Tests\PhpAT\unit\Rule\Assertion\Inheritance;
 
-use PHPAT\EventDispatcher\EventDispatcher;
-use PhpAT\Parser\Ast\AstNode;
-use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\FullClassName;
-use PhpAT\Parser\Relation\Composition;
-use PhpAT\Parser\Relation\Dependency;
-use PhpAT\Parser\Relation\Inheritance;
-use PhpAT\Parser\Relation\Mixin;
 use PhpAT\Rule\Assertion\Inheritance\MustExtend;
-use PhpAT\Statement\Event\StatementNotValidEvent;
-use PhpAT\Statement\Event\StatementValidEvent;
-use PHPUnit\Framework\TestCase;
+use Tests\PhpAT\unit\Rule\Assertion\AbstractAssertionTestCase;
 
-class MustExtendTest extends TestCase
+class MustExtendTest extends AbstractAssertionTestCase
 {
-    /**
-     * @dataProvider dataProvider
-     * @param ClassLike   $origin
-     * @param ClassLike[] $included
-     * @param ClassLike[] $excluded
-     * @param array       $astMap
-     * @param array  $expectedEvents
-     */
-    public function testDispatchesCorrectEvents(
-        ClassLike $origin,
-        array $included,
-        array $excluded,
-        array $astMap,
-        array $expectedEvents
-    ): void
+    protected function getTestedClassName(): string
     {
-        $eventDispatcherMock = $this->createMock(EventDispatcher::class);
-        $class = new MustExtend($eventDispatcherMock);
-
-        foreach ($expectedEvents as $valid) {
-            $eventType = $valid ? StatementValidEvent::class : StatementNotValidEvent::class;
-            $consecutive[] = [$this->isInstanceOf($eventType)];
-        }
-
-        $eventDispatcherMock
-            ->expects($this->exactly(count($consecutive??[])))
-            ->method('dispatch')
-            ->withConsecutive(...$consecutive??[]);
-
-        $class->validate($origin, $included, $excluded, $astMap);
+        return MustExtend::class;
     }
 
     public function dataProvider(): array
@@ -56,7 +20,7 @@ class MustExtendTest extends TestCase
                 FullClassName::createFromFQCN('Example\ClassExample'),
                 [FullClassName::createFromFQCN('Example\ParentClassExample')],
                 [],
-                $this->getAstMap(),
+                $this->getMap(),
                 [true]
             ],
             //it fails because it does not extends NotARealParent
@@ -64,27 +28,9 @@ class MustExtendTest extends TestCase
                 FullClassName::createFromFQCN('Example\ClassExample'),
                 [FullClassName::createFromFQCN('NotARealParent')],
                 [],
-                $this->getAstMap(),
+                $this->getMap(),
                 [false]
             ]
-       ];
-    }
-
-    private function getAstMap(): array
-    {
-        return [
-            new AstNode(
-                new \SplFileInfo('folder/Example/ClassExample.php'),
-                new FullClassName('Example', 'ClassExample'),
-                [
-                    new Inheritance(0, new FullClassName('Example', 'ParentClassExample')),
-                    new Dependency(0, new FullClassName('Example', 'AnotherClassExample')),
-                    new Dependency(0, new FullClassName('Vendor', 'ThirdPartyExample')),
-                    new Composition(0, new FullClassName('Example', 'InterfaceExample')),
-                    new Composition(0, new FullClassName('Example', 'AnotherInterface')),
-                    new Mixin(0, new FullClassName('Example', 'TraitExample'))
-                ]
-            )
        ];
     }
 }

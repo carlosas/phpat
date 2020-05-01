@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace PhpAT\Rule\Assertion;
 
-use PhpAT\Parser\Ast\AstNode;
+use PhpAT\Parser\Ast\SrcNode;
+use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\Relation\Composition;
 use PhpAT\Parser\Relation\Dependency;
@@ -18,35 +19,35 @@ abstract class AbstractAssertion
     protected $eventDispatcher;
 
     /**
-     * @param ClassLike   $origin
-     * @param ClassLike[] $destinations
-     * @param ClassLike[] $excluded
-     * @param array       $astMap
+     * @param ClassLike    $origin
+     * @param ClassLike[]  $destinations
+     * @param ClassLike[]  $excluded
+     * @param ReferenceMap $map
      */
-    abstract public function validate(ClassLike $origin, array $destinations, array $excluded, array $astMap): void;
+    abstract public function validate(ClassLike $origin, array $destinations, array $excluded, ReferenceMap $map): void;
 
     abstract public function acceptsRegex(): bool;
 
     /**
-     * @param ClassLike $origin
-     * @param array     $astMap
-     * @return AstNode[]
+     * @param ClassLike    $origin
+     * @param ReferenceMap $map
+     * @return SrcNode[]
      */
-    protected function filterMatchingNodes(ClassLike $origin, array $astMap): array
+    protected function filterMatchingNodes(ClassLike $origin, ReferenceMap $map): array
     {
-        /** @var AstNode $node */
-        foreach ($astMap as $node) {
+        foreach ($map->getSrcNodes() as $node) {
             if ($origin->matches($node->getClassName())) {
                 $found[] = $node;
             }
         }
+
         return $found ?? [];
     }
 
     /**
      * @return string[]
      */
-    protected function getDependencies(AstNode $node): array
+    protected function getDependencies(SrcNode $node): array
     {
         foreach ($node->getRelations() as $relation) {
             if ($relation instanceof Dependency) {
@@ -60,7 +61,7 @@ abstract class AbstractAssertion
     /**
      * @return string[]
      */
-    protected function getInterfaces(AstNode $node): array
+    protected function getInterfaces(SrcNode $node): array
     {
         foreach ($node->getRelations() as $relation) {
             if ($relation instanceof Composition) {
@@ -71,7 +72,7 @@ abstract class AbstractAssertion
         return $interfaces ?? [];
     }
 
-    protected function getParent(AstNode $node): ?string
+    protected function getParent(SrcNode $node): ?string
     {
         foreach ($node->getRelations() as $relation) {
             if ($relation instanceof Inheritance) {
@@ -85,7 +86,7 @@ abstract class AbstractAssertion
     /**
      * @return string[]
      */
-    protected function getTraits(AstNode $node): array
+    protected function getTraits(SrcNode $node): array
     {
         foreach ($node->getRelations() as $relation) {
             if ($relation instanceof Mixin) {

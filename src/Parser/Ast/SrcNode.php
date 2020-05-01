@@ -5,7 +5,7 @@ namespace PhpAT\Parser\Ast;
 use PhpAT\Parser\FullClassName;
 use PhpAT\Parser\Relation\AbstractRelation;
 
-class AstNode implements \JsonSerializable
+class SrcNode implements \JsonSerializable
 {
     /**
      * @var string

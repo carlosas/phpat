@@ -15,35 +15,46 @@ class FileFinder
         $this->finder = $finder;
     }
 
+    public function findFile(string $file): ?\SplFileInfo
+    {
+        if (!file_exists($file)) {
+            return null;
+        }
+
+        $parts = $this->splitFile($file);
+
+        return ($this->finder->locateFile($parts[0], $parts[1])) ?? null;
+    }
+
     /**
      * @param  string $file
      * @param  array  $excluded
      * @return \SplFileInfo[]
      */
-    public function findFiles(string $file, array $excluded = []): array
+    public function findSrcFiles(string $file, array $excluded = []): array
     {
-        $splittedFile = $this->getSplittedFile($file);
+        $parts = $this->splitFile(Configuration::getSrcPath() . $file);
 
         return $this->finder->find(
-            $splittedFile[0],
-            $splittedFile[1],
+            $parts[0],
+            $parts[1],
             [],
             $excluded
         );
     }
 
-    public function findAllFiles(string $path): array
+    public function findPhpFilesInPath(string $path): array
     {
-        //array_merge(Configuration::getSrcExcluded())
         return $this->finder->find($path, '*.php', [], []);
     }
 
-    private function getSplittedFile(string $file): array
+    private function splitFile(string $file): ?array
     {
-        $file = Configuration::getSrcPath() . $file;
         $pos = strrpos($file, '/');
-        $splittedFile = [substr($file, 0, $pos), substr($file, $pos + 1)];
+        if ($pos === false) {
+            return null;
+        }
 
-        return $splittedFile;
+        return [substr($file, 0, $pos), substr($file, $pos + 1)];
     }
 }

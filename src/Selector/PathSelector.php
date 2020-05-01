@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace PhpAT\Selector;
 
 use PhpAT\File\FileFinder;
-use PhpAT\Parser\Ast\AstNode;
+use PhpAT\Parser\Ast\SrcNode;
+use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\FullClassName;
 use PhpParser\NodeTraverserInterface;
@@ -33,9 +34,9 @@ class PathSelector implements SelectorInterface
      */
     private $fileFinder;
     /**
-     * @var AstNode[]
+     * @var ReferenceMap
      */
-    private $astMap;
+    private $map;
     /**
      * @var Parser
      */
@@ -63,11 +64,11 @@ class PathSelector implements SelectorInterface
     }
 
     /**
-     * @param AstNode[] $astMap
+     * @param ReferenceMap $map
      */
-    public function setAstMap(array $astMap): void
+    public function setReferenceMap(ReferenceMap $map): void
     {
-        $this->astMap = $astMap;
+        $this->map = $map;
     }
 
     /**
@@ -75,12 +76,12 @@ class PathSelector implements SelectorInterface
      */
     public function select(): array
     {
-        foreach ($this->fileFinder->findFiles($this->path) as $file) {
+        foreach ($this->fileFinder->findSrcFiles($this->path) as $file) {
             $filePathname = str_replace('\\', '/', $file->getPathname());
 
-            foreach ($this->astMap as $astNode) {
-                if ($astNode->getFilePathname() === $filePathname) {
-                    $result[] = FullClassName::createFromFQCN($astNode->getClassName());
+            foreach ($this->map->getSrcNodes() as $srcNode) {
+                if ($srcNode->getFilePathname() === $filePathname) {
+                    $result[] = FullClassName::createFromFQCN($srcNode->getClassName());
                 }
             }
         }

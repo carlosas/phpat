@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpAT\Rule\Assertion\Composition;
 
 use PHPAT\EventDispatcher\EventDispatcher;
+use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\FullClassName;
 use PhpAT\Rule\Assertion\AbstractAssertion;
@@ -25,18 +26,18 @@ class CanOnlyImplement extends AbstractAssertion
     }
 
     /**
-     * @param ClassLike   $origin
-     * @param ClassLike[] $included
-     * @param ClassLike[] $excluded
-     * @param array       $astMap
+     * @param ClassLike    $origin
+     * @param ClassLike[]  $included
+     * @param ClassLike[]  $excluded
+     * @param ReferenceMap $map
      */
     public function validate(
         ClassLike $origin,
         array $included,
         array $excluded,
-        array $astMap
+        ReferenceMap $map
     ): void {
-        $matchingNodes = $this->filterMatchingNodes($origin, $astMap);
+        $matchingNodes = $this->filterMatchingNodes($origin, $map);
 
         foreach ($matchingNodes as $node) {
             $interfaces = $this->getInterfaces($node);

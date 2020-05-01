@@ -32,4 +32,23 @@ class SymfonyFinderAdapter implements Finder
 
         return iterator_to_array($results);
     }
+
+    public function locateFile(string $filePath, string $fileName): ?\SplFileInfo
+    {
+        $finder = $this->finder->create();
+
+        $finder
+            ->in($filePath . '/')
+            ->name($fileName)
+            ->files()
+            ->depth('== 0');
+
+        if ($finder->hasResults() === false) {
+            return null;
+        }
+
+        $result = array_values(iterator_to_array($finder->getIterator()));
+
+        return $result[0] ?? null;
+    }
 }
