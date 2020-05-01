@@ -2,7 +2,6 @@
 
 namespace PhpAT\Parser\Ast;
 
-use MCStreetguy\ComposerParser\Factory as ComposerParser;
 use PhpAT\App\Configuration;
 use PhpAT\File\FileFinder;
 use PhpAT\Parser\Ast\Collector\DependencyCollector;
@@ -10,15 +9,12 @@ use PhpAT\Parser\Ast\Collector\InterfaceCollector;
 use PhpAT\Parser\Ast\Collector\NameCollector;
 use PhpAT\Parser\Ast\Collector\ParentCollector;
 use PhpAT\Parser\Ast\Collector\TraitCollector;
-use PhpAT\Parser\Ast\Composer\ComposerPackage;
-use PhpAT\Parser\ComposerFileParser;
 use PhpParser\ErrorHandler\Throwing;
 use PhpParser\NameContext;
 use PhpParser\NodeTraverserInterface;
 use PhpParser\Parser;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use Psr\EventDispatcher\EventDispatcherInterface;
-use Tightenco\Collect\Support\Collection;
 
 class MapBuilder
 {
@@ -39,27 +35,20 @@ class MapBuilder
      */
     private $phpDocParser;
     /**
-     * @var ComposerFileParser
-     */
-    private $composerParser;
-    /**
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
-    private static $packageNames;
 
     public function __construct(
         FileFinder $finder,
         Parser $parser,
         NodeTraverserInterface $traverser,
-        ComposerFileParser $composerParser,
         PhpDocParser $phpDocParser,
         EventDispatcherInterface $eventDispatcher
     ) {
         $this->finder = $finder;
         $this->parser = $parser;
         $this->traverser = $traverser;
-        $this->composerParser = $composerParser;
         $this->phpDocParser = $phpDocParser;
         $this->eventDispatcher = $eventDispatcher;
     }

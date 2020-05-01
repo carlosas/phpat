@@ -58,8 +58,8 @@ class ComposerSourceSelector implements SelectorInterface
         }
 
         return array_map(
-            function (string $namespace){
-                return new RegexClassName($namespace.'*');
+            function (string $namespace) {
+                return new RegexClassName($namespace . '*');
             },
             $namespaces
         );
