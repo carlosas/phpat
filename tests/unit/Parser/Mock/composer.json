@@ -1,20 +1,19 @@
 {
   "name": "foo/bar",
   "require": {
-    "php": "^7.2",
-    "carlosas/simple-event-dispatcher": "^0.1"
+    "thecodingmachine/safe": "^0.1.15"
   },
   "require-dev": {
     "phpunit/phpunit": "^8.1"
   },
   "autoload": {
     "psr-4": {
-      "Source\\Namespace\\": "src/"
+      "Source\\Namespace\\": "FooBar"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Test\\Namespace\\": "tests/"
+      "Test\\Namespace\\": "FooBar/Tests"
     }
   }
 }

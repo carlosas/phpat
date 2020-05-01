@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpAT\Rule\Assertion;
 
-use PhpAT\Parser\Ast\AstNode;
+use PhpAT\Parser\Ast\SrcNode;
 use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\Relation\Composition;
@@ -31,7 +31,7 @@ abstract class AbstractAssertion
     /**
      * @param ClassLike    $origin
      * @param ReferenceMap $map
-     * @return AstNode[]
+     * @return SrcNode[]
      */
     protected function filterMatchingNodes(ClassLike $origin, ReferenceMap $map): array
     {
@@ -47,7 +47,7 @@ abstract class AbstractAssertion
     /**
      * @return string[]
      */
-    protected function getDependencies(AstNode $node): array
+    protected function getDependencies(SrcNode $node): array
     {
         foreach ($node->getRelations() as $relation) {
             if ($relation instanceof Dependency) {
@@ -61,7 +61,7 @@ abstract class AbstractAssertion
     /**
      * @return string[]
      */
-    protected function getInterfaces(AstNode $node): array
+    protected function getInterfaces(SrcNode $node): array
     {
         foreach ($node->getRelations() as $relation) {
             if ($relation instanceof Composition) {
@@ -72,7 +72,7 @@ abstract class AbstractAssertion
         return $interfaces ?? [];
     }
 
-    protected function getParent(AstNode $node): ?string
+    protected function getParent(SrcNode $node): ?string
     {
         foreach ($node->getRelations() as $relation) {
             if ($relation instanceof Inheritance) {
@@ -86,7 +86,7 @@ abstract class AbstractAssertion
     /**
      * @return string[]
      */
-    protected function getTraits(AstNode $node): array
+    protected function getTraits(SrcNode $node): array
     {
         foreach ($node->getRelations() as $relation) {
             if ($relation instanceof Mixin) {

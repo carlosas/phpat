@@ -3,7 +3,7 @@
 namespace Tests\PhpAT\unit\Rule\Assertion;
 
 use PHPAT\EventDispatcher\EventDispatcher;
-use PhpAT\Parser\Ast\AstNode;
+use PhpAT\Parser\Ast\SrcNode;
 use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\FullClassName;
@@ -65,7 +65,7 @@ abstract class AbstractAssertionTestCase extends TestCase
     {
         return new ReferenceMap(
             [
-                new AstNode(
+                new SrcNode(
                     new \SplFileInfo('folder/Example/ClassExample.php'),
                     new FullClassName('Example', 'ClassExample'),
                     [

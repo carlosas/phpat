@@ -2,6 +2,7 @@
 
 namespace PhpAT\Parser\Ast;
 
+use MCStreetguy\ComposerParser\Factory as ComposerParser;
 use PhpAT\App\Configuration;
 use PhpAT\File\FileFinder;
 use PhpAT\Parser\Ast\Collector\DependencyCollector;
@@ -9,6 +10,7 @@ use PhpAT\Parser\Ast\Collector\InterfaceCollector;
 use PhpAT\Parser\Ast\Collector\NameCollector;
 use PhpAT\Parser\Ast\Collector\ParentCollector;
 use PhpAT\Parser\Ast\Collector\TraitCollector;
+use PhpAT\Parser\Ast\Composer\ComposerPackage;
 use PhpAT\Parser\ComposerFileParser;
 use PhpParser\ErrorHandler\Throwing;
 use PhpParser\NameContext;
@@ -16,6 +18,7 @@ use PhpParser\NodeTraverserInterface;
 use PhpParser\Parser;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Tightenco\Collect\Support\Collection;
 
 class MapBuilder
 {
@@ -43,6 +46,7 @@ class MapBuilder
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
+    private static $packageNames;
 
     public function __construct(
         FileFinder $finder,
@@ -62,7 +66,7 @@ class MapBuilder
 
     public function build(): ReferenceMap
     {
-        return new ReferenceMap($this->buildSrcMap(), $this->buildComposerMap());
+        return new ReferenceMap($this->buildSrcMap());
     }
 
     private function buildSrcMap(): array
@@ -94,7 +98,7 @@ class MapBuilder
 
             $this->traverser->traverse($parsed);
 
-            $srcMap[$nameCollector->getNameString()] = new AstNode(
+            $srcMap[$nameCollector->getNameString()] = new SrcNode(
                 $fileInfo,
                 $nameCollector->getName(),
                 array_merge(
@@ -107,16 +111,6 @@ class MapBuilder
         }
 
         return $srcMap ?? [];
-    }
-
-    private function buildComposerMap(): array
-    {
-        $result = [];
-        foreach (Configuration::getComposerFiles() as $name => $files) {
-            $result[$name] = $this->composerParser->parse($files['file'], $files['lock']);
-        }
-
-        return $result;
     }
 
     private function normalizePathname(string $pathname): string

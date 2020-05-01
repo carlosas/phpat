@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PhpAT\Selector;
 
 use PhpAT\File\FileFinder;
-use PhpAT\Parser\Ast\AstNode;
+use PhpAT\Parser\Ast\SrcNode;
 use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\FullClassName;
@@ -79,9 +79,9 @@ class PathSelector implements SelectorInterface
         foreach ($this->fileFinder->findSrcFiles($this->path) as $file) {
             $filePathname = str_replace('\\', '/', $file->getPathname());
 
-            foreach ($this->map->getSrcNodes() as $astNode) {
-                if ($astNode->getFilePathname() === $filePathname) {
-                    $result[] = FullClassName::createFromFQCN($astNode->getClassName());
+            foreach ($this->map->getSrcNodes() as $srcNode) {
+                if ($srcNode->getFilePathname() === $filePathname) {
+                    $result[] = FullClassName::createFromFQCN($srcNode->getClassName());
                 }
             }
         }

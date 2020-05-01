@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpAT\Selector;
 
-use PhpAT\Parser\Ast\AstNode;
+use PhpAT\Parser\Ast\SrcNode;
 use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\FullClassName;
@@ -48,9 +48,9 @@ class ClassNameSelector implements SelectorInterface
      */
     public function select(): array
     {
-        foreach ($this->map->getSrcNodes() as $astNode) {
-            if ($this->matchesPattern($astNode->getClassName(), $this->fqcn)) {
-                $result[] = FullClassName::createFromFQCN($astNode->getClassName());
+        foreach ($this->map->getSrcNodes() as $srcNode) {
+            if ($this->matchesPattern($srcNode->getClassName(), $this->fqcn)) {
+                $result[] = FullClassName::createFromFQCN($srcNode->getClassName());
             }
         }
 

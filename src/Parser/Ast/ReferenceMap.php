@@ -5,40 +5,25 @@ namespace PhpAT\Parser\Ast;
 class ReferenceMap
 {
     /**
-     * @var AstNode[]
+     * @var SrcNode[]
      */
     private $srcNodes;
-    /**
-     * @var ComposerModule[]
-     */
-    private $composerMap;
 
     /**
      * ReferenceMap constructor.
-     * @param AstNode[] $srcNodes
-     * @param ComposerModule[] $composerMap
+     * @param SrcNode[] $srcNodes
      */
     public function __construct(
-        array $srcNodes,
-        array $composerMap
+        array $srcNodes
     ) {
         $this->srcNodes = $srcNodes;
-        $this->composerMap = $composerMap;
     }
 
     /**
-     * @return AstNode[]
+     * @return SrcNode[]
      */
     public function getSrcNodes(): array
     {
         return $this->srcNodes;
-    }
-
-    /**
-     * @return ComposerModule[]
-     */
-    public function getComposerMap(): array
-    {
-        return $this->composerMap;
     }
 }

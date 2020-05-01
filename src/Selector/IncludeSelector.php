@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpAT\Selector;
 
-use PhpAT\Parser\Ast\AstNode;
+use PhpAT\Parser\Ast\SrcNode;
 use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\FullClassName;
@@ -48,13 +48,13 @@ class IncludeSelector implements SelectorInterface
      */
     public function select(): array
     {
-        foreach ($this->map->getSrcNodes() as $astNode) {
-            foreach ($astNode->getRelations() as $relation) {
+        foreach ($this->map->getSrcNodes() as $srcNode) {
+            foreach ($srcNode->getRelations() as $relation) {
                 if (
                     $relation instanceof Mixin
                     && $this->matchesPattern($relation->relatedClass->getFQCN(), $this->fqcn)
                 ) {
-                    $result[] = FullClassName::createFromFQCN($astNode->getClassName());
+                    $result[] = FullClassName::createFromFQCN($srcNode->getClassName());
                 }
             }
         }
