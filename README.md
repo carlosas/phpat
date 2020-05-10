@@ -10,13 +10,6 @@
 		<img src="https://img.shields.io/packagist/php-v/carlosas/phpat?style=for-the-badge" alt="PHP Version">
 	</a>
 	<a>
-		<img src="https://img.shields.io/packagist/dt/carlosas/phpat?style=for-the-badge" alt="Downloads">
-	</a>
-	<br />
-	<a>
-		<img src="https://img.shields.io/github/license/carlosas/phpat?style=for-the-badge" alt="License">
-	</a>
-	<a>
 		<img src="https://img.shields.io/badge/contributions-welcome-green.svg?style=for-the-badge" alt="Contributions welcome">
 	</a>
 </p>
@@ -30,6 +23,9 @@ It provides a natural language abstraction to define your own architectural rule
 You can also integrate *phpat* easily into your toolchain.
 
 There are four groups of supported assertions: **Dependency**, **Inheritance**, **Composition** and **Mixin**.
+
+Check out the section [WHAT TO TEST]('doc/WHAT_TO_TEST.md) to see some examples of typical phpat use cases.
+
 <h2></h2>
 
 ### Installation 💽
@@ -38,6 +34,14 @@ Just require **phpat** with [Composer](https://getcomposer.org/):
 ```bash
 composer require --dev carlosas/phpat
 ```
+
+<details><summary>Manual download</summary>
+
+If you have dependency conflicts, you can also download the latest PHAR file from [Releases](https://github.com/carlosas/phpat/releases). 
+
+You will have to use it executing `php phpat.phar phpat.yaml` and declare your tests in XML or YAML.
+
+</details>
 
 <h2></h2>
 
@@ -51,24 +55,26 @@ src:
 tests:
   path: tests/architecture/
 ```
-This is the complete list of options:
-* `src` `path`: The root path of your application.
-* `src` `include`: Files you want to be tested excluding the rest (default=all).
-* `src` `exclude`: Files you want to be excluded in the tests (default=none).
-* `tests` `path`: The path where your tests are.
-* `options` `verbosity`: 0/1/2 output verbosity level (default=1).
-* `options` `dry-run`: true/false report failed suite without error exit code (default=false).
-* `options` `dependency` `ignore_docblocks`: true/false ignore dependencies on docblocks (default=false).
+
+<details><summary>Complete list of options</summary>
+
+| Name                                      | Description                                              | Default      |
+|-------------------------------------------|----------------------------------------------------------|:------------:|
+| `src` `path`                              | The root path of your application                        | *no default* |
+|` src` `include`                           | Files you want to be tested excluding the rest           | *all files*  |
+| `src` `exclude`                           | Files you want to be excluded in the tests               | *no files*   |
+| `tests` `path`                            | The path where your tests are                            | *no default* |
+| `options` `verbosity`                     | Output verbosity level (0/1/2)                           | 1            |
+| `options` `dry-run`                       | Report failed suite without error exit code (true/false) | false        |
+| `options` `dependency` `ignore_docblocks` | Ignore dependencies on docblocks (true/false)            | false        |
+
+</details>
 
 <h2></h2>
 
 ### Test definition 📓
 
-There are different ways to choose which classes will intervene in a rule (called Selectors) and many different possibles Assertions.
-Check the complete list of both here:
-
-* [Selectors](doc/SELECTORS.md)
-* [Assertions](doc/ASSERTIONS.md)
+There are different [Selectors](doc/SELECTORS.md) to choose which classes will intervene in a rule and many different [Assertions](doc/ASSERTIONS.md).
 
 This could be a test with a couple of rules:
 ```php
@@ -105,6 +111,40 @@ class ExampleTest extends ArchitectureTest
     }
 }
 ```
+
+<details><summary>YAML / XML test definition</summary>
+
+You can also define tests in YAML and XML notation.
+```yaml
+rules:
+  testAssertionsImplementAssertionInterface:
+    - classes:
+        - havePath: Rule/Assertion/*
+    - excluding:
+        - haveClassName: PhpAT\Rule\Assertion\*\MustNot*
+        - havePath: Rule/Assertion/MatchResult.php
+    - assert: mustExtend
+    - classes:
+        - haveClassName: PhpAT\Rule\Assertion\AbstractAssertion
+```
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<test xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="https://raw.githubusercontent.com/carlosas/phpat/master/src/Test/Test.xsd">
+    <rule name="testAssertionsDoNotDependOnVendors">
+        <classes>
+            <selector type="havePath">Rule/Assertion/*</selector>
+        </classes>
+        <assert>canOnlyDependOn</assert>
+        <classes>
+            <selector type="haveClassName">PhpAT\*</selector>
+            <selector type="haveClassName">Psr\*</selector>
+        </classes>
+    </rule>
+</test>
+```
+
+</details>
 
 <h2></h2>
 
