@@ -24,7 +24,7 @@ You can also integrate *phpat* easily into your toolchain.
 
 There are four groups of supported assertions: **Dependency**, **Inheritance**, **Composition** and **Mixin**.
 
-Check out the section [WHAT TO TEST]('doc/WHAT_TO_TEST.md) to see some examples of typical phpat use cases.
+Check out the section [WHAT TO TEST](doc/WHAT_TO_TEST.md) to see some examples of typical phpat use cases.
 
 <h2></h2>
 
