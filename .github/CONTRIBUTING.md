@@ -16,9 +16,18 @@ There are several ways to help out:
 composer validate --strict
 vendor/bin/phpcs --standard=php_cs.xml src/
 vendor/bin/phpunit tests/unit/
-php phpat
+php phpat phpat.yaml
 php phpat tests/functional/functional.yaml
 ```
+
+## The internals
+
+Brief summary of how phpat works internally. The execution consists in several steps:
+* **Boot and configuration**: Boots the application reading the configuration file and input args.
+* **Reference mapping**: Finds and parses the files that can be analyzed and builds a ReferenceMap.
+* **Statement construction**: Finds the tests, reads the rules and creates statements by resolving the selectors using the ReferenceMap.
+* **Assertions**: Validates the assertions of each statement and emits the result events.
+
 ---
 
 ## Code of conduct
