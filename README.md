@@ -114,7 +114,7 @@ class ExampleTest extends ArchitectureTest
 
 <details><summary>YAML / XML test definition</summary>
 
-You can also define tests with either YAML or XML.
+You can also define tests with whether in YAML or XML.
 
 ```yaml
 rules:
