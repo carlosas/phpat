@@ -6,7 +6,9 @@ The following sections illustrate some typical checks you could perform.
 
 #### Layered Architecture
 
-![Layered](img/layered.png)
+<p align="center">
+    <img width="500px" src="img/layered.png" alt="Layered">
+</p>
 
 If you are organizing your code in layers (e.g. with an onion structure), you might want to ensure that
 the inner layers do not depend on the outer ones:
@@ -19,7 +21,9 @@ the inner layers do not depend on the outer ones:
 
 #### Model-View-Controller
 
-![MVC](img/mvc.png)
+<p align="center">
+    <img width="500px" src="img/mvc.png" alt="MVC">
+</p>
 
 If you are using a MVC approach, you could ensure that both model and view are not coupled to controllers. You also might want to check that they are not coupled to each other:
 
@@ -39,7 +43,9 @@ In other words:
 
 #### Monorepos
 
-![Monorepos](img/monorepos.png)
+<p align="center">
+    <img width="500px" src="img/monorepos.png" alt="Monorepos">
+</p>
 
 If you are using different composer files to split your code in members of a monorepo, you might want to ensure that
 the code from one member does not depend on the code from another member
@@ -56,7 +62,9 @@ You also might want to ensure that the code from one member does not depend on c
 
 #### Aggregates
 
-![Aggregates](img/aggregates.png)
+<p align="center">
+    <img width="500px" src="img/aggregates.png" alt="Aggregates">
+</p>
 
 You won't want your classes to have direct access to the members of an aggregate, except for the aggregate root.
 You can use a lot of different approaches to identify the root and its members: by namespace, filepath, an abstract or interface for the aggregate root, etc.
@@ -71,7 +79,9 @@ If you have, for instance, an AggregateRootInterface you can create a rule like 
 
 #### Enforcing or forbidding an abstract extension
 
-![Abstract](img/abstract.png)
+<p align="center">
+    <img width="500px" src="img/abstract.png" alt="Abstract">
+</p>
 
 You might want to ensure that a specific type of classes are extending a certain abstract class. Services, Controllers, CommandHandlers, etc.
 
@@ -85,7 +95,9 @@ You might want to ensure that a specific type of classes are extending a certain
 
 #### Enforcing or forbidding an interface implementation
 
-![Interface](img/interface.png)
+<p align="center">
+    <img width="500px" src="img/interface.png" alt="Interface">
+</p>
 
 You might want to ensure that a specific type of classes are implementing a certain interface. ValueObjects, Entities, etc.
 
@@ -97,7 +109,9 @@ You might want to ensure that a specific type of classes are implementing a cert
 
 #### Enforcing or forbidding a trait inclusion
 
-![Trait](img/trait.png)
+<p align="center">
+    <img width="500px" src="img/trait.png" alt="Trait">
+</p>
 
 You might want to ensure that a specific type of classes are including a certain trait
 
