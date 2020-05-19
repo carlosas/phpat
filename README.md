@@ -24,7 +24,7 @@ You can also integrate *phpat* easily into your toolchain.
 
 There are four groups of supported assertions: **Dependency**, **Inheritance**, **Composition** and **Mixin**.
 
-Check out the section [WHAT TO TEST](doc/WHAT_TO_TEST.md) to see some examples of typical phpat use cases.
+ℹ️ Check out the section [WHAT TO TEST](doc/WHAT_TO_TEST.md) to see some examples of typical use cases.
 
 <h2></h2>
 
@@ -36,7 +36,7 @@ composer require --dev carlosas/phpat
 ```
 
 <details><summary>Manual download</summary>
-
+<br />
 If you have dependency conflicts, you can also download the latest PHAR file from [Releases](https://github.com/carlosas/phpat/releases). 
 
 You will have to use it executing `php phpat.phar phpat.yaml` and declare your tests in XML or YAML.
@@ -57,7 +57,7 @@ tests:
 ```
 
 <details><summary>Complete list of options</summary>
-
+<br />
 | Name                                      | Description                                              | Default      |
 |-------------------------------------------|----------------------------------------------------------|:------------:|
 | `src` `path`                              | The root path of your application                        | *no default* |
@@ -113,8 +113,8 @@ class ExampleTest extends ArchitectureTest
 ```
 
 <details><summary>YAML / XML test definition</summary>
-
-You can also define tests with whether in YAML or XML.
+<br />
+You can also define tests whether in YAML or XML.
 
 ```yaml
 rules:
