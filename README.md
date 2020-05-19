@@ -37,6 +37,7 @@ composer require --dev carlosas/phpat
 
 <details><summary>Manual download</summary>
 <br />
+
 If you have dependency conflicts, you can also download the latest PHAR file from [Releases](https://github.com/carlosas/phpat/releases). 
 
 You will have to use it executing `php phpat.phar phpat.yaml` and declare your tests in XML or YAML.
@@ -58,6 +59,7 @@ tests:
 
 <details><summary>Complete list of options</summary>
 <br />
+
 | Name                                      | Description                                              | Default      |
 |-------------------------------------------|----------------------------------------------------------|:------------:|
 | `src` `path`                              | The root path of your application                        | *no default* |
@@ -114,6 +116,7 @@ class ExampleTest extends ArchitectureTest
 
 <details><summary>YAML / XML test definition</summary>
 <br />
+
 You can also define tests whether in YAML or XML.
 
 ```yaml
