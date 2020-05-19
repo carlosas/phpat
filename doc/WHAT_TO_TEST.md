@@ -1,15 +1,15 @@
 # What to test
 
-The following sections illustrate some typical checks that you could perform.
+The following sections illustrate some typical checks you could perform.
 
-## Dependency between classes
+## Class dependencies
 
 #### Layered Architecture
 
 ![Layered](img/layered.png)
 
-If you are organizing your code in layers with, for instance, an onion structure, you might want to ensure that
-the inner layers do not depend on the outer ones
+If you are organizing your code in layers (e.g. with an onion structure), you might want to ensure that
+the inner layers do not depend on the outer ones:
 
 >Classes with name App\\Domain\\* must not depend on classes with name App\\Application\\* and classes with name App\\Infrastructure\\*
 
@@ -21,7 +21,7 @@ the inner layers do not depend on the outer ones
 
 ![MVC](img/mvc.png)
 
-If you are using a MVC approach, you could ensure that both model and view are not coupled to controllers. You also might want to check that they are not coupled to each other
+If you are using a MVC approach, you could ensure that both model and view are not coupled to controllers. You also might want to check that they are not coupled to each other:
 
 >Classes with name App\\Model\\* and classes with name App\\View\\* must not depend on classes with name App\\Controller\\*
 
@@ -29,7 +29,7 @@ If you are using a MVC approach, you could ensure that both model and view are n
 
 >Classes with name App\\View\\* must not depend on classes with name App\\Model\\*
 
-Or in other words
+In other words:
 
 >Classes with name App\\Model\\* can only depend on classes with name App\\Model\\*
 
@@ -59,7 +59,7 @@ You also might want to ensure that the code from one member does not depend on c
 ![Aggregates](img/aggregates.png)
 
 You won't want your classes to have direct access to the members of an aggregate, except for the aggregate root.
-You can use a lot of different approaches to identify the root and its members: by namespace, filepath, an abstract or interface for the aggregate root...
+You can use a lot of different approaches to identify the root and its members: by namespace, filepath, an abstract or interface for the aggregate root, etc.
 If you have, for instance, an AggregateRootInterface you can create a rule like this
 
 >Classes with name App\\* excluding classes that implement App\\Domain\\Entity\\AggregateRootInterface must not depend on
@@ -69,11 +69,11 @@ If you have, for instance, an AggregateRootInterface you can create a rule like 
 
 ## Inheritance
 
-#### Enforce or forbid extending an abstract
+#### Enforcing or forbidding an abstract extension
 
 ![Abstract](img/abstract.png)
 
-You might want to ensure that all the classes of a type are extending a certain abstract class. Services, Controllers, CommandHandlers...
+You might want to ensure that a specific type of classes are extending a certain abstract class. Services, Controllers, CommandHandlers, etc.
 
 >Classes with name App\\Application\\\*Handler must extend class with name App\\Application\\AbstractHandler
 
@@ -83,11 +83,11 @@ You might want to ensure that all the classes of a type are extending a certain 
 
 ## Composition
 
-#### Enforce or forbid implementing an interface
+#### Enforcing or forbidding an interface implementation
 
 ![Interface](img/interface.png)
 
-You might want to ensure that all the classes of a type are implementing a certain interface. ValueObjects, Entities...
+You might want to ensure that a specific type of classes are implementing a certain interface. ValueObjects, Entities, etc.
 
 >Classes with name App\\Domain\\Entity\\\* must implement class with name App\\Domain\\Entity\\EntityInterface
 
@@ -95,11 +95,11 @@ You might want to ensure that all the classes of a type are implementing a certa
 
 ## Mixing
 
-#### Enforce or forbid including a trait
+#### Enforcing or forbidding a trait inclusion
 
 ![Trait](img/trait.png)
 
-You might want to ensure that all the classes of a type are including a certain trait
+You might want to ensure that a specific type of classes are including a certain trait
 
 >Classes with name App\\Infrastructure\\Repository\\\* must include class with name App\\Infrastructure\\Repository\\RepositoryTrait
 

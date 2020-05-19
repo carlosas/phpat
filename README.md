@@ -74,7 +74,7 @@ tests:
 
 ### Test definition 📓
 
-There are different [Selectors](doc/SELECTORS.md) to choose which classes will intervene in a rule and many different [Assertions](doc/ASSERTIONS.md).
+There are different [Selectors](doc/SELECTORS.md) to choose which classes will intervene in a rule and a wide range of [Assertions](doc/ASSERTIONS.md).
 
 This could be a test with a couple of rules:
 ```php
@@ -114,7 +114,8 @@ class ExampleTest extends ArchitectureTest
 
 <details><summary>YAML / XML test definition</summary>
 
-You can also define tests in YAML and XML notation.
+You can also define tests with either YAML or XML.
+
 ```yaml
 rules:
   testAssertionsImplementAssertionInterface:
@@ -162,4 +163,4 @@ This will change with the release of the stable `1.0.0` version.
 
 <h2></h2>
 
-**PHP Architecture Tester** is in a very early stage, contributions are welcome. Please take a look to the [Contribution docs](.github/CONTRIBUTING.md).
+**PHP Architecture Tester** is in a very early stage, contributions are welcome. Please have a look to the [Contribution docs](.github/CONTRIBUTING.md).
