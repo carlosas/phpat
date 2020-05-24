@@ -6,7 +6,7 @@ use PhpAT\Parser\FullClassName;
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 
-class NameCollector extends NodeVisitorAbstract
+class NamespacedNameCollector extends NodeVisitorAbstract
 {
     /** @var FullClassName|null */
     private $name = null;

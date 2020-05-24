@@ -40,7 +40,7 @@ class CanOnlyImplement extends AbstractAssertion
         $matchingNodes = $this->filterMatchingNodes($origin, $map);
 
         foreach ($matchingNodes as $node) {
-            $interfaces = $this->getInterfaces($node);
+            $interfaces = $this->getInterfaces($node, $map);
             $success = true;
             foreach ($interfaces as $key => $interface) {
                 $result = $this->relationMatchesDestinations($interface, $included, $excluded);

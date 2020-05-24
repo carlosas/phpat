@@ -39,7 +39,7 @@ class MustImplement extends AbstractAssertion
         $matchingNodes = $this->filterMatchingNodes($origin, $map);
 
         foreach ($matchingNodes as $node) {
-            $interfaces = $this->getInterfaces($node);
+            $interfaces = $this->getInterfaces($node, $map);
             foreach ($included as $destination) {
                 $result = $this->destinationMatchesRelations($destination, $excluded, $interfaces);
                 if ($result->matched() === true) {

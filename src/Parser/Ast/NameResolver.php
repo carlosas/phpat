@@ -8,7 +8,7 @@ use PhpParser\NodeVisitor\NameResolver as PhpParserNameResolver;
 class NameResolver extends PhpParserNameResolver
 {
     public function __construct(
-        NameContext &$nameContext
+        NameContext $nameContext
     ) {
         parent::__construct();
         $this->nameContext = $nameContext;

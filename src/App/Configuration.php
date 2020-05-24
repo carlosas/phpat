@@ -6,6 +6,7 @@ namespace PhpAT\App;
 
 class Configuration
 {
+    private static $phpStormStubsPath;
     private static $initialized = false;
     private static $srcPath;
     private static $srcIncluded;
@@ -31,6 +32,9 @@ class Configuration
         self::$verbosity = (int) ($config['options']['verbosity'] ?? 1);
         self::$dryRun = (bool) ($config['options']['dry-run'] ?? false);
         self::$dependencyIgnoreDocBlocks = (bool) ($config['options']['dependency']['ignore_docblocks'] ?? false);
+        self::$phpStormStubsPath = is_file(__DIR__ . '/../../autoload.php')
+            ? __DIR__ . '/../../jetbrains/phpstorm-stubs'
+            : __DIR__ . '/../../vendor/jetbrains/phpstorm-stubs';
     }
 
     public static function getSrcPath(): string
@@ -66,5 +70,10 @@ class Configuration
     public static function getDependencyIgnoreDocBlocks(): bool
     {
         return self::$dependencyIgnoreDocBlocks;
+    }
+
+    public static function getPhpStormStubsPath(): string
+    {
+        return self::$phpStormStubsPath;
     }
 }

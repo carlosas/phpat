@@ -2,7 +2,7 @@
 
 namespace Tests\PhpAT\functional\fixtures\Dependency;
 
-class Predefined
+class CoreAndExtensions
 {
     /**
      * @throws \Exception

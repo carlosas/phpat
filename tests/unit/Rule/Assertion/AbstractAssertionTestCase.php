@@ -70,15 +70,23 @@ abstract class AbstractAssertionTestCase extends TestCase
                     new FullClassName('Example', 'ClassExample'),
                     [
                         new Inheritance(0, new FullClassName('Example', 'ParentClassExample')),
+                        new Inheritance(0, new FullClassName('', 'FilterIterator')),
                         new Dependency(0, new FullClassName('Example', 'AnotherClassExample')),
                         new Dependency(0, new FullClassName('Vendor', 'ThirdPartyExample')),
+                        new Dependency(0, new FullClassName('', 'iterable')),
                         new Composition(0, new FullClassName('Example', 'InterfaceExample')),
                         new Composition(0, new FullClassName('Example', 'AnotherInterface')),
-                        new Mixin(0, new FullClassName('Example', 'TraitExample'))
+                        new Composition(0, new FullClassName('', 'iterable')),
+                        new Mixin(0, new FullClassName('Example', 'TraitExample')),
+                        new Mixin(0, new FullClassName('', 'PHPDocElement'))
                     ]
                 )
             ],
-            []
+            [
+                new FullClassName('', 'iterable'),
+                new FullClassName('', 'FilterIterator'),
+                new FullClassName('', 'PHPDocElement'),
+            ]
         );
     }
 }

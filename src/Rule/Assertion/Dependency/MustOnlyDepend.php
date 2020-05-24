@@ -39,7 +39,7 @@ class MustOnlyDepend extends AbstractAssertion
         $matchingNodes = $this->filterMatchingNodes($origin, $map);
 
         foreach ($matchingNodes as $node) {
-            $dependencies = $this->getDependencies($node);
+            $dependencies = $this->getDependencies($node, $map);
             foreach ($included as $destination) {
                 $result = $this->destinationMatchesRelations($destination, $excluded, $dependencies);
                 if ($result->matched() === true) {
