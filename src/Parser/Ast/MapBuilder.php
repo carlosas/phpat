@@ -3,6 +3,7 @@
 namespace PhpAT\Parser\Ast;
 
 use PhpAT\App\Configuration;
+use PhpAT\App\Event\ErrorEvent;
 use PhpAT\File\FileFinder;
 use PhpAT\Parser\Ast\Collector\DependencyCollector;
 use PhpAT\Parser\Ast\Collector\InterfaceCollector;
@@ -86,6 +87,12 @@ class MapBuilder
         /** @var \SplFileInfo $fileInfo */
         foreach ($files as $fileInfo) {
             $parsed = $this->parser->parse(file_get_contents($this->normalizePathname($fileInfo->getPathname())));
+            if ($parsed === null) {
+                $this->eventDispatcher->dispatch(
+                    new ErrorEvent($this->normalizePathname($fileInfo->getPathname()) . ' could not be parsed')
+                );
+                continue;
+            }
 
             $this->traverser->traverse($parsed);
 
@@ -118,6 +125,12 @@ class MapBuilder
         /** @var \SplFileInfo $fileInfo */
         foreach ($files as $fileInfo) {
             $parsed = $this->parser->parse(file_get_contents($this->normalizePathname($fileInfo->getPathname())));
+            if ($parsed === null) {
+                $this->eventDispatcher->dispatch(
+                    new ErrorEvent($this->normalizePathname($fileInfo->getPathname()) . ' could not be parsed')
+                );
+            }
+
             $this->traverser->traverse($parsed);
         }
 
