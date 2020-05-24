@@ -81,6 +81,11 @@ class StdOutput implements OutputInterface
         $this->writeLn('WARNING: ' . $message, OutputLevel::WARNING);
     }
 
+    public function error(string $message): void
+    {
+        $this->writeLn('ERROR: ' . $message, OutputLevel::ERROR);
+    }
+
     public function fatalError(string $message): void
     {
         $this->writeLn('FATAL ERROR: ' . $message, OutputLevel::ERROR);
