@@ -68,7 +68,7 @@ tests:
 | `tests` `path`                            | The path where your tests are                            | *no default* |
 | `options` `verbosity`                     | Output verbosity level (0/1/2)                           | 1            |
 | `options` `dry-run`                       | Report failed suite without error exit code (true/false) | false        |
-| `options` `dependency` `ignore_docblocks` | Ignore dependencies on docblocks (true/false)            | false        |
+| `options` `ignore_docblocks`              | Ignore relations on docblocks (true/false)               | false        |
 
 </details>
 

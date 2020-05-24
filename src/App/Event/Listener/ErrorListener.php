@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace PhpAT\App\Event\Listener;
 
 use PhpAT\App\Event\ErrorEvent;
-use PhpAT\App\Exception\FatalErrorException;
 use PHPAT\EventDispatcher\EventInterface;
 use PHPAT\EventDispatcher\EventListenerInterface;
 use PhpAT\Output\OutputInterface;

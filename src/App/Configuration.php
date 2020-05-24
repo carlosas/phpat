@@ -14,7 +14,7 @@ class Configuration
     private static $testsPath;
     private static $verbosity;
     private static $dryRun;
-    private static $dependencyIgnoreDocBlocks;
+    private static $ignoreDocBlocks;
 
     public static function init(array $config)
     {
@@ -31,7 +31,7 @@ class Configuration
         self::$testsPath = $config['tests']['path'] ?? '';
         self::$verbosity = (int) ($config['options']['verbosity'] ?? 1);
         self::$dryRun = (bool) ($config['options']['dry-run'] ?? false);
-        self::$dependencyIgnoreDocBlocks = (bool) ($config['options']['dependency']['ignore_docblocks'] ?? false);
+        self::$ignoreDocBlocks = (bool) ($config['options']['ignore_docblocks'] ?? false);
         self::$phpStormStubsPath = is_file(__DIR__ . '/../../autoload.php')
             ? __DIR__ . '/../../jetbrains/phpstorm-stubs'
             : __DIR__ . '/../../vendor/jetbrains/phpstorm-stubs';
@@ -67,9 +67,9 @@ class Configuration
         return self::$dryRun;
     }
 
-    public static function getDependencyIgnoreDocBlocks(): bool
+    public static function getIgnoreDocBlocks(): bool
     {
-        return self::$dependencyIgnoreDocBlocks;
+        return self::$ignoreDocBlocks;
     }
 
     public static function getPhpStormStubsPath(): string

@@ -78,7 +78,7 @@ class MapBuilder
             $this->phpDocParser,
             new PhpDocTypeResolver(),
             $nameContext,
-            Configuration::getDependencyIgnoreDocBlocks()
+            Configuration::getIgnoreDocBlocks()
         );
         $this->traverser->addVisitor($dependencyCollector);
 
