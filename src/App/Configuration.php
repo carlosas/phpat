@@ -32,8 +32,8 @@ class Configuration
         self::$verbosity = (int) ($config['options']['verbosity'] ?? 1);
         self::$dryRun = (bool) ($config['options']['dry-run'] ?? false);
         self::$ignoreDocBlocks = (bool) ($config['options']['ignore_docblocks'] ?? false);
-        self::$phpStormStubsPath = is_file(__DIR__ . '/../../autoload.php')
-            ? __DIR__ . '/../../jetbrains/phpstorm-stubs'
+        self::$phpStormStubsPath = is_file(__DIR__ . '/../../../../autoload.php')
+            ? __DIR__ . '/../../../../jetbrains/phpstorm-stubs'
             : __DIR__ . '/../../vendor/jetbrains/phpstorm-stubs';
     }
 
