@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PhpAT\Selector;
+namespace PhpAT\Parser;
 
 class ComposerFileParser
 {

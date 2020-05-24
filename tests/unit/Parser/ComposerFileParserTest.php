@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\PhpAT\unit\Selector;
+namespace Tests\PhpAT\unit\Parser;
 
-use PhpAT\Selector\ComposerFileParser;
+use PhpAT\Parser\ComposerFileParser;
 use PHPUnit\Framework\TestCase;
 
 class ComposerFileParserTest extends TestCase
@@ -15,7 +15,7 @@ class ComposerFileParserTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->subject = new ComposerFileParser(__DIR__ . '/Mock/composer.json');
+        $this->subject = new ComposerFileParser(__DIR__.'/../Selector/Mock/composer.json');
     }
 
     public function testExtractsNamespaces(): void

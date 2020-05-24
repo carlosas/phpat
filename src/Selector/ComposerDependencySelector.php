@@ -6,6 +6,7 @@ namespace PhpAT\Selector;
 
 use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\ClassLike;
+use PhpAT\Parser\ComposerFileParser;
 use PhpAT\Parser\RegexClassName;
 
 class ComposerDependencySelector implements SelectorInterface
