@@ -67,8 +67,9 @@ tests:
 | `src` `exclude`                           | Files you want to be excluded in the tests               | *no files*   |
 | `tests` `path`                            | The path where your tests are                            | *no default* |
 | `options` `verbosity`                     | Output verbosity level (0/1/2)                           | 1            |
-| `options` `dry-run`                       | Report failed suite without error exit code (true/false) | false        |
-| `options` `ignore_docblocks`              | Ignore relations on docblocks (true/false)               | false        |
+| `options` `dry-run`                       | Report failed suite without error exit code (T/F)        | false        |
+| `options` `ignore_docblocks`              | Ignore relations on docblocks (T/F)                      | false        |
+| `options` `ignore_php_extensions`         | Ignore relations to core and extensions classes (T/F)    | true         |
 
 </details>
 

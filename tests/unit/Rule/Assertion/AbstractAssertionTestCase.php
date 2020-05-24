@@ -2,6 +2,7 @@
 
 namespace Tests\PhpAT\unit\Rule\Assertion;
 
+use PhpAT\App\Configuration;
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\Ast\SrcNode;
 use PhpAT\Parser\Ast\ReferenceMap;
@@ -22,6 +23,11 @@ abstract class AbstractAssertionTestCase extends TestCase
     abstract public function dataProvider(): array;
 
     abstract protected function getTestedClassName(): string;
+
+    public static function setUpBeforeClass(): void
+    {
+        Configuration::init([]);
+    }
 
     /**
      * @dataProvider dataProvider

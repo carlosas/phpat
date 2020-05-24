@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhpAT\Rule\Assertion;
 
+use PhpAT\App\Configuration;
 use PhpAT\Parser\Ast\SrcNode;
 use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\ClassLike;
@@ -168,6 +169,10 @@ abstract class AbstractAssertion
 
     protected function isIgnored(ClassLike $class, ReferenceMap $map): bool
     {
+        if (Configuration::getIgnorePhpExtensions() === false) {
+            return false;
+        }
+
         /** @var ClassLike $extensionClass */
         foreach ($map->getExtensionNodes() as $extensionClass) {
             if ($extensionClass->matches($class->toString())) {
