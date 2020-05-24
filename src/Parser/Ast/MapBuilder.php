@@ -129,6 +129,7 @@ class MapBuilder
                 $this->eventDispatcher->dispatch(
                     new ErrorEvent($this->normalizePathname($fileInfo->getPathname()) . ' could not be parsed')
                 );
+                continue;
             }
 
             $this->traverser->traverse($parsed);
