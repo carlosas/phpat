@@ -50,15 +50,12 @@ class DependencyTest extends ArchitectureTest
             ->build();
     }
 
-    public function testPredefinedClassesGetIgnored(): Rule
+    public function testCoreClassesGetIgnored(): Rule
     {
         return $this->newRule
-            ->andClassesThat(Selector::havePath('Dependency/Predefined.php'))
-            ->mustOnlyDependOn()
-            ->classesThat(Selector::haveClassName(\Exception::class)) //should warn
-            ->classesThat(Selector::haveClassName('\Exception')) //should warn
-            ->classesThat(Selector::haveClassName(\BadMethodCallException::class)) //should warn
-            ->classesThat(Selector::haveClassName('\BadMethodCallException')) //should warn
+            ->andClassesThat(Selector::havePath('Dependency/CoreAndExtensions.php'))
+            ->canOnlyDependOn()
+            ->classesThat(Selector::haveClassName(SimpleClass::class))
             ->build();
     }
 

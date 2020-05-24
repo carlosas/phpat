@@ -47,12 +47,17 @@ abstract class AbstractAssertion
     /**
      * @return string[]
      */
-    protected function getDependencies(SrcNode $node): array
+    protected function getDependencies(SrcNode $node, ReferenceMap $map): array
     {
         foreach ($node->getRelations() as $relation) {
-            if ($relation instanceof Dependency) {
-                $dependencies[] = $relation->relatedClass->getFQCN();
+            if (
+                !($relation instanceof Dependency)
+                || $this->isIgnored($relation->relatedClass, $map)
+            ) {
+                continue;
             }
+
+            $dependencies[] = $relation->relatedClass->getFQCN();
         }
 
         return $dependencies ?? [];
@@ -61,23 +66,33 @@ abstract class AbstractAssertion
     /**
      * @return string[]
      */
-    protected function getInterfaces(SrcNode $node): array
+    protected function getInterfaces(SrcNode $node, ReferenceMap $map): array
     {
         foreach ($node->getRelations() as $relation) {
-            if ($relation instanceof Composition) {
-                $interfaces[] = $relation->relatedClass->getFQCN();
+            if (
+                !($relation instanceof Composition)
+                || $this->isIgnored($relation->relatedClass, $map)
+            ) {
+                continue;
             }
+
+            $interfaces[] = $relation->relatedClass->getFQCN();
         }
 
         return $interfaces ?? [];
     }
 
-    protected function getParent(SrcNode $node): ?string
+    protected function getParent(SrcNode $node, ReferenceMap $map): ?string
     {
         foreach ($node->getRelations() as $relation) {
-            if ($relation instanceof Inheritance) {
-                return $relation->relatedClass->getFQCN();
+            if (
+                !($relation instanceof Inheritance)
+                || $this->isIgnored($relation->relatedClass, $map)
+            ) {
+                continue;
             }
+
+            return $relation->relatedClass->getFQCN();
         }
 
         return null;
@@ -86,12 +101,17 @@ abstract class AbstractAssertion
     /**
      * @return string[]
      */
-    protected function getTraits(SrcNode $node): array
+    protected function getTraits(SrcNode $node, ReferenceMap $map): array
     {
         foreach ($node->getRelations() as $relation) {
-            if ($relation instanceof Mixin) {
-                $mixins[] = $relation->relatedClass->getFQCN();
+            if (
+                !($relation instanceof Mixin)
+                || $this->isIgnored($relation->relatedClass, $map)
+            ) {
+                continue;
             }
+
+            $mixins[] = $relation->relatedClass->getFQCN();
         }
 
         return $mixins ?? [];
@@ -144,5 +164,17 @@ abstract class AbstractAssertion
         }
 
         return new MatchResult(!empty($m), $m ?? []);
+    }
+
+    protected function isIgnored(ClassLike $class, ReferenceMap $map): bool
+    {
+        /** @var ClassLike $extensionClass */
+        foreach ($map->getExtensionNodes() as $extensionClass) {
+            if ($extensionClass->matches($class->toString())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

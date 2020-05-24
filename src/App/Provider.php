@@ -11,7 +11,7 @@ use PhpAT\File\FileFinder;
 use PhpAT\File\SymfonyFinderAdapter;
 use PhpAT\Output\OutputInterface;
 use PhpAT\Parser\Ast\MapBuilder;
-use PhpAT\Selector\ComposerFileParser;
+use PhpAT\Parser\Ast\NodeTraverser;
 use PhpAT\Rule\RuleBuilder;
 use PhpAT\Rule\Assertion\Composition;
 use PhpAT\Rule\Assertion\Dependency;
@@ -23,8 +23,6 @@ use PhpAT\Test\FileTestExtractor;
 use PhpAT\Test\Parser\XmlTestParser;
 use PhpAT\Test\Parser\YamlTestParser;
 use PhpAT\Test\TestExtractor;
-use PhpParser\NodeTraverser;
-use PhpParser\NodeTraverserInterface;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
 use PHPStan\PhpDocParser\Parser\ConstExprParser;
@@ -80,13 +78,13 @@ class Provider
             ->addArgument(new SymfonyFinderAdapter(new Finder()));
 
         $this->builder
-            ->register(NodeTraverserInterface::class, NodeTraverser::class);
+            ->register(NodeTraverser::class, NodeTraverser::class);
 
         $this->builder
             ->register(MapBuilder::class, MapBuilder::class)
             ->addArgument(new Reference(FileFinder::class))
             ->addArgument(new Reference(Parser::class))
-            ->addArgument(new Reference(NodeTraverserInterface::class))
+            ->addArgument(new Reference(NodeTraverser::class))
             ->addArgument(new Reference(PhpDocParser::class))
             ->addArgument(new Reference(EventDispatcher::class));
 

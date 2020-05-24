@@ -5,11 +5,9 @@ declare(strict_types=1);
 namespace PhpAT\Selector;
 
 use PhpAT\File\FileFinder;
-use PhpAT\Parser\Ast\SrcNode;
 use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\ClassLike;
 use PhpAT\Parser\FullClassName;
-use PhpParser\NodeTraverserInterface;
 use PhpParser\Parser;
 
 /**
@@ -21,8 +19,7 @@ class PathSelector implements SelectorInterface
 {
     private const DEPENDENCIES = [
         FileFinder::class,
-        Parser::class,
-        NodeTraverserInterface::class,
+        Parser::class
     ];
 
     /**
@@ -41,10 +38,6 @@ class PathSelector implements SelectorInterface
      * @var Parser
      */
     private $parser;
-    /**
-     * @var NodeTraverserInterface
-     */
-    private $traverser;
 
     public function __construct(string $path)
     {
@@ -60,7 +53,6 @@ class PathSelector implements SelectorInterface
     {
         $this->fileFinder = $dependencies[FileFinder::class];
         $this->parser = $dependencies[Parser::class];
-        $this->traverser = $dependencies[NodeTraverserInterface::class];
     }
 
     /**

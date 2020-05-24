@@ -39,7 +39,7 @@ class MustInclude extends AbstractAssertion
         $matchingNodes = $this->filterMatchingNodes($origin, $map);
 
         foreach ($matchingNodes as $node) {
-            $traits = $this->getTraits($node);
+            $traits = $this->getTraits($node, $map);
 
             foreach ($included as $destination) {
                 $result = $this->destinationMatchesRelations($destination, $excluded, $traits);

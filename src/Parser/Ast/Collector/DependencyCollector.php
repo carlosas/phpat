@@ -2,6 +2,7 @@
 
 namespace PhpAT\Parser\Ast\Collector;
 
+use PhpAT\App\Configuration;
 use PhpAT\Parser\Ast\PhpDocTypeResolver;
 use PhpAT\Parser\FullClassName;
 use PhpAT\Parser\Relation\Dependency;
@@ -38,7 +39,7 @@ class DependencyCollector extends AbstractRelationCollector
     public function __construct(
         PhpDocParser $docParser,
         PhpDocTypeResolver $docTypeResolver,
-        NameContext &$nameContext,
+        NameContext $nameContext,
         bool $ignoreDocBlocks = false
     ) {
         $this->docParser = $docParser;
@@ -73,7 +74,7 @@ class DependencyCollector extends AbstractRelationCollector
     private function addDependency(int $line, string $fqcn): void
     {
         $class = FullClassName::createFromFQCN($fqcn);
-        if (!array_key_exists($fqcn, $this->found) && $this->isAutoloaded($fqcn) && $class->getNamespace() !== '') {
+        if (!array_key_exists($fqcn, $this->found) && $this->isAutoloaded($fqcn)) {
             $this->found[$fqcn] = $class->getFQCN();
             $this->results[] = new Dependency($line, $class);
         }

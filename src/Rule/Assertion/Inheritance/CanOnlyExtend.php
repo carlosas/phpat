@@ -39,7 +39,7 @@ class CanOnlyExtend extends AbstractAssertion
         $matchingNodes = $this->filterMatchingNodes($origin, $map);
 
         foreach ($matchingNodes as $node) {
-            $parent = $this->getParent($node);
+            $parent = $this->getParent($node, $map);
             if ($parent === null) {
                 $this->dispatchResult(true, $node->getClassName());
                 continue;

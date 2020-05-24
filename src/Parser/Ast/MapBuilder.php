@@ -6,12 +6,13 @@ use PhpAT\App\Configuration;
 use PhpAT\File\FileFinder;
 use PhpAT\Parser\Ast\Collector\DependencyCollector;
 use PhpAT\Parser\Ast\Collector\InterfaceCollector;
-use PhpAT\Parser\Ast\Collector\NameCollector;
+use PhpAT\Parser\Ast\Collector\ClassNameCollector;
+use PhpAT\Parser\Ast\Collector\NamespacedNameCollector;
 use PhpAT\Parser\Ast\Collector\ParentCollector;
 use PhpAT\Parser\Ast\Collector\TraitCollector;
+use PhpAT\Parser\ClassLike;
 use PhpParser\ErrorHandler\Throwing;
 use PhpParser\NameContext;
-use PhpParser\NodeTraverserInterface;
 use PhpParser\Parser;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -27,7 +28,7 @@ class MapBuilder
      */
     private $parser;
     /**
-     * @var NodeTraverserInterface
+     * @var NodeTraverser
      */
     private $traverser;
     /**
@@ -42,7 +43,7 @@ class MapBuilder
     public function __construct(
         FileFinder $finder,
         Parser $parser,
-        NodeTraverserInterface $traverser,
+        NodeTraverser $traverser,
         PhpDocParser $phpDocParser,
         EventDispatcherInterface $eventDispatcher
     ) {
@@ -55,15 +56,16 @@ class MapBuilder
 
     public function build(): ReferenceMap
     {
-        return new ReferenceMap($this->buildSrcMap());
+        return new ReferenceMap($this->buildSrcMap(), $this->buildExtensionMap());
     }
 
     private function buildSrcMap(): array
     {
+        $this->traverser->reset();
         $nameContext  = new NameContext(new Throwing());
         $nameResolver = new NameResolver($nameContext);
         $this->traverser->addVisitor($nameResolver);
-        $nameCollector = new NameCollector();
+        $nameCollector = new NamespacedNameCollector();
         $this->traverser->addVisitor($nameCollector);
         $interfaceCollector = new InterfaceCollector();
         $this->traverser->addVisitor($interfaceCollector);
@@ -100,6 +102,26 @@ class MapBuilder
         }
 
         return $srcMap ?? [];
+    }
+
+    /**
+     * @return ClassLike[]
+     */
+    private function buildExtensionMap(): array
+    {
+        $nameCollector = new ClassNameCollector();
+        $this->traverser->reset();
+        $this->traverser->addVisitor($nameCollector);
+
+        $files = $this->finder->findPhpFilesInPath(Configuration::getPhpStormStubsPath());
+
+        /** @var \SplFileInfo $fileInfo */
+        foreach ($files as $fileInfo) {
+            $parsed = $this->parser->parse(file_get_contents($this->normalizePathname($fileInfo->getPathname())));
+            $this->traverser->traverse($parsed);
+        }
+
+        return $nameCollector->getNames();
     }
 
     private function normalizePathname(string $pathname): string
