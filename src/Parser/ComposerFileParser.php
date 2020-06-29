@@ -4,78 +4,83 @@ declare(strict_types=1);
 
 namespace PhpAT\Parser;
 
+use PhpAT\App\Configuration;
+
 class ComposerFileParser
 {
-
     /** @var string */
     private $composerFilePath;
-
     /** @var array */
     private $composerFile;
-
     /** @var string */
     private $lockFilePath;
-
     /** @var array */
-    private $lockFile;
-
+    private $lockFile = null;
     /** @var array */
     private $lockedPackages;
+    /** @var Configuration */
+    private $configuration;
 
-    public function __construct(string $composerFile, string $lockFile = null)
+    /**
+     * @param Configuration $configuration
+     * @param string        $packageAlias
+     * @return $this
+     * @throws \Exception
+     */
+    public function parse(Configuration $configuration, string $packageAlias): self
     {
-        if ($lockFile === null) {
-            $lockFile = substr($composerFile, 0, -5) . '.lock';
+        $this->configuration = $configuration->getComposerConfiguration();
+
+        if (!isset($this->configuration[$packageAlias]['json'])) {
+            throw new \Exception('Composer package "' . $packageAlias . '" is not properly configured');
         }
 
-        $this->composerFile = json_decode(file_get_contents($composerFile), true);
-        $this->composerFilePath = $composerFile;
-        $this->lockFile = json_decode(file_get_contents($lockFile), true);
-        $this->lockFilePath = $lockFile;
+        $this->composerFilePath = $this->configuration[$packageAlias]['json'];
+        $this->composerFile = json_decode(file_get_contents($this->composerFilePath), true);
+        $this->lockFilePath = $this->configuration[$packageAlias]['lock']
+            ?? substr($this->composerFilePath, 0, -5) . '.lock';
+        $this->lockFile = json_decode(file_get_contents($this->lockFilePath), true);
         $this->lockedPackages = $this->getPackagesFromLockFile();
+
+        return $this;
     }
 
     /**
      * Returns an array of all namespaces declared by the current composer file.
      *
-     * @param bool $includeDev
+     * @param bool $dev
      * @return string[]
      */
-    public function getNamespaces(bool $includeDev = false): array
+    public function getNamespaces(bool $dev = false): array
     {
-        return $this->extractNamespaces($this->composerFile, $includeDev);
+        return $this->extractNamespaces($this->composerFile, $dev);
     }
 
     /**
      * Returns an array of all required namespaces including deep dependencies (dependencies of dependencies)
      *
-     * @param bool $includeDev
+     * @param bool $dev
      * @return string[]
      */
-    public function getDeepRequirementNamespaces(bool $includeDev): array
+    public function getDeepRequirementNamespaces(bool $dev): array
     {
-        $required = $this->getDirectDependencies($includeDev);
-        $required = $this->flattenDependencies($required, $includeDev);
-        return $this->autoloadableNamespacesForRequirements($required, $includeDev);
+        $required = $this->getDirectDependencies($dev);
+        $required = $this->flattenDependencies($required);
+        return $this->autoloadableNamespacesForRequirements($required);
     }
 
     /**
      * Returns an array of directly required package names.
      *
-     * @param bool $includeDev
+     * @param bool $dev
      * @return string[]
      */
-    public function getDirectDependencies(bool $includeDev): array
+    public function getDirectDependencies(bool $dev): array
     {
         $required = [];
-        foreach (array_keys($this->composerFile['require'] ?? []) as $packageName) {
+        $key = $dev ? 'require-dev' : 'require';
+        foreach (array_keys($this->composerFile[$key] ?? []) as $packageName) {
             $required[] = (string) $packageName;
-        }
-
-        if ($includeDev) {
-            foreach (array_keys($this->composerFile['require-dev'] ?? []) as $packageName) {
-                $required[] = (string) $packageName;
-            }
         }
 
         return $required;
@@ -85,17 +90,17 @@ class ComposerFileParser
      * Resolves an array of package names to an array of namespaces declared by those packages.
      *
      * @param string[] $requirements
-     * @param bool $includeDev
+     * @param bool $dev
      * @return string[]
      */
-    public function autoloadableNamespacesForRequirements(array $requirements, bool $includeDev)
+    public function autoloadableNamespacesForRequirements(array $requirements)
     {
         $namespaces = [];
 
         foreach ($requirements as $package) {
             $namespaces = array_merge(
                 $namespaces,
-                $this->extractNamespaces($this->lockedPackages[ $package ], $includeDev)
+                $this->extractNamespaces($this->lockedPackages[ $package ], false)
             );
         }
 
@@ -112,7 +117,7 @@ class ComposerFileParser
         return $this->lockFilePath;
     }
 
-    private function flattenDependencies(array $topLevelRequirements, bool $includeDev): array
+    private function flattenDependencies(array $topLevelRequirements): array
     {
         $required = [];
         $toCheck = $topLevelRequirements;
@@ -127,12 +132,6 @@ class ComposerFileParser
             $required[] = $packageName;
 
             $deepRequirements = array_keys($package['require'] ?? []);
-            if ($includeDev) {
-                $deepRequirements = array_merge(
-                    $deepRequirements,
-                    array_keys($package['require-dev'] ?? [])
-                );
-            }
 
             foreach ($deepRequirements as $name) {
                 if (!\in_array($name, $required)) {
@@ -141,7 +140,7 @@ class ComposerFileParser
             }
         }
 
-        return $required;
+        return array_unique($required);
     }
 
     private function getPackagesFromLockFile(): array
@@ -159,23 +158,15 @@ class ComposerFileParser
         return $lockedPackages;
     }
 
-    private function extractNamespaces(array $package, bool $includeDev): array
+    private function extractNamespaces(array $package, bool $dev): array
     {
+        $key = $dev ? 'autoload-dev' : 'autoload';
         $namespaces = [];
-        foreach (array_keys($package['autoload']['psr-0'] ?? []) as $namespace) {
+        foreach (array_keys($package[$key]['psr-0'] ?? []) as $namespace) {
             $namespaces[] = (string) $namespace;
         }
-        foreach (array_keys($package['autoload']['psr-4'] ?? []) as $namespace) {
+        foreach (array_keys($package[$key]['psr-4'] ?? []) as $namespace) {
             $namespaces[] = (string) $namespace;
-        }
-
-        if ($includeDev) {
-            foreach (array_keys($package['autoload-dev']['psr-0'] ?? []) as $namespace) {
-                $namespaces[] = (string) $namespace;
-            }
-            foreach (array_keys($package['autoload-dev']['psr-4'] ?? []) as $namespace) {
-                $namespaces[] = (string) $namespace;
-            }
         }
 
         return $namespaces;

@@ -31,18 +31,27 @@ class Selector
         return new IncludeSelector($fqcn);
     }
 
-    public static function areDependenciesFromComposer(
-        string $composerJson,
-        string $composerLock,
-        bool $includeDev = false
-    ): ComposerDependencySelector {
-        return new ComposerDependencySelector($composerJson, $composerLock, $includeDev);
+    public static function areAutoloadableFromComposer(
+        string $composerAlias
+    ): ComposerSourceSelector {
+        return new ComposerSourceSelector($composerAlias, false);
     }
 
-    public static function areAutoloadableFromComposer(
-        string $composerJson,
-        bool $includeDev = false
+    public static function areDevAutoloadableFromComposer(
+        string $composerAlias
     ): ComposerSourceSelector {
-        return new ComposerSourceSelector($composerJson, $includeDev);
+        return new ComposerSourceSelector($composerAlias, true);
+    }
+
+    public static function areDependenciesFromComposer(
+        string $composerAlias
+    ): ComposerDependencySelector {
+        return new ComposerDependencySelector($composerAlias, false);
+    }
+
+    public static function areDevDependenciesFromComposer(
+        string $composerAlias
+    ): ComposerDependencySelector {
+        return new ComposerDependencySelector($composerAlias, true);
     }
 }

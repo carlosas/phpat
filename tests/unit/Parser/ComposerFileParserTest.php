@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Tests\PhpAT\unit\Parser;
 
+use PhpAT\App\Configuration;
 use PhpAT\Parser\ComposerFileParser;
 use PHPUnit\Framework\TestCase;
 
@@ -15,17 +16,25 @@ class ComposerFileParserTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->subject = new ComposerFileParser(__DIR__.'/../Selector/Mock/composer.json');
+
+        $configurationMock = $this->createMock(Configuration::class);
+        $configurationMock->method('getComposerConfiguration')->willReturn([
+            'main' => [
+               'json' => __DIR__ . '/Mock/fake-composer.json',
+               'lock' => __DIR__ . '/Mock/fake-composer.lock'
+            ]
+        ]);
+        $this->subject = (new ComposerFileParser())->parse($configurationMock, 'main');
     }
 
     public function testExtractsNamespaces(): void
     {
         $this->assertEquals(
-            [ 'Source\\Namespace\\' ],
+            ['Source\\Namespace\\'],
             $this->subject->getNamespaces(false)
         );
         $this->assertEquals(
-            [ 'Source\\Namespace\\', 'Test\\Namespace\\' ],
+            ['Test\\Namespace\\'],
             $this->subject->getNamespaces(true)
         );
     }
@@ -33,11 +42,11 @@ class ComposerFileParserTest extends TestCase
     public function testShouldExtractDependencies(): void
     {
         $this->assertEquals(
-            [ 'thecodingmachine/safe' ],
+            ['thecodingmachine/safe'],
             $this->subject->getDirectDependencies(false)
         );
         $this->assertEquals(
-            [ 'thecodingmachine/safe', 'phpunit/phpunit' ],
+            ['phpunit/phpunit'],
             $this->subject->getDirectDependencies(true)
         );
     }
@@ -46,7 +55,7 @@ class ComposerFileParserTest extends TestCase
     {
         $this->assertContains(
             'Safe\\',
-            $this->subject->autoloadableNamespacesForRequirements([ 'thecodingmachine/safe' ], false)
+            $this->subject->autoloadableNamespacesForRequirements(['thecodingmachine/safe'])
         );
     }
 

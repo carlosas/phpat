@@ -65,6 +65,8 @@ tests:
 | `src` `path`                              | The root path of your application                        | *no default* |
 |` src` `include`                           | Files you want to be tested excluding the rest           | *all files*  |
 | `src` `exclude`                           | Files you want to be excluded in the tests               | *no files*   |
+| `composer` `$ALIAS` `json`                | Path of your composer.json file (multiple)               | *no files*   |
+| `composer` `$ALIAS` `lock`                | Path of your composer.lock file (multiple)               | *no files*   |
 | `tests` `path`                            | The path where your tests are                            | *no default* |
 | `options` `verbosity`                     | Output verbosity level (0/1/2)                           | 1            |
 | `options` `dry-run`                       | Report failed suite without error exit code (T/F)        | false        |

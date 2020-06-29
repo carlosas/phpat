@@ -3,7 +3,10 @@ declare(strict_types=1);
 
 namespace Tests\PhpAT\unit\Selector;
 
+use PhpAT\App\Configuration;
+use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\ClassLike;
+use PhpAT\Parser\ComposerFileParser;
 use PhpAT\Selector\ComposerSourceSelector;
 use PHPUnit\Framework\TestCase;
 
@@ -27,13 +30,35 @@ class ComposerSourceSelectorTest extends TestCase
         $this->assertTrue($this->oneSelectedMatches($source, 'Test\\Namespace\\Foo'));
     }
 
-    /** @return ClassLike[] $selected */
-    private function select(bool $includeDev): array
+    /**
+     * @param bool $devMode
+     * @return ClassLike[]
+     */
+    private function select(bool $devMode): array
     {
-        return (new ComposerSourceSelector(__DIR__ . '/Mock/composer.json', $includeDev))->select();
+        $selector = new ComposerSourceSelector('main', $devMode);
+        $eventDispatcherMock = $this->createMock(EventDispatcher::class);
+        $configurationMock = $this->createMock(Configuration::class);
+        $configurationMock->method('getComposerConfiguration')->willReturn([
+            'main' => [
+                'json' => __DIR__.'/../Parser/Mock/fake-composer.json',
+                'lock' => __DIR__.'/../Parser/Mock/fake-composer.lock'
+            ]
+        ]);
+        $selector->injectDependencies([
+            EventDispatcher::class => $eventDispatcherMock,
+            Configuration::class => $configurationMock,
+            ComposerFileParser::class => new ComposerFileParser()
+        ]);
+
+        return $selector->select();
     }
 
-    /** @param ClassLike[] $selected */
+    /**
+     * @param ClassLike[]  $selected
+     * @param string $classToMatch
+     * @return bool
+     */
     private function oneSelectedMatches(array $selected, string $classToMatch): bool
     {
         foreach ($selected as $classLike) {
