@@ -14,9 +14,8 @@ use PhpAT\Rule\Event\Listener\RuleValidationStartListener;
 use PhpAT\Statement\Event\Listener\StatementNotValidListener;
 use PhpAT\Statement\Event\Listener\StatementValidListener;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
 
-class ListenerProvider
+class EventListenerProvider
 {
     private $builder;
     /**

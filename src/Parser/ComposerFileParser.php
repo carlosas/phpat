@@ -18,7 +18,7 @@ class ComposerFileParser
     private $lockFile = null;
     /** @var array */
     private $lockedPackages;
-    /** @var Configuration */
+    /** @var array */
     private $configuration;
 
     /**
