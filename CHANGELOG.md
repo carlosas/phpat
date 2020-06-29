@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.7.1
+* Fix composer dependencies with empty namespace selected as `*`
+
 ## 0.7.0
 * Package name changed to `phpat/phpat`
 * Add support for tests in YAML and XML files

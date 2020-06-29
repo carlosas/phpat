@@ -94,16 +94,17 @@ class ComposerFileParser
      */
     public function autoloadableNamespacesForRequirements(array $requirements)
     {
-        $namespaces = [];
-
         foreach ($requirements as $package) {
-            $namespaces = array_merge(
-                $namespaces,
-                $this->extractNamespaces($this->lockedPackages[ $package ], false)
-            );
+            $n = $this->extractNamespaces($this->lockedPackages[$package], false);
+            foreach ($n as $k => $v) {
+                if (empty($v)) {
+                    unset($n[$k]);
+                }
+            }
+            $namespaces = array_merge($namespaces ?? [], $n);
         }
 
-        return $namespaces;
+        return $namespaces ?? [];
     }
 
     public function getComposerFilePath(): string
