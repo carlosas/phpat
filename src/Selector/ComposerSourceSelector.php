@@ -86,6 +86,6 @@ class ComposerSourceSelector implements SelectorInterface
 
     public function getParameter(): string
     {
-        return sprintf('%s (%s)', $this->packageAlias, $this->devMode);
+        return sprintf('%s (%s)', $this->packageAlias, $this->devMode ? 'true' : 'false');
     }
 }

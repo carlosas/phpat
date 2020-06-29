@@ -95,10 +95,7 @@ class DependencyCollector extends AbstractRelationCollector
                     $nameNode = strpos($name, '\\') === 0
                         ? new Node\Name\FullyQualified($name)
                         : new Node\Name($name);
-                    $class    = $this->nameContext->getResolvedClassName($nameNode);
-                    if ($class !== null) {
-                        $result[] = $class;
-                    }
+                    $result[] = $this->nameContext->getResolvedClassName($nameNode);
                 }
             }
         }

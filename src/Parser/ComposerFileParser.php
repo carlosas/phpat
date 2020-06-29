@@ -18,7 +18,7 @@ class ComposerFileParser
     private $lockFile = null;
     /** @var array */
     private $lockedPackages;
-    /** @var Configuration */
+    /** @var array */
     private $configuration;
 
     /**
@@ -90,7 +90,6 @@ class ComposerFileParser
      * Resolves an array of package names to an array of namespaces declared by those packages.
      *
      * @param string[] $requirements
-     * @param bool $dev
      * @return string[]
      */
     public function autoloadableNamespacesForRequirements(array $requirements)
