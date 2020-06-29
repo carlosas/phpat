@@ -8,9 +8,6 @@ php:
 install:
   - composer install --no-interaction
 
-before_script:
-  - curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar
-
 script:
   - composer validate --strict
   - vendor/bin/phpcs --standard=php_cs.xml src/
