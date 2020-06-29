@@ -57,7 +57,7 @@ abstract class ArchitectureTest implements TestInterface
             $this->eventDispatcher->dispatch(new FatalErrorEvent($message));
         }
 
-        if (!($rule instanceof Rule)) {
+        if (($rule instanceof Rule) == false) {
             $message = $method . ' must return an instance of ' . Rule::class . '.';
 
             $this->eventDispatcher->dispatch(new FatalErrorEvent($message));
