@@ -6,81 +6,80 @@ namespace PhpAT\App;
 
 class Configuration
 {
-    private static $phpStormStubsPath;
-    private static $initialized = false;
-    private static $srcPath;
-    private static $srcIncluded;
-    private static $srcExcluded;
-    private static $testsPath;
-    private static $verbosity;
-    private static $dryRun;
-    private static $ignoreDocBlocks;
-    private static $ignorePhpExtensions;
+    private $phpStormStubsPath;
+    private $srcPath;
+    private $srcIncluded;
+    private $srcExcluded;
+    private $composerConfiguration;
+    private $testsPath;
+    private $verbosity;
+    private $dryRun;
+    private $ignoreDocBlocks;
+    private $ignorePhpExtensions;
 
-    public static function init(array $config)
+    public function __construct(array $config)
     {
-        if (!self::$initialized) {
-            self::process($config);
-        }
-    }
-
-    private static function process(array $config)
-    {
-        self::$srcPath = $config['src']['path'] ?? '';
-        self::$srcIncluded = $config['src']['include'] ?? [];
-        self::$srcExcluded = $config['src']['exclude'] ?? [];
-        self::$testsPath = $config['tests']['path'] ?? '';
-        self::$verbosity = (int) ($config['options']['verbosity'] ?? 1);
-        self::$dryRun = (bool) ($config['options']['dry-run'] ?? false);
-        self::$ignoreDocBlocks = (bool) ($config['options']['ignore_docblocks'] ?? false);
-        self::$ignorePhpExtensions = (bool) ($config['options']['ignore_php_extensions'] ?? true);
-        self::$phpStormStubsPath = is_file(__DIR__ . '/../../../../autoload.php')
+        $this->srcPath = $config['src']['path'] ?? '';
+        $this->srcIncluded = $config['src']['include'] ?? [];
+        $this->srcExcluded = $config['src']['exclude'] ?? [];
+        $this->composerConfiguration = $config['composer'] ?? [];
+        $this->testsPath = $config['tests']['path'] ?? '';
+        $this->verbosity = (int) ($config['options']['verbosity'] ?? 1);
+        $this->dryRun = (bool) ($config['options']['dry-run'] ?? false);
+        $this->ignoreDocBlocks = (bool) ($config['options']['ignore_docblocks'] ?? false);
+        $this->ignorePhpExtensions = (bool) ($config['options']['ignore_php_extensions'] ?? true);
+        $this->phpStormStubsPath = is_file(__DIR__ . '/../../../../autoload.php')
             ? __DIR__ . '/../../../../jetbrains/phpstorm-stubs'
             : __DIR__ . '/../../vendor/jetbrains/phpstorm-stubs';
     }
 
-    public static function getSrcPath(): string
+    public function getSrcPath(): string
     {
-        return self::$srcPath;
+        return $this->srcPath;
     }
 
-    public static function getSrcIncluded(): array
+    public function getSrcIncluded(): array
     {
-        return self::$srcIncluded;
+        return $this->srcIncluded;
     }
 
-    public static function getSrcExcluded(): array
+    public function getSrcExcluded(): array
     {
-        return self::$srcExcluded;
+        return $this->srcExcluded;
     }
 
-    public static function getTestsPath(): string
+    public function getComposerConfiguration(): array
     {
-        return self::$testsPath;
+        return $this->composerConfiguration;
     }
 
-    public static function getVerbosity(): int
+    public function getTestsPath(): string
     {
-        return self::$verbosity;
+        return $this->testsPath;
     }
 
-    public static function getDryRun(): bool
+    public function getVerbosity(): int
     {
-        return self::$dryRun;
+        return $this->verbosity;
     }
 
-    public static function getIgnoreDocBlocks(): bool
+    public function getDryRun(): bool
     {
-        return self::$ignoreDocBlocks;
+        return $this->dryRun;
     }
 
-    public static function getIgnorePhpExtensions(): bool
+    public function getIgnoreDocBlocks(): bool
     {
-        return self::$ignorePhpExtensions;
+        return $this->ignoreDocBlocks;
     }
 
-    public static function getPhpStormStubsPath(): string
+    public function getIgnorePhpExtensions(): bool
     {
-        return self::$phpStormStubsPath;
+        return $this->ignorePhpExtensions;
+    }
+
+    public function getPhpStormStubsPath(): string
+    {
+        return $this->phpStormStubsPath;
     }
 }

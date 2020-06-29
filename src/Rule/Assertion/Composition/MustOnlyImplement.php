@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PhpAT\Rule\Assertion\Composition;
 
-use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\ClassLike;
 use PhpAT\Rule\Assertion\AbstractAssertion;
@@ -13,12 +12,6 @@ use PhpAT\Statement\Event\StatementValidEvent;
 
 class MustOnlyImplement extends AbstractAssertion
 {
-    public function __construct(
-        EventDispatcher $eventDispatcher
-    ) {
-        $this->eventDispatcher = $eventDispatcher;
-    }
-
     public function acceptsRegex(): bool
     {
         return false;

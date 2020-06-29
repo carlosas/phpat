@@ -39,15 +39,12 @@ use Symfony\Component\Finder\Finder;
  */
 class Provider
 {
-    /**
-     * @var ContainerBuilder
-     */
+    /** @var ContainerBuilder */
     private $builder;
-
-    /**
-     * @var OutputInterface
-     */
+    /** @var OutputInterface */
     private $output;
+    /** @var Configuration */
+    private $configuration;
 
     /**
      * Provider constructor.
@@ -57,7 +54,7 @@ class Provider
      */
     public function __construct(ContainerBuilder $builder, array $config, OutputInterface $output)
     {
-        Configuration::init($config);
+        $this->configuration = new Configuration($config);
         $this->builder  = $builder;
         $this->output = $output;
     }
@@ -75,7 +72,8 @@ class Provider
 
         $this->builder
             ->register(FileFinder::class, FileFinder::class)
-            ->addArgument(new SymfonyFinderAdapter(new Finder()));
+            ->addArgument(new SymfonyFinderAdapter(new Finder()))
+            ->addArgument($this->configuration);
 
         $this->builder
             ->register(NodeTraverser::class, NodeTraverser::class);
@@ -86,7 +84,8 @@ class Provider
             ->addArgument(new Reference(Parser::class))
             ->addArgument(new Reference(NodeTraverser::class))
             ->addArgument(new Reference(PhpDocParser::class))
-            ->addArgument(new Reference(EventDispatcher::class));
+            ->addArgument(new Reference(EventDispatcher::class))
+            ->addArgument($this->configuration);
 
         $this->builder
             ->register(RuleBuilder::class, RuleBuilder::class)
@@ -97,7 +96,8 @@ class Provider
             ->addArgument(new Reference(RuleBuilder::class))
             ->addArgument(new Reference(EventDispatcher::class))
             ->addArgument(new Reference(YamlTestParser::class))
-            ->addArgument(new Reference(XmlTestParser::class));
+            ->addArgument(new Reference(XmlTestParser::class))
+            ->addArgument($this->configuration);
 
         $this->builder
             ->register(YamlTestParser::class, YamlTestParser::class)
@@ -117,74 +117,91 @@ class Provider
         $this->builder
             ->register(StatementBuilder::class, StatementBuilder::class)
             ->addArgument(new Reference(SelectorResolver::class))
-            ->addArgument(new Reference(EventDispatcher::class));
+            ->addArgument(new Reference(EventDispatcher::class))
+            ->addArgument($this->configuration);
 
         $this->builder
             ->register(Dependency\MustDepend::class, Dependency\MustDepend::class)
-            ->addArgument(new Reference(EventDispatcher::class));
+            ->addArgument(new Reference(EventDispatcher::class))
+            ->addArgument($this->configuration);
 
         $this->builder
             ->register(Dependency\MustNotDepend::class, Dependency\MustNotDepend::class)
-            ->addArgument(new Reference(EventDispatcher::class));
+            ->addArgument(new Reference(EventDispatcher::class))
+            ->addArgument($this->configuration);
 
         $this->builder
             ->register(Dependency\MustOnlyDepend::class, Dependency\MustOnlyDepend::class)
-            ->addArgument(new Reference(EventDispatcher::class));
+            ->addArgument(new Reference(EventDispatcher::class))
+            ->addArgument($this->configuration);
 
         $this->builder
             ->register(Dependency\CanOnlyDepend::class, Dependency\CanOnlyDepend::class)
-            ->addArgument(new Reference(EventDispatcher::class));
+            ->addArgument(new Reference(EventDispatcher::class))
+            ->addArgument($this->configuration);
 
         $this->builder
             ->register(Inheritance\MustExtend::class, Inheritance\MustExtend::class)
-            ->addArgument(new Reference(EventDispatcher::class));
+            ->addArgument(new Reference(EventDispatcher::class))
+            ->addArgument($this->configuration);
 
         $this->builder
             ->register(Inheritance\MustNotExtend::class, Inheritance\MustNotExtend::class)
-            ->addArgument(new Reference(EventDispatcher::class));
+            ->addArgument(new Reference(EventDispatcher::class))
+            ->addArgument($this->configuration);
 
         $this->builder
             ->register(Inheritance\CanOnlyExtend::class, Inheritance\CanOnlyExtend::class)
-            ->addArgument(new Reference(EventDispatcher::class));
+            ->addArgument(new Reference(EventDispatcher::class))
+            ->addArgument($this->configuration);
 
         $this->builder
             ->register(Composition\MustImplement::class, Composition\MustImplement::class)
-            ->addArgument(new Reference(EventDispatcher::class));
+            ->addArgument(new Reference(EventDispatcher::class))
+            ->addArgument($this->configuration);
 
         $this->builder
             ->register(Composition\MustNotImplement::class, Composition\MustNotImplement::class)
-            ->addArgument(new Reference(EventDispatcher::class));
+            ->addArgument(new Reference(EventDispatcher::class))
+            ->addArgument($this->configuration);
 
         $this->builder
             ->register(Composition\MustOnlyImplement::class, Composition\MustOnlyImplement::class)
-            ->addArgument(new Reference(EventDispatcher::class));
+            ->addArgument(new Reference(EventDispatcher::class))
+            ->addArgument($this->configuration);
 
         $this->builder
             ->register(Composition\CanOnlyImplement::class, Composition\CanOnlyImplement::class)
-            ->addArgument(new Reference(EventDispatcher::class));
+            ->addArgument(new Reference(EventDispatcher::class))
+            ->addArgument($this->configuration);
 
         $this->builder
             ->register(Mixin\MustInclude::class, Mixin\MustInclude::class)
-            ->addArgument(new Reference(EventDispatcher::class));
+            ->addArgument(new Reference(EventDispatcher::class))
+            ->addArgument($this->configuration);
 
         $this->builder
             ->register(Mixin\MustNotInclude::class, Mixin\MustNotInclude::class)
-            ->addArgument(new Reference(EventDispatcher::class));
+            ->addArgument(new Reference(EventDispatcher::class))
+            ->addArgument($this->configuration);
 
         $this->builder
             ->register(Mixin\MustOnlyInclude::class, Mixin\MustOnlyInclude::class)
-            ->addArgument(new Reference(EventDispatcher::class));
+            ->addArgument(new Reference(EventDispatcher::class))
+            ->addArgument($this->configuration);
 
         $this->builder
             ->register(Mixin\CanOnlyInclude::class, Mixin\CanOnlyInclude::class)
-            ->addArgument(new Reference(EventDispatcher::class));
+            ->addArgument(new Reference(EventDispatcher::class))
+            ->addArgument($this->configuration);
 
         $this->builder
             ->register('app', App::class)
             ->addArgument(new Reference(MapBuilder::class))
             ->addArgument(new Reference(TestExtractor::class))
             ->addArgument(new Reference(StatementBuilder::class))
-            ->addArgument(new Reference(EventDispatcher::class));
+            ->addArgument(new Reference(EventDispatcher::class))
+            ->addArgument($this->configuration);
 
         $listenerProvider = new \PhpAT\App\ListenerProvider($this->builder, $this->output);
         $this->builder->merge($listenerProvider->register());

@@ -13,12 +13,6 @@ use PhpAT\Statement\Event\StatementValidEvent;
 
 class MustInclude extends AbstractAssertion
 {
-    public function __construct(
-        EventDispatcher $eventDispatcher
-    ) {
-        $this->eventDispatcher = $eventDispatcher;
-    }
-
     public function acceptsRegex(): bool
     {
         return false;

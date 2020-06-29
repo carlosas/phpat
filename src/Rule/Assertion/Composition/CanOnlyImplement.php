@@ -4,22 +4,14 @@ declare(strict_types=1);
 
 namespace PhpAT\Rule\Assertion\Composition;
 
-use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\ClassLike;
-use PhpAT\Parser\FullClassName;
 use PhpAT\Rule\Assertion\AbstractAssertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
 
 class CanOnlyImplement extends AbstractAssertion
 {
-    public function __construct(
-        EventDispatcher $eventDispatcher
-    ) {
-        $this->eventDispatcher = $eventDispatcher;
-    }
-
     public function acceptsRegex(): bool
     {
         return true;

@@ -40,19 +40,25 @@ class MapBuilder
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
+    /**
+     * @var Configuration
+     */
+    private $configuration;
 
     public function __construct(
         FileFinder $finder,
         Parser $parser,
         NodeTraverser $traverser,
         PhpDocParser $phpDocParser,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcherInterface $eventDispatcher,
+        Configuration $configuration
     ) {
         $this->finder = $finder;
         $this->parser = $parser;
         $this->traverser = $traverser;
         $this->phpDocParser = $phpDocParser;
         $this->eventDispatcher = $eventDispatcher;
+        $this->configuration = $configuration;
     }
 
     public function build(): ReferenceMap
@@ -78,11 +84,11 @@ class MapBuilder
             $this->phpDocParser,
             new PhpDocTypeResolver(),
             $nameContext,
-            Configuration::getIgnoreDocBlocks()
+            $this->configuration->getIgnoreDocBlocks()
         );
         $this->traverser->addVisitor($dependencyCollector);
 
-        $files = $this->finder->findPhpFilesInPath(Configuration::getSrcPath());
+        $files = $this->finder->findPhpFilesInPath($this->configuration->getSrcPath());
 
         /** @var \SplFileInfo $fileInfo */
         foreach ($files as $fileInfo) {
@@ -120,7 +126,7 @@ class MapBuilder
         $this->traverser->reset();
         $this->traverser->addVisitor($nameCollector);
 
-        $files = $this->finder->findPhpFilesInPath(Configuration::getPhpStormStubsPath());
+        $files = $this->finder->findPhpFilesInPath($this->configuration->getPhpStormStubsPath());
 
         /** @var \SplFileInfo $fileInfo */
         foreach ($files as $fileInfo) {

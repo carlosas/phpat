@@ -24,11 +24,6 @@ abstract class AbstractAssertionTestCase extends TestCase
 
     abstract protected function getTestedClassName(): string;
 
-    public static function setUpBeforeClass(): void
-    {
-        Configuration::init([]);
-    }
-
     /**
      * @dataProvider dataProvider
      * @param ClassLike    $origin The selected class in which to perform assertions
@@ -47,9 +42,12 @@ abstract class AbstractAssertionTestCase extends TestCase
     {
         /** @var MockObject $eventDispatcherMock */
         $eventDispatcherMock = $this->createMock(EventDispatcher::class);
+        /** @var MockObject $configurationMock */
+        $configurationMock = $this->createMock(Configuration::class);
+        $configurationMock->method('getIgnorePhpExtensions')->willReturn(true);
         $className = $this->getTestedClassName();
         /** @var AbstractAssertion $class */
-        $class = new $className($eventDispatcherMock);
+        $class = new $className($eventDispatcherMock, $configurationMock);
 
         foreach ($expectedEvents as $valid) {
             $eventType = $valid ? StatementValidEvent::class : StatementNotValidEvent::class;

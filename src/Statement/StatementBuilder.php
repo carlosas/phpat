@@ -28,16 +28,25 @@ class StatementBuilder
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
+    /**
+     * @var Configuration
+     */
+    private $configuration;
 
     /**
      * StatementBuilder constructor.
      * @param SelectorResolver         $selectorResolver
      * @param EventDispatcherInterface $eventDispatcher
+     * @param Configuration            $configuration
      */
-    public function __construct(SelectorResolver $selectorResolver, EventDispatcherInterface $eventDispatcher)
-    {
+    public function __construct(
+        SelectorResolver $selectorResolver,
+        EventDispatcherInterface $eventDispatcher,
+        Configuration $configuration
+    ) {
         $this->selectorResolver = $selectorResolver;
         $this->eventDispatcher = $eventDispatcher;
+        $this->configuration = $configuration;
     }
 
     /**
@@ -85,7 +94,7 @@ class StatementBuilder
             $classNamesToValidate = array_merge($classNamesToValidate, $this->selectorResolver->resolve($i, $map));
         }
 
-        foreach (Configuration::getSrcExcluded() as $exc) {
+        foreach ($this->configuration->getSrcExcluded() as $exc) {
             $excludedInConfig[] = new PathSelector($exc);
         }
         $excludedSelectors = array_merge($excludedInRule, $excludedInConfig ?? []);
@@ -101,10 +110,10 @@ class StatementBuilder
             }
         }
 
-        if (!empty(Configuration::getSrcIncluded())) {
+        if (!empty($this->configuration->getSrcIncluded())) {
             $filteredClassNames = [];
 
-            foreach (Configuration::getSrcIncluded() as $inc) {
+            foreach ($this->configuration->getSrcIncluded() as $inc) {
                 $resolvedIncludeRow[] = $this->selectorResolver->resolve(new PathSelector($inc), $map);
             }
             foreach ($resolvedIncludeRow ?? [] as $includedClasses) {

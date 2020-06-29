@@ -36,24 +36,31 @@ class App
      * @var MapBuilder
      */
     private $mapBuilder;
+    /**
+     * @var Configuration
+     */
+    private $configuration;
 
     /**
      * App constructor.
-     * @param MapBuilder               $mapBuilder
-     * @param TestExtractor            $extractor
-     * @param StatementBuilder         $statementBuilder
-     * @param EventDispatcher       $dispatcher
+     * @param MapBuilder       $mapBuilder
+     * @param TestExtractor    $extractor
+     * @param StatementBuilder $statementBuilder
+     * @param EventDispatcher  $dispatcher
+     * @param Configuration    $configuration
      */
     public function __construct(
         MapBuilder $mapBuilder,
         TestExtractor $extractor,
         StatementBuilder $statementBuilder,
-        EventDispatcher $dispatcher
+        EventDispatcher $dispatcher,
+        Configuration $configuration
     ) {
         $this->extractor        = $extractor;
         $this->statementBuilder = $statementBuilder;
         $this->dispatcher       = $dispatcher;
         $this->mapBuilder       = $mapBuilder;
+        $this->configuration    = $configuration;
     }
 
     /**
@@ -76,9 +83,7 @@ class App
             $statements = $this->statementBuilder->build($rule, $map);
 
             $this->dispatcher->dispatch(new RuleValidationStartEvent($rule->getName()));
-            /**
-             * @var Statement $statement
-            */
+            /** @var Statement $statement */
             foreach ($statements as $statement) {
                 $this->validateStatement($statement, $map);
             }
@@ -88,7 +93,7 @@ class App
 
         $this->dispatcher->dispatch(new SuiteEndEvent());
 
-        return !RuleValidationStorage::anyRuleHadErrors() || Configuration::getDryRun();
+        return !RuleValidationStorage::anyRuleHadErrors() || $this->configuration->getDryRun();
     }
 
     private function validateStatement(Statement $statement, ReferenceMap $map): void

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpAT\Rule\Assertion;
 
 use PhpAT\App\Configuration;
+use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\Ast\SrcNode;
 use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\ClassLike;
@@ -12,12 +13,19 @@ use PhpAT\Parser\Relation\Composition;
 use PhpAT\Parser\Relation\Dependency;
 use PhpAT\Parser\Relation\Inheritance;
 use PhpAT\Parser\Relation\Mixin;
-use Psr\EventDispatcher\EventDispatcherInterface;
 
 abstract class AbstractAssertion
 {
-    /** @var EventDispatcherInterface */
+    /** @var Configuration */
+    protected $configuration;
+    /** @var EventDispatcher */
     protected $eventDispatcher;
+
+    public function __construct(EventDispatcher $eventDispatcher, Configuration $configuration)
+    {
+        $this->configuration = $configuration;
+        $this->eventDispatcher = $eventDispatcher;
+    }
 
     /**
      * @param ClassLike    $origin
@@ -169,7 +177,7 @@ abstract class AbstractAssertion
 
     protected function isIgnored(ClassLike $class, ReferenceMap $map): bool
     {
-        if (Configuration::getIgnorePhpExtensions() === false) {
+        if ($this->configuration->getIgnorePhpExtensions() === false) {
             return false;
         }
 

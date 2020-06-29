@@ -8,11 +8,15 @@ use PhpAT\App\Configuration;
 
 class FileFinder
 {
+    /** @var Finder */
     private $finder;
+    /** @var Configuration */
+    private $configuration;
 
-    public function __construct(Finder $finder)
+    public function __construct(Finder $finder, Configuration $configuration)
     {
         $this->finder = $finder;
+        $this->configuration = $configuration;
     }
 
     public function findFile(string $file): ?\SplFileInfo
@@ -33,7 +37,7 @@ class FileFinder
      */
     public function findSrcFiles(string $file, array $excluded = []): array
     {
-        $parts = $this->splitFile(Configuration::getSrcPath() . $file);
+        $parts = $this->splitFile($this->configuration->getSrcPath() . $file);
 
         return $this->finder->find(
             $parts[0],
