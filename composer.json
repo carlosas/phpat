@@ -1,5 +1,5 @@
 {
-  "name": "carlosas/phpat",
+  "name": "phpat/phpat",
   "type": "library",
   "description": "PHP Architecture Tester",
   "license": "MIT",
