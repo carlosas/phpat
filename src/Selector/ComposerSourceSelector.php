@@ -8,9 +8,9 @@ use PhpAT\App\Configuration;
 use PhpAT\App\Event\ErrorEvent;
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\Ast\ReferenceMap;
-use PhpAT\Parser\ClassLike;
+use PhpAT\Parser\Ast\ClassLike;
 use PhpAT\Parser\ComposerFileParser;
-use PhpAT\Parser\RegexClassName;
+use PhpAT\Parser\Ast\RegexClassName;
 
 /**
  * Class ComposerSourceSelector

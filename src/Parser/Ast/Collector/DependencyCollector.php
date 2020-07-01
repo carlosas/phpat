@@ -4,7 +4,7 @@ namespace PhpAT\Parser\Ast\Collector;
 
 use PhpAT\App\Configuration;
 use PhpAT\Parser\Ast\PhpDocTypeResolver;
-use PhpAT\Parser\FullClassName;
+use PhpAT\Parser\Ast\FullClassName;
 use PhpAT\Parser\Relation\Dependency;
 use PhpParser\Comment\Doc;
 use PhpParser\NameContext;

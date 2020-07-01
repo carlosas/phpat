@@ -2,7 +2,7 @@
 
 namespace Tests\PhpAT\unit\Rule\Assertion\Inheritance;
 
-use PhpAT\Parser\FullClassName;
+use PhpAT\Parser\Ast\FullClassName;
 use PhpAT\Rule\Assertion\Inheritance\MustNotExtend;
 use Tests\PhpAT\unit\Rule\Assertion\AbstractAssertionTestCase;
 

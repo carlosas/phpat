@@ -2,8 +2,6 @@
 
 namespace PhpAT\Parser\Ast;
 
-use PhpAT\Parser\ClassLike;
-
 class ReferenceMap
 {
     /**

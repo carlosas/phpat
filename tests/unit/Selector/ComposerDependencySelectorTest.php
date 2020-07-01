@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Tests\PhpAT\unit\Selector;
 use PhpAT\App\Configuration;
 use PHPAT\EventDispatcher\EventDispatcher;
-use PhpAT\Parser\ClassLike;
+use PhpAT\Parser\Ast\ClassLike;
 use PhpAT\Parser\ComposerFileParser;
 use PhpAT\Selector\ComposerDependencySelector;
 use PHPUnit\Framework\TestCase;

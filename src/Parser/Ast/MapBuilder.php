@@ -11,7 +11,6 @@ use PhpAT\Parser\Ast\Collector\ClassNameCollector;
 use PhpAT\Parser\Ast\Collector\NamespacedNameCollector;
 use PhpAT\Parser\Ast\Collector\ParentCollector;
 use PhpAT\Parser\Ast\Collector\TraitCollector;
-use PhpAT\Parser\ClassLike;
 use PhpParser\ErrorHandler\Throwing;
 use PhpParser\NameContext;
 use PhpParser\Parser;

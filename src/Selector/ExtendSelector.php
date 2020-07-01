@@ -6,8 +6,8 @@ namespace PhpAT\Selector;
 
 use PhpAT\Parser\Ast\SrcNode;
 use PhpAT\Parser\Ast\ReferenceMap;
-use PhpAT\Parser\ClassLike;
-use PhpAT\Parser\FullClassName;
+use PhpAT\Parser\Ast\ClassLike;
+use PhpAT\Parser\Ast\FullClassName;
 use PhpAT\Parser\Relation\Inheritance;
 
 class ExtendSelector implements SelectorInterface
