@@ -4,6 +4,7 @@ namespace Tests\PhpAT\unit\Rule\Assertion;
 
 use PhpAT\App\Configuration;
 use PHPAT\EventDispatcher\EventDispatcher;
+use PhpAT\Parser\Ast\ComposerPackage;
 use PhpAT\Parser\Ast\SrcNode;
 use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\Ast\ClassLike;
@@ -90,6 +91,9 @@ abstract class AbstractAssertionTestCase extends TestCase
                 new FullClassName('', 'iterable'),
                 new FullClassName('', 'FilterIterator'),
                 new FullClassName('', 'PHPDocElement'),
+            ],
+            [
+                new ComposerPackage('main', [], [], [], [])
             ]
         );
     }

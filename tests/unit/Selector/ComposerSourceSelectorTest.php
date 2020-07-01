@@ -3,10 +3,11 @@ declare(strict_types=1);
 
 namespace Tests\PhpAT\unit\Selector;
 
-use PhpAT\App\Configuration;
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\Ast\ClassLike;
-use PhpAT\Parser\ComposerFileParser;
+use PhpAT\Parser\Ast\ComposerPackage;
+use PhpAT\Parser\Ast\ReferenceMap;
+use PhpAT\Parser\Ast\RegexClassName;
 use PhpAT\Selector\ComposerSourceSelector;
 use PHPUnit\Framework\TestCase;
 
@@ -38,25 +39,27 @@ class ComposerSourceSelectorTest extends TestCase
     {
         $selector = new ComposerSourceSelector('main', $devMode);
         $eventDispatcherMock = $this->createMock(EventDispatcher::class);
-        $configurationMock = $this->createMock(Configuration::class);
-        $configurationMock->method('getComposerConfiguration')->willReturn([
-            'main' => [
-                'json' => __DIR__.'/../Parser/Mock/fake-composer.json',
-                'lock' => __DIR__.'/../Parser/Mock/fake-composer.lock'
+        $selector->injectDependencies([EventDispatcher::class => $eventDispatcherMock]);
+        $referenceMapMock = $this->createMock(ReferenceMap::class);
+        $referenceMapMock->method('getComposerPackages')->willReturn(
+            [
+                'main' => new ComposerPackage(
+                    'main',
+                    [new RegexClassName('Source\\Namespace\\*')],
+                    [new RegexClassName('Test\\Namespace\\*')],
+                    [new RegexClassName('Vendor\\*')],
+                    [new RegexClassName('DevVendor\\*')]
+                )
             ]
-        ]);
-        $selector->injectDependencies([
-            EventDispatcher::class => $eventDispatcherMock,
-            Configuration::class => $configurationMock,
-            ComposerFileParser::class => new ComposerFileParser()
-        ]);
+        );
+        $selector->setReferenceMap($referenceMapMock);
 
         return $selector->select();
     }
 
     /**
-     * @param ClassLike[]  $selected
-     * @param string $classToMatch
+     * @param ClassLike[] $selected
+     * @param string      $classToMatch
      * @return bool
      */
     private function oneSelectedMatches(array $selected, string $classToMatch): bool

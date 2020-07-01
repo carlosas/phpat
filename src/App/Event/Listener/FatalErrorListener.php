@@ -19,6 +19,10 @@ class FatalErrorListener implements EventListenerInterface
         $this->output = $output;
     }
 
+    /**
+     * @param EventInterface $event
+     * @throws FatalErrorException
+     */
     public function __invoke(EventInterface $event)
     {
         /** @var FatalErrorEvent $event */

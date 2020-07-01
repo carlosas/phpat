@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace PhpAT\Selector;
 
-use PhpAT\App\Configuration;
 use PhpAT\App\Event\ErrorEvent;
 use PHPAT\EventDispatcher\EventDispatcher;
+use PhpAT\Parser\Ast\ComposerPackage;
 use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\Ast\ClassLike;
-use PhpAT\Parser\ComposerFileParser;
-use PhpAT\Parser\Ast\RegexClassName;
 
 /**
  * Class ComposerSourceSelector
@@ -18,9 +16,7 @@ use PhpAT\Parser\Ast\RegexClassName;
 class ComposerSourceSelector implements SelectorInterface
 {
     private const DEPENDENCIES = [
-        EventDispatcher::class,
-        Configuration::class,
-        ComposerFileParser::class
+        EventDispatcher::class
     ];
 
     /** @var ReferenceMap */
@@ -29,10 +25,6 @@ class ComposerSourceSelector implements SelectorInterface
     private $devMode;
     /** @var EventDispatcher */
     private $eventDispatcher;
-    /** @var ComposerFileParser */
-    private $composer;
-    /** @var Configuration */
-    private $configuration;
     /** @var string */
     private $packageAlias;
 
@@ -50,8 +42,6 @@ class ComposerSourceSelector implements SelectorInterface
     public function injectDependencies(array $dependencies)
     {
         $this->eventDispatcher = $dependencies[EventDispatcher::class];
-        $this->configuration = $dependencies[Configuration::class];
-        $this->composer = $dependencies[ComposerFileParser::class];
     }
 
     /** @param ReferenceMap $map */
@@ -63,25 +53,18 @@ class ComposerSourceSelector implements SelectorInterface
     /** @return ClassLike[] */
     public function select(): array
     {
-        try {
-            $parsed = $this->composer->parse($this->configuration, $this->packageAlias);
-        } catch (\Throwable $e) {
-            $errorEvent = new ErrorEvent(
-                'Composer package "' . $this->packageAlias . '" is not properly configured'
+        /** @var ComposerPackage|null $package */
+        $package = $this->map->getComposerPackages()[$this->packageAlias] ?? null;
+
+        if ($package === null) {
+            $this->eventDispatcher->dispatch(
+                new ErrorEvent("Package " . $this->packageAlias . "not found in configuration")
             );
-            $this->eventDispatcher->dispatch($errorEvent);
 
             return [];
         }
 
-        $namespaces = $parsed->getNamespaces($this->devMode);
-
-        return array_map(
-            function (string $namespace) {
-                return new RegexClassName($namespace . '*');
-            },
-            $namespaces
-        );
+        return $this->devMode ? $package->getDevAutoload() : $package->getAutoload();
     }
 
     public function getParameter(): string
