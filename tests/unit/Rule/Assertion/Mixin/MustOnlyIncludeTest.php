@@ -2,7 +2,7 @@
 
 namespace Tests\PhpAT\unit\Rule\Assertion\Mixin;
 
-use PhpAT\Parser\FullClassName;
+use PhpAT\Parser\Ast\FullClassName;
 use PhpAT\Rule\Assertion\Mixin\MustOnlyInclude;
 use Tests\PhpAT\unit\Rule\Assertion\AbstractAssertionTestCase;
 

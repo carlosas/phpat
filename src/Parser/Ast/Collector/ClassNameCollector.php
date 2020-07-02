@@ -2,7 +2,7 @@
 
 namespace PhpAT\Parser\Ast\Collector;
 
-use PhpAT\Parser\FullClassName;
+use PhpAT\Parser\Ast\FullClassName;
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 

@@ -2,7 +2,7 @@
 
 namespace Tests\PhpAT\unit\Rule\Assertion\Composition;
 
-use PhpAT\Parser\FullClassName;
+use PhpAT\Parser\Ast\FullClassName;
 use PhpAT\Rule\Assertion\Composition\CanOnlyImplement;
 use Tests\PhpAT\unit\Rule\Assertion\AbstractAssertionTestCase;
 

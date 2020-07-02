@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace PhpAT\Parser;
 
-use PhpAT\App\Configuration;
-
 class ComposerFileParser
 {
     /** @var string */
@@ -18,27 +16,18 @@ class ComposerFileParser
     private $lockFile = null;
     /** @var array */
     private $lockedPackages;
-    /** @var array */
-    private $configuration;
 
     /**
-     * @param Configuration $configuration
-     * @param string        $packageAlias
+     * @param string $composerFilePath
+     * @param string $lockFilePath
      * @return $this
      * @throws \Exception
      */
-    public function parse(Configuration $configuration, string $packageAlias): self
+    public function parse(string $composerFilePath, string $lockFilePath): self
     {
-        $this->configuration = $configuration->getComposerConfiguration();
-
-        if (!isset($this->configuration[$packageAlias]['json'])) {
-            throw new \Exception('Composer package "' . $packageAlias . '" is not properly configured');
-        }
-
-        $this->composerFilePath = $this->configuration[$packageAlias]['json'];
+        $this->composerFilePath = $composerFilePath;
         $this->composerFile = json_decode(file_get_contents($this->composerFilePath), true);
-        $this->lockFilePath = $this->configuration[$packageAlias]['lock']
-            ?? substr($this->composerFilePath, 0, -5) . '.lock';
+        $this->lockFilePath = $lockFilePath;
         $this->lockFile = json_decode(file_get_contents($this->lockFilePath), true);
         $this->lockedPackages = $this->getPackagesFromLockFile();
 

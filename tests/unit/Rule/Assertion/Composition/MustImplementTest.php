@@ -2,8 +2,8 @@
 
 namespace Tests\PhpAT\unit\Rule\Assertion\Composition;
 
-use PhpAT\Parser\FullClassName;
-use PhpAT\Parser\RegexClassName;
+use PhpAT\Parser\Ast\FullClassName;
+use PhpAT\Parser\Ast\RegexClassName;
 use PhpAT\Rule\Assertion\Composition\MustImplement;
 use Tests\PhpAT\unit\Rule\Assertion\AbstractAssertionTestCase;
 

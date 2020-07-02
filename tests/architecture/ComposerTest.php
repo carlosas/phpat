@@ -25,7 +25,6 @@ class ComposerTest extends ArchitectureTest
             ->mustNotDependOn()
             ->classesThat(Selector::areDependenciesFromComposer('main'))
             ->excludingClassesThat(Selector::haveClassName('PHPAT\*'))
-            ->andExcludingClassesThat(Selector::haveClassName('Psr\*'))
             ->build();
     }
 }

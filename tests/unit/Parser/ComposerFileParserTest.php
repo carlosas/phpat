@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Tests\PhpAT\unit\Parser;
 
-use PhpAT\App\Configuration;
 use PhpAT\Parser\ComposerFileParser;
 use PHPUnit\Framework\TestCase;
 
@@ -17,14 +16,10 @@ class ComposerFileParserTest extends TestCase
     {
         parent::setUp();
 
-        $configurationMock = $this->createMock(Configuration::class);
-        $configurationMock->method('getComposerConfiguration')->willReturn([
-            'main' => [
-               'json' => __DIR__ . '/Mock/fake-composer.json',
-               'lock' => __DIR__ . '/Mock/fake-composer.lock'
-            ]
-        ]);
-        $this->subject = (new ComposerFileParser())->parse($configurationMock, 'main');
+        $this->subject = (new ComposerFileParser())->parse(
+            __DIR__ . '/Mock/fake-composer.json',
+            __DIR__ . '/Mock/fake-composer.lock'
+        );
     }
 
     public function testExtractsNamespaces(): void

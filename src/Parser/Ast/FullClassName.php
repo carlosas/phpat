@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpAT\Parser;
+namespace PhpAT\Parser\Ast;
 
 class FullClassName implements ClassLike
 {

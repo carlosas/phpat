@@ -6,7 +6,7 @@ namespace PhpAT\Rule\Assertion\Inheritance;
 
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\Ast\ReferenceMap;
-use PhpAT\Parser\ClassLike;
+use PhpAT\Parser\Ast\ClassLike;
 use PhpAT\Rule\Assertion\AbstractAssertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;

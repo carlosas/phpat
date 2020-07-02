@@ -8,7 +8,7 @@ use PhpAT\App\Configuration;
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\Ast\SrcNode;
 use PhpAT\Parser\Ast\ReferenceMap;
-use PhpAT\Parser\ClassLike;
+use PhpAT\Parser\Ast\ClassLike;
 use PhpAT\Parser\Relation\Composition;
 use PhpAT\Parser\Relation\Dependency;
 use PhpAT\Parser\Relation\Inheritance;

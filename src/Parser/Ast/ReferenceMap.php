@@ -2,8 +2,6 @@
 
 namespace PhpAT\Parser\Ast;
 
-use PhpAT\Parser\ClassLike;
-
 class ReferenceMap
 {
     /**
@@ -14,18 +12,25 @@ class ReferenceMap
      * @var ClassLike[]
      */
     private $extensionNodes;
+    /**
+     * @var array
+     */
+    private $composerPackages;
 
     /**
      * ReferenceMap constructor.
      * @param SrcNode[]   $srcNodes
      * @param ClassLike[] $extensionNodes
+     * @param array       $composerPackages
      */
     public function __construct(
         array $srcNodes,
-        array $extensionNodes
+        array $extensionNodes,
+        array $composerPackages
     ) {
         $this->srcNodes = $srcNodes;
         $this->extensionNodes = $extensionNodes;
+        $this->composerPackages = $composerPackages;
     }
 
     /**
@@ -42,5 +47,13 @@ class ReferenceMap
     public function getExtensionNodes(): array
     {
         return $this->extensionNodes;
+    }
+
+    /**
+     * @return array
+     */
+    public function getComposerPackages(): array
+    {
+        return $this->composerPackages;
     }
 }

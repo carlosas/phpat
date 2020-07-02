@@ -6,8 +6,8 @@ namespace PhpAT\Selector;
 
 use PhpAT\File\FileFinder;
 use PhpAT\Parser\Ast\ReferenceMap;
-use PhpAT\Parser\ClassLike;
-use PhpAT\Parser\FullClassName;
+use PhpAT\Parser\Ast\ClassLike;
+use PhpAT\Parser\Ast\FullClassName;
 use PhpParser\Parser;
 
 /**

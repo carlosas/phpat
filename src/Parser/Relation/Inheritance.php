@@ -2,7 +2,7 @@
 
 namespace PhpAT\Parser\Relation;
 
-use PhpAT\Parser\FullClassName;
+use PhpAT\Parser\Ast\FullClassName;
 
 class Inheritance extends AbstractRelation
 {

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PhpAT\Rule\Assertion\Mixin;
 
 use PHPAT\EventDispatcher\EventDispatcher;
-use PhpAT\Parser\ClassLike;
+use PhpAT\Parser\Ast\ClassLike;
 use PhpAT\Rule\Assertion\AbstractAssertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;

@@ -2,7 +2,7 @@
 
 namespace Tests\PhpAT\unit\Rule\Assertion\Dependency;
 
-use PhpAT\Parser\FullClassName;
+use PhpAT\Parser\Ast\FullClassName;
 use PhpAT\Rule\Assertion\Dependency\CanOnlyDepend;
 use Tests\PhpAT\unit\Rule\Assertion\AbstractAssertionTestCase;
 

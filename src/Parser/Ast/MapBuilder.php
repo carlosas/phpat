@@ -4,6 +4,7 @@ namespace PhpAT\Parser\Ast;
 
 use PhpAT\App\Configuration;
 use PhpAT\App\Event\ErrorEvent;
+use PhpAT\App\Event\FatalErrorEvent;
 use PhpAT\File\FileFinder;
 use PhpAT\Parser\Ast\Collector\DependencyCollector;
 use PhpAT\Parser\Ast\Collector\InterfaceCollector;
@@ -11,7 +12,7 @@ use PhpAT\Parser\Ast\Collector\ClassNameCollector;
 use PhpAT\Parser\Ast\Collector\NamespacedNameCollector;
 use PhpAT\Parser\Ast\Collector\ParentCollector;
 use PhpAT\Parser\Ast\Collector\TraitCollector;
-use PhpAT\Parser\ClassLike;
+use PhpAT\Parser\ComposerFileParser;
 use PhpParser\ErrorHandler\Throwing;
 use PhpParser\NameContext;
 use PhpParser\Parser;
@@ -41,6 +42,10 @@ class MapBuilder
      */
     private $eventDispatcher;
     /**
+     * @var ComposerFileParser
+     */
+    private $composerFileParser;
+    /**
      * @var Configuration
      */
     private $configuration;
@@ -51,6 +56,7 @@ class MapBuilder
         NodeTraverser $traverser,
         PhpDocParser $phpDocParser,
         EventDispatcherInterface $eventDispatcher,
+        ComposerFileParser $composerFileParser,
         Configuration $configuration
     ) {
         $this->finder = $finder;
@@ -58,12 +64,13 @@ class MapBuilder
         $this->traverser = $traverser;
         $this->phpDocParser = $phpDocParser;
         $this->eventDispatcher = $eventDispatcher;
+        $this->composerFileParser = $composerFileParser;
         $this->configuration = $configuration;
     }
 
     public function build(): ReferenceMap
     {
-        return new ReferenceMap($this->buildSrcMap(), $this->buildExtensionMap());
+        return new ReferenceMap($this->buildSrcMap(), $this->buildExtensionMap(), $this->buildComposerMap());
     }
 
     private function buildSrcMap(): array
@@ -144,8 +151,57 @@ class MapBuilder
         return $nameCollector->getNames();
     }
 
+    /** @return ComposerPackage[] */
+    private function buildComposerMap(): array
+    {
+        $packages = $this->configuration->getComposerConfiguration();
+
+        $result = [];
+        foreach ($packages as $alias => $files) {
+            if (
+                !isset($files['json'])
+                || !is_file($files['json'])
+                || !is_file($files['lock'] ?? substr($files['json'], 0, -5) . '.lock')
+            ) {
+                $error = new FatalErrorEvent('Composer package "' . $alias . '" is not properly configured');
+                $this->eventDispatcher->dispatch($error);
+            }
+
+            try {
+                $parsed = $this->composerFileParser->parse($files['json'], $files['lock']);
+            } catch (\Throwable $e) {
+                $error = new FatalErrorEvent('Error parsing "' . $alias . '" composer files');
+                $this->eventDispatcher->dispatch($error);
+            }
+
+            $result[$alias] = new ComposerPackage(
+                $alias,
+                $this->convertNamespacesToClassLikes($parsed->getNamespaces(false)),
+                $this->convertNamespacesToClassLikes($parsed->getNamespaces(true)),
+                $this->convertNamespacesToClassLikes($parsed->getDeepRequirementNamespaces(false)),
+                $this->convertNamespacesToClassLikes($parsed->getDeepRequirementNamespaces(true))
+            );
+        }
+
+        return $result;
+    }
+
     private function normalizePathname(string $pathname): string
     {
         return str_replace('\\', '/', $pathname);
+    }
+
+    /**
+     * @param string[] $array
+     * @return ClassLike[]
+     */
+    private function convertNamespacesToClassLikes(array $namespaces): array
+    {
+        return array_map(
+            function (string $namespace) {
+                return new RegexClassName($namespace . '*');
+            },
+            $namespaces
+        );
     }
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpAT\Statement;
 
-use PhpAT\Parser\ClassLike;
+use PhpAT\Parser\Ast\ClassLike;
 use PhpAT\Rule\Assertion\AbstractAssertion;
 
 /**

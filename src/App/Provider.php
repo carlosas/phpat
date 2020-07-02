@@ -87,6 +87,7 @@ class Provider
             ->addArgument(new Reference(NodeTraverser::class))
             ->addArgument(new Reference(PhpDocParser::class))
             ->addArgument(new Reference(EventDispatcher::class))
+            ->addArgument(new Reference(ComposerFileParser::class))
             ->addArgument(new Reference(Configuration::class));
 
         $this->builder
