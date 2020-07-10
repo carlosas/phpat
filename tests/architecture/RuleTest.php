@@ -17,4 +17,14 @@ class RuleTest extends ArchitectureTest
             ->andClassesThat(Selector::haveClassName(SelectorInterface::class))
             ->build();
     }
+
+    public function testRuleBuilderDependsOnlyOnPhpatAndPsrContainer(): Rule
+    {
+        return $this->newRule
+            ->classesThat(Selector::haveClassName(\PhpAT\Rule\RuleBuilder::class))
+            ->canOnlyDependOn()
+            ->classesThat(Selector::haveClassName('PhpAT\\*'))
+            ->andClassesThat(Selector::haveClassName(\Psr\Container\ContainerInterface::class))
+            ->build();
+    }
 }
