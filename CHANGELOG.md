@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.7.2
+* Move composer parsing to ReferenceMap creation stage
+* Include unknown FQCNs (out of src) in ClassNameSelector
+
 ## 0.7.1
 * Fix composer dependencies with empty namespace selected as `*`
 
