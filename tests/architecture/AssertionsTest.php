@@ -24,7 +24,6 @@ class AssertionsTest extends ArchitectureTest
             ->classesThat(Selector::havePath('Rule/Assertion/*'))
             ->canOnlyDependOn()
             ->classesThat(Selector::haveClassName('PhpAT\*'))
-            ->andClassesThat(Selector::haveClassName('Psr\*'))
             ->build();
     }
 }

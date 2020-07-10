@@ -55,6 +55,8 @@ class ClassNameSelector implements SelectorInterface
 
         if ($this->isRegex($this->fqcn)) {
             $result[] = new RegexClassName($this->fqcn);
+        } elseif (empty($result)) {
+            $result[] = FullClassName::createFromFQCN($this->fqcn);
         }
 
         return $result ?? [];
