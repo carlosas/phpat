@@ -10,8 +10,10 @@ use PHPAT\EventDispatcher\ListenerProvider;
 use PhpAT\File\FileFinder;
 use PhpAT\File\SymfonyFinderAdapter;
 use PhpAT\Output\OutputInterface;
+use PhpAT\Parser\Ast\Extractor\ExtractorFactory;
 use PhpAT\Parser\Ast\MapBuilder;
 use PhpAT\Parser\Ast\NodeTraverser;
+use PhpAT\Parser\Ast\PhpDocTypeResolver;
 use PhpAT\Parser\ComposerFileParser;
 use PhpAT\Rule\RuleBuilder;
 use PhpAT\Rule\Assertion\Composition;
@@ -69,6 +71,7 @@ class Provider
         $this->builder->set(ComposerFileParser::class, new ComposerFileParser());
         $this->builder->set(Parser::class, (new ParserFactory())->create(ParserFactory::ONLY_PHP7));
         $this->builder->set(PhpDocParser::class, new PhpDocParser(new TypeParser(), new ConstExprParser()));
+        $this->builder->set(PhpDocTypeResolver::class, new PhpDocTypeResolver());
         $listenerProvider = (new EventListenerMapper())->populateListenerProvider(new ListenerProvider($this->builder));
         $this->builder->set(EventDispatcher::class, (new EventDispatcher($listenerProvider)));
 
@@ -81,8 +84,15 @@ class Provider
             ->register(NodeTraverser::class, NodeTraverser::class);
 
         $this->builder
+            ->register(ExtractorFactory::class, ExtractorFactory::class)
+            ->addArgument(new Reference(PhpDocParser::class))
+            ->addArgument(new Reference(PhpDocTypeResolver::class))
+            ->addArgument(new Reference(Configuration::class));
+
+        $this->builder
             ->register(MapBuilder::class, MapBuilder::class)
             ->addArgument(new Reference(FileFinder::class))
+            ->addArgument(new Reference(ExtractorFactory::class))
             ->addArgument(new Reference(Parser::class))
             ->addArgument(new Reference(NodeTraverser::class))
             ->addArgument(new Reference(PhpDocParser::class))

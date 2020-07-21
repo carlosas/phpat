@@ -6,52 +6,45 @@ use PhpAT\App\Configuration;
 use PhpAT\App\Event\ErrorEvent;
 use PhpAT\App\Event\FatalErrorEvent;
 use PhpAT\File\FileFinder;
-use PhpAT\Parser\Ast\Collector\DependencyCollector;
-use PhpAT\Parser\Ast\Collector\InterfaceCollector;
 use PhpAT\Parser\Ast\Collector\ClassNameCollector;
-use PhpAT\Parser\Ast\Collector\NamespacedNameCollector;
-use PhpAT\Parser\Ast\Collector\ParentCollector;
-use PhpAT\Parser\Ast\Collector\TraitCollector;
+use PhpAT\Parser\Ast\Extractor\ExtractorFactory;
 use PhpAT\Parser\ComposerFileParser;
-use PhpParser\ErrorHandler\Throwing;
-use PhpParser\NameContext;
 use PhpParser\Parser;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Roave\BetterReflection\BetterReflection;
+use Roave\BetterReflection\Reflection\ReflectionClass;
+use Roave\BetterReflection\Reflector\ClassReflector;
+use Roave\BetterReflection\SourceLocator\Type\FileIteratorSourceLocator;
 
 class MapBuilder
 {
-    /**
-     * @var FileFinder
-     */
+    /** @var FileFinder */
     private $finder;
-    /**
-     * @var Parser
-     */
+    /** @var Parser */
     private $parser;
-    /**
-     * @var NodeTraverser
-     */
+    /** @var NodeTraverser */
     private $traverser;
-    /**
-     * @var PhpDocParser
-     */
+    /** @var PhpDocParser */
     private $phpDocParser;
-    /**
-     * @var EventDispatcherInterface
-     */
+    /** @var EventDispatcherInterface */
     private $eventDispatcher;
-    /**
-     * @var ComposerFileParser
-     */
+    /** @var ComposerFileParser */
     private $composerFileParser;
-    /**
-     * @var Configuration
-     */
+    /** @var Configuration */
     private $configuration;
+    /** @var Extractor\DependencyExtractor */
+    private $dependencyExtractor;
+    /** @var Extractor\ParentExtractor */
+    private $parentExtractor;
+    /** @var Extractor\InterfaceExtractor */
+    private $interfaceExtractor;
+    /** @var Extractor\TraitExtractor */
+    private $traitExtractor;
 
     public function __construct(
         FileFinder $finder,
+        ExtractorFactory $extractorFactory,
         Parser $parser,
         NodeTraverser $traverser,
         PhpDocParser $phpDocParser,
@@ -66,6 +59,11 @@ class MapBuilder
         $this->eventDispatcher = $eventDispatcher;
         $this->composerFileParser = $composerFileParser;
         $this->configuration = $configuration;
+
+        $this->dependencyExtractor = $extractorFactory->createDependencyExtractor();
+        $this->parentExtractor = $extractorFactory->createParentExtractor();
+        $this->interfaceExtractor = $extractorFactory->createInterfaceExtractor();
+        $this->traitExtractor = $extractorFactory->createTraitExtractor();
     }
 
     public function build(): ReferenceMap
@@ -75,48 +73,21 @@ class MapBuilder
 
     private function buildSrcMap(): array
     {
-        $this->traverser->reset();
-        $nameContext  = new NameContext(new Throwing());
-        $nameResolver = new NameResolver($nameContext);
-        $this->traverser->addVisitor($nameResolver);
-        $nameCollector = new NamespacedNameCollector();
-        $this->traverser->addVisitor($nameCollector);
-        $interfaceCollector = new InterfaceCollector();
-        $this->traverser->addVisitor($interfaceCollector);
-        $traitCollector = new TraitCollector();
-        $this->traverser->addVisitor($traitCollector);
-        $parentCollector = new ParentCollector();
-        $this->traverser->addVisitor($parentCollector);
-        $dependencyCollector = new DependencyCollector(
-            $this->phpDocParser,
-            new PhpDocTypeResolver(),
-            $nameContext,
-            $this->configuration->getIgnoreDocBlocks()
-        );
-        $this->traverser->addVisitor($dependencyCollector);
-
         $files = $this->finder->findPhpFilesInPath($this->configuration->getSrcPath());
+        $astLocator = (new BetterReflection())->astLocator();
+        $reflector = new ClassReflector(new FileIteratorSourceLocator(new \ArrayIterator($files), $astLocator));
 
-        /** @var \SplFileInfo $fileInfo */
-        foreach ($files as $fileInfo) {
-            $parsed = $this->parser->parse(file_get_contents($this->normalizePathname($fileInfo->getPathname())));
-            if ($parsed === null) {
-                $this->eventDispatcher->dispatch(
-                    new ErrorEvent($this->normalizePathname($fileInfo->getPathname()) . ' could not be parsed')
-                );
-                continue;
-            }
-
-            $this->traverser->traverse($parsed);
-
-            $srcMap[$nameCollector->getNameString()] = new SrcNode(
-                $fileInfo,
-                $nameCollector->getName(),
+        $classes = $reflector->getAllClasses();
+        /** @var ReflectionClass $class */
+        foreach ($classes as $class) {
+            $srcMap[$class->getName()] = new SrcNode(
+                $class->getFileName(),
+                FullClassName::createFromFQCN($class->getName()),
                 array_merge(
-                    $parentCollector->getResults(),
-                    $dependencyCollector->getResults(),
-                    $interfaceCollector->getResults(),
-                    $traitCollector->getResults()
+                    $this->dependencyExtractor->extract($class),
+                    $this->parentExtractor->extract($class),
+                    $this->interfaceExtractor->extract($class),
+                    $this->traitExtractor->extract($class)
                 )
             );
         }

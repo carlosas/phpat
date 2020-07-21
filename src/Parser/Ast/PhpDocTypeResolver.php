@@ -7,31 +7,22 @@ use PHPStan\PhpDocParser\Ast\Type;
 /**
  * Class PhpDocTypeResolver
  * @package PhpAT\Parser\Ast
- * Based on SensioLabs/Deptrac TypeResolver
+ * Based on sensiolabs-de/deptrac TypeResolver
+ * Copyright (c) 2016 | MIT License
  */
 class PhpDocTypeResolver
 {
-    private const BUILTIN_TYPES = [
-        'array',
-        'callable',
-        'string',
-        'int',
-        'float',
-        'double',
-        'bool',
-        'iterable',
-        'void',
-        'object',
-        'mixed',
-    ];
-
     /**
      * @param Type\TypeNode $type
      * @return string[]
      */
     public function resolve(Type\TypeNode $type): array
     {
-        if ($type instanceof Type\IdentifierTypeNode && !$this->isBuiltinType($type->name)) {
+        if (
+            $type instanceof Type\IdentifierTypeNode
+            && !PhpType::isBuiltinType($type->name)
+            && !PhpType::isSpecialType($type->name)
+        ) {
             return [$type->name];
         }
 
@@ -40,10 +31,5 @@ class PhpDocTypeResolver
         }
 
         return [];
-    }
-
-    private function isBuiltinType(string $type): bool
-    {
-        return in_array($type, self::BUILTIN_TYPES, true);
     }
 }
