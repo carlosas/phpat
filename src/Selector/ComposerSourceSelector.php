@@ -7,6 +7,7 @@ namespace PhpAT\Selector;
 use PhpAT\App\Event\ErrorEvent;
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\Ast\ComposerPackage;
+use PhpAT\Parser\Ast\FullClassName;
 use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\Ast\ClassLike;
 
@@ -64,11 +65,42 @@ class ComposerSourceSelector implements SelectorInterface
             return [];
         }
 
-        return $this->devMode ? $package->getDevAutoload() : $package->getAutoload();
+        $regexs = $this->devMode ? $package->getDevAutoload() : $package->getAutoload();
+        $regexsWithSrcClasses = [];
+        foreach ($this->map->getSrcNodes() as $srcNode) {
+            foreach ($regexs as $regex) {
+                if ($this->matchesPattern($srcNode->getClassName(), $regex->toString())) {
+                    $result[] = FullClassName::createFromFQCN($srcNode->getClassName());
+                    $regexsWithSrcClasses[$regex->toString()] = $regex;
+                }
+            }
+        }
+
+        foreach ($regexs as $regex) {
+            if (!isset($regexsWithSrcClasses[$regex->toString()])) {
+                $result[] = $regex;
+            }
+        }
+
+        return $result ?? [];
     }
 
     public function getParameter(): string
     {
         return sprintf('%s (%s)', $this->packageAlias, $this->devMode ? 'true' : 'false');
+    }
+
+    protected function matchesPattern(string $className, string $pattern): bool
+    {
+        $pattern = preg_replace_callback(
+            '/([^*])/',
+            function ($m) {
+                return preg_quote($m[0], '/');
+            },
+            $pattern
+        );
+        $pattern = str_replace('*', '.*', $pattern);
+
+        return (bool) preg_match('/^' . $pattern . '$/i', $className);
     }
 }
