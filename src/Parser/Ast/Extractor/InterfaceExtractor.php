@@ -26,11 +26,12 @@ class InterfaceExtractor extends AbstractExtractor
     public function extract(ReflectionClass $class): array
     {
         try {
+            /** @var ReflectionClass $interface */
             foreach ($class->getInterfaces() as $interface) {
                 $this->addRelation(
                     Composition::class,
                     $class->getStartLine(),
-                    FullClassName::createFromFQCN($interface)
+                    FullClassName::createFromFQCN($interface->getName())
                 );
             }
         } catch (\Throwable $e) {

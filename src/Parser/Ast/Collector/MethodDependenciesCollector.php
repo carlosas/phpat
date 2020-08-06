@@ -3,7 +3,6 @@
 namespace PhpAT\Parser\Ast\Collector;
 
 use PhpAT\App\Configuration;
-
 use PhpAT\Parser\Ast\FullClassName;
 use PhpAT\Parser\Ast\PhpDocTypeResolver;
 use PhpAT\Parser\Ast\PhpType;
@@ -68,7 +67,7 @@ class MethodDependenciesCollector extends NodeVisitorAbstract
         $this->recordClassExpressionUsage($node);
         $this->recordClassExpressionUsage($node);
         $this->recordCatchUsage($node);
-        //$this->recordFunctionCallUsage($node);
+        //TODO $this->recordDocBlocks($node);
 
         return $node;
     }
@@ -101,15 +100,6 @@ class MethodDependenciesCollector extends NodeVisitorAbstract
             foreach ($node->types as $type) {
                 $this->addDependency($type, $node->getStartLine());
             }
-        }
-    }
-
-    public function recordFunctionCallUsage(Node $node)
-    {
-        if ($node instanceof Node\Expr\FuncCall
-            && $node->name instanceof Node\Name
-        ) {
-            $this->addDependency($node->name, $node->getStartLine());
         }
     }
 }

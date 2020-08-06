@@ -5,7 +5,6 @@ namespace PhpAT\Parser\Ast\Extractor;
 use PhpAT\Parser\Ast\FullClassName;
 use PhpAT\Parser\Ast\PhpType;
 use PhpAT\Parser\Relation\AbstractRelation;
-use phpDocumentor\Reflection\Types\Context;
 use Roave\BetterReflection\Reflection\ReflectionClass;
 use Roave\BetterReflection\Reflection\ReflectionType;
 

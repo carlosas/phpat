@@ -2,12 +2,9 @@
 
 namespace PhpAT\Parser\Ast;
 
-use PHP_CodeSniffer\Reports\Full;
 use PhpAT\App\Configuration;
-use PhpAT\App\Event\ErrorEvent;
 use PhpAT\App\Event\FatalErrorEvent;
 use PhpAT\File\FileFinder;
-use PhpAT\Parser\Ast\Collector\ClassNameCollector;
 use PhpAT\Parser\Ast\Extractor\ExtractorFactory;
 use PhpAT\Parser\ComposerFileParser;
 use PhpParser\Parser;

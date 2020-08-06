@@ -115,7 +115,6 @@ class DependencyExtractor extends AbstractExtractor
                 FullClassName::createFromFQCN($docType)
             );
         }
-
         // Method body
         $collector = new MethodDependenciesCollector(
             $this->configuration,
