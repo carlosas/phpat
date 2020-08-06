@@ -30,8 +30,7 @@ class ParentExtractor extends AbstractExtractor
                 $this->addRelation(Inheritance::class, $class->getStartLine(), FullClassName::createFromFQCN($p));
             }
         } catch (\Throwable $e) {
-            //var_dump($e->getMessage());
-            //TODO: Change reflection source to Composer autoload
+            //TODO: Maybe change reflection source to Composer autoload
         }
 
         return $this->flushRelations();

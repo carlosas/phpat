@@ -55,7 +55,7 @@ class DependencyExtractor extends AbstractExtractor
                 $this->addMethodDependencies($method, $context);
             }
         } catch (\Throwable $e) {
-            echo $e->getMessage(); die;
+            //TODO: Maybe change reflection source to Composer autoload
         }
 
         return $this->flushRelations();

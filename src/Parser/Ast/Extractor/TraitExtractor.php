@@ -26,13 +26,18 @@ class TraitExtractor extends AbstractExtractor
     public function extract(ReflectionClass $class): array
     {
         try {
-            foreach ($class->getTraitNames() as $trait) {
-                $this->addRelation(Mixin::class, $class->getStartLine(), FullClassName::createFromFQCN($trait));
+            /** @var ReflectionClass $trait */
+            foreach ($class->getTraits() as $trait) {
+                $this->addRelation(
+                    Mixin::class,
+                    $trait->getStartLine(),
+                    FullClassName::createFromFQCN($trait->getName())
+                );
             }
         } catch (\Throwable $e) {
-            //TODO: Change reflection source to Composer autoload
+            //TODO: Maybe change reflection source to Composer autoload
         }
 
-        return $result ?? [];
+        return $this->flushRelations();
     }
 }

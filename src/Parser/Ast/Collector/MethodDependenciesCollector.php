@@ -67,6 +67,8 @@ class MethodDependenciesCollector extends NodeVisitorAbstract
         $this->recordClassExpressionUsage($node);
         $this->recordClassExpressionUsage($node);
         $this->recordCatchUsage($node);
+        $this->recordExtendsUsage($node);
+        $this->recordImplementsUsage($node);
         //TODO $this->recordDocBlocks($node);
 
         return $node;
@@ -99,6 +101,25 @@ class MethodDependenciesCollector extends NodeVisitorAbstract
         if ($node instanceof Node\Stmt\Catch_) {
             foreach ($node->types as $type) {
                 $this->addDependency($type, $node->getStartLine());
+            }
+        }
+    }
+
+    private function recordExtendsUsage(Node $node)
+    {
+        if ($node instanceof Node\Stmt\Class_ || $node instanceof Node\Stmt\Interface_) {
+            foreach (array_filter([$node->extends]) as $extends) {
+                $this->addDependency($extends, $node->getStartLine());
+            }
+        }
+
+    }
+
+    private function recordImplementsUsage(Node $node)
+    {
+        if ($node instanceof Node\Stmt\Class_) {
+            foreach (array_filter($node->implements) as $implements) {
+                $this->addDependency($implements, $node->getStartLine());
             }
         }
     }

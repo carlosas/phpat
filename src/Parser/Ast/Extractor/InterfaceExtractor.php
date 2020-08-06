@@ -35,7 +35,7 @@ class InterfaceExtractor extends AbstractExtractor
                 );
             }
         } catch (\Throwable $e) {
-            //TODO: Change reflection source to Composer autoload
+            //TODO: Maybe change reflection source to Composer autoload
         }
 
         return $this->flushRelations();
