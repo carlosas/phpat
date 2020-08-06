@@ -2,6 +2,7 @@
 
 namespace PhpAT\Parser\Ast;
 
+use PHP_CodeSniffer\Reports\Full;
 use PhpAT\App\Configuration;
 use PhpAT\App\Event\ErrorEvent;
 use PhpAT\App\Event\FatalErrorEvent;
@@ -100,26 +101,16 @@ class MapBuilder
      */
     private function buildExtensionMap(): array
     {
-        $nameCollector = new ClassNameCollector();
-        $this->traverser->reset();
-        $this->traverser->addVisitor($nameCollector);
+        $files = $this->finder->findPhpFilesInPath($this->normalizePathname($this->configuration->getPhpStormStubsPath()));
+        $astLocator = (new BetterReflection())->astLocator();
+        $reflector = new ClassReflector(new FileIteratorSourceLocator(new \ArrayIterator($files), $astLocator));
 
-        $files = $this->finder->findPhpFilesInPath($this->configuration->getPhpStormStubsPath());
-
-        /** @var \SplFileInfo $fileInfo */
-        foreach ($files as $fileInfo) {
-            $parsed = $this->parser->parse(file_get_contents($this->normalizePathname($fileInfo->getPathname())));
-            if ($parsed === null) {
-                $this->eventDispatcher->dispatch(
-                    new ErrorEvent($this->normalizePathname($fileInfo->getPathname()) . ' could not be parsed')
-                );
-                continue;
-            }
-
-            $this->traverser->traverse($parsed);
-        }
-
-        return $nameCollector->getNames();
+        return array_map(
+            function(ReflectionClass $class) {
+                return FullClassName::createFromFQCN($class->getName());
+            },
+            $reflector->getAllClasses()
+        );
     }
 
     /** @return ComposerPackage[] */
@@ -159,7 +150,7 @@ class MapBuilder
 
     private function normalizePathname(string $pathname): string
     {
-        return str_replace('\\', '/', $pathname);
+        return str_replace('\\', '/', realpath($pathname));
     }
 
     /**
