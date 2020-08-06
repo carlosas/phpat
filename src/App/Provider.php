@@ -71,9 +71,12 @@ class Provider
         $this->builder->set(ComposerFileParser::class, new ComposerFileParser());
         $this->builder->set(Parser::class, (new ParserFactory())->create(ParserFactory::ONLY_PHP7));
         $this->builder->set(PhpDocParser::class, new PhpDocParser(new TypeParser(), new ConstExprParser()));
-        $this->builder->set(PhpDocTypeResolver::class, new PhpDocTypeResolver());
         $listenerProvider = (new EventListenerMapper())->populateListenerProvider(new ListenerProvider($this->builder));
         $this->builder->set(EventDispatcher::class, (new EventDispatcher($listenerProvider)));
+
+        $this->builder
+            ->register(PhpDocTypeResolver::class, PhpDocTypeResolver::class)
+            ->addArgument(new Reference(PhpDocParser::class));
 
         $this->builder
             ->register(FileFinder::class, FileFinder::class)
@@ -85,7 +88,6 @@ class Provider
 
         $this->builder
             ->register(ExtractorFactory::class, ExtractorFactory::class)
-            ->addArgument(new Reference(PhpDocParser::class))
             ->addArgument(new Reference(PhpDocTypeResolver::class))
             ->addArgument(new Reference(Configuration::class));
 

@@ -6,10 +6,10 @@ class NodeTraverser extends \PhpParser\NodeTraverser
 {
     public function traverse(array $nodes) : array
     {
-        $result = parent::traverse($nodes);
+        $nodes = parent::traverse($nodes);
         $this->reset();
 
-        return $result;
+        return $nodes;
     }
 
     public function reset(): void

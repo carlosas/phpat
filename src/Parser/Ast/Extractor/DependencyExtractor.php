@@ -3,26 +3,21 @@
 namespace PhpAT\Parser\Ast\Extractor;
 
 use PhpAT\App\Configuration;
-use PhpAT\Parser\Ast\Collector\NewDependencyCollector;
+use PhpAT\Parser\Ast\Collector\MethodDependenciesCollector;
 use PhpAT\Parser\Ast\FullClassName;
 use PhpAT\Parser\Ast\NodeTraverser;
 use PhpAT\Parser\Ast\PhpDocTypeResolver;
 use PhpAT\Parser\Relation\AbstractRelation;
 use PhpAT\Parser\Relation\Dependency;
 use phpDocumentor\Reflection\Types\Context;
-use PhpParser\Node;
-use PHPStan\PhpDocParser\Lexer\Lexer;
-use PHPStan\PhpDocParser\Parser\PhpDocParser;
-use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Roave\BetterReflection\Reflection\ReflectionClass;
 use Roave\BetterReflection\Reflection\ReflectionMethod;
 use Roave\BetterReflection\Reflection\ReflectionParameter;
+use Roave\BetterReflection\Reflection\ReflectionProperty;
 use Roave\BetterReflection\TypesFinder\PhpDocumentor\NamespaceNodeToReflectionTypeContext;
 
 class DependencyExtractor extends AbstractExtractor
 {
-    /** @var PhpDocParser */
-    private $docParser;
     /** @var PhpDocTypeResolver */
     private $docTypeResolver;
     /** @var Configuration */
@@ -33,11 +28,9 @@ class DependencyExtractor extends AbstractExtractor
     private $found = [];
 
     public function __construct(
-        PhpDocParser $docParser,
         PhpDocTypeResolver $docTypeResolver,
         Configuration $configuration
     ) {
-        $this->docParser = $docParser;
         $this->docTypeResolver = $docTypeResolver;
         $this->configuration = $configuration;
         $this->traverser = new NodeTraverser();
@@ -52,6 +45,11 @@ class DependencyExtractor extends AbstractExtractor
         $context = (new NamespaceNodeToReflectionTypeContext())($class->getDeclaringNamespaceAst());
 
         try {
+            /** @var ReflectionProperty $property */
+            foreach ($class->getImmediateProperties() as $property) {
+                $this->addPropertyDependencies($property, $context);
+            }
+
             /** @var ReflectionMethod $method */
             foreach ($class->getImmediateMethods() as $method) {
                 $this->addMethodDependencies($method, $context);
@@ -61,6 +59,25 @@ class DependencyExtractor extends AbstractExtractor
         }
 
         return $this->flushRelations();
+    }
+
+    private function addPropertyDependencies(ReflectionProperty $property, Context $context): void
+    {
+        if (!is_null($property->getType())) {
+            $this->addRelation(
+                Dependency::class,
+                $property->getStartLine(),
+                FullClassName::createFromFQCN($property->getType()->getName())
+            );
+        }
+
+        foreach ($this->docTypeResolver->getBlockClassNames($context, $property->getDocComment()) as $docType) {
+            $this->addRelation(
+                Dependency::class,
+                $property->getStartLine(),
+                FullClassName::createFromFQCN($docType)
+            );
+        }
     }
 
     /**
@@ -90,46 +107,31 @@ class DependencyExtractor extends AbstractExtractor
                 );
             }
         }
-
-        //TODO: DocBlock classes
-        // DocBlock
-        //$ast = $method->getDocComment();
-        //var_dump($ast);
-        //die;
+        // Docblocks
+        foreach ($this->docTypeResolver->getBlockClassNames($context, $method->getDocComment()) as $docType) {
+            $this->addRelation(
+                Dependency::class,
+                $method->getStartLine(),
+                FullClassName::createFromFQCN($docType)
+            );
+        }
 
         // Method body
-        $extractor = new NewDependencyCollector(
+        $collector = new MethodDependenciesCollector(
             $this->configuration,
-            $this->docParser,
             $this->docTypeResolver,
             $context
         );
-        $this->traverser->addVisitor($extractor);
+        $this->traverser->addVisitor($collector);
         $this->traverser->traverse([$method->getAst()]);
 
-//        /** @var Node\Name $name */
-//        foreach ($names as $name) {
-//            if (!PhpType::isBuiltinType($name->toString())) {
-//                var_dump(($context->getResolvedClassName($name))->toString());
-//            }
-//        }
-    }
-
-    private function extractDocClassNames(string $docBlock): array
-    {
-        $nodes = $this->docParser->parse(new TokenIterator((new Lexer())->tokenize($docBlock)));
-        foreach ($nodes->getTags() as $tag) {
-            if (isset($tag->value->type)) {
-                $names = $this->docTypeResolver->resolve($tag->value->type);
-                foreach ($names as $name) {
-                    $nameNode = strpos($name, '\\') === 0
-                        ? new Node\Name\FullyQualified($name)
-                        : new Node\Name($name);
-                    $result[] = $this->nameContext->getResolvedClassName($nameNode);
-                }
-            }
+        /** @var Dependency $result */
+        foreach ($collector->getResults() as $result) {
+            $this->addRelation(
+                Dependency::class,
+                $result->line,
+                $result->relatedClass
+            );
         }
-
-        return $result ?? [];
     }
 }
