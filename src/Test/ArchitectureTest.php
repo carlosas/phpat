@@ -49,16 +49,14 @@ abstract class ArchitectureTest implements TestInterface
         /** @var Rule $rule */
         $rule = $this->$method();
 
+        if (!($rule instanceof Rule)) {
+            throw new \Exception($method . ' must return an instance of ' . Rule::class . '.');
+        }
+
         if ($rule->getAssertion() === null) {
             $message = $method
                 . ' is not properly defined. Please make sure that you define one of the assertion methods'
                 . '(e.g. `mustImplement` or `mustNotDependOn`) to declare the assertion of the rule.';
-
-            $this->eventDispatcher->dispatch(new FatalErrorEvent($message));
-        }
-
-        if (($rule instanceof Rule) === false) {
-            $message = $method . ' must return an instance of ' . Rule::class . '.';
 
             $this->eventDispatcher->dispatch(new FatalErrorEvent($message));
         }
