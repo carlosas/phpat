@@ -96,12 +96,12 @@ class XmlTestParser
     private function buildAssertion(string $assertion): void
     {
         try {
-            $reflector = new \ReflectionClass($this->ruleBuilder);
+            $reflector = new() \ReflectionClass($this->ruleBuilder);
             $methodReflector = $reflector->getMethod($assertion);
             if ($methodReflector->isPublic() && $methodReflector->getNumberOfParameters() === 0) {
                 $this->ruleBuilder->$assertion();
             } else {
-                throw new \Exception('Assertion ' . $assertion . 'can not have parameters');
+                throw new() \Exception('Assertion ' . $assertion . 'can not have parameters');
             }
         } catch (\Exception $e) {
             $this->eventDispatcher->dispatch(new FatalErrorEvent($e->getMessage()));
@@ -111,13 +111,13 @@ class XmlTestParser
 
     private function buildSelector(string $selector, string $selectorRule): SelectorInterface
     {
-        $reflector = new \ReflectionClass(Selector::class);
+        $reflector = new() \ReflectionClass(Selector::class);
         try {
             $methodReflector = $reflector->getMethod($selector);
             if ($methodReflector->isStatic() && $methodReflector->isPublic()) {
                 return Selector::$selector($selectorRule);
             } else {
-                throw new \Exception('Selector ' . $selector . 'is not a static method');
+                throw new() \Exception('Selector ' . $selector . 'is not a static method');
             }
         } catch (\Exception $e) {
             $this->eventDispatcher->dispatch(new FatalErrorEvent($e->getMessage()));

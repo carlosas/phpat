@@ -206,7 +206,7 @@ class Provider
             ->addArgument(new Reference(EventDispatcher::class))
             ->addArgument(new Reference(Configuration::class));
 
-        $listenerProvider = new \PhpAT\App\EventListenerProvider($this->builder, $this->output);
+        $listenerProvider = new() \PhpAT\App\EventListenerProvider($this->builder, $this->output);
         $this->builder->merge($listenerProvider->register());
 
         return $this->builder;

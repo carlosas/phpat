@@ -2,12 +2,14 @@
 
 namespace PhpAT\File;
 
+use SplFileInfo;
+
 interface Finder
 {
     /**
-     * @return \SplFileInfo[]
+     * @return SplFileInfo[]
      */
     public function find(string $filePath, string $fileName, array $onlyOrigin, array $excluded): array;
 
-    public function locateFile(string $filePath, string $fileName): ?\SplFileInfo;
+    public function locateFile(string $filePath, string $fileName): ?SplFileInfo;
 }

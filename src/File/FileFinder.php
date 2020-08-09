@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhpAT\File;
 
+use SplFileInfo;
 use PhpAT\App\Configuration;
 
 class FileFinder
@@ -19,7 +20,7 @@ class FileFinder
         $this->configuration = $configuration;
     }
 
-    public function findFile(string $file): ?\SplFileInfo
+    public function findFile(string $file): ?SplFileInfo
     {
         if (!file_exists($file)) {
             return null;

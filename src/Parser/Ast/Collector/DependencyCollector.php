@@ -93,8 +93,8 @@ class DependencyCollector extends AbstractRelationCollector
                 $names = $this->docTypeResolver->resolve($tag->value->type);
                 foreach ($names as $name) {
                     $nameNode = strpos($name, '\\') === 0
-                        ? new Node\Name\FullyQualified($name)
-                        : new Node\Name($name);
+                        ? new() Node\Name\FullyQualified($name)
+                        : new() Node\Name($name);
                     $result[] = $this->nameContext->getResolvedClassName($nameNode);
                 }
             }

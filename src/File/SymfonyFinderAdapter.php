@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpAT\File;
 
 use Symfony\Component\Finder\Finder as SymfonyFinder;
+use SplFileInfo;
 
 class SymfonyFinderAdapter implements Finder
 {
@@ -33,7 +34,7 @@ class SymfonyFinderAdapter implements Finder
         return iterator_to_array($results);
     }
 
-    public function locateFile(string $filePath, string $fileName): ?\SplFileInfo
+    public function locateFile(string $filePath, string $fileName): ?SplFileInfo
     {
         $finder = $this->finder->create();
 
