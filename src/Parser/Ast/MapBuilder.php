@@ -172,6 +172,7 @@ class MapBuilder
             } catch (\Throwable $e) {
                 $error = new FatalErrorEvent('Error parsing "' . $alias . '" composer files');
                 $this->eventDispatcher->dispatch($error);
+                continue;
             }
 
             $result[$alias] = new ComposerPackage(
