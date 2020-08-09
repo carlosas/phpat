@@ -193,7 +193,7 @@ class MapBuilder
     }
 
     /**
-     * @param string[] $array
+     * @param string[] $namespaces
      * @return ClassLike[]
      */
     private function convertNamespacesToClassLikes(array $namespaces): array
