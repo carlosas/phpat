@@ -39,6 +39,14 @@ class PhpDocTypeResolver
             return $this->resolve($type->type);
         }
 
+        if ($type instanceof Type\CallableTypeNode) {
+            $types = [ $this->resolve($type->returnType) ];
+            foreach ($type->parameters as $parameter) {
+                $types[] = $this->resolve($parameter->type);
+            }
+            return array_merge(...$types);
+        }
+
         return [];
     }
 
