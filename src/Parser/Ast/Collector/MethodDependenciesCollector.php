@@ -65,7 +65,6 @@ class MethodDependenciesCollector extends NodeVisitorAbstract
     public function leaveNode(Node $node)
     {
         $this->recordClassExpressionUsage($node);
-        $this->recordClassExpressionUsage($node);
         $this->recordCatchUsage($node);
         $this->recordExtendsUsage($node);
         $this->recordImplementsUsage($node);
