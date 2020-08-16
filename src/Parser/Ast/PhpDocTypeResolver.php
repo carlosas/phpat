@@ -39,6 +39,14 @@ class PhpDocTypeResolver
             return $this->resolve($type->type);
         }
 
+        if ($type instanceof Type\GenericTypeNode) {
+            $types[] = [ [ $type->type->name ] ];
+            foreach ($type->genericTypes as $innerType) {
+                $types[] = $this->resolve($innerType);
+            }
+            return array_merge(...$types);
+        }
+
         return [];
     }
 
