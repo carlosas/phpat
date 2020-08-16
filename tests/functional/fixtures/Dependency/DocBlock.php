@@ -44,7 +44,13 @@ class DocBlock
     }
 
     /** @param GenericOuter<GenericInner> $genericArgument */
-    public function acceptsGeneric($genericArgument): void
+    public function classGeneric($genericArgument): void
+    {
+
+    }
+
+    /** @param array<GenericInner> $genericArgument */
+    public function arrayGeneric($genericArgument): void
     {
 
     }
