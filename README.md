@@ -4,10 +4,10 @@
 <h2 align="center">Easy to use architecture testing tool for PHP</h2>
 <p align="center">
 	<a>
-		<img src="https://img.shields.io/packagist/v/carlosas/phpat?label=version&style=for-the-badge" alt="Version">
+		<img src="https://img.shields.io/packagist/v/phpat/phpat?label=version&style=for-the-badge" alt="Version">
     </a>
 	<a>
-		<img src="https://img.shields.io/packagist/php-v/carlosas/phpat?style=for-the-badge" alt="PHP Version">
+		<img src="https://img.shields.io/packagist/php-v/phpat/phpat?style=for-the-badge" alt="PHP Version">
 	</a>
 	<a>
 		<img src="https://img.shields.io/badge/contributions-welcome-green.svg?style=for-the-badge" alt="Contributions welcome">
@@ -32,7 +32,7 @@ There are four groups of supported assertions: **Dependency**, **Inheritance**, 
 
 Just require **phpat** with [Composer](https://getcomposer.org/):
 ```bash
-composer require --dev carlosas/phpat
+composer require --dev phpat/phpat
 ```
 
 <details><summary>Manual download</summary>
