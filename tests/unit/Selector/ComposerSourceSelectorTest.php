@@ -6,8 +6,10 @@ namespace Tests\PhpAT\unit\Selector;
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\Ast\ClassLike;
 use PhpAT\Parser\Ast\ComposerPackage;
+use PhpAT\Parser\Ast\FullClassName;
 use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\Ast\RegexClassName;
+use PhpAT\Parser\Ast\SrcNode;
 use PhpAT\Selector\ComposerSourceSelector;
 use PHPUnit\Framework\TestCase;
 
@@ -41,6 +43,9 @@ class ComposerSourceSelectorTest extends TestCase
         $eventDispatcherMock = $this->createMock(EventDispatcher::class);
         $selector->injectDependencies([EventDispatcher::class => $eventDispatcherMock]);
         $referenceMapMock = $this->createMock(ReferenceMap::class);
+        $srcNode = $this->createMock(SrcNode::class);
+        $srcNode->method('getClassName')->willReturn('Source\Namespace\Foo');
+        $referenceMapMock->method('getSrcNodes')->willReturn(['Source\Namespace\Foo' => $srcNode]);
         $referenceMapMock->method('getComposerPackages')->willReturn(
             [
                 'main' => new ComposerPackage(

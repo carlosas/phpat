@@ -3,6 +3,8 @@
 namespace Tests\PhpAT\functional\fixtures\Dependency;
 
 use Tests\PhpAT\functional\fixtures\DummyException;
+use Tests\PhpAT\functional\fixtures\GenericInner;
+use Tests\PhpAT\functional\fixtures\GenericOuter;
 use Tests\PhpAT\functional\fixtures\SimpleClass;
 use Tests\PhpAT\functional\fixtures\AnotherSimpleClass as AliasedClass;
 use Tests\PhpAT\functional\fixtures\Inheritance;
@@ -39,5 +41,17 @@ class DocBlock
         $c = 3;
         /** @var null $d */
         $d = 4;
+    }
+
+    /** @param GenericOuter<GenericInner> $genericArgument */
+    public function classGeneric($genericArgument): void
+    {
+
+    }
+
+    /** @param array<GenericInner> $genericArgument */
+    public function arrayGeneric($genericArgument): void
+    {
+
     }
 }

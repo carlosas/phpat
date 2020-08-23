@@ -2,16 +2,16 @@
 
 namespace Tests\PhpAT\functional\architecture;
 
-use PHPAT\EventDispatcher\EventInterface;
 use PhpAT\Rule\Rule;
 use PhpAT\Selector\Selector;
 use PhpAT\Test\ArchitectureTest;
 use Tests\PhpAT\functional\fixtures\ClassWithAnonymousClass;
+use Tests\PhpAT\functional\fixtures\Dependency\DocBlock;
 use Tests\PhpAT\functional\fixtures\DummyException;
+use Tests\PhpAT\functional\fixtures\GenericInner;
+use Tests\PhpAT\functional\fixtures\GenericOuter;
 use Tests\PhpAT\functional\fixtures\Inheritance\InheritanceNamespaceSimpleClass;
 use Tests\PhpAT\functional\fixtures\SimpleClass;
-use Tests\PhpAT\functional\fixtures\SimpleInterface;
-use Tests\PhpAT\functional\fixtures\SimpleTrait;
 
 class DependencyTest extends ArchitectureTest
 {
@@ -97,11 +97,22 @@ class DependencyTest extends ArchitectureTest
             ->classesThat(Selector::havePath('Dependency/DocBlock.php'))
             ->mustOnlyDependOn()
             ->classesThat(Selector::haveClassName(SimpleClass::class))
-            ->andClassesThat(Selector::haveClassName('Tests\PhpAT\functional\fixtures\Simple*')) //should warn
             ->andClassesThat(Selector::havePath('AnotherSimpleClass.php'))
             ->andClassesThat(Selector::havePath('Dependency/DependencyNamespaceSimpleClass.php'))
             ->andClassesThat(Selector::haveClassName(InheritanceNamespaceSimpleClass::class))
             ->andClassesThat(Selector::haveClassName(DummyException::class))
+            ->andClassesThat(Selector::haveClassName(GenericInner::class))
+            ->andClassesThat(Selector::haveClassName(GenericOuter::class))
+            ->build();
+    }
+
+    public function testDocblocksSupportGenerics(): Rule
+    {
+        return $this->newRule
+            ->classesThat(Selector::haveClassName(DocBlock::class))
+            ->mustDependOn()
+            ->classesThat(Selector::haveClassName(GenericOuter::class))
+            ->andClassesThat(Selector::haveClassName(GenericInner::class))
             ->build();
     }
 }

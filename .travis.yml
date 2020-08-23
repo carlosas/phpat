@@ -10,7 +10,7 @@ install:
 
 script:
   - composer validate --strict
-  - vendor/bin/phpcs --standard=php_cs.xml src/
+  - vendor/bin/phpcs src/
   - vendor/bin/phpunit tests/unit/
   - php phpat
   - php phpat tests/functional/functional.yaml
