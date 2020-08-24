@@ -38,10 +38,7 @@ class MethodDependenciesCollector extends NodeVisitorAbstract
 
     public function beforeTraverse(array $nodes)
     {
-        $nodes = parent::beforeTraverse($nodes);
         $this->results = [];
-
-        return $nodes;
     }
 
     /**

@@ -62,9 +62,4 @@ class SrcNode implements \JsonSerializable
             'relations' => $this->getRelations(),
         ];
     }
-
-    private function normalizePathname(string $pathname): string
-    {
-        return str_replace('\\', '/', $pathname);
-    }
 }
