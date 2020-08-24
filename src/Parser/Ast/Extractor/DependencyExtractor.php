@@ -24,8 +24,6 @@ class DependencyExtractor extends AbstractExtractor
     private $configuration;
     /** @var NodeTraverser */
     private $traverser;
-    /** @var string[] */
-    private $found = [];
 
     public function __construct(
         PhpDocTypeResolver $docTypeResolver,
@@ -63,7 +61,7 @@ class DependencyExtractor extends AbstractExtractor
 
     private function addPropertyDependencies(ReflectionProperty $property, Context $context): void
     {
-        if (!is_null($property->getType())) {
+        if ($property->getType() !== null) {
             $this->addRelation(
                 Dependency::class,
                 $property->getStartLine(),
@@ -106,14 +104,6 @@ class DependencyExtractor extends AbstractExtractor
                     FullClassName::createFromFQCN($parameter->getType()->getName())
                 );
             }
-        }
-        // Docblocks
-        foreach ($this->docTypeResolver->getBlockClassNames($context, $method->getDocComment()) as $docType) {
-            $this->addRelation(
-                Dependency::class,
-                $method->getStartLine(),
-                FullClassName::createFromFQCN($docType)
-            );
         }
         // Method body
         $collector = new MethodDependenciesCollector(

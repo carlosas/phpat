@@ -20,7 +20,7 @@ abstract class AbstractExtractor
 
     protected function isClassType(?ReflectionType $type): bool
     {
-        if (is_null($type) || PhpType::isBuiltinType($type->getName())) {
+        if ($type === null || PhpType::isBuiltinType($type->getName())) {
             return false;
         }
 
@@ -29,26 +29,7 @@ abstract class AbstractExtractor
 
     protected function addRelation(string $type, int $line, FullClassName $className)
     {
-        $this->relations[] = new $type($line, $className);
-    }
-
-    /**
-     * @return AbstractRelation[]
-     */
-    protected function removeDuplicates(): array
-    {
-        $found = [];
-        foreach ($this->relations as $key => $relation) {
-            $c = get_class($relation);
-            if (($found[$relation->relatedClass->getName()] ?? null) instanceof $c) {
-                unset($this->relations[$key]);
-                continue;
-            }
-
-            $found[$relation->relatedClass->getName()] = $relation;
-        }
-
-        return $found;
+        $this->relations[$className->getFQCN()]['line-' . $line] = new $type($line, $className);
     }
 
     /**
@@ -56,9 +37,19 @@ abstract class AbstractExtractor
      */
     protected function flushRelations(): array
     {
-        $result = $this->relations ?? [];
+        foreach ($this->relations ?? [] as $relation) {
+            foreach ($relation as $occurrence) {
+                $result[] = $occurrence;
+            }
+        }
+
+/*
+        if (!empty($this->relations)) {
+            $result = call_user_func_array('array_merge', $this->relations);
+        }
+*/
         $this->relations = [];
 
-        return $result;
+        return $result ?? [];
     }
 }

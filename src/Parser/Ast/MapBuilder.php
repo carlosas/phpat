@@ -5,6 +5,7 @@ namespace PhpAT\Parser\Ast;
 use PhpAT\App\Configuration;
 use PhpAT\App\Event\FatalErrorEvent;
 use PhpAT\File\FileFinder;
+use PhpAT\Parser\Ast\Extractor\AbstractExtractor;
 use PhpAT\Parser\Ast\Extractor\ExtractorFactory;
 use PhpAT\Parser\ComposerFileParser;
 use PhpParser\Parser;
@@ -14,6 +15,7 @@ use Roave\BetterReflection\BetterReflection;
 use Roave\BetterReflection\Reflection\ReflectionClass;
 use Roave\BetterReflection\Reflector\ClassReflector;
 use Roave\BetterReflection\SourceLocator\Type\FileIteratorSourceLocator;
+use Tests\PhpAT\functional\fixtures\Dependency\DocBlock;
 
 class MapBuilder
 {
@@ -98,12 +100,14 @@ class MapBuilder
      */
     private function buildExtensionMap(): array
     {
-        $files = $this->finder->findPhpFilesInPath($this->normalizePathname($this->configuration->getPhpStormStubsPath()));
+        $files = $this->finder->findPhpFilesInPath(
+            $this->normalizePathname($this->configuration->getPhpStormStubsPath())
+        );
         $astLocator = (new BetterReflection())->astLocator();
         $reflector = new ClassReflector(new FileIteratorSourceLocator(new \ArrayIterator($files), $astLocator));
 
         return array_map(
-            function(ReflectionClass $class) {
+            function (ReflectionClass $class) {
                 return FullClassName::createFromFQCN($class->getName());
             },
             $reflector->getAllClasses()

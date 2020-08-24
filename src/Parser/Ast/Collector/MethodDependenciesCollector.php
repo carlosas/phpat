@@ -29,9 +29,9 @@ class MethodDependenciesCollector extends NodeVisitorAbstract
      */
     private $docTypeResolver;
     /**
-     * @var string[]
+     * @var Context
      */
-    private $aliases;
+    private $context;
 
     /** @var AbstractRelation[] */
     protected $results = [];
@@ -59,7 +59,7 @@ class MethodDependenciesCollector extends NodeVisitorAbstract
     ) {
         $this->configuration = $configuration;
         $this->docTypeResolver = $docTypeResolver;
-        $this->aliases = $context->getNamespaceAliases();
+        $this->context = $context;
     }
 
     public function leaveNode(Node $node)
@@ -68,22 +68,28 @@ class MethodDependenciesCollector extends NodeVisitorAbstract
         $this->recordCatchUsage($node);
         $this->recordExtendsUsage($node);
         $this->recordImplementsUsage($node);
-        //TODO $this->recordDocBlocks($node);
+        $this->recordDocBlockUsage($node);
 
         return $node;
     }
 
-    private function addDependency(Node\Name $symbol, int $line): void
+    private function addDependency(string $fqdn, int $line): void
     {
-        $className = FullClassName::createFromFQCN((string) $symbol);
-        if (!PhpType::isBuiltinType($className->getFQCN()) && !PhpType::isSpecialType($className->getFQCN())) {
+        $className = FullClassName::createFromFQCN($fqdn);
+        if (
+            !PhpType::isBuiltinType($className->getFQCN())
+            && !PhpType::isSpecialType($className->getFQCN())
+            && PhpType::isAutoloaded($className->getFQCN())
+        ) {
             $this->results[] = new Dependency($line, $className);
         }
     }
 
     public function recordClassExpressionUsage(Node $node)
     {
-        if (($node instanceof Node\Expr\StaticCall
+        if (
+            (
+                $node instanceof Node\Expr\StaticCall
                 || $node instanceof Node\Expr\StaticPropertyFetch
                 || $node instanceof Node\Expr\ClassConstFetch
                 || $node instanceof Node\Expr\New_
@@ -91,7 +97,7 @@ class MethodDependenciesCollector extends NodeVisitorAbstract
             )
             && $node->class instanceof Node\Name
         ) {
-            $this->addDependency($node->class, $node->getStartLine());
+            $this->addDependency((string) $node->class, $node->getStartLine());
         }
     }
 
@@ -99,7 +105,7 @@ class MethodDependenciesCollector extends NodeVisitorAbstract
     {
         if ($node instanceof Node\Stmt\Catch_) {
             foreach ($node->types as $type) {
-                $this->addDependency($type, $node->getStartLine());
+                $this->addDependency((string) $type, $node->getStartLine());
             }
         }
     }
@@ -108,18 +114,30 @@ class MethodDependenciesCollector extends NodeVisitorAbstract
     {
         if ($node instanceof Node\Stmt\Class_ || $node instanceof Node\Stmt\Interface_) {
             foreach (array_filter([$node->extends]) as $extends) {
-                $this->addDependency($extends, $node->getStartLine());
+                $this->addDependency((string) $extends, $node->getStartLine());
             }
         }
-
     }
 
     private function recordImplementsUsage(Node $node)
     {
         if ($node instanceof Node\Stmt\Class_) {
             foreach (array_filter($node->implements) as $implements) {
-                $this->addDependency($implements, $node->getStartLine());
+                $this->addDependency((string) $implements, $node->getStartLine());
             }
+        }
+    }
+
+    private function recordDocBlockUsage(Node $node)
+    {
+        $doc = $node->getDocComment();
+        if ($doc === null) {
+            return;
+        }
+
+        $names = $this->docTypeResolver->getBlockClassNames($this->context, $doc->getText());
+        foreach ($names as $name) {
+            $this->addDependency($name, $doc->getStartLine());
         }
     }
 }

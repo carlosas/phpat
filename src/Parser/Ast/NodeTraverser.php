@@ -4,7 +4,7 @@ namespace PhpAT\Parser\Ast;
 
 class NodeTraverser extends \PhpParser\NodeTraverser
 {
-    public function traverse(array $nodes) : array
+    public function traverse(array $nodes): array
     {
         $nodes = parent::traverse($nodes);
         $this->reset();

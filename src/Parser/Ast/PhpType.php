@@ -4,7 +4,6 @@ namespace PhpAT\Parser\Ast;
 
 class PhpType
 {
-    // From Roave\BetterReflection\Reflection\ReflectionType
     public const BUILTIN_TYPES = [
         'array',
         'callable',
@@ -17,9 +16,10 @@ class PhpType
         'void',
         'object',
         'mixed',
+        'resource',
+        'null'
     ];
 
-    // From PhpParser\Node\Name
     public const SPECIAL_TYPES = [
         'self',
         'parent',
@@ -34,5 +34,10 @@ class PhpType
     public static function isSpecialType(string $type): bool
     {
         return in_array($type, PhpType::SPECIAL_TYPES, true);
+    }
+
+    public static function isAutoloaded(string $type): bool
+    {
+        return (class_exists($type) || interface_exists($type) || trait_exists($type));
     }
 }
