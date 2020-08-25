@@ -19,7 +19,7 @@ class Configuration
 
     public function __construct(array $config)
     {
-        $this->srcPath = $config['src']['path'] ?? '';
+        $this->srcPath = realpath(__DIR__ . '/../../' . $config['src']['path']) . '/' ?? '';
         $this->srcIncluded = $config['src']['include'] ?? [];
         $this->srcExcluded = $config['src']['exclude'] ?? [];
         $this->composerConfiguration = $config['composer'] ?? [];

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace PhpAT\Rule\Assertion\Dependency;
 
-use PhpAT\App\Configuration;
-use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\Ast\ClassLike;
 use PhpAT\Rule\Assertion\AbstractAssertion;
