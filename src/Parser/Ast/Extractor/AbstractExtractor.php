@@ -43,11 +43,6 @@ abstract class AbstractExtractor
             }
         }
 
-/*
-        if (!empty($this->relations)) {
-            $result = call_user_func_array('array_merge', $this->relations);
-        }
-*/
         $this->relations = [];
 
         return $result ?? [];

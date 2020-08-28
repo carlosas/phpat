@@ -6,6 +6,9 @@ use PhpAT\App\Configuration;
 use PhpAT\Parser\Ast\FullClassName;
 use PhpAT\Parser\Relation\AbstractRelation;
 use PhpAT\Parser\Relation\Mixin;
+use PhpParser\Node;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\TraitUse;
 use Roave\BetterReflection\Reflection\ReflectionClass;
 
 class TraitExtractor extends AbstractExtractor
@@ -25,17 +28,35 @@ class TraitExtractor extends AbstractExtractor
      */
     public function extract(ReflectionClass $class): array
     {
-        try {
-            /** @var ReflectionClass $trait */
-            foreach ($class->getTraits() as $trait) {
+        $ast = $class->getAst();
+
+        if (!isset($ast->stmts)) {
+            return $this->flushRelations();
+        }
+
+        $traits = array_merge(
+            [],
+            ...array_map(
+                static function (TraitUse $traitUse): array {
+                    return $traitUse->traits;
+                },
+                array_filter(
+                    $ast->stmts,
+                    static function (Node $node): bool {
+                        return $node instanceof TraitUse;
+                    }
+                )
+            )
+        );
+
+        foreach ($traits as $trait) {
+            if ($trait instanceof FullyQualified) {
                 $this->addRelation(
                     Mixin::class,
                     $trait->getStartLine(),
-                    FullClassName::createFromFQCN($trait->getName())
+                    FullClassName::createFromFQCN($trait->toString())
                 );
             }
-        } catch (\Throwable $e) {
-            //TODO: Maybe change reflection source to Composer autoload
         }
 
         return $this->flushRelations();

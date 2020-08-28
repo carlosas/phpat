@@ -5,7 +5,6 @@ namespace PhpAT\Parser\Ast;
 use PhpAT\App\Configuration;
 use PhpAT\App\Event\FatalErrorEvent;
 use PhpAT\File\FileFinder;
-use PhpAT\Parser\Ast\Extractor\AbstractExtractor;
 use PhpAT\Parser\Ast\Extractor\ExtractorFactory;
 use PhpAT\Parser\ComposerFileParser;
 use PhpParser\Parser;
@@ -15,7 +14,6 @@ use Roave\BetterReflection\BetterReflection;
 use Roave\BetterReflection\Reflection\ReflectionClass;
 use Roave\BetterReflection\Reflector\ClassReflector;
 use Roave\BetterReflection\SourceLocator\Type\FileIteratorSourceLocator;
-use Tests\PhpAT\functional\fixtures\Dependency\DocBlock;
 
 class MapBuilder
 {
@@ -155,7 +153,7 @@ class MapBuilder
     }
 
     /**
-     * @param string[] $array
+     * @param string[] $namespaces
      * @return ClassLike[]
      */
     private function convertNamespacesToClassLikes(array $namespaces): array

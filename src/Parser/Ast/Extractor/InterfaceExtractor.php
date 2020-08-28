@@ -6,6 +6,7 @@ use PhpAT\App\Configuration;
 use PhpAT\Parser\Ast\FullClassName;
 use PhpAT\Parser\Relation\AbstractRelation;
 use PhpAT\Parser\Relation\Composition;
+use PhpParser\Node\Name\FullyQualified;
 use Roave\BetterReflection\Reflection\ReflectionClass;
 
 class InterfaceExtractor extends AbstractExtractor
@@ -25,17 +26,20 @@ class InterfaceExtractor extends AbstractExtractor
      */
     public function extract(ReflectionClass $class): array
     {
-        try {
-            /** @var ReflectionClass $interface */
-            foreach ($class->getInterfaces() as $interface) {
+        $ast = $class->getAst();
+
+        if (!isset($ast->implements)) {
+            return $this->flushRelations();
+        }
+
+        foreach ($ast->implements as $interface) {
+            if ($interface instanceof FullyQualified) {
                 $this->addRelation(
                     Composition::class,
                     $class->getStartLine(),
-                    FullClassName::createFromFQCN($interface->getName())
+                    FullClassName::createFromFQCN($interface->toString())
                 );
             }
-        } catch (\Throwable $e) {
-            //TODO: Maybe change reflection source to Composer autoload
         }
 
         return $this->flushRelations();
