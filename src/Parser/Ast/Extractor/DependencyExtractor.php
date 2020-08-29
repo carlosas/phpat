@@ -6,7 +6,7 @@ use PhpAT\App\Configuration;
 use PhpAT\Parser\Ast\Collector\MethodDependenciesCollector;
 use PhpAT\Parser\Ast\FullClassName;
 use PhpAT\Parser\Ast\NodeTraverser;
-use PhpAT\Parser\Ast\PhpDocTypeResolver;
+use PhpAT\Parser\Ast\Type\PhpDocTypeResolver;
 use PhpAT\Parser\Relation\AbstractRelation;
 use PhpAT\Parser\Relation\Dependency;
 use phpDocumentor\Reflection\Types\Context;
@@ -42,18 +42,14 @@ class DependencyExtractor extends AbstractExtractor
     {
         $context = (new NamespaceNodeToReflectionTypeContext())($class->getDeclaringNamespaceAst());
 
-        try {
-            /** @var ReflectionProperty $property */
-            foreach ($class->getImmediateProperties() as $property) {
-                $this->addPropertyDependencies($property, $context);
-            }
+        /** @var ReflectionProperty $property */
+        foreach ($class->getImmediateProperties() as $property) {
+            $this->addPropertyDependencies($property, $context);
+        }
 
-            /** @var ReflectionMethod $method */
-            foreach ($class->getImmediateMethods() as $method) {
-                $this->addMethodDependencies($method, $context);
-            }
-        } catch (\Throwable $e) {
-            //TODO: Maybe change reflection source to Composer autoload
+        /** @var ReflectionMethod $method */
+        foreach ($class->getImmediateMethods() as $method) {
+            $this->addMethodDependencies($method, $context);
         }
 
         return $this->flushRelations();

@@ -3,7 +3,7 @@
 namespace PhpAT\Parser\Ast\Extractor;
 
 use PhpAT\App\Configuration;
-use PhpAT\Parser\Ast\PhpDocTypeResolver;
+use PhpAT\Parser\Ast\Type\PhpDocTypeResolver;
 
 class ExtractorFactory
 {

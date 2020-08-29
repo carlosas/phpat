@@ -3,7 +3,7 @@
 namespace PhpAT\Parser\Ast\Extractor;
 
 use PhpAT\Parser\Ast\FullClassName;
-use PhpAT\Parser\Ast\PhpType;
+use PhpAT\Parser\Ast\Type\PhpType;
 use PhpAT\Parser\Relation\AbstractRelation;
 use Roave\BetterReflection\Reflection\ReflectionClass;
 use Roave\BetterReflection\Reflection\ReflectionType;

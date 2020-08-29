@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpAT\Parser\Ast;
+namespace PhpAT\Parser\Ast\Type;
 
 class PhpType
 {

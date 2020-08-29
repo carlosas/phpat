@@ -12,12 +12,4 @@
             <directory name="vendor" />
         </ignoreFiles>
     </projectFiles>
-
-    <issueHandlers>
-        <NoInterfaceProperties>
-            <errorLevel type="suppress">
-                <file name="src/Parser/Ast/PhpDocTypeResolver.php" /> <!-- needs node type getter refactor -->
-            </errorLevel>
-        </NoInterfaceProperties>
-    </issueHandlers>
 </psalm>

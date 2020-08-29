@@ -13,7 +13,8 @@ use PhpAT\Output\OutputInterface;
 use PhpAT\Parser\Ast\Extractor\ExtractorFactory;
 use PhpAT\Parser\Ast\MapBuilder;
 use PhpAT\Parser\Ast\NodeTraverser;
-use PhpAT\Parser\Ast\PhpDocTypeResolver;
+use PhpAT\Parser\Ast\Type\PhpDocTypeResolver;
+use PhpAT\Parser\Ast\Type\PhpStanNodeTypeExtractor;
 use PhpAT\Parser\ComposerFileParser;
 use PhpAT\Rule\RuleBuilder;
 use PhpAT\Rule\Assertion\Composition;
@@ -73,10 +74,12 @@ class Provider
         $this->builder->set(PhpDocParser::class, new PhpDocParser(new TypeParser(), new ConstExprParser()));
         $listenerProvider = (new EventListenerMapper())->populateListenerProvider(new ListenerProvider($this->builder));
         $this->builder->set(EventDispatcher::class, (new EventDispatcher($listenerProvider)));
+        $this->builder->set(PhpStanNodeTypeExtractor::class, new PhpStanNodeTypeExtractor());
 
         $this->builder
             ->register(PhpDocTypeResolver::class, PhpDocTypeResolver::class)
-            ->addArgument(new Reference(PhpDocParser::class));
+            ->addArgument(new Reference(PhpDocParser::class))
+            ->addArgument(new Reference(PhpStanNodeTypeExtractor::class));
 
         $this->builder
             ->register(FileFinder::class, FileFinder::class)
