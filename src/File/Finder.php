@@ -7,7 +7,7 @@ interface Finder
     /**
      * @return \SplFileInfo[]
      */
-    public function find(string $filePath, string $fileName, array $onlyOrigin, array $excluded): array;
+    public function find(string $filePath, string $fileName, array $include, array $exclude): array;
 
     public function locateFile(string $filePath, string $fileName): ?\SplFileInfo;
 }

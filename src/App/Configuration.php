@@ -23,7 +23,7 @@ class Configuration
             ? realpath(__DIR__ . '/../../../../..')
             : realpath(__DIR__ . '/../..');
 
-        $this->srcPath = $this->normalizePath($root . '/' . $config['src']['path']) ?? '';
+        $this->srcPath = $this->normalizePath($root . '/' . $config['src']['path']);
         $this->srcIncluded = $config['src']['include'] ?? [];
         $this->srcExcluded = $config['src']['exclude'] ?? [];
         $this->composerConfiguration = $config['composer'] ?? [];
