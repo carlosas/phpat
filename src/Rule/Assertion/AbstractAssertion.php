@@ -29,11 +29,11 @@ abstract class AbstractAssertion
 
     /**
      * @param ClassLike    $origin
-     * @param ClassLike[]  $destinations
+     * @param ClassLike[]  $included
      * @param ClassLike[]  $excluded
      * @param ReferenceMap $map
      */
-    abstract public function validate(ClassLike $origin, array $destinations, array $excluded, ReferenceMap $map): void;
+    abstract public function validate(ClassLike $origin, array $included, array $excluded, ReferenceMap $map): void;
 
     abstract public function acceptsRegex(): bool;
 

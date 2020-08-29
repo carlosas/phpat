@@ -2,5 +2,3 @@
 /vendor/
 /composer.phar
 /composer.lock
-/phpcs.phar
-/phpcbf.phar
