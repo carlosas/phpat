@@ -30,14 +30,14 @@ class PhpStanNodeTypeExtractor
     public function getTypesNodes(Node $node): array
     {
         if ($node instanceof PhpDocChildNode) {
-            return self::getTypesFromChildNode($node);
+            return $this->getTypesFromChildNode($node);
         }
 
         if ($node instanceof PhpDocTagValueNode) {
             return $this->getTypesFromTagValueNode($node);
         }
 
-        return self::getTypesFromOthersNode($node);
+        return $this->getTypesFromOthersNode($node);
     }
 
     /**
