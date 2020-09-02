@@ -21,7 +21,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\UsesTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 
-class PhpStanNodeTypeExtractor
+class PhpStanDocNodeTypeExtractor
 {
     /**
      * @param Node $node
@@ -29,8 +29,8 @@ class PhpStanNodeTypeExtractor
      */
     public function getTypesNodes(Node $node): array
     {
-        if ($node instanceof PhpDocChildNode) {
-            return $this->getTypesFromChildNode($node);
+        if ($node instanceof PhpDocTagNode) {
+            return $this->getTypesFromTagNode($node);
         }
 
         if ($node instanceof PhpDocTagValueNode) {
@@ -41,29 +41,25 @@ class PhpStanNodeTypeExtractor
     }
 
     /**
-     * @param PhpDocChildNode $node
+     * @param PhpDocTagNode $node
      * @return TypeNode[]
      */
-    public function getTypesFromChildNode(PhpDocChildNode $node): array
+    private function getTypesFromTagNode(PhpDocTagNode $node): array
     {
-        if ($node instanceof PhpDocTagNode) {
-            $types = $this->getTypesNodes($node->value);
-        }
-
-        return $types ?? [];
+        return $this->getTypesNodes($node->value);
     }
 
     /**
      * @param PhpDocTagValueNode $node
      * @return TypeNode[]
      */
-    public function getTypesFromTagValueNode(PhpDocTagValueNode $node): array
+    private function getTypesFromTagValueNode(PhpDocTagValueNode $node): array
     {
         switch (true) {
             case $node instanceof MethodTagValueNode:
                 $types[] = $node->returnType;
                 foreach ($node->parameters as $p) {
-                    $types = $this->getTypesNodes($p);
+                    $types = array_merge($types, $this->getTypesNodes($p));
                 }
                 break;
 
@@ -81,9 +77,13 @@ class PhpStanNodeTypeExtractor
             case $node instanceof ThrowsTagValueNode:
             case $node instanceof MixinTagValueNode:
                 $types[] = $node->type ?? null;
+                break;
+
+            default:
+                $types = [];
         }
 
-        return $types ?? [];
+        return $types;
     }
 
     /**
@@ -105,8 +105,12 @@ class PhpStanNodeTypeExtractor
 
             case $node instanceof MethodTagValueParameterNode:
                 $types[] = $node->type ?? null;
+                break;
+
+            default:
+                $types = [];
         }
 
-        return $types ?? [];
+        return $types;
     }
 }

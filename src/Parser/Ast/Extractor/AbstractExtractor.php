@@ -18,15 +18,6 @@ abstract class AbstractExtractor
      */
     abstract public function extract(ReflectionClass $class): array;
 
-    protected function isClassType(?ReflectionType $type): bool
-    {
-        if ($type === null || PhpType::isBuiltinType($type->getName())) {
-            return false;
-        }
-
-        return true;
-    }
-
     protected function addRelation(string $type, int $line, FullClassName $className)
     {
         $this->relations[$className->getFQCN()]['line-' . $line] = new $type($line, $className);

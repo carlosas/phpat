@@ -7,9 +7,11 @@ use PhpAT\Parser\Ast\Collector\MethodDependenciesCollector;
 use PhpAT\Parser\Ast\FullClassName;
 use PhpAT\Parser\Ast\NodeTraverser;
 use PhpAT\Parser\Ast\Type\PhpDocTypeResolver;
+use PhpAT\Parser\Ast\Type\PhpType;
 use PhpAT\Parser\Relation\AbstractRelation;
 use PhpAT\Parser\Relation\Dependency;
 use phpDocumentor\Reflection\Types\Context;
+use PhpParser\Comment;
 use Roave\BetterReflection\Reflection\ReflectionClass;
 use Roave\BetterReflection\Reflection\ReflectionMethod;
 use Roave\BetterReflection\Reflection\ReflectionParameter;
@@ -42,6 +44,8 @@ class DependencyExtractor extends AbstractExtractor
     {
         $context = (new NamespaceNodeToReflectionTypeContext())($class->getDeclaringNamespaceAst());
 
+        $this->addClassDependencies($class, $context);
+
         /** @var ReflectionProperty $property */
         foreach ($class->getImmediateProperties() as $property) {
             $this->addPropertyDependencies($property, $context);
@@ -57,20 +61,54 @@ class DependencyExtractor extends AbstractExtractor
 
     private function addPropertyDependencies(ReflectionProperty $property, Context $context): void
     {
-        if ($property->getType() !== null) {
+        $type = $property->getType();
+        if (
+            $type !== null
+            && !PhpType::isBuiltinType($type->getName())
+            && !PhpType::isSpecialType($type->getName())
+        ) {
             $this->addRelation(
                 Dependency::class,
                 $property->getStartLine(),
-                FullClassName::createFromFQCN($property->getType()->getName())
+                FullClassName::createFromFQCN($type->getName())
             );
         }
 
-        foreach ($this->docTypeResolver->getBlockClassNames($context, $property->getDocComment()) as $docType) {
-            $this->addRelation(
-                Dependency::class,
-                $property->getStartLine(),
-                FullClassName::createFromFQCN($docType)
-            );
+        foreach ($this->docTypeResolver->getBlockClassNames($context, $property->getDocComment()) as $type) {
+            if (
+                $type !== null
+                && !PhpType::isBuiltinType($type)
+                && !PhpType::isSpecialType($type)
+            ) {
+                $this->addRelation(
+                    Dependency::class,
+                    $property->getStartLine(),
+                    FullClassName::createFromFQCN($type)
+                );
+            }
+        }
+    }
+
+    /**
+     * @param ReflectionClass $class
+     * @param Context $context
+     */
+    private function addClassDependencies(ReflectionClass $class, Context $context): void
+    {
+        // Class doc comment
+        $doc = $class->getDocComment();
+        foreach ($this->docTypeResolver->getBlockClassNames($context, $doc) as $type) {
+            if (
+                $type !== null
+                && !PhpType::isBuiltinType($type)
+                && !PhpType::isSpecialType($type)
+            ) {
+                $this->addRelation(
+                    Dependency::class,
+                    $class->getStartLine(),
+                    FullClassName::createFromFQCN($type)
+                );
+            }
         }
     }
 
@@ -82,18 +120,28 @@ class DependencyExtractor extends AbstractExtractor
     private function addMethodDependencies(ReflectionMethod $method, Context $context): void
     {
         // Method return
-        $returnType = $method->getReturnType();
-        if ($this->isClassType($returnType) && !$returnType->isBuiltin()) {
+        $type = $method->getReturnType();
+        if (
+            $type !== null
+            && !PhpType::isBuiltinType($type->getName())
+            && !PhpType::isSpecialType($type->getName())
+        ) {
             $this->addRelation(
                 Dependency::class,
                 $method->getStartLine(),
-                FullClassName::createFromFQCN($returnType->getName())
+                FullClassName::createFromFQCN($type->getName())
             );
         }
+
         // Method parameters
         /** @var ReflectionParameter $parameter */
         foreach ($method->getParameters() as $parameter) {
-            if ($this->isClassType($parameter->getType()) && !$parameter->getType()->isBuiltin()) {
+            $type = $parameter->getType();
+            if (
+                $type !== null
+                && !PhpType::isBuiltinType($type->getName())
+                && !PhpType::isSpecialType($type->getName())
+            ) {
                 $this->addRelation(
                     Dependency::class,
                     $method->getStartLine(),
@@ -101,6 +149,7 @@ class DependencyExtractor extends AbstractExtractor
                 );
             }
         }
+
         // Method body
         $collector = new MethodDependenciesCollector(
             $this->configuration,
@@ -112,11 +161,17 @@ class DependencyExtractor extends AbstractExtractor
 
         /** @var Dependency $result */
         foreach ($collector->getResults() as $result) {
-            $this->addRelation(
-                Dependency::class,
-                $result->line,
-                $result->relatedClass
-            );
+            $fqcn = $result->relatedClass->getFQCN();
+            if (
+                !PhpType::isBuiltinType($fqcn)
+                && !PhpType::isSpecialType($fqcn)
+            ) {
+                $this->addRelation(
+                    Dependency::class,
+                    $result->line,
+                    $result->relatedClass
+                );
+            }
         }
     }
 }

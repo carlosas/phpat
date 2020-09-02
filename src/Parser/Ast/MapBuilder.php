@@ -7,7 +7,6 @@ use PhpAT\App\Event\FatalErrorEvent;
 use PhpAT\File\FileFinder;
 use PhpAT\Parser\Ast\Extractor\ExtractorFactory;
 use PhpAT\Parser\ComposerFileParser;
-use PhpAT\Test\FileTestExtractor;
 use PhpParser\Parser;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use Psr\EventDispatcher\EventDispatcherInterface;

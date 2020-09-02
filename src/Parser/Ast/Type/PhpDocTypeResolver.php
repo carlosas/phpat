@@ -12,15 +12,20 @@ class PhpDocTypeResolver
 {
     /** @var PhpDocParser */
     private $docParser;
-    /** @var PhpStanNodeTypeExtractor */
+    /** @var PhpStanDocNodeTypeExtractor */
     private $typeExtractor;
 
-    public function __construct(PhpDocParser $docParser, PhpStanNodeTypeExtractor $typeExtractor)
+    public function __construct(PhpDocParser $docParser, PhpStanDocNodeTypeExtractor $typeExtractor)
     {
         $this->docParser = $docParser;
         $this->typeExtractor = $typeExtractor;
     }
 
+    /**
+     * @param Context $context
+     * @param string  $docBlock
+     * @return string[]
+     */
     public function getBlockClassNames(Context $context, string $docBlock): array
     {
         try {
@@ -52,8 +57,6 @@ class PhpDocTypeResolver
     {
         if (
             $type instanceof Type\IdentifierTypeNode
-            && !PhpType::isBuiltinType($type->name)
-            && !PhpType::isSpecialType($type->name)
         ) {
             return [$type->name];
         }
@@ -75,7 +78,11 @@ class PhpDocTypeResolver
 
     private function resolveNameFromContext(Context $context, string $name): string
     {
-        if (strpos($name, '\\') === 0) {
+        if (
+            strpos($name, '\\') === 0
+            || PhpType::isBuiltinType($name)
+            || PhpType::isSpecialType($name)
+        ) {
             return $name;
         }
 
