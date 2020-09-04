@@ -103,7 +103,9 @@ class XmlTestParser
         if ($methodReflector->isPublic() && $methodReflector->getNumberOfParameters() === 0) {
             $this->ruleBuilder->$assertion();
         } else {
-            $this->eventDispatcher->dispatch(new FatalErrorEvent('Assertion ' . $assertion . 'can not have parameters'));
+            $this->eventDispatcher->dispatch(
+                new FatalErrorEvent('Assertion ' . $assertion . 'can not have parameters')
+            );
             throw new FatalErrorException();
         }
     }
