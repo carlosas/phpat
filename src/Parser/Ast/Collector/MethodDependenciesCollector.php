@@ -4,8 +4,8 @@ namespace PhpAT\Parser\Ast\Collector;
 
 use PhpAT\App\Configuration;
 use PhpAT\Parser\Ast\FullClassName;
-use PhpAT\Parser\Ast\PhpDocTypeResolver;
-use PhpAT\Parser\Ast\PhpType;
+use PhpAT\Parser\Ast\Type\PhpDocTypeResolver;
+use PhpAT\Parser\Ast\Type\PhpType;
 use PhpAT\Parser\Relation\AbstractRelation;
 use PhpAT\Parser\Relation\Dependency;
 use phpDocumentor\Reflection\Types\Context;
@@ -36,9 +36,14 @@ class MethodDependenciesCollector extends NodeVisitorAbstract
     /** @var AbstractRelation[] */
     protected $results = [];
 
-    public function beforeTraverse(array $nodes)
-    {
-        $this->results = [];
+    public function __construct(
+        Configuration $configuration,
+        PhpDocTypeResolver $docTypeResolver,
+        Context $context
+    ) {
+        $this->configuration = $configuration;
+        $this->docTypeResolver = $docTypeResolver;
+        $this->context = $context;
     }
 
     /**
@@ -49,14 +54,9 @@ class MethodDependenciesCollector extends NodeVisitorAbstract
         return $this->results;
     }
 
-    public function __construct(
-        Configuration $configuration,
-        PhpDocTypeResolver $docTypeResolver,
-        Context $context
-    ) {
-        $this->configuration = $configuration;
-        $this->docTypeResolver = $docTypeResolver;
-        $this->context = $context;
+    public function beforeTraverse(array $nodes)
+    {
+        $this->results = [];
     }
 
     public function leaveNode(Node $node)
@@ -73,16 +73,10 @@ class MethodDependenciesCollector extends NodeVisitorAbstract
     private function addDependency(string $fqdn, int $line): void
     {
         $className = FullClassName::createFromFQCN($fqdn);
-        if (
-            !PhpType::isBuiltinType($className->getFQCN())
-            && !PhpType::isSpecialType($className->getFQCN())
-            && PhpType::isAutoloaded($className->getFQCN())
-        ) {
-            $this->results[] = new Dependency($line, $className);
-        }
+        $this->results[] = new Dependency($line, $className);
     }
 
-    public function recordClassExpressionUsage(Node $node)
+    private function recordClassExpressionUsage(Node $node)
     {
         if (
             (
@@ -98,7 +92,7 @@ class MethodDependenciesCollector extends NodeVisitorAbstract
         }
     }
 
-    public function recordCatchUsage(Node $node)
+    private function recordCatchUsage(Node $node)
     {
         if ($node instanceof Node\Stmt\Catch_) {
             foreach ($node->types as $type) {

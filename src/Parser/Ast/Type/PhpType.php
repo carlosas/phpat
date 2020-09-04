@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpAT\Parser\Ast;
+namespace PhpAT\Parser\Ast\Type;
 
 class PhpType
 {
@@ -9,21 +9,26 @@ class PhpType
         'callable',
         'string',
         'int',
+        'integer',
         'float',
         'double',
         'bool',
+        'boolean',
         'iterable',
         'void',
         'object',
         'mixed',
         'resource',
-        'null'
+        'null',
+        'true',
+        'false'
     ];
 
     public const SPECIAL_TYPES = [
         'self',
         'parent',
-        'static'
+        'static',
+        '$this'
     ];
 
     public static function isBuiltinType(string $type): bool
@@ -34,10 +39,5 @@ class PhpType
     public static function isSpecialType(string $type): bool
     {
         return in_array($type, PhpType::SPECIAL_TYPES, true);
-    }
-
-    public static function isAutoloaded(string $type): bool
-    {
-        return (class_exists($type) || interface_exists($type) || trait_exists($type));
     }
 }

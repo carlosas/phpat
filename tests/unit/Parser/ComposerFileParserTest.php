@@ -17,8 +17,8 @@ class ComposerFileParserTest extends TestCase
         parent::setUp();
 
         $this->subject = (new ComposerFileParser())->parse(
-            __DIR__ . '/Mock/fake-composer.json',
-            __DIR__ . '/Mock/fake-composer.lock'
+            __DIR__ . '/mocks/fake-composer.json',
+            __DIR__ . '/mocks/fake-composer.lock'
         );
     }
 

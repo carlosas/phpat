@@ -1,41 +1,47 @@
 <?php
 
-namespace PhpAT\Parser\Ast;
+namespace PhpAT\Parser\Ast\Type;
 
 use phpDocumentor\Reflection\Types\Context;
 use PHPStan\PhpDocParser\Ast\Type;
 use PHPStan\PhpDocParser\Lexer\Lexer;
-use PHPStan\PhpDocParser\Parser\ParserException;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 
-/**
- * Class PhpDocTypeResolver
- * @package PhpAT\Parser\Ast
- */
 class PhpDocTypeResolver
 {
     /** @var PhpDocParser */
     private $docParser;
+    /** @var PhpStanDocNodeTypeExtractor */
+    private $typeExtractor;
 
-    public function __construct(PhpDocParser $docParser)
+    public function __construct(PhpDocParser $docParser, PhpStanDocNodeTypeExtractor $typeExtractor)
     {
         $this->docParser = $docParser;
+        $this->typeExtractor = $typeExtractor;
     }
 
+    /**
+     * @param Context $context
+     * @param string  $docBlock
+     * @return string[]
+     */
     public function getBlockClassNames(Context $context, string $docBlock): array
     {
         try {
             $nodes = $this->docParser->parse(new TokenIterator((new Lexer())->tokenize($docBlock)));
-        } catch (ParserException $e) {
+        } catch (\Throwable $e) {
             return [];
         }
 
         foreach ($nodes->getTags() as $tag) {
-            if (isset($tag->value->type)) {
-                $names = $this->resolveTypeNode($tag->value->type);
-                foreach ($names as $name) {
-                    $result[] = $this->resolveNameFromContext($context, $name);
+            $types = $this->typeExtractor->getTypesNodes($tag);
+            foreach ($types as $type) {
+                if ($type !== null) {
+                    $names = $this->resolveTypeNode($type);
+                    foreach ($names as $name) {
+                        $result[] = $this->resolveNameFromContext($context, $name);
+                    }
                 }
             }
         }
@@ -47,12 +53,10 @@ class PhpDocTypeResolver
      * @param Type\TypeNode $type
      * @return string[]
      */
-    public function resolveTypeNode(Type\TypeNode $type): array
+    private function resolveTypeNode(Type\TypeNode $type): array
     {
         if (
             $type instanceof Type\IdentifierTypeNode
-            && !PhpType::isBuiltinType($type->name)
-            && !PhpType::isSpecialType($type->name)
         ) {
             return [$type->name];
         }
@@ -74,7 +78,11 @@ class PhpDocTypeResolver
 
     private function resolveNameFromContext(Context $context, string $name): string
     {
-        if (strpos($name, '\\') === 0) {
+        if (
+            strpos($name, '\\') === 0
+            || PhpType::isBuiltinType($name)
+            || PhpType::isSpecialType($name)
+        ) {
             return $name;
         }
 
