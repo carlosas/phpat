@@ -5,6 +5,8 @@ namespace Tests\PhpAT\functional\architecture;
 use PhpAT\Rule\Rule;
 use PhpAT\Selector\Selector;
 use PhpAT\Test\ArchitectureTest;
+use Tests\PhpAT\functional\fixtures\CallableArgument;
+use Tests\PhpAT\functional\fixtures\CallableReturn;
 use Tests\PhpAT\functional\fixtures\ClassWithAnonymousClass;
 use Tests\PhpAT\functional\fixtures\Dependency\DocBlock;
 use Tests\PhpAT\functional\fixtures\DummyException;
@@ -103,6 +105,8 @@ class DependencyTest extends ArchitectureTest
             ->andClassesThat(Selector::haveClassName(DummyException::class))
             ->andClassesThat(Selector::haveClassName(GenericInner::class))
             ->andClassesThat(Selector::haveClassName(GenericOuter::class))
+            ->andClassesThat(Selector::haveClassName(CallableArgument::class))
+            ->andClassesThat(Selector::haveClassName(CallableReturn::class))
             ->build();
     }
 
@@ -113,6 +117,15 @@ class DependencyTest extends ArchitectureTest
             ->mustDependOn()
             ->classesThat(Selector::haveClassName(GenericOuter::class))
             ->andClassesThat(Selector::haveClassName(GenericInner::class))
+            ->build();
+    }
+    public function testDocblocksHaveSupportForCallableTypes(): Rule
+    {
+        return $this->newRule
+            ->classesThat(Selector::haveClassName(DocBlock::class))
+            ->mustDependOn()
+            ->andClassesThat(Selector::haveClassName(CallableArgument::class))
+            ->andClassesThat(Selector::haveClassName(CallableReturn::class))
             ->build();
     }
 }
