@@ -11,6 +11,7 @@ install:
 script:
   - composer validate --strict
   - vendor/bin/phpcs src/
+  - vendor/bin/psalm
   - vendor/bin/phpunit tests/unit/
   - php phpat
   - php phpat tests/functional/functional.yaml
