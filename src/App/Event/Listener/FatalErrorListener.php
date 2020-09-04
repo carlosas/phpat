@@ -27,7 +27,5 @@ class FatalErrorListener implements EventListenerInterface
     {
         /** @var FatalErrorEvent $event */
         $this->output->fatalError($event->getMessage());
-
-        throw new FatalErrorException();
     }
 }

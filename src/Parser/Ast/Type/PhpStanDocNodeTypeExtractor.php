@@ -106,9 +106,6 @@ class PhpStanDocNodeTypeExtractor
             case $node instanceof MethodTagValueParameterNode:
                 $types[] = $node->type ?? null;
                 break;
-
-            default:
-                $types = [];
         }
 
         return $types;

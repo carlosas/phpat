@@ -57,6 +57,8 @@ class MethodDependenciesCollector extends NodeVisitorAbstract
     public function beforeTraverse(array $nodes)
     {
         $this->results = [];
+
+        return $nodes;
     }
 
     public function leaveNode(Node $node)
