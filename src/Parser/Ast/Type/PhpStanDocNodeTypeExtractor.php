@@ -9,7 +9,6 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueParameterNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\MixinTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
@@ -104,10 +103,12 @@ class PhpStanDocNodeTypeExtractor
                 break;
 
             case $node instanceof MethodTagValueParameterNode:
-                $types[] = $node->type ?? null;
+                if ($node->type !== null) {
+                    $types[] = $node->type;
+                }
                 break;
         }
 
-        return $types;
+        return $types ?? [];
     }
 }
