@@ -4,6 +4,7 @@ namespace PhpAT\Parser\Ast;
 
 use PhpAT\App\Configuration;
 use PhpAT\App\Event\FatalErrorEvent;
+use PhpAT\App\Exception\FatalErrorException;
 use PhpAT\File\FileFinder;
 use PhpAT\Parser\Ast\Extractor\ExtractorFactory;
 use PhpAT\Parser\ComposerFileParser;
@@ -112,7 +113,10 @@ class MapBuilder
         );
     }
 
-    /** @return ComposerPackage[] */
+    /**
+     * @return ComposerPackage[]
+     * @throws FatalErrorException
+     */
     private function buildComposerMap(): array
     {
         $packages = $this->configuration->getComposerConfiguration();
@@ -126,13 +130,16 @@ class MapBuilder
             ) {
                 $error = new FatalErrorEvent('Composer package "' . $alias . '" is not properly configured');
                 $this->eventDispatcher->dispatch($error);
+                throw new FatalErrorException();
             }
 
             try {
                 $parsed = $this->composerFileParser->parse($files['json'], $files['lock']);
             } catch (\Throwable $e) {
-                $error = new FatalErrorEvent('Error parsing "' . $alias . '" composer files');
-                $this->eventDispatcher->dispatch($error);
+                $this->eventDispatcher->dispatch(
+                    new FatalErrorEvent('Error parsing "' . $alias . '" composer files')
+                );
+                throw new FatalErrorException();
             }
 
             $result[$alias] = new ComposerPackage(
