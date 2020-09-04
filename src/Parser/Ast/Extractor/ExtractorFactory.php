@@ -22,7 +22,7 @@ class ExtractorFactory
 
     public function createDependencyExtractor(): DependencyExtractor
     {
-        return new DependencyExtractor($this->docTypeResolver, $this->configuration);
+        return new DependencyExtractor($this->docTypeResolver, $this->configuration, $this);
     }
 
     public function createParentExtractor(): ParentExtractor

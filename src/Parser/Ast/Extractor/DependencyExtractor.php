@@ -11,7 +11,6 @@ use PhpAT\Parser\Ast\Type\PhpType;
 use PhpAT\Parser\Relation\AbstractRelation;
 use PhpAT\Parser\Relation\Dependency;
 use phpDocumentor\Reflection\Types\Context;
-use PhpParser\Comment;
 use Roave\BetterReflection\Reflection\ReflectionClass;
 use Roave\BetterReflection\Reflection\ReflectionMethod;
 use Roave\BetterReflection\Reflection\ReflectionParameter;
@@ -26,14 +25,18 @@ class DependencyExtractor extends AbstractExtractor
     private $configuration;
     /** @var NodeTraverser */
     private $traverser;
+    /** @var ExtractorFactory */
+    private $extractorFactory;
 
     public function __construct(
         PhpDocTypeResolver $docTypeResolver,
-        Configuration $configuration
+        Configuration $configuration,
+        ExtractorFactory $extractorFactory
     ) {
         $this->docTypeResolver = $docTypeResolver;
         $this->configuration = $configuration;
         $this->traverser = new NodeTraverser();
+        $this->extractorFactory = $extractorFactory;
     }
 
     /**
@@ -59,6 +62,10 @@ class DependencyExtractor extends AbstractExtractor
         return $this->flushRelations();
     }
 
+    /**
+     * @param ReflectionProperty $property
+     * @param Context $context
+     */
     private function addPropertyDependencies(ReflectionProperty $property, Context $context): void
     {
         $type = $property->getType();
@@ -95,7 +102,18 @@ class DependencyExtractor extends AbstractExtractor
      */
     private function addClassDependencies(ReflectionClass $class, Context $context): void
     {
-        // Class doc comment
+        $this->addDependenciesFromRelations(
+            $this->extractorFactory->createParentExtractor()->extract($class)
+        );
+
+        $this->addDependenciesFromRelations(
+            $this->extractorFactory->createInterfaceExtractor()->extract($class)
+        );
+
+        $this->addDependenciesFromRelations(
+            $this->extractorFactory->createTraitExtractor()->extract($class)
+        );
+
         $doc = $class->getDocComment();
         foreach ($this->docTypeResolver->getBlockClassNames($context, $doc) as $type) {
             if (
@@ -115,7 +133,6 @@ class DependencyExtractor extends AbstractExtractor
     /**
      * @param ReflectionMethod $method
      * @param Context $context
-     * @return void
      */
     private function addMethodDependencies(ReflectionMethod $method, Context $context): void
     {
@@ -172,6 +189,20 @@ class DependencyExtractor extends AbstractExtractor
                     $result->relatedClass
                 );
             }
+        }
+    }
+
+    /**
+     * @param AbstractRelation[] $relations
+     */
+    private function addDependenciesFromRelations(array $relations): void
+    {
+        foreach ($relations as $relation) {
+            $this->addRelation(
+                Dependency::class,
+                $relation->line,
+                $relation->relatedClass
+            );
         }
     }
 }
