@@ -8,6 +8,8 @@ use Tests\PhpAT\functional\fixtures\GenericOuter;
 use Tests\PhpAT\functional\fixtures\SimpleClass;
 use Tests\PhpAT\functional\fixtures\AnotherSimpleClass as AliasedClass;
 use Tests\PhpAT\functional\fixtures\Inheritance;
+use Tests\PhpAT\functional\fixtures\CallableArgument;
+use Tests\PhpAT\functional\fixtures\CallableReturn;
 
 class DocBlock
 {
@@ -41,6 +43,12 @@ class DocBlock
         $c = 3;
         /** @var null $d */
         $d = 4;
+    }
+
+    /** @param (callable(CallableArgument): CallableReturn) $genericArgument */
+    public function acceptsCallable(callable $callableArgument): void
+    {
+
     }
 
     /** @param GenericOuter<GenericInner> $genericArgument */
