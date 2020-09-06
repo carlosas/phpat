@@ -21,11 +21,11 @@ class SrcNode implements \JsonSerializable
     private $relations;
 
     public function __construct(
-        \SplFileInfo $fileInfo,
+        string $fileName,
         FullClassName $className,
         array $relations
     ) {
-        $this->filePathname = $this->normalizePathname($fileInfo->getPathname());
+        $this->filePathname = $fileName;
         $this->className = $className->getFQCN();
         $this->relations = $relations;
     }
@@ -61,10 +61,5 @@ class SrcNode implements \JsonSerializable
             'classname' => $this->getClassName(),
             'relations' => $this->getRelations(),
         ];
-    }
-
-    private function normalizePathname(string $pathname): string
-    {
-        return str_replace('\\', '/', $pathname);
     }
 }

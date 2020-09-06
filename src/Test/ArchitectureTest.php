@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpAT\Test;
 
 use PhpAT\App\Event\FatalErrorEvent;
+use PhpAT\App\Exception\FatalErrorException;
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Rule\Rule;
 use PhpAT\Rule\RuleBuilder;
@@ -30,7 +31,7 @@ abstract class ArchitectureTest implements TestInterface
                     $rule = $this->invokeTest($method);
                 } catch (\Exception $e) {
                     $this->eventDispatcher->dispatch(new FatalErrorEvent($e->getMessage()));
-                    continue;
+                    throw new FatalErrorException();
                 }
                 $rule->setName(ltrim(preg_replace('/(?<!\ )[A-Z]/', ' $0', $method), 'test '));
                 $rules->addValue($rule);
@@ -46,8 +47,14 @@ abstract class ArchitectureTest implements TestInterface
      */
     protected function invokeTest(string $method): Rule
     {
-        /** @var Rule $rule */
         $rule = $this->$method();
+
+        if (!($rule instanceof Rule)) {
+            $message = $method . ' must return an instance of ' . Rule::class . '.';
+
+            $this->eventDispatcher->dispatch(new FatalErrorEvent($message));
+            throw new FatalErrorException();
+        }
 
         if ($rule->getAssertion() === null) {
             $message = $method
@@ -55,12 +62,7 @@ abstract class ArchitectureTest implements TestInterface
                 . '(e.g. `mustImplement` or `mustNotDependOn`) to declare the assertion of the rule.';
 
             $this->eventDispatcher->dispatch(new FatalErrorEvent($message));
-        }
-
-        if (($rule instanceof Rule) === false) {
-            $message = $method . ' must return an instance of ' . Rule::class . '.';
-
-            $this->eventDispatcher->dispatch(new FatalErrorEvent($message));
+            throw new FatalErrorException();
         }
 
         return $rule;

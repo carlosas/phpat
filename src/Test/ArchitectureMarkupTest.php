@@ -3,6 +3,7 @@
 namespace PhpAT\Test;
 
 use PhpAT\App\Event\FatalErrorEvent;
+use PhpAT\App\Exception\FatalErrorException;
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Rule\Rule;
 use PhpAT\Rule\RuleBuilder;
@@ -26,12 +27,7 @@ class ArchitectureMarkupTest implements TestInterface
         $rules = new RuleCollection();
         foreach ($this->methods as $method) {
             if (preg_match('/^(test)([A-Za-z0-9])+$/', $method)) {
-                try {
-                    $rule = $this->invokeTest($method);
-                } catch (\Exception $e) {
-                    $this->eventDispatcher->dispatch(new FatalErrorEvent($e->getMessage()));
-                    continue;
-                }
+                $rule = $this->invokeTest($method);
                 $rule->setName(ltrim(preg_replace('/(?<!\ )[A-Z]/', ' $0', $method), 'test '));
                 $rules->addValue($rule);
             }
@@ -46,8 +42,14 @@ class ArchitectureMarkupTest implements TestInterface
      */
     private function invokeTest(string $method): Rule
     {
-        /** @var Rule $rule */
         $rule = call_user_func($this->$method);
+
+        if (!($rule instanceof Rule)) {
+            $message = $method . ' must return an instance of ' . Rule::class . '.';
+
+            $this->eventDispatcher->dispatch(new FatalErrorEvent($message));
+            throw new FatalErrorException();
+        }
 
         if ($rule->getAssertion() === null) {
             $message = $method
@@ -55,12 +57,7 @@ class ArchitectureMarkupTest implements TestInterface
                 . '(e.g. `mustImplement` or `mustNotDependOn`) to declare the assertion of the rule.';
 
             $this->eventDispatcher->dispatch(new FatalErrorEvent($message));
-        }
-
-        if (($rule instanceof Rule) === false) {
-            $message = $method . ' must return an instance of ' . Rule::class . '.';
-
-            $this->eventDispatcher->dispatch(new FatalErrorEvent($message));
+            throw new FatalErrorException();
         }
 
         return $rule;

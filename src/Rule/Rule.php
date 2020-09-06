@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace PhpAT\Rule;
 
 use PhpAT\Rule\Assertion\AbstractAssertion;
-use PhpAT\Rule\Assertion\Dependency\MustDepend;
 use PhpAT\Selector\SelectorInterface;
 
 /**

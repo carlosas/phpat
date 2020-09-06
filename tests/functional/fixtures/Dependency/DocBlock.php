@@ -50,4 +50,16 @@ class DocBlock
     {
 
     }
+
+    /** @param GenericOuter<GenericInner> $genericArgument */
+    public function classGeneric($genericArgument): void
+    {
+
+    }
+
+    /** @param array<GenericInner> $genericArgument */
+    public function arrayGeneric($genericArgument): void
+    {
+
+    }
 }

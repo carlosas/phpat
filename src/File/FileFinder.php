@@ -37,7 +37,7 @@ class FileFinder
      */
     public function findSrcFiles(string $file, array $excluded = []): array
     {
-        $parts = $this->splitFile($this->configuration->getSrcPath() . $file);
+        $parts = $this->splitFile($this->configuration->getSrcPath() . '/' . $file);
 
         return $this->finder->find(
             $parts[0],

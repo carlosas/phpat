@@ -19,7 +19,11 @@ class Configuration
 
     public function __construct(array $config)
     {
-        $this->srcPath = $config['src']['path'] ?? '';
+        $root = is_file(__DIR__ . '/../../../../autoload.php')
+            ? realpath(__DIR__ . '/../../../../..')
+            : realpath(__DIR__ . '/../..');
+
+        $this->srcPath = $this->normalizePath($root . '/' . $config['src']['path']);
         $this->srcIncluded = $config['src']['include'] ?? [];
         $this->srcExcluded = $config['src']['exclude'] ?? [];
         $this->composerConfiguration = $config['composer'] ?? [];
@@ -28,9 +32,7 @@ class Configuration
         $this->dryRun = (bool) ($config['options']['dry-run'] ?? false);
         $this->ignoreDocBlocks = (bool) ($config['options']['ignore_docblocks'] ?? false);
         $this->ignorePhpExtensions = (bool) ($config['options']['ignore_php_extensions'] ?? true);
-        $this->phpStormStubsPath = is_file(__DIR__ . '/../../../../autoload.php')
-            ? __DIR__ . '/../../../../jetbrains/phpstorm-stubs'
-            : __DIR__ . '/../../vendor/jetbrains/phpstorm-stubs';
+        $this->phpStormStubsPath = $root . '/vendor/jetbrains/phpstorm-stubs';
     }
 
     public function getSrcPath(): string
@@ -81,5 +83,10 @@ class Configuration
     public function getPhpStormStubsPath(): string
     {
         return $this->phpStormStubsPath;
+    }
+
+    private function normalizePath(string $path): string
+    {
+        return str_replace('\\', '/', realpath($path));
     }
 }

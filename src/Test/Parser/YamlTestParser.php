@@ -3,6 +3,7 @@
 namespace PhpAT\Test\Parser;
 
 use PhpAT\App\Event\FatalErrorEvent;
+use PhpAT\App\Exception\FatalErrorException;
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Rule\Rule;
 use PhpAT\Rule\RuleBuilder;
@@ -60,7 +61,7 @@ class YamlTestParser
                         $this->eventDispatcher->dispatch(
                             new FatalErrorEvent('Statement ' . $statementName . 'is not implemented')
                         );
-                        break;
+                        throw new FatalErrorException();
                 }
             }
         }
@@ -93,33 +94,29 @@ class YamlTestParser
 
     private function buildAssertion(string $assertion): void
     {
-        try {
-            $reflector = new \ReflectionClass($this->ruleBuilder);
-            $methodReflector = $reflector->getMethod($assertion);
-            if ($methodReflector->isPublic() && $methodReflector->getNumberOfParameters() === 0) {
-                $this->ruleBuilder->$assertion();
-            } else {
-                throw new \Exception('Assertion ' . $assertion . 'can not have parameters');
-            }
-        } catch (\Exception $e) {
-            $this->eventDispatcher->dispatch(new FatalErrorEvent($e->getMessage()));
-            throw $e;
+        $reflector = new \ReflectionClass($this->ruleBuilder);
+        $methodReflector = $reflector->getMethod($assertion);
+        if ($methodReflector->isPublic() && $methodReflector->getNumberOfParameters() === 0) {
+            $this->ruleBuilder->$assertion();
+        } else {
+            $this->eventDispatcher->dispatch(
+                new FatalErrorEvent('Assertion ' . $assertion . 'can not have parameters')
+            );
+            throw new FatalErrorException();
         }
     }
 
     private function buildSelector(string $selector, string $selectorRule): SelectorInterface
     {
         $reflector = new \ReflectionClass(Selector::class);
-        try {
-            $methodReflector = $reflector->getMethod($selector);
-            if ($methodReflector->isStatic() && $methodReflector->isPublic()) {
-                return Selector::$selector($selectorRule);
-            } else {
-                throw new \Exception('Selector ' . $selector . 'is not a static method');
-            }
-        } catch (\Exception $e) {
-            $this->eventDispatcher->dispatch(new FatalErrorEvent($e->getMessage()));
-            throw $e;
+        $methodReflector = $reflector->getMethod($selector);
+        if ($methodReflector->isStatic() && $methodReflector->isPublic()) {
+            return Selector::$selector($selectorRule);
+        } else {
+            $this->eventDispatcher->dispatch(
+                new FatalErrorEvent('Selector ' . $selector . 'is not a static method')
+            );
+            throw new FatalErrorException();
         }
     }
 }
