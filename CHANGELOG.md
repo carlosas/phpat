@@ -1,6 +1,17 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.7.3
+* Change composer package name to `phpat/phpat`
+* Refactor AST build to a better-reflection/php-parse hybrid
+* Add support to generic types in docs
+* Add support to callable types in docs
+* Add support to union types in docs
+* Fix src path configuration sometimes giving issues
+* Drop Symfony 2 compatibility
+* Move Fatal Error exceptions out of event listener
+* Add psalm and phpstan to CI checks
+
 ## 0.7.2
 * Move composer parsing to ReferenceMap creation stage
 * Include unknown FQCNs (out of src) in ClassNameSelector
