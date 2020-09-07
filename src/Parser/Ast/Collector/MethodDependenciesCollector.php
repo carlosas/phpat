@@ -4,7 +4,7 @@ namespace PhpAT\Parser\Ast\Collector;
 
 use PhpAT\App\Configuration;
 use PhpAT\Parser\Ast\FullClassName;
-use PhpAT\Parser\Ast\Type\PhpDocTypeResolver;
+use PhpAT\Parser\Ast\Type\PhpStanDocTypeNodeResolver;
 use PhpAT\Parser\Ast\Type\PhpType;
 use PhpAT\Parser\Relation\AbstractRelation;
 use PhpAT\Parser\Relation\Dependency;
@@ -25,7 +25,7 @@ class MethodDependenciesCollector extends NodeVisitorAbstract
      */
     private $configuration;
     /**
-     * @var PhpDocTypeResolver
+     * @var PhpStanDocTypeNodeResolver
      */
     private $docTypeResolver;
     /**
@@ -38,7 +38,7 @@ class MethodDependenciesCollector extends NodeVisitorAbstract
 
     public function __construct(
         Configuration $configuration,
-        PhpDocTypeResolver $docTypeResolver,
+        PhpStanDocTypeNodeResolver $docTypeResolver,
         Context $context
     ) {
         $this->configuration = $configuration;

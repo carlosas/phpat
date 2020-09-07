@@ -6,7 +6,8 @@ use PhpAT\App\Configuration;
 use PhpAT\Parser\Ast\Collector\MethodDependenciesCollector;
 use PhpAT\Parser\Ast\FullClassName;
 use PhpAT\Parser\Ast\NodeTraverser;
-use PhpAT\Parser\Ast\Type\PhpDocTypeResolver;
+use PhpAT\Parser\Ast\Type\PhpParserTypeNodeResolver;
+use PhpAT\Parser\Ast\Type\PhpStanDocTypeNodeResolver;
 use PhpAT\Parser\Ast\Type\PhpType;
 use PhpAT\Parser\Relation\AbstractRelation;
 use PhpAT\Parser\Relation\Dependency;
@@ -20,7 +21,7 @@ use Roave\BetterReflection\TypesFinder\PhpDocumentor\NamespaceNodeToReflectionTy
 
 class DependencyExtractor extends AbstractExtractor
 {
-    /** @var PhpDocTypeResolver */
+    /** @var PhpStanDocTypeNodeResolver */
     private $docTypeResolver;
     /** @var Configuration */
     private $configuration;
@@ -28,9 +29,11 @@ class DependencyExtractor extends AbstractExtractor
     private $traverser;
     /** @var ExtractorFactory */
     private $extractorFactory;
+    /** @var PhpParserTypeNodeResolver */
+    private $typeNodeResolver;
 
     public function __construct(
-        PhpDocTypeResolver $docTypeResolver,
+        PhpStanDocTypeNodeResolver $docTypeResolver,
         Configuration $configuration,
         ExtractorFactory $extractorFactory
     ) {
@@ -38,6 +41,7 @@ class DependencyExtractor extends AbstractExtractor
         $this->configuration = $configuration;
         $this->traverser = new NodeTraverser();
         $this->extractorFactory = $extractorFactory;
+        $this->typeNodeResolver = new PhpParserTypeNodeResolver();
     }
 
     /**
@@ -69,29 +73,25 @@ class DependencyExtractor extends AbstractExtractor
      */
     private function addPropertyDependencies(ReflectionProperty $property, Context $context): void
     {
-        $type = $property->getType();
-        if (
-            $type !== null
-            && !PhpType::isBuiltinType($type->getName())
-            && !PhpType::isSpecialType($type->getName())
-        ) {
-            $this->addRelation(
-                Dependency::class,
-                $property->getStartLine(),
-                FullClassName::createFromFQCN($type->getName())
-            );
-        }
+        $ast = $property->getAst();
+        $propertyTypes = $this->typeNodeResolver->getTypeClassNames($ast->type);
 
-        foreach ($this->docTypeResolver->getBlockClassNames($context, $property->getDocComment()) as $type) {
-            if (
-                $type !== null
-                && !PhpType::isBuiltinType($type)
-                && !PhpType::isSpecialType($type)
-            ) {
+        foreach ($propertyTypes as $propertyType) {
+            if (!PhpType::isBuiltinType($propertyType) && !PhpType::isSpecialType($propertyType)) {
                 $this->addRelation(
                     Dependency::class,
                     $property->getStartLine(),
-                    FullClassName::createFromFQCN($type)
+                    FullClassName::createFromFQCN($propertyType)
+                );
+            }
+        }
+
+        foreach ($this->docTypeResolver->getBlockClassNames($context, $property->getDocComment()) as $docType) {
+            if (!PhpType::isBuiltinType($docType) && !PhpType::isSpecialType($docType)) {
+                $this->addRelation(
+                    Dependency::class,
+                    $property->getStartLine(),
+                    FullClassName::createFromFQCN($docType)
                 );
             }
         }
@@ -143,18 +143,16 @@ class DependencyExtractor extends AbstractExtractor
             ($ast instanceof Node\Stmt\ClassMethod || $ast instanceof Node\Stmt\Function_)
             && $ast->returnType !== null
         ) {
-            $returnType = $this->getNodeType($ast->returnType);
+            $returnTypes = $this->typeNodeResolver->getTypeClassNames($ast->returnType);
 
-            if (
-                $returnType !== null
-                && !PhpType::isBuiltinType($returnType)
-                && !PhpType::isSpecialType($returnType)
-            ) {
-                $this->addRelation(
-                    Dependency::class,
-                    $method->getStartLine(),
-                    FullClassName::createFromFQCN($returnType)
-                );
+            foreach ($returnTypes as $returnType) {
+                if (!PhpType::isBuiltinType($returnType) && !PhpType::isSpecialType($returnType)) {
+                    $this->addRelation(
+                        Dependency::class,
+                        $method->getStartLine(),
+                        FullClassName::createFromFQCN($returnType)
+                    );
+                }
             }
         }
 
@@ -162,15 +160,17 @@ class DependencyExtractor extends AbstractExtractor
         /** @var ReflectionParameter $parameter */
         foreach ($method->getParameters() as $parameter) {
             $ast = $parameter->getAst();
-            if (property_exists($ast, 'type') && $ast->type !== null) {
-                $paramType = $this->getNodeType($ast->type);
+            if ($ast->type !== null) {
+                $paramTypes = $this->typeNodeResolver->getTypeClassNames($ast->type);
 
-                if (!PhpType::isBuiltinType($paramType) && !PhpType::isSpecialType($paramType)) {
-                    $this->addRelation(
-                        Dependency::class,
-                        $method->getStartLine(),
-                        FullClassName::createFromFQCN($paramType)
-                    );
+                foreach ($paramTypes as $paramType) {
+                    if (!PhpType::isBuiltinType($paramType) && !PhpType::isSpecialType($paramType)) {
+                        $this->addRelation(
+                            Dependency::class,
+                            $method->getStartLine(),
+                            FullClassName::createFromFQCN($paramType)
+                        );
+                    }
                 }
             }
         }
@@ -212,19 +212,5 @@ class DependencyExtractor extends AbstractExtractor
                 $relation->relatedClass
             );
         }
-    }
-
-    private function getNodeType(Node $node): ?string
-    {
-        switch (true) {
-            case $node instanceof Node\Identifier:
-            case $node instanceof Node\Name\FullyQualified:
-            case $node instanceof Node\Name:
-                return $node->toString();
-            case $node instanceof Node\NullableType:
-                return $node->type->toString();
-        }
-
-        return null;
     }
 }

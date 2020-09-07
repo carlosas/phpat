@@ -13,7 +13,7 @@ use PhpAT\Output\OutputInterface;
 use PhpAT\Parser\Ast\Extractor\ExtractorFactory;
 use PhpAT\Parser\Ast\MapBuilder;
 use PhpAT\Parser\Ast\NodeTraverser;
-use PhpAT\Parser\Ast\Type\PhpDocTypeResolver;
+use PhpAT\Parser\Ast\Type\PhpStanDocTypeNodeResolver;
 use PhpAT\Parser\Ast\Type\PhpStanDocNodeTypeExtractor;
 use PhpAT\Parser\ComposerFileParser;
 use PhpAT\Rule\RuleBuilder;
@@ -77,7 +77,7 @@ class Provider
         $this->builder->set(PhpStanDocNodeTypeExtractor::class, new PhpStanDocNodeTypeExtractor());
 
         $this->builder
-            ->register(PhpDocTypeResolver::class, PhpDocTypeResolver::class)
+            ->register(PhpStanDocTypeNodeResolver::class, PhpStanDocTypeNodeResolver::class)
             ->addArgument(new Reference(PhpDocParser::class))
             ->addArgument(new Reference(PhpStanDocNodeTypeExtractor::class));
 
@@ -91,7 +91,7 @@ class Provider
 
         $this->builder
             ->register(ExtractorFactory::class, ExtractorFactory::class)
-            ->addArgument(new Reference(PhpDocTypeResolver::class))
+            ->addArgument(new Reference(PhpStanDocTypeNodeResolver::class))
             ->addArgument(new Reference(Configuration::class));
 
         $this->builder

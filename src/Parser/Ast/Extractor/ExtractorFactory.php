@@ -3,17 +3,17 @@
 namespace PhpAT\Parser\Ast\Extractor;
 
 use PhpAT\App\Configuration;
-use PhpAT\Parser\Ast\Type\PhpDocTypeResolver;
+use PhpAT\Parser\Ast\Type\PhpStanDocTypeNodeResolver;
 
 class ExtractorFactory
 {
-    /** @var PhpDocTypeResolver */
+    /** @var PhpStanDocTypeNodeResolver */
     private $docTypeResolver;
     /** @var Configuration */
     private $configuration;
 
     public function __construct(
-        PhpDocTypeResolver $docTypeResolver,
+        PhpStanDocTypeNodeResolver $docTypeResolver,
         Configuration $configuration
     ) {
         $this->docTypeResolver = $docTypeResolver;
