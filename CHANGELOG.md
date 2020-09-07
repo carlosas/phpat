@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 * Fix src path configuration sometimes giving issues
 * Drop Symfony 2 compatibility
 * Move Fatal Error exceptions out of event listener
+* Fix issue with FQCNs starting with backslash
 * Add psalm and phpstan to CI checks
 
 ## 0.7.2
