@@ -11,6 +11,7 @@ use PhpAT\Parser\Ast\Type\PhpType;
 use PhpAT\Parser\Relation\AbstractRelation;
 use PhpAT\Parser\Relation\Dependency;
 use phpDocumentor\Reflection\Types\Context;
+use PhpParser\Node;
 use Roave\BetterReflection\Reflection\ReflectionClass;
 use Roave\BetterReflection\Reflection\ReflectionMethod;
 use Roave\BetterReflection\Reflection\ReflectionParameter;
@@ -137,33 +138,40 @@ class DependencyExtractor extends AbstractExtractor
     private function addMethodDependencies(ReflectionMethod $method, Context $context): void
     {
         // Method return
-        $type = $method->getReturnType();
+        $ast = $method->getAst();
         if (
-            $type !== null
-            && !PhpType::isBuiltinType($type->getName())
-            && !PhpType::isSpecialType($type->getName())
+            ($ast instanceof Node\Stmt\ClassMethod || $ast instanceof Node\Stmt\Function_)
+            && $ast->returnType !== null
         ) {
-            $this->addRelation(
-                Dependency::class,
-                $method->getStartLine(),
-                FullClassName::createFromFQCN($type->getName())
-            );
+            $returnType = $this->getNodeType($ast->returnType);
+
+            if (
+                $returnType !== null
+                && !PhpType::isBuiltinType($returnType)
+                && !PhpType::isSpecialType($returnType)
+            ) {
+                $this->addRelation(
+                    Dependency::class,
+                    $method->getStartLine(),
+                    FullClassName::createFromFQCN($returnType)
+                );
+            }
         }
 
         // Method parameters
         /** @var ReflectionParameter $parameter */
         foreach ($method->getParameters() as $parameter) {
-            $type = $parameter->getType();
-            if (
-                $type !== null
-                && !PhpType::isBuiltinType($type->getName())
-                && !PhpType::isSpecialType($type->getName())
-            ) {
-                $this->addRelation(
-                    Dependency::class,
-                    $method->getStartLine(),
-                    FullClassName::createFromFQCN($parameter->getType()->getName())
-                );
+            $ast = $parameter->getAst();
+            if (property_exists($ast, 'type') && $ast->type !== null) {
+                $paramType = $this->getNodeType($ast->type);
+
+                if (!PhpType::isBuiltinType($paramType) && !PhpType::isSpecialType($paramType)) {
+                    $this->addRelation(
+                        Dependency::class,
+                        $method->getStartLine(),
+                        FullClassName::createFromFQCN($paramType)
+                    );
+                }
             }
         }
 
@@ -204,5 +212,19 @@ class DependencyExtractor extends AbstractExtractor
                 $relation->relatedClass
             );
         }
+    }
+
+    private function getNodeType(Node $node): ?string
+    {
+        switch (true) {
+            case $node instanceof Node\Identifier:
+            case $node instanceof Node\Name\FullyQualified:
+            case $node instanceof Node\Name:
+                return $node->toString();
+            case $node instanceof Node\NullableType:
+                return $node->type->toString();
+        }
+
+        return null;
     }
 }
