@@ -15,7 +15,7 @@ class FullClassName implements ClassLike
 
     public static function createFromFQCN(string $fqcn): self
     {
-        $parts = explode('\\', $fqcn);
+        $parts = explode('\\', ltrim($fqcn, '\\'));
         $name = array_pop($parts);
 
         return new self(implode('\\', $parts), $name);
