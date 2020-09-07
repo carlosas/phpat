@@ -19,6 +19,8 @@ use Tests\PhpAT\functional\fixtures\PropertyClass;
 use Tests\PhpAT\functional\fixtures\PropertyReadClass;
 use Tests\PhpAT\functional\fixtures\PropertyWriteClass;
 use Tests\PhpAT\functional\fixtures\ReturnClass;
+use Tests\PhpAT\functional\fixtures\UnionClassOne;
+use Tests\PhpAT\functional\fixtures\UnionClassTwo;
 use Tests\PhpAT\functional\fixtures\UsesClass;
 use Tests\PhpAT\functional\fixtures\UsesClass2;
 use Tests\PhpAT\functional\fixtures\VarClass;
@@ -42,8 +44,8 @@ class DocBlockTest extends ArchitectureTest
             ->andClassesThat(Selector::haveClassName(GenericOuterClass::class))
             ->andClassesThat(Selector::haveClassName(GenericInnerClass::class))
             ->andClassesThat(Selector::haveClassName(GenericInnerClass2::class))
-            //->andClassesThat(Selector::haveClassName(UsesClass::class)) //not implemented in phpstan/phpdoc-parser
-            //->andClassesThat(Selector::haveClassName(UsesClass2::class)) //not implemented in phpstan/phpdoc-parser
+            ->andClassesThat(Selector::haveClassName(UnionClassOne::class))
+            ->andClassesThat(Selector::haveClassName(UnionClassTwo::class))
             ->andClassesThat(Selector::haveClassName(DummyExceptionClass::class))
             ->andClassesThat(Selector::haveClassName(VarClass::class))
             ->build();

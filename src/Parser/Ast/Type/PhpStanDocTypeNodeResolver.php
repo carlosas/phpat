@@ -65,20 +65,27 @@ class PhpStanDocTypeNodeResolver
             return $this->resolveTypeNode($type->type);
         }
 
-        if ($type instanceof Type\GenericTypeNode) {
-            $types[] = $this->resolveTypeNode($type->type);
-            foreach ($type->genericTypes as $innerType) {
-                $types[] = $this->resolveTypeNode($innerType);
+        if ($type instanceof Type\UnionTypeNode) {
+            foreach ($type->types as $t) {
+                $typesUnion = array_merge($typesUnion ?? [], $this->resolveTypeNode($t));
             }
-            return array_merge(...$types);
+            return $typesUnion ?? [];
+        }
+
+        if ($type instanceof Type\GenericTypeNode) {
+            $typesGeneric[] = $this->resolveTypeNode($type->type);
+            foreach ($type->genericTypes as $innerType) {
+                $typesGeneric[] = $this->resolveTypeNode($innerType);
+            }
+            return array_merge(...$typesGeneric);
         }
 
         if ($type instanceof Type\CallableTypeNode) {
-            $types[] = $this->resolveTypeNode($type->returnType);
+            $typesCallable[] = $this->resolveTypeNode($type->returnType);
             foreach ($type->parameters as $parameter) {
-                $types[] = $this->resolveTypeNode($parameter->type);
+                $typesCallable[] = $this->resolveTypeNode($parameter->type);
             }
-            return array_merge(...$types);
+            return array_merge(...$typesCallable);
         }
 
         return [];

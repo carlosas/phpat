@@ -11,17 +11,16 @@ namespace Tests\PhpAT\functional\fixtures;
  */
 class DocBlock
 {
-    //TODO * @uses UsesClass to do something
-    //     * @uses UsesClass2::usesMethod() to do something else
     /**
      * @param ParamClass $p
      * @param ParamClass2 $p2 Parameter with description
      * @param GenericOuterClass<GenericInnerClass> $p3
      * @param array<GenericInnerClass2> $p4
+     * @param UnionClassOne|UnionClassTwo $p5
      * @return ReturnClass nicedescription
      * @throws DummyExceptionClass
      */
-    public function methodOne($p, $p2, $p3, $p4)
+    public function methodOne($p, $p2, $p3, $p4, $p5)
     {
         /** @var VarClass $v */
         $v = null;
@@ -52,11 +51,9 @@ class GenericInnerClass {}
 
 class GenericInnerClass2 {}
 
-class UsesClass {}
+class UnionClassOne {}
 
-class UsesClass2 {
-    public function usesMethod() {}
-}
+class UnionClassTwo {}
 
 class DummyExceptionClass {}
 
