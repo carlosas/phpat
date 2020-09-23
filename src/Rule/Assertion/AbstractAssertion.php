@@ -160,13 +160,13 @@ abstract class AbstractAssertion
         array $excluded,
         array $relations
     ): MatchResult {
-        foreach ($excluded as $exc) {
-            if ($exc->matches($destination->toString()) || $destination->matches($exc->toString())) {
-                return new MatchResult(false, []);
-            }
-        }
-
         foreach ($relations as $rel) {
+            foreach ($excluded as $exc) {
+                if ($exc->matches($rel)) {
+                    continue 2;
+                }
+            }
+
             if ($destination->matches($rel)) {
                 $m[] = $rel;
             }

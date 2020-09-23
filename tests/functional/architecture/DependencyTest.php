@@ -5,9 +5,12 @@ namespace Tests\PhpAT\functional\architecture;
 use PhpAT\Rule\Rule;
 use PhpAT\Selector\Selector;
 use PhpAT\Test\ArchitectureTest;
+use Tests\PhpAT\functional\FixtureOutOfPathOne;
+use Tests\PhpAT\functional\FixtureOutOfPathTwo;
 use Tests\PhpAT\functional\fixtures\CallableArgument;
 use Tests\PhpAT\functional\fixtures\CallableReturn;
 use Tests\PhpAT\functional\fixtures\ClassWithAnonymousClass;
+use Tests\PhpAT\functional\fixtures\ClassWithOutsideDependency;
 use Tests\PhpAT\functional\fixtures\Dependency\DocBlock;
 use Tests\PhpAT\functional\fixtures\DummyException;
 use Tests\PhpAT\functional\fixtures\GenericInner;
@@ -127,6 +130,17 @@ class DependencyTest extends ArchitectureTest
             ->mustDependOn()
             ->classesThat(Selector::haveClassName(GenericOuter::class))
             ->andClassesThat(Selector::haveClassName(GenericInner::class))
+            ->build();
+    }
+
+    public function testClassOutsideOfPathGetsSelectedInInclusionAndExclusion(): Rule
+    {
+        return $this->newRule
+            ->classesThat(Selector::haveClassName(ClassWithOutsideDependency::class))
+            ->mustNotDependOn()
+            ->classesThat(Selector::haveClassName('Tests\PhpAT\functional\FixtureOutOfPath*'))
+            ->excludingClassesThat(Selector::haveClassName(FixtureOutOfPathOne::class))
+            ->excludingClassesThat(Selector::haveClassName(FixtureOutOfPathTwo::class))
             ->build();
     }
 }
