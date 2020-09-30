@@ -14,7 +14,9 @@ There are several ways to help out:
 * All tests and coding standard checks should pass
 ```bash
 composer validate --strict
-vendor/bin/phpcs --standard=php_cs.xml src/
+vendor/bin/phpcs src/
+vendor/bin/psalm
+vendor/bin/phpstan analyse src --level=5
 vendor/bin/phpunit tests/unit/
 php phpat phpat.yaml
 php phpat tests/functional/functional.yaml
@@ -27,6 +29,11 @@ Brief summary of how phpat works internally. The execution consists in several s
 * **Reference mapping**: Finds and parses the files that can be analyzed and builds a ReferenceMap.
 * **Statement construction**: Finds the tests, reads the rules and creates statements by resolving the selectors using the ReferenceMap.
 * **Assertions**: Validates the assertions of each statement and emits the result events.
+
+## Slack channel
+
+Feel free to join the channel [#phpat](https://symfony-devs.slack.com/archives/CQFKA2R0D) on SymfonyDevs' workspace
+if you want to discuss something or need some help.
 
 ---
 
