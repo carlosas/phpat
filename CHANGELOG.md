@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.7.4
+* Fix exclusions when they are not part of the src
+* Allow to include test files with more valid names
+
 ## 0.7.3
 * Change composer package name to `phpat/phpat`
 * Refactor AST build to a better-reflection/php-parse hybrid
