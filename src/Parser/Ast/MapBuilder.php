@@ -2,6 +2,7 @@
 
 namespace PhpAT\Parser\Ast;
 
+use JetBrains\PHPStormStub\PhpStormStubsMap;
 use PhpAT\App\Configuration;
 use PhpAT\App\Event\FatalErrorEvent;
 use PhpAT\App\Exception\FatalErrorException;
@@ -99,17 +100,11 @@ class MapBuilder
      */
     private function buildExtensionMap(): array
     {
-        $files = $this->finder->findPhpFilesInPath(
-            $this->normalizePathname($this->configuration->getPhpStormStubsPath())
-        );
-        $astLocator = (new BetterReflection())->astLocator();
-        $reflector = new ClassReflector(new FileIteratorSourceLocator(new \ArrayIterator($files), $astLocator));
-
         return array_map(
-            function (ReflectionClass $class) {
-                return FullClassName::createFromFQCN($class->getName());
+            function (string $class) {
+                return FullClassName::createFromFQCN($class);
             },
-            $reflector->getAllClasses()
+            array_keys(PhpStormStubsMap::CLASSES)
         );
     }
 
