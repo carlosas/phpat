@@ -2,6 +2,8 @@
 
 namespace PhpAT\Output;
 
+use PhpAT\App\Exception\FatalErrorException;
+
 class StdOutput implements OutputInterface
 {
     /**
@@ -20,7 +22,7 @@ class StdOutput implements OutputInterface
 
     public function __construct(int $verbosity, bool $dryRun)
     {
-        $this->verbose = $verbosity;
+        $this->verbose = $this->cleanVerbosity($verbosity);
         $this->errStream = $dryRun ? \STDOUT : \STDERR;
     }
 
@@ -93,21 +95,38 @@ class StdOutput implements OutputInterface
 
     private function write(string $message, int $level = OutputLevel::DEFAULT): void
     {
-        $this->out($message, $level);
+        $this->out($message, $level, $this->verbose);
     }
 
     private function writeLn(string $message, int $level = OutputLevel::DEFAULT): void
     {
         $message .= PHP_EOL;
-        $this->out($message, $level);
+        $this->out($message, $level, $this->verbose);
     }
 
-    private function out(string $message, int $level): void
+    private function out(string $message, int $level, int $currentVerbosity): void
     {
-        if (!in_array($level, VerboseLevel::OUTPUT_LEVEL[$this->verbose])) {
+        if (!in_array($level, VerboseLevel::OUTPUT_LEVEL[$currentVerbosity])) {
             return;
         }
+
         $stream = $level > OutputLevel::WARNING ? $this->errStream : $this->okStream;
         fwrite($stream, $message);
+    }
+
+    private function cleanVerbosity(int $verbosity): int
+    {
+        if (in_array($verbosity, VerboseLevel::AVAILABLE_LEVELS)) {
+            return $verbosity;
+        }
+
+        $message = 'Verbosity "' . $verbosity . '" is not valid, defaulted to "' . VerboseLevel::DEFAULT_LEVEL . '"';
+        $this->out(
+            'WARNING: ' . $message . PHP_EOL,
+            OutputLevel::WARNING,
+            VerboseLevel::DEFAULT_LEVEL
+        );
+
+        return VerboseLevel::DEFAULT_LEVEL;
     }
 }

@@ -4,6 +4,8 @@ namespace PhpAT\Output;
 
 class VerboseLevel
 {
+    public const AVAILABLE_LEVELS = [self::NORMAL, self::VERBOSE, self::VERY_VERBOSE];
+    public const DEFAULT_LEVEL = self::VERBOSE;
     public const NORMAL = 0;
     public const VERBOSE = 1; //-v
     public const VERY_VERBOSE = 2; //-vv
