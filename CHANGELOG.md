@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.7.5
+* Fix random silent failures while creating internal php classmap
+* Fix test file valid names
+* Set default verbosity on invalid configuration
+
 ## 0.7.4
 * Fix exclusions when they are not part of the src
 * Allow to include test files with more valid names
