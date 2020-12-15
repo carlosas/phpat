@@ -5,11 +5,14 @@ php:
   - 7.3
   - 7.4
 
+before_install:
+  - phpenv config-rm xdebug.ini
+  - composer validate --strict
+
 install:
   - composer install --no-interaction
 
 script:
-  - composer validate --strict
   - vendor/bin/phpcs src/
   - vendor/bin/psalm
   - vendor/bin/phpstan analyse src --level=5
