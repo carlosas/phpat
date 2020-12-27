@@ -9,7 +9,7 @@ on:
       - "main"
 
 jobs:
-  coding-standards:
+  tests:
     name: "${{ matrix.script.name }} - PHP ${{ matrix.php-version }}"
 
     runs-on: "ubuntu-20.04"
@@ -18,8 +18,12 @@ jobs:
       matrix:
 
         script:
-          - "${{ fromJson('{\"name\":\"Lint\", \"command\":\"composer validate --strict\"}') }}"
+          - "${{ fromJson('{\"name\":\"PHPUnit\", \"command\":\"vendor/bin/phpunit --verbose tests/unit/\"}') }}"
+          - "${{ fromJson('{\"name\":\"PHPAT\", \"command\":\"php phpat\"}') }}"
+          - "${{ fromJson('{\"name\":\"PHPAT tests\", \"command\":\"php phpat tests/functional/functional.yaml\"}') }}"
+          - "${{ fromJson('{\"name\":\"Psalm\", \"command\":\"vendor/bin/psalm\"}') }}"
           - "${{ fromJson('{\"name\":\"PHPStan\", \"command\":\"vendor/bin/phpstan analyse --level=5 src/\"}') }}"
+          - "${{ fromJson('{\"name\":\"PHPCS\", \"command\":\"vendor/bin/phpcs -s src/\"}') }}"
 
         php-version:
           - "7.4"
@@ -31,20 +35,19 @@ jobs:
 
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v2.3.4"
+        uses: "actions/checkout@v2"
 
       - name: "Install PHP with extensions"
         uses: "shivammathur/setup-php@2.9.0"
         with:
           coverage: "none"
-          extensions: "${{ env.PHP_EXTENSIONS }}"
           php-version: "${{ matrix.php-version }}"
 
       - name: "Determine composer cache directory"
         uses: "./.github/actions/composer/composer/determine-cache-directory"
 
       - name: "Cache dependencies installed with composer"
-        uses: "actions/cache@v2.1.3"
+        uses: "actions/cache@v2"
         with:
           path: "${{ env.COMPOSER_CACHE_DIR }}"
           key: "php-${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-${{ hashFiles('composer.lock') }}"
@@ -57,3 +60,45 @@ jobs:
 
       - name: "Execute ${{ matrix.script.name }}"
         run: "${{ matrix.script.command }}"
+
+  lint:
+    name: "Validate Composer config"
+
+    runs-on: "ubuntu-20.04"
+
+    strategy:
+      matrix:
+
+        php-version:
+          - "7.4"
+
+        dependencies:
+          - "highest"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v2"
+
+      - name: "Install PHP with extensions"
+        uses: "shivammathur/setup-php@2.9.0"
+        with:
+          coverage: "none"
+          php-version: "${{ matrix.php-version }}"
+
+      - name: "Determine composer cache directory"
+        uses: "./.github/actions/composer/composer/determine-cache-directory"
+
+      - name: "Cache dependencies installed with composer"
+        uses: "actions/cache@v2"
+        with:
+          path: "${{ env.COMPOSER_CACHE_DIR }}"
+          key: "php-${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-${{ hashFiles('composer.lock') }}"
+          restore-keys: "php-${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-"
+
+      - name: "Install ${{ matrix.dependencies }} dependencies with composer"
+        uses: "./.github/actions/composer/composer/install"
+        with:
+          dependencies: "${{ matrix.dependencies }}"
+
+      - name: "Validate composer.json and composer.lock"
+        run: "composer validate --strict"
