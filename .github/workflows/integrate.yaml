@@ -1,0 +1,61 @@
+# GitHub Actions for carlosas/phpat
+
+name: "Integrate"
+
+on:
+  pull_request: null
+  push:
+    branches:
+      - "main"
+
+jobs:
+  coding-standards:
+    name: "${{ matrix.script.name }} - PHP ${{ matrix.php-version }}"
+
+    runs-on: "ubuntu-20.04"
+
+    strategy:
+      matrix:
+
+        script:
+          - name: "Lint"
+            commmand: "composer validate --strict"
+          - name: "PHPStan"
+            command: "vendor/bin/phpstan analyse --level=5 src/"
+
+        php-version:
+          - "7.4"
+          - "7.3"
+          - "7.2"
+
+        dependencies:
+          - "highest"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v2.3.4"
+
+      - name: "Install PHP with extensions"
+        uses: "shivammathur/setup-php@2.9.0"
+        with:
+          coverage: "none"
+          extensions: "${{ env.PHP_EXTENSIONS }}"
+          php-version: "${{ matrix.php-version }}"
+
+      - name: "Determine composer cache directory"
+        uses: "./.github/actions/composer/composer/determine-cache-directory"
+
+      - name: "Cache dependencies installed with composer"
+        uses: "actions/cache@v2.1.3"
+        with:
+          path: "${{ env.COMPOSER_CACHE_DIR }}"
+          key: "php-${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-${{ hashFiles('composer.lock') }}"
+          restore-keys: "php-${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-"
+
+      - name: "Install ${{ matrix.dependencies }} dependencies with composer"
+        uses: "./.github/actions/composer/composer/install"
+        with:
+          dependencies: "${{ matrix.dependencies }}"
+
+      - name: "Execute ${{ matrix.script.name }}"
+        run: "${{ matrix.script.command }}"
