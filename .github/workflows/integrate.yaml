@@ -18,10 +18,8 @@ jobs:
       matrix:
 
         script:
-          - name: "Lint"
-            commmand: "composer validate --strict"
-          - name: "PHPStan"
-            command: "vendor/bin/phpstan analyse --level=5 src/"
+          - "${{ fromJson('{\"name\":\"Lint\", \"commmand\":\"composer validate --strict\"}') }}"
+          - "${{ fromJson('{\"name\":\"PHPStan\", \"commmand\":\"vendor/bin/phpstan analyse --level=5 src/\"}') }}"
 
         php-version:
           - "7.4"
