@@ -1,0 +1,16 @@
+# https://docs.github.com/en/actions/creating-actions/creating-a-composite-run-steps-action
+# https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#inputs
+# https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runs-for-composite-run-steps-actions
+# https://getcomposer.org/doc/03-cli.md#composer-cache-dir
+
+name: "Determine composer cache directory"
+
+description: "Determines the composer cache directory and exports it as COMPOSER_CACHE_DIR environment variable"
+
+runs:
+  using: "composite"
+
+  steps:
+    - name: "Determine composer cache directory"
+      shell: "bash"
+      run: "echo \"COMPOSER_CACHE_DIR=$(composer config cache-dir)\" >> $GITHUB_ENV"

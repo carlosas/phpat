@@ -1,0 +1,22 @@
+# https://docs.github.com/en/actions/creating-actions/creating-a-composite-run-steps-action
+# https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#inputs
+# https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runs-for-composite-run-steps-actions
+
+name: "Install dependencies with composer"
+
+description: "Installs dependencies with composer"
+
+inputs:
+  dependencies:
+    description: "Which dependencies to install, one of \"lowest\", \"locked\", \"highest\""
+    required: true
+
+runs:
+  using: "composite"
+
+  steps:
+    - name: "Install ${{ inputs.dependencies }} dependencies with composer"
+      shell: "bash"
+      run: "${{ github.action_path }}/run.sh"
+      env:
+        COMPOSER_INSTALL_DEPENDENCIES: "${{ inputs.dependencies }}"
