@@ -10,7 +10,7 @@ class ConfigurationFactory
     private const DEFAULT_OPTIONS = [
         'dry-run' => false,
         'verbosity' => 0,
-        'ignore_docblocks' => false,
+        'ignore-docblocks' => false,
         'ignore_php_extensions' => true
     ];
 
@@ -27,7 +27,7 @@ class ConfigurationFactory
             $config['tests']['path'] ?? '',
             $this->decideVerbosity($commandOptions, $config),
             (bool) ($config['options']['dry-run'] ?? static::DEFAULT_OPTIONS['dry-run']),
-            (bool) ($config['options']['ignore_docblocks'] ?? static::DEFAULT_OPTIONS['ignore_docblocks']),
+            (bool) ($config['options']['ignore-docblocks'] ?? static::DEFAULT_OPTIONS['ignore-docblocks']),
             (bool) ($config['options']['ignore_php_extensions'] ?? static::DEFAULT_OPTIONS['ignore_php_extensions'])
         );
     }

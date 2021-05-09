@@ -70,7 +70,7 @@ tests:
 | `tests` `path`                            | The path where your tests are                            | *no default* |
 | `options` `verbosity`                     | Output verbosity level (-1/0/1/2)                        | 0            |
 | `options` `dry-run`                       | Report failed suite without error exit code              | *no*         |
-| `options` `ignore_docblocks`              | Ignore relations on docblocks (T/F)                      | false        |
+| `options` `ignore-docblocks`              | Ignore relations on docblocks (T/F)                      | false        |
 | `options` `ignore_php_extensions`         | Ignore relations to core and extensions classes (T/F)    | true         |
 
 </details>

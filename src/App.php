@@ -53,7 +53,7 @@ class App extends SingleCommandApplication
                 'Report failed suite without error exit code'
             )
             ->addOption(
-                'ignore_docblocks',
+                'ignore-docblocks',
                 null,
                 InputOption::VALUE_REQUIRED,
                 'Ignore relations in docblocks'

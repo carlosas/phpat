@@ -34,7 +34,7 @@ All notable changes to this project will be documented in this file.
 * Add support for tests in YAML and XML files
 * Ignore only core and extension classes (instead of all classes without namespace)
 * Add `ignore_php_extensions` option
-* Change `ignore_docblocks` option name
+* Change `ignore-docblocks` option name
 * Change the configuration needed for composer selectors:
 ```yaml
 # phpat.yaml
