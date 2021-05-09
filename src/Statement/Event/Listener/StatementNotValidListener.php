@@ -7,7 +7,7 @@ namespace PhpAT\Statement\Event\Listener;
 use PhpAT\App\RuleValidationStorage;
 use PHPAT\EventDispatcher\EventInterface;
 use PHPAT\EventDispatcher\EventListenerInterface;
-use PhpAT\Output\OutputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 
 class StatementNotValidListener implements EventListenerInterface
@@ -21,8 +21,8 @@ class StatementNotValidListener implements EventListenerInterface
 
     public function __invoke(EventInterface $event)
     {
-        /** @var StatementNotValidEvent $event */
-        $this->output->statementNotValid($event->getMessage());
+        $this->output->write('X', false, OutputInterface::VERBOSITY_VERBOSE);
+        $this->output->writeln(' ' . $event->getMessage(), OutputInterface::VERBOSITY_VERY_VERBOSE);
         RuleValidationStorage::addError($event->getMessage());
     }
 }

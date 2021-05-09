@@ -17,21 +17,30 @@ class Configuration
     private $ignoreDocBlocks;
     private $ignorePhpExtensions;
 
-    public function __construct(array $config)
-    {
+    public function __construct(
+        string $srcPath,
+        array $srcIncluded,
+        array $srcExcluded,
+        array $composerConfiguration,
+        string $testPath,
+        int $verbosity,
+        bool $dryRun,
+        bool $ignoreDocBlocks,
+        bool $ignorePhpExtensions
+    ) {
         $root = is_file(__DIR__ . '/../../../../autoload.php')
             ? realpath(__DIR__ . '/../../../../..')
             : realpath(__DIR__ . '/../..');
 
-        $this->srcPath = $this->normalizePath($root . '/' . $config['src']['path']);
-        $this->srcIncluded = $config['src']['include'] ?? [];
-        $this->srcExcluded = $config['src']['exclude'] ?? [];
-        $this->composerConfiguration = $config['composer'] ?? [];
-        $this->testsPath = $config['tests']['path'] ?? '';
-        $this->verbosity = (int) ($config['options']['verbosity'] ?? 1);
-        $this->dryRun = (bool) ($config['options']['dry-run'] ?? false);
-        $this->ignoreDocBlocks = (bool) ($config['options']['ignore_docblocks'] ?? false);
-        $this->ignorePhpExtensions = (bool) ($config['options']['ignore_php_extensions'] ?? true);
+        $this->srcPath = $this->normalizePath($root . '/' . $srcPath);
+        $this->srcIncluded = $srcIncluded ?? [];
+        $this->srcExcluded = $srcExcluded ?? [];
+        $this->composerConfiguration = $composerConfiguration;
+        $this->testsPath = $testPath;
+        $this->verbosity = (int) $verbosity;
+        $this->dryRun = (bool) $dryRun;
+        $this->ignoreDocBlocks = (bool) $ignoreDocBlocks;
+        $this->ignorePhpExtensions = (bool) $ignorePhpExtensions;
         $this->phpStormStubsPath = $root . '/vendor/jetbrains/phpstorm-stubs';
     }
 
