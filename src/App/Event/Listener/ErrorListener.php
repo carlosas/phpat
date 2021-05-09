@@ -7,7 +7,7 @@ namespace PhpAT\App\Event\Listener;
 use PhpAT\App\Event\ErrorEvent;
 use PHPAT\EventDispatcher\EventInterface;
 use PHPAT\EventDispatcher\EventListenerInterface;
-use PhpAT\Output\OutputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class ErrorListener implements EventListenerInterface
 {
@@ -21,6 +21,6 @@ class ErrorListener implements EventListenerInterface
     public function __invoke(EventInterface $event)
     {
         /** @var ErrorEvent $event */
-        $this->output->fatalError($event->getMessage());
+        $this->output->writeln('ERROR' . $event->getMessage());
     }
 }

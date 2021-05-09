@@ -1,15 +1,16 @@
 <?php
 
-declare(strict_types=1);
-
 namespace PhpAT;
 
+use PhpAT\App\Cli\SingleCommandApplication;
 use PhpAT\App\Configuration;
 use PhpAT\App\Event\SuiteEndEvent;
 use PhpAT\App\Event\SuiteStartEvent;
-use PhpAT\Parser\Ast\MapBuilder;
+use PhpAT\App\Provider;
 use PhpAT\App\RuleValidationStorage;
+use PhpAT\Config\ConfigurationFactory;
 use PHPAT\EventDispatcher\EventDispatcher;
+use PhpAT\Parser\Ast\MapBuilder;
 use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Rule\Event\RuleValidationEndEvent;
 use PhpAT\Rule\Event\RuleValidationStartEvent;
@@ -17,56 +18,75 @@ use PhpAT\Rule\RuleCollection;
 use PhpAT\Statement\Statement;
 use PhpAT\Statement\StatementBuilder;
 use PhpAT\Test\TestExtractor;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class App
+class App extends SingleCommandApplication
 {
-    /**
-     * @var TestExtractor $extractor
-     */
+    /** @var TestExtractor */
     private $extractor;
-    /**
-     * @var StatementBuilder $statementBuilder
-     */
+    /** * @var StatementBuilder */
     private $statementBuilder;
-    /**
-     * @var EventDispatcher
-     */
+    /** * @var EventDispatcher */
     private $dispatcher;
-    /**
-     * @var MapBuilder
-     */
+    /** * @var MapBuilder */
     private $mapBuilder;
-    /**
-     * @var Configuration
-     */
+    /** * @var Configuration */
     private $configuration;
 
-    /**
-     * App constructor.
-     * @param MapBuilder       $mapBuilder
-     * @param TestExtractor    $extractor
-     * @param StatementBuilder $statementBuilder
-     * @param EventDispatcher  $dispatcher
-     * @param Configuration    $configuration
-     */
-    public function __construct(
-        MapBuilder $mapBuilder,
-        TestExtractor $extractor,
-        StatementBuilder $statementBuilder,
-        EventDispatcher $dispatcher,
-        Configuration $configuration
-    ) {
-        $this->extractor        = $extractor;
-        $this->statementBuilder = $statementBuilder;
-        $this->dispatcher       = $dispatcher;
-        $this->mapBuilder       = $mapBuilder;
-        $this->configuration    = $configuration;
+    protected function configure()
+    {
+        $this
+            ->addArgument(
+                'config',
+                InputArgument::OPTIONAL,
+                'Configuration file',
+                file_exists('phpat.yaml') ? 'phpat.yaml' : 'phpat.yml'
+            )
+            ->addOption(
+                'dry-run',
+                'd',
+                InputOption::VALUE_NONE,
+                'Report failed suite without error exit code'
+            )
+            ->addOption(
+                'ignore_docblocks',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Ignore relations in docblocks'
+            )
+            ->addOption(
+                'ignore_php_extensions',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Ignore relations to core and extensions classes'
+            );
     }
 
-    /**
-     * @throws \Exception
-     */
-    public function execute(): bool
+    protected function initialize(InputInterface $input, OutputInterface $output)
+    {
+        if (!(file_exists($input->getArgument('config')))) {
+            throw new \RuntimeException('Configuration file not found.');
+        }
+
+        $provider = new Provider(
+            new ContainerBuilder(),
+            (new ConfigurationFactory())->create($input->getArgument('config'), $input->getOptions()),
+            $output
+        );
+        $container = $provider->register();
+
+        $this->extractor = $container->get(TestExtractor::class);
+        $this->statementBuilder = $container->get(StatementBuilder::class);
+        $this->dispatcher = $container->get(EventDispatcher::class);
+        $this->configuration = $container->get(Configuration::class);
+        $this->mapBuilder = $container->get(MapBuilder::class);
+    }
+
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->dispatcher->dispatch(new SuiteStartEvent());
 
@@ -93,7 +113,7 @@ class App
 
         $this->dispatcher->dispatch(new SuiteEndEvent());
 
-        return !RuleValidationStorage::anyRuleHadErrors() || $this->configuration->getDryRun();
+        return (int) !(RuleValidationStorage::getTotalErrors() === 0 || $this->configuration->getDryRun());
     }
 
     private function validateStatement(Statement $statement, ReferenceMap $map): void

@@ -19,9 +19,9 @@ class RuleValidationStorage
      */
     private static $fatalErrors = [];
     /**
-     * @var bool
+     * @var int
      */
-    private static $anyRuleHadErrors = false;
+    private static $totalErrors = 0;
     /**
      * @var bool
      */
@@ -55,7 +55,7 @@ class RuleValidationStorage
     {
         self::$errors[] = $message;
         self::$lastRuleHadErrors = true;
-        self::$anyRuleHadErrors = true;
+        self::$totalErrors += 1;
     }
 
     /**
@@ -64,7 +64,6 @@ class RuleValidationStorage
     public static function addFatalError(string $message): void
     {
         self::$fatalErrors[] = $message;
-        self::$anyRuleHadErrors = true;
     }
 
     /**
@@ -91,11 +90,11 @@ class RuleValidationStorage
     }
 
     /**
-     * @return bool
+     * @return int
      */
-    public static function anyRuleHadErrors(): bool
+    public static function getTotalErrors(): int
     {
-        return self::$anyRuleHadErrors;
+        return self::$totalErrors;
     }
 
     /**

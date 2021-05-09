@@ -8,7 +8,7 @@ use PhpAT\App\Event\WarningEvent;
 use PhpAT\App\RuleValidationStorage;
 use PHPAT\EventDispatcher\EventInterface;
 use PHPAT\EventDispatcher\EventListenerInterface;
-use PhpAT\Output\OutputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class WarningListener implements EventListenerInterface
 {

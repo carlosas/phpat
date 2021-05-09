@@ -9,7 +9,6 @@ use PHPAT\EventDispatcher\EventDispatcher;
 use PHPAT\EventDispatcher\ListenerProvider;
 use PhpAT\File\FileFinder;
 use PhpAT\File\SymfonyFinderAdapter;
-use PhpAT\Output\OutputInterface;
 use PhpAT\Parser\Ast\Extractor\ExtractorFactory;
 use PhpAT\Parser\Ast\MapBuilder;
 use PhpAT\Parser\Ast\NodeTraverser;
@@ -32,15 +31,11 @@ use PhpParser\ParserFactory;
 use PHPStan\PhpDocParser\Parser\ConstExprParser;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TypeParser;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Finder\Finder;
 
-/**
- * Class Provider
- *
- * @package PhpAT\App
- */
 class Provider
 {
     /** @var ContainerBuilder */
@@ -53,12 +48,12 @@ class Provider
     /**
      * Provider constructor.
      * @param ContainerBuilder $builder
-     * @param array            $config
+     * @param Configuration    $configuration
      * @param OutputInterface  $output
      */
-    public function __construct(ContainerBuilder $builder, array $config, OutputInterface $output)
+    public function __construct(ContainerBuilder $builder, Configuration $configuration, OutputInterface $output)
     {
-        $this->configuration = new Configuration($config);
+        $this->configuration = $configuration;
         $this->builder  = $builder;
         $this->output = $output;
     }
@@ -210,14 +205,6 @@ class Provider
 
         $this->builder
             ->register(Mixin\CanOnlyInclude::class, Mixin\CanOnlyInclude::class)
-            ->addArgument(new Reference(EventDispatcher::class))
-            ->addArgument(new Reference(Configuration::class));
-
-        $this->builder
-            ->register('app', App::class)
-            ->addArgument(new Reference(MapBuilder::class))
-            ->addArgument(new Reference(TestExtractor::class))
-            ->addArgument(new Reference(StatementBuilder::class))
             ->addArgument(new Reference(EventDispatcher::class))
             ->addArgument(new Reference(Configuration::class));
 

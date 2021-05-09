@@ -8,19 +8,16 @@ use PhpAT\App\Event\Listener\FatalErrorListener;
 use PhpAT\App\Event\Listener\SuiteEndListener;
 use PhpAT\App\Event\Listener\SuiteStartListener;
 use PhpAT\App\Event\Listener\WarningListener;
-use PhpAT\Output\OutputInterface;
 use PhpAT\Rule\Event\Listener\RuleValidationEndListener;
 use PhpAT\Rule\Event\Listener\RuleValidationStartListener;
 use PhpAT\Statement\Event\Listener\StatementNotValidListener;
 use PhpAT\Statement\Event\Listener\StatementValidListener;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class EventListenerProvider
 {
     private $builder;
-    /**
-     * @var OutputInterface
-     */
     private $output;
 
     public function __construct(ContainerBuilder $builder, OutputInterface $output)

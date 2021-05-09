@@ -7,7 +7,7 @@ namespace PhpAT\App\Event\Listener;
 use PhpAT\App\RuleValidationStorage;
 use PHPAT\EventDispatcher\EventInterface;
 use PHPAT\EventDispatcher\EventListenerInterface;
-use PhpAT\Output\OutputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class SuiteEndListener implements EventListenerInterface
 {
@@ -20,8 +20,16 @@ class SuiteEndListener implements EventListenerInterface
 
     public function __invoke(EventInterface $event)
     {
-        $success = !RuleValidationStorage::anyRuleHadErrors();
+        $errors = RuleValidationStorage::getTotalErrors();
         $time = microtime(true) - RuleValidationStorage::getStartTime();
-        $this->output->suiteEnd($time, $success);
+
+        $this->output->writeln('', OutputInterface::VERBOSITY_NORMAL);
+        $message = $errors === 0
+            ? '<info>TESTS PASSED</info>'
+            : '<error>ERRORS FOUND</error>';
+        $this->output->writeln(
+            ' <options=bold>phpat</> | ' . round($time, 2) . 's' . ' | ' . $message,
+            OutputInterface::VERBOSITY_NORMAL
+        );
     }
 }

@@ -48,7 +48,7 @@ You will have to use it executing `php phpat.phar phpat.yaml` and declare your t
 
 ### Configuration 🔧
 
-You might want to setup a basic configuration:
+You will need to setup a minimum configuration:
 ```yaml
 # phpat.yaml
 src:
@@ -68,8 +68,8 @@ tests:
 | `composer` `$ALIAS` `json`                | Path of your composer.json file (multiple)               | *no files*   |
 | `composer` `$ALIAS` `lock`                | Path of your composer.lock file (multiple)               | *no files*   |
 | `tests` `path`                            | The path where your tests are                            | *no default* |
-| `options` `verbosity`                     | Output verbosity level (0/1/2)                           | 1            |
-| `options` `dry-run`                       | Report failed suite without error exit code (T/F)        | false        |
+| `options` `verbosity`                     | Output verbosity level (-1/0/1/2)                        | 0            |
+| `options` `dry-run`                       | Report failed suite without error exit code              | *no*         |
 | `options` `ignore_docblocks`              | Ignore relations on docblocks (T/F)                      | false        |
 | `options` `ignore_php_extensions`         | Ignore relations to core and extensions classes (T/F)    | true         |
 
