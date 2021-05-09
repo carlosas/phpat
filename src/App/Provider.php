@@ -48,7 +48,7 @@ class Provider
     /**
      * Provider constructor.
      * @param ContainerBuilder $builder
-     * @param array            $configuration
+     * @param Configuration    $configuration
      * @param OutputInterface  $output
      */
     public function __construct(ContainerBuilder $builder, Configuration $configuration, OutputInterface $output)
