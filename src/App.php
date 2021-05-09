@@ -47,12 +47,6 @@ class App extends SingleCommandApplication
                 file_exists('phpat.yaml') ? 'phpat.yaml' : 'phpat.yml'
             )
             ->addOption(
-                'dry-run',
-                'd',
-                InputOption::VALUE_NONE,
-                'Report failed suite without error exit code'
-            )
-            ->addOption(
                 'ignore-docblocks',
                 null,
                 InputOption::VALUE_REQUIRED,
@@ -113,7 +107,7 @@ class App extends SingleCommandApplication
 
         $this->dispatcher->dispatch(new SuiteEndEvent());
 
-        return (int) !(RuleValidationStorage::getTotalErrors() === 0 || $this->configuration->getDryRun());
+        return (int) !(RuleValidationStorage::getTotalErrors() === 0);
     }
 
     private function validateStatement(Statement $statement, ReferenceMap $map): void

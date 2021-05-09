@@ -13,7 +13,6 @@ class Configuration
     private $composerConfiguration;
     private $testsPath;
     private $verbosity;
-    private $dryRun;
     private $ignoreDocBlocks;
     private $ignorePhpExtensions;
 
@@ -24,7 +23,6 @@ class Configuration
         array $composerConfiguration,
         string $testPath,
         int $verbosity,
-        bool $dryRun,
         bool $ignoreDocBlocks,
         bool $ignorePhpExtensions
     ) {
@@ -38,7 +36,6 @@ class Configuration
         $this->composerConfiguration = $composerConfiguration;
         $this->testsPath = $testPath;
         $this->verbosity = (int) $verbosity;
-        $this->dryRun = (bool) $dryRun;
         $this->ignoreDocBlocks = (bool) $ignoreDocBlocks;
         $this->ignorePhpExtensions = (bool) $ignorePhpExtensions;
         $this->phpStormStubsPath = $root . '/vendor/jetbrains/phpstorm-stubs';
@@ -72,11 +69,6 @@ class Configuration
     public function getVerbosity(): int
     {
         return $this->verbosity;
-    }
-
-    public function getDryRun(): bool
-    {
-        return $this->dryRun;
     }
 
     public function getIgnoreDocBlocks(): bool

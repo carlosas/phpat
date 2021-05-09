@@ -8,7 +8,6 @@ use Symfony\Component\Yaml\Yaml;
 class ConfigurationFactory
 {
     private const DEFAULT_OPTIONS = [
-        'dry-run' => false,
         'verbosity' => 0,
         'ignore-docblocks' => false,
         'ignore-php-extensions' => true
@@ -26,7 +25,6 @@ class ConfigurationFactory
             $config['composer'] ?? [],
             $config['tests']['path'] ?? '',
             $this->decideVerbosity($commandOptions, $config),
-            (bool) ($config['options']['dry-run'] ?? static::DEFAULT_OPTIONS['dry-run']),
             (bool) ($config['options']['ignore-docblocks'] ?? static::DEFAULT_OPTIONS['ignore-docblocks']),
             (bool) ($config['options']['ignore-php-extensions'] ?? static::DEFAULT_OPTIONS['ignore-php-extensions'])
         );
