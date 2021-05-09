@@ -44,7 +44,7 @@ class SingleCommandApplication extends Command
             $message = 'An error occurred while running phpat. "
                 . Please consider opening an issue: http://github.com/carlosas/phpat/issues';
             fwrite(
-                $errStream ?? STDERR,
+                STDERR,
                 sprintf(
                     "\n%s%s%s\n",
                     $redBgWhiteText,
@@ -54,7 +54,7 @@ class SingleCommandApplication extends Command
             );
             do {
                 fwrite(
-                    $errStream ?? STDERR,
+                    STDERR,
                     sprintf(
                         "\n%s\n%s(%s)\n\n%s",
                         $e->getMessage(),

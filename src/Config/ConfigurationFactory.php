@@ -20,7 +20,7 @@ class ConfigurationFactory
         $config['options'] = array_merge($config['options'] ?? [], $commandOptions);
 
         return new Configuration(
-            $config['src']['path'],
+            $config['src']['path'] ?? '',
             $config['src']['include'] ?? [],
             $config['src']['exclude'] ?? [],
             $config['composer'] ?? [],

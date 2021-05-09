@@ -33,8 +33,8 @@ class Configuration
             : realpath(__DIR__ . '/../..');
 
         $this->srcPath = $this->normalizePath($root . '/' . $srcPath);
-        $this->srcIncluded = $srcIncluded ?? [];
-        $this->srcExcluded = $srcExcluded ?? [];
+        $this->srcIncluded = $srcIncluded;
+        $this->srcExcluded = $srcExcluded;
         $this->composerConfiguration = $composerConfiguration;
         $this->testsPath = $testPath;
         $this->verbosity = (int) $verbosity;
