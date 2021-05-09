@@ -40,10 +40,30 @@ class App extends SingleCommandApplication
     protected function configure()
     {
         $this
-            ->addArgument('config', InputArgument::OPTIONAL, 'Configuration file', file_exists('phpat.yaml') ? 'phpat.yaml' : 'phpat.yml')
-            ->addOption('dry-run', 'd', InputOption::VALUE_NONE, 'Report failed suite without error exit code')
-            ->addOption('ignore_docblocks', null, InputOption::VALUE_REQUIRED, 'Ignore relations in docblocks')
-            ->addOption('ignore_php_extensions', null, InputOption::VALUE_REQUIRED, 'Ignore relations to core and extensions classes');
+            ->addArgument(
+                'config',
+                InputArgument::OPTIONAL,
+                'Configuration file',
+                file_exists('phpat.yaml') ? 'phpat.yaml' : 'phpat.yml'
+            )
+            ->addOption(
+                'dry-run',
+                'd',
+                InputOption::VALUE_NONE,
+                'Report failed suite without error exit code'
+            )
+            ->addOption(
+                'ignore_docblocks',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Ignore relations in docblocks'
+            )
+            ->addOption(
+                'ignore_php_extensions',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Ignore relations to core and extensions classes'
+            );
     }
 
     protected function initialize(InputInterface $input, OutputInterface $output)
