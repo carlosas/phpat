@@ -113,7 +113,7 @@ class App extends SingleCommandApplication
 
         $this->dispatcher->dispatch(new SuiteEndEvent());
 
-        return (int) (RuleValidationStorage::getTotalErrors() === 0 || $this->configuration->getDryRun());
+        return (int) !(RuleValidationStorage::getTotalErrors() === 0 || $this->configuration->getDryRun());
     }
 
     private function validateStatement(Statement $statement, ReferenceMap $map): void

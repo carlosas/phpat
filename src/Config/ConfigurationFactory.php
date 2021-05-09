@@ -9,6 +9,7 @@ class ConfigurationFactory
 {
     private const DEFAULT_OPTIONS = [
         'dry-run' => false,
+        'verbosity' => 0,
         'ignore_docblocks' => false,
         'ignore_php_extensions' => true
     ];
