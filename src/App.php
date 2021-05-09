@@ -59,7 +59,7 @@ class App extends SingleCommandApplication
                 'Ignore relations in docblocks'
             )
             ->addOption(
-                'ignore_php_extensions',
+                'ignore-php-extensions',
                 null,
                 InputOption::VALUE_REQUIRED,
                 'Ignore relations to core and extensions classes'

@@ -71,7 +71,7 @@ tests:
 | `options` `verbosity`                     | Output verbosity level (-1/0/1/2)                        | 0            |
 | `options` `dry-run`                       | Report failed suite without error exit code              | *no*         |
 | `options` `ignore-docblocks`              | Ignore relations on docblocks (T/F)                      | false        |
-| `options` `ignore_php_extensions`         | Ignore relations to core and extensions classes (T/F)    | true         |
+| `options` `ignore-php-extensions`         | Ignore relations to core and extensions classes (T/F)    | true         |
 
 </details>
 

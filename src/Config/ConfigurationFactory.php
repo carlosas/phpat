@@ -11,7 +11,7 @@ class ConfigurationFactory
         'dry-run' => false,
         'verbosity' => 0,
         'ignore-docblocks' => false,
-        'ignore_php_extensions' => true
+        'ignore-php-extensions' => true
     ];
 
     public function create(string $configFilePath, array $commandOptions): Configuration
@@ -28,7 +28,7 @@ class ConfigurationFactory
             $this->decideVerbosity($commandOptions, $config),
             (bool) ($config['options']['dry-run'] ?? static::DEFAULT_OPTIONS['dry-run']),
             (bool) ($config['options']['ignore-docblocks'] ?? static::DEFAULT_OPTIONS['ignore-docblocks']),
-            (bool) ($config['options']['ignore_php_extensions'] ?? static::DEFAULT_OPTIONS['ignore_php_extensions'])
+            (bool) ($config['options']['ignore-php-extensions'] ?? static::DEFAULT_OPTIONS['ignore-php-extensions'])
         );
     }
 
