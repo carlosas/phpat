@@ -41,20 +41,28 @@ class SingleCommandApplication extends Command
         } catch (\Throwable $e) {
             $redBgWhiteText = "\033[41m\033[1;37m";
             $formattingReset = "\033[0m";
-            fwrite($errStream ?? STDERR, sprintf(
-                "\n%s%s%s\n",
-                $redBgWhiteText,
-                'An error occurred while running phpat. Please consider opening an issue: http://github.com/carlosas/phpat/issues',
-                $formattingReset
-            ));
+            $message = 'An error occurred while running phpat. "
+                . Please consider opening an issue: http://github.com/carlosas/phpat/issues';
+            fwrite(
+                $errStream ?? STDERR,
+                sprintf(
+                    "\n%s%s%s\n",
+                    $redBgWhiteText,
+                    $message,
+                    $formattingReset
+                )
+            );
             do {
-                fwrite($errStream ?? STDERR, sprintf(
-                    "\n%s\n%s(%s)\n\n%s",
-                    $e->getMessage(),
-                    $e->getFile(),
-                    $e->getLine(),
-                    $e->getTraceAsString()
-                ));
+                fwrite(
+                    $errStream ?? STDERR,
+                    sprintf(
+                        "\n%s\n%s(%s)\n\n%s",
+                        $e->getMessage(),
+                        $e->getFile(),
+                        $e->getLine(),
+                        $e->getTraceAsString()
+                    )
+                );
             } while ($e = $e->getPrevious());
         } finally {
             $this->running = false;
