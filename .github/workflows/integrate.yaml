@@ -59,8 +59,8 @@ jobs:
       - name: "Run squizlabs/php_codesniffer"
         run: "vendor/bin/phpcs src/"
 
-  dependency-analysis:
-    name: "Dependency Analysis"
+  architecture-analysis:
+    name: "Architecture Analysis"
 
     runs-on: "ubuntu-latest"
 
