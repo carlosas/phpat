@@ -7,6 +7,8 @@ on: # yamllint disable-line rule:truthy
   push:
     branches:
       - "main"
+      - "master"
+      - "v*"
 
 env:
   PHP_EXTENSIONS: "json, simplexml"
