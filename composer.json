@@ -43,6 +43,6 @@
     }
   },
   "bin": [
-    "phpat"
+    "bin/phpat"
   ]
 }

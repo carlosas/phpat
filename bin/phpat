@@ -5,9 +5,9 @@ error_reporting(E_ALL);
 ini_set('display_errors', 'stderr');
 gc_disable();
 
-$autoload = is_file(__DIR__.'/../../autoload.php')
-    ? __DIR__.'/../../autoload.php'
-    : __DIR__.'/vendor/autoload.php';
+$autoload = is_file(__DIR__.'/../../../autoload.php')
+    ? __DIR__.'/../../../autoload.php'
+    : __DIR__.'/../vendor/autoload.php';
 require $autoload;
 
 exit((new \PhpAT\App())->run());

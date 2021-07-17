@@ -99,10 +99,10 @@ jobs:
           dependencies: "${{ matrix.dependencies }}"
 
       - name: "Run phpat/phpat"
-        run: "php phpat"
+        run: "php bin/phpat"
 
       - name: "Run phpat/phpat for functional tests"
-        run: "php phpat tests/functional/functional.yaml"
+        run: "php bin/phpat tests/functional/functional.yaml"
 
   static-code-analysis:
     name: "Static Code Analysis"
