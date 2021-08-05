@@ -66,9 +66,18 @@ class App extends SingleCommandApplication
             throw new \RuntimeException('Configuration file not found.');
         }
 
+        $configuration = (new ConfigurationFactory())->create(
+            $input->getArgument('config'),
+            $input->getOptions()
+        );
+
+        if (!$this->hasCommandVerbosity($output)) {
+            $output->setVerbosity($this->getConsoleVerbosity($configuration->getVerbosity()));
+        }
+
         $provider = new Provider(
             new ContainerBuilder(),
-            (new ConfigurationFactory())->create($input->getArgument('config'), $input->getOptions()),
+            $configuration,
             $output
         );
         $container = $provider->register();
@@ -118,5 +127,25 @@ class App extends SingleCommandApplication
             $statement->getExcludedDestinations(),
             $map
         );
+    }
+
+    private function hasCommandVerbosity(OutputInterface $output): bool
+    {
+        return $output->getVerbosity() !== OutputInterface::VERBOSITY_NORMAL;
+    }
+
+    private function getConsoleVerbosity(int $verbosity): int
+    {
+        switch($verbosity) {
+            case 2:
+                return OutputInterface::VERBOSITY_VERY_VERBOSE;
+            case 1:
+                return OutputInterface::VERBOSITY_VERBOSE;
+            case -1:
+                return OutputInterface::VERBOSITY_QUIET;
+            case 0:
+            default:
+                return OutputInterface::VERBOSITY_NORMAL;
+        }
     }
 }
