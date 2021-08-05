@@ -5,8 +5,8 @@ namespace PhpAT\Parser\Ast\Extractor;
 use PhpAT\Parser\Ast\FullClassName;
 use PhpAT\Parser\Ast\Type\PhpType;
 use PhpAT\Parser\Relation\AbstractRelation;
-use Roave\BetterReflection\Reflection\ReflectionClass;
-use Roave\BetterReflection\Reflection\ReflectionType;
+use PHPStan\BetterReflection\Reflection\ReflectionClass;
+use PHPStan\BetterReflection\Reflection\ReflectionType;
 
 abstract class AbstractExtractor
 {

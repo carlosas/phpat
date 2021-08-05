@@ -1,8 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
-namespace PhpAT;
+namespace PhpAT\Parser\Ast\Type;
 
 use phpDocumentor\Reflection\Types\Context;
 use PhpParser\Node;
@@ -11,12 +9,13 @@ use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 
-use function array_filter;
-use function array_map;
-use function array_merge;
-use function in_array;
-
-class NamespaceNodeToReflectionTypeContext
+/**
+ * Class NamespaceNodeToReflectionContext
+ * @package PhpAT\Parser\Ast\Type
+ * Based on Roave/BetterReflection NamespaceNodeToReflectionTypeContext
+ * Copyright (c) 2017 Roave, LLC. | MIT License
+ */
+class NamespaceNodeToReflectionContext
 {
     public function __invoke(?Namespace_ $namespace): Context
     {
@@ -26,7 +25,7 @@ class NamespaceNodeToReflectionTypeContext
 
         return new Context(
             $namespace->name ? $namespace->name->toString() : '',
-            $this->aliasesToFullyQualifiedNames($namespace),
+            $this->aliasesToFullyQualifiedNames($namespace)
         );
     }
 
@@ -54,9 +53,9 @@ class NamespaceNodeToReflectionTypeContext
                             $use->uses,
                         );
                     },
-                    $this->classAlikeUses($namespace),
-                ),
-            ),
+                    $this->classAlikeUses($namespace)
+                )
+            )
         );
     }
 
@@ -72,7 +71,7 @@ class NamespaceNodeToReflectionTypeContext
                     $node instanceof Use_
                     || $node instanceof GroupUse
                 ) && in_array($node->type, [Use_::TYPE_UNKNOWN, Use_::TYPE_NORMAL], true);
-            },
+            }
         );
     }
 }

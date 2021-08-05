@@ -9,7 +9,7 @@ use PhpAT\Parser\Relation\Mixin;
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\TraitUse;
-use Roave\BetterReflection\Reflection\ReflectionClass;
+use PHPStan\BetterReflection\Reflection\ReflectionClass;
 
 class TraitExtractor extends AbstractExtractor
 {
