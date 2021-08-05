@@ -2,13 +2,12 @@
 
 namespace Tests\PhpAT\functional\php8\fixtures;
 
-class ConstructorPromotionClass
+class NamedArgumentClass
 {
-    public function __construct(
-        public string $name,
-        public SimpleClassOne $simpleClass,
-        public ?SimpleClassTwo $simpleClassTwo,
-        public SimpleClassThree|SimpleClassFour $anotherClass,
-        public \DateTimeImmutable $birthDate
-    ) {}
+    public function someMethod(): void
+    {
+        $a = new UnionClass(
+            classFiveOrSix: new SimpleClassFive()
+        );
+    }
 }

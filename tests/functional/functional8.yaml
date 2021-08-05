@@ -1,0 +1,6 @@
+src:
+  path: tests/functional/php8/fixtures/
+tests:
+  path: tests/functional/php8/architecture/
+options:
+  verbosity: 2

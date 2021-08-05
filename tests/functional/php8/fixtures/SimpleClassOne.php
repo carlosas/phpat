@@ -2,6 +2,6 @@
 
 namespace Tests\PhpAT\functional\php8\fixtures;
 
-class SimpleClass
+class SimpleClassOne
 {
 }
