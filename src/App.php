@@ -136,7 +136,7 @@ class App extends SingleCommandApplication
 
     private function getConsoleVerbosity(int $verbosity): int
     {
-        switch($verbosity) {
+        switch ($verbosity) {
             case 2:
                 return OutputInterface::VERBOSITY_VERY_VERBOSE;
             case 1:
