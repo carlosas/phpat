@@ -9,6 +9,7 @@ on: # yamllint disable-line rule:truthy
       - "main"
       - "master"
       - "v*"
+      - "php8"
 
 env:
   PHP_EXTENSIONS: "json, simplexml"
@@ -22,7 +23,7 @@ jobs:
     strategy:
       matrix:
         php-version:
-          - "7.2"
+          - "7.3"
 
         dependencies:
           - "highest"
@@ -67,9 +68,9 @@ jobs:
     strategy:
       matrix:
         php-version:
-          - "7.2"
           - "7.3"
           - "7.4"
+          - "8.0"
 
         dependencies:
           - "highest"
@@ -159,9 +160,9 @@ jobs:
     strategy:
       matrix:
         php-version:
-          - "7.2"
           - "7.3"
           - "7.4"
+          - "8.0"
 
         dependencies:
           - "highest"

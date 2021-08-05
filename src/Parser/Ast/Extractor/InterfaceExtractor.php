@@ -7,7 +7,7 @@ use PhpAT\Parser\Ast\FullClassName;
 use PhpAT\Parser\Relation\AbstractRelation;
 use PhpAT\Parser\Relation\Composition;
 use PhpParser\Node\Name\FullyQualified;
-use Roave\BetterReflection\Reflection\ReflectionClass;
+use PHPStan\BetterReflection\Reflection\ReflectionClass;
 
 class InterfaceExtractor extends AbstractExtractor
 {

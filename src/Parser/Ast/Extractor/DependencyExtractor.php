@@ -6,6 +6,7 @@ use PhpAT\App\Configuration;
 use PhpAT\Parser\Ast\Collector\MethodDependenciesCollector;
 use PhpAT\Parser\Ast\FullClassName;
 use PhpAT\Parser\Ast\NodeTraverser;
+use PhpAT\Parser\Ast\Type\NamespaceNodeToReflectionContext;
 use PhpAT\Parser\Ast\Type\PhpParserTypeNodeResolver;
 use PhpAT\Parser\Ast\Type\PhpStanDocTypeNodeResolver;
 use PhpAT\Parser\Ast\Type\PhpType;
@@ -13,11 +14,10 @@ use PhpAT\Parser\Relation\AbstractRelation;
 use PhpAT\Parser\Relation\Dependency;
 use phpDocumentor\Reflection\Types\Context;
 use PhpParser\Node;
-use Roave\BetterReflection\Reflection\ReflectionClass;
-use Roave\BetterReflection\Reflection\ReflectionMethod;
-use Roave\BetterReflection\Reflection\ReflectionParameter;
-use Roave\BetterReflection\Reflection\ReflectionProperty;
-use Roave\BetterReflection\TypesFinder\PhpDocumentor\NamespaceNodeToReflectionTypeContext;
+use PHPStan\BetterReflection\Reflection\ReflectionClass;
+use PHPStan\BetterReflection\Reflection\ReflectionMethod;
+use PHPStan\BetterReflection\Reflection\ReflectionParameter;
+use PHPStan\BetterReflection\Reflection\ReflectionProperty;
 
 class DependencyExtractor extends AbstractExtractor
 {
@@ -50,7 +50,7 @@ class DependencyExtractor extends AbstractExtractor
      */
     public function extract(ReflectionClass $class): array
     {
-        $context = (new NamespaceNodeToReflectionTypeContext())($class->getDeclaringNamespaceAst());
+        $context = (new NamespaceNodeToReflectionContext())($class->getDeclaringNamespaceAst());
 
         $this->addClassDependencies($class, $context);
 
