@@ -3,6 +3,8 @@
 namespace PhpAT\Parser\Ast\Extractor\AttributeHelper;
 
 use phpDocumentor\Reflection\Types\Context;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
 use PHPStan\BetterReflection\Reflection\ReflectionAttribute;
 use PHPStan\BetterReflection\Reflection\ReflectionClass;
 use PHPStan\BetterReflection\Reflection\ReflectionMethod;
@@ -21,7 +23,6 @@ class AttributeExtractor implements AttributeExtractorInterface
     {
         foreach ($class->getAttributes() as $attribute) {
             $result[] = $attribute->getName();
-            //TODO: attribute arguments might use types
         }
 
         return $result ?? [];
@@ -29,12 +30,13 @@ class AttributeExtractor implements AttributeExtractorInterface
 
     public function getFromReflectionMethod(ReflectionMethod $method): array
     {
+        /** @var ClassMethod|Function_ $ast */
         $ast = $method->getAst();
         foreach ($ast->attrGroups ?? [] as $attrGroup) {
             foreach ($attrGroup->attrs as $attr) {
                 $result[] = (new ReflectionAttribute(
                     $attr->name->toString(),
-                    [] //TODO: attribute arguments might use types
+                    []
                 ))->getName();
             }
         }
