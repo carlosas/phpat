@@ -4,6 +4,7 @@ namespace PhpAT\Parser\Ast\Extractor;
 
 use PhpAT\App\Configuration;
 use PhpAT\Parser\Ast\Collector\MethodDependenciesCollector;
+use PhpAT\Parser\Ast\Extractor\AttributeHelper\AttributeExtractorFactory;
 use PhpAT\Parser\Ast\FullClassName;
 use PhpAT\Parser\Ast\NodeTraverser;
 use PhpAT\Parser\Ast\Type\NamespaceNodeToReflectionContext;
@@ -104,6 +105,8 @@ class DependencyExtractor extends AbstractExtractor
             $this->extractorFactory->createTraitExtractor()->extract($class)
         );
 
+        $this->addClassAttributesDependencies($class, $context);
+
         $this->addDocCommentDependencies($class->getDocComment(), $class->getStartLine(), $context);
     }
 
@@ -149,6 +152,9 @@ class DependencyExtractor extends AbstractExtractor
                 }
             }
         }
+
+        // Method attributes
+        $this->addMethodAttributesDependencies($method, $context);
 
         // Method body
         $collector = new MethodDependenciesCollector(
@@ -198,6 +204,28 @@ class DependencyExtractor extends AbstractExtractor
                 Dependency::class,
                 $relation->line,
                 $relation->relatedClass
+            );
+        }
+    }
+
+    private function addClassAttributesDependencies(ReflectionClass $class, Context $context): void
+    {
+        foreach ((new AttributeExtractorFactory())->create($context)->getFromReflectionClass($class) as $name) {
+            $this->addRelation(
+                Dependency::class,
+                $class->getStartLine(),
+                FullClassName::createFromFQCN($name)
+            );
+        }
+    }
+
+    private function addMethodAttributesDependencies(ReflectionMethod $method, Context $context): void
+    {
+        foreach ((new AttributeExtractorFactory())->create($context)->getFromReflectionMethod($method) as $name) {
+            $this->addRelation(
+                Dependency::class,
+                $method->getStartLine(),
+                FullClassName::createFromFQCN($name)
             );
         }
     }

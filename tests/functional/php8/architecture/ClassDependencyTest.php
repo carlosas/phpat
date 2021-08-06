@@ -7,7 +7,8 @@ use PhpAT\Selector\Selector;
 use PhpAT\Test\ArchitectureTest;
 use Tests\PhpAT\functional\php8\fixtures\ClassWithAttribute;
 use Tests\PhpAT\functional\php8\fixtures\ConstructorPromotionClass;
-use Tests\PhpAT\functional\php8\fixtures\DummyAttribute;
+use Tests\PhpAT\functional\php8\fixtures\DummyAttributeOne;
+use Tests\PhpAT\functional\php8\fixtures\DummyAttributeTwo;
 use Tests\PhpAT\functional\php8\fixtures\DummyException;
 use Tests\PhpAT\functional\php8\fixtures\MatchClass;
 use Tests\PhpAT\functional\php8\fixtures\NamedArgumentClass;
@@ -67,14 +68,14 @@ class ClassDependencyTest extends ArchitectureTest
             ->andClassesThat(Selector::haveClassName(DummyException::class))
             ->build();
     }
-    /*
+
     public function testAttributesAreCatched(): Rule
     {
         return $this->newRule
             ->classesThat(Selector::haveClassName(ClassWithAttribute::class))
             ->mustOnlyDependOn()
-            ->classesThat(Selector::haveClassName(DummyAttribute::class))
+            ->classesThat(Selector::haveClassName(DummyAttributeOne::class))
+            ->classesThat(Selector::haveClassName(DummyAttributeTwo::class))
             ->build();
     }
-    */
 }

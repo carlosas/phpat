@@ -2,7 +2,11 @@
 
 namespace Tests\PhpAT\functional\php8\fixtures;
 
-#[DummyAttribute]
+#[DummyAttributeOne]
 class ClassWithAttribute
 {
+    #[DummyAttributeTwo]
+    public function someMethod(): void
+    {
+    }
 }
