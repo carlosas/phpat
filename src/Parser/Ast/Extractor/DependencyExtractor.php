@@ -16,7 +16,6 @@ use phpDocumentor\Reflection\Types\Context;
 use PhpParser\Node;
 use PHPStan\BetterReflection\Reflection\ReflectionClass;
 use PHPStan\BetterReflection\Reflection\ReflectionMethod;
-use PHPStan\BetterReflection\Reflection\ReflectionParameter;
 use PHPStan\BetterReflection\Reflection\ReflectionProperty;
 
 class DependencyExtractor extends AbstractExtractor
@@ -54,12 +53,10 @@ class DependencyExtractor extends AbstractExtractor
 
         $this->addClassDependencies($class, $context);
 
-        /** @var ReflectionProperty $property */
         foreach ($class->getImmediateProperties() as $property) {
             $this->addPropertyDependencies($property, $context);
         }
 
-        /** @var ReflectionMethod $method */
         foreach ($class->getImmediateMethods() as $method) {
             $this->addMethodDependencies($method, $context);
         }
@@ -86,15 +83,7 @@ class DependencyExtractor extends AbstractExtractor
             }
         }
 
-        foreach ($this->docTypeResolver->getBlockClassNames($context, $property->getDocComment()) as $docType) {
-            if (!PhpType::isBuiltinType($docType) && !PhpType::isSpecialType($docType)) {
-                $this->addRelation(
-                    Dependency::class,
-                    $property->getStartLine(),
-                    FullClassName::createFromFQCN($docType)
-                );
-            }
-        }
+        $this->addDocCommentDependencies($property->getDocComment(), $property->getStartLine(), $context);
     }
 
     /**
@@ -115,20 +104,7 @@ class DependencyExtractor extends AbstractExtractor
             $this->extractorFactory->createTraitExtractor()->extract($class)
         );
 
-        $doc = $class->getDocComment();
-        foreach ($this->docTypeResolver->getBlockClassNames($context, $doc) as $type) {
-            if (
-                $type !== null
-                && !PhpType::isBuiltinType($type)
-                && !PhpType::isSpecialType($type)
-            ) {
-                $this->addRelation(
-                    Dependency::class,
-                    $class->getStartLine(),
-                    FullClassName::createFromFQCN($type)
-                );
-            }
-        }
+        $this->addDocCommentDependencies($class->getDocComment(), $class->getStartLine(), $context);
     }
 
     /**
@@ -157,7 +133,6 @@ class DependencyExtractor extends AbstractExtractor
         }
 
         // Method parameters
-        /** @var ReflectionParameter $parameter */
         foreach ($method->getParameters() as $parameter) {
             $ast = $parameter->getAst();
             if ($ast->type !== null) {
@@ -195,6 +170,19 @@ class DependencyExtractor extends AbstractExtractor
                     Dependency::class,
                     $result->line,
                     $result->relatedClass
+                );
+            }
+        }
+    }
+
+    private function addDocCommentDependencies(string $docComment, int $startLine, Context $context)
+    {
+        foreach ($this->docTypeResolver->getBlockClassNames($context, $docComment) as $type) {
+            if ($type !== null && !PhpType::isBuiltinType($type) && !PhpType::isSpecialType($type)) {
+                $this->addRelation(
+                    Dependency::class,
+                    $startLine,
+                    FullClassName::createFromFQCN($type)
                 );
             }
         }
