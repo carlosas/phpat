@@ -73,7 +73,10 @@ class MapBuilder
 
     private function buildSrcMap(): array
     {
-        $files = $this->finder->findPhpFilesInPath($this->configuration->getSrcPath());
+        $files = $this->finder->findPhpFilesInPath(
+            $this->configuration->getSrcPath(),
+            $this->configuration->getSrcExcluded()
+        );
         $astLocator = (new BetterReflection())->astLocator();
         $reflector = new ClassReflector(new FileIteratorSourceLocator(new \ArrayIterator($files), $astLocator));
 
