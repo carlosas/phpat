@@ -6,19 +6,22 @@ class FullClassName implements ClassLike
 {
     private $namespace;
     private $name;
+    private $fqcn;
 
-    public function __construct(string $namespace, string $name)
+    private function __construct(string $namespace, string $name, string $fqcn)
     {
         $this->namespace = $namespace;
         $this->name = $name;
+        $this->fqcn = $fqcn;
     }
 
     public static function createFromFQCN(string $fqcn): self
     {
         $parts = explode('\\', ltrim($fqcn, '\\'));
         $name = array_pop($parts);
+        $normalizedFqcn = empty($parts) ? $name : $fqcn;
 
-        return new self(implode('\\', $parts), $name);
+        return new self(implode('\\', $parts), $name, $normalizedFqcn);
     }
 
     public function getNamespace(): string
@@ -33,9 +36,7 @@ class FullClassName implements ClassLike
 
     public function getFQCN(): string
     {
-        return (empty($this->getNamespace()))
-            ? $this->getName()
-            : $this->getNamespace() . '\\' . $this->getName();
+        return $this->fqcn;
     }
 
     public function matches(string $name): bool
