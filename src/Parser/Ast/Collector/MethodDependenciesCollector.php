@@ -5,7 +5,6 @@ namespace PhpAT\Parser\Ast\Collector;
 use PhpAT\App\Configuration;
 use PhpAT\Parser\Ast\FullClassName;
 use PhpAT\Parser\Ast\Type\PhpStanDocTypeNodeResolver;
-use PhpAT\Parser\Ast\Type\PhpType;
 use PhpAT\Parser\Relation\AbstractRelation;
 use PhpAT\Parser\Relation\Dependency;
 use phpDocumentor\Reflection\Types\Context;

@@ -22,7 +22,7 @@ jobs:
     strategy:
       matrix:
         php-version:
-          - "7.2"
+          - "7.3"
 
         dependencies:
           - "highest"
@@ -59,17 +59,17 @@ jobs:
       - name: "Run squizlabs/php_codesniffer"
         run: "vendor/bin/phpcs src/"
 
-  dependency-analysis:
-    name: "Dependency Analysis"
+  architecture-analysis:
+    name: "Architecture Analysis"
 
     runs-on: "ubuntu-latest"
 
     strategy:
       matrix:
         php-version:
-          - "7.2"
           - "7.3"
           - "7.4"
+          - "8.0"
 
         dependencies:
           - "highest"
@@ -101,10 +101,93 @@ jobs:
           dependencies: "${{ matrix.dependencies }}"
 
       - name: "Run phpat/phpat"
-        run: "php phpat"
+        run: "php bin/phpat"
+
+  functional-analysis:
+    name: "Functional Analysis"
+
+    runs-on: "ubuntu-latest"
+
+    strategy:
+      matrix:
+        php-version:
+          - "7.3"
+          - "7.4"
+          - "8.0"
+
+        dependencies:
+          - "highest"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v2"
+
+      - name: "Install PHP with extensions"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          coverage: "none"
+          extensions: "${{ env.PHP_EXTENSIONS }}"
+          php-version: "${{ matrix.php-version }}"
+
+      - name: "Determine composer cache directory"
+        uses: "./.github/actions/composer/composer/determine-cache-directory"
+
+      - name: "Cache dependencies installed with composer"
+        uses: "actions/cache@v2"
+        with:
+          path: "${{ env.COMPOSER_CACHE_DIR }}"
+          key: "php-${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-${{ hashFiles('composer.lock') }}"
+          restore-keys: "php-${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-"
+
+      - name: "Install ${{ matrix.dependencies }} dependencies with composer"
+        uses: "./.github/actions/composer/composer/install"
+        with:
+          dependencies: "${{ matrix.dependencies }}"
 
       - name: "Run phpat/phpat for functional tests"
-        run: "php phpat tests/functional/functional.yaml"
+        run: "php bin/phpat tests/functional/functional7.yaml"
+
+  functional-analysis-php8:
+    name: "Functional Analysis (PHP8 specific)"
+
+    runs-on: "ubuntu-latest"
+
+    strategy:
+      matrix:
+        php-version:
+          - "8.0"
+
+        dependencies:
+          - "highest"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v2"
+
+      - name: "Install PHP with extensions"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          coverage: "none"
+          extensions: "${{ env.PHP_EXTENSIONS }}"
+          php-version: "${{ matrix.php-version }}"
+
+      - name: "Determine composer cache directory"
+        uses: "./.github/actions/composer/composer/determine-cache-directory"
+
+      - name: "Cache dependencies installed with composer"
+        uses: "actions/cache@v2"
+        with:
+          path: "${{ env.COMPOSER_CACHE_DIR }}"
+          key: "php-${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-${{ hashFiles('composer.lock') }}"
+          restore-keys: "php-${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-"
+
+      - name: "Install ${{ matrix.dependencies }} dependencies with composer"
+        uses: "./.github/actions/composer/composer/install"
+        with:
+          dependencies: "${{ matrix.dependencies }}"
+
+      - name: "Run phpat/phpat for functional tests"
+        run: "php bin/phpat tests/functional/functional8.yaml"
 
   static-code-analysis:
     name: "Static Code Analysis"
@@ -159,9 +242,9 @@ jobs:
     strategy:
       matrix:
         php-version:
-          - "7.2"
           - "7.3"
           - "7.4"
+          - "8.0"
 
         dependencies:
           - "highest"
