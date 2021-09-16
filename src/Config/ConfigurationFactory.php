@@ -10,7 +10,8 @@ class ConfigurationFactory
     private const DEFAULT_OPTIONS = [
         'verbosity' => 0,
         'ignore-docblocks' => false,
-        'ignore-php-extensions' => true
+        'ignore-php-extensions' => true,
+        'composer' => ['main' => ['json' => 'composer.json', 'lock' => 'composer.lock']]
     ];
 
     public function create(string $configFilePath, array $commandOptions): Configuration
@@ -22,7 +23,7 @@ class ConfigurationFactory
             $config['src']['path'] ?? '',
             $config['src']['include'] ?? [],
             $config['src']['exclude'] ?? [],
-            $config['composer'] ?? [],
+            $config['composer'] ?? static::DEFAULT_OPTIONS['composer'],
             $config['tests']['path'] ?? '',
             $this->decideVerbosity($commandOptions, $config),
             (bool) ($config['options']['ignore-docblocks'] ?? static::DEFAULT_OPTIONS['ignore-docblocks']),
