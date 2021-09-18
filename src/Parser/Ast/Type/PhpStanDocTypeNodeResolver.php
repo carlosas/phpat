@@ -2,7 +2,7 @@
 
 namespace PhpAT\Parser\Ast\Type;
 
-use phpDocumentor\Reflection\Types\Context;
+use PhpAT\Parser\Ast\ClassContext;
 use PHPStan\PhpDocParser\Ast\Type;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
@@ -22,11 +22,11 @@ class PhpStanDocTypeNodeResolver
     }
 
     /**
-     * @param Context $context
+     * @param ClassContext $context
      * @param string  $docBlock
      * @return string[]
      */
-    public function getBlockClassNames(Context $context, string $docBlock): array
+    public function getBlockClassNames(ClassContext $context, string $docBlock): array
     {
         try {
             $nodes = $this->docParser->parse(new TokenIterator((new Lexer())->tokenize($docBlock)));
@@ -91,7 +91,7 @@ class PhpStanDocTypeNodeResolver
         return [];
     }
 
-    private function resolveNameFromContext(Context $context, string $name): string
+    private function resolveNameFromContext(ClassContext $context, string $name): string
     {
         if (
             strpos($name, '\\') === 0

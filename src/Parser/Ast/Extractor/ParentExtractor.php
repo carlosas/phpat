@@ -6,7 +6,6 @@ use PhpAT\App\Configuration;
 use PhpAT\Parser\Ast\FullClassName;
 use PhpAT\Parser\Relation\AbstractRelation;
 use PhpAT\Parser\Relation\Inheritance;
-use PhpAT\Rule\Assertion\Mixin\MustOnlyInclude;
 use PhpParser\Node\Name\FullyQualified;
 use PHPStan\BetterReflection\Reflection\ReflectionClass;
 

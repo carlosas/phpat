@@ -3,6 +3,7 @@
 namespace PhpAT\Parser\Ast\Extractor;
 
 use PhpAT\App\Configuration;
+use PhpAT\Parser\Ast\ClassContext;
 use PhpAT\Parser\Ast\Collector\MethodDependenciesCollector;
 use PhpAT\Parser\Ast\Extractor\AttributeHelper\AttributeExtractorFactory;
 use PhpAT\Parser\Ast\FullClassName;
@@ -13,7 +14,6 @@ use PhpAT\Parser\Ast\Type\PhpStanDocTypeNodeResolver;
 use PhpAT\Parser\Ast\Type\PhpType;
 use PhpAT\Parser\Relation\AbstractRelation;
 use PhpAT\Parser\Relation\Dependency;
-use phpDocumentor\Reflection\Types\Context;
 use PhpParser\Node;
 use PHPStan\BetterReflection\Reflection\ReflectionClass;
 use PHPStan\BetterReflection\Reflection\ReflectionMethod;
@@ -67,9 +67,9 @@ class DependencyExtractor extends AbstractExtractor
 
     /**
      * @param ReflectionProperty $property
-     * @param Context $context
+     * @param ClassContext $context
      */
-    private function addPropertyDependencies(ReflectionProperty $property, Context $context): void
+    private function addPropertyDependencies(ReflectionProperty $property, ClassContext $context): void
     {
         $ast = $property->getAst();
         $propertyTypes = $this->typeNodeResolver->getTypeClassNames($ast->type);
@@ -89,9 +89,9 @@ class DependencyExtractor extends AbstractExtractor
 
     /**
      * @param ReflectionClass $class
-     * @param Context $context
+     * @param ClassContext $context
      */
-    private function addClassDependencies(ReflectionClass $class, Context $context): void
+    private function addClassDependencies(ReflectionClass $class, ClassContext $context): void
     {
         $this->addDependenciesFromRelations(
             $this->extractorFactory->createParentExtractor()->extract($class)
@@ -112,9 +112,9 @@ class DependencyExtractor extends AbstractExtractor
 
     /**
      * @param ReflectionMethod $method
-     * @param Context $context
+     * @param ClassContext $context
      */
-    private function addMethodDependencies(ReflectionMethod $method, Context $context): void
+    private function addMethodDependencies(ReflectionMethod $method, ClassContext $context): void
     {
         // Method return
         $ast = $method->getAst();
@@ -181,7 +181,7 @@ class DependencyExtractor extends AbstractExtractor
         }
     }
 
-    private function addDocCommentDependencies(string $docComment, int $startLine, Context $context)
+    private function addDocCommentDependencies(string $docComment, int $startLine, ClassContext $context)
     {
         foreach ($this->docTypeResolver->getBlockClassNames($context, $docComment) as $type) {
             if ($type !== null && !PhpType::isBuiltinType($type) && !PhpType::isSpecialType($type)) {
@@ -208,7 +208,7 @@ class DependencyExtractor extends AbstractExtractor
         }
     }
 
-    private function addClassAttributesDependencies(ReflectionClass $class, Context $context): void
+    private function addClassAttributesDependencies(ReflectionClass $class, ClassContext $context): void
     {
         foreach ((new AttributeExtractorFactory())->create($context)->getFromReflectionClass($class) as $name) {
             $this->addRelation(
@@ -219,7 +219,7 @@ class DependencyExtractor extends AbstractExtractor
         }
     }
 
-    private function addMethodAttributesDependencies(ReflectionMethod $method, Context $context): void
+    private function addMethodAttributesDependencies(ReflectionMethod $method, ClassContext $context): void
     {
         foreach ((new AttributeExtractorFactory())->create($context)->getFromReflectionMethod($method) as $name) {
             $this->addRelation(

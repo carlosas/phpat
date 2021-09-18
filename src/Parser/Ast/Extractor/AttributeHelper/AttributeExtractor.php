@@ -2,7 +2,7 @@
 
 namespace PhpAT\Parser\Ast\Extractor\AttributeHelper;
 
-use phpDocumentor\Reflection\Types\Context;
+use PhpAT\Parser\Ast\ClassContext;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\BetterReflection\Reflection\ReflectionAttribute;
@@ -11,10 +11,10 @@ use PHPStan\BetterReflection\Reflection\ReflectionMethod;
 
 class AttributeExtractor implements AttributeExtractorInterface
 {
-    /** @var Context */
+    /** @var ClassContext */
     private $context;
 
-    public function __construct(Context $context)
+    public function __construct(ClassContext $context)
     {
         $this->context = $context;
     }

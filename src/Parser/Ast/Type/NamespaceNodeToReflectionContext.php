@@ -2,7 +2,7 @@
 
 namespace PhpAT\Parser\Ast\Type;
 
-use phpDocumentor\Reflection\Types\Context;
+use PhpAT\Parser\Ast\ClassContext;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Namespace_;
@@ -17,13 +17,13 @@ use PhpParser\Node\Stmt\UseUse;
  */
 class NamespaceNodeToReflectionContext
 {
-    public function __invoke(?Namespace_ $namespace): Context
+    public function __invoke(?Namespace_ $namespace): ClassContext
     {
         if (! $namespace) {
-            return new Context('');
+            return new ClassContext('');
         }
 
-        return new Context(
+        return new ClassContext(
             $namespace->name ? $namespace->name->toString() : '',
             $this->aliasesToFullyQualifiedNames($namespace)
         );

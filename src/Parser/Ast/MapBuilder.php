@@ -118,18 +118,12 @@ class MapBuilder
 
         $result = [];
         foreach ($packages as $alias => $files) {
-            if (
-                !isset($files['json'])
-                || !is_file($files['json'])
-                || !is_file($files['lock'] ?? substr($files['json'], 0, -5) . '.lock')
-            ) {
-                $error = new FatalErrorEvent('Composer package "' . $alias . '" is not properly configured');
-                $this->eventDispatcher->dispatch($error);
-                throw new FatalErrorException();
-            }
+            $composerJson = $files['json'];
+            $composerLock = $files['lock'] ?? substr($composerJson, 0, -5) . '.lock';
+            $this->assertComposerPackage($alias, $composerJson, $composerLock);
 
             try {
-                $parsed = $this->composerFileParser->parse($files['json'], $files['lock']);
+                $parsed = $this->composerFileParser->parse($composerJson, $composerLock);
             } catch (\Throwable $e) {
                 $this->eventDispatcher->dispatch(
                     new FatalErrorEvent('Error parsing "' . $alias . '" composer files')
@@ -166,5 +160,23 @@ class MapBuilder
             },
             $namespaces
         );
+    }
+
+    /**
+     * @throws FatalErrorException
+     */
+    private function assertComposerPackage(string $alias, string $composerJson, string $composerLock): void
+    {
+        if (!is_file($composerJson)) {
+            $error = new FatalErrorEvent('Composer package "' . $alias . '" is not properly configured');
+            $this->eventDispatcher->dispatch($error);
+            throw new FatalErrorException();
+        }
+
+        if (!is_file($composerLock)) {
+            $error = new FatalErrorEvent('Unable to find the composer package "' . $alias . '" lock file');
+            $this->eventDispatcher->dispatch($error);
+            throw new FatalErrorException();
+        }
     }
 }
