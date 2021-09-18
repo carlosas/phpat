@@ -2,12 +2,12 @@
 
 namespace PhpAT\Parser\Ast\Extractor\AttributeHelper;
 
-use phpDocumentor\Reflection\Types\Context;
+use PhpAT\Parser\Ast\ClassContext;
 use PhpParser\Node\AttributeGroup;
 
 class AttributeExtractorFactory
 {
-    public function create(Context $context): AttributeExtractorInterface
+    public function create(ClassContext $context): AttributeExtractorInterface
     {
         if (class_exists(AttributeGroup::class)) {
             return new AttributeExtractor($context);

@@ -47,6 +47,9 @@ class FileFinder
         );
     }
 
+    /**
+     * @return \SplFileInfo[]
+     */
     public function findPhpFilesInPath(string $path): array
     {
         return $this->finder->find($path, '*.php', [], []);
