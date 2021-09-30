@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace PhpAT\App;
 
-use PhpAT\App;
 use PHPAT\EventDispatcher\EventDispatcher;
 use PHPAT\EventDispatcher\ListenerProvider;
 use PhpAT\File\FileFinder;
 use PhpAT\File\SymfonyFinderAdapter;
-use PhpAT\Parser\Ast\Extractor\ExtractorFactory;
 use PhpAT\Parser\Ast\MapBuilder;
-use PhpAT\Parser\Ast\NodeTraverser;
+use PhpAT\Parser\Ast\Traverser\TraverserFactory;
 use PhpAT\Parser\Ast\Type\PhpStanDocTypeNodeResolver;
 use PhpAT\Parser\Ast\Type\PhpStanDocNodeTypeExtractor;
 use PhpAT\Parser\ComposerFileParser;
@@ -76,26 +74,20 @@ class Provider
             ->addArgument(new Reference(PhpDocParser::class))
             ->addArgument(new Reference(PhpStanDocNodeTypeExtractor::class));
 
+        $this->builder->register(TraverserFactory::class, TraverserFactory::class)
+            ->addArgument(new Reference(Configuration::class))
+            ->addArgument(new Reference(PhpStanDocTypeNodeResolver::class));
+
         $this->builder
             ->register(FileFinder::class, FileFinder::class)
             ->addArgument(new SymfonyFinderAdapter(new Finder()))
             ->addArgument(new Reference(Configuration::class));
 
         $this->builder
-            ->register(NodeTraverser::class, NodeTraverser::class);
-
-        $this->builder
-            ->register(ExtractorFactory::class, ExtractorFactory::class)
-            ->addArgument(new Reference(PhpStanDocTypeNodeResolver::class))
-            ->addArgument(new Reference(Configuration::class));
-
-        $this->builder
             ->register(MapBuilder::class, MapBuilder::class)
             ->addArgument(new Reference(FileFinder::class))
-            ->addArgument(new Reference(ExtractorFactory::class))
             ->addArgument(new Reference(Parser::class))
-            ->addArgument(new Reference(NodeTraverser::class))
-            ->addArgument(new Reference(PhpDocParser::class))
+            ->addArgument(new Reference(TraverserFactory::class))
             ->addArgument(new Reference(EventDispatcher::class))
             ->addArgument(new Reference(ComposerFileParser::class))
             ->addArgument(new Reference(Configuration::class));

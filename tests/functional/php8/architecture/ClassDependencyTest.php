@@ -8,6 +8,7 @@ use PhpAT\Test\ArchitectureTest;
 use Tests\PhpAT\functional\php8\fixtures\ClassWithAttribute;
 use Tests\PhpAT\functional\php8\fixtures\ConstructorPromotionClass;
 use Tests\PhpAT\functional\php8\fixtures\DummyAttributeOne;
+use Tests\PhpAT\functional\php8\fixtures\DummyAttributeThree;
 use Tests\PhpAT\functional\php8\fixtures\DummyAttributeTwo;
 use Tests\PhpAT\functional\php8\fixtures\DummyException;
 use Tests\PhpAT\functional\php8\fixtures\MatchClass;
@@ -75,6 +76,16 @@ class ClassDependencyTest extends ArchitectureTest
             ->classesThat(Selector::haveClassName(ClassWithAttribute::class))
             ->mustOnlyDependOn()
             ->classesThat(Selector::haveClassName(DummyAttributeOne::class))
+            ->classesThat(Selector::haveClassName(DummyAttributeTwo::class))
+            ->classesThat(Selector::haveClassName(DummyAttributeThree::class))
+            ->build();
+    }
+
+    public function testInternalAttributeClassIsIgnored(): Rule
+    {
+        return $this->newRule
+            ->classesThat(Selector::haveClassName(DummyAttributeTwo::class))
+            ->canOnlyDependOn()
             ->classesThat(Selector::haveClassName(DummyAttributeTwo::class))
             ->build();
     }

@@ -1,5 +1,7 @@
 <?php
 
+namespace Tests\PhpAT\architecture;
+
 use PhpAT\Selector\Selector;
 use PhpAT\Rule\Rule;
 use PhpAT\Test\ArchitectureTest;
