@@ -6,6 +6,6 @@ class PathNormalizer
 {
     public static function normalizePathname(string $pathname): string
     {
-        return str_replace('\\', '/', realpath($pathname));
+        return str_replace('\\', DIRECTORY_SEPARATOR, realpath($pathname));
     }
 }

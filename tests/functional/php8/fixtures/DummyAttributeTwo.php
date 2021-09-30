@@ -2,6 +2,6 @@
 
 namespace Tests\PhpAT\functional\php8\fixtures;
 
-#[\Attribute] class DummyAttributeTwo
+#[\Attribute(\Attribute::TARGET_METHOD)] class DummyAttributeTwo
 {
 }

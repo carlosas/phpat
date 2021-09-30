@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhpAT\Selector;
 
+use PhpAT\App\Helper\PathNormalizer;
 use PhpAT\File\FileFinder;
 use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\Ast\ClassLike;
@@ -69,7 +70,7 @@ class PathSelector implements SelectorInterface
     public function select(): array
     {
         foreach ($this->fileFinder->findSrcFiles($this->path) as $file) {
-            $filePathname = str_replace('\\', '/', $file->getPathname());
+            $filePathname = PathNormalizer::normalizePathname($file->getPathname());
 
             foreach ($this->map->getSrcNodes() as $srcNode) {
                 if ($srcNode->getFilePathname() === $filePathname) {

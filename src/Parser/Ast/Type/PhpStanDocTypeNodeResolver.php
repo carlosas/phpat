@@ -2,7 +2,8 @@
 
 namespace PhpAT\Parser\Ast\Type;
 
-use PhpAT\Parser\Ast\ClassContext;
+use PhpParser\NameContext;
+use PhpParser\Node\Name;
 use PHPStan\PhpDocParser\Ast\Type;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
@@ -22,11 +23,11 @@ class PhpStanDocTypeNodeResolver
     }
 
     /**
-     * @param ClassContext $context
+     * @param NameContext $context
      * @param string  $docBlock
      * @return string[]
      */
-    public function getBlockClassNames(ClassContext $context, string $docBlock): array
+    public function getBlockClassNames(NameContext $context, string $docBlock): array
     {
         try {
             $nodes = $this->docParser->parse(new TokenIterator((new Lexer())->tokenize($docBlock)));
@@ -91,7 +92,7 @@ class PhpStanDocTypeNodeResolver
         return [];
     }
 
-    private function resolveNameFromContext(ClassContext $context, string $name): string
+    private function resolveNameFromContext(NameContext $context, string $name): string
     {
         if (
             strpos($name, '\\') === 0
@@ -101,17 +102,6 @@ class PhpStanDocTypeNodeResolver
             return $name;
         }
 
-        $parts = explode('\\', $name);
-        $link = $parts[0] ?? [];
-        if (isset($context->getNamespaceAliases()[$link])) {
-            array_shift($parts);
-            if (empty($parts)) {
-                return $context->getNamespaceAliases()[$link];
-            }
-
-            return $context->getNamespaceAliases()[$link] . '\\' . implode('\\', $parts);
-        }
-
-        return $context->getNamespace() . '\\' . implode('\\', $parts);
+        return $context->getResolvedClassName(new Name($name))->toString();
     }
 }

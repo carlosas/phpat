@@ -2,20 +2,17 @@
 
 namespace PhpAT\Parser\Ast;
 
-use JetBrains\PHPStormStub\PhpStormStubsMap;
 use PhpAT\App\Configuration;
 use PhpAT\App\Event\FatalErrorEvent;
 use PhpAT\App\Exception\FatalErrorException;
+use PhpAT\App\Helper\PathNormalizer;
 use PhpAT\File\FileFinder;
-use PhpAT\Parser\Ast\Extractor\ExtractorFactory;
+use PhpAT\Parser\Ast\Traverser\TraverseContext;
+use PhpAT\Parser\Ast\Traverser\TraverserFactory;
 use PhpAT\Parser\ComposerFileParser;
+use PhpAT\PhpStubsMap\PhpStubsMap;
 use PhpParser\Parser;
-use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use Psr\EventDispatcher\EventDispatcherInterface;
-use PHPStan\BetterReflection\BetterReflection;
-use PHPStan\BetterReflection\Reflection\ReflectionClass;
-use PHPStan\BetterReflection\Reflector\ClassReflector;
-use PHPStan\BetterReflection\SourceLocator\Type\FileIteratorSourceLocator;
 
 class MapBuilder
 {
@@ -23,47 +20,29 @@ class MapBuilder
     private $finder;
     /** @var Parser */
     private $parser;
-    /** @var NodeTraverser */
-    private $traverser;
-    /** @var PhpDocParser */
-    private $phpDocParser;
+    /** @var TraverserFactory */
+    private $traverserFactory;
     /** @var EventDispatcherInterface */
     private $eventDispatcher;
     /** @var ComposerFileParser */
     private $composerFileParser;
     /** @var Configuration */
     private $configuration;
-    /** @var Extractor\DependencyExtractor */
-    private $dependencyExtractor;
-    /** @var Extractor\ParentExtractor */
-    private $parentExtractor;
-    /** @var Extractor\InterfaceExtractor */
-    private $interfaceExtractor;
-    /** @var Extractor\TraitExtractor */
-    private $traitExtractor;
 
     public function __construct(
         FileFinder $finder,
-        ExtractorFactory $extractorFactory,
         Parser $parser,
-        NodeTraverser $traverser,
-        PhpDocParser $phpDocParser,
+        TraverserFactory $traverserFactory,
         EventDispatcherInterface $eventDispatcher,
         ComposerFileParser $composerFileParser,
         Configuration $configuration
     ) {
         $this->finder = $finder;
         $this->parser = $parser;
-        $this->traverser = $traverser;
-        $this->phpDocParser = $phpDocParser;
+        $this->traverserFactory = $traverserFactory;
         $this->eventDispatcher = $eventDispatcher;
         $this->composerFileParser = $composerFileParser;
         $this->configuration = $configuration;
-
-        $this->dependencyExtractor = $extractorFactory->createDependencyExtractor();
-        $this->parentExtractor = $extractorFactory->createParentExtractor();
-        $this->interfaceExtractor = $extractorFactory->createInterfaceExtractor();
-        $this->traitExtractor = $extractorFactory->createTraitExtractor();
     }
 
     public function build(): ReferenceMap
@@ -74,25 +53,16 @@ class MapBuilder
     private function buildSrcMap(): array
     {
         $files = $this->finder->findPhpFilesInPath($this->configuration->getSrcPath());
-        $astLocator = (new BetterReflection())->astLocator();
-        $reflector = new ClassReflector(new FileIteratorSourceLocator(new \ArrayIterator($files), $astLocator));
+        $traverser = $this->traverserFactory->create();
 
-        $classes = $reflector->getAllClasses();
-        /** @var ReflectionClass $class */
-        foreach ($classes as $class) {
-            $srcMap[$class->getName()] = new SrcNode(
-                $class->getFileName(),
-                FullClassName::createFromFQCN($class->getName()),
-                array_merge(
-                    $this->dependencyExtractor->extract($class),
-                    $this->parentExtractor->extract($class),
-                    $this->interfaceExtractor->extract($class),
-                    $this->traitExtractor->extract($class)
-                )
-            );
+        foreach ($files as $file) {
+            $pathname = PathNormalizer::normalizePathname($file->getPathname());
+            $parsed = $this->parser->parse(file_get_contents($pathname));
+            TraverseContext::startFile($pathname);
+            $traverser->traverse($parsed);
         }
 
-        return $srcMap ?? [];
+        return Classmap::getClassmap();
     }
 
     /**
@@ -104,7 +74,7 @@ class MapBuilder
             function (string $class) {
                 return FullClassName::createFromFQCN($class);
             },
-            array_keys(PhpStormStubsMap::CLASSES)
+            array_keys(PhpStubsMap::CLASSES)
         );
     }
 
@@ -141,11 +111,6 @@ class MapBuilder
         }
 
         return $result;
-    }
-
-    private function normalizePathname(string $pathname): string
-    {
-        return str_replace('\\', '/', realpath($pathname));
     }
 
     /**

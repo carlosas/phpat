@@ -24,12 +24,6 @@ class UnionClass
 
     public function someMethod(SimpleClassOne|SimpleClassTwo $bar): SimpleClassThree|SimpleClassFour
     {
-        if ($bar instanceof SimpleClassOne) {
-            return new SimpleClassThree();
-        }
-
-        if ($bar instanceof SimpleClassTwo) {
-            return new SimpleClassFour();
-        }
+        //not implemented
     }
 }
