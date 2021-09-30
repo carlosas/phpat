@@ -102,6 +102,6 @@ class PhpStanDocTypeNodeResolver
             return $name;
         }
 
-        return $context->getResolvedClassName(new Name($name));
+        return $context->getResolvedClassName(new Name($name))->toString();
     }
 }
