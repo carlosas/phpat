@@ -62,7 +62,7 @@ class MapBuilder
             $traverser->traverse($parsed);
         }
 
-        return Classmap::getClassmap() ?? [];
+        return Classmap::getClassmap();
     }
 
     /**

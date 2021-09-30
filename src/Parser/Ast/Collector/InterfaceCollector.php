@@ -14,7 +14,7 @@ class InterfaceCollector extends NodeVisitorAbstract
     {
         if ($node instanceof Node\Stmt\ClassLike && $node->name !== NULL) {
             if (isset($node->implements)) {
-                foreach ($node->implements ?? [] as $implements) {
+                foreach ($node->implements as $implements) {
                     if ($implements instanceof Node\Name\FullyQualified) {
                         Classmap::registerClassImplements(
                             TraverseContext::className(),
