@@ -60,10 +60,10 @@ class MethodDependenciesCollector extends NodeVisitorAbstract
     {
         $this->recordClassExpressionUsage($node);
         $this->recordCatchUsage($node);
-        //$this->recordFunctionCallUsage($node); //TODO: Function call usage
+        //$this->recordFunctionCallUsage($node);
         $this->recordFunctionParameterTypesUsage($node);
         $this->recordFunctionReturnTypeUsage($node);
-        //$this->recordConstantFetchUsage($node); //TODO: Complete code PHP constants
+        //$this->recordConstantFetchUsage($node);
         $this->recordExtendsUsage($node);
         $this->recordImplementsUsage($node);
         $this->recordTraitUsage($node);
@@ -115,7 +115,8 @@ class MethodDependenciesCollector extends NodeVisitorAbstract
         }
     }
 
-    private function recordTraitUsage(Node $node) {
+    private function recordTraitUsage(Node $node)
+    {
         if ($node instanceof Node\Stmt\TraitUse) {
             foreach ($node->traits as $trait) {
                 $this->registerTypeAsDependency($trait);
@@ -190,10 +191,8 @@ class MethodDependenciesCollector extends NodeVisitorAbstract
 
         if ($type instanceof Node\UnionType) {
             foreach ($type->types as $t) {
-                $this->registerTypeAsDependency($t); //TODO: check
+                $this->registerTypeAsDependency($t);
             }
         }
-
-        //TODO: PHP 8.1 intersection type
     }
 }

@@ -12,7 +12,7 @@ class ParentCollector extends NodeVisitorAbstract
 {
     public function leaveNode(Node $node)
     {
-        if ($node instanceof Node\Stmt\ClassLike && $node->name !== NULL) {
+        if ($node instanceof Node\Stmt\ClassLike && $node->name !== null) {
             if (isset($node->extends) && $node->extends instanceof Node\Name\FullyQualified) {
                 Classmap::registerClassExtends(
                     TraverseContext::className(),

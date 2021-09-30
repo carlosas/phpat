@@ -63,7 +63,6 @@ final class Classmap
     private static function translateClassmap(array $classmap): array
     {
         foreach ($classmap as $className => $properties) {
-
             $srcNodes[$className] = new SrcNode(
                 $properties['pathname'],
                 FullClassName::createFromFQCN($className),

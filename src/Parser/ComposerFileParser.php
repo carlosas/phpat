@@ -111,7 +111,7 @@ class ComposerFileParser
         $required = [];
         $toCheck = $topLevelRequirements;
 
-        while (\count($toCheck) > 0) { //TODO create a test for this kind of function usage
+        while (\count($toCheck) > 0) {
             $packageName = array_pop($toCheck);
             $package = $this->lockedPackages[ $packageName ] ?? null;
             if ($package === null) {

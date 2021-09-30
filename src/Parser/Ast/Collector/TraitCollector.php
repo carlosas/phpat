@@ -14,9 +14,6 @@ class TraitCollector extends NodeVisitorAbstract
     {
         if ($node instanceof Node\Stmt\TraitUse) {
             foreach ($node->traits as $trait) {
-//                echo TraverseContext::className()->toString() . PHP_EOL;
-//                echo $trait->toString() . PHP_EOL;
-//                echo '---------------------------------------------------' . PHP_EOL; //TODO: y los traits fuera de la clase?
                 if ($trait instanceof Node\Name\FullyQualified) {
                     Classmap::registerClassIncludesTrait(
                         TraverseContext::className(),

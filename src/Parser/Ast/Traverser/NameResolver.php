@@ -8,7 +8,7 @@ use PhpParser\NodeVisitor\NameResolver as PhpParserNameResolver;
 
 class NameResolver extends PhpParserNameResolver
 {
-    protected function resolveName(Name $name, int $type) : Name
+    protected function resolveName(Name $name, int $type): Name
     {
         if (PhpType::isBuiltinType($name->toString())) {
             return $name;
@@ -16,5 +16,4 @@ class NameResolver extends PhpParserNameResolver
 
         return parent::resolveName($name, $type);
     }
-
 }

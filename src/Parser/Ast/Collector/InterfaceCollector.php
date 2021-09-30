@@ -12,7 +12,7 @@ class InterfaceCollector extends NodeVisitorAbstract
 {
     public function leaveNode(Node $node)
     {
-        if ($node instanceof Node\Stmt\ClassLike && $node->name !== NULL) {
+        if ($node instanceof Node\Stmt\ClassLike && $node->name !== null) {
             if (isset($node->implements)) {
                 foreach ($node->implements as $implements) {
                     if ($implements instanceof Node\Name\FullyQualified) {
