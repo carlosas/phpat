@@ -2,7 +2,6 @@
 
 namespace PhpAT\Parser\Ast;
 
-use JetBrains\PHPStormStub\PhpStormStubsMap;
 use PhpAT\App\Configuration;
 use PhpAT\App\Event\FatalErrorEvent;
 use PhpAT\App\Exception\FatalErrorException;
@@ -11,6 +10,7 @@ use PhpAT\File\FileFinder;
 use PhpAT\Parser\Ast\Traverser\TraverseContext;
 use PhpAT\Parser\Ast\Traverser\TraverserFactory;
 use PhpAT\Parser\ComposerFileParser;
+use PhpAT\PhpStubsMap\PhpStubsMap;
 use PhpParser\Parser;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
@@ -74,7 +74,7 @@ class MapBuilder
             function (string $class) {
                 return FullClassName::createFromFQCN($class);
             },
-            array_keys(PhpStormStubsMap::CLASSES)
+            array_keys(PhpStubsMap::CLASSES)
         );
     }
 

@@ -6,7 +6,6 @@ namespace PhpAT\App;
 
 class Configuration
 {
-    private $phpStormStubsPath;
     private $srcPath;
     private $srcIncluded;
     private $srcExcluded;
@@ -38,7 +37,6 @@ class Configuration
         $this->verbosity = (int) $verbosity;
         $this->ignoreDocBlocks = (bool) $ignoreDocBlocks;
         $this->ignorePhpExtensions = (bool) $ignorePhpExtensions;
-        $this->phpStormStubsPath = $root . '/vendor/jetbrains/phpstorm-stubs';
     }
 
     public function getSrcPath(): string
@@ -79,11 +77,6 @@ class Configuration
     public function getIgnorePhpExtensions(): bool
     {
         return $this->ignorePhpExtensions;
-    }
-
-    public function getPhpStormStubsPath(): string
-    {
-        return $this->phpStormStubsPath;
     }
 
     private function normalizePath(string $path): string

@@ -2,7 +2,7 @@
 
 namespace PhpAT\Parser\Ast\Type;
 
-use JetBrains\PHPStormStub\PhpStormStubsMap;
+use PhpAT\PhpStubsMap\PhpStubsMap;
 
 class PhpType
 {
@@ -45,11 +45,11 @@ class PhpType
 
     public static function isCoreType(string $type): bool
     {
-        return array_key_exists($type, PhpStormStubsMap::CLASSES);
+        return array_key_exists($type, PhpStubsMap::CLASSES);
     }
 
     public static function isCoreConstant(string $type): bool
     {
-        return array_key_exists($type, PhpStormStubsMap::CONSTANTS);
+        return array_key_exists($type, PhpStubsMap::CONSTANTS);
     }
 }

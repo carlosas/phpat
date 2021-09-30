@@ -15,7 +15,6 @@ class ComposerTest extends ArchitectureTest
             ->canOnlyDependOn()
             ->classesThat(Selector::areAutoloadableFromComposer('main'))
             ->classesThat(Selector::areDependenciesFromComposer('main'))
-            ->classesThat(Selector::haveClassName('JetBrains\PHPStormStub\PhpStormStubsMap'))
             ->build();
     }
 
