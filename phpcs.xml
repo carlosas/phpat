@@ -4,6 +4,9 @@
 
     <file>src/</file>
 
+    <rule ref="Generic.Files.LineEndings">
+        <exclude name="Generic.Files.LineEndings.InvalidEOLChar"/>
+    </rule>
     <rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
     <rule ref="Generic.Commenting.Todo"/>
     <rule ref="Generic.ControlStructures.DisallowYodaConditions"/>
