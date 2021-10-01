@@ -11,6 +11,7 @@ use Tests\PhpAT\functional\php7\fixtures\CallableArgument;
 use Tests\PhpAT\functional\php7\fixtures\CallableReturn;
 use Tests\PhpAT\functional\php7\fixtures\ClassWithAnonymousClass;
 use Tests\PhpAT\functional\php7\fixtures\ClassWithOutsideDependency;
+use Tests\PhpAT\functional\php7\fixtures\Dependency\DependencyOutOfClass;
 use Tests\PhpAT\functional\php7\fixtures\Dependency\DocBlock;
 use Tests\PhpAT\functional\php7\fixtures\DummyException;
 use Tests\PhpAT\functional\php7\fixtures\GenericInner;
@@ -130,6 +131,15 @@ class DependencyTest extends ArchitectureTest
             ->mustDependOn()
             ->classesThat(Selector::haveClassName(GenericOuter::class))
             ->andClassesThat(Selector::haveClassName(GenericInner::class))
+            ->build();
+    }
+
+    public function testDependencyOutsideOfClassGetsIgnored(): Rule
+    {
+        return $this->newRule
+            ->classesThat(Selector::haveClassName(DependencyOutOfClass::class))
+            ->mustNotDependOn()
+            ->classesThat(Selector::haveClassName(SimpleClass::class))
             ->build();
     }
 

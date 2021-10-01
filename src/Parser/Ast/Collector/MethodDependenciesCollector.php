@@ -176,7 +176,10 @@ class MethodDependenciesCollector extends NodeVisitorAbstract
 
     private function registerTypeAsDependency($type): void
     {
-        if ($type instanceof Node\Name\FullyQualified || $type instanceof Node\Identifier) {
+        if (
+            ($type instanceof Node\Name\FullyQualified || $type instanceof Node\Identifier)
+            && TraverseContext::className() !== null
+        ) {
             Classmap::registerClassDepends(
                 TraverseContext::className(),
                 FullClassName::createFromFQCN($type->toString())
