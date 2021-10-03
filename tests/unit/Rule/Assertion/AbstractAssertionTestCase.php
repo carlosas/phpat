@@ -74,16 +74,16 @@ abstract class AbstractAssertionTestCase extends TestCase
                     new \SplFileInfo('folder/Example/ClassExample.php'),
                     FullClassName::createFromFQCN('Example\\ClassExample'),
                     [
-                        new Inheritance(0, FullClassName::createFromFQCN('Example\\ParentClassExample')),
-                        new Inheritance(0, FullClassName::createFromFQCN('\\FilterIterator')),
-                        new Dependency(0, FullClassName::createFromFQCN('Example\\AnotherClassExample')),
-                        new Dependency(0, FullClassName::createFromFQCN('Vendor\\ThirdPartyExample')),
-                        new Dependency(0, FullClassName::createFromFQCN('iterable')),
-                        new Composition(0, FullClassName::createFromFQCN('Example\\InterfaceExample')),
-                        new Composition(0, FullClassName::createFromFQCN('Example\\AnotherInterface')),
-                        new Composition(0, FullClassName::createFromFQCN('iterable')),
-                        new Mixin(0, FullClassName::createFromFQCN('Example\\TraitExample')),
-                        new Mixin(0, FullClassName::createFromFQCN('PHPDocElement'))
+                        new Inheritance(FullClassName::createFromFQCN('Example\\ParentClassExample'), 0, 0),
+                        new Inheritance(FullClassName::createFromFQCN('\\FilterIterator'), 0, 0),
+                        new Dependency(FullClassName::createFromFQCN('Example\\AnotherClassExample'), 0, 0),
+                        new Dependency(FullClassName::createFromFQCN('Vendor\\ThirdPartyExample'), 0, 0),
+                        new Dependency(FullClassName::createFromFQCN('iterable'), 0, 0),
+                        new Composition(FullClassName::createFromFQCN('Example\\InterfaceExample'), 0, 0),
+                        new Composition(FullClassName::createFromFQCN('Example\\AnotherInterface'), 0, 0),
+                        new Composition(FullClassName::createFromFQCN('iterable'), 0, 0),
+                        new Mixin(FullClassName::createFromFQCN('Example\\TraitExample'), 0, 0),
+                        new Mixin(FullClassName::createFromFQCN('PHPDocElement'), 0, 0)
                     ]
                 )
             ],

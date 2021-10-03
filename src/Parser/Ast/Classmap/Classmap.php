@@ -27,28 +27,52 @@ final class Classmap
         }
     }
 
-    public static function registerClassImplements(FullClassName $classImplementing, FullClassName $classImplemented)
-    {
-        static::$classmap[$classImplementing->getFQCN()]->addInterface($classImplemented);
+    public static function registerClassImplements(
+        FullClassName $classImplementing,
+        FullClassName $classImplemented,
+        int $startLine,
+        int $endLine
+    ) {
+        static::$classmap[$classImplementing->getFQCN()]->addInterface(
+            new ClassmapRelation($classImplemented, $startLine, $endLine)
+        );
     }
 
-    public static function registerClassExtends(FullClassName $classExtending, FullClassName $classExtended)
-    {
-        static::$classmap[$classExtending->getFQCN()]->addParent($classExtended);
+    public static function registerClassExtends(
+        FullClassName $classExtending,
+        FullClassName $classExtended,
+        int $startLine,
+        int $endLine
+    ) {
+        static::$classmap[$classExtending->getFQCN()]->addParent(
+            new ClassmapRelation($classExtended, $startLine, $endLine)
+        );
     }
 
-    public static function registerClassIncludesTrait(FullClassName $classUsing, FullClassName $classUsed)
-    {
-        static::$classmap[$classUsing->getFQCN()]->addTrait($classUsed);
+    public static function registerClassIncludesTrait(
+        FullClassName $classIncluding,
+        FullClassName $classIncluded,
+        int $startLine,
+        int $endLine
+    ) {
+        static::$classmap[$classIncluding->getFQCN()]->addTrait(
+            new ClassmapRelation($classIncluded, $startLine, $endLine)
+        );
     }
 
-    public static function registerClassDepends(FullClassName $classDepending, FullClassName $classDepended)
-    {
+    public static function registerClassDepends(
+        FullClassName $classDepending,
+        FullClassName $classDepended,
+        int $startLine,
+        int $endLine
+    ) {
         if (PhpType::isBuiltinType($classDepended->getFQCN()) || PhpType::isSpecialType($classDepended->getFQCN())) {
             return;
         }
 
-        static::$classmap[$classDepending->getFQCN()]->addDependency($classDepended);
+        static::$classmap[$classDepending->getFQCN()]->addDependency(
+            new ClassmapRelation($classDepended, $startLine, $endLine)
+        );
     }
 
     public static function getClassmap(): array
@@ -82,13 +106,13 @@ final class Classmap
     }
 
     /**
-     * @param FullClassName[] $className
+     * @param ClassmapRelation[] $classmapRelations
      * @return AbstractRelation[]
      */
-    private static function addRelations(string $type, array $className): array
+    private static function addRelations(string $type, array $classmapRelations): array
     {
-        foreach ($className as $name) {
-            $result[] = new $type(0, $name);
+        foreach ($classmapRelations as $relation) {
+            $result[] = new $type($relation->relatedClass, $relation->startLine, $relation->endLine);
         }
 
         return $result ?? [];

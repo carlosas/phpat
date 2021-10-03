@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpAT\Parser\Relation;
+namespace PhpAT\Parser\Ast\Classmap;
 
 use PhpAT\Parser\Ast\FullClassName;
 
-class AbstractRelation
+final class ClassmapRelation
 {
     /** @var FullClassName */
     public $relatedClass;

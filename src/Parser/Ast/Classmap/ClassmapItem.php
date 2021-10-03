@@ -2,8 +2,6 @@
 
 namespace PhpAT\Parser\Ast\Classmap;
 
-use PhpAT\Parser\Ast\FullClassName;
-
 final class ClassmapItem
 {
     /** @var string */
@@ -14,11 +12,11 @@ final class ClassmapItem
     private $flag;
     /** @var array */
     private $classesDepended = [];
-    /** @var FullClassName|null */
+    /** @var ClassmapRelation|null */
     private $classExtended = null;
-    /** @var FullClassName[] */
+    /** @var ClassmapRelation[] */
     private $interfacesImplemented = [];
-    /** @var FullClassName[] */
+    /** @var ClassmapRelation[] */
     private $includedTraits = [];
 
     public function __construct(string $pathname, string $classType, ?int $flag)
@@ -28,22 +26,22 @@ final class ClassmapItem
         $this->flag = $flag;
     }
 
-    public function addDependency(FullClassName $className): void
+    public function addDependency(ClassmapRelation $className): void
     {
         $this->classesDepended[] = $className;
     }
 
-    public function addParent(FullClassName $className): void
+    public function addParent(ClassmapRelation $className): void
     {
         $this->classExtended = $className;
     }
 
-    public function addInterface(FullClassName $className): void
+    public function addInterface(ClassmapRelation $className): void
     {
         $this->interfacesImplemented[] = $className;
     }
 
-    public function addTrait(FullClassName $className): void
+    public function addTrait(ClassmapRelation $className): void
     {
         $this->includedTraits[] = $className;
     }
@@ -63,25 +61,25 @@ final class ClassmapItem
         return $this->flag;
     }
 
-    /** @return  FullClassName[] */
+    /** @return  ClassmapRelation[] */
     public function getDependencies(): array
     {
         return $this->classesDepended;
     }
 
-    /** @return  FullClassName|null */
-    public function getParent(): ?FullClassName
+    /** @return  ClassmapRelation|null */
+    public function getParent(): ?ClassmapRelation
     {
         return $this->classExtended;
     }
 
-    /** @return  FullClassName[] */
+    /** @return  ClassmapRelation[] */
     public function getInterfaces(): array
     {
         return $this->interfacesImplemented;
     }
 
-    /** @return  FullClassName[] */
+    /** @return  ClassmapRelation[] */
     public function getTraits(): array
     {
         return $this->includedTraits;

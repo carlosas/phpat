@@ -17,7 +17,9 @@ class TraitCollector extends NodeVisitorAbstract
                 if ($trait instanceof Node\Name\FullyQualified) {
                     Classmap::registerClassIncludesTrait(
                         TraverseContext::className(),
-                        FullClassName::createFromFQCN($trait->toString())
+                        FullClassName::createFromFQCN($trait->toString()),
+                        $trait->getStartLine(),
+                        $trait->getEndLine()
                     );
                 }
             }

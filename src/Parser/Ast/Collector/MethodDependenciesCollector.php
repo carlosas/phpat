@@ -182,7 +182,9 @@ class MethodDependenciesCollector extends NodeVisitorAbstract
         ) {
             Classmap::registerClassDepends(
                 TraverseContext::className(),
-                FullClassName::createFromFQCN($type->toString())
+                FullClassName::createFromFQCN($type->toString()),
+                $type->getStartLine(),
+                $type->getEndLine()
             );
             return;
         }

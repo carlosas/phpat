@@ -16,7 +16,9 @@ class ParentCollector extends NodeVisitorAbstract
             if (isset($node->extends) && $node->extends instanceof Node\Name\FullyQualified) {
                 Classmap::registerClassExtends(
                     TraverseContext::className(),
-                    FullClassName::createFromFQCN($node->extends->toString())
+                    FullClassName::createFromFQCN($node->extends->toString()),
+                    $node->extends->getStartLine(),
+                    $node->extends->getEndLine()
                 );
             }
         }

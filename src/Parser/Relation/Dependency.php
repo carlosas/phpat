@@ -6,8 +6,8 @@ use PhpAT\Parser\Ast\FullClassName;
 
 class Dependency extends AbstractRelation
 {
-    public function __construct(int $line, FullClassName $relatedClass)
+    public function __construct(FullClassName $relatedClass, int $startLine, int $endLine)
     {
-        parent::__construct($line, $relatedClass);
+        parent::__construct($relatedClass, $startLine, $endLine);
     }
 }
