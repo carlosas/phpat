@@ -3,7 +3,7 @@
 namespace PhpAT\Parser\Ast\Collector;
 
 use PhpAT\App\Configuration;
-use PhpAT\Parser\Ast\Classmap;
+use PhpAT\Parser\Ast\Classmap\Classmap;
 use PhpAT\Parser\Ast\FullClassName;
 use PhpAT\Parser\Ast\Traverser\TraverseContext;
 use PhpAT\Parser\Ast\Type\PhpStanDocTypeNodeResolver;

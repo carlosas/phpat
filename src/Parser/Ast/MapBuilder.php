@@ -7,6 +7,7 @@ use PhpAT\App\Event\FatalErrorEvent;
 use PhpAT\App\Exception\FatalErrorException;
 use PhpAT\App\Helper\PathNormalizer;
 use PhpAT\File\FileFinder;
+use PhpAT\Parser\Ast\Classmap\Classmap;
 use PhpAT\Parser\Ast\Traverser\TraverseContext;
 use PhpAT\Parser\Ast\Traverser\TraverserFactory;
 use PhpAT\Parser\ComposerFileParser;

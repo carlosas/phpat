@@ -1,7 +1,9 @@
 <?php
 
-namespace PhpAT\Parser\Ast;
+namespace PhpAT\Parser\Ast\Classmap;
 
+use PhpAT\Parser\Ast\FullClassName;
+use PhpAT\Parser\Ast\SrcNode;
 use PhpAT\Parser\Ast\Type\PhpType;
 use PhpAT\Parser\Relation\AbstractRelation;
 use PhpAT\Parser\Relation\Composition;
@@ -11,6 +13,7 @@ use PhpAT\Parser\Relation\Mixin;
 
 final class Classmap
 {
+    /** @var ClassmapItem[] */
     private static $classmap = [];
 
     public static function registerClass(
@@ -20,27 +23,23 @@ final class Classmap
         ?int $flag
     ) {
         if (!isset(static::$classmap[$className->getFQCN()])) {
-            static::$classmap[$className->getFQCN()] = [
-                'pathname' => $pathname,
-                'type' => $classType,
-                'flag' => $flag
-            ];
+            static::$classmap[$className->getFQCN()] = new ClassmapItem($pathname, $classType, $flag);
         }
     }
 
     public static function registerClassImplements(FullClassName $classImplementing, FullClassName $classImplemented)
     {
-        static::$classmap[$classImplementing->getFQCN()]['implements'][] = $classImplemented;
+        static::$classmap[$classImplementing->getFQCN()]->addInterface($classImplemented);
     }
 
     public static function registerClassExtends(FullClassName $classExtending, FullClassName $classExtended)
     {
-        static::$classmap[$classExtending->getFQCN()]['extends'][] = $classExtended;
+        static::$classmap[$classExtending->getFQCN()]->addParent($classExtended);
     }
 
     public static function registerClassIncludesTrait(FullClassName $classUsing, FullClassName $classUsed)
     {
-        static::$classmap[$classUsing->getFQCN()]['includes-trait'][] = $classUsed;
+        static::$classmap[$classUsing->getFQCN()]->addTrait($classUsed);
     }
 
     public static function registerClassDepends(FullClassName $classDepending, FullClassName $classDepended)
@@ -49,7 +48,7 @@ final class Classmap
             return;
         }
 
-        static::$classmap[$classDepending->getFQCN()]['depends'][] = $classDepended;
+        static::$classmap[$classDepending->getFQCN()]->addDependency($classDepended);
     }
 
     public static function getClassmap(): array
@@ -62,15 +61,19 @@ final class Classmap
      */
     private static function translateClassmap(array $classmap): array
     {
+        /** @var ClassmapItem $properties */
         foreach ($classmap as $className => $properties) {
             $srcNodes[$className] = new SrcNode(
-                $properties['pathname'],
+                $properties->getPathname(),
                 FullClassName::createFromFQCN($className),
                 array_merge(
-                    static::addRelations(Dependency::class, $properties['depends'] ?? []),
-                    static::addRelations(Inheritance::class, $properties['extends'] ?? []),
-                    static::addRelations(Composition::class, $properties['implements'] ?? []),
-                    static::addRelations(Mixin::class, $properties['includes-trait'] ?? [])
+                    static::addRelations(Dependency::class, $properties->getDependencies()),
+                    static::addRelations(
+                        Inheritance::class,
+                        $properties->getParent() === null ? [] : [$properties->getParent()]
+                    ),
+                    static::addRelations(Composition::class, $properties->getInterfaces()),
+                    static::addRelations(Mixin::class, $properties->getTraits())
                 )
             );
         }
