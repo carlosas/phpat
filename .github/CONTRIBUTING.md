@@ -19,7 +19,8 @@ vendor/bin/psalm
 vendor/bin/phpstan analyse src --level=5
 vendor/bin/phpunit tests/unit/
 php phpat phpat.yaml
-php phpat tests/functional/functional.yaml
+php phpat tests/functional/functional7.yaml
+php phpat tests/functional/functional8.yaml
 ```
 
 ## The internals
