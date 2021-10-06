@@ -24,6 +24,7 @@ use PhpAT\Test\FileTestExtractor;
 use PhpAT\Test\Parser\XmlTestParser;
 use PhpAT\Test\Parser\YamlTestParser;
 use PhpAT\Test\TestExtractor;
+use PhpParser\Lexer\Emulative;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
 use PHPStan\PhpDocParser\Parser\ConstExprParser;
@@ -63,7 +64,12 @@ class Provider
     {
         $this->builder->set(Configuration::class, $this->configuration);
         $this->builder->set(ComposerFileParser::class, new ComposerFileParser());
-        $this->builder->set(Parser::class, (new ParserFactory())->create(ParserFactory::ONLY_PHP7));
+        $phpVersion = $this->configuration->getPhpVersion();
+        $lexerOptions = $phpVersion ? ['phpVersion' => $phpVersion] : [];
+        $this->builder->set(
+            Parser::class,
+            (new ParserFactory())->create(ParserFactory::ONLY_PHP7, new Emulative($lexerOptions))
+        );
         $this->builder->set(PhpDocParser::class, new PhpDocParser(new TypeParser(), new ConstExprParser()));
         $listenerProvider = (new EventListenerMapper())->populateListenerProvider(new ListenerProvider($this->builder));
         $this->builder->set(EventDispatcher::class, (new EventDispatcher($listenerProvider)));

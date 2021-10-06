@@ -47,6 +47,12 @@ class App extends SingleCommandApplication
                 file_exists('phpat.yaml') ? 'phpat.yaml' : 'phpat.yml'
             )
             ->addOption(
+                'php-version',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'PHP version of the src code'
+            )
+            ->addOption(
                 'ignore-docblocks',
                 null,
                 InputOption::VALUE_REQUIRED,
