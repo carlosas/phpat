@@ -17,7 +17,7 @@ class ConfigurationFactory
     public function create(string $configFilePath, array $commandOptions): Configuration
     {
         $config = Yaml::parse(file_get_contents($configFilePath));
-        $config['options'] = array_merge($config['options'] ?? [], $commandOptions);
+        $config['options'] = array_merge($config['options'] ?? [], array_filter($commandOptions));
 
         return new Configuration(
             $config['src']['path'] ?? '',
