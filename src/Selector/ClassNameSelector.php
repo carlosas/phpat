@@ -59,7 +59,7 @@ class ClassNameSelector implements SelectorInterface
             $result[] = FullClassName::createFromFQCN($this->fqcn);
         }
 
-        return $result ?? [];
+        return $result;
     }
 
     /**

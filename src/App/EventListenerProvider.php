@@ -37,8 +37,7 @@ class EventListenerProvider
             ->addArgument($this->output);
 
         $this->builder
-            ->register(WarningListener::class, WarningListener::class)
-            ->addArgument($this->output);
+            ->register(WarningListener::class, WarningListener::class);
 
         $this->builder
             ->register(FatalErrorListener::class, FatalErrorListener::class)

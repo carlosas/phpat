@@ -24,12 +24,14 @@ class ConfigurationFactory
             $config['src']['path'] ?? '',
             $config['src']['include'] ?? [],
             $config['src']['exclude'] ?? [],
-            $config['composer'] ?? static::DEFAULT_OPTIONS['composer'],
+            $config['composer'] ?? ConfigurationFactory::DEFAULT_OPTIONS['composer'],
             $config['tests']['path'] ?? '',
             $this->decideVerbosity($commandOptions, $config),
-            $config['options']['php-version'] ?? static::DEFAULT_OPTIONS['php-version'],
-            (bool) ($config['options']['ignore-docblocks'] ?? static::DEFAULT_OPTIONS['ignore-docblocks']),
-            (bool) ($config['options']['ignore-php-extensions'] ?? static::DEFAULT_OPTIONS['ignore-php-extensions'])
+            $config['options']['php-version'] ?? ConfigurationFactory::DEFAULT_OPTIONS['php-version'],
+            (bool) ($config['options']['ignore-docblocks']
+                ?? ConfigurationFactory::DEFAULT_OPTIONS['ignore-docblocks']),
+            (bool) ($config['options']['ignore-php-extensions']
+                ?? ConfigurationFactory::DEFAULT_OPTIONS['ignore-php-extensions'])
         );
     }
 
@@ -39,6 +41,6 @@ class ConfigurationFactory
             return 0;
         }
 
-        return ($config['options']['verbosity'] ?? static::DEFAULT_OPTIONS['verbosity']);
+        return ($config['options']['verbosity'] ?? ConfigurationFactory::DEFAULT_OPTIONS['verbosity']);
     }
 }
