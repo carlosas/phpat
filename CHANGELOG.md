@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## v0.7.7
+* Do not analyze excluded files ([+info](https://github.com/carlosas/phpat/pull/157#issuecomment-967341532))
+
+## v0.7.6
+* Move CI to GitHub Actions
+* Optimize FullClassName usage
+
 ## 0.7.5
 * Fix random silent failures while creating internal php classmap
 * Fix test file valid names
