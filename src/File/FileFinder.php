@@ -47,9 +47,14 @@ class FileFinder
         );
     }
 
-    public function findPhpFilesInPath(string $path): array
+    public function findPhpFilesInPath(string $path, array $excluded = []): array
     {
-        return $this->finder->find($path, '*.php', [], []);
+        return $this->finder->find(
+            $path,
+            '*.php',
+            [],
+            $excluded
+        );
     }
 
     private function splitFile(string $file): ?array
