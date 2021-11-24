@@ -23,10 +23,10 @@
     "symfony/yaml": "^3.4 || ^4.0 || ^5.0"
   },
   "require-dev": {
+    "phpstan/phpstan": "^0.12 || ^1.0",
     "phpunit/phpunit": "^8.5",
     "squizlabs/php_codesniffer": "^3.5",
-    "vimeo/psalm": "^3.14 | ^4.0",
-    "phpstan/phpstan": "^0.12 || ^1.0"
+    "vimeo/psalm": "^3.14 | ^4.0"
   },
   "config": {
     "sort-packages": true
