@@ -26,14 +26,14 @@ abstract class ArchitectureTest implements TestInterface
     {
         $rules = new RuleCollection();
         foreach (get_class_methods($this) as $method) {
-            if (preg_match('/^(test)([A-Za-z0-9])+$/', $method)) {
+            if (preg_match('/^(test)([_A-Za-z0-9])+$/', $method)) {
                 try {
                     $rule = $this->invokeTest($method);
                 } catch (\Exception $e) {
                     $this->eventDispatcher->dispatch(new FatalErrorEvent($e->getMessage()));
                     throw new FatalErrorException();
                 }
-                $rule->setName(ltrim(preg_replace('/(?<!\ )[A-Z]/', ' $0', $method), 'test '));
+                $rule->setName($this->beautifyMethodName($method));
                 $rules->addValue($rule);
             }
         }
@@ -66,5 +66,19 @@ abstract class ArchitectureTest implements TestInterface
         }
 
         return $rule;
+    }
+
+    private function beautifyMethodName(string $methodName): string
+    {
+        return ucfirst(
+            ltrim(
+                str_replace(
+                    '_',
+                    ' ',
+                    preg_replace('/(?<!\ )[A-Z]/', '_$0', $methodName)
+                ),
+                'test '
+            )
+        );
     }
 }

@@ -39,20 +39,15 @@ class FileFinder
     {
         $parts = $this->splitFile($this->configuration->getSrcPath() . '/' . $file);
 
-        return $this->finder->find(
-            $parts[0],
-            $parts[1],
-            [],
-            $excluded
-        );
+        return $this->finder->find($parts[0], $parts[1], [], $excluded);
     }
 
     /**
      * @return \SplFileInfo[]
      */
-    public function findPhpFilesInPath(string $path): array
+    public function findPhpFilesInPath(string $path, array $excluded = []): array
     {
-        return $this->finder->find($path, '*.php', [], []);
+        return $this->finder->find($path, '*.php', [], $excluded);
     }
 
     private function splitFile(string $file): ?array

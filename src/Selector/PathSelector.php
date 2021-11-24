@@ -9,7 +9,6 @@ use PhpAT\File\FileFinder;
 use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\Ast\ClassLike;
 use PhpAT\Parser\Ast\FullClassName;
-use PhpParser\Parser;
 
 /**
  * Class PathSelector
@@ -19,8 +18,7 @@ use PhpParser\Parser;
 class PathSelector implements SelectorInterface
 {
     private const DEPENDENCIES = [
-        FileFinder::class,
-        Parser::class
+        FileFinder::class
     ];
 
     /**
@@ -35,10 +33,6 @@ class PathSelector implements SelectorInterface
      * @var ReferenceMap
      */
     private $map;
-    /**
-     * @var Parser
-     */
-    private $parser;
 
     public function __construct(string $path)
     {
@@ -53,7 +47,6 @@ class PathSelector implements SelectorInterface
     public function injectDependencies(array $dependencies): void
     {
         $this->fileFinder = $dependencies[FileFinder::class];
-        $this->parser = $dependencies[Parser::class];
     }
 
     /**

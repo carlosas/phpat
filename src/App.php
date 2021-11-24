@@ -34,8 +34,6 @@ class App extends SingleCommandApplication
     private $dispatcher;
     /** * @var MapBuilder */
     private $mapBuilder;
-    /** * @var Configuration */
-    private $configuration;
 
     protected function configure()
     {
@@ -45,6 +43,12 @@ class App extends SingleCommandApplication
                 InputArgument::OPTIONAL,
                 'Configuration file',
                 file_exists('phpat.yaml') ? 'phpat.yaml' : 'phpat.yml'
+            )
+            ->addOption(
+                'php-version',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'PHP version of the src code'
             )
             ->addOption(
                 'ignore-docblocks',
@@ -85,7 +89,6 @@ class App extends SingleCommandApplication
         $this->extractor = $container->get(TestExtractor::class);
         $this->statementBuilder = $container->get(StatementBuilder::class);
         $this->dispatcher = $container->get(EventDispatcher::class);
-        $this->configuration = $container->get(Configuration::class);
         $this->mapBuilder = $container->get(MapBuilder::class);
     }
 

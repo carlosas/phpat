@@ -139,7 +139,7 @@ class MethodDependenciesCollector extends NodeVisitorAbstract
             $this->registerTypeAsDependency($node->getReturnType());
         }
     }
-
+/*
     private function recordConstantFetchUsage(Node $node): void
     {
         if (
@@ -151,7 +151,7 @@ class MethodDependenciesCollector extends NodeVisitorAbstract
             $this->registerTypeAsDependency($node->name);
         }
     }
-
+*/
     private function recordDocBlockUsage(Node $node)
     {
         $doc = $node->getDocComment();

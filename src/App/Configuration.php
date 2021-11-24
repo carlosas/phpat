@@ -12,6 +12,7 @@ class Configuration
     private $composerConfiguration;
     private $testsPath;
     private $verbosity;
+    private $phpVersion;
     private $ignoreDocBlocks;
     private $ignorePhpExtensions;
 
@@ -22,6 +23,7 @@ class Configuration
         array $composerConfiguration,
         string $testPath,
         int $verbosity,
+        ?string $phpVersion,
         bool $ignoreDocBlocks,
         bool $ignorePhpExtensions
     ) {
@@ -35,6 +37,7 @@ class Configuration
         $this->composerConfiguration = $composerConfiguration;
         $this->testsPath = $testPath;
         $this->verbosity = $verbosity;
+        $this->phpVersion = $phpVersion;
         $this->ignoreDocBlocks = $ignoreDocBlocks;
         $this->ignorePhpExtensions = $ignorePhpExtensions;
     }
@@ -67,6 +70,11 @@ class Configuration
     public function getVerbosity(): int
     {
         return $this->verbosity;
+    }
+
+    public function getPhpVersion(): ?string
+    {
+        return $this->phpVersion;
     }
 
     public function getIgnoreDocBlocks(): bool

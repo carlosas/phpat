@@ -111,12 +111,12 @@ class StatementBuilder
         }
 
         if (!empty($this->configuration->getSrcIncluded())) {
-            $filteredClassNames = [];
-
+            $resolvedIncludeRow = [];
             foreach ($this->configuration->getSrcIncluded() as $inc) {
                 $resolvedIncludeRow[] = $this->selectorResolver->resolve(new PathSelector($inc), $map);
             }
-            foreach ($resolvedIncludeRow ?? [] as $includedClasses) {
+            $filteredClassNames = [];
+            foreach ($resolvedIncludeRow as $includedClasses) {
                 /** @var ClassLike $includedClassName */
                 foreach ($includedClasses as $includedClassName) {
                     /** @var ClassLike $value */
