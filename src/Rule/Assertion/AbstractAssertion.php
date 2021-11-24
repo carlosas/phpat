@@ -16,10 +16,8 @@ use PhpAT\Parser\Relation\Mixin;
 
 abstract class AbstractAssertion
 {
-    /** @var Configuration */
-    protected $configuration;
-    /** @var EventDispatcher */
-    protected $eventDispatcher;
+    protected \PhpAT\App\Configuration $configuration;
+    protected \PHPAT\EventDispatcher\EventDispatcher $eventDispatcher;
 
     public function __construct(EventDispatcher $eventDispatcher, Configuration $configuration)
     {
@@ -28,18 +26,14 @@ abstract class AbstractAssertion
     }
 
     /**
-     * @param ClassLike    $origin
      * @param ClassLike[]  $included
      * @param ClassLike[]  $excluded
-     * @param ReferenceMap $map
      */
     abstract public function validate(ClassLike $origin, array $included, array $excluded, ReferenceMap $map): void;
 
     abstract public function acceptsRegex(): bool;
 
     /**
-     * @param ClassLike    $origin
-     * @param ReferenceMap $map
      * @return SrcNode[]
      */
     protected function filterMatchingNodes(ClassLike $origin, ReferenceMap $map): array
@@ -127,10 +121,8 @@ abstract class AbstractAssertion
     }
 
     /**
-     * @param string      $relation
      * @param ClassLike[] $destinations
      * @param ClassLike[] $excluded
-     * @return MatchResult
      */
     protected function relationMatchesDestinations(string $relation, array $destinations, array $excluded): MatchResult
     {
@@ -150,10 +142,8 @@ abstract class AbstractAssertion
     }
 
     /**
-     * @param ClassLike   $destination
      * @param ClassLike[] $excluded
      * @param string[] $relations
-     * @return MatchResult
      */
     protected function destinationMatchesRelations(
         ClassLike $destination,
@@ -177,7 +167,7 @@ abstract class AbstractAssertion
 
     protected function isIgnored(ClassLike $class, ReferenceMap $map): bool
     {
-        if ($this->configuration->getIgnorePhpExtensions() === false) {
+        if (!$this->configuration->getIgnorePhpExtensions()) {
             return false;
         }
 

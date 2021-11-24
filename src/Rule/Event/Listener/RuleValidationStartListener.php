@@ -11,7 +11,7 @@ use PhpAT\Rule\Event\RuleValidationStartEvent;
 
 class RuleValidationStartListener implements EventListenerInterface
 {
-    private $output;
+    private OutputInterface $output;
 
     public function __construct(OutputInterface $output)
     {
@@ -20,7 +20,6 @@ class RuleValidationStartListener implements EventListenerInterface
 
     public function __invoke(EventInterface $event)
     {
-        /** @var RuleValidationStartEvent $event */
         $this->output->writeln('', OutputInterface::VERBOSITY_VERBOSE);
         $this->output->writeln(str_repeat('-', strlen($event->getRuleName()) + 4), OutputInterface::VERBOSITY_VERBOSE);
         $this->output->writeln('| ' . $event->getRuleName() . ' |', OutputInterface::VERBOSITY_VERBOSE);

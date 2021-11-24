@@ -26,14 +26,10 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class App extends SingleCommandApplication
 {
-    /** @var TestExtractor */
-    private $extractor;
-    /** * @var StatementBuilder */
-    private $statementBuilder;
-    /** * @var EventDispatcher */
-    private $dispatcher;
-    /** * @var MapBuilder */
-    private $mapBuilder;
+    private ?TestExtractor $extractor = null;
+    private ?StatementBuilder $statementBuilder = null;
+    private ?EventDispatcher $dispatcher = null;
+    private ?MapBuilder $mapBuilder = null;
 
     protected function configure()
     {
@@ -119,7 +115,7 @@ class App extends SingleCommandApplication
 
         $this->dispatcher->dispatch(new SuiteEndEvent());
 
-        return (int) !(RuleValidationStorage::getTotalErrors() === 0);
+        return (int) (RuleValidationStorage::getTotalErrors() !== 0);
     }
 
     private function validateStatement(Statement $statement, ReferenceMap $map): void

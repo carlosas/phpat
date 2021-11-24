@@ -7,14 +7,8 @@ use PhpAT\Parser\Relation\AbstractRelation;
 
 class SrcNode implements \JsonSerializable
 {
-    /**
-     * @var string
-     */
-    private $filePathname;
-    /**
-     * @var string
-     */
-    private $className;
+    private string $filePathname;
+    private string $className;
     /**
      * @var AbstractRelation[]
      */
@@ -30,17 +24,11 @@ class SrcNode implements \JsonSerializable
         $this->relations = $relations;
     }
 
-    /**
-     * @return string
-     */
     public function getClassName(): string
     {
         return $this->className;
     }
 
-    /**
-     * @return string
-     */
     public function getFilePathname(): string
     {
         return $this->filePathname;

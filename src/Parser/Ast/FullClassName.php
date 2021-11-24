@@ -4,9 +4,9 @@ namespace PhpAT\Parser\Ast;
 
 class FullClassName implements ClassLike
 {
-    private $namespace;
-    private $name;
-    private $fqcn;
+    private string $namespace;
+    private string $name;
+    private string $fqcn;
 
     private function __construct(string $namespace, string $name, string $fqcn)
     {

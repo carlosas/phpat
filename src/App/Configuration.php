@@ -6,15 +6,15 @@ namespace PhpAT\App;
 
 class Configuration
 {
-    private $srcPath;
+    private string $srcPath;
     private $srcIncluded;
     private $srcExcluded;
     private $composerConfiguration;
-    private $testsPath;
-    private $verbosity;
-    private $phpVersion;
-    private $ignoreDocBlocks;
-    private $ignorePhpExtensions;
+    private string $testsPath;
+    private int $verbosity;
+    private ?string $phpVersion;
+    private bool $ignoreDocBlocks;
+    private bool $ignorePhpExtensions;
 
     public function __construct(
         string $srcPath,

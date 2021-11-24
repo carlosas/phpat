@@ -8,19 +8,13 @@ use PHPAT\EventDispatcher\EventInterface;
 
 class RuleValidationStartEvent implements EventInterface
 {
-    /**
-     * @var string
-     */
-    private $ruleName;
+    private string $ruleName;
 
     public function __construct(string $ruleName)
     {
         $this->ruleName = $ruleName;
     }
 
-    /**
-     * @return string
-     */
     public function getRuleName(): string
     {
         return $this->ruleName;

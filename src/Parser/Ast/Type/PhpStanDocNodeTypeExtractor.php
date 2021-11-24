@@ -23,7 +23,6 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 class PhpStanDocNodeTypeExtractor
 {
     /**
-     * @param Node $node
      * @return TypeNode[]
      */
     public function getTypesNodes(Node $node): array
@@ -40,7 +39,6 @@ class PhpStanDocNodeTypeExtractor
     }
 
     /**
-     * @param PhpDocTagNode $node
      * @return TypeNode[]
      */
     private function getTypesFromTagNode(PhpDocTagNode $node): array
@@ -49,7 +47,6 @@ class PhpStanDocNodeTypeExtractor
     }
 
     /**
-     * @param PhpDocTagValueNode $node
      * @return TypeNode[]
      */
     private function getTypesFromTagValueNode(PhpDocTagValueNode $node): array
@@ -86,7 +83,6 @@ class PhpStanDocNodeTypeExtractor
     }
 
     /**
-     * @param Node $node
      * @return TypeNode[]
      */
     public function getTypesFromOthersNode(Node $node): array

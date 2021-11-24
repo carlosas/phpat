@@ -11,7 +11,7 @@ use PhpAT\Parser\Relation\Mixin;
 
 final class Classmap
 {
-    private static $classmap = [];
+    private static array $classmap = [];
 
     public static function registerClass(
         FullClassName $className,

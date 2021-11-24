@@ -12,14 +12,8 @@ use PhpAT\Parser\Relation\Inheritance;
 
 class ExtendSelector implements SelectorInterface
 {
-    /**
-     * @var string
-     */
-    private $fqcn;
-    /**
-     * @var ReferenceMap
-     */
-    private $map;
+    private string $fqcn;
+    private ?\PhpAT\Parser\Ast\ReferenceMap $map = null;
 
     public function __construct(string $fqcn)
     {
@@ -35,9 +29,6 @@ class ExtendSelector implements SelectorInterface
     {
     }
 
-    /**
-     * @param ReferenceMap $map
-     */
     public function setReferenceMap(ReferenceMap $map): void
     {
         $this->map = $map;
@@ -62,9 +53,6 @@ class ExtendSelector implements SelectorInterface
         return $result ?? [];
     }
 
-    /**
-     * @return string
-     */
     public function getParameter(): string
     {
         return $this->fqcn;

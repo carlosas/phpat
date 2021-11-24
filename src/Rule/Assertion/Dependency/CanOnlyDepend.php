@@ -18,10 +18,8 @@ class CanOnlyDepend extends AbstractAssertion
     }
 
     /**
-     * @param ClassLike    $origin
      * @param ClassLike[]  $included
      * @param ClassLike[]  $excluded
-     * @param ReferenceMap $map
      */
     public function validate(
         ClassLike $origin,
@@ -34,15 +32,15 @@ class CanOnlyDepend extends AbstractAssertion
         foreach ($matchingNodes as $node) {
             $dependencies = $this->getDependencies($node, $map);
             $success = true;
-            foreach ($dependencies as $key => $dependency) {
+            foreach ($dependencies as $dependency) {
                 $result = $this->relationMatchesDestinations($dependency, $included, $excluded);
-                if ($result->matched() === false) {
+                if (!$result->matched()) {
                     $success = false;
                     $this->dispatchResult(false, $node->getClassName(), $dependency);
                 }
             }
 
-            if ($success === true) {
+            if ($success) {
                 $this->dispatchResult(true, $node->getClassName());
             }
         }

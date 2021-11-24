@@ -22,10 +22,7 @@ class Rule
      * @var SelectorInterface[]
      */
     private $originExcluded;
-    /**
-     * @var AbstractAssertion|null
-     */
-    private $assertion;
+    private ?\PhpAT\Rule\Assertion\AbstractAssertion $assertion;
     /**
      * @var SelectorInterface[]
      */
@@ -34,10 +31,7 @@ class Rule
      * @var SelectorInterface[]
      */
     private $destinationExcluded;
-    /**
-     * @var string
-     */
-    private $name;
+    private ?string $name = null;
 
     public function __construct(
         array $origin,
@@ -69,9 +63,6 @@ class Rule
         return $this->originExcluded;
     }
 
-    /**
-     * @return AbstractAssertion|null
-     */
     public function getAssertion(): ?AbstractAssertion
     {
         return $this->assertion;
@@ -93,17 +84,11 @@ class Rule
         return $this->destinationExcluded;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     */
     public function setName(string $name): void
     {
         $this->name = $name;

@@ -19,40 +19,33 @@ use Psr\Container\ContainerInterface;
  */
 class RuleBuilder
 {
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
+    private \Psr\Container\ContainerInterface $container;
     /**
      * @var SelectorInterface[]
      */
-    private $origin = [];
+    private array $origin = [];
     /**
      * @var SelectorInterface[]
      */
-    private $originExclude = [];
+    private array $originExclude = [];
     /**
      * @var SelectorInterface[]
      */
-    private $destination = [];
+    private array $destination = [];
     /**
      * @var SelectorInterface[]
      */
-    private $destinationExclude = [];
+    private array $destinationExclude = [];
     /**
      * @var AbstractAssertion|null
      */
-    private $assertion = null;
+    private $assertion;
 
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
 
-    /**
-     * @param  SelectorInterface $selector
-     * @return RuleBuilder
-     */
     public function classesThat(SelectorInterface $selector): self
     {
         if (empty($this->assertion)) {
@@ -64,19 +57,11 @@ class RuleBuilder
         return $this;
     }
 
-    /**
-     * @param  SelectorInterface $selector
-     * @return RuleBuilder
-     */
     public function andClassesThat(SelectorInterface $selector): self
     {
         return $this->classesThat($selector);
     }
 
-    /**
-     * @param  SelectorInterface $selector
-     * @return RuleBuilder
-     */
     public function excludingClassesThat(SelectorInterface $selector): self
     {
         if (empty($this->assertion)) {
@@ -88,139 +73,86 @@ class RuleBuilder
         return $this;
     }
 
-    /**
-     * @param  SelectorInterface $selector
-     * @return RuleBuilder
-     */
     public function andExcludingClassesThat(SelectorInterface $selector): self
     {
         return $this->excludingClassesThat($selector);
     }
 
-    /**
-     * @return RuleBuilder
-     */
     public function mustDependOn(): self
     {
         return $this->setAssertion(Dependency\MustDepend::class);
     }
 
-    /**
-     * @return RuleBuilder
-     */
     public function mustNotDependOn(): self
     {
         return $this->setAssertion(Dependency\MustNotDepend::class);
     }
 
-    /**
-     * @return RuleBuilder
-     */
     public function mustOnlyDependOn(): self
     {
         return $this->setAssertion(Dependency\MustOnlyDepend::class);
     }
 
-    /**
-     * @return RuleBuilder
-     */
     public function canOnlyDependOn(): self
     {
         return $this->setAssertion(Dependency\CanOnlyDepend::class);
     }
 
-    /**
-     * @return RuleBuilder
-     */
     public function mustImplement(): self
     {
         return $this->setAssertion(Composition\MustImplement::class);
     }
 
-    /**
-     * @return RuleBuilder
-     */
     public function mustNotImplement(): self
     {
         return $this->setAssertion(Composition\MustNotImplement::class);
     }
 
-    /**
-     * @return RuleBuilder
-     */
     public function mustOnlyImplement(): self
     {
         return $this->setAssertion(Composition\MustOnlyImplement::class);
     }
 
-    /**
-     * @return RuleBuilder
-     */
     public function canOnlyImplement(): self
     {
         return $this->setAssertion(Composition\CanOnlyImplement::class);
     }
 
-    /**
-     * @return RuleBuilder
-     */
     public function mustExtend(): self
     {
         return $this->setAssertion(Inheritance\MustExtend::class);
     }
 
-    /**
-     * @return RuleBuilder
-     */
     public function mustNotExtend(): self
     {
         return $this->setAssertion(Inheritance\MustNotExtend::class);
     }
 
-    /**
-     * @return RuleBuilder
-     */
     public function canOnlyExtend(): self
     {
         return $this->setAssertion(Inheritance\CanOnlyExtend::class);
     }
 
-    /**
-     * @return RuleBuilder
-     */
     public function mustInclude(): self
     {
         return $this->setAssertion(Mixin\MustInclude::class);
     }
 
-    /**
-     * @return RuleBuilder
-     */
     public function mustNotInclude(): self
     {
         return $this->setAssertion(Mixin\MustNotInclude::class);
     }
 
-    /**
-     * @return RuleBuilder
-     */
     public function mustOnlyInclude(): self
     {
         return $this->setAssertion(Mixin\MustOnlyInclude::class);
     }
 
-    /**
-     * @return RuleBuilder
-     */
     public function canOnlyInclude(): self
     {
         return $this->setAssertion(Mixin\CanOnlyInclude::class);
     }
 
-    /**
-     * @param string $assertion
-     * @return RuleBuilder
-     */
     private function setAssertion(string $assertion): self
     {
         $this->assertion = $this->container->get($assertion);
@@ -228,9 +160,6 @@ class RuleBuilder
         return $this;
     }
 
-    /**
-     * @return Rule
-     */
     public function build(): Rule
     {
         $rule = new Rule(

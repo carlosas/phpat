@@ -12,15 +12,17 @@ class InterfaceCollector extends NodeVisitorAbstract
 {
     public function leaveNode(Node $node)
     {
-        if ($node instanceof Node\Stmt\ClassLike && $node->name !== null) {
-            if (isset($node->implements)) {
-                foreach ($node->implements as $implements) {
-                    if ($implements instanceof Node\Name\FullyQualified) {
-                        Classmap::registerClassImplements(
-                            TraverseContext::className(),
-                            FullClassName::createFromFQCN($implements->toString())
-                        );
-                    }
+        if (
+            $node instanceof Node\Stmt\ClassLike
+            && $node->name !== null
+            && (property_exists($node, 'implements') && $node->implements !== null)
+        ) {
+            foreach ($node->implements as $implements) {
+                if ($implements instanceof Node\Name\FullyQualified) {
+                    Classmap::registerClassImplements(
+                        TraverseContext::className(),
+                        FullClassName::createFromFQCN($implements->toString())
+                    );
                 }
             }
         }

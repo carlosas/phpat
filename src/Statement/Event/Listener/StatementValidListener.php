@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class StatementValidListener implements EventListenerInterface
 {
-    private $output;
+    private OutputInterface $output;
 
     public function __construct(OutputInterface $output)
     {
@@ -20,7 +20,6 @@ class StatementValidListener implements EventListenerInterface
 
     public function __invoke(EventInterface $event)
     {
-        /** @var StatementValidEvent $event */
         $this->output->write('.', false, OutputInterface::VERBOSITY_VERBOSE);
         $this->output->writeln(' ' . $event->getMessage(), OutputInterface::VERBOSITY_VERY_VERBOSE);
     }

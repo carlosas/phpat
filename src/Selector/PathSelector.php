@@ -21,18 +21,12 @@ class PathSelector implements SelectorInterface
         FileFinder::class
     ];
 
-    /**
-     * @var string
-     */
-    private $path;
+    private string $path;
     /**
      * @var FileFinder
      */
     private $fileFinder;
-    /**
-     * @var ReferenceMap
-     */
-    private $map;
+    private ?\PhpAT\Parser\Ast\ReferenceMap $map = null;
 
     public function __construct(string $path)
     {
@@ -49,9 +43,6 @@ class PathSelector implements SelectorInterface
         $this->fileFinder = $dependencies[FileFinder::class];
     }
 
-    /**
-     * @param ReferenceMap $map
-     */
     public function setReferenceMap(ReferenceMap $map): void
     {
         $this->map = $map;
@@ -75,9 +66,6 @@ class PathSelector implements SelectorInterface
         return $result ?? [];
     }
 
-    /**
-     * @return string
-     */
     public function getParameter(): string
     {
         return $this->path;

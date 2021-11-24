@@ -17,8 +17,8 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class EventListenerProvider
 {
-    private $builder;
-    private $output;
+    private ContainerBuilder $builder;
+    private OutputInterface $output;
 
     public function __construct(ContainerBuilder $builder, OutputInterface $output)
     {

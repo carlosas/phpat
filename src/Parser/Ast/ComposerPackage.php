@@ -4,8 +4,7 @@ namespace PhpAT\Parser\Ast;
 
 class ComposerPackage
 {
-    /** @var string */
-    private $packageAlias;
+    private string $packageAlias;
     /** ClassLike[] */
     private $autoload;
     /** ClassLike[] */
@@ -17,7 +16,6 @@ class ComposerPackage
 
     /**
      * ComposerPackage constructor.
-     * @param string      $packageAlias
      * @param ClassLike[] $autoload
      * @param ClassLike[] $devAutoload
      * @param ClassLike[] $dependencies
@@ -37,9 +35,6 @@ class ComposerPackage
         $this->devDependencies = $devDependencies;
     }
 
-    /**
-     * @return string
-     */
     public function getPackageAlias(): string
     {
         return $this->packageAlias;

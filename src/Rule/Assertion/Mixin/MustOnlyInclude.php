@@ -19,10 +19,8 @@ class MustOnlyInclude extends AbstractAssertion
     }
 
     /**
-     * @param ClassLike    $origin
      * @param ClassLike[]  $included
      * @param ClassLike[]  $excluded
-     * @param ReferenceMap $map
      */
     public function validate(
         ClassLike $origin,
@@ -36,7 +34,7 @@ class MustOnlyInclude extends AbstractAssertion
             $traits = $this->getTraits($node, $map);
             foreach ($included as $destination) {
                 $result = $this->destinationMatchesRelations($destination, $excluded, $traits);
-                if ($result->matched() === true) {
+                if ($result->matched()) {
                     foreach ($result->getMatches() as $match) {
                         $this->dispatchResult(true, $node->getClassName(), $match);
                     }
@@ -47,12 +45,12 @@ class MustOnlyInclude extends AbstractAssertion
             $success = true;
             foreach ($traits as $trait) {
                 $result = $this->relationMatchesDestinations($trait, $included, $excluded);
-                if ($result->matched() === false) {
+                if (!$result->matched()) {
                     $success = false;
                     $this->dispatchOthersResult(true, $node->getClassName(), $trait);
                 }
             }
-            if ($success === true) {
+            if ($success) {
                 $this->dispatchOthersResult(false, $node->getClassName());
             }
         }

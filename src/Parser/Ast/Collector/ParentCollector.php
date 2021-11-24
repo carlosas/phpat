@@ -12,13 +12,16 @@ class ParentCollector extends NodeVisitorAbstract
 {
     public function leaveNode(Node $node)
     {
-        if ($node instanceof Node\Stmt\ClassLike && $node->name !== null) {
-            if (isset($node->extends) && $node->extends instanceof Node\Name\FullyQualified) {
-                Classmap::registerClassExtends(
-                    TraverseContext::className(),
-                    FullClassName::createFromFQCN($node->extends->toString())
-                );
-            }
+        if (
+            $node instanceof Node\Stmt\ClassLike
+            && $node->name !== null
+            && isset($node->extends)
+            && $node->extends instanceof Node\Name\FullyQualified
+        ) {
+            Classmap::registerClassExtends(
+                TraverseContext::className(),
+                FullClassName::createFromFQCN($node->extends->toString())
+            );
         }
 
         return $node;

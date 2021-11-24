@@ -20,24 +20,12 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 
 class StatementBuilder
 {
-    /**
-     * @var SelectorResolver
-     */
-    private $selectorResolver;
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-    /**
-     * @var Configuration
-     */
-    private $configuration;
+    private \PhpAT\Selector\SelectorResolver $selectorResolver;
+    private \Psr\EventDispatcher\EventDispatcherInterface $eventDispatcher;
+    private \PhpAT\App\Configuration $configuration;
 
     /**
      * StatementBuilder constructor.
-     * @param SelectorResolver         $selectorResolver
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param Configuration            $configuration
      */
     public function __construct(
         SelectorResolver $selectorResolver,
@@ -50,9 +38,6 @@ class StatementBuilder
     }
 
     /**
-     * @param Rule  $rule
-     * @param ReferenceMap $map
-     * @return \Generator
      * @throws \Exception
      */
     public function build(Rule $rule, ReferenceMap $map): \Generator
@@ -80,9 +65,6 @@ class StatementBuilder
     }
 
     /**
-     * @param array $includedInRule
-     * @param array $excludedInRule
-     * @param ReferenceMap $map
      * @return ClassLike[]
      * @throws \Exception
      */
@@ -138,8 +120,6 @@ class StatementBuilder
 
     /**
      * @param SelectorInterface[] $selectors
-     * @param AbstractAssertion $assertion
-     * @param ReferenceMap $map
      * @return ClassLike[]
      * @throws \Exception
      */
@@ -150,7 +130,7 @@ class StatementBuilder
     ): array {
         $classLikeNames = [];
         foreach ($selectors as $s) {
-            if ($this->isRegex($s->getParameter()) && $assertion->acceptsRegex() === false) {
+            if ($this->isRegex($s->getParameter()) && !$assertion->acceptsRegex()) {
                 $assertionName = substr(get_class($assertion), strrpos(get_class($assertion), '\\') + 1);
                 $message = $assertionName . ' can not assert regex selectors. Ignoring: ' . $s->getParameter();
                 $this->eventDispatcher->dispatch(new WarningEvent($message));

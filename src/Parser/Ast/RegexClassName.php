@@ -4,7 +4,7 @@ namespace PhpAT\Parser\Ast;
 
 class RegexClassName implements ClassLike
 {
-    private $regex;
+    private string $regex;
 
     public function __construct(string $regex)
     {

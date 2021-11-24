@@ -19,10 +19,8 @@ class CanOnlyInclude extends AbstractAssertion
     }
 
     /**
-     * @param ClassLike    $origin
      * @param ClassLike[]  $included
      * @param ClassLike[]  $excluded
-     * @param ReferenceMap $map
      */
     public function validate(
         ClassLike $origin,
@@ -35,15 +33,15 @@ class CanOnlyInclude extends AbstractAssertion
         foreach ($matchingNodes as $node) {
             $traits = $this->getTraits($node, $map);
             $success = true;
-            foreach ($traits as $key => $trait) {
+            foreach ($traits as $trait) {
                 $result = $this->relationMatchesDestinations($trait, $included, $excluded);
-                if ($result->matched() === false) {
+                if (!$result->matched()) {
                     $success = false;
                     $this->dispatchResult(false, $node->getClassName(), $trait);
                 }
             }
 
-            if ($success === true) {
+            if ($success) {
                 $this->dispatchResult(true, $node->getClassName());
             }
         }

@@ -14,8 +14,8 @@ use PhpAT\Test\TestInterface;
 
 class XmlTestParser
 {
-    private $ruleBuilder;
-    private $eventDispatcher;
+    private \PhpAT\Rule\RuleBuilder $ruleBuilder;
+    private \PHPAT\EventDispatcher\EventDispatcher $eventDispatcher;
 
     public function __construct(RuleBuilder $ruleBuilder, EventDispatcher $eventDispatcher)
     {
@@ -64,12 +64,12 @@ class XmlTestParser
         }
 
         $this->buildClasses($rule->classes[0]);
-        if ($rule->excluding[0]) {
+        if ($rule->excluding[0] !== null) {
             $this->buildExcluding($rule->excluding[0]);
         }
         $this->buildAssertion(trim((string) $rule->assert));
         $this->buildClasses($rule->classes[1]);
-        if ($rule->excluding[1]) {
+        if ($rule->excluding[1] !== null) {
             $this->buildExcluding($rule->excluding[1]);
         }
 
