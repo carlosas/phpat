@@ -13,7 +13,7 @@ use PhpAT\Parser\Relation\Inheritance;
 class ExtendSelector implements SelectorInterface
 {
     private string $fqcn;
-    private ?\PhpAT\Parser\Ast\ReferenceMap $map = null;
+    private ?ReferenceMap $map = null;
 
     public function __construct(string $fqcn)
     {

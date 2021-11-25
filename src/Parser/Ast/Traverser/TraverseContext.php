@@ -7,7 +7,7 @@ use PhpAT\Parser\Ast\FullClassName;
 class TraverseContext
 {
     private static ?string $pathname = null;
-    private static ?\PhpAT\Parser\Ast\FullClassName $class = null;
+    private static ?FullClassName $class = null;
 
     public static function startFile(string $pathname)
     {

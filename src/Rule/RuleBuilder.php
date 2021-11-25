@@ -36,10 +36,7 @@ class RuleBuilder
      * @var SelectorInterface[]
      */
     private array $destinationExclude = [];
-    /**
-     * @var AbstractAssertion|null
-     */
-    private $assertion;
+    private ?AbstractAssertion $assertion;
 
     public function __construct(ContainerInterface $container)
     {

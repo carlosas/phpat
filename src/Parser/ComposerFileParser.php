@@ -8,10 +8,10 @@ class ComposerFileParser
 {
     private ?string $composerFilePath = null;
     /** @var array */
-    private $composerFile;
+    private array $composerFile;
     private ?string $lockFilePath = null;
     /** @var array */
-    private $lockFile;
+    private array $lockFile;
     private ?array $lockedPackages = null;
 
     /**

@@ -7,7 +7,7 @@ namespace PhpAT\Rule\Assertion;
 class MatchResult
 {
     private bool $matched;
-    private $matches;
+    private array $matches;
 
     /**
      * MatchResult constructor.

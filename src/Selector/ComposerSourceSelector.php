@@ -20,10 +20,9 @@ class ComposerSourceSelector implements SelectorInterface
         EventDispatcher::class
     ];
 
-    private ?\PhpAT\Parser\Ast\ReferenceMap $map = null;
+    private ?ReferenceMap $map = null;
     private bool $devMode;
-    /** @var EventDispatcher */
-    private $eventDispatcher;
+    private EventDispatcher $eventDispatcher;
     private string $packageAlias;
 
     public function __construct(string $packageAlias, bool $devMode)

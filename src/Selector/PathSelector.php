@@ -22,11 +22,8 @@ class PathSelector implements SelectorInterface
     ];
 
     private string $path;
-    /**
-     * @var FileFinder
-     */
-    private $fileFinder;
-    private ?\PhpAT\Parser\Ast\ReferenceMap $map = null;
+    private FileFinder $fileFinder;
+    private ?ReferenceMap $map = null;
 
     public function __construct(string $path)
     {

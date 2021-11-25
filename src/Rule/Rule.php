@@ -17,20 +17,20 @@ class Rule
     /**
      * @var SelectorInterface[]
      */
-    private $origin;
+    private array $origin;
     /**
      * @var SelectorInterface[]
      */
-    private $originExcluded;
-    private ?\PhpAT\Rule\Assertion\AbstractAssertion $assertion;
+    private array $originExcluded;
+    private ?AbstractAssertion $assertion;
     /**
      * @var SelectorInterface[]
      */
-    private $destination;
+    private array $destination;
     /**
      * @var SelectorInterface[]
      */
-    private $destinationExcluded;
+    private array $destinationExcluded;
     private ?string $name = null;
 
     public function __construct(

@@ -19,11 +19,11 @@ class Statement
     /**
      * @var ClassLike[]
      */
-    private $destinations;
+    private array $destinations;
     /**
      * @var ClassLike[]
      */
-    private $excludedDestinations;
+    private array $excludedDestinations;
 
     public function __construct(
         ClassLike $origin,

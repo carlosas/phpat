@@ -20,9 +20,9 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 
 class StatementBuilder
 {
-    private \PhpAT\Selector\SelectorResolver $selectorResolver;
-    private \Psr\EventDispatcher\EventDispatcherInterface $eventDispatcher;
-    private \PhpAT\App\Configuration $configuration;
+    private SelectorResolver $selectorResolver;
+    private EventDispatcherInterface $eventDispatcher;
+    private Configuration $configuration;
 
     /**
      * StatementBuilder constructor.

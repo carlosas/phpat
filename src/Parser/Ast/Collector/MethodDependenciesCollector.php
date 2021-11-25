@@ -22,9 +22,9 @@ use PhpParser\NodeVisitorAbstract;
  */
 class MethodDependenciesCollector extends NodeVisitorAbstract
 {
-    private \PhpAT\App\Configuration $configuration;
-    private \PhpAT\Parser\Ast\Type\PhpStanDocTypeNodeResolver $docTypeResolver;
-    private \PhpParser\NameContext $context;
+    private Configuration $configuration;
+    private PhpStanDocTypeNodeResolver $docTypeResolver;
+    private NameContext $context;
 
     /** @var AbstractRelation[] */
     protected $results = [];

@@ -10,11 +10,7 @@ class RuleValidationStorage
     private static array $errors = [];
     private static int $totalErrors = 0;
     private static bool $lastRuleHadErrors = false;
-
-    /**
-     * @var float
-     */
-    private static $startTime = 0;
+    private static float $startTime = 0;
 
     public static function setStartTime(float $time): void
     {
@@ -66,6 +62,6 @@ class RuleValidationStorage
 
     public static function getStartTime(): float
     {
-        return (float) self::$startTime;
+        return self::$startTime;
     }
 }

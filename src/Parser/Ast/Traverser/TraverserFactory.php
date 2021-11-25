@@ -13,8 +13,8 @@ use PhpParser\NodeTraverser;
 
 class TraverserFactory
 {
-    private \PhpAT\App\Configuration $configuration;
-    private \PhpAT\Parser\Ast\Type\PhpStanDocTypeNodeResolver $docTypeResolver;
+    private Configuration $configuration;
+    private PhpStanDocTypeNodeResolver $docTypeResolver;
 
     public function __construct(
         Configuration $configuration,

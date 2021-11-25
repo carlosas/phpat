@@ -16,8 +16,8 @@ use PhpAT\Parser\Relation\Mixin;
 
 abstract class AbstractAssertion
 {
-    protected \PhpAT\App\Configuration $configuration;
-    protected \PHPAT\EventDispatcher\EventDispatcher $eventDispatcher;
+    protected Configuration $configuration;
+    protected EventDispatcher $eventDispatcher;
 
     public function __construct(EventDispatcher $eventDispatcher, Configuration $configuration)
     {

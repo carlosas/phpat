@@ -2,6 +2,7 @@
 
 namespace Tests\PhpAT\architecture;
 
+use PhpAT\App\Cli\SingleCommandApplication;
 use PhpAT\Selector\Selector;
 use PhpAT\Rule\Rule;
 use PhpAT\Test\ArchitectureTest;
@@ -13,7 +14,7 @@ class OutputTest extends ArchitectureTest
         return $this->newRule
             ->classesThat(Selector::haveClassName('*'))
             ->excludingClassesThat(Selector::havePath('*/Event/Listener/*Listener.php'))
-            ->excludingClassesThat(Selector::haveClassName(\PhpAT\App\Cli\SingleCommandApplication::class))
+            ->excludingClassesThat(Selector::haveClassName(SingleCommandApplication::class))
             ->excludingClassesThat(Selector::haveClassName('PhpAT\App\Provider'))
             ->excludingClassesThat(Selector::havePath('App/EventListenerProvider.php'))
             ->excludingClassesThat(Selector::havePath('App.php'))

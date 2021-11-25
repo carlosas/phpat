@@ -8,9 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class ComposerFileParserTest extends TestCase
 {
-
-    /** @var ComposerFileParser */
-    private $subject;
+    private ComposerFileParser $subject;
 
     public function setUp(): void
     {

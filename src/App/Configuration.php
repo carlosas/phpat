@@ -7,9 +7,9 @@ namespace PhpAT\App;
 class Configuration
 {
     private string $srcPath;
-    private $srcIncluded;
-    private $srcExcluded;
-    private $composerConfiguration;
+    private array $srcIncluded;
+    private array $srcExcluded;
+    private array $composerConfiguration;
     private string $testsPath;
     private int $verbosity;
     private ?string $phpVersion;

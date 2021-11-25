@@ -12,7 +12,7 @@ class SrcNode implements \JsonSerializable
     /**
      * @var AbstractRelation[]
      */
-    private $relations;
+    private array $relations;
 
     public function __construct(
         string $fileName,

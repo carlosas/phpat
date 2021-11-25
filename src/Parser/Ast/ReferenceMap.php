@@ -7,15 +7,15 @@ class ReferenceMap
     /**
      * @var SrcNode[]
      */
-    private $srcNodes;
+    private array $srcNodes;
     /**
      * @var ClassLike[]
      */
-    private $extensionNodes;
+    private array $extensionNodes;
     /**
      * @var array
      */
-    private $composerPackages;
+    private array $composerPackages;
 
     /**
      * ReferenceMap constructor.

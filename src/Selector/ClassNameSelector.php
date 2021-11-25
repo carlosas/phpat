@@ -12,7 +12,7 @@ use PhpAT\Parser\Ast\RegexClassName;
 class ClassNameSelector implements SelectorInterface
 {
     private string $fqcn;
-    private ?\PhpAT\Parser\Ast\ReferenceMap $map = null;
+    private ?ReferenceMap $map = null;
 
     public function __construct(string $fqcn)
     {

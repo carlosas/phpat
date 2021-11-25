@@ -6,7 +6,7 @@ namespace PhpAT\Test;
 
 class ArchitectureTestCollection
 {
-    private $values = [];
+    private array $values = [];
 
     /**
      * ArchitectureTestCollection constructor.

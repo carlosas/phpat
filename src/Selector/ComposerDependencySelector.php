@@ -16,9 +16,8 @@ class ComposerDependencySelector implements SelectorInterface
         EventDispatcher::class
     ];
 
-    /** @var EventDispatcher */
-    private $eventDispatcher;
-    private ?\PhpAT\Parser\Ast\ReferenceMap $map = null;
+    private EventDispatcher $eventDispatcher;
+    private ?ReferenceMap $map = null;
     private bool $devMode;
     private string $packageAlias;
 
