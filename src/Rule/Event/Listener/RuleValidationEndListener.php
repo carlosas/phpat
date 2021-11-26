@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpAT\Rule\Event\Listener;
 
-use PhpAT\App\RuleValidationStorage;
+use PhpAT\App\ErrorStorage;
 use PHPAT\EventDispatcher\EventInterface;
 use PHPAT\EventDispatcher\EventListenerInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -21,11 +21,11 @@ class RuleValidationEndListener implements EventListenerInterface
     public function __invoke(EventInterface $event)
     {
         $this->output->writeln('', OutputInterface::VERBOSITY_VERBOSE);
-        foreach (RuleValidationStorage::flushWarnings() as $warning) {
+        foreach (ErrorStorage::flushWarnings() as $warning) {
             $this->output->writeln('WARNING: ' . $warning, OutputInterface::VERBOSITY_NORMAL);
         }
 
-        $errors = RuleValidationStorage::flushErrors();
+        $errors = ErrorStorage::flushRuleErrors();
         if (empty($errors)) {
             $this->output->writeln('OK', OutputInterface::VERBOSITY_VERBOSE);
             return;

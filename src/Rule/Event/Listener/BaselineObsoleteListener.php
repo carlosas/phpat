@@ -2,14 +2,15 @@
 
 declare(strict_types=1);
 
-namespace PhpAT\App\Event\Listener;
+namespace PhpAT\Rule\Event\Listener;
 
-use PhpAT\App\Event\ErrorEvent;
+use PhpAT\App\ErrorStorage;
 use PHPAT\EventDispatcher\EventInterface;
 use PHPAT\EventDispatcher\EventListenerInterface;
+use PhpAT\Rule\Event\BaselineObsoleteEvent;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ErrorListener implements EventListenerInterface
+class BaselineObsoleteListener implements EventListenerInterface
 {
     private OutputInterface $output;
 
@@ -20,7 +21,8 @@ class ErrorListener implements EventListenerInterface
 
     public function __invoke(EventInterface $event)
     {
-        /** @var ErrorEvent $event */
-        $this->output->writeln('ERROR' . $event->getMessage());
+        /** @var BaselineObsoleteEvent $event */
+        $this->output->writeln(PHP_EOL . 'BASELINE ERROR ' . $event->getMessage());
+        ErrorStorage::addAnonymousError();
     }
 }

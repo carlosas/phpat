@@ -15,6 +15,7 @@ class Configuration
     private ?string $phpVersion;
     private bool $ignoreDocBlocks;
     private bool $ignorePhpExtensions;
+    private string $baselineFilePath;
 
     public function __construct(
         string $srcPath,
@@ -40,6 +41,7 @@ class Configuration
         $this->phpVersion = $phpVersion;
         $this->ignoreDocBlocks = $ignoreDocBlocks;
         $this->ignorePhpExtensions = $ignorePhpExtensions;
+        $this->baselineFilePath = $this->normalizePath($root . '/phpat.baseline.json');
     }
 
     public function getSrcPath(): string
@@ -87,8 +89,17 @@ class Configuration
         return $this->ignorePhpExtensions;
     }
 
+    public function getBaselineFilePath(): string
+    {
+        return $this->baselineFilePath;
+    }
+
     private function normalizePath(string $path): string
     {
-        return str_replace('\\', '/', realpath($path));
+        if (is_file($path)) {
+            $path = realpath($path);
+        }
+
+        return str_replace('\\', '/', $path);
     }
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpAT\App;
 
-class RuleValidationStorage
+class ErrorStorage
 {
     private static array $warnings = [];
     private static array $errors = [];
@@ -22,15 +22,16 @@ class RuleValidationStorage
         self::$warnings[] = $message;
     }
 
-    public static function addError(string $message): void
+    public static function addAnonymousError(): void
+    {
+        self::$totalErrors += 1;
+    }
+
+    public static function addRuleError(string $message): void
     {
         self::$errors[] = $message;
         self::$lastRuleHadErrors = true;
         self::$totalErrors += 1;
-    }
-
-    public static function addFatalError(string $message): void
-    {
     }
 
     public static function flushWarnings(): array
@@ -41,7 +42,7 @@ class RuleValidationStorage
         return $w;
     }
 
-    public static function flushErrors(): array
+    public static function flushRuleErrors(): array
     {
         $e = self::$errors;
         self::$errors = [];

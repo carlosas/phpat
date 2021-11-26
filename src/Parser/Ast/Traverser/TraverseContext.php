@@ -20,7 +20,6 @@ class TraverseContext
         self::$class = $className;
     }
 
-
     public static function pathname(): string
     {
         return self::$pathname;

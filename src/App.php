@@ -3,11 +3,11 @@
 namespace PhpAT;
 
 use PhpAT\App\Cli\SingleCommandApplication;
-use PhpAT\App\Configuration;
 use PhpAT\App\Event\SuiteEndEvent;
 use PhpAT\App\Event\SuiteStartEvent;
 use PhpAT\App\Provider;
-use PhpAT\App\RuleValidationStorage;
+use PhpAT\App\ErrorStorage;
+use PhpAT\Rule\Baseline;
 use PhpAT\Config\ConfigurationFactory;
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\Ast\MapBuilder;
@@ -30,6 +30,7 @@ class App extends SingleCommandApplication
     private ?StatementBuilder $statementBuilder = null;
     private ?EventDispatcher $dispatcher = null;
     private ?MapBuilder $mapBuilder = null;
+    private ?Baseline $baseline = null;
 
     protected function configure()
     {
@@ -86,6 +87,7 @@ class App extends SingleCommandApplication
         $this->statementBuilder = $container->get(StatementBuilder::class);
         $this->dispatcher = $container->get(EventDispatcher::class);
         $this->mapBuilder = $container->get(MapBuilder::class);
+        $this->baseline = $container->get(Baseline::class);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -113,9 +115,11 @@ class App extends SingleCommandApplication
             $this->dispatcher->dispatch(new RuleValidationEndEvent());
         }
 
+        $this->baseline->checkNonCompensatedErrors();
+
         $this->dispatcher->dispatch(new SuiteEndEvent());
 
-        return (int) (RuleValidationStorage::getTotalErrors() !== 0);
+        return (int) (ErrorStorage::getTotalErrors() !== 0);
     }
 
     private function validateStatement(Statement $statement, ReferenceMap $map): void

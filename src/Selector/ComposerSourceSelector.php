@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PhpAT\Selector;
 
-use PhpAT\App\Event\ErrorEvent;
+use PhpAT\App\Event\BaselineObsoleteEvent;
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\Ast\ComposerPackage;
 use PhpAT\Parser\Ast\FullClassName;
@@ -53,7 +53,7 @@ class ComposerSourceSelector implements SelectorInterface
 
         if (!$package instanceof \PhpAT\Parser\Ast\ComposerPackage) {
             $this->eventDispatcher->dispatch(
-                new ErrorEvent("Package " . $this->packageAlias . "not found in configuration")
+                new BaselineObsoleteEvent("Package " . $this->packageAlias . "not found in configuration")
             );
 
             return [];
