@@ -18,6 +18,10 @@ class RuleValidationStartListener implements EventListenerInterface
         $this->output = $output;
     }
 
+    /**
+     * @psalm-suppress MoreSpecificImplementedParamType
+     * @param RuleValidationStartEvent $event
+     */
     public function __invoke(EventInterface $event)
     {
         $this->output->writeln('', OutputInterface::VERBOSITY_VERBOSE);

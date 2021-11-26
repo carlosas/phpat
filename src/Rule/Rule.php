@@ -31,7 +31,7 @@ class Rule
      * @var SelectorInterface[]
      */
     private array $destinationExcluded;
-    private ?string $name = null;
+    private string $name = '';
 
     public function __construct(
         array $origin,

@@ -6,10 +6,8 @@ namespace PhpAT\Parser;
 
 class ComposerFileParser
 {
-    private ?string $composerFilePath = null;
     /** @var array */
     private array $composerFile;
-    private ?string $lockFilePath = null;
     /** @var array */
     private array $lockFile;
     private ?array $lockedPackages = null;
@@ -19,10 +17,8 @@ class ComposerFileParser
      */
     public function parse(string $composerFilePath, string $lockFilePath): self
     {
-        $this->composerFilePath = $composerFilePath;
-        $this->composerFile = json_decode(file_get_contents($this->composerFilePath), true);
-        $this->lockFilePath = $lockFilePath;
-        $this->lockFile = json_decode(file_get_contents($this->lockFilePath), true);
+        $this->composerFile = json_decode(file_get_contents($composerFilePath), true);
+        $this->lockFile = json_decode(file_get_contents($lockFilePath), true);
         $this->lockedPackages = $this->getPackagesFromLockFile();
 
         return $this;
@@ -85,16 +81,6 @@ class ComposerFileParser
         }
 
         return $namespaces ?? [];
-    }
-
-    public function getComposerFilePath(): string
-    {
-        return $this->composerFilePath;
-    }
-
-    public function getLockFilePath(): string
-    {
-        return $this->lockFilePath;
     }
 
     private function flattenDependencies(array $topLevelRequirements): array

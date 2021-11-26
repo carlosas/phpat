@@ -18,6 +18,10 @@ class StatementValidListener implements EventListenerInterface
         $this->output = $output;
     }
 
+    /**
+     * @psalm-suppress MoreSpecificImplementedParamType
+     * @param StatementValidEvent $event
+     */
     public function __invoke(EventInterface $event)
     {
         $this->output->write('.', false, OutputInterface::VERBOSITY_VERBOSE);

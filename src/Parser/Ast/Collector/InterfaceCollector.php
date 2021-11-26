@@ -15,7 +15,7 @@ class InterfaceCollector extends NodeVisitorAbstract
         if (
             $node instanceof Node\Stmt\ClassLike
             && $node->name !== null
-            && (property_exists($node, 'implements') && $node->implements !== null)
+            && (isset($node->implements) && $node->implements !== null)
         ) {
             foreach ($node->implements as $implements) {
                 if ($implements instanceof Node\Name\FullyQualified) {

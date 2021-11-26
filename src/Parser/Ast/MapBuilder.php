@@ -46,7 +46,10 @@ class MapBuilder
 
     private function buildSrcMap(): array
     {
-        $files = $this->finder->findPhpFilesInPath($this->configuration->getSrcPath());
+        $files = $this->finder->findPhpFilesInPath(
+            $this->configuration->getSrcPath(),
+            $this->configuration->getSrcExcluded()
+        );
         $traverser = $this->traverserFactory->create();
 
         foreach ($files as $file) {
