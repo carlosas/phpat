@@ -19,10 +19,8 @@ class MustExtend extends AbstractAssertion
     }
 
     /**
-     * @param ClassLike    $origin
      * @param ClassLike[]  $included
      * @param ClassLike[]  $excluded
-     * @param ReferenceMap $map
      */
     public function validate(
         ClassLike $origin,
@@ -41,7 +39,7 @@ class MustExtend extends AbstractAssertion
                 }
 
                 $result = $this->destinationMatchesRelations($destination, $excluded, [$parent]);
-                if ($result->matched() === true) {
+                if ($result->matched()) {
                     foreach ($result->getMatches() as $match) {
                         $this->dispatchResult(true, $node->getClassName(), $match);
                     }

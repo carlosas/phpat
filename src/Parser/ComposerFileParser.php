@@ -6,29 +6,19 @@ namespace PhpAT\Parser;
 
 class ComposerFileParser
 {
-    /** @var string */
-    private $composerFilePath;
     /** @var array */
-    private $composerFile;
-    /** @var string */
-    private $lockFilePath;
+    private array $composerFile;
     /** @var array */
-    private $lockFile = null;
-    /** @var array */
-    private $lockedPackages;
+    private array $lockFile;
+    private ?array $lockedPackages = null;
 
     /**
-     * @param string $composerFilePath
-     * @param string $lockFilePath
-     * @return $this
      * @throws \Exception
      */
     public function parse(string $composerFilePath, string $lockFilePath): self
     {
-        $this->composerFilePath = $composerFilePath;
-        $this->composerFile = json_decode(file_get_contents($this->composerFilePath), true);
-        $this->lockFilePath = $lockFilePath;
-        $this->lockFile = json_decode(file_get_contents($this->lockFilePath), true);
+        $this->composerFile = json_decode(file_get_contents($composerFilePath), true);
+        $this->lockFile = json_decode(file_get_contents($lockFilePath), true);
         $this->lockedPackages = $this->getPackagesFromLockFile();
 
         return $this;
@@ -37,7 +27,6 @@ class ComposerFileParser
     /**
      * Returns an array of all namespaces declared by the current composer file.
      *
-     * @param bool $dev
      * @return string[]
      */
     public function getNamespaces(bool $dev = false): array
@@ -48,7 +37,6 @@ class ComposerFileParser
     /**
      * Returns an array of all required namespaces including deep dependencies (dependencies of dependencies)
      *
-     * @param bool $dev
      * @return string[]
      */
     public function getDeepRequirementNamespaces(bool $dev): array
@@ -61,7 +49,6 @@ class ComposerFileParser
     /**
      * Returns an array of directly required package names.
      *
-     * @param bool $dev
      * @return string[]
      */
     public function getDirectDependencies(bool $dev): array
@@ -96,22 +83,12 @@ class ComposerFileParser
         return $namespaces ?? [];
     }
 
-    public function getComposerFilePath(): string
-    {
-        return $this->composerFilePath;
-    }
-
-    public function getLockFilePath(): string
-    {
-        return $this->lockFilePath;
-    }
-
     private function flattenDependencies(array $topLevelRequirements): array
     {
         $required = [];
         $toCheck = $topLevelRequirements;
 
-        while (\count($toCheck) > 0) {
+        while ($toCheck !== []) {
             $packageName = array_pop($toCheck);
             $package = $this->lockedPackages[ $packageName ] ?? null;
             if ($package === null) {

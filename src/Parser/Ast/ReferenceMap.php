@@ -7,21 +7,20 @@ class ReferenceMap
     /**
      * @var SrcNode[]
      */
-    private $srcNodes;
+    private array $srcNodes;
     /**
      * @var ClassLike[]
      */
-    private $extensionNodes;
+    private array $extensionNodes;
     /**
      * @var array
      */
-    private $composerPackages;
+    private array $composerPackages;
 
     /**
      * ReferenceMap constructor.
      * @param SrcNode[]   $srcNodes
      * @param ClassLike[] $extensionNodes
-     * @param array       $composerPackages
      */
     public function __construct(
         array $srcNodes,
@@ -49,9 +48,6 @@ class ReferenceMap
         return $this->extensionNodes;
     }
 
-    /**
-     * @return array
-     */
     public function getComposerPackages(): array
     {
         return $this->composerPackages;

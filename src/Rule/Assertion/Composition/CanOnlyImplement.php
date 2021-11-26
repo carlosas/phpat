@@ -18,10 +18,8 @@ class CanOnlyImplement extends AbstractAssertion
     }
 
     /**
-     * @param ClassLike    $origin
      * @param ClassLike[]  $included
      * @param ClassLike[]  $excluded
-     * @param ReferenceMap $map
      */
     public function validate(
         ClassLike $origin,
@@ -34,15 +32,15 @@ class CanOnlyImplement extends AbstractAssertion
         foreach ($matchingNodes as $node) {
             $interfaces = $this->getInterfaces($node, $map);
             $success = true;
-            foreach ($interfaces as $key => $interface) {
+            foreach ($interfaces as $interface) {
                 $result = $this->relationMatchesDestinations($interface, $included, $excluded);
-                if ($result->matched() === false) {
+                if (!$result->matched()) {
                     $success = false;
                     $this->dispatchResult(false, $node->getClassName(), $interface);
                 }
             }
 
-            if ($success === true) {
+            if ($success) {
                 $this->dispatchResult(true, $node->getClassName());
             }
         }

@@ -12,11 +12,11 @@ use PhpAT\Test\Parser\YamlTestParser;
 
 class FileTestExtractor implements TestExtractor
 {
-    private $ruleBuilder;
-    private $testPath;
-    private $eventDispatcher;
-    private $yamlTestParser;
-    private $xmlTestParser;
+    private \PhpAT\Rule\RuleBuilder $ruleBuilder;
+    private string $testPath;
+    private \PHPAT\EventDispatcher\EventDispatcher $eventDispatcher;
+    private \PhpAT\Test\Parser\YamlTestParser $yamlTestParser;
+    private \PhpAT\Test\Parser\XmlTestParser $xmlTestParser;
 
     public function __construct(
         RuleBuilder $ruleBuilder,

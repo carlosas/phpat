@@ -19,10 +19,8 @@ class CanOnlyExtend extends AbstractAssertion
     }
 
     /**
-     * @param ClassLike    $origin
      * @param ClassLike[]  $included
      * @param ClassLike[]  $excluded
-     * @param ReferenceMap $map
      */
     public function validate(
         ClassLike $origin,
@@ -40,7 +38,7 @@ class CanOnlyExtend extends AbstractAssertion
             }
 
             $result = $this->relationMatchesDestinations($parent, $included, $excluded);
-            if ($result->matched() === false) {
+            if (!$result->matched()) {
                 $this->dispatchResult(false, $node->getClassName(), $parent);
             } else {
                 $this->dispatchResult(true, $node->getClassName());

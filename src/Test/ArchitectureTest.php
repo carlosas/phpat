@@ -13,8 +13,8 @@ use PhpAT\Rule\RuleCollection;
 
 abstract class ArchitectureTest implements TestInterface
 {
-    protected $newRule;
-    private $eventDispatcher;
+    protected \PhpAT\Rule\RuleBuilder $newRule;
+    private \PHPAT\EventDispatcher\EventDispatcher $eventDispatcher;
 
     final public function __construct(RuleBuilder $builder, EventDispatcher $eventDispatcher)
     {
@@ -41,10 +41,6 @@ abstract class ArchitectureTest implements TestInterface
         return $rules;
     }
 
-    /**
-     * @param string $method
-     * @return Rule
-     */
     protected function invokeTest(string $method): Rule
     {
         $rule = $this->$method();

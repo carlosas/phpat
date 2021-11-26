@@ -20,10 +20,8 @@ class MustDepend extends AbstractAssertion
     }
 
     /**
-     * @param ClassLike    $origin
      * @param ClassLike[]  $included
      * @param ClassLike[]  $excluded
-     * @param ReferenceMap $map
      */
     public function validate(
         ClassLike $origin,
@@ -37,7 +35,7 @@ class MustDepend extends AbstractAssertion
             $dependencies = $this->getDependencies($node, $map);
             foreach ($included as $destination) {
                 $result = $this->destinationMatchesRelations($destination, $excluded, $dependencies);
-                if ($result->matched() === true) {
+                if ($result->matched()) {
                     foreach ($result->getMatches() as $match) {
                         $this->dispatchResult(true, $node->getClassName(), $match);
                     }

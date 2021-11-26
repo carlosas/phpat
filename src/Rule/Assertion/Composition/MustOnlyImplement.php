@@ -18,10 +18,8 @@ class MustOnlyImplement extends AbstractAssertion
     }
 
     /**
-     * @param ClassLike    $origin
      * @param ClassLike[]  $included
      * @param ClassLike[]  $excluded
-     * @param ReferenceMap $map
      */
     public function validate(
         ClassLike $origin,
@@ -35,7 +33,7 @@ class MustOnlyImplement extends AbstractAssertion
             $interfaces = $this->getInterfaces($node, $map);
             foreach ($included as $destination) {
                 $result = $this->destinationMatchesRelations($destination, $excluded, $interfaces);
-                if ($result->matched() === true) {
+                if ($result->matched()) {
                     foreach ($result->getMatches() as $match) {
                         $this->dispatchResult(true, $node->getClassName(), $match);
                     }
@@ -46,12 +44,12 @@ class MustOnlyImplement extends AbstractAssertion
             $success = true;
             foreach ($interfaces as $interface) {
                 $result = $this->relationMatchesDestinations($interface, $included, $excluded);
-                if ($result->matched() === false) {
+                if (!$result->matched()) {
                     $success = false;
                     $this->dispatchOthersResult(true, $node->getClassName(), $interface);
                 }
             }
-            if ($success === true) {
+            if ($success) {
                 $this->dispatchOthersResult(false, $node->getClassName());
             }
         }

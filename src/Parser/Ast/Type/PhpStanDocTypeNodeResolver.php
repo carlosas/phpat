@@ -11,10 +11,8 @@ use PHPStan\PhpDocParser\Parser\TokenIterator;
 
 class PhpStanDocTypeNodeResolver
 {
-    /** @var PhpDocParser */
-    private $docParser;
-    /** @var PhpStanDocNodeTypeExtractor */
-    private $typeExtractor;
+    private \PHPStan\PhpDocParser\Parser\PhpDocParser $docParser;
+    private \PhpAT\Parser\Ast\Type\PhpStanDocNodeTypeExtractor $typeExtractor;
 
     public function __construct(PhpDocParser $docParser, PhpStanDocNodeTypeExtractor $typeExtractor)
     {
@@ -23,8 +21,6 @@ class PhpStanDocTypeNodeResolver
     }
 
     /**
-     * @param NameContext $context
-     * @param string  $docBlock
      * @return string[]
      */
     public function getBlockClassNames(NameContext $context, string $docBlock): array
@@ -51,7 +47,6 @@ class PhpStanDocTypeNodeResolver
     }
 
     /**
-     * @param Type\TypeNode $type
      * @return string[]
      */
     private function resolveTypeNode(Type\TypeNode $type): array

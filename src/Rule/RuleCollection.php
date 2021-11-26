@@ -6,7 +6,7 @@ namespace PhpAT\Rule;
 
 class RuleCollection
 {
-    private $values = [];
+    private array $values = [];
 
     /**
      * RuleCollection constructor.

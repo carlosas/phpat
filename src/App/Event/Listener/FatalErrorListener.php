@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class FatalErrorListener implements EventListenerInterface
 {
-    private $output;
+    private OutputInterface $output;
 
     public function __construct(OutputInterface $output)
     {
@@ -20,7 +20,6 @@ class FatalErrorListener implements EventListenerInterface
     }
 
     /**
-     * @param EventInterface $event
      * @throws FatalErrorException
      */
     public function __invoke(EventInterface $event)

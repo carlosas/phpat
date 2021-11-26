@@ -17,18 +17,12 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 
 class MapBuilder
 {
-    /** @var FileFinder */
-    private $finder;
-    /** @var Parser */
-    private $parser;
-    /** @var TraverserFactory */
-    private $traverserFactory;
-    /** @var EventDispatcherInterface */
-    private $eventDispatcher;
-    /** @var ComposerFileParser */
-    private $composerFileParser;
-    /** @var Configuration */
-    private $configuration;
+    private FileFinder $finder;
+    private Parser $parser;
+    private TraverserFactory $traverserFactory;
+    private EventDispatcherInterface $eventDispatcher;
+    private ComposerFileParser $composerFileParser;
+    private Configuration $configuration;
 
     public function __construct(
         FileFinder $finder,
@@ -53,7 +47,10 @@ class MapBuilder
 
     private function buildSrcMap(): array
     {
-        $files = $this->finder->findPhpFilesInPath($this->configuration->getSrcPath());
+        $files = $this->finder->findPhpFilesInPath(
+            $this->configuration->getSrcPath(),
+            $this->configuration->getSrcExcluded()
+        );
         $traverser = $this->traverserFactory->create();
 
         foreach ($files as $file) {

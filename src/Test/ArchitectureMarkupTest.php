@@ -11,9 +11,9 @@ use PhpAT\Rule\RuleCollection;
 
 class ArchitectureMarkupTest implements TestInterface
 {
-    protected $newRule;
-    private $eventDispatcher;
-    private $methods;
+    protected \PhpAT\Rule\RuleBuilder $newRule;
+    private \PHPAT\EventDispatcher\EventDispatcher $eventDispatcher;
+    private array $methods;
 
     final public function __construct(array $methods, RuleBuilder $builder, EventDispatcher $eventDispatcher)
     {
@@ -36,10 +36,6 @@ class ArchitectureMarkupTest implements TestInterface
         return $rules;
     }
 
-    /**
-     * @param string $method
-     * @return Rule
-     */
     private function invokeTest(string $method): Rule
     {
         $rule = call_user_func($this->$method);

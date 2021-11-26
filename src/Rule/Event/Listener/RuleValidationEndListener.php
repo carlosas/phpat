@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class RuleValidationEndListener implements EventListenerInterface
 {
-    private $output;
+    private OutputInterface $output;
 
     public function __construct(OutputInterface $output)
     {

@@ -14,22 +14,16 @@ use PhpAT\Rule\Assertion\AbstractAssertion;
  */
 class Statement
 {
-    /**
-     * @var AbstractAssertion
-     */
-    private $assertion;
-    /**
-     * @var ClassLike
-     */
-    private $origin;
+    private \PhpAT\Rule\Assertion\AbstractAssertion $assertion;
+    private \PhpAT\Parser\Ast\ClassLike $origin;
     /**
      * @var ClassLike[]
      */
-    private $destinations;
+    private array $destinations;
     /**
      * @var ClassLike[]
      */
-    private $excludedDestinations;
+    private array $excludedDestinations;
 
     public function __construct(
         ClassLike $origin,
@@ -43,17 +37,11 @@ class Statement
         $this->excludedDestinations = $excludedDestinations;
     }
 
-    /**
-     * @return AbstractAssertion
-     */
     public function getAssertion(): AbstractAssertion
     {
         return $this->assertion;
     }
 
-    /**
-     * @return ClassLike
-     */
     public function getOrigin(): ClassLike
     {
         return $this->origin;

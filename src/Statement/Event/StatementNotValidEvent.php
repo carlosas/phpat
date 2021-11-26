@@ -8,10 +8,7 @@ use PHPAT\EventDispatcher\EventInterface;
 
 class StatementNotValidEvent implements EventInterface
 {
-    /**
-     * @var string
-     */
-    private $message;
+    private string $message;
 
     public function __construct(string $message)
     {

@@ -9,6 +9,7 @@ use PhpAT\Parser\Ast\Traverser\TraverseContext;
 use PhpAT\Parser\Ast\Type\PhpStanDocTypeNodeResolver;
 use PhpAT\Parser\Ast\Type\PhpType;
 use PhpAT\Parser\Relation\AbstractRelation;
+use PhpParser\Comment\Doc;
 use PhpParser\NameContext;
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
@@ -21,12 +22,9 @@ use PhpParser\NodeVisitorAbstract;
  */
 class MethodDependenciesCollector extends NodeVisitorAbstract
 {
-    /** @var Configuration */
-    private $configuration;
-    /** @var PhpStanDocTypeNodeResolver */
-    private $docTypeResolver;
-    /** @var NameContext */
-    private $context;
+    private Configuration $configuration;
+    private PhpStanDocTypeNodeResolver $docTypeResolver;
+    private NameContext $context;
 
     /** @var AbstractRelation[] */
     protected $results = [];
@@ -67,7 +65,7 @@ class MethodDependenciesCollector extends NodeVisitorAbstract
         $this->recordExtendsUsage($node);
         $this->recordImplementsUsage($node);
         $this->recordTraitUsage($node);
-        if ($this->configuration->getIgnoreDocBlocks() === false) {
+        if (!$this->configuration->getIgnoreDocBlocks()) {
             $this->recordDocBlockUsage($node);
         }
         $this->recordAttributeUsage($node);
@@ -155,7 +153,7 @@ class MethodDependenciesCollector extends NodeVisitorAbstract
     private function recordDocBlockUsage(Node $node)
     {
         $doc = $node->getDocComment();
-        if ($doc === null) {
+        if (!$doc instanceof Doc) {
             return;
         }
 

@@ -8,10 +8,8 @@ use PhpAT\App\Configuration;
 
 class FileFinder
 {
-    /** @var Finder */
-    private $finder;
-    /** @var Configuration */
-    private $configuration;
+    private Finder $finder;
+    private Configuration $configuration;
 
     public function __construct(Finder $finder, Configuration $configuration)
     {
@@ -31,8 +29,6 @@ class FileFinder
     }
 
     /**
-     * @param  string $file
-     * @param  array  $excluded
      * @return \SplFileInfo[]
      */
     public function findSrcFiles(string $file, array $excluded = []): array

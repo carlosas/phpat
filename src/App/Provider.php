@@ -37,18 +37,12 @@ use Symfony\Component\Finder\Finder;
 
 class Provider
 {
-    /** @var ContainerBuilder */
-    private $builder;
-    /** @var OutputInterface */
-    private $output;
-    /** @var Configuration */
-    private $configuration;
+    private ContainerBuilder $builder;
+    private OutputInterface $output;
+    private Configuration $configuration;
 
     /**
      * Provider constructor.
-     * @param ContainerBuilder $builder
-     * @param Configuration    $configuration
-     * @param OutputInterface  $output
      */
     public function __construct(ContainerBuilder $builder, Configuration $configuration, OutputInterface $output)
     {
@@ -57,9 +51,6 @@ class Provider
         $this->output = $output;
     }
 
-    /**
-     * @return ContainerBuilder
-     */
     public function register(): ContainerBuilder
     {
         $this->builder->set(Configuration::class, $this->configuration);
@@ -206,7 +197,7 @@ class Provider
             ->addArgument(new Reference(EventDispatcher::class))
             ->addArgument(new Reference(Configuration::class));
 
-        $listenerProvider = new \PhpAT\App\EventListenerProvider($this->builder, $this->output);
+        $listenerProvider = new EventListenerProvider($this->builder, $this->output);
         $this->builder->merge($listenerProvider->register());
 
         return $this->builder;
