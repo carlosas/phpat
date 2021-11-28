@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace PhpAT\Selector;
 
-use PhpAT\App\Event\BaselineObsoleteEvent;
 use PHPAT\EventDispatcher\EventDispatcher;
-use PhpAT\Parser\Ast\ComposerPackage;
 use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\Ast\ClassLike;
 
