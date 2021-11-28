@@ -42,6 +42,12 @@ class App extends SingleCommandApplication
                 file_exists('phpat.yaml') ? 'phpat.yaml' : 'phpat.yml'
             )
             ->addOption(
+                'baseline',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Path to baseline file to use'
+            )
+            ->addOption(
                 'php-version',
                 null,
                 InputOption::VALUE_REQUIRED,

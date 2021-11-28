@@ -22,7 +22,8 @@ class Configuration
         array $srcIncluded,
         array $srcExcluded,
         array $composerConfiguration,
-        string $testPath,
+        string $testsPath,
+        string $baselineFilePath,
         int $verbosity,
         ?string $phpVersion,
         bool $ignoreDocBlocks,
@@ -36,12 +37,12 @@ class Configuration
         $this->srcIncluded = $srcIncluded;
         $this->srcExcluded = $srcExcluded;
         $this->composerConfiguration = $composerConfiguration;
-        $this->testsPath = $testPath;
+        $this->testsPath = $testsPath;
+        $this->baselineFilePath = $this->normalizePath($root . '/' . $baselineFilePath);
         $this->verbosity = $verbosity;
         $this->phpVersion = $phpVersion;
         $this->ignoreDocBlocks = $ignoreDocBlocks;
         $this->ignorePhpExtensions = $ignorePhpExtensions;
-        $this->baselineFilePath = $this->normalizePath($root . '/phpat.baseline.json');
     }
 
     public function getSrcPath(): string

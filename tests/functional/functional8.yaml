@@ -2,5 +2,6 @@ src:
   path: tests/functional/php8/fixtures/
 tests:
   path: tests/functional/php8/architecture/
+  baseline: tests/functional/php8/phpat.baseline.json
 options:
   verbosity: 2
