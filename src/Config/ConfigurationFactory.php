@@ -26,7 +26,7 @@ class ConfigurationFactory
             $config['src']['exclude'] ?? [],
             $config['composer'] ?? $this->defaults['composer'],
             $config['tests']['path'] ?? '',
-            $commandOptions['baseline'] ?? $config['tests']['baseline'],
+            $commandOptions['baseline'] ?? $config['tests']['baseline'] ?? '',
             $this->decideVerbosity($commandOptions, $config),
             $config['options']['php-version'] ?? $this->defaults['php-version'],
             (bool) ($config['options']['ignore-docblocks'] ?? $this->defaults['ignore-docblocks']),
