@@ -7,6 +7,7 @@ namespace PhpAT\Selector;
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\Ast\ClassLike;
+use PhpAT\Rule\Event\BaselineObsoleteEvent;
 
 class ComposerDependencySelector implements SelectorInterface
 {

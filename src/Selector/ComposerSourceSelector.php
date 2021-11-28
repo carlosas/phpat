@@ -8,6 +8,7 @@ use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\Ast\FullClassName;
 use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\Ast\ClassLike;
+use PhpAT\Rule\Event\BaselineObsoleteEvent;
 
 /**
  * Class ComposerSourceSelector
