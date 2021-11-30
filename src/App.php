@@ -48,6 +48,12 @@ class App extends SingleCommandApplication
                 'Path to baseline file to use'
             )
             ->addOption(
+                'generate-baseline',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Generate a baseline file and exit without error code'
+            )
+            ->addOption(
                 'php-version',
                 null,
                 InputOption::VALUE_REQUIRED,
@@ -122,10 +128,11 @@ class App extends SingleCommandApplication
         }
 
         $this->baseline->checkNonCompensatedErrors();
+        $baselineGenerated = $this->baseline->generateBaselineFileIfNeeded();
 
         $this->dispatcher->dispatch(new SuiteEndEvent());
 
-        return (int) (ErrorStorage::getTotalErrors() !== 0);
+        return ($baselineGenerated || (ErrorStorage::getTotalErrors() === 0)) ? 0 : 1;
     }
 
     private function validateStatement(Statement $statement, ReferenceMap $map): void

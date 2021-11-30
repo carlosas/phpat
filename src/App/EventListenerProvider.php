@@ -36,7 +36,8 @@ class EventListenerProvider
 
         $this->builder
             ->register(SuiteEndListener::class, SuiteEndListener::class)
-            ->addArgument($this->output);
+            ->addArgument($this->output)
+            ->addArgument($this->builder->get(Configuration::class));
 
         $this->builder
             ->register(WarningListener::class, WarningListener::class);
@@ -51,7 +52,8 @@ class EventListenerProvider
 
         $this->builder
             ->register(RuleValidationEndListener::class, RuleValidationEndListener::class)
-            ->addArgument($this->output);
+            ->addArgument($this->output)
+            ->addArgument($this->builder->get(Baseline::class));
 
         $this->builder
             ->register(StatementValidListener::class, StatementValidListener::class)

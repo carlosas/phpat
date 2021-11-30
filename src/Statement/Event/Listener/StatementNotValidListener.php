@@ -15,12 +15,12 @@ use PhpAT\Statement\Event\StatementNotValidEvent;
 class StatementNotValidListener implements EventListenerInterface
 {
     private OutputInterface $output;
-    private Baseline $baseliner;
+    private Baseline $baseline;
 
-    public function __construct(OutputInterface $output, Baseline $baseliner)
+    public function __construct(OutputInterface $output, Baseline $baseline)
     {
         $this->output = $output;
-        $this->baseliner = $baseliner;
+        $this->baseline = $baseline;
     }
 
     /**
@@ -29,7 +29,7 @@ class StatementNotValidListener implements EventListenerInterface
      */
     public function __invoke(EventInterface $event)
     {
-        if ($this->baseliner->compensateError(RuleContext::ruleName(), $event->getMessage())) {
+        if ($this->baseline->compensateError(RuleContext::ruleName(), $event->getMessage())) {
             return;
         }
 

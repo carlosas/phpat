@@ -29,6 +29,7 @@ class ConfigurationFactory
             $commandOptions['baseline'] ?? $config['tests']['baseline'] ?? '',
             $this->decideVerbosity($commandOptions, $config),
             $config['options']['php-version'] ?? $this->defaults['php-version'],
+            $commandOptions['generate-baseline'],
             (bool) ($config['options']['ignore-docblocks'] ?? $this->defaults['ignore-docblocks']),
             (bool) ($config['options']['ignore-php-extensions'] ?? $this->defaults['ignore-php-extensions'])
         );
