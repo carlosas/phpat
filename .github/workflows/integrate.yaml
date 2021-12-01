@@ -190,7 +190,7 @@ jobs:
         run: "php bin/phpat tests/functional/functional8.yaml"
 
   functional-analysis-php81:
-    name:    "Functional Analysis (PHP8 specific)"
+    name:    "Functional Analysis (PHP8.1 specific)"
 
     runs-on: "ubuntu-latest"
 
