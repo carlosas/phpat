@@ -107,7 +107,7 @@ class Configuration
         if ($path === null) {
             return null;
         }
-        
+
         $path = $this->rootPath . '/' . $path;
         if (is_file($path)) {
             $path = realpath($path);
