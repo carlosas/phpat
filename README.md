@@ -74,6 +74,7 @@ tests:
 | `options` `php-version`                   | PHP version of the src code (x.x.x)                      | PHP_VERSION  |
 | `options` `ignore-docblocks`              | Ignore relations on docblocks (T/F)                      | false        |
 | `options` `ignore-php-extensions`         | Ignore relations to core and extensions classes (T/F)    | true         |
+| `--generate-baseline`                     | Option to generate a json baseline file (null/filename)  | false        |
 
 </details>
 

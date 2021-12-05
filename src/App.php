@@ -50,7 +50,7 @@ class App extends SingleCommandApplication
             ->addOption(
                 'generate-baseline',
                 null,
-                InputOption::VALUE_REQUIRED,
+                InputOption::VALUE_OPTIONAL,
                 'Generate a baseline file and exit without error code'
             )
             ->addOption(
@@ -79,10 +79,7 @@ class App extends SingleCommandApplication
             throw new \RuntimeException('Configuration file not found.');
         }
 
-        $configuration = (new ConfigurationFactory())->create(
-            $input->getArgument('config'),
-            $input->getOptions()
-        );
+        $configuration = (new ConfigurationFactory())->create($input);
 
         if (!$this->hasCommandVerbosity($output)) {
             $output->setVerbosity($this->getConsoleVerbosity($configuration->getVerbosity()));

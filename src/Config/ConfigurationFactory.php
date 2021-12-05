@@ -3,6 +3,7 @@
 namespace PhpAT\Config;
 
 use PhpAT\App\Configuration;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Yaml\Yaml;
 
 class ConfigurationFactory
@@ -12,11 +13,15 @@ class ConfigurationFactory
         'php-version' => null,
         'ignore-docblocks' => false,
         'ignore-php-extensions' => true,
-        'composer' => ['main' => ['json' => 'composer.json', 'lock' => 'composer.lock']]
+        'composer' => ['main' => ['json' => 'composer.json', 'lock' => 'composer.lock']],
+        'baseline-path' => 'phpat.baseline.json',
     ];
 
-    public function create(string $configFilePath, array $commandOptions): Configuration
+    public function create(InputInterface $input): Configuration
     {
+        $configFilePath = $input->getArgument('config');
+        $commandOptions = $input->getOptions();
+
         $config = Yaml::parse(file_get_contents($configFilePath));
         $config['options'] = array_merge($config['options'] ?? [], array_filter($commandOptions));
 
@@ -29,7 +34,7 @@ class ConfigurationFactory
             $commandOptions['baseline'] ?? $config['tests']['baseline'] ?? '',
             $this->decideVerbosity($commandOptions, $config),
             $config['options']['php-version'] ?? $this->defaults['php-version'],
-            $commandOptions['generate-baseline'],
+            $this->decideBaselineGeneration($input),
             (bool) ($config['options']['ignore-docblocks'] ?? $this->defaults['ignore-docblocks']),
             (bool) ($config['options']['ignore-php-extensions'] ?? $this->defaults['ignore-php-extensions'])
         );
@@ -42,5 +47,15 @@ class ConfigurationFactory
         }
 
         return ($config['options']['verbosity'] ?? $this->defaults['verbosity']);
+    }
+
+    private function decideBaselineGeneration(InputInterface $input): ?string
+    {
+        $opt = $input->getParameterOption('--generate-baseline', 'not-defined');
+        if ($opt === 'not-defined') {
+            return null;
+        }
+
+        return $opt ?? $this->defaults['baseline-path'];
     }
 }

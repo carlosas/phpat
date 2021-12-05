@@ -42,7 +42,7 @@ class Configuration
         $this->baselineFilePath = $this->normalizePath($baselineFilePath);
         $this->verbosity = $verbosity;
         $this->phpVersion = $phpVersion;
-        $this->generateBaselineIn = $generateBaselineIn === null ? null : $this->normalizePath($generateBaselineIn);
+        $this->generateBaselineIn = is_string($generateBaselineIn) ? $this->normalizePath($generateBaselineIn) : null;
         $this->ignoreDocBlocks = $ignoreDocBlocks;
         $this->ignorePhpExtensions = $ignorePhpExtensions;
     }
