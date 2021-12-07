@@ -25,7 +25,7 @@ final class Baseline
 
     public function compensateError(string $ruleName, string $error): bool
     {
-        if (!isset($this->baselineErrors[$ruleName])) {
+        if ($this->generateBaselinePath !== null || !isset($this->baselineErrors[$ruleName])) {
             return false;
         }
 
