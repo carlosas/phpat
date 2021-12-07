@@ -12,7 +12,8 @@ class ClassCollector extends NodeVisitorAbstract
 {
     public function enterNode(Node $node)
     {
-        if ($node instanceof Node\Stmt\ClassLike && property_exists($node, 'namespacedName')) {
+        /** @phpstan-ignore-next-line https://github.com/nikic/PHP-Parser/pull/822 */
+        if ($node instanceof Node\Stmt\ClassLike && ($node->namespacedName ?? null) !== null) {
             $class = FullClassName::createFromFQCN($node->namespacedName->toString());
 
             TraverseContext::registerClass($class);
