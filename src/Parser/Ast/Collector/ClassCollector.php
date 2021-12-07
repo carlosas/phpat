@@ -12,7 +12,7 @@ class ClassCollector extends NodeVisitorAbstract
 {
     public function enterNode(Node $node)
     {
-        if ($node instanceof Node\Stmt\ClassLike && isset($node->namespacedName)) {
+        if ($node instanceof Node\Stmt\ClassLike && property_exists($node, 'namespacedName')) {
             $class = FullClassName::createFromFQCN($node->namespacedName->toString());
 
             TraverseContext::registerClass($class);
