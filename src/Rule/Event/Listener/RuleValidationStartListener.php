@@ -6,6 +6,7 @@ namespace PhpAT\Rule\Event\Listener;
 
 use PHPAT\EventDispatcher\EventInterface;
 use PHPAT\EventDispatcher\EventListenerInterface;
+use PhpAT\Rule\RuleContext;
 use Symfony\Component\Console\Output\OutputInterface;
 use PhpAT\Rule\Event\RuleValidationStartEvent;
 
@@ -24,6 +25,7 @@ class RuleValidationStartListener implements EventListenerInterface
      */
     public function __invoke(EventInterface $event)
     {
+        RuleContext::startRule($event->getRuleName());
         $this->output->writeln('', OutputInterface::VERBOSITY_VERBOSE);
         $this->output->writeln(str_repeat('-', strlen($event->getRuleName()) + 4), OutputInterface::VERBOSITY_VERBOSE);
         $this->output->writeln('| ' . $event->getRuleName() . ' |', OutputInterface::VERBOSITY_VERBOSE);

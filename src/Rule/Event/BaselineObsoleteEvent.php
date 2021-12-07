@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace PhpAT\App\Event;
+namespace PhpAT\Rule\Event;
 
 use PHPAT\EventDispatcher\EventInterface;
 
-class ErrorEvent implements EventInterface
+class BaselineObsoleteEvent implements EventInterface
 {
     private string $message;
 

@@ -3,11 +3,11 @@
 namespace PhpAT;
 
 use PhpAT\App\Cli\SingleCommandApplication;
-use PhpAT\App\Configuration;
 use PhpAT\App\Event\SuiteEndEvent;
 use PhpAT\App\Event\SuiteStartEvent;
 use PhpAT\App\Provider;
-use PhpAT\App\RuleValidationStorage;
+use PhpAT\App\ErrorStorage;
+use PhpAT\Rule\Baseline;
 use PhpAT\Config\ConfigurationFactory;
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\Ast\MapBuilder;
@@ -30,6 +30,7 @@ class App extends SingleCommandApplication
     private ?StatementBuilder $statementBuilder = null;
     private ?EventDispatcher $dispatcher = null;
     private ?MapBuilder $mapBuilder = null;
+    private ?Baseline $baseline = null;
 
     protected function configure()
     {
@@ -39,6 +40,18 @@ class App extends SingleCommandApplication
                 InputArgument::OPTIONAL,
                 'Configuration file',
                 file_exists('phpat.yaml') ? 'phpat.yaml' : 'phpat.yml'
+            )
+            ->addOption(
+                'baseline',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Path to baseline file to use'
+            )
+            ->addOption(
+                'generate-baseline',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Generate a baseline file and exit without error code'
             )
             ->addOption(
                 'php-version',
@@ -66,10 +79,7 @@ class App extends SingleCommandApplication
             throw new \RuntimeException('Configuration file not found.');
         }
 
-        $configuration = (new ConfigurationFactory())->create(
-            $input->getArgument('config'),
-            $input->getOptions()
-        );
+        $configuration = (new ConfigurationFactory())->create($input);
 
         if (!$this->hasCommandVerbosity($output)) {
             $output->setVerbosity($this->getConsoleVerbosity($configuration->getVerbosity()));
@@ -86,6 +96,7 @@ class App extends SingleCommandApplication
         $this->statementBuilder = $container->get(StatementBuilder::class);
         $this->dispatcher = $container->get(EventDispatcher::class);
         $this->mapBuilder = $container->get(MapBuilder::class);
+        $this->baseline = $container->get(Baseline::class);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -113,9 +124,12 @@ class App extends SingleCommandApplication
             $this->dispatcher->dispatch(new RuleValidationEndEvent());
         }
 
+        $this->baseline->checkNonCompensatedErrors();
+        $baselineGenerated = $this->baseline->generateBaselineFileIfNeeded();
+
         $this->dispatcher->dispatch(new SuiteEndEvent());
 
-        return (int) (RuleValidationStorage::getTotalErrors() !== 0);
+        return ($baselineGenerated || (ErrorStorage::getTotalErrors() === 0)) ? 0 : 1;
     }
 
     private function validateStatement(Statement $statement, ReferenceMap $map): void

@@ -8,6 +8,8 @@ use PhpAT\App\Event\Listener\FatalErrorListener;
 use PhpAT\App\Event\Listener\SuiteEndListener;
 use PhpAT\App\Event\Listener\SuiteStartListener;
 use PhpAT\App\Event\Listener\WarningListener;
+use PhpAT\Rule\Baseline;
+use PhpAT\Rule\Event\Listener\BaselineObsoleteListener;
 use PhpAT\Rule\Event\Listener\RuleValidationEndListener;
 use PhpAT\Rule\Event\Listener\RuleValidationStartListener;
 use PhpAT\Statement\Event\Listener\StatementNotValidListener;
@@ -34,7 +36,8 @@ class EventListenerProvider
 
         $this->builder
             ->register(SuiteEndListener::class, SuiteEndListener::class)
-            ->addArgument($this->output);
+            ->addArgument($this->output)
+            ->addArgument($this->builder->get(Configuration::class));
 
         $this->builder
             ->register(WarningListener::class, WarningListener::class);
@@ -49,7 +52,8 @@ class EventListenerProvider
 
         $this->builder
             ->register(RuleValidationEndListener::class, RuleValidationEndListener::class)
-            ->addArgument($this->output);
+            ->addArgument($this->output)
+            ->addArgument($this->builder->get(Baseline::class));
 
         $this->builder
             ->register(StatementValidListener::class, StatementValidListener::class)
@@ -57,6 +61,11 @@ class EventListenerProvider
 
         $this->builder
             ->register(StatementNotValidListener::class, StatementNotValidListener::class)
+            ->addArgument($this->output)
+            ->addArgument($this->builder->get(Baseline::class));
+
+        $this->builder
+            ->register(BaselineObsoleteListener::class, BaselineObsoleteListener::class)
             ->addArgument($this->output);
 
         return $this->builder;

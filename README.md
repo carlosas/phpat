@@ -66,13 +66,15 @@ tests:
 | `src` `path`                              | The root path of your application                        | *no default* |
 |` src` `include`                           | Files you want to be tested excluding the rest           | *all files*  |
 | `src` `exclude`                           | Files you want to be excluded in the tests               | *no files*   |
-| `composer` `$ALIAS` `json`                | Path of your composer.json file (multiple)               | *no files*   |
-| `composer` `$ALIAS` `lock`                | Path of your composer.lock file (multiple)               | *no files*   |
+| `composer` `$ALIAS` `json`                | Path of your composer.json file (multiple)               | main json    |
+| `composer` `$ALIAS` `lock`                | Path of your composer.lock file (multiple)               | main lock    |
 | `tests` `path`                            | The path where your tests are                            | *no default* |
+| `tests` `baseline`                        | Path to a generated baseline file                        | *no default* |
 | `options` `verbosity`                     | Output verbosity level (-1/0/1/2)                        | 0            |
 | `options` `php-version`                   | PHP version of the src code (x.x.x)                      | PHP_VERSION  |
 | `options` `ignore-docblocks`              | Ignore relations on docblocks (T/F)                      | false        |
 | `options` `ignore-php-extensions`         | Ignore relations to core and extensions classes (T/F)    | true         |
+| `--generate-baseline`                     | Option to generate a json baseline file (null/filename)  | false        |
 
 </details>
 
