@@ -14,7 +14,7 @@ class ConfigurationFactory
         'ignore-docblocks' => false,
         'ignore-php-extensions' => true,
         'composer' => ['main' => ['json' => 'composer.json', 'lock' => 'composer.lock']],
-        'baseline-path' => 'phpat.baseline.json',
+        'baseline-path' => 'phpat-baseline.json',
     ];
 
     public function create(InputInterface $input): Configuration
