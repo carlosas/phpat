@@ -115,6 +115,8 @@ class StatementBuilder
             $classNamesToValidate = $filteredClassNames;
         }
 
+        $classNamesToValidate = $this->removeRegexClassNames($classNamesToValidate);
+
         return $classNamesToValidate;
     }
 
@@ -141,6 +143,14 @@ class StatementBuilder
         }
 
         return array_values($classLikeNames);
+    }
+
+    private function removeRegexClassNames(array $classNames): array
+    {
+        return array_filter(
+            $classNames,
+            fn (ClassLike $c) => !$this->isRegex($c->toString())
+        );
     }
 
     private function isRegex(string $str): bool
