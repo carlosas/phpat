@@ -14,13 +14,14 @@ class DocBlock
     /**
      * @param ParamClass $p
      * @param ParamClass2 $p2 Parameter with description
-     * @param GenericOuterClass<GenericInnerClass> $p3
-     * @param array<GenericInnerClass2> $p4
-     * @param UnionClassOne|UnionClassTwo $p5
+     * @param \Tests\PhpAT\functional\php7\fixtures\ParamClass3 $p3
+     * @param GenericOuterClass<GenericInnerClass> $p4
+     * @param array<GenericInnerClass2> $p5
+     * @param UnionClassOne|UnionClassTwo $p6
      * @return ReturnClass nicedescription
      * @throws DummyExceptionClass
      */
-    public function methodOne($p, $p2, $p3, $p4, $p5)
+    public function methodOne($p, $p2, $p3, $p4, $p5, $p6)
     {
         /** @var VarClass $v */
         $v = null;
@@ -42,6 +43,8 @@ class MixinClass {}
 class ParamClass {}
 
 class ParamClass2 {}
+
+class ParamClass3 {}
 
 class ReturnClass {}
 

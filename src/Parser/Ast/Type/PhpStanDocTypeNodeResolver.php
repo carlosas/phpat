@@ -2,6 +2,7 @@
 
 namespace PhpAT\Parser\Ast\Type;
 
+use PhpAT\PhpStubsMap\PhpStubsMap;
 use PhpParser\NameContext;
 use PhpParser\Node\Name;
 use PHPStan\PhpDocParser\Ast\Type;
@@ -89,14 +90,17 @@ class PhpStanDocTypeNodeResolver
 
     private function resolveNameFromContext(NameContext $context, string $name): string
     {
+        $isFullyQualified = substr($name, 0, 1) === '\\';
+        $name = $isFullyQualified ? substr($name, 1) : $name;
+
         if (
-            strpos($name, '\\') === 0
+            PhpType::isCoreType($name)
             || PhpType::isBuiltinType($name)
             || PhpType::isSpecialType($name)
         ) {
             return $name;
         }
 
-        return $context->getResolvedClassName(new Name($name))->toString();
+        return $isFullyQualified ? $name : $context->getResolvedClassName(new Name($name))->toString();
     }
 }

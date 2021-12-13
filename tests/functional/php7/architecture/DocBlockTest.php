@@ -15,14 +15,13 @@ use Tests\PhpAT\functional\php7\fixtures\MethodReturnClass;
 use Tests\PhpAT\functional\php7\fixtures\MixinClass;
 use Tests\PhpAT\functional\php7\fixtures\ParamClass;
 use Tests\PhpAT\functional\php7\fixtures\ParamClass2;
+use Tests\PhpAT\functional\php7\fixtures\ParamClass3;
 use Tests\PhpAT\functional\php7\fixtures\PropertyClass;
 use Tests\PhpAT\functional\php7\fixtures\PropertyReadClass;
 use Tests\PhpAT\functional\php7\fixtures\PropertyWriteClass;
 use Tests\PhpAT\functional\php7\fixtures\ReturnClass;
 use Tests\PhpAT\functional\php7\fixtures\UnionClassOne;
 use Tests\PhpAT\functional\php7\fixtures\UnionClassTwo;
-use Tests\PhpAT\functional\php7\fixtures\UsesClass;
-use Tests\PhpAT\functional\php7\fixtures\UsesClass2;
 use Tests\PhpAT\functional\php7\fixtures\VarClass;
 
 class DocBlockTest extends ArchitectureTest
@@ -40,6 +39,7 @@ class DocBlockTest extends ArchitectureTest
             ->andClassesThat(Selector::haveClassName(MixinClass::class))
             ->andClassesThat(Selector::haveClassName(ParamClass::class))
             ->andClassesThat(Selector::haveClassName(ParamClass2::class))
+            ->andClassesThat(Selector::haveClassName(ParamClass3::class))
             ->andClassesThat(Selector::haveClassName(ReturnClass::class))
             ->andClassesThat(Selector::haveClassName(GenericOuterClass::class))
             ->andClassesThat(Selector::haveClassName(GenericInnerClass::class))
