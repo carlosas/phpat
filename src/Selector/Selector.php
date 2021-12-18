@@ -32,25 +32,25 @@ class Selector
     }
 
     public static function areAutoloadableFromComposer(
-        string $composerAlias
+        string $composerAlias = 'main'
     ): ComposerSourceSelector {
         return new ComposerSourceSelector($composerAlias, false);
     }
 
     public static function areDevAutoloadableFromComposer(
-        string $composerAlias
+        string $composerAlias = 'main'
     ): ComposerSourceSelector {
         return new ComposerSourceSelector($composerAlias, true);
     }
 
     public static function areDependenciesFromComposer(
-        string $composerAlias
+        string $composerAlias = 'main'
     ): ComposerDependencySelector {
         return new ComposerDependencySelector($composerAlias, false);
     }
 
     public static function areDevDependenciesFromComposer(
-        string $composerAlias
+        string $composerAlias = 'main'
     ): ComposerDependencySelector {
         return new ComposerDependencySelector($composerAlias, true);
     }
