@@ -1,10 +1,31 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## v0.7.7
+## 0.8.0
+* Add PHP 8.0 and 8.1 compatibility
+* Drop PHP 7.2 and 7.3 compatibility
+* Support PHP 8.0 features:
+  * Constructor promotion
+  * Named Parameters
+  * Union Types
+  * Attributes
+  * Match and Throw Expression
+* Rename `ignore_docblocks` to `ignore-docblocks`
+* Rename `ignore_php_extensions` to `ignore-php-extensions`
+* Remove `dry-run` option
+* Move main executable file to `/bin/phpat`
+* Remove BetterReflection usage
+* Add class and method attributes as dependencies
+* Add default composer configuration
+* Accept *snake_case* test filenames
+* Baseline file
+* Fix wrongly mapped fully qualified classnames on docblocks
+* Remove regex selections with results from origins to avoid duplicated statements
+
+## 0.7.7
 * Do not analyze excluded files ([+info](https://github.com/carlosas/phpat/pull/157#issuecomment-967341532))
 
-## v0.7.6
+## 0.7.6
 * Move CI to GitHub Actions
 * Optimize FullClassName usage
 
