@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 ## 0.8.0
 * Add PHP 8.0 and 8.1 compatibility
 * Drop PHP 7.2 and 7.3 compatibility
+* Update min/max composer dependencies versions
 * Support PHP 8.0 features:
   * Constructor promotion
   * Named Parameters
@@ -21,6 +22,7 @@ All notable changes to this project will be documented in this file.
 * Baseline file
 * Fix wrongly mapped fully qualified classnames on docblocks
 * Remove regex selections with results from origins to avoid duplicated statements
+* Add `php-version` option to force emulative lexer php version
 
 ## 0.7.7
 * Do not analyze excluded files ([+info](https://github.com/carlosas/phpat/pull/157#issuecomment-967341532))
