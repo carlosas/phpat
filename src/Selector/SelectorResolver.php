@@ -16,19 +16,11 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class SelectorResolver
 {
-    /**
-     * @var ContainerBuilder
-     */
-    private $container;
-    /**
-     * @var EventDispatcher
-     */
-    private $dispatcher;
+    private \Symfony\Component\DependencyInjection\ContainerBuilder $container;
+    private \PHPAT\EventDispatcher\EventDispatcher $dispatcher;
 
     /**
      * SelectorResolver constructor.
-     *
-     * @param ContainerBuilder $container
      */
     public function __construct(ContainerBuilder $container, EventDispatcher $dispatcher)
     {
@@ -36,11 +28,6 @@ class SelectorResolver
         $this->dispatcher = $dispatcher;
     }
 
-    /**
-     * @param SelectorInterface $selector
-     * @param ReferenceMap      $map
-     * @return array
-     */
     public function resolve(SelectorInterface $selector, ReferenceMap $map): array
     {
         foreach ($selector->getDependencies() as $dependency) {

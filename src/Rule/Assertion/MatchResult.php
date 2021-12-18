@@ -6,12 +6,11 @@ namespace PhpAT\Rule\Assertion;
 
 class MatchResult
 {
-    private $matched;
-    private $matches;
+    private bool $matched;
+    private array $matches;
 
     /**
      * MatchResult constructor.
-     * @param bool     $matched
      * @param string[] $matches
      */
     public function __construct(bool $matched, array $matches)

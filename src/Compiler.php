@@ -36,17 +36,11 @@ class Compiler
     /**
      * @var string[]
      */
-    protected $paths;
+    protected array $paths;
 
-    /**
-     * @var string
-     */
-    protected $name;
+    protected string $name;
 
-    /**
-     * @var string
-     */
-    protected $file;
+    protected string $file;
 
     public function __construct(array $paths, string $name = 'phpat.phar')
     {
@@ -75,7 +69,7 @@ class Compiler
 
     protected function cleanOutputDir(): void
     {
-        if (file_exists($this->file) && unlink($this->file) === false) {
+        if (file_exists($this->file) && !unlink($this->file)) {
             throw new RuntimeException("Failed to delete {$this->file}");
         }
     }

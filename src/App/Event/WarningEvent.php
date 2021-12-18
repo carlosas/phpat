@@ -8,19 +8,13 @@ use PHPAT\EventDispatcher\EventInterface;
 
 class WarningEvent implements EventInterface
 {
-    /**
-     * @var string
-     */
-    private $message;
+    private string $message;
 
     public function __construct(string $message)
     {
         $this->message = $message;
     }
 
-    /**
-     * @return string
-     */
     public function getMessage(): string
     {
         return $this->message;

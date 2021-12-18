@@ -2,68 +2,42 @@
 
 namespace PhpAT\Parser\Ast;
 
-use JetBrains\PHPStormStub\PhpStormStubsMap;
 use PhpAT\App\Configuration;
 use PhpAT\App\Event\FatalErrorEvent;
 use PhpAT\App\Exception\FatalErrorException;
+use PhpAT\App\Helper\PathNormalizer;
 use PhpAT\File\FileFinder;
-use PhpAT\Parser\Ast\Extractor\ExtractorFactory;
+use PhpAT\Parser\Ast\Classmap\Classmap;
+use PhpAT\Parser\Ast\Traverser\TraverseContext;
+use PhpAT\Parser\Ast\Traverser\TraverserFactory;
 use PhpAT\Parser\ComposerFileParser;
+use PhpAT\PhpStubsMap\PhpStubsMap;
 use PhpParser\Parser;
-use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use Psr\EventDispatcher\EventDispatcherInterface;
-use Roave\BetterReflection\BetterReflection;
-use Roave\BetterReflection\Reflection\ReflectionClass;
-use Roave\BetterReflection\Reflector\ClassReflector;
-use Roave\BetterReflection\SourceLocator\Type\FileIteratorSourceLocator;
 
 class MapBuilder
 {
-    /** @var FileFinder */
-    private $finder;
-    /** @var Parser */
-    private $parser;
-    /** @var NodeTraverser */
-    private $traverser;
-    /** @var PhpDocParser */
-    private $phpDocParser;
-    /** @var EventDispatcherInterface */
-    private $eventDispatcher;
-    /** @var ComposerFileParser */
-    private $composerFileParser;
-    /** @var Configuration */
-    private $configuration;
-    /** @var Extractor\DependencyExtractor */
-    private $dependencyExtractor;
-    /** @var Extractor\ParentExtractor */
-    private $parentExtractor;
-    /** @var Extractor\InterfaceExtractor */
-    private $interfaceExtractor;
-    /** @var Extractor\TraitExtractor */
-    private $traitExtractor;
+    private FileFinder $finder;
+    private Parser $parser;
+    private TraverserFactory $traverserFactory;
+    private EventDispatcherInterface $eventDispatcher;
+    private ComposerFileParser $composerFileParser;
+    private Configuration $configuration;
 
     public function __construct(
         FileFinder $finder,
-        ExtractorFactory $extractorFactory,
         Parser $parser,
-        NodeTraverser $traverser,
-        PhpDocParser $phpDocParser,
+        TraverserFactory $traverserFactory,
         EventDispatcherInterface $eventDispatcher,
         ComposerFileParser $composerFileParser,
         Configuration $configuration
     ) {
         $this->finder = $finder;
         $this->parser = $parser;
-        $this->traverser = $traverser;
-        $this->phpDocParser = $phpDocParser;
+        $this->traverserFactory = $traverserFactory;
         $this->eventDispatcher = $eventDispatcher;
         $this->composerFileParser = $composerFileParser;
         $this->configuration = $configuration;
-
-        $this->dependencyExtractor = $extractorFactory->createDependencyExtractor();
-        $this->parentExtractor = $extractorFactory->createParentExtractor();
-        $this->interfaceExtractor = $extractorFactory->createInterfaceExtractor();
-        $this->traitExtractor = $extractorFactory->createTraitExtractor();
     }
 
     public function build(): ReferenceMap
@@ -77,25 +51,16 @@ class MapBuilder
             $this->configuration->getSrcPath(),
             $this->configuration->getSrcExcluded()
         );
-        $astLocator = (new BetterReflection())->astLocator();
-        $reflector = new ClassReflector(new FileIteratorSourceLocator(new \ArrayIterator($files), $astLocator));
+        $traverser = $this->traverserFactory->create();
 
-        $classes = $reflector->getAllClasses();
-        /** @var ReflectionClass $class */
-        foreach ($classes as $class) {
-            $srcMap[$class->getName()] = new SrcNode(
-                $class->getFileName(),
-                FullClassName::createFromFQCN($class->getName()),
-                array_merge(
-                    $this->dependencyExtractor->extract($class),
-                    $this->parentExtractor->extract($class),
-                    $this->interfaceExtractor->extract($class),
-                    $this->traitExtractor->extract($class)
-                )
-            );
+        foreach ($files as $file) {
+            $pathname = PathNormalizer::normalizePathname($file->getPathname());
+            $parsed = $this->parser->parse(file_get_contents($pathname));
+            TraverseContext::startFile($pathname);
+            $traverser->traverse($parsed);
         }
 
-        return $srcMap ?? [];
+        return Classmap::getClassmap();
     }
 
     /**
@@ -107,7 +72,7 @@ class MapBuilder
             function (string $class) {
                 return FullClassName::createFromFQCN($class);
             },
-            array_keys(PhpStormStubsMap::CLASSES)
+            array_keys(PhpStubsMap::CLASSES)
         );
     }
 
@@ -121,18 +86,12 @@ class MapBuilder
 
         $result = [];
         foreach ($packages as $alias => $files) {
-            if (
-                !isset($files['json'])
-                || !is_file($files['json'])
-                || !is_file($files['lock'] ?? substr($files['json'], 0, -5) . '.lock')
-            ) {
-                $error = new FatalErrorEvent('Composer package "' . $alias . '" is not properly configured');
-                $this->eventDispatcher->dispatch($error);
-                throw new FatalErrorException();
-            }
+            $composerJson = $files['json'];
+            $composerLock = $files['lock'] ?? substr($composerJson, 0, -5) . '.lock';
+            $this->assertComposerPackage($alias, $composerJson, $composerLock);
 
             try {
-                $parsed = $this->composerFileParser->parse($files['json'], $files['lock']);
+                $parsed = $this->composerFileParser->parse($composerJson, $composerLock);
             } catch (\Throwable $e) {
                 $this->eventDispatcher->dispatch(
                     new FatalErrorEvent('Error parsing "' . $alias . '" composer files')
@@ -152,11 +111,6 @@ class MapBuilder
         return $result;
     }
 
-    private function normalizePathname(string $pathname): string
-    {
-        return str_replace('\\', '/', realpath($pathname));
-    }
-
     /**
      * @param string[] $namespaces
      * @return ClassLike[]
@@ -169,5 +123,23 @@ class MapBuilder
             },
             $namespaces
         );
+    }
+
+    /**
+     * @throws FatalErrorException
+     */
+    private function assertComposerPackage(string $alias, string $composerJson, string $composerLock): void
+    {
+        if (!is_file($composerJson)) {
+            $error = new FatalErrorEvent('Composer package "' . $alias . '" is not properly configured');
+            $this->eventDispatcher->dispatch($error);
+            throw new FatalErrorException();
+        }
+
+        if (!is_file($composerLock)) {
+            $error = new FatalErrorEvent('Unable to find the composer package "' . $alias . '" lock file');
+            $this->eventDispatcher->dispatch($error);
+            throw new FatalErrorException();
+        }
     }
 }

@@ -6,33 +6,45 @@ namespace PhpAT\App;
 
 class Configuration
 {
-    private $phpStormStubsPath;
-    private $srcPath;
-    private $srcIncluded;
-    private $srcExcluded;
-    private $composerConfiguration;
-    private $testsPath;
-    private $verbosity;
-    private $dryRun;
-    private $ignoreDocBlocks;
-    private $ignorePhpExtensions;
+    private string $srcPath;
+    private array $srcIncluded;
+    private array $srcExcluded;
+    private array $composerConfiguration;
+    private string $testsPath;
+    private int $verbosity;
+    private ?string $phpVersion;
+    private bool $ignoreDocBlocks;
+    private bool $ignorePhpExtensions;
+    private string $baselineFilePath;
+    private ?string $generateBaselineIn;
+    private string $rootPath;
 
-    public function __construct(array $config)
-    {
-        $root = is_file(__DIR__ . '/../../../../autoload.php')
-            ? realpath(__DIR__ . '/../../../../..')
-            : realpath(__DIR__ . '/../..');
+    public function __construct(
+        string $srcPath,
+        array $srcIncluded,
+        array $srcExcluded,
+        array $composerConfiguration,
+        string $testsPath,
+        string $baselineFilePath,
+        int $verbosity,
+        ?string $phpVersion,
+        ?string $generateBaselineIn,
+        bool $ignoreDocBlocks,
+        bool $ignorePhpExtensions
+    ) {
+        $this->rootPath = $this->getRootPath();
 
-        $this->srcPath = $this->normalizePath($root . '/' . $config['src']['path']);
-        $this->srcIncluded = $config['src']['include'] ?? [];
-        $this->srcExcluded = $config['src']['exclude'] ?? [];
-        $this->composerConfiguration = $config['composer'] ?? [];
-        $this->testsPath = $config['tests']['path'] ?? '';
-        $this->verbosity = (int) ($config['options']['verbosity'] ?? 1);
-        $this->dryRun = (bool) ($config['options']['dry-run'] ?? false);
-        $this->ignoreDocBlocks = (bool) ($config['options']['ignore_docblocks'] ?? false);
-        $this->ignorePhpExtensions = (bool) ($config['options']['ignore_php_extensions'] ?? true);
-        $this->phpStormStubsPath = $root . '/vendor/jetbrains/phpstorm-stubs';
+        $this->srcPath = $this->normalizePath($srcPath);
+        $this->srcIncluded = $srcIncluded;
+        $this->srcExcluded = $srcExcluded;
+        $this->composerConfiguration = $composerConfiguration;
+        $this->testsPath = $testsPath;
+        $this->baselineFilePath = $this->normalizePath($baselineFilePath);
+        $this->verbosity = $verbosity;
+        $this->phpVersion = $phpVersion;
+        $this->generateBaselineIn = is_string($generateBaselineIn) ? $this->normalizePath($generateBaselineIn) : null;
+        $this->ignoreDocBlocks = $ignoreDocBlocks;
+        $this->ignorePhpExtensions = $ignorePhpExtensions;
     }
 
     public function getSrcPath(): string
@@ -65,9 +77,9 @@ class Configuration
         return $this->verbosity;
     }
 
-    public function getDryRun(): bool
+    public function getPhpVersion(): ?string
     {
-        return $this->dryRun;
+        return $this->phpVersion;
     }
 
     public function getIgnoreDocBlocks(): bool
@@ -80,13 +92,40 @@ class Configuration
         return $this->ignorePhpExtensions;
     }
 
-    public function getPhpStormStubsPath(): string
+    public function getBaselineFilePath(): string
     {
-        return $this->phpStormStubsPath;
+        return $this->baselineFilePath;
     }
 
-    private function normalizePath(string $path): string
+    public function getGenerateBaselineIn(): ?string
     {
-        return str_replace('\\', '/', realpath($path));
+        return $this->generateBaselineIn;
+    }
+
+    private function normalizePath(?string $path): ?string
+    {
+        if ($path === null) {
+            return null;
+        }
+
+        $path = $this->rootPath . '/' . $path;
+        if (is_file($path)) {
+            $path = realpath($path);
+        }
+
+        return str_replace('\\', '/', $path);
+    }
+
+    private function getRootPath(): string
+    {
+        $path = is_file(__DIR__ . '/../../../../autoload.php')
+            ? realpath(__DIR__ . '/../../../../..')
+            : realpath(__DIR__ . '/../..');
+
+        if ($path === false) {
+            throw new \Exception('Unable to find your autoload.php file');
+        }
+
+        return $path;
     }
 }

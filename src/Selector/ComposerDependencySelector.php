@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace PhpAT\Selector;
 
-use PhpAT\App\Event\ErrorEvent;
 use PHPAT\EventDispatcher\EventDispatcher;
-use PhpAT\Parser\Ast\ComposerPackage;
 use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\Ast\ClassLike;
+use PhpAT\Rule\Event\BaselineObsoleteEvent;
 
 class ComposerDependencySelector implements SelectorInterface
 {
@@ -16,14 +15,10 @@ class ComposerDependencySelector implements SelectorInterface
         EventDispatcher::class
     ];
 
-    /** @var EventDispatcher */
-    private $eventDispatcher;
-    /** @var ReferenceMap */
-    private $map;
-    /** @var bool */
-    private $devMode;
-    /** @var string */
-    private $packageAlias;
+    private EventDispatcher $eventDispatcher;
+    private ?ReferenceMap $map = null;
+    private bool $devMode;
+    private string $packageAlias;
 
     public function __construct(string $packageAlias, bool $devMode = false)
     {
@@ -41,7 +36,6 @@ class ComposerDependencySelector implements SelectorInterface
         $this->eventDispatcher = $dependencies[EventDispatcher::class];
     }
 
-    /** @param ReferenceMap $map */
     public function setReferenceMap(ReferenceMap $map): void
     {
         $this->map = $map;
@@ -50,12 +44,11 @@ class ComposerDependencySelector implements SelectorInterface
     /** @return ClassLike[] */
     public function select(): array
     {
-        /** @var ComposerPackage|null $package */
         $package = $this->map->getComposerPackages()[$this->packageAlias] ?? null;
 
-        if ($package === null) {
+        if (!$package instanceof \PhpAT\Parser\Ast\ComposerPackage) {
             $this->eventDispatcher->dispatch(
-                new ErrorEvent("Package " . $this->packageAlias . "not found in configuration")
+                new BaselineObsoleteEvent("Package " . $this->packageAlias . "not found in configuration")
             );
 
             return [];

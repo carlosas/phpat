@@ -4,15 +4,13 @@ declare(strict_types=1);
 
 namespace PhpAT\App;
 
-use PhpAT\App;
+use PhpAT\Rule\Baseline;
 use PHPAT\EventDispatcher\EventDispatcher;
 use PHPAT\EventDispatcher\ListenerProvider;
 use PhpAT\File\FileFinder;
 use PhpAT\File\SymfonyFinderAdapter;
-use PhpAT\Output\OutputInterface;
-use PhpAT\Parser\Ast\Extractor\ExtractorFactory;
 use PhpAT\Parser\Ast\MapBuilder;
-use PhpAT\Parser\Ast\NodeTraverser;
+use PhpAT\Parser\Ast\Traverser\TraverserFactory;
 use PhpAT\Parser\Ast\Type\PhpStanDocTypeNodeResolver;
 use PhpAT\Parser\Ast\Type\PhpStanDocNodeTypeExtractor;
 use PhpAT\Parser\ComposerFileParser;
@@ -27,59 +25,60 @@ use PhpAT\Test\FileTestExtractor;
 use PhpAT\Test\Parser\XmlTestParser;
 use PhpAT\Test\Parser\YamlTestParser;
 use PhpAT\Test\TestExtractor;
+use PhpParser\Lexer\Emulative;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
 use PHPStan\PhpDocParser\Parser\ConstExprParser;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TypeParser;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Finder\Finder;
 
-/**
- * Class Provider
- *
- * @package PhpAT\App
- */
 class Provider
 {
-    /** @var ContainerBuilder */
-    private $builder;
-    /** @var OutputInterface */
-    private $output;
-    /** @var Configuration */
-    private $configuration;
+    private ContainerBuilder $builder;
+    private OutputInterface $output;
+    private Configuration $configuration;
 
     /**
      * Provider constructor.
-     * @param ContainerBuilder $builder
-     * @param array            $config
-     * @param OutputInterface  $output
      */
-    public function __construct(ContainerBuilder $builder, array $config, OutputInterface $output)
+    public function __construct(ContainerBuilder $builder, Configuration $configuration, OutputInterface $output)
     {
-        $this->configuration = new Configuration($config);
+        $this->configuration = $configuration;
         $this->builder  = $builder;
         $this->output = $output;
     }
 
-    /**
-     * @return ContainerBuilder
-     */
     public function register(): ContainerBuilder
     {
         $this->builder->set(Configuration::class, $this->configuration);
         $this->builder->set(ComposerFileParser::class, new ComposerFileParser());
-        $this->builder->set(Parser::class, (new ParserFactory())->create(ParserFactory::ONLY_PHP7));
+        $phpVersion = $this->configuration->getPhpVersion();
+        $lexerOptions = $phpVersion ? ['phpVersion' => $phpVersion] : [];
+        $this->builder->set(
+            Parser::class,
+            (new ParserFactory())->create(ParserFactory::ONLY_PHP7, new Emulative($lexerOptions))
+        );
         $this->builder->set(PhpDocParser::class, new PhpDocParser(new TypeParser(), new ConstExprParser()));
         $listenerProvider = (new EventListenerMapper())->populateListenerProvider(new ListenerProvider($this->builder));
         $this->builder->set(EventDispatcher::class, (new EventDispatcher($listenerProvider)));
         $this->builder->set(PhpStanDocNodeTypeExtractor::class, new PhpStanDocNodeTypeExtractor());
 
+        $this->builder->register(Baseline::class, Baseline::class)
+            ->addArgument($this->configuration)
+            ->addArgument(new Reference(EventDispatcher::class));
+
         $this->builder
             ->register(PhpStanDocTypeNodeResolver::class, PhpStanDocTypeNodeResolver::class)
             ->addArgument(new Reference(PhpDocParser::class))
             ->addArgument(new Reference(PhpStanDocNodeTypeExtractor::class));
+
+        $this->builder->register(TraverserFactory::class, TraverserFactory::class)
+            ->addArgument(new Reference(Configuration::class))
+            ->addArgument(new Reference(PhpStanDocTypeNodeResolver::class));
 
         $this->builder
             ->register(FileFinder::class, FileFinder::class)
@@ -87,20 +86,10 @@ class Provider
             ->addArgument(new Reference(Configuration::class));
 
         $this->builder
-            ->register(NodeTraverser::class, NodeTraverser::class);
-
-        $this->builder
-            ->register(ExtractorFactory::class, ExtractorFactory::class)
-            ->addArgument(new Reference(PhpStanDocTypeNodeResolver::class))
-            ->addArgument(new Reference(Configuration::class));
-
-        $this->builder
             ->register(MapBuilder::class, MapBuilder::class)
             ->addArgument(new Reference(FileFinder::class))
-            ->addArgument(new Reference(ExtractorFactory::class))
             ->addArgument(new Reference(Parser::class))
-            ->addArgument(new Reference(NodeTraverser::class))
-            ->addArgument(new Reference(PhpDocParser::class))
+            ->addArgument(new Reference(TraverserFactory::class))
             ->addArgument(new Reference(EventDispatcher::class))
             ->addArgument(new Reference(ComposerFileParser::class))
             ->addArgument(new Reference(Configuration::class));
@@ -213,15 +202,7 @@ class Provider
             ->addArgument(new Reference(EventDispatcher::class))
             ->addArgument(new Reference(Configuration::class));
 
-        $this->builder
-            ->register('app', App::class)
-            ->addArgument(new Reference(MapBuilder::class))
-            ->addArgument(new Reference(TestExtractor::class))
-            ->addArgument(new Reference(StatementBuilder::class))
-            ->addArgument(new Reference(EventDispatcher::class))
-            ->addArgument(new Reference(Configuration::class));
-
-        $listenerProvider = new \PhpAT\App\EventListenerProvider($this->builder, $this->output);
+        $listenerProvider = new EventListenerProvider($this->builder, $this->output);
         $this->builder->merge($listenerProvider->register());
 
         return $this->builder;

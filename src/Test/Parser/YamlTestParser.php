@@ -14,8 +14,8 @@ use Symfony\Component\Yaml\Yaml;
 
 class YamlTestParser
 {
-    private $ruleBuilder;
-    private $eventDispatcher;
+    private \PhpAT\Rule\RuleBuilder $ruleBuilder;
+    private \PHPAT\EventDispatcher\EventDispatcher $eventDispatcher;
 
     public function __construct(RuleBuilder $ruleBuilder, EventDispatcher $eventDispatcher)
     {

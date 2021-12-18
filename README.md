@@ -13,7 +13,6 @@
 		<img src="https://img.shields.io/badge/contributions-welcome-green.svg?style=for-the-badge" alt="Contributions welcome">
 	</a>
 </p>
-<p align="center">⚠ PHP 8 supported temporarily in the package version v0.8.x-dev</p>
 <br />
 
 ### Introduction 📜
@@ -49,7 +48,7 @@ You will have to use it executing `php phpat.phar phpat.yaml` and declare your t
 
 ### Configuration 🔧
 
-You might want to setup a basic configuration:
+You will need to setup a minimum configuration:
 ```yaml
 # phpat.yaml
 src:
@@ -66,13 +65,15 @@ tests:
 | `src` `path`                              | The root path of your application                        | *no default* |
 |` src` `include`                           | Files you want to be tested excluding the rest           | *all files*  |
 | `src` `exclude`                           | Files you want to be excluded in the tests               | *no files*   |
-| `composer` `$ALIAS` `json`                | Path of your composer.json file (multiple)               | *no files*   |
-| `composer` `$ALIAS` `lock`                | Path of your composer.lock file (multiple)               | *no files*   |
+| `composer` `$ALIAS` `json`                | Path of your composer.json file (multiple)               | main json    |
+| `composer` `$ALIAS` `lock`                | Path of your composer.lock file (multiple)               | main lock    |
 | `tests` `path`                            | The path where your tests are                            | *no default* |
-| `options` `verbosity`                     | Output verbosity level (0/1/2)                           | 1            |
-| `options` `dry-run`                       | Report failed suite without error exit code (T/F)        | false        |
-| `options` `ignore_docblocks`              | Ignore relations on docblocks (T/F)                      | false        |
-| `options` `ignore_php_extensions`         | Ignore relations to core and extensions classes (T/F)    | true         |
+| `tests` `baseline`                        | Path to a generated baseline file                        | *no default* |
+| `options` `verbosity`                     | Output verbosity level (-1/0/1/2)                        | 0            |
+| `options` `php-version`                   | PHP version of the src code (x.x.x)                      | PHP_VERSION  |
+| `options` `ignore-docblocks`              | Ignore relations on docblocks (T/F)                      | false        |
+| `options` `ignore-php-extensions`         | Ignore relations to core and extensions classes (T/F)    | true         |
+| `--generate-baseline`                     | Option to generate a json baseline file (null/filename)  | false        |
 
 </details>
 

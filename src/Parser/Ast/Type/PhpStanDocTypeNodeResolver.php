@@ -2,7 +2,9 @@
 
 namespace PhpAT\Parser\Ast\Type;
 
-use phpDocumentor\Reflection\Types\Context;
+use PhpAT\PhpStubsMap\PhpStubsMap;
+use PhpParser\NameContext;
+use PhpParser\Node\Name;
 use PHPStan\PhpDocParser\Ast\Type;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
@@ -10,10 +12,8 @@ use PHPStan\PhpDocParser\Parser\TokenIterator;
 
 class PhpStanDocTypeNodeResolver
 {
-    /** @var PhpDocParser */
-    private $docParser;
-    /** @var PhpStanDocNodeTypeExtractor */
-    private $typeExtractor;
+    private \PHPStan\PhpDocParser\Parser\PhpDocParser $docParser;
+    private \PhpAT\Parser\Ast\Type\PhpStanDocNodeTypeExtractor $typeExtractor;
 
     public function __construct(PhpDocParser $docParser, PhpStanDocNodeTypeExtractor $typeExtractor)
     {
@@ -22,11 +22,9 @@ class PhpStanDocTypeNodeResolver
     }
 
     /**
-     * @param Context $context
-     * @param string  $docBlock
      * @return string[]
      */
-    public function getBlockClassNames(Context $context, string $docBlock): array
+    public function getBlockClassNames(NameContext $context, string $docBlock): array
     {
         try {
             $nodes = $this->docParser->parse(new TokenIterator((new Lexer())->tokenize($docBlock)));
@@ -50,7 +48,6 @@ class PhpStanDocTypeNodeResolver
     }
 
     /**
-     * @param Type\TypeNode $type
      * @return string[]
      */
     private function resolveTypeNode(Type\TypeNode $type): array
@@ -91,27 +88,19 @@ class PhpStanDocTypeNodeResolver
         return [];
     }
 
-    private function resolveNameFromContext(Context $context, string $name): string
+    private function resolveNameFromContext(NameContext $context, string $name): string
     {
+        $isFullyQualified = substr($name, 0, 1) === '\\';
+        $name = $isFullyQualified ? substr($name, 1) : $name;
+
         if (
-            strpos($name, '\\') === 0
+            PhpType::isCoreType($name)
             || PhpType::isBuiltinType($name)
             || PhpType::isSpecialType($name)
         ) {
             return $name;
         }
 
-        $parts = explode('\\', $name);
-        $link = $parts[0] ?? [];
-        if (isset($context->getNamespaceAliases()[$link])) {
-            array_shift($parts);
-            if (empty($parts)) {
-                return $context->getNamespaceAliases()[$link];
-            }
-
-            return $context->getNamespaceAliases()[$link] . '\\' . implode('\\', $parts);
-        }
-
-        return $context->getNamespace() . '\\' . implode('\\', $parts);
+        return $isFullyQualified ? $name : $context->getResolvedClassName(new Name($name))->toString();
     }
 }

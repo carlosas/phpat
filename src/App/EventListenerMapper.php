@@ -11,6 +11,8 @@ use PhpAT\App\Event\SuiteStartEvent;
 use PhpAT\App\Event\Listener\SuiteStartListener;
 use PhpAT\App\Event\WarningEvent;
 use PHPAT\EventDispatcher\ListenerProvider;
+use PhpAT\Rule\Event\BaselineObsoleteEvent;
+use PhpAT\Rule\Event\Listener\BaselineObsoleteListener;
 use PhpAT\Rule\Event\Listener\RuleValidationEndListener;
 use PhpAT\Rule\Event\Listener\RuleValidationStartListener;
 use PhpAT\Rule\Event\RuleValidationEndEvent;
@@ -32,6 +34,7 @@ class EventListenerMapper
         $listenerProvider->addEventListener(RuleValidationEndEvent::class, RuleValidationEndListener::class);
         $listenerProvider->addEventListener(StatementValidEvent::class, StatementValidListener::class);
         $listenerProvider->addEventListener(StatementNotValidEvent::class, StatementNotValidListener::class);
+        $listenerProvider->addEventListener(BaselineObsoleteEvent::class, BaselineObsoleteListener::class);
 
         return $listenerProvider;
     }

@@ -6,14 +6,14 @@ use PhpAT\Parser\Ast\FullClassName;
 
 class AbstractRelation
 {
-    /** @var FullClassName */
-    public $relatedClass;
-    /** @var int */
-    public $line;
+    public FullClassName $relatedClass;
+    public int $startLine;
+    public int $endLine;
 
-    public function __construct(int $line, FullClassName $relatedClass)
+    public function __construct(FullClassName $relatedClass, int $startLine, int $endLine)
     {
-        $this->line = $line;
         $this->relatedClass = $relatedClass;
+        $this->startLine = $startLine;
+        $this->endLine = $endLine;
     }
 }

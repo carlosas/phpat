@@ -8,7 +8,7 @@ use Symfony\Component\Finder\Finder as SymfonyFinder;
 
 class SymfonyFinderAdapter implements Finder
 {
-    private $finder;
+    private SymfonyFinder $finder;
 
     public function __construct(SymfonyFinder $finder)
     {
@@ -43,7 +43,7 @@ class SymfonyFinderAdapter implements Finder
             ->files()
             ->depth('== 0');
 
-        if ($finder->hasResults() === false) {
+        if (!$finder->hasResults()) {
             return null;
         }
 

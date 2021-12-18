@@ -11,14 +11,8 @@ use PhpAT\Parser\Relation\Composition;
 
 class ImplementSelector implements SelectorInterface
 {
-    /**
-     * @var string
-     */
-    private $fqcn;
-    /**
-     * @var ReferenceMap
-     */
-    private $map;
+    private string $fqcn;
+    private ?ReferenceMap $map = null;
 
     public function __construct(string $fqcn)
     {
@@ -34,9 +28,6 @@ class ImplementSelector implements SelectorInterface
     {
     }
 
-    /**
-     * @param ReferenceMap $map
-     */
     public function setReferenceMap(ReferenceMap $map): void
     {
         $this->map = $map;
@@ -61,9 +52,6 @@ class ImplementSelector implements SelectorInterface
         return $result ?? [];
     }
 
-    /**
-     * @return string
-     */
     public function getParameter(): string
     {
         return $this->fqcn;

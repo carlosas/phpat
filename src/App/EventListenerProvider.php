@@ -8,20 +8,19 @@ use PhpAT\App\Event\Listener\FatalErrorListener;
 use PhpAT\App\Event\Listener\SuiteEndListener;
 use PhpAT\App\Event\Listener\SuiteStartListener;
 use PhpAT\App\Event\Listener\WarningListener;
-use PhpAT\Output\OutputInterface;
+use PhpAT\Rule\Baseline;
+use PhpAT\Rule\Event\Listener\BaselineObsoleteListener;
 use PhpAT\Rule\Event\Listener\RuleValidationEndListener;
 use PhpAT\Rule\Event\Listener\RuleValidationStartListener;
 use PhpAT\Statement\Event\Listener\StatementNotValidListener;
 use PhpAT\Statement\Event\Listener\StatementValidListener;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class EventListenerProvider
 {
-    private $builder;
-    /**
-     * @var OutputInterface
-     */
-    private $output;
+    private ContainerBuilder $builder;
+    private OutputInterface $output;
 
     public function __construct(ContainerBuilder $builder, OutputInterface $output)
     {
@@ -37,11 +36,11 @@ class EventListenerProvider
 
         $this->builder
             ->register(SuiteEndListener::class, SuiteEndListener::class)
-            ->addArgument($this->output);
+            ->addArgument($this->output)
+            ->addArgument($this->builder->get(Configuration::class));
 
         $this->builder
-            ->register(WarningListener::class, WarningListener::class)
-            ->addArgument($this->output);
+            ->register(WarningListener::class, WarningListener::class);
 
         $this->builder
             ->register(FatalErrorListener::class, FatalErrorListener::class)
@@ -53,7 +52,8 @@ class EventListenerProvider
 
         $this->builder
             ->register(RuleValidationEndListener::class, RuleValidationEndListener::class)
-            ->addArgument($this->output);
+            ->addArgument($this->output)
+            ->addArgument($this->builder->get(Baseline::class));
 
         $this->builder
             ->register(StatementValidListener::class, StatementValidListener::class)
@@ -61,6 +61,11 @@ class EventListenerProvider
 
         $this->builder
             ->register(StatementNotValidListener::class, StatementNotValidListener::class)
+            ->addArgument($this->output)
+            ->addArgument($this->builder->get(Baseline::class));
+
+        $this->builder
+            ->register(BaselineObsoleteListener::class, BaselineObsoleteListener::class)
             ->addArgument($this->output);
 
         return $this->builder;

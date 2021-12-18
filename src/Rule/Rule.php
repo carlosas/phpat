@@ -17,27 +17,21 @@ class Rule
     /**
      * @var SelectorInterface[]
      */
-    private $origin;
+    private array $origin;
     /**
      * @var SelectorInterface[]
      */
-    private $originExcluded;
-    /**
-     * @var AbstractAssertion|null
-     */
-    private $assertion;
+    private array $originExcluded;
+    private ?AbstractAssertion $assertion;
     /**
      * @var SelectorInterface[]
      */
-    private $destination;
+    private array $destination;
     /**
      * @var SelectorInterface[]
      */
-    private $destinationExcluded;
-    /**
-     * @var string
-     */
-    private $name;
+    private array $destinationExcluded;
+    private string $name = '';
 
     public function __construct(
         array $origin,
@@ -69,9 +63,6 @@ class Rule
         return $this->originExcluded;
     }
 
-    /**
-     * @return AbstractAssertion|null
-     */
     public function getAssertion(): ?AbstractAssertion
     {
         return $this->assertion;
@@ -93,17 +84,11 @@ class Rule
         return $this->destinationExcluded;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     */
     public function setName(string $name): void
     {
         $this->name = $name;

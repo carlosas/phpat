@@ -12,14 +12,8 @@ use PhpAT\Parser\Relation\Mixin;
 
 class IncludeSelector implements SelectorInterface
 {
-    /**
-     * @var string
-     */
-    private $fqcn;
-    /**
-     * @var ReferenceMap
-     */
-    private $map;
+    private string $fqcn;
+    private ?ReferenceMap $map = null;
 
     public function __construct(string $fqcn)
     {
@@ -35,9 +29,6 @@ class IncludeSelector implements SelectorInterface
     {
     }
 
-    /**
-     * @param ReferenceMap $map
-     */
     public function setReferenceMap(ReferenceMap $map): void
     {
         $this->map = $map;
@@ -62,9 +53,6 @@ class IncludeSelector implements SelectorInterface
         return $result ?? [];
     }
 
-    /**
-     * @return string
-     */
     public function getParameter(): string
     {
         return $this->fqcn;

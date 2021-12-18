@@ -1,4 +1,6 @@
 /.idea/
+/ops/
 /vendor/
 /composer.phar
 /composer.lock
+/Makefile

@@ -11,11 +11,10 @@ class ComposerTest extends ArchitectureTest
     public function testOnlyDependsOnComposerDependencies(): Rule
     {
         return $this->newRule
-            ->classesThat(Selector::areAutoloadableFromComposer('main'))
+            ->classesThat(Selector::areAutoloadableFromComposer())
             ->canOnlyDependOn()
-            ->classesThat(Selector::areAutoloadableFromComposer('main'))
-            ->classesThat(Selector::areDependenciesFromComposer('main'))
-            ->classesThat(Selector::haveClassName('JetBrains\PHPStormStub\PhpStormStubsMap'))
+            ->classesThat(Selector::areAutoloadableFromComposer())
+            ->classesThat(Selector::areDependenciesFromComposer())
             ->build();
     }
 

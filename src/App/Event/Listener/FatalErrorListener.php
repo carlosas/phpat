@@ -8,11 +8,11 @@ use PhpAT\App\Event\FatalErrorEvent;
 use PhpAT\App\Exception\FatalErrorException;
 use PHPAT\EventDispatcher\EventInterface;
 use PHPAT\EventDispatcher\EventListenerInterface;
-use PhpAT\Output\OutputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class FatalErrorListener implements EventListenerInterface
 {
-    private $output;
+    private OutputInterface $output;
 
     public function __construct(OutputInterface $output)
     {
@@ -20,12 +20,11 @@ class FatalErrorListener implements EventListenerInterface
     }
 
     /**
-     * @param EventInterface $event
      * @throws FatalErrorException
      */
     public function __invoke(EventInterface $event)
     {
         /** @var FatalErrorEvent $event */
-        $this->output->fatalError($event->getMessage());
+        $this->output->writeln('FATAL ERROR: ' . $event->getMessage());
     }
 }
