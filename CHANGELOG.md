@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 * Accept *snake_case* test filenames
 * Baseline file
 * Fix wrongly mapped fully qualified classnames on docblocks
+* Ignore dependencies out of the class context
 * Remove regex selections with results from origins to avoid duplicated statements
 
 ## 0.7.7
