@@ -4,29 +4,32 @@ namespace PhpAT\Parser\Ast;
 
 class RegexClassName implements ClassLike
 {
+    private string $originalRegex;
     private string $regex;
 
-    public function __construct(string $regex)
+    public function __construct(string $expression)
     {
-        $this->regex = $regex;
+        $this->originalRegex = $expression;
+        $this->regex = str_replace(
+            '*',
+            '.*',
+            preg_replace_callback(
+                '/([^*])/',
+                function ($m) {
+                    return preg_quote($m[0], '/');
+                },
+                $expression
+            )
+        );
     }
 
     public function matches(string $name): bool
     {
-        $pattern = preg_replace_callback(
-            '/([^*])/',
-            function ($m) {
-                return preg_quote($m[0], '/');
-            },
-            $this->regex
-        );
-        $pattern = str_replace('*', '.*', $pattern);
-
-        return (bool) preg_match('/^' . $pattern . '$/i', $name);
+        return (bool) preg_match('/^' . $this->regex . '$/i', $name);
     }
 
     public function toString(): string
     {
-        return $this->regex;
+        return $this->originalRegex;
     }
 }
