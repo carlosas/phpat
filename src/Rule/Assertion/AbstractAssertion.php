@@ -26,8 +26,8 @@ abstract class AbstractAssertion
     }
 
     /**
-     * @param ClassLike[]  $included
-     * @param ClassLike[]  $excluded
+     * @param array<ClassLike> $included
+     * @param array<ClassLike> $excluded
      */
     abstract public function validate(ClassLike $origin, array $included, array $excluded, ReferenceMap $map): void;
 
@@ -121,8 +121,8 @@ abstract class AbstractAssertion
     }
 
     /**
-     * @param ClassLike[] $destinations
-     * @param ClassLike[] $excluded
+     * @param array<ClassLike> $destinations
+     * @param array<ClassLike> $excluded
      */
     protected function relationMatchesDestinations(string $relation, array $destinations, array $excluded): MatchResult
     {
@@ -142,8 +142,8 @@ abstract class AbstractAssertion
     }
 
     /**
-     * @param ClassLike[] $excluded
-     * @param string[] $relations
+     * @param array<ClassLike> $excluded
+     * @param array<string> $relations
      */
     protected function destinationMatchesRelations(
         ClassLike $destination,
@@ -171,7 +171,6 @@ abstract class AbstractAssertion
             return false;
         }
 
-        /** @var ClassLike $extensionClass */
         foreach ($map->getExtensionNodes() as $extensionClass) {
             if ($extensionClass->matches($class->toString())) {
                 return true;

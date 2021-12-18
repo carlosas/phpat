@@ -14,24 +14,16 @@ use PhpAT\Selector\SelectorInterface;
  */
 class Rule
 {
-    /**
-     * @var SelectorInterface[]
-     */
-    private array $origin;
-    /**
-     * @var SelectorInterface[]
-     */
-    private array $originExcluded;
     private ?AbstractAssertion $assertion;
-    /**
-     * @var SelectorInterface[]
-     */
-    private array $destination;
-    /**
-     * @var SelectorInterface[]
-     */
-    private array $destinationExcluded;
     private string $name = '';
+    /** @var array<SelectorInterface> */
+    private array $origin;
+    /** @var array<SelectorInterface> */
+    private array $originExcluded;
+    /** @var array<SelectorInterface> */
+    private array $destination;
+    /** @var array<SelectorInterface> */
+    private array $destinationExcluded;
 
     public function __construct(
         array $origin,
@@ -48,7 +40,7 @@ class Rule
     }
 
     /**
-     * @return SelectorInterface[]
+     * @return array<SelectorInterface>
      */
     public function getOrigin(): array
     {
@@ -56,7 +48,7 @@ class Rule
     }
 
     /**
-     * @return SelectorInterface[]
+     * @return array<SelectorInterface>
      */
     public function getOriginExcluded(): array
     {
@@ -69,7 +61,7 @@ class Rule
     }
 
     /**
-     * @return SelectorInterface[]
+     * @return array<SelectorInterface>
      */
     public function getDestination(): array
     {
@@ -77,7 +69,7 @@ class Rule
     }
 
     /**
-     * @return SelectorInterface[]
+     * @return array<SelectorInterface>
      */
     public function getDestinationExcluded(): array
     {

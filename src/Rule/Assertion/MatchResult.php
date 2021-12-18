@@ -11,7 +11,7 @@ class MatchResult
 
     /**
      * MatchResult constructor.
-     * @param string[] $matches
+     * @param array<string> $matches
      */
     public function __construct(bool $matched, array $matches)
     {

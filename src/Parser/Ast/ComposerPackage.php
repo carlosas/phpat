@@ -5,21 +5,21 @@ namespace PhpAT\Parser\Ast;
 class ComposerPackage
 {
     private string $packageAlias;
-    /** ClassLike[] */
+    /** @var array<ClassLike> */
     private array $autoload;
-    /** ClassLike[] */
+    /** @var array<ClassLike> */
     private array $devAutoload;
-    /** ClassLike[] */
+    /** @var array<ClassLike> */
     private array $dependencies;
-    /** ClassLike[] */
+    /** @var array<ClassLike> */
     private array $devDependencies;
 
     /**
      * ComposerPackage constructor.
-     * @param ClassLike[] $autoload
-     * @param ClassLike[] $devAutoload
-     * @param ClassLike[] $dependencies
-     * @param ClassLike[] $devDependencies
+     * @param array<ClassLike> $autoload
+     * @param array<ClassLike> $devAutoload
+     * @param array<ClassLike> $dependencies
+     * @param array<ClassLike> $devDependencies
      */
     public function __construct(
         string $packageAlias,
@@ -41,7 +41,7 @@ class ComposerPackage
     }
 
     /**
-     * @return ClassLike[]
+     * @return array<ClassLike>
      */
     public function getAutoload(): array
     {
@@ -49,7 +49,7 @@ class ComposerPackage
     }
 
     /**
-     * @return ClassLike[]
+     * @return array<ClassLike>
      */
     public function getDevAutoload(): array
     {
@@ -57,7 +57,7 @@ class ComposerPackage
     }
 
     /**
-     * @return ClassLike[]
+     * @return array<ClassLike>
      */
     public function getDependencies(): array
     {
@@ -65,7 +65,7 @@ class ComposerPackage
     }
 
     /**
-     * @return ClassLike[]
+     * @return array<ClassLike>
      */
     public function getDevDependencies(): array
     {

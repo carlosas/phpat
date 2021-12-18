@@ -19,24 +19,16 @@ use Psr\Container\ContainerInterface;
  */
 class RuleBuilder
 {
-    private \Psr\Container\ContainerInterface $container;
-    /**
-     * @var SelectorInterface[]
-     */
-    private array $origin = [];
-    /**
-     * @var SelectorInterface[]
-     */
-    private array $originExclude = [];
-    /**
-     * @var SelectorInterface[]
-     */
-    private array $destination = [];
-    /**
-     * @var SelectorInterface[]
-     */
-    private array $destinationExclude = [];
+    private ContainerInterface $container;
     private ?AbstractAssertion $assertion;
+    /** @var array<SelectorInterface> */
+    private array $origin = [];
+    /** @var array<SelectorInterface> */
+    private array $originExclude = [];
+    /** @var array<SelectorInterface> */
+    private array $destination = [];
+    /** @var array<SelectorInterface> */
+    private array $destinationExclude = [];
 
     public function __construct(ContainerInterface $container)
     {

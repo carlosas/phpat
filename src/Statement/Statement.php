@@ -14,15 +14,11 @@ use PhpAT\Rule\Assertion\AbstractAssertion;
  */
 class Statement
 {
-    private \PhpAT\Rule\Assertion\AbstractAssertion $assertion;
-    private \PhpAT\Parser\Ast\ClassLike $origin;
-    /**
-     * @var ClassLike[]
-     */
+    private AbstractAssertion $assertion;
+    private ClassLike $origin;
+    /** @var array<ClassLike> */
     private array $destinations;
-    /**
-     * @var ClassLike[]
-     */
+    /** @var array<ClassLike> */
     private array $excludedDestinations;
 
     public function __construct(
@@ -48,7 +44,7 @@ class Statement
     }
 
     /**
-     * @return ClassLike[]
+     * @return array<ClassLike>
      */
     public function getDestinations(): array
     {
@@ -56,7 +52,7 @@ class Statement
     }
 
     /**
-     * @return ClassLike[]
+     * @return array<ClassLike>
      */
     public function getExcludedDestinations(): array
     {

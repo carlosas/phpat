@@ -8,7 +8,6 @@ use PhpAT\App\Event\WarningEvent;
 use PhpAT\App\ErrorStorage;
 use PHPAT\EventDispatcher\EventInterface;
 use PHPAT\EventDispatcher\EventListenerInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 
 class WarningListener implements EventListenerInterface
 {

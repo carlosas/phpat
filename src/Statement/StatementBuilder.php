@@ -65,7 +65,7 @@ class StatementBuilder
     }
 
     /**
-     * @return ClassLike[]
+     * @return array<ClassLike>
      * @throws \Exception
      */
     private function selectOrigins(array $includedInRule, array $excludedInRule, ReferenceMap $map): array
@@ -121,8 +121,8 @@ class StatementBuilder
     }
 
     /**
-     * @param SelectorInterface[] $selectors
-     * @return ClassLike[]
+     * @param array<SelectorInterface> $selectors
+     * @return array<ClassLike>
      * @throws \Exception
      */
     private function selectDestinations(

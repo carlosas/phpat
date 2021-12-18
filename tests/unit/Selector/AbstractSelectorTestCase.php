@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 abstract class AbstractSelectorTestCase extends TestCase
 {
     /**
-     * @param ClassLike[] $selected
+     * @param array<ClassLike> $selected
      * @param string      $classToMatch
      * @return bool
      */

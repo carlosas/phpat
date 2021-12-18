@@ -35,7 +35,7 @@ class ComposerSourceSelectorTest extends TestCase
 
     /**
      * @param bool $devMode
-     * @return ClassLike[]
+     * @return array<ClassLike>
      */
     private function select(bool $devMode): array
     {
@@ -63,7 +63,7 @@ class ComposerSourceSelectorTest extends TestCase
     }
 
     /**
-     * @param ClassLike[] $selected
+     * @param array<ClassLike> $selected
      * @param string      $classToMatch
      * @return bool
      */

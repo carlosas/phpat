@@ -6,9 +6,7 @@ namespace PhpAT\Parser;
 
 class ComposerFileParser
 {
-    /** @var array */
     private array $composerFile;
-    /** @var array */
     private array $lockFile;
     private ?array $lockedPackages = null;
 
@@ -65,8 +63,8 @@ class ComposerFileParser
     /**
      * Resolves an array of package names to an array of namespaces declared by those packages.
      *
-     * @param string[] $requirements
-     * @return string[]
+     * @param array<string> $requirements
+     * @return array<string>
      */
     public function autoloadableNamespacesForRequirements(array $requirements)
     {

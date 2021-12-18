@@ -33,7 +33,7 @@ class ComposerDependencySelectorTest extends TestCase
     }
 
     /**
-     * @param ClassLike[] $selected
+     * @param array<ClassLike> $selected
      * @param string      $classToMatch
      * @return bool
      */
@@ -50,7 +50,7 @@ class ComposerDependencySelectorTest extends TestCase
 
     /**
      * @param bool $devMode
-     * @return ClassLike[]
+     * @return array<ClassLike>
      */
     private function select(bool $devMode): array
     {

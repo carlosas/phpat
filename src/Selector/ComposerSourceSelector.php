@@ -45,7 +45,7 @@ class ComposerSourceSelector implements SelectorInterface
         $this->map = $map;
     }
 
-    /** @return ClassLike[] */
+    /** @return array<ClassLike> */
     public function select(): array
     {
         $package = $this->map->getComposerPackages()[$this->packageAlias] ?? null;
