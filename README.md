@@ -13,7 +13,6 @@
 		<img src="https://img.shields.io/badge/contributions-welcome-green.svg?style=for-the-badge" alt="Contributions welcome">
 	</a>
 </p>
-<p align="center">⚠ PHP 8 supported temporarily in the package version v0.8.x-dev</p>
 <br />
 
 ### Introduction 📜
