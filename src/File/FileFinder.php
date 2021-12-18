@@ -30,7 +30,7 @@ class FileFinder
     }
 
     /**
-     * @return \SplFileInfo[]
+     * @return array<\SplFileInfo>
      */
     public function findSrcFiles(string $file, array $excluded = []): array
     {
@@ -44,7 +44,7 @@ class FileFinder
     }
 
     /**
-     * @return \SplFileInfo[]
+     * @return array<\SplFileInfo>
      */
     public function findPhpFilesInPath(string $path, array $excluded = []): array
     {

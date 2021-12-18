@@ -32,7 +32,7 @@ class SrcNode implements \JsonSerializable
     }
 
     /**
-     * @return AbstractRelation[]
+     * @return array<AbstractRelation>
      */
     public function getRelations(): array
     {

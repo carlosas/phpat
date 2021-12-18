@@ -24,7 +24,7 @@ class RuleCollection
     }
 
     /**
-     * @return Rule[]
+     * @return array<Rule>
      */
     public function getValues(): array
     {

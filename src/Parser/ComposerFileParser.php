@@ -25,7 +25,7 @@ class ComposerFileParser
     /**
      * Returns an array of all namespaces declared by the current composer file.
      *
-     * @return string[]
+     * @return array<string>
      */
     public function getNamespaces(bool $dev = false): array
     {
@@ -35,7 +35,7 @@ class ComposerFileParser
     /**
      * Returns an array of all required namespaces including deep dependencies (dependencies of dependencies)
      *
-     * @return string[]
+     * @return array<string>
      */
     public function getDeepRequirementNamespaces(bool $dev): array
     {
@@ -47,7 +47,7 @@ class ComposerFileParser
     /**
      * Returns an array of directly required package names.
      *
-     * @return string[]
+     * @return array<string>
      */
     public function getDirectDependencies(bool $dev): array
     {

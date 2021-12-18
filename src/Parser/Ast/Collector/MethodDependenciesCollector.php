@@ -40,7 +40,7 @@ class MethodDependenciesCollector extends NodeVisitorAbstract
     }
 
     /**
-     * @return AbstractRelation[]
+     * @return array<AbstractRelation>
      */
     public function getResults(): array
     {

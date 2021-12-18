@@ -25,7 +25,7 @@ class MatchResult
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     public function getMatches(): array
     {

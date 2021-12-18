@@ -5,7 +5,7 @@ namespace PhpAT\File;
 interface Finder
 {
     /**
-     * @return \SplFileInfo[]
+     * @return array<\SplFileInfo>
      */
     public function find(string $filePath, string $fileName, array $include, array $exclude): array;
 

@@ -34,7 +34,7 @@ abstract class AbstractAssertion
     abstract public function acceptsRegex(): bool;
 
     /**
-     * @return SrcNode[]
+     * @return array<SrcNode>
      */
     protected function filterMatchingNodes(ClassLike $origin, ReferenceMap $map): array
     {
@@ -48,7 +48,7 @@ abstract class AbstractAssertion
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     protected function getDependencies(SrcNode $node, ReferenceMap $map): array
     {
@@ -67,7 +67,7 @@ abstract class AbstractAssertion
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     protected function getInterfaces(SrcNode $node, ReferenceMap $map): array
     {
@@ -102,7 +102,7 @@ abstract class AbstractAssertion
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     protected function getTraits(SrcNode $node, ReferenceMap $map): array
     {
