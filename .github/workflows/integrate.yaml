@@ -103,7 +103,7 @@ jobs:
           dependencies: "${{ matrix.dependencies }}"
 
       - name: "Run phpat/phpat"
-        run: "php bin/phpat"
+        run: "php bin/phpat ci/phpat.yaml"
 
   functional-analysis:
     name: "Functional Analysis"
