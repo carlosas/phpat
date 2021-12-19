@@ -232,7 +232,7 @@ jobs:
           dependencies: "${{ matrix.dependencies }}"
 
       - name: "Run phpstan/phpstan"
-        run: "vendor/bin/phpstan analyse src --level=5"
+        run: "vendor/bin/phpstan analyse -c ci/phpstan.neon"
 
       - name: "Run vimeo/psalm"
         run: "vendor/bin/psalm --config=ci/psalm.xml"
