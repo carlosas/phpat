@@ -59,7 +59,7 @@ jobs:
           dependencies: "${{ matrix.dependencies }}"
 
       - name: "Run squizlabs/php_codesniffer"
-        run: "vendor/bin/phpcs src/ --standard=ci/phpcs.xml "
+        run: "vendor/bin/phpcs src/ --standard=ci/phpcs.xml"
 
   architecture-analysis:
     name: "Architecture Analysis"
@@ -235,7 +235,7 @@ jobs:
         run: "vendor/bin/phpstan analyse -c ci/phpstan.neon"
 
       - name: "Run vimeo/psalm"
-        run: "vendor/bin/psalm -c=ci/psalm.xml"
+        run: "vendor/bin/psalm -c ci/psalm.xml"
 
   tests:
     name: "Tests"
