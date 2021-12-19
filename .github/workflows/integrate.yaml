@@ -235,7 +235,7 @@ jobs:
         run: "vendor/bin/phpstan analyse -c ci/phpstan.neon"
 
       - name: "Run vimeo/psalm"
-        run: "vendor/bin/psalm --config=ci/psalm.xml"
+        run: "vendor/bin/psalm -c=ci/psalm.xml"
 
   tests:
     name: "Tests"
