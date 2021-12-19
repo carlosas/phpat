@@ -75,6 +75,9 @@ final class Classmap
         );
     }
 
+    /*
+     * @return array<string, SrcNode>
+     */
     public static function getClassmap(): array
     {
         return Classmap::translateClassmap(Classmap::$classmap);

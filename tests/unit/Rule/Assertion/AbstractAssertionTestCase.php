@@ -70,8 +70,8 @@ abstract class AbstractAssertionTestCase extends TestCase
     {
         return new ReferenceMap(
             [
-                new SrcNode(
-                    new \SplFileInfo('folder/Example/ClassExample.php'),
+                'Example\\ClassExample' => new SrcNode(
+                    'folder/Example/ClassExample.php',
                     FullClassName::createFromFQCN('Example\\ClassExample'),
                     [
                         new Inheritance(FullClassName::createFromFQCN('Example\\ParentClassExample'), 0, 0),

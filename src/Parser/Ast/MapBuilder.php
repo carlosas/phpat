@@ -45,6 +45,9 @@ class MapBuilder
         return new ReferenceMap($this->buildSrcMap(), $this->buildExtensionMap(), $this->buildComposerMap());
     }
 
+    /*
+     * @return array<string, SrcNode>
+     */
     private function buildSrcMap(): array
     {
         $files = $this->finder->findPhpFilesInPath(
