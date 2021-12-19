@@ -6,12 +6,9 @@ use PhpAT\Parser\Ast\FullClassName;
 
 final class ClassmapRelation
 {
-    /** @var FullClassName */
-    public $relatedClass;
-    /** @var int */
-    public $startLine;
-    /** @var int */
-    public $endLine;
+    public FullClassName $relatedClass;
+    public int $startLine;
+    public int $endLine;
 
     public function __construct(FullClassName $relatedClass, int $startLine, int $endLine)
     {

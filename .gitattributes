@@ -1,13 +1,11 @@
 /.github export-ignore
 /tests export-ignore
+/ci export-ignore
 /doc export-ignore
 /dist export-ignore
 build.php export-ignore
 src/Compiler.php export-ignore
 .gitattributes export-ignore
 .gitignore export-ignore
-phpcs.xml export-ignore
-psalm.xml export-ignore
-phpat.yaml export-ignore
 CHANGELOG.md export-ignore
 README.md export-ignore

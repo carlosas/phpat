@@ -7,6 +7,7 @@ namespace PhpAT\Selector;
 use PhpAT\App\Event\WarningEvent;
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\Ast\ReferenceMap;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
@@ -16,13 +17,13 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class SelectorResolver
 {
-    private \Symfony\Component\DependencyInjection\ContainerBuilder $container;
-    private \PHPAT\EventDispatcher\EventDispatcher $dispatcher;
+    private ContainerBuilder $container;
+    private EventDispatcherInterface $dispatcher;
 
     /**
      * SelectorResolver constructor.
      */
-    public function __construct(ContainerBuilder $container, EventDispatcher $dispatcher)
+    public function __construct(ContainerBuilder $container, EventDispatcherInterface $dispatcher)
     {
         $this->container = $container;
         $this->dispatcher = $dispatcher;

@@ -26,8 +26,8 @@ class MethodDependenciesCollector extends NodeVisitorAbstract
     private PhpStanDocTypeNodeResolver $docTypeResolver;
     private NameContext $context;
 
-    /** @var AbstractRelation[] */
-    protected $results = [];
+    /** @var array<AbstractRelation> */
+    protected array $results = [];
 
     public function __construct(
         Configuration $configuration,
@@ -40,7 +40,7 @@ class MethodDependenciesCollector extends NodeVisitorAbstract
     }
 
     /**
-     * @return AbstractRelation[]
+     * @return array<AbstractRelation>
      */
     public function getResults(): array
     {

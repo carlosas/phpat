@@ -9,7 +9,6 @@ use PhpAT\App\Provider;
 use PhpAT\App\ErrorStorage;
 use PhpAT\Rule\Baseline;
 use PhpAT\Config\ConfigurationFactory;
-use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\Ast\MapBuilder;
 use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Rule\Event\RuleValidationEndEvent;
@@ -18,6 +17,7 @@ use PhpAT\Rule\RuleCollection;
 use PhpAT\Statement\Statement;
 use PhpAT\Statement\StatementBuilder;
 use PhpAT\Test\TestExtractor;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -28,7 +28,7 @@ class App extends SingleCommandApplication
 {
     private ?TestExtractor $extractor = null;
     private ?StatementBuilder $statementBuilder = null;
-    private ?EventDispatcher $dispatcher = null;
+    private ?EventDispatcherInterface $dispatcher = null;
     private ?MapBuilder $mapBuilder = null;
     private ?Baseline $baseline = null;
 
@@ -94,7 +94,7 @@ class App extends SingleCommandApplication
 
         $this->extractor = $container->get(TestExtractor::class);
         $this->statementBuilder = $container->get(StatementBuilder::class);
-        $this->dispatcher = $container->get(EventDispatcher::class);
+        $this->dispatcher = $container->get(EventDispatcherInterface::class);
         $this->mapBuilder = $container->get(MapBuilder::class);
         $this->baseline = $container->get(Baseline::class);
     }

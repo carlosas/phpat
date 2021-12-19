@@ -5,15 +5,16 @@ namespace PhpAT\Rule;
 use PhpAT\App\Configuration;
 use PhpAT\Rule\Event\BaselineObsoleteEvent;
 use PHPAT\EventDispatcher\EventDispatcher;
+use Psr\EventDispatcher\EventDispatcherInterface;
 
 final class Baseline
 {
     private array $baselineErrors;
     private ?string $generateBaselinePath;
-    private EventDispatcher $eventDispatcher;
+    private EventDispatcherInterface $eventDispatcher;
     private array $storedErrors = [];
 
-    public function __construct(Configuration $configuration, EventDispatcher $eventDispatcher)
+    public function __construct(Configuration $configuration, EventDispatcherInterface $eventDispatcher)
     {
         $this->eventDispatcher = $eventDispatcher;
         $path = $configuration->getBaselineFilePath();

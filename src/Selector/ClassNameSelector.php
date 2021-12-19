@@ -34,7 +34,7 @@ class ClassNameSelector implements SelectorInterface
     }
 
     /**
-     * @return ClassLike[]
+     * @return array<ClassLike>
      */
     public function select(): array
     {

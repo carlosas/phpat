@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PhpAT\File;
 
 use PhpAT\App\Configuration;
+use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
 
 class FileFinder
 {
@@ -29,21 +30,29 @@ class FileFinder
     }
 
     /**
-     * @return \SplFileInfo[]
+     * @return array<\SplFileInfo>
      */
     public function findSrcFiles(string $file, array $excluded = []): array
     {
         $parts = $this->splitFile($this->configuration->getSrcPath() . '/' . $file);
 
-        return $this->finder->find($parts[0], $parts[1], [], $excluded);
+        try {
+            return $this->finder->find($parts[0], $parts[1], [], $excluded);
+        } catch (DirectoryNotFoundException $e) {
+            return [];
+        }
     }
 
     /**
-     * @return \SplFileInfo[]
+     * @return array<\SplFileInfo>
      */
     public function findPhpFilesInPath(string $path, array $excluded = []): array
     {
-        return $this->finder->find($path, '*.php', [], $excluded);
+        try {
+            return $this->finder->find($path, '*.php', [], $excluded);
+        } catch (DirectoryNotFoundException $e) {
+            return [];
+        }
     }
 
     private function splitFile(string $file): ?array

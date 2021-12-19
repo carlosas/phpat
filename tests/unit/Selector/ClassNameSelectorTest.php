@@ -36,7 +36,7 @@ class ClassNameSelectorTest extends AbstractSelectorTestCase
 
     /**
      * @param string $className
-     * @return ClassLike[]
+     * @return array<ClassLike>
      */
     private function select(string $className): array
     {

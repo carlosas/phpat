@@ -13,42 +13,37 @@ use PhpAT\Parser\Relation\Composition;
 use PhpAT\Parser\Relation\Dependency;
 use PhpAT\Parser\Relation\Inheritance;
 use PhpAT\Parser\Relation\Mixin;
+use Psr\EventDispatcher\EventDispatcherInterface;
 
 abstract class AbstractAssertion
 {
     protected Configuration $configuration;
-    protected EventDispatcher $eventDispatcher;
+    protected EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(EventDispatcher $eventDispatcher, Configuration $configuration)
+    public function __construct(EventDispatcherInterface $eventDispatcher, Configuration $configuration)
     {
         $this->configuration = $configuration;
         $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
-     * @param ClassLike[]  $included
-     * @param ClassLike[]  $excluded
+     * @param array<ClassLike> $included
+     * @param array<ClassLike> $excluded
      */
     abstract public function validate(ClassLike $origin, array $included, array $excluded, ReferenceMap $map): void;
 
     abstract public function acceptsRegex(): bool;
 
     /**
-     * @return SrcNode[]
+     * @return array<SrcNode>
      */
     protected function filterMatchingNodes(ClassLike $origin, ReferenceMap $map): array
     {
-        foreach ($map->getSrcNodes() as $node) {
-            if ($origin->matches($node->getClassName())) {
-                $found[] = $node;
-            }
-        }
-
-        return $found ?? [];
+        return $origin->getMatchingNodes($map->getSrcNodes());
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     protected function getDependencies(SrcNode $node, ReferenceMap $map): array
     {
@@ -67,7 +62,7 @@ abstract class AbstractAssertion
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     protected function getInterfaces(SrcNode $node, ReferenceMap $map): array
     {
@@ -102,7 +97,7 @@ abstract class AbstractAssertion
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     protected function getTraits(SrcNode $node, ReferenceMap $map): array
     {
@@ -121,8 +116,8 @@ abstract class AbstractAssertion
     }
 
     /**
-     * @param ClassLike[] $destinations
-     * @param ClassLike[] $excluded
+     * @param array<ClassLike> $destinations
+     * @param array<ClassLike> $excluded
      */
     protected function relationMatchesDestinations(string $relation, array $destinations, array $excluded): MatchResult
     {
@@ -142,8 +137,8 @@ abstract class AbstractAssertion
     }
 
     /**
-     * @param ClassLike[] $excluded
-     * @param string[] $relations
+     * @param array<ClassLike> $excluded
+     * @param array<string> $relations
      */
     protected function destinationMatchesRelations(
         ClassLike $destination,
@@ -171,7 +166,6 @@ abstract class AbstractAssertion
             return false;
         }
 
-        /** @var ClassLike $extensionClass */
         foreach ($map->getExtensionNodes() as $extensionClass) {
             if ($extensionClass->matches($class->toString())) {
                 return true;

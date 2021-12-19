@@ -22,7 +22,7 @@ class PhpStanDocTypeNodeResolver
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     public function getBlockClassNames(NameContext $context, string $docBlock): array
     {
@@ -48,7 +48,7 @@ class PhpStanDocTypeNodeResolver
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     private function resolveTypeNode(Type\TypeNode $type): array
     {

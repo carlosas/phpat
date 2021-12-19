@@ -59,7 +59,7 @@ jobs:
           dependencies: "${{ matrix.dependencies }}"
 
       - name: "Run squizlabs/php_codesniffer"
-        run: "vendor/bin/phpcs src/"
+        run: "vendor/bin/phpcs src/ --standard=ci/phpcs.xml"
 
   architecture-analysis:
     name: "Architecture Analysis"
@@ -103,7 +103,7 @@ jobs:
           dependencies: "${{ matrix.dependencies }}"
 
       - name: "Run phpat/phpat"
-        run: "php bin/phpat"
+        run: "php bin/phpat ci/phpat.yaml"
 
   functional-analysis:
     name: "Functional Analysis"
@@ -232,10 +232,10 @@ jobs:
           dependencies: "${{ matrix.dependencies }}"
 
       - name: "Run phpstan/phpstan"
-        run: "vendor/bin/phpstan analyse src --level=5"
+        run: "vendor/bin/phpstan analyse -c ci/phpstan.neon"
 
       - name: "Run vimeo/psalm"
-        run: "vendor/bin/psalm"
+        run: "vendor/bin/psalm -c ci/psalm.xml"
 
   tests:
     name: "Tests"

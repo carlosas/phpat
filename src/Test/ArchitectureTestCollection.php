@@ -11,7 +11,7 @@ class ArchitectureTestCollection
     /**
      * ArchitectureTestCollection constructor.
      *
-     * @param TestInterface[] $tests
+     * @param array<TestInterface> $tests
      */
     public function __construct(array $tests = [])
     {

@@ -12,6 +12,7 @@ use PhpAT\Parser\Ast\RegexClassName;
 use PhpAT\Parser\Ast\SrcNode;
 use PhpAT\Selector\ComposerSourceSelector;
 use PHPUnit\Framework\TestCase;
+use Psr\EventDispatcher\EventDispatcherInterface;
 
 class ComposerSourceSelectorTest extends TestCase
 {
@@ -35,13 +36,13 @@ class ComposerSourceSelectorTest extends TestCase
 
     /**
      * @param bool $devMode
-     * @return ClassLike[]
+     * @return array<ClassLike>
      */
     private function select(bool $devMode): array
     {
         $selector = new ComposerSourceSelector('main', $devMode);
-        $eventDispatcherMock = $this->createMock(EventDispatcher::class);
-        $selector->injectDependencies([EventDispatcher::class => $eventDispatcherMock]);
+        $eventDispatcherMock = $this->createMock(EventDispatcherInterface::class);
+        $selector->injectDependencies([EventDispatcherInterface::class => $eventDispatcherMock]);
         $referenceMapMock = $this->createMock(ReferenceMap::class);
         $srcNode = $this->createMock(SrcNode::class);
         $srcNode->method('getClassName')->willReturn('Source\Namespace\Foo');
@@ -63,7 +64,7 @@ class ComposerSourceSelectorTest extends TestCase
     }
 
     /**
-     * @param ClassLike[] $selected
+     * @param array<ClassLike> $selected
      * @param string      $classToMatch
      * @return bool
      */

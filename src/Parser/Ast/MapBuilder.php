@@ -45,6 +45,9 @@ class MapBuilder
         return new ReferenceMap($this->buildSrcMap(), $this->buildExtensionMap(), $this->buildComposerMap());
     }
 
+    /*
+     * @return array<string, SrcNode>
+     */
     private function buildSrcMap(): array
     {
         $files = $this->finder->findPhpFilesInPath(
@@ -64,7 +67,7 @@ class MapBuilder
     }
 
     /**
-     * @return ClassLike[]
+     * @return array<ClassLike>
      */
     private function buildExtensionMap(): array
     {
@@ -77,7 +80,7 @@ class MapBuilder
     }
 
     /**
-     * @return ComposerPackage[]
+     * @return array<string, ComposerPackage>
      * @throws FatalErrorException
      */
     private function buildComposerMap(): array
@@ -112,8 +115,8 @@ class MapBuilder
     }
 
     /**
-     * @param string[] $namespaces
-     * @return ClassLike[]
+     * @param array<string> $namespaces
+     * @return array<ClassLike>
      */
     private function convertNamespacesToClassLikes(array $namespaces): array
     {

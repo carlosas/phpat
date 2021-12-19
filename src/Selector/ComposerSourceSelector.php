@@ -9,6 +9,7 @@ use PhpAT\Parser\Ast\FullClassName;
 use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\Ast\ClassLike;
 use PhpAT\Rule\Event\BaselineObsoleteEvent;
+use Psr\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class ComposerSourceSelector
@@ -16,12 +17,12 @@ use PhpAT\Rule\Event\BaselineObsoleteEvent;
 class ComposerSourceSelector implements SelectorInterface
 {
     private const DEPENDENCIES = [
-        EventDispatcher::class
+        EventDispatcherInterface::class
     ];
 
     private ?ReferenceMap $map = null;
     private bool $devMode;
-    private EventDispatcher $eventDispatcher;
+    private EventDispatcherInterface $eventDispatcher;
     private string $packageAlias;
 
     public function __construct(string $packageAlias, bool $devMode)
@@ -37,7 +38,7 @@ class ComposerSourceSelector implements SelectorInterface
 
     public function injectDependencies(array $dependencies)
     {
-        $this->eventDispatcher = $dependencies[EventDispatcher::class];
+        $this->eventDispatcher = $dependencies[EventDispatcherInterface::class];
     }
 
     public function setReferenceMap(ReferenceMap $map): void
@@ -45,7 +46,7 @@ class ComposerSourceSelector implements SelectorInterface
         $this->map = $map;
     }
 
-    /** @return ClassLike[] */
+    /** @return array<ClassLike> */
     public function select(): array
     {
         $package = $this->map->getComposerPackages()[$this->packageAlias] ?? null;

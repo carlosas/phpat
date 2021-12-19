@@ -9,9 +9,7 @@ class RuleCollection
     private array $values = [];
 
     /**
-     * RuleCollection constructor.
-     *
-     * @param Rule[] $rules
+     * @param array<Rule> $rules
      */
     public function __construct(array $rules = [])
     {
@@ -26,7 +24,7 @@ class RuleCollection
     }
 
     /**
-     * @return Rule[]
+     * @return array<Rule>
      */
     public function getValues(): array
     {

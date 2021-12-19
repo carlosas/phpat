@@ -20,8 +20,8 @@ class MustOnlyDepend extends AbstractAssertion
     }
 
     /**
-     * @param ClassLike[]  $included
-     * @param ClassLike[]  $excluded
+     * @param array<ClassLike> $included
+     * @param array<ClassLike> $excluded
      */
     public function validate(
         ClassLike $origin,

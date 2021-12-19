@@ -22,7 +22,7 @@ class BaselineObsoleteListener implements EventListenerInterface
     public function __invoke(EventInterface $event)
     {
         /** @var BaselineObsoleteEvent $event */
-        $this->output->writeln(PHP_EOL . 'BASELINE ERROR ' . $event->getMessage());
+        $this->output->writeln(PHP_EOL . 'BASELINE ERROR: ' . $event->getMessage());
         ErrorStorage::addAnonymousError();
     }
 }

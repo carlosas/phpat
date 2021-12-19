@@ -31,6 +31,7 @@ use PhpParser\ParserFactory;
 use PHPStan\PhpDocParser\Parser\ConstExprParser;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TypeParser;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -64,12 +65,12 @@ class Provider
         );
         $this->builder->set(PhpDocParser::class, new PhpDocParser(new TypeParser(), new ConstExprParser()));
         $listenerProvider = (new EventListenerMapper())->populateListenerProvider(new ListenerProvider($this->builder));
-        $this->builder->set(EventDispatcher::class, (new EventDispatcher($listenerProvider)));
+        $this->builder->set(EventDispatcherInterface::class, (new EventDispatcher($listenerProvider)));
         $this->builder->set(PhpStanDocNodeTypeExtractor::class, new PhpStanDocNodeTypeExtractor());
 
         $this->builder->register(Baseline::class, Baseline::class)
             ->addArgument($this->configuration)
-            ->addArgument(new Reference(EventDispatcher::class));
+            ->addArgument(new Reference(EventDispatcherInterface::class));
 
         $this->builder
             ->register(PhpStanDocTypeNodeResolver::class, PhpStanDocTypeNodeResolver::class)
@@ -90,7 +91,7 @@ class Provider
             ->addArgument(new Reference(FileFinder::class))
             ->addArgument(new Reference(Parser::class))
             ->addArgument(new Reference(TraverserFactory::class))
-            ->addArgument(new Reference(EventDispatcher::class))
+            ->addArgument(new Reference(EventDispatcherInterface::class))
             ->addArgument(new Reference(ComposerFileParser::class))
             ->addArgument(new Reference(Configuration::class));
 
@@ -101,7 +102,7 @@ class Provider
         $this->builder
             ->register(TestExtractor::class, FileTestExtractor::class)
             ->addArgument(new Reference(RuleBuilder::class))
-            ->addArgument(new Reference(EventDispatcher::class))
+            ->addArgument(new Reference(EventDispatcherInterface::class))
             ->addArgument(new Reference(YamlTestParser::class))
             ->addArgument(new Reference(XmlTestParser::class))
             ->addArgument(new Reference(Configuration::class));
@@ -109,97 +110,97 @@ class Provider
         $this->builder
             ->register(YamlTestParser::class, YamlTestParser::class)
             ->addArgument(new Reference(RuleBuilder::class))
-            ->addArgument(new Reference(EventDispatcher::class));
+            ->addArgument(new Reference(EventDispatcherInterface::class));
 
         $this->builder
             ->register(XmlTestParser::class, XmlTestParser::class)
             ->addArgument(new Reference(RuleBuilder::class))
-            ->addArgument(new Reference(EventDispatcher::class));
+            ->addArgument(new Reference(EventDispatcherInterface::class));
 
         $this->builder
             ->register(SelectorResolver::class, SelectorResolver::class)
             ->addArgument($this->builder)
-            ->addArgument(new Reference(EventDispatcher::class));
+            ->addArgument(new Reference(EventDispatcherInterface::class));
 
         $this->builder
             ->register(StatementBuilder::class, StatementBuilder::class)
             ->addArgument(new Reference(SelectorResolver::class))
-            ->addArgument(new Reference(EventDispatcher::class))
+            ->addArgument(new Reference(EventDispatcherInterface::class))
             ->addArgument(new Reference(Configuration::class));
 
         $this->builder
             ->register(Dependency\MustDepend::class, Dependency\MustDepend::class)
-            ->addArgument(new Reference(EventDispatcher::class))
+            ->addArgument(new Reference(EventDispatcherInterface::class))
             ->addArgument(new Reference(Configuration::class));
 
         $this->builder
             ->register(Dependency\MustNotDepend::class, Dependency\MustNotDepend::class)
-            ->addArgument(new Reference(EventDispatcher::class))
+            ->addArgument(new Reference(EventDispatcherInterface::class))
             ->addArgument(new Reference(Configuration::class));
 
         $this->builder
             ->register(Dependency\MustOnlyDepend::class, Dependency\MustOnlyDepend::class)
-            ->addArgument(new Reference(EventDispatcher::class))
+            ->addArgument(new Reference(EventDispatcherInterface::class))
             ->addArgument(new Reference(Configuration::class));
 
         $this->builder
             ->register(Dependency\CanOnlyDepend::class, Dependency\CanOnlyDepend::class)
-            ->addArgument(new Reference(EventDispatcher::class))
+            ->addArgument(new Reference(EventDispatcherInterface::class))
             ->addArgument(new Reference(Configuration::class));
 
         $this->builder
             ->register(Inheritance\MustExtend::class, Inheritance\MustExtend::class)
-            ->addArgument(new Reference(EventDispatcher::class))
+            ->addArgument(new Reference(EventDispatcherInterface::class))
             ->addArgument(new Reference(Configuration::class));
 
         $this->builder
             ->register(Inheritance\MustNotExtend::class, Inheritance\MustNotExtend::class)
-            ->addArgument(new Reference(EventDispatcher::class))
+            ->addArgument(new Reference(EventDispatcherInterface::class))
             ->addArgument(new Reference(Configuration::class));
 
         $this->builder
             ->register(Inheritance\CanOnlyExtend::class, Inheritance\CanOnlyExtend::class)
-            ->addArgument(new Reference(EventDispatcher::class))
+            ->addArgument(new Reference(EventDispatcherInterface::class))
             ->addArgument(new Reference(Configuration::class));
 
         $this->builder
             ->register(Composition\MustImplement::class, Composition\MustImplement::class)
-            ->addArgument(new Reference(EventDispatcher::class))
+            ->addArgument(new Reference(EventDispatcherInterface::class))
             ->addArgument(new Reference(Configuration::class));
 
         $this->builder
             ->register(Composition\MustNotImplement::class, Composition\MustNotImplement::class)
-            ->addArgument(new Reference(EventDispatcher::class))
+            ->addArgument(new Reference(EventDispatcherInterface::class))
             ->addArgument(new Reference(Configuration::class));
 
         $this->builder
             ->register(Composition\MustOnlyImplement::class, Composition\MustOnlyImplement::class)
-            ->addArgument(new Reference(EventDispatcher::class))
+            ->addArgument(new Reference(EventDispatcherInterface::class))
             ->addArgument(new Reference(Configuration::class));
 
         $this->builder
             ->register(Composition\CanOnlyImplement::class, Composition\CanOnlyImplement::class)
-            ->addArgument(new Reference(EventDispatcher::class))
+            ->addArgument(new Reference(EventDispatcherInterface::class))
             ->addArgument(new Reference(Configuration::class));
 
         $this->builder
             ->register(Mixin\MustInclude::class, Mixin\MustInclude::class)
-            ->addArgument(new Reference(EventDispatcher::class))
+            ->addArgument(new Reference(EventDispatcherInterface::class))
             ->addArgument(new Reference(Configuration::class));
 
         $this->builder
             ->register(Mixin\MustNotInclude::class, Mixin\MustNotInclude::class)
-            ->addArgument(new Reference(EventDispatcher::class))
+            ->addArgument(new Reference(EventDispatcherInterface::class))
             ->addArgument(new Reference(Configuration::class));
 
         $this->builder
             ->register(Mixin\MustOnlyInclude::class, Mixin\MustOnlyInclude::class)
-            ->addArgument(new Reference(EventDispatcher::class))
+            ->addArgument(new Reference(EventDispatcherInterface::class))
             ->addArgument(new Reference(Configuration::class));
 
         $this->builder
             ->register(Mixin\CanOnlyInclude::class, Mixin\CanOnlyInclude::class)
-            ->addArgument(new Reference(EventDispatcher::class))
+            ->addArgument(new Reference(EventDispatcherInterface::class))
             ->addArgument(new Reference(Configuration::class));
 
         $listenerProvider = new EventListenerProvider($this->builder, $this->output);

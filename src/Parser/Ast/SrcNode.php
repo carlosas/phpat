@@ -8,9 +8,7 @@ class SrcNode implements \JsonSerializable
 {
     private string $filePathname;
     private string $className;
-    /**
-     * @var AbstractRelation[]
-     */
+    /** @var array<AbstractRelation> */
     private array $relations;
 
     public function __construct(
@@ -34,7 +32,7 @@ class SrcNode implements \JsonSerializable
     }
 
     /**
-     * @return AbstractRelation[]
+     * @return array<AbstractRelation>
      */
     public function getRelations(): array
     {

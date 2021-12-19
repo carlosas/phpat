@@ -16,7 +16,7 @@ class Compiler
     /**
      * A list of relative file paths that should be excluded from the Phar
      *
-     * @var string[]
+     * @var array<string>
      */
     protected const EXCLUDED_FILES = [
         'phpat',
@@ -27,19 +27,15 @@ class Compiler
     /**
      * A list of patterns that will cause a matched file path to be excluded
      *
-     * @var string[]
+     * @var array<string>
      */
     protected const EXCLUDED_PATTERNS = [
         '/^\/?vendor\/phpunit\/?(.*)?/'
     ];
 
-    /**
-     * @var string[]
-     */
+    /** @var array<string> */
     protected array $paths;
-
     protected string $name;
-
     protected string $file;
 
     public function __construct(array $paths, string $name = 'phpat.phar')

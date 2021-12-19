@@ -6,9 +6,7 @@ namespace PhpAT\Parser;
 
 class ComposerFileParser
 {
-    /** @var array */
     private array $composerFile;
-    /** @var array */
     private array $lockFile;
     private ?array $lockedPackages = null;
 
@@ -27,7 +25,7 @@ class ComposerFileParser
     /**
      * Returns an array of all namespaces declared by the current composer file.
      *
-     * @return string[]
+     * @return array<string>
      */
     public function getNamespaces(bool $dev = false): array
     {
@@ -37,7 +35,7 @@ class ComposerFileParser
     /**
      * Returns an array of all required namespaces including deep dependencies (dependencies of dependencies)
      *
-     * @return string[]
+     * @return array<string>
      */
     public function getDeepRequirementNamespaces(bool $dev): array
     {
@@ -49,7 +47,7 @@ class ComposerFileParser
     /**
      * Returns an array of directly required package names.
      *
-     * @return string[]
+     * @return array<string>
      */
     public function getDirectDependencies(bool $dev): array
     {
@@ -65,8 +63,8 @@ class ComposerFileParser
     /**
      * Resolves an array of package names to an array of namespaces declared by those packages.
      *
-     * @param string[] $requirements
-     * @return string[]
+     * @param array<string> $requirements
+     * @return array<string>
      */
     public function autoloadableNamespacesForRequirements(array $requirements)
     {

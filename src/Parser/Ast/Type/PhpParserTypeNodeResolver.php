@@ -7,7 +7,7 @@ use PhpParser\Node;
 class PhpParserTypeNodeResolver
 {
     /**
-     * @return string[]
+     * @return array<string>
      */
     public function getTypeClassNames(?Node $node): array
     {

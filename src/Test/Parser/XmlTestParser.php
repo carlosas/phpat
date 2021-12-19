@@ -11,13 +11,14 @@ use PhpAT\Selector\Selector;
 use PhpAT\Selector\SelectorInterface;
 use PhpAT\Test\ArchitectureMarkupTest;
 use PhpAT\Test\TestInterface;
+use Psr\EventDispatcher\EventDispatcherInterface;
 
 class XmlTestParser
 {
-    private \PhpAT\Rule\RuleBuilder $ruleBuilder;
-    private \PHPAT\EventDispatcher\EventDispatcher $eventDispatcher;
+    private RuleBuilder $ruleBuilder;
+    private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(RuleBuilder $ruleBuilder, EventDispatcher $eventDispatcher)
+    public function __construct(RuleBuilder $ruleBuilder, EventDispatcherInterface $eventDispatcher)
     {
         $this->ruleBuilder = $ruleBuilder;
         $this->eventDispatcher = $eventDispatcher;

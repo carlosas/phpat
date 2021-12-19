@@ -10,13 +10,14 @@ use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Rule\Rule;
 use PhpAT\Rule\RuleBuilder;
 use PhpAT\Rule\RuleCollection;
+use Psr\EventDispatcher\EventDispatcherInterface;
 
 abstract class ArchitectureTest implements TestInterface
 {
-    protected \PhpAT\Rule\RuleBuilder $newRule;
-    private \PHPAT\EventDispatcher\EventDispatcher $eventDispatcher;
+    protected RuleBuilder $newRule;
+    private EventDispatcherInterface $eventDispatcher;
 
-    final public function __construct(RuleBuilder $builder, EventDispatcher $eventDispatcher)
+    final public function __construct(RuleBuilder $builder, EventDispatcherInterface $eventDispatcher)
     {
         $this->newRule = $builder;
         $this->eventDispatcher = $eventDispatcher;

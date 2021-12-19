@@ -18,6 +18,7 @@ use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\EventDispatcher\EventDispatcherInterface;
 
 abstract class AbstractAssertionTestCase extends TestCase
 {
@@ -28,10 +29,10 @@ abstract class AbstractAssertionTestCase extends TestCase
     /**
      * @dataProvider dataProvider
      * @param ClassLike    $origin The selected class in which to perform assertions
-     * @param ClassLike[]  $included Classes that must be in the relation test
-     * @param ClassLike[]  $excluded Classes excluded from the relation test
+     * @param array<ClassLike> $included Classes that must be in the relation test
+     * @param array<ClassLike> $excluded Classes excluded from the relation test
      * @param ReferenceMap $map The fake reference map
-     * @param bool[]       $expectedEvents Expected ordered assertion results (true = valid , false = invalid)
+     * @param array<bool>       $expectedEvents Expected ordered assertion results (true = valid , false = invalid)
      */
     public function testDispatchesCorrectEvents(
         ClassLike $origin,
@@ -39,11 +40,10 @@ abstract class AbstractAssertionTestCase extends TestCase
         array $excluded,
         ReferenceMap $map,
         array $expectedEvents
-    ): void
-    {
-        /** @var MockObject $eventDispatcherMock */
-        $eventDispatcherMock = $this->createMock(EventDispatcher::class);
-        /** @var MockObject $configurationMock */
+    ): void {
+        /** @var MockObject|EventDispatcherInterface $eventDispatcherMock */
+        $eventDispatcherMock = $this->createMock(EventDispatcherInterface::class);
+        /** @var MockObject|Configuration $configurationMock */
         $configurationMock = $this->createMock(Configuration::class);
         $configurationMock->method('getIgnorePhpExtensions')->willReturn(true);
         $className = $this->getTestedClassName();
@@ -56,9 +56,9 @@ abstract class AbstractAssertionTestCase extends TestCase
         }
 
         $eventDispatcherMock
-            ->expects($this->exactly(count($consecutive??[])))
+            ->expects($this->exactly(count($consecutive ?? [])))
             ->method('dispatch')
-            ->withConsecutive(...$consecutive??[]);
+            ->withConsecutive(...$consecutive ?? []);
 
         $class->validate($origin, $included, $excluded, $map);
     }
@@ -70,8 +70,8 @@ abstract class AbstractAssertionTestCase extends TestCase
     {
         return new ReferenceMap(
             [
-                new SrcNode(
-                    new \SplFileInfo('folder/Example/ClassExample.php'),
+                'Example\\ClassExample' => new SrcNode(
+                    'folder/Example/ClassExample.php',
                     FullClassName::createFromFQCN('Example\\ClassExample'),
                     [
                         new Inheritance(FullClassName::createFromFQCN('Example\\ParentClassExample'), 0, 0),

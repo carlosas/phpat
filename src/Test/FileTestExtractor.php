@@ -9,18 +9,19 @@ use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Rule\RuleBuilder;
 use PhpAT\Test\Parser\XmlTestParser;
 use PhpAT\Test\Parser\YamlTestParser;
+use Psr\EventDispatcher\EventDispatcherInterface;
 
 class FileTestExtractor implements TestExtractor
 {
-    private \PhpAT\Rule\RuleBuilder $ruleBuilder;
+    private RuleBuilder $ruleBuilder;
     private string $testPath;
-    private \PHPAT\EventDispatcher\EventDispatcher $eventDispatcher;
-    private \PhpAT\Test\Parser\YamlTestParser $yamlTestParser;
-    private \PhpAT\Test\Parser\XmlTestParser $xmlTestParser;
+    private EventDispatcherInterface $eventDispatcher;
+    private YamlTestParser $yamlTestParser;
+    private XmlTestParser $xmlTestParser;
 
     public function __construct(
         RuleBuilder $ruleBuilder,
-        EventDispatcher $eventDispatcher,
+        EventDispatcherInterface $eventDispatcher,
         YamlTestParser $yamlTestParser,
         XmlTestParser $xmlTestParser,
         Configuration $configuration

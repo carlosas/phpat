@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 abstract class AbstractSelectorTestCase extends TestCase
 {
     /**
-     * @param ClassLike[] $selected
+     * @param array<ClassLike> $selected
      * @param string      $classToMatch
      * @return bool
      */
@@ -38,8 +38,8 @@ abstract class AbstractSelectorTestCase extends TestCase
     {
         return new ReferenceMap(
             [
-                new SrcNode(
-                    new \SplFileInfo('folder/Example/ClassExample.php'),
+                'Example\\ClassExample' => new SrcNode(
+                    'folder/Example/ClassExample.php',
                     FullClassName::createFromFQCN('Example\\ClassExample'),
                     [
                         new Inheritance(FullClassName::createFromFQCN('Example\\ParentClassExample'), 0, 0),

@@ -4,23 +4,18 @@ namespace PhpAT\Parser\Ast;
 
 class ReferenceMap
 {
-    /**
-     * @var SrcNode[]
-     */
+    /** @var array<string, SrcNode> */
     private array $srcNodes;
-    /**
-     * @var ClassLike[]
-     */
+    /** @var array<ClassLike> */
     private array $extensionNodes;
-    /**
-     * @var array
-     */
+    /** @var array<string, ComposerPackage> */
     private array $composerPackages;
 
     /**
      * ReferenceMap constructor.
-     * @param SrcNode[]   $srcNodes
-     * @param ClassLike[] $extensionNodes
+     * @param array<string, SrcNode>   $srcNodes
+     * @param array<ClassLike> $extensionNodes
+     * @param array<string, ComposerPackage> $composerPackages
      */
     public function __construct(
         array $srcNodes,
@@ -33,7 +28,7 @@ class ReferenceMap
     }
 
     /**
-     * @return SrcNode[]
+     * @return array<string, SrcNode>
      */
     public function getSrcNodes(): array
     {
@@ -41,13 +36,16 @@ class ReferenceMap
     }
 
     /**
-     * @return ClassLike[]
+     * @return array<ClassLike>
      */
     public function getExtensionNodes(): array
     {
         return $this->extensionNodes;
     }
 
+    /**
+     * @return array<string, ComposerPackage>
+     */
     public function getComposerPackages(): array
     {
         return $this->composerPackages;

@@ -13,8 +13,8 @@ use PhpAT\Parser\Relation\Mixin;
 
 final class Classmap
 {
-    /** @var ClassmapItem[] */
-    private static $classmap = [];
+    /** @var array<string, ClassmapItem> */
+    private static array $classmap = [];
 
     public static function registerClass(
         FullClassName $className,
@@ -22,8 +22,8 @@ final class Classmap
         string $classType,
         ?int $flag
     ) {
-        if (!isset(static::$classmap[$className->getFQCN()])) {
-            static::$classmap[$className->getFQCN()] = new ClassmapItem($pathname, $classType, $flag);
+        if (!isset(Classmap::$classmap[$className->getFQCN()])) {
+            Classmap::$classmap[$className->getFQCN()] = new ClassmapItem($pathname, $classType, $flag);
         }
     }
 
@@ -33,7 +33,7 @@ final class Classmap
         int $startLine,
         int $endLine
     ) {
-        static::$classmap[$classImplementing->getFQCN()]->addInterface(
+        Classmap::$classmap[$classImplementing->getFQCN()]->addInterface(
             new ClassmapRelation($classImplemented, $startLine, $endLine)
         );
     }
@@ -44,7 +44,7 @@ final class Classmap
         int $startLine,
         int $endLine
     ) {
-        static::$classmap[$classExtending->getFQCN()]->addParent(
+        Classmap::$classmap[$classExtending->getFQCN()]->addParent(
             new ClassmapRelation($classExtended, $startLine, $endLine)
         );
     }
@@ -55,7 +55,7 @@ final class Classmap
         int $startLine,
         int $endLine
     ) {
-        static::$classmap[$classIncluding->getFQCN()]->addTrait(
+        Classmap::$classmap[$classIncluding->getFQCN()]->addTrait(
             new ClassmapRelation($classIncluded, $startLine, $endLine)
         );
     }
@@ -70,34 +70,38 @@ final class Classmap
             return;
         }
 
-        static::$classmap[$classDepending->getFQCN()]->addDependency(
+        Classmap::$classmap[$classDepending->getFQCN()]->addDependency(
             new ClassmapRelation($classDepended, $startLine, $endLine)
         );
     }
 
+    /*
+     * @return array<string, SrcNode>
+     */
     public static function getClassmap(): array
     {
-        return static::translateClassmap(static::$classmap);
+        return Classmap::translateClassmap(Classmap::$classmap);
     }
 
     /**
      * Temporary BC structure
+     * @param array<string, ClassmapItem> $classmap
+     * @return array<string, SrcNode>
      */
     private static function translateClassmap(array $classmap): array
     {
-        /** @var ClassmapItem $properties */
         foreach ($classmap as $className => $properties) {
             $srcNodes[$className] = new SrcNode(
                 $properties->getPathname(),
                 FullClassName::createFromFQCN($className),
                 array_merge(
-                    static::addRelations(Dependency::class, $properties->getDependencies()),
-                    static::addRelations(
+                    Classmap::addRelations(Dependency::class, $properties->getDependencies()),
+                    Classmap::addRelations(
                         Inheritance::class,
                         $properties->getParent() === null ? [] : [$properties->getParent()]
                     ),
-                    static::addRelations(Composition::class, $properties->getInterfaces()),
-                    static::addRelations(Mixin::class, $properties->getTraits())
+                    Classmap::addRelations(Composition::class, $properties->getInterfaces()),
+                    Classmap::addRelations(Mixin::class, $properties->getTraits())
                 )
             );
         }
@@ -106,8 +110,8 @@ final class Classmap
     }
 
     /**
-     * @param ClassmapRelation[] $classmapRelations
-     * @return AbstractRelation[]
+     * @param array<ClassmapRelation> $classmapRelations
+     * @return array<AbstractRelation>
      */
     private static function addRelations(string $type, array $classmapRelations): array
     {
