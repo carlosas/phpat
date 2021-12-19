@@ -13,13 +13,14 @@ use PhpAT\Parser\Relation\Composition;
 use PhpAT\Parser\Relation\Dependency;
 use PhpAT\Parser\Relation\Inheritance;
 use PhpAT\Parser\Relation\Mixin;
+use Psr\EventDispatcher\EventDispatcherInterface;
 
 abstract class AbstractAssertion
 {
     protected Configuration $configuration;
-    protected EventDispatcher $eventDispatcher;
+    protected EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(EventDispatcher $eventDispatcher, Configuration $configuration)
+    public function __construct(EventDispatcherInterface $eventDispatcher, Configuration $configuration)
     {
         $this->configuration = $configuration;
         $this->eventDispatcher = $eventDispatcher;

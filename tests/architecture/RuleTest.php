@@ -14,7 +14,6 @@ class RuleTest extends ArchitectureTest
     {
         return $this->newRule
             ->classesThat(Selector::haveClassName(Rule::class))
-            ->andClassesThat(Selector::havePath('Application/*/UseCase/*asdksdf.php'))
             ->mustOnlyDependOn()
             ->classesThat(Selector::haveClassName(AbstractAssertion::class))
             ->andClassesThat(Selector::haveClassName(SelectorInterface::class))

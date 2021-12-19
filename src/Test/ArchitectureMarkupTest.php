@@ -8,14 +8,15 @@ use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Rule\Rule;
 use PhpAT\Rule\RuleBuilder;
 use PhpAT\Rule\RuleCollection;
+use Psr\EventDispatcher\EventDispatcherInterface;
 
 class ArchitectureMarkupTest implements TestInterface
 {
-    protected \PhpAT\Rule\RuleBuilder $newRule;
-    private \PHPAT\EventDispatcher\EventDispatcher $eventDispatcher;
+    protected RuleBuilder $newRule;
+    private EventDispatcherInterface $eventDispatcher;
     private array $methods;
 
-    final public function __construct(array $methods, RuleBuilder $builder, EventDispatcher $eventDispatcher)
+    final public function __construct(array $methods, RuleBuilder $builder, EventDispatcherInterface $eventDispatcher)
     {
         $this->newRule = $builder;
         $this->eventDispatcher = $eventDispatcher;

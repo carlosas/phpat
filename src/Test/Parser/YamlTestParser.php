@@ -10,14 +10,15 @@ use PhpAT\Rule\RuleBuilder;
 use PhpAT\Selector\Selector;
 use PhpAT\Selector\SelectorInterface;
 use PhpAT\Test\ArchitectureMarkupTest;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Yaml\Yaml;
 
 class YamlTestParser
 {
-    private \PhpAT\Rule\RuleBuilder $ruleBuilder;
-    private \PHPAT\EventDispatcher\EventDispatcher $eventDispatcher;
+    private RuleBuilder $ruleBuilder;
+    private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(RuleBuilder $ruleBuilder, EventDispatcher $eventDispatcher)
+    public function __construct(RuleBuilder $ruleBuilder, EventDispatcherInterface $eventDispatcher)
     {
         $this->ruleBuilder = $ruleBuilder;
         $this->eventDispatcher = $eventDispatcher;

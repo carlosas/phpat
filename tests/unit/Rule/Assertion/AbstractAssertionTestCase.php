@@ -18,6 +18,7 @@ use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\EventDispatcher\EventDispatcherInterface;
 
 abstract class AbstractAssertionTestCase extends TestCase
 {
@@ -40,8 +41,8 @@ abstract class AbstractAssertionTestCase extends TestCase
         ReferenceMap $map,
         array $expectedEvents
     ): void {
-        /** @var MockObject|EventDispatcher $eventDispatcherMock */
-        $eventDispatcherMock = $this->createMock(EventDispatcher::class);
+        /** @var MockObject|EventDispatcherInterface $eventDispatcherMock */
+        $eventDispatcherMock = $this->createMock(EventDispatcherInterface::class);
         /** @var MockObject|Configuration $configurationMock */
         $configurationMock = $this->createMock(Configuration::class);
         $configurationMock->method('getIgnorePhpExtensions')->willReturn(true);

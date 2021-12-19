@@ -23,8 +23,9 @@ class ComposerTest extends ArchitectureTest
         return $this->newRule
             ->classesThat(Selector::haveClassName('PhpAT\Rule\Assertion\*'))
             ->mustNotDependOn()
-            ->classesThat(Selector::areDependenciesFromComposer('main'))
+            ->classesThat(Selector::areDependenciesFromComposer())
             ->excludingClassesThat(Selector::haveClassName('PHPAT\*'))
+            ->andExcludingClassesThat(Selector::haveClassName('Psr\*'))
             ->build();
     }
 }

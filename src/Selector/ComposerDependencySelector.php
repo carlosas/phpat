@@ -8,14 +8,15 @@ use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\Ast\ClassLike;
 use PhpAT\Rule\Event\BaselineObsoleteEvent;
+use Psr\EventDispatcher\EventDispatcherInterface;
 
 class ComposerDependencySelector implements SelectorInterface
 {
     private const DEPENDENCIES = [
-        EventDispatcher::class
+        EventDispatcherInterface::class
     ];
 
-    private EventDispatcher $eventDispatcher;
+    private EventDispatcherInterface $eventDispatcher;
     private ?ReferenceMap $map = null;
     private bool $devMode;
     private string $packageAlias;
@@ -33,7 +34,7 @@ class ComposerDependencySelector implements SelectorInterface
 
     public function injectDependencies(array $dependencies)
     {
-        $this->eventDispatcher = $dependencies[EventDispatcher::class];
+        $this->eventDispatcher = $dependencies[EventDispatcherInterface::class];
     }
 
     public function setReferenceMap(ReferenceMap $map): void

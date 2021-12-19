@@ -20,12 +20,13 @@ class AssertionsTest extends ArchitectureTest
             ->build();
     }
 
-    public function testAssertionsOnlyDependPhpATAndPsr(): Rule
+    public function testAssertionsOnlyDependPhpatAndPsr(): Rule
     {
         return $this->newRule
             ->classesThat(Selector::havePath('Rule/Assertion/*'))
             ->canOnlyDependOn()
             ->classesThat(Selector::haveClassName('PhpAT\*'))
+            ->andClassesThat(Selector::haveClassName('Psr\*'))
             ->build();
     }
 }

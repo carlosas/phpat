@@ -9,6 +9,7 @@ use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\Ast\RegexClassName;
 use PhpAT\Selector\ComposerDependencySelector;
 use PHPUnit\Framework\TestCase;
+use Psr\EventDispatcher\EventDispatcherInterface;
 
 class ComposerDependencySelectorTest extends TestCase
 {
@@ -55,8 +56,8 @@ class ComposerDependencySelectorTest extends TestCase
     private function select(bool $devMode): array
     {
         $selector = new ComposerDependencySelector('main', $devMode);
-        $eventDispatcherMock = $this->createMock(EventDispatcher::class);
-        $selector->injectDependencies([EventDispatcher::class => $eventDispatcherMock]);
+        $eventDispatcherMock = $this->createMock(EventDispatcherInterface::class);
+        $selector->injectDependencies([EventDispatcherInterface::class => $eventDispatcherMock]);
         $referenceMapMock = $this->createMock(ReferenceMap::class);
         $referenceMapMock->method('getComposerPackages')->willReturn(
             [
