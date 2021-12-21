@@ -2,29 +2,13 @@
 
 namespace Tests\PhpAT\benchmark;
 
-use PhpAT\App;
-use Psr\EventDispatcher\EventDispatcherInterface;
-
-class NullDispatcher implements EventDispatcherInterface
-{
-    public function dispatch(object $event)
-    {
-        return;
-    }
-}
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\NullOutput;
 
 class AppExecutionBench
 {
-    /**
-     * @Revs(1)
-     * @Iterations(500)
-     */
     public function benchConsume()
     {
-        $app = new App();
-        $reflectionClass = new \ReflectionClass($app);
-        $reflectionClass->getProperty('dispatcher')->setValue(new NullDispatcher());
-
-        $app->run();
+        (new \PhpAT\App())->run(new ArrayInput([]), new NullOutput());
     }
 }
