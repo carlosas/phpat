@@ -14,11 +14,11 @@ There are several ways to help out:
 * All tests and coding standard checks should pass
 ```bash
 composer validate --strict
-vendor/bin/phpcs src/
-vendor/bin/psalm
-vendor/bin/phpstan analyse src --level=5
+vendor/bin/phpcs src/ --standard=ci/phpcs.xml
+vendor/bin/psalm -c ci/psalm.xml
+vendor/bin/phpstan analyse -c ci/phpstan.neon
 vendor/bin/phpunit tests/unit/
-php bin/phpat phpat.yaml
+php bin/phpat ci/phpat.yaml
 php bin/phpat tests/functional/functional7.yaml
 php bin/phpat tests/functional/functional8.yaml
 ```

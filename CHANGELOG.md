@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.8.1
+* Fix exception when no files found in path selector
+* Improve RegexClassName match performance
+
 ## 0.8.0
 * Add PHP 8.0 and 8.1 compatibility
 * Drop PHP 7.2 and 7.3 compatibility

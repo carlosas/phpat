@@ -4,7 +4,7 @@ namespace PhpAT\Parser\Ast;
 
 class ReferenceMap
 {
-    /** @var array<SrcNode> */
+    /** @var array<string, SrcNode> */
     private array $srcNodes;
     /** @var array<ClassLike> */
     private array $extensionNodes;
@@ -13,7 +13,7 @@ class ReferenceMap
 
     /**
      * ReferenceMap constructor.
-     * @param array<SrcNode>   $srcNodes
+     * @param array<string, SrcNode>   $srcNodes
      * @param array<ClassLike> $extensionNodes
      * @param array<string, ComposerPackage> $composerPackages
      */
@@ -28,7 +28,7 @@ class ReferenceMap
     }
 
     /**
-     * @return array<SrcNode>
+     * @return array<string, SrcNode>
      */
     public function getSrcNodes(): array
     {

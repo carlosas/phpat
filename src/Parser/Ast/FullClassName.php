@@ -44,6 +44,11 @@ class FullClassName implements ClassLike
         return $this->getFQCN() === $name;
     }
 
+    public function getMatchingNodes(array $nodes): array
+    {
+        return array_key_exists($this->getFQCN(), $nodes) ? [$nodes[$this->getFQCN()]] : [];
+    }
+
     public function toString(): string
     {
         return $this->getFQCN();

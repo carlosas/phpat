@@ -39,13 +39,7 @@ abstract class AbstractAssertion
      */
     protected function filterMatchingNodes(ClassLike $origin, ReferenceMap $map): array
     {
-        foreach ($map->getSrcNodes() as $node) {
-            if ($origin->matches($node->getClassName())) {
-                $found[] = $node;
-            }
-        }
-
-        return $found ?? [];
+        return $origin->getMatchingNodes($map->getSrcNodes());
     }
 
     /**
