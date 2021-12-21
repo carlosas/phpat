@@ -237,9 +237,6 @@ jobs:
       - name: "Run vimeo/psalm"
         run: "vendor/bin/psalm -c ci/psalm.xml"
 
-      - name: "Run phpbench/phpbench"
-        run: "vendor/bin/phpbench run tests/benchmark/AppExecutionBench.php"
-
   tests:
     name: "Tests"
 
@@ -286,3 +283,6 @@ jobs:
 
       - name: "Run tests with phpunit/phpunit"
         run: "vendor/bin/phpunit tests/unit/"
+
+      - name: "Run phpbench/phpbench"
+        run: "vendor/bin/phpbench run tests/benchmark/AppExecutionBench.php"
