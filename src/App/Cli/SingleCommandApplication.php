@@ -13,7 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class SingleCommandApplication extends Command
 {
     private string $version = 'UNKNOWN';
-    private bool $autoExit = true;
+    private bool $autoExit = false;
     private bool $running = false;
 
     public function setVersion(string $version): self
