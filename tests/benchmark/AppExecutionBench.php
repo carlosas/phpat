@@ -2,6 +2,7 @@
 
 namespace Tests\PhpAT\benchmark;
 
+use PhpAT\App;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
 
@@ -10,19 +11,30 @@ class AppExecutionBench
     /**
      * @Iterations(10)
      * @Sleep(1000)
-     * @ParamProviders({"provideConfigPaths"})
      */
-    public function benchRun($params)
+    public function benchRunBase()
     {
-        (new \PhpAT\App())->run(new ArrayInput(['config' => realpath($params['path'])]), new NullOutput());
+        $path = realpath(__DIR__ . '/../../ci/phpat.yaml');
+        (new App())->run(new ArrayInput(['config' => $path]), new NullOutput());
     }
 
-    public function provideConfigPaths(): array
+    /**
+     * @Iterations(10)
+     * @Sleep(1000)
+     */
+    public function benchRunFunctional7()
     {
-        return [
-            'base' => ['path' => __DIR__ . '/../../ci/phpat.yaml'],
-            'functional7' => ['path' => __DIR__ . '/../../tests/functional/functional7.yaml'],
-            'functional8' => ['path' => __DIR__ . '/../../tests/functional/functional8.yaml'],
-        ];
+        $path = realpath(__DIR__ . '/../../tests/functional/functional7.yaml');
+        (new App())->run(new ArrayInput(['config' => $path]), new NullOutput());
+    }
+
+    /**
+     * @Iterations(10)
+     * @Sleep(1000)
+     */
+    public function benchRunFunctional8()
+    {
+        $path = realpath(__DIR__ . '/../../tests/functional/functional8.yaml');
+        (new App())->run(new ArrayInput(['config' => $path]), new NullOutput());
     }
 }
