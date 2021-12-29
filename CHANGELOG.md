@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 * Fix class property types not caught as dependencies
 * Support PHP 8.1 features:
   * Enums
+  * _never_ type
   * Intersection types
 
 ## 0.8.2
