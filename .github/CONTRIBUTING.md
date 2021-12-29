@@ -22,6 +22,7 @@ vendor/bin/phpunit tests/unit/
 php bin/phpat ci/phpat.yaml
 php bin/phpat tests/functional/functional74.yaml
 php bin/phpat tests/functional/functional80.yaml
+php bin/phpat tests/functional/functional81.yaml
 ```
 
 ## The internals
