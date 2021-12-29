@@ -53,43 +53,8 @@ jobs:
       - name: "Run friendsofphp/php-cs-fixer"
         run: "vendor/bin/php-cs-fixer fix --config ./ci/php-cs-fixer.php"
 
-  architecture-analysis:
-    name: "Architecture Analysis"
-    runs-on: "ubuntu-latest"
-    strategy:
-      matrix:
-        php-version:
-          - "7.4"
-          - "8.0"
-          - "8.1"
-        dependencies:
-          - "highest"
-    steps:
-      - name: "Checkout"
-        uses: "actions/checkout@v2"
-      - name: "Install PHP with extensions"
-        uses: "shivammathur/setup-php@v2"
-        with:
-          coverage: "none"
-          extensions: "${{ env.PHP_EXTENSIONS }}"
-          php-version: "${{ matrix.php-version }}"
-      - name: "Determine composer cache directory"
-        uses: "./.github/actions/composer/composer/determine-cache-directory"
-      - name: "Cache dependencies installed with composer"
-        uses: "actions/cache@v2"
-        with:
-          path: "${{ env.COMPOSER_CACHE_DIR }}"
-          key: "php-${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-${{ hashFiles('composer.lock') }}"
-          restore-keys: "php-${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-"
-      - name: "Install ${{ matrix.dependencies }} dependencies with composer"
-        uses: "./.github/actions/composer/composer/install"
-        with:
-          dependencies: "${{ matrix.dependencies }}"
-      - name: "Run phpat/phpat"
-        run: "php bin/phpat ci/phpat.yaml"
-
   functional-analysis:
-    name: "Functional Analysis"
+    name: "Architecture and functional analysis"
     runs-on: "ubuntu-latest"
     strategy:
       matrix:
@@ -120,42 +85,14 @@ jobs:
         uses: "./.github/actions/composer/composer/install"
         with:
           dependencies: "${{ matrix.dependencies }}"
-      - name: "Run phpat/phpat for functional tests"
+      - name: "Run phpat/phpat for architecture tests"
+        run: "php bin/phpat ci/phpat.yaml"
+      - name: "Run phpat/phpat for functional tests (PHP 7.4)"
         run: "php bin/phpat tests/functional/functional74.yaml"
-
-  functional-analysis-php80:
-    name: "Functional Analysis (PHP 8.0 specific)"
-    runs-on: "ubuntu-latest"
-    strategy:
-      matrix:
-        php-version:
-          - "8.0"
-          - "8.1"
-        dependencies:
-          - "highest"
-    steps:
-      - name: "Checkout"
-        uses: "actions/checkout@v2"
-      - name: "Install PHP with extensions"
-        uses: "shivammathur/setup-php@v2"
-        with:
-          coverage: "none"
-          extensions: "${{ env.PHP_EXTENSIONS }}"
-          php-version: "${{ matrix.php-version }}"
-      - name: "Determine composer cache directory"
-        uses: "./.github/actions/composer/composer/determine-cache-directory"
-      - name: "Cache dependencies installed with composer"
-        uses: "actions/cache@v2"
-        with:
-          path: "${{ env.COMPOSER_CACHE_DIR }}"
-          key: "php-${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-${{ hashFiles('composer.lock') }}"
-          restore-keys: "php-${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-"
-      - name: "Install ${{ matrix.dependencies }} dependencies with composer"
-        uses: "./.github/actions/composer/composer/install"
-        with:
-          dependencies: "${{ matrix.dependencies }}"
-      - name: "Run phpat/phpat for functional tests"
+      - name: "Run phpat/phpat for functional tests (PHP 8.0)"
         run: "php bin/phpat tests/functional/functional80.yaml"
+      - name: "Run phpat/phpat for functional tests (PHP 8.1)"
+        run: "php bin/phpat tests/functional/functional81.yaml"
 
   static-code-analysis:
     name: "Static Code Analysis"
