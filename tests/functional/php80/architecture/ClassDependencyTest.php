@@ -1,25 +1,25 @@
 <?php
 
-namespace Tests\PhpAT\functional\php8\architecture;
+namespace Tests\PhpAT\functional\php80\architecture;
 
 use PhpAT\Rule\Rule;
 use PhpAT\Selector\Selector;
 use PhpAT\Test\ArchitectureTest;
-use Tests\PhpAT\functional\php8\fixtures\ClassWithAttribute;
-use Tests\PhpAT\functional\php8\fixtures\ConstructorPromotionClass;
-use Tests\PhpAT\functional\php8\fixtures\DummyAttributeOne;
-use Tests\PhpAT\functional\php8\fixtures\DummyAttributeThree;
-use Tests\PhpAT\functional\php8\fixtures\DummyAttributeTwo;
-use Tests\PhpAT\functional\php8\fixtures\DummyException;
-use Tests\PhpAT\functional\php8\fixtures\MatchClass;
-use Tests\PhpAT\functional\php8\fixtures\NamedArgumentClass;
-use Tests\PhpAT\functional\php8\fixtures\SimpleClassFive;
-use Tests\PhpAT\functional\php8\fixtures\SimpleClassFour;
-use Tests\PhpAT\functional\php8\fixtures\SimpleClassOne;
-use Tests\PhpAT\functional\php8\fixtures\SimpleClassSix;
-use Tests\PhpAT\functional\php8\fixtures\SimpleClassThree;
-use Tests\PhpAT\functional\php8\fixtures\SimpleClassTwo;
-use Tests\PhpAT\functional\php8\fixtures\UnionClass;
+use Tests\PhpAT\functional\php80\fixtures\ClassWithAttribute;
+use Tests\PhpAT\functional\php80\fixtures\ConstructorPromotionClass;
+use Tests\PhpAT\functional\php80\fixtures\DummyAttributeOne;
+use Tests\PhpAT\functional\php80\fixtures\DummyAttributeThree;
+use Tests\PhpAT\functional\php80\fixtures\DummyAttributeTwo;
+use Tests\PhpAT\functional\php80\fixtures\DummyException;
+use Tests\PhpAT\functional\php80\fixtures\MatchClass;
+use Tests\PhpAT\functional\php80\fixtures\NamedArgumentClass;
+use Tests\PhpAT\functional\php80\fixtures\SimpleClassFive;
+use Tests\PhpAT\functional\php80\fixtures\SimpleClassFour;
+use Tests\PhpAT\functional\php80\fixtures\SimpleClassOne;
+use Tests\PhpAT\functional\php80\fixtures\SimpleClassSix;
+use Tests\PhpAT\functional\php80\fixtures\SimpleClassThree;
+use Tests\PhpAT\functional\php80\fixtures\SimpleClassTwo;
+use Tests\PhpAT\functional\php80\fixtures\UnionClass;
 
 class ClassDependencyTest extends ArchitectureTest
 {
