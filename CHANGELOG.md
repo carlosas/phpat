@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.8.3
+* Fix class property types not caught as dependencies
+* Support PHP 8.1 features:
+  * Enums
+  * Intersection types
+
 ## 0.8.2
 * Add Symfony 6 compatibility
 
