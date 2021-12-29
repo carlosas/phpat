@@ -32,7 +32,7 @@ class RegexClassName implements ClassLike
 
     public function getMatchingNodes(array $nodes): array
     {
-        return array_map(fn($n) => $nodes[$n], preg_grep($this->regex, array_keys($nodes)));
+        return array_map(fn ($n) => $nodes[$n], preg_grep($this->regex, array_keys($nodes)));
     }
 
     public function toString(): string

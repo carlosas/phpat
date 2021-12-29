@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Tests\PhpAT\unit\Selector;
+
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\Ast\ClassLike;
 use PhpAT\Parser\Ast\ComposerPackage;

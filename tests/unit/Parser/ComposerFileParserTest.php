@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Tests\PhpAT\unit\Parser;
@@ -59,5 +60,4 @@ class ComposerFileParserTest extends TestCase
         // phpunit/phpunit depends on doctrine/instantiator
         $this->assertContains('Doctrine\\Instantiator\\', $namespaces);
     }
-
 }

@@ -137,19 +137,19 @@ class MethodDependenciesCollector extends NodeVisitorAbstract
             $this->registerTypeAsDependency($node->getReturnType());
         }
     }
-/*
-    private function recordConstantFetchUsage(Node $node): void
-    {
-        if (
-            $node instanceof Node\Expr\ConstFetch
-            && !PhpType::isSpecialType($node->name->toString())
-            && !PhpType::isBuiltinType($node->name->toString())
-            && !PhpType::isCoreConstant($node->name->toString())
-        ) {
-            $this->registerTypeAsDependency($node->name);
+    /*
+        private function recordConstantFetchUsage(Node $node): void
+        {
+            if (
+                $node instanceof Node\Expr\ConstFetch
+                && !PhpType::isSpecialType($node->name->toString())
+                && !PhpType::isBuiltinType($node->name->toString())
+                && !PhpType::isCoreConstant($node->name->toString())
+            ) {
+                $this->registerTypeAsDependency($node->name);
+            }
         }
-    }
-*/
+    */
     private function recordDocBlockUsage(Node $node)
     {
         $doc = $node->getDocComment();
