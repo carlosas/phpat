@@ -61,6 +61,9 @@ jobs:
       - name: "Run squizlabs/php_codesniffer"
         run: "vendor/bin/phpcs src/ --standard=ci/phpcs.xml"
 
+      - name: "Run friendsofphp/php-cs-fixer"
+        run: "vendor/bin/php-cs-fixer fix --config ./ci/php-cs-fixer.php"
+
   architecture-analysis:
     name: "Architecture Analysis"
 
