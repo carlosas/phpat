@@ -65,9 +65,7 @@ class ClassDependenciesCollector extends NodeVisitorAbstract
         $this->recordExtendsUsage($node);
         $this->recordImplementsUsage($node);
         $this->recordTraitUsage($node);
-        if (!$this->configuration->getIgnoreDocBlocks()) {
-            $this->recordDocBlockUsage($node);
-        }
+        $this->recordDocBlockUsage($node);
         $this->recordAttributeUsage($node);
 
         return $node;
@@ -166,6 +164,10 @@ class ClassDependenciesCollector extends NodeVisitorAbstract
     */
     private function recordDocBlockUsage(Node $node)
     {
+        if ($this->configuration->getIgnoreDocBlocks()) {
+            return;
+        }
+
         $doc = $node->getDocComment();
         if (!$doc instanceof Doc) {
             return;
@@ -206,7 +208,7 @@ class ClassDependenciesCollector extends NodeVisitorAbstract
             return;
         }
 
-        if ($type instanceof Node\UnionType) {
+        if ($type instanceof Node\UnionType || $type instanceof Node\IntersectionType) {
             foreach ($type->types as $t) {
                 $this->registerTypeAsDependency($t);
             }

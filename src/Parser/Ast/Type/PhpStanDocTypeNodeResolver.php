@@ -62,7 +62,7 @@ class PhpStanDocTypeNodeResolver
             return $this->resolveTypeNode($type->type);
         }
 
-        if ($type instanceof Type\UnionTypeNode) {
+        if ($type instanceof Type\UnionTypeNode || $type instanceof Type\IntersectionTypeNode) {
             foreach ($type->types as $t) {
                 $typesUnion = array_merge($typesUnion ?? [], $this->resolveTypeNode($t));
             }

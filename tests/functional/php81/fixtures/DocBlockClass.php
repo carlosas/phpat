@@ -5,13 +5,12 @@ namespace Tests\PhpAT\functional\php81\fixtures;
 use Tests\PhpAT\functional\php81\fixtures\AnotherNamespace\AnotherSimpleClass;
 use Tests\PhpAT\functional\php81\fixtures\AnotherNamespace\SimpleClass;
 
-class ClassWithNewFeatures
+class DocBlockClass
 {
-    public function __construct(
-        public readonly EnumClassOne $status
-    ) {}
-
-    public function someMethod(SimpleClass&AnotherSimpleClass $value): string
+    /**
+     * @param SimpleClass&AnotherSimpleClass $value
+     */
+    public function someMethod($value): string
     {
         return "Wow!";
     }
