@@ -97,16 +97,19 @@ class ClassDependenciesCollector extends NodeVisitorAbstract
 
     private function recordExtendsUsage(Node $node)
     {
-        if ($node instanceof Node\Stmt\Class_ || $node instanceof Node\Stmt\Interface_) {
-            foreach (array_filter([$node->extends]) as $extends) {
-                $this->registerTypeAsDependency($extends);
-            }
+        if (
+            $node instanceof Node\Stmt\ClassLike
+            && isset($node->extends)
+            && $node->extends instanceof Node\Name\FullyQualified
+        ) {
+            $this->registerTypeAsDependency($node->extends);
         }
     }
 
     private function recordImplementsUsage(Node $node)
     {
         if ($node instanceof Node\Stmt\ClassLike) {
+            /** @phpstan-ignore-next-line */
             foreach (array_filter($node->implements ?? []) as $implements) {
                 $this->registerTypeAsDependency($implements);
             }
@@ -125,7 +128,7 @@ class ClassDependenciesCollector extends NodeVisitorAbstract
     private function recordClassPropertyTypesUsage(Node $node)
     {
         if ($node instanceof Node\Stmt\ClassLike) {
-            foreach ($node->getProperties() ?? [] as $property) {
+            foreach ($node->getProperties() as $property) {
                 if ($property->type instanceof Node\Name\FullyQualified) {
                     $this->registerTypeAsDependency($property->type);
                 }

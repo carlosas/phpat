@@ -4,8 +4,8 @@ namespace PhpAT\Parser\Ast\Traverser;
 
 use PhpAT\App\Configuration;
 use PhpAT\Parser\Ast\Collector\ClassCollector;
-use PhpAT\Parser\Ast\Collector\InterfaceCollector;
 use PhpAT\Parser\Ast\Collector\ClassDependenciesCollector;
+use PhpAT\Parser\Ast\Collector\InterfaceCollector;
 use PhpAT\Parser\Ast\Collector\ParentCollector;
 use PhpAT\Parser\Ast\Collector\TraitCollector;
 use PhpAT\Parser\Ast\Type\PhpStanDocTypeNodeResolver;
