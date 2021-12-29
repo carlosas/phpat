@@ -24,7 +24,7 @@ class ComposerParser
     }
 
     /**
-     * @return array<\SplFileInfo>
+     * @return array<string>
      */
     public function getFilesToAutoload(bool $includeDev = true): array
     {
@@ -59,7 +59,7 @@ class ComposerParser
             $filesFound = array_diff($filesFound, $this->getFiles($path));
         }
 
-        return $filesFound;
+        return array_unique(array_map(fn (\SplFileInfo $i) => $i->getPathname(), $filesFound));
     }
 
     /**
