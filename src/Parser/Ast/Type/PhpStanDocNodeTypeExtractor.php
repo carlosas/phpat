@@ -41,6 +41,32 @@ class PhpStanDocNodeTypeExtractor
     /**
      * @return array<TypeNode>
      */
+    public function getTypesFromOthersNode(Node $node): array
+    {
+        switch (true) {
+            case $node instanceof TypeNode:
+                $types[] = $node;
+                break;
+
+            case $node instanceof PhpDocNode:
+                foreach ($node->children as $c) {
+                    $types = $this->getTypesNodes($c);
+                }
+                break;
+
+            case $node instanceof MethodTagValueParameterNode:
+                if ($node->type !== null) {
+                    $types[] = $node->type;
+                }
+                break;
+        }
+
+        return $types ?? [];
+    }
+
+    /**
+     * @return array<TypeNode>
+     */
     private function getTypesFromTagNode(PhpDocTagNode $node): array
     {
         return $this->getTypesNodes($node->value);
@@ -80,31 +106,5 @@ class PhpStanDocNodeTypeExtractor
         }
 
         return $types;
-    }
-
-    /**
-     * @return array<TypeNode>
-     */
-    public function getTypesFromOthersNode(Node $node): array
-    {
-        switch (true) {
-            case $node instanceof TypeNode:
-                $types[] = $node;
-                break;
-
-            case $node instanceof PhpDocNode:
-                foreach ($node->children as $c) {
-                    $types = $this->getTypesNodes($c);
-                }
-                break;
-
-            case $node instanceof MethodTagValueParameterNode:
-                if ($node->type !== null) {
-                    $types[] = $node->type;
-                }
-                break;
-        }
-
-        return $types ?? [];
     }
 }

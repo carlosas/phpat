@@ -4,9 +4,9 @@ namespace Tests\PhpAT\unit\Selector;
 
 use PhpAT\Parser\Ast\ClassLike;
 use PhpAT\Parser\Ast\ComposerPackage;
-use PhpAT\Parser\Ast\SrcNode;
-use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\Ast\FullClassName;
+use PhpAT\Parser\Ast\ReferenceMap;
+use PhpAT\Parser\Ast\SrcNode;
 use PhpAT\Parser\Relation\Composition;
 use PhpAT\Parser\Relation\Dependency;
 use PhpAT\Parser\Relation\Inheritance;

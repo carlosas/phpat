@@ -3,8 +3,8 @@
 namespace Tests\PhpAT\architecture;
 
 use PhpAT\App\Cli\SingleCommandApplication;
-use PhpAT\Selector\Selector;
 use PhpAT\Rule\Rule;
+use PhpAT\Selector\Selector;
 use PhpAT\Test\ArchitectureTest;
 
 class OutputTest extends ArchitectureTest

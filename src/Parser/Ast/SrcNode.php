@@ -17,8 +17,8 @@ class SrcNode implements \JsonSerializable
         array $relations
     ) {
         $this->filePathname = $fileName;
-        $this->className = $className->getFQCN();
-        $this->relations = $relations;
+        $this->className    = $className->getFQCN();
+        $this->relations    = $relations;
     }
 
     public function getClassName(): string
@@ -42,7 +42,7 @@ class SrcNode implements \JsonSerializable
     public function jsonSerialize(): array
     {
         return [
-            'pathname' => $this->getFilePathname(),
+            'pathname'  => $this->getFilePathname(),
             'classname' => $this->getClassName(),
             'relations' => $this->getRelations(),
         ];

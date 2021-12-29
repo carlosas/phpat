@@ -6,13 +6,13 @@ use PhpAT\Parser\Ast\FullClassName;
 
 class TraverseContext
 {
-    private static string $pathname = '';
+    private static string $pathname      = '';
     private static ?FullClassName $class = null;
 
     public static function startFile(string $pathname)
     {
         self::$pathname = $pathname;
-        self::$class = null;
+        self::$class    = null;
     }
 
     public static function registerClass(FullClassName $className)

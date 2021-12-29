@@ -4,7 +4,6 @@ namespace PhpAT\Rule;
 
 use PhpAT\App\Configuration;
 use PhpAT\Rule\Event\BaselineObsoleteEvent;
-use PHPAT\EventDispatcher\EventDispatcher;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
 final class Baseline
@@ -16,10 +15,10 @@ final class Baseline
 
     public function __construct(Configuration $configuration, EventDispatcherInterface $eventDispatcher)
     {
-        $this->eventDispatcher = $eventDispatcher;
-        $path = $configuration->getBaselineFilePath();
-        $this->generateBaselinePath = $configuration->getGenerateBaselineIn();
-        $this->baselineErrors = is_file($path)
+        $this->eventDispatcher      = $eventDispatcher;
+        $path                       = $configuration->getBaselineFilePath();
+        $this->generateBaselinePath = $configuration->getGenerateBaseline();
+        $this->baselineErrors       = is_file($path)
             ? json_decode(file_get_contents($path), true)
             : [];
     }
@@ -30,7 +29,7 @@ final class Baseline
             return false;
         }
 
-        $error = array_search($error, $this->baselineErrors[$ruleName]);
+        $error = array_search($error, $this->baselineErrors[$ruleName], true);
         if ($error === false) {
             return false;
         }

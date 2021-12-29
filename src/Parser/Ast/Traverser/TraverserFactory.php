@@ -4,8 +4,8 @@ namespace PhpAT\Parser\Ast\Traverser;
 
 use PhpAT\App\Configuration;
 use PhpAT\Parser\Ast\Collector\ClassCollector;
+use PhpAT\Parser\Ast\Collector\ClassDependenciesCollector;
 use PhpAT\Parser\Ast\Collector\InterfaceCollector;
-use PhpAT\Parser\Ast\Collector\MethodDependenciesCollector;
 use PhpAT\Parser\Ast\Collector\ParentCollector;
 use PhpAT\Parser\Ast\Collector\TraitCollector;
 use PhpAT\Parser\Ast\Type\PhpStanDocTypeNodeResolver;
@@ -20,7 +20,7 @@ class TraverserFactory
         Configuration $configuration,
         PhpStanDocTypeNodeResolver $docTypeResolver
     ) {
-        $this->configuration = $configuration;
+        $this->configuration   = $configuration;
         $this->docTypeResolver = $docTypeResolver;
     }
 
@@ -38,7 +38,7 @@ class TraverserFactory
         $traverser->addVisitor($traitCollector);
         $parentCollector = new ParentCollector();
         $traverser->addVisitor($parentCollector);
-        $dependencyCollector = new MethodDependenciesCollector(
+        $dependencyCollector = new ClassDependenciesCollector(
             $this->configuration,
             $this->docTypeResolver,
             $nameResolver->getNameContext()

@@ -6,11 +6,11 @@ namespace PhpAT\App;
 
 class ErrorStorage
 {
-    private static array $warnings = [];
-    private static array $errors = [];
-    private static int $totalErrors = 0;
+    private static array $warnings         = [];
+    private static array $errors           = [];
+    private static int $totalErrors        = 0;
     private static bool $lastRuleHadErrors = false;
-    private static float $startTime = 0;
+    private static float $startTime        = 0;
 
     public static function setStartTime(float $time): void
     {
@@ -29,14 +29,14 @@ class ErrorStorage
 
     public static function addRuleError(string $message): void
     {
-        self::$errors[] = $message;
+        self::$errors[]          = $message;
         self::$lastRuleHadErrors = true;
         self::$totalErrors += 1;
     }
 
     public static function flushWarnings(): array
     {
-        $w = self::$warnings;
+        $w              = self::$warnings;
         self::$warnings = [];
 
         return $w;
@@ -44,8 +44,8 @@ class ErrorStorage
 
     public static function flushRuleErrors(): array
     {
-        $e = self::$errors;
-        self::$errors = [];
+        $e                       = self::$errors;
+        self::$errors            = [];
         self::$lastRuleHadErrors = false;
 
         return $e;

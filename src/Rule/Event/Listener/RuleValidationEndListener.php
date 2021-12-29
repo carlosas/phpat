@@ -18,7 +18,7 @@ class RuleValidationEndListener implements EventListenerInterface
 
     public function __construct(OutputInterface $output, Baseline $baseline)
     {
-        $this->output = $output;
+        $this->output   = $output;
         $this->baseline = $baseline;
     }
 

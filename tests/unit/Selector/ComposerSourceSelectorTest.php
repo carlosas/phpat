@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Tests\PhpAT\unit\Selector;
@@ -40,11 +41,11 @@ class ComposerSourceSelectorTest extends TestCase
      */
     private function select(bool $devMode): array
     {
-        $selector = new ComposerSourceSelector('main', $devMode);
+        $selector            = new ComposerSourceSelector('main', $devMode);
         $eventDispatcherMock = $this->createMock(EventDispatcherInterface::class);
         $selector->injectDependencies([EventDispatcherInterface::class => $eventDispatcherMock]);
         $referenceMapMock = $this->createMock(ReferenceMap::class);
-        $srcNode = $this->createMock(SrcNode::class);
+        $srcNode          = $this->createMock(SrcNode::class);
         $srcNode->method('getClassName')->willReturn('Source\Namespace\Foo');
         $referenceMapMock->method('getSrcNodes')->willReturn(['Source\Namespace\Foo' => $srcNode]);
         $referenceMapMock->method('getComposerPackages')->willReturn(

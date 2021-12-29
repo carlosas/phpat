@@ -23,7 +23,8 @@ class PhpType
         'resource',
         'null',
         'true',
-        'false'
+        'false',
+        'never'
     ];
 
     public const SPECIAL_TYPES = [

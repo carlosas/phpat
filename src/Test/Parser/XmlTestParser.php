@@ -20,15 +20,15 @@ class XmlTestParser
 
     public function __construct(RuleBuilder $ruleBuilder, EventDispatcherInterface $eventDispatcher)
     {
-        $this->ruleBuilder = $ruleBuilder;
+        $this->ruleBuilder     = $ruleBuilder;
         $this->eventDispatcher = $eventDispatcher;
     }
 
     public function parseFile(string $pathToFile): ArchitectureMarkupTest
     {
         $fileContents = simplexml_load_file($pathToFile);
-        $rules = $fileContents->rule;
-        $methods = [];
+        $rules        = $fileContents->rule;
+        $methods      = [];
         foreach ($rules as $rule) {
             $methods[] = trim((string) $rule['name']);
         }
@@ -40,7 +40,7 @@ class XmlTestParser
         );
 
         foreach ($rules as $rule) {
-            $parsedRule = $this->parseRule($rule);
+            $parsedRule                            = $this->parseRule($rule);
             $class->{trim((string) $rule['name'])} = function () use ($parsedRule) {
                 return $parsedRule;
             };
@@ -50,14 +50,14 @@ class XmlTestParser
 
     private function parseRule(\SimpleXMLElement $rule): Rule
     {
-        if ($rule->classes->count() != 2) {
+        if ($rule->classes->count() !== 2) {
             $this->eventDispatcher->dispatch(
                 new FatalErrorEvent('Rule must have 2 <classes>')
             );
             throw new FatalErrorException();
         }
 
-        if ($rule->assert->count() != 1) {
+        if ($rule->assert->count() !== 1) {
             $this->eventDispatcher->dispatch(
                 new FatalErrorEvent('Rule must have 1 <assert>')
             );
@@ -99,10 +99,10 @@ class XmlTestParser
 
     private function buildAssertion(string $assertion): void
     {
-        $reflector = new \ReflectionClass($this->ruleBuilder);
+        $reflector       = new \ReflectionClass($this->ruleBuilder);
         $methodReflector = $reflector->getMethod($assertion);
         if ($methodReflector->isPublic() && $methodReflector->getNumberOfParameters() === 0) {
-            $this->ruleBuilder->$assertion();
+            $this->ruleBuilder->{$assertion}();
         } else {
             $this->eventDispatcher->dispatch(
                 new FatalErrorEvent('Assertion ' . $assertion . 'can not have parameters')
@@ -113,13 +113,12 @@ class XmlTestParser
 
     private function buildSelector(string $selector, string $selectorRule): SelectorInterface
     {
-        $reflector = new \ReflectionClass(Selector::class);
+        $reflector       = new \ReflectionClass(Selector::class);
         $methodReflector = $reflector->getMethod($selector);
         if ($methodReflector->isStatic() && $methodReflector->isPublic()) {
             return Selector::$selector($selectorRule);
-        } else {
-            $this->eventDispatcher->dispatch(new FatalErrorEvent('Selector ' . $selector . 'is not a static method'));
-            throw new FatalErrorException();
         }
+        $this->eventDispatcher->dispatch(new FatalErrorEvent('Selector ' . $selector . 'is not a static method'));
+        throw new FatalErrorException();
     }
 }

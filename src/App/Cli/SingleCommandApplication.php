@@ -13,8 +13,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 class SingleCommandApplication extends Command
 {
     private string $version = 'UNKNOWN';
-    private bool $autoExit = false;
-    private bool $running = false;
+    private bool $autoExit  = false;
+    private bool $running   = false;
 
     public function setVersion(string $version): self
     {
@@ -39,9 +39,9 @@ class SingleCommandApplication extends Command
         try {
             $return = $application->run($input, $output);
         } catch (\Throwable $e) {
-            $redBgWhiteText = "\033[41m\033[1;37m";
+            $redBgWhiteText  = "\033[41m\033[1;37m";
             $formattingReset = "\033[0m";
-            $message = 'An error occurred while running phpat. "
+            $message         = 'An error occurred while running phpat. "
                 . Please consider opening an issue: http://github.com/carlosas/phpat/issues';
             fwrite(
                 STDERR,

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace PhpAT\Rule\Assertion\Composition;
 
-use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\Ast\ClassLike;
+use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Rule\Assertion\AbstractAssertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
@@ -46,8 +46,8 @@ class MustImplement extends AbstractAssertion
 
     protected function dispatchResult(bool $result, string $fqcnOrigin, string $fqcnDestination): void
     {
-        $event = $this->getEventClassName($result);
-        $action = $result ? ' implements ' : ' does not implement ';
+        $event   = $this->getEventClassName($result);
+        $action  = $result ? ' implements ' : ' does not implement ';
         $message = $fqcnOrigin . $action . $fqcnDestination;
 
         $this->eventDispatcher->dispatch(new $event($message));

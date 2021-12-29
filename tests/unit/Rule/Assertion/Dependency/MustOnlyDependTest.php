@@ -8,11 +8,6 @@ use Tests\PhpAT\unit\Rule\Assertion\AbstractAssertionTestCase;
 
 class MustOnlyDependTest extends AbstractAssertionTestCase
 {
-    protected function getTestedClassName(): string
-    {
-        return MustOnlyDepend::class;
-    }
-
     public function dataProvider(): array
     {
         return [
@@ -57,5 +52,9 @@ class MustOnlyDependTest extends AbstractAssertionTestCase
                 [false, false, false]
             ],
         ];
+    }
+    protected function getTestedClassName(): string
+    {
+        return MustOnlyDepend::class;
     }
 }

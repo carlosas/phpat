@@ -1,6 +1,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.8.3
+* Fix class property types not caught as dependencies
+* Support PHP 8.1 features:
+  * Enums
+  * _never_ type
+  * Intersection types
+
+## 0.8.2
+* Add Symfony 6 compatibility
+
 ## 0.8.1
 * Fix exception when no files found in path selector
 * Improve RegexClassName match performance

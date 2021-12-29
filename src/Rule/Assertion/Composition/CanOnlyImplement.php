@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace PhpAT\Rule\Assertion\Composition;
 
-use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\Ast\ClassLike;
+use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Rule\Assertion\AbstractAssertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
@@ -31,7 +31,7 @@ class CanOnlyImplement extends AbstractAssertion
 
         foreach ($matchingNodes as $node) {
             $interfaces = $this->getInterfaces($node, $map);
-            $success = true;
+            $success    = true;
             foreach ($interfaces as $interface) {
                 $result = $this->relationMatchesDestinations($interface, $included, $excluded);
                 if (!$result->matched()) {

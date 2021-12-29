@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace PhpAT\Rule;
 
+use PhpAT\Rule\Assertion\AbstractAssertion;
 use PhpAT\Rule\Assertion\Composition;
 use PhpAT\Rule\Assertion\Dependency;
 use PhpAT\Rule\Assertion\Inheritance;
 use PhpAT\Rule\Assertion\Mixin;
-use PhpAT\Rule\Assertion\AbstractAssertion;
 use PhpAT\Selector\SelectorInterface;
 use Psr\Container\ContainerInterface;
 
@@ -142,13 +142,6 @@ class RuleBuilder
         return $this->setAssertion(Mixin\CanOnlyInclude::class);
     }
 
-    private function setAssertion(string $assertion): self
-    {
-        $this->assertion = $this->container->get($assertion);
-
-        return $this;
-    }
-
     public function build(): Rule
     {
         $rule = new Rule(
@@ -163,12 +156,19 @@ class RuleBuilder
         return $rule;
     }
 
+    private function setAssertion(string $assertion): self
+    {
+        $this->assertion = $this->container->get($assertion);
+
+        return $this;
+    }
+
     private function resetBuilder(): void
     {
-        $this->origin = [];
-        $this->originExclude = [];
-        $this->destination = [];
+        $this->origin             = [];
+        $this->originExclude      = [];
+        $this->destination        = [];
         $this->destinationExclude = [];
-        $this->assertion = null;
+        $this->assertion          = null;
     }
 }

@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Tests\PhpAT\unit\Selector;
+
 use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Parser\Ast\ClassLike;
 use PhpAT\Parser\Ast\ComposerPackage;
@@ -55,7 +57,7 @@ class ComposerDependencySelectorTest extends TestCase
      */
     private function select(bool $devMode): array
     {
-        $selector = new ComposerDependencySelector('main', $devMode);
+        $selector            = new ComposerDependencySelector('main', $devMode);
         $eventDispatcherMock = $this->createMock(EventDispatcherInterface::class);
         $selector->injectDependencies([EventDispatcherInterface::class => $eventDispatcherMock]);
         $referenceMapMock = $this->createMock(ReferenceMap::class);

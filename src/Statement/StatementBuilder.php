@@ -6,11 +6,11 @@ namespace PhpAT\Statement;
 
 use PhpAT\App\Configuration;
 use PhpAT\App\Event\WarningEvent;
-use PhpAT\Parser\Ast\SrcNode;
-use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\Ast\ClassLike;
 use PhpAT\Parser\Ast\FullClassName;
+use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\Ast\RegexClassName;
+use PhpAT\Parser\Ast\SrcNode;
 use PhpAT\Rule\Assertion\AbstractAssertion;
 use PhpAT\Rule\Rule;
 use PhpAT\Selector\PathSelector;
@@ -33,8 +33,8 @@ class StatementBuilder
         Configuration $configuration
     ) {
         $this->selectorResolver = $selectorResolver;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->configuration = $configuration;
+        $this->eventDispatcher  = $eventDispatcher;
+        $this->configuration    = $configuration;
     }
 
     /**
@@ -42,7 +42,7 @@ class StatementBuilder
      */
     public function build(Rule $rule, ReferenceMap $map): \Generator
     {
-        $origins = $this->selectOrigins($rule->getOrigin(), $rule->getOriginExcluded(), $map);
+        $origins      = $this->selectOrigins($rule->getOrigin(), $rule->getOriginExcluded(), $map);
         $destinations = $this->selectDestinations(
             $rule->getDestination(),
             $rule->getAssertion(),
@@ -65,8 +65,8 @@ class StatementBuilder
     }
 
     /**
-     * @return array<ClassLike>
      * @throws \Exception
+     * @return array<ClassLike>
      */
     private function selectOrigins(array $includedInRule, array $excludedInRule, ReferenceMap $map): array
     {
@@ -122,8 +122,8 @@ class StatementBuilder
 
     /**
      * @param array<SelectorInterface> $selectors
-     * @return array<ClassLike>
      * @throws \Exception
+     * @return array<ClassLike>
      */
     private function selectDestinations(
         array $selectors,
@@ -134,7 +134,7 @@ class StatementBuilder
         foreach ($selectors as $s) {
             if ($this->isRegex($s->getParameter()) && !$assertion->acceptsRegex()) {
                 $assertionName = substr(get_class($assertion), strrpos(get_class($assertion), '\\') + 1);
-                $message = $assertionName . ' can not assert regex selectors. Ignoring: ' . $s->getParameter();
+                $message       = $assertionName . ' can not assert regex selectors. Ignoring: ' . $s->getParameter();
                 $this->eventDispatcher->dispatch(new WarningEvent($message));
                 continue;
             }

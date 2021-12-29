@@ -32,10 +32,10 @@ class Rule
         array $destination,
         array $destinationExcluded
     ) {
-        $this->origin = $origin;
-        $this->originExcluded = $originExcluded;
-        $this->assertion = $assertion;
-        $this->destination = $destination;
+        $this->origin              = $origin;
+        $this->originExcluded      = $originExcluded;
+        $this->assertion           = $assertion;
+        $this->destination         = $destination;
         $this->destinationExcluded = $destinationExcluded;
     }
 

@@ -8,11 +8,6 @@ use Tests\PhpAT\unit\Rule\Assertion\AbstractAssertionTestCase;
 
 class CanOnlyIncludeTest extends AbstractAssertionTestCase
 {
-    protected function getTestedClassName(): string
-    {
-        return CanOnlyInclude::class;
-    }
-
     public function dataProvider(): array
     {
         return [
@@ -42,5 +37,9 @@ class CanOnlyIncludeTest extends AbstractAssertionTestCase
                 [false]
             ],
         ];
+    }
+    protected function getTestedClassName(): string
+    {
+        return CanOnlyInclude::class;
     }
 }
