@@ -33,8 +33,8 @@ class StatementBuilder
         Configuration $configuration
     ) {
         $this->selectorResolver = $selectorResolver;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->configuration = $configuration;
+        $this->eventDispatcher  = $eventDispatcher;
+        $this->configuration    = $configuration;
     }
 
     /**
@@ -42,7 +42,7 @@ class StatementBuilder
      */
     public function build(Rule $rule, ReferenceMap $map): \Generator
     {
-        $origins = $this->selectOrigins($rule->getOrigin(), $rule->getOriginExcluded(), $map);
+        $origins      = $this->selectOrigins($rule->getOrigin(), $rule->getOriginExcluded(), $map);
         $destinations = $this->selectDestinations(
             $rule->getDestination(),
             $rule->getAssertion(),
@@ -134,7 +134,7 @@ class StatementBuilder
         foreach ($selectors as $s) {
             if ($this->isRegex($s->getParameter()) && !$assertion->acceptsRegex()) {
                 $assertionName = substr(get_class($assertion), strrpos(get_class($assertion), '\\') + 1);
-                $message = $assertionName . ' can not assert regex selectors. Ignoring: ' . $s->getParameter();
+                $message       = $assertionName . ' can not assert regex selectors. Ignoring: ' . $s->getParameter();
                 $this->eventDispatcher->dispatch(new WarningEvent($message));
                 continue;
             }

@@ -48,8 +48,8 @@ class MustDepend extends AbstractAssertion
 
     protected function dispatchResult(bool $result, string $fqcnOrigin, string $fqcnDestination): void
     {
-        $event = $this->getEventClassName($result);
-        $action = $result ? ' depends on ' : ' does not depend on ';
+        $event   = $this->getEventClassName($result);
+        $action  = $result ? ' depends on ' : ' does not depend on ';
         $message = $fqcnOrigin . $action . $fqcnDestination;
 
         $this->eventDispatcher->dispatch(new $event($message));

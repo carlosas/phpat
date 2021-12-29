@@ -58,8 +58,8 @@ class MustOnlyInclude extends AbstractAssertion
 
     private function dispatchResult(bool $includes, string $fqcnOrigin, string $fqcnDestination): void
     {
-        $action = $includes ? ' includes ' : ' does not include ';
-        $event = $includes ? StatementValidEvent::class : StatementNotValidEvent::class;
+        $action  = $includes ? ' includes ' : ' does not include ';
+        $event   = $includes ? StatementValidEvent::class : StatementNotValidEvent::class;
         $message = $fqcnOrigin . $action . $fqcnDestination;
 
         $this->eventDispatcher->dispatch(new $event($message));

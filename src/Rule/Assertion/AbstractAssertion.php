@@ -22,7 +22,7 @@ abstract class AbstractAssertion
 
     public function __construct(EventDispatcherInterface $eventDispatcher, Configuration $configuration)
     {
-        $this->configuration = $configuration;
+        $this->configuration   = $configuration;
         $this->eventDispatcher = $eventDispatcher;
     }
 

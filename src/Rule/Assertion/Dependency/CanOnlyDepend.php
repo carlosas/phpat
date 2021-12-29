@@ -31,7 +31,7 @@ class CanOnlyDepend extends AbstractAssertion
 
         foreach ($matchingNodes as $node) {
             $dependencies = $this->getDependencies($node, $map);
-            $success = true;
+            $success      = true;
             foreach ($dependencies as $dependency) {
                 $result = $this->relationMatchesDestinations($dependency, $included, $excluded);
                 if (!$result->matched()) {

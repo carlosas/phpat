@@ -32,12 +32,12 @@ class MapBuilder
         ComposerFileParser $composerFileParser,
         Configuration $configuration
     ) {
-        $this->finder = $finder;
-        $this->parser = $parser;
-        $this->traverserFactory = $traverserFactory;
-        $this->eventDispatcher = $eventDispatcher;
+        $this->finder             = $finder;
+        $this->parser             = $parser;
+        $this->traverserFactory   = $traverserFactory;
+        $this->eventDispatcher    = $eventDispatcher;
         $this->composerFileParser = $composerFileParser;
-        $this->configuration = $configuration;
+        $this->configuration      = $configuration;
     }
 
     public function build(): ReferenceMap
@@ -58,7 +58,7 @@ class MapBuilder
 
         foreach ($files as $file) {
             $pathname = PathNormalizer::normalizePathname($file->getPathname());
-            $parsed = $this->parser->parse(file_get_contents($pathname));
+            $parsed   = $this->parser->parse(file_get_contents($pathname));
             TraverseContext::startFile($pathname);
             $traverser->traverse($parsed);
         }

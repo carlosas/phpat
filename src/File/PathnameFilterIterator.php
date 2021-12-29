@@ -6,7 +6,7 @@ namespace PhpAT\File;
 
 class PathnameFilterIterator extends \FilterIterator
 {
-    protected array $matchRegexps = [];
+    protected array $matchRegexps   = [];
     protected array $noMatchRegexps = [];
 
     public function __construct(\Iterator $iterator, array $matchPatterns, array $noMatchPatterns)

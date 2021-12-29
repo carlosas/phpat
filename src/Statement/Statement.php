@@ -27,9 +27,9 @@ class Statement
         array $destinations,
         array $excludedDestinations
     ) {
-        $this->origin = $origin;
-        $this->assertion = $assertion;
-        $this->destinations = $destinations;
+        $this->origin               = $origin;
+        $this->assertion            = $assertion;
+        $this->destinations         = $destinations;
         $this->excludedDestinations = $excludedDestinations;
     }
 

@@ -57,8 +57,8 @@ class MustOnlyImplement extends AbstractAssertion
 
     private function dispatchResult(bool $implements, string $fqcnOrigin, string $fqcnDestination): void
     {
-        $action = $implements ? ' implements ' : ' does not implement ';
-        $event = $implements ? StatementValidEvent::class : StatementNotValidEvent::class;
+        $action  = $implements ? ' implements ' : ' does not implement ';
+        $event   = $implements ? StatementValidEvent::class : StatementNotValidEvent::class;
         $message = $fqcnOrigin . $action . $fqcnDestination;
 
         $this->eventDispatcher->dispatch(new $event($message));

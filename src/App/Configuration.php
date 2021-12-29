@@ -34,17 +34,17 @@ class Configuration
     ) {
         $this->rootPath = $this->getRootPath();
 
-        $this->srcPath = $this->normalizePath($srcPath);
-        $this->srcIncluded = $srcIncluded;
-        $this->srcExcluded = $srcExcluded;
+        $this->srcPath               = $this->normalizePath($srcPath);
+        $this->srcIncluded           = $srcIncluded;
+        $this->srcExcluded           = $srcExcluded;
         $this->composerConfiguration = $composerConfiguration;
-        $this->testsPath = $testsPath;
-        $this->baselineFilePath = $this->normalizePath($baselineFilePath);
-        $this->verbosity = $verbosity;
-        $this->phpVersion = $phpVersion;
-        $this->generateBaselineIn = is_string($generateBaselineIn) ? $this->normalizePath($generateBaselineIn) : null;
-        $this->ignoreDocBlocks = $ignoreDocBlocks;
-        $this->ignorePhpExtensions = $ignorePhpExtensions;
+        $this->testsPath             = $testsPath;
+        $this->baselineFilePath      = $this->normalizePath($baselineFilePath);
+        $this->verbosity             = $verbosity;
+        $this->phpVersion            = $phpVersion;
+        $this->generateBaselineIn    = is_string($generateBaselineIn) ? $this->normalizePath($generateBaselineIn) : null;
+        $this->ignoreDocBlocks       = $ignoreDocBlocks;
+        $this->ignorePhpExtensions   = $ignorePhpExtensions;
     }
 
     public function getSrcPath(): string

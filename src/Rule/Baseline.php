@@ -16,10 +16,10 @@ final class Baseline
 
     public function __construct(Configuration $configuration, EventDispatcherInterface $eventDispatcher)
     {
-        $this->eventDispatcher = $eventDispatcher;
-        $path = $configuration->getBaselineFilePath();
+        $this->eventDispatcher      = $eventDispatcher;
+        $path                       = $configuration->getBaselineFilePath();
         $this->generateBaselinePath = $configuration->getGenerateBaselineIn();
-        $this->baselineErrors = is_file($path)
+        $this->baselineErrors       = is_file($path)
             ? json_decode(file_get_contents($path), true)
             : [];
     }

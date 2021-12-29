@@ -17,9 +17,9 @@ final class ClassmapItem
 
     public function __construct(string $pathname, string $classType, ?int $flag)
     {
-        $this->pathname = $pathname;
+        $this->pathname  = $pathname;
         $this->classType = $classType;
-        $this->flag = $flag;
+        $this->flag      = $flag;
     }
 
     public function addDependency(ClassmapRelation $relation): void

@@ -165,10 +165,10 @@ class RuleBuilder
 
     private function resetBuilder(): void
     {
-        $this->origin = [];
-        $this->originExclude = [];
-        $this->destination = [];
+        $this->origin             = [];
+        $this->originExclude      = [];
+        $this->destination        = [];
         $this->destinationExclude = [];
-        $this->assertion = null;
+        $this->assertion          = null;
     }
 }

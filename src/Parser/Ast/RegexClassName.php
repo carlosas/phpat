@@ -10,7 +10,7 @@ class RegexClassName implements ClassLike
     public function __construct(string $expression)
     {
         $this->originalExpression = $expression;
-        $this->regex = '/^'
+        $this->regex              = '/^'
             . str_replace(
                 '*',
                 '.*',

@@ -19,7 +19,7 @@ abstract class ArchitectureTest implements TestInterface
 
     final public function __construct(RuleBuilder $builder, EventDispatcherInterface $eventDispatcher)
     {
-        $this->newRule = $builder;
+        $this->newRule         = $builder;
         $this->eventDispatcher = $eventDispatcher;
     }
 

@@ -59,8 +59,8 @@ class MustOnlyDepend extends AbstractAssertion
 
     private function dispatchResult(bool $depends, string $fqcnOrigin, string $fqcnDestination): void
     {
-        $action = $depends ? ' depends on ' : ' does not depend on ';
-        $event = $depends ? StatementValidEvent::class : StatementNotValidEvent::class;
+        $action  = $depends ? ' depends on ' : ' does not depend on ';
+        $event   = $depends ? StatementValidEvent::class : StatementNotValidEvent::class;
         $message = $fqcnOrigin . $action . $fqcnDestination;
 
         $this->eventDispatcher->dispatch(new $event($message));

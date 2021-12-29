@@ -34,9 +34,9 @@ class MethodDependenciesCollector extends NodeVisitorAbstract
         PhpStanDocTypeNodeResolver $docTypeResolver,
         NameContext $context
     ) {
-        $this->configuration = $configuration;
+        $this->configuration   = $configuration;
         $this->docTypeResolver = $docTypeResolver;
-        $this->context = $context;
+        $this->context         = $context;
     }
 
     /**

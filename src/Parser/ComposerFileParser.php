@@ -15,8 +15,8 @@ class ComposerFileParser
      */
     public function parse(string $composerFilePath, string $lockFilePath): self
     {
-        $this->composerFile = json_decode(file_get_contents($composerFilePath), true);
-        $this->lockFile = json_decode(file_get_contents($lockFilePath), true);
+        $this->composerFile   = json_decode(file_get_contents($composerFilePath), true);
+        $this->lockFile       = json_decode(file_get_contents($lockFilePath), true);
         $this->lockedPackages = $this->getPackagesFromLockFile();
 
         return $this;
@@ -52,7 +52,7 @@ class ComposerFileParser
     public function getDirectDependencies(bool $dev): array
     {
         $required = [];
-        $key = $dev ? 'require-dev' : 'require';
+        $key      = $dev ? 'require-dev' : 'require';
         foreach (array_keys($this->composerFile[$key] ?? []) as $packageName) {
             $required[] = (string) $packageName;
         }
@@ -84,11 +84,11 @@ class ComposerFileParser
     private function flattenDependencies(array $topLevelRequirements): array
     {
         $required = [];
-        $toCheck = $topLevelRequirements;
+        $toCheck  = $topLevelRequirements;
 
         while ($toCheck !== []) {
             $packageName = array_pop($toCheck);
-            $package = $this->lockedPackages[ $packageName ] ?? null;
+            $package     = $this->lockedPackages[ $packageName ] ?? null;
             if ($package === null) {
                 continue;
             }
@@ -124,7 +124,7 @@ class ComposerFileParser
 
     private function extractNamespaces(array $package, bool $dev): array
     {
-        $key = $dev ? 'autoload-dev' : 'autoload';
+        $key        = $dev ? 'autoload-dev' : 'autoload';
         $namespaces = [];
         foreach (array_keys($package[$key]['psr-0'] ?? []) as $namespace) {
             $namespaces[] = (string) $namespace;

@@ -48,8 +48,8 @@ class MustInclude extends AbstractAssertion
 
     private function dispatchResult(bool $result, string $fqcnOrigin, string $fqcnDestination): void
     {
-        $action = $result ? ' includes ' : ' does not include ';
-        $event = $this->getEventClassName($result);
+        $action  = $result ? ' includes ' : ' does not include ';
+        $event   = $this->getEventClassName($result);
         $message = $fqcnOrigin . $action . $fqcnDestination;
 
         $this->eventDispatcher->dispatch(new $event($message));

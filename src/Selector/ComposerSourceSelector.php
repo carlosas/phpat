@@ -28,7 +28,7 @@ class ComposerSourceSelector implements SelectorInterface
     public function __construct(string $packageAlias, bool $devMode)
     {
         $this->packageAlias = $packageAlias;
-        $this->devMode = $devMode;
+        $this->devMode      = $devMode;
     }
 
     public function getDependencies(): array
@@ -59,12 +59,12 @@ class ComposerSourceSelector implements SelectorInterface
             return [];
         }
 
-        $regexs = $this->devMode ? $package->getDevAutoload() : $package->getAutoload();
+        $regexs               = $this->devMode ? $package->getDevAutoload() : $package->getAutoload();
         $regexsWithSrcClasses = [];
         foreach ($this->map->getSrcNodes() as $srcNode) {
             foreach ($regexs as $regex) {
                 if ($this->matchesPattern($srcNode->getClassName(), $regex->toString())) {
-                    $result[] = FullClassName::createFromFQCN($srcNode->getClassName());
+                    $result[]                                 = FullClassName::createFromFQCN($srcNode->getClassName());
                     $regexsWithSrcClasses[$regex->toString()] = $regex;
                 }
             }

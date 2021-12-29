@@ -17,14 +17,14 @@ class SuiteEndListener implements EventListenerInterface
 
     public function __construct(OutputInterface $output, Configuration $configuration)
     {
-        $this->output = $output;
+        $this->output             = $output;
         $this->generatingBaseline = $configuration->getGenerateBaselineIn() !== null;
     }
 
     public function __invoke(EventInterface $event)
     {
         $errors = ErrorStorage::getTotalErrors();
-        $time = microtime(true) - ErrorStorage::getStartTime();
+        $time   = microtime(true) - ErrorStorage::getStartTime();
 
         $this->output->writeln('', OutputInterface::VERBOSITY_NORMAL);
 

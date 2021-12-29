@@ -20,15 +20,15 @@ class XmlTestParser
 
     public function __construct(RuleBuilder $ruleBuilder, EventDispatcherInterface $eventDispatcher)
     {
-        $this->ruleBuilder = $ruleBuilder;
+        $this->ruleBuilder     = $ruleBuilder;
         $this->eventDispatcher = $eventDispatcher;
     }
 
     public function parseFile(string $pathToFile): ArchitectureMarkupTest
     {
         $fileContents = simplexml_load_file($pathToFile);
-        $rules = $fileContents->rule;
-        $methods = [];
+        $rules        = $fileContents->rule;
+        $methods      = [];
         foreach ($rules as $rule) {
             $methods[] = trim((string) $rule['name']);
         }
@@ -40,7 +40,7 @@ class XmlTestParser
         );
 
         foreach ($rules as $rule) {
-            $parsedRule = $this->parseRule($rule);
+            $parsedRule                            = $this->parseRule($rule);
             $class->{trim((string) $rule['name'])} = function () use ($parsedRule) {
                 return $parsedRule;
             };
@@ -99,7 +99,7 @@ class XmlTestParser
 
     private function buildAssertion(string $assertion): void
     {
-        $reflector = new \ReflectionClass($this->ruleBuilder);
+        $reflector       = new \ReflectionClass($this->ruleBuilder);
         $methodReflector = $reflector->getMethod($assertion);
         if ($methodReflector->isPublic() && $methodReflector->getNumberOfParameters() === 0) {
             $this->ruleBuilder->$assertion();
@@ -113,7 +113,7 @@ class XmlTestParser
 
     private function buildSelector(string $selector, string $selectorRule): SelectorInterface
     {
-        $reflector = new \ReflectionClass(Selector::class);
+        $reflector       = new \ReflectionClass(Selector::class);
         $methodReflector = $reflector->getMethod($selector);
         if ($methodReflector->isStatic() && $methodReflector->isPublic()) {
             return Selector::$selector($selectorRule);

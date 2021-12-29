@@ -52,8 +52,8 @@ class MustExtend extends AbstractAssertion
 
     protected function dispatchResult(bool $result, string $fqcnOrigin, string $fqcnDestination): void
     {
-        $action = $result ? ' extends ' : ' does not extend ';
-        $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
+        $action  = $result ? ' extends ' : ' does not extend ';
+        $event   = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
         $message = $fqcnOrigin . $action . $fqcnDestination;
 
         $this->eventDispatcher->dispatch(new $event($message));

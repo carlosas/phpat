@@ -24,7 +24,7 @@ class ComposerDependencySelector implements SelectorInterface
     public function __construct(string $packageAlias, bool $devMode = false)
     {
         $this->packageAlias = $packageAlias;
-        $this->devMode = $devMode;
+        $this->devMode      = $devMode;
     }
 
     public function getDependencies(): array

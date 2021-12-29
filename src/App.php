@@ -26,11 +26,11 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class App extends SingleCommandApplication
 {
-    private ?TestExtractor $extractor = null;
-    private ?StatementBuilder $statementBuilder = null;
+    private ?TestExtractor $extractor             = null;
+    private ?StatementBuilder $statementBuilder   = null;
     private ?EventDispatcherInterface $dispatcher = null;
-    private ?MapBuilder $mapBuilder = null;
-    private ?Baseline $baseline = null;
+    private ?MapBuilder $mapBuilder               = null;
+    private ?Baseline $baseline                   = null;
 
     protected function configure()
     {
@@ -92,11 +92,11 @@ class App extends SingleCommandApplication
         );
         $container = $provider->register();
 
-        $this->extractor = $container->get(TestExtractor::class);
+        $this->extractor        = $container->get(TestExtractor::class);
         $this->statementBuilder = $container->get(StatementBuilder::class);
-        $this->dispatcher = $container->get(EventDispatcherInterface::class);
-        $this->mapBuilder = $container->get(MapBuilder::class);
-        $this->baseline = $container->get(Baseline::class);
+        $this->dispatcher       = $container->get(EventDispatcherInterface::class);
+        $this->mapBuilder       = $container->get(MapBuilder::class);
+        $this->baseline         = $container->get(Baseline::class);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

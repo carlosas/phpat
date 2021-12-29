@@ -51,7 +51,7 @@ abstract class AbstractAssertionTestCase extends TestCase
         $class = new $className($eventDispatcherMock, $configurationMock);
 
         foreach ($expectedEvents as $valid) {
-            $eventType = $valid ? StatementValidEvent::class : StatementNotValidEvent::class;
+            $eventType     = $valid ? StatementValidEvent::class : StatementNotValidEvent::class;
             $consecutive[] = [$this->isInstanceOf($eventType)];
         }
 

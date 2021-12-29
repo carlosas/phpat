@@ -16,8 +16,8 @@ class MustNotExtend extends MustExtend
 
     protected function dispatchResult(bool $result, string $fqcnOrigin, string $fqcnDestination): void
     {
-        $action = $result ? ' extends ' : ' does not extend ';
-        $event = $result ? StatementNotValidEvent::class : StatementValidEvent::class;
+        $action  = $result ? ' extends ' : ' does not extend ';
+        $event   = $result ? StatementNotValidEvent::class : StatementValidEvent::class;
         $message = $fqcnOrigin . $action . $fqcnDestination;
 
         $this->eventDispatcher->dispatch(new $event($message));

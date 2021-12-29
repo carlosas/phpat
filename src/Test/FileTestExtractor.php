@@ -26,11 +26,11 @@ class FileTestExtractor implements TestExtractor
         XmlTestParser $xmlTestParser,
         Configuration $configuration
     ) {
-        $this->ruleBuilder = $ruleBuilder;
+        $this->ruleBuilder     = $ruleBuilder;
         $this->eventDispatcher = $eventDispatcher;
-        $this->yamlTestParser = $yamlTestParser;
-        $this->xmlTestParser = $xmlTestParser;
-        $this->testPath = getcwd() . '/' . $configuration->getTestsPath();
+        $this->yamlTestParser  = $yamlTestParser;
+        $this->xmlTestParser   = $xmlTestParser;
+        $this->testPath        = getcwd() . '/' . $configuration->getTestsPath();
     }
 
     public function execute(): ArchitectureTestCollection

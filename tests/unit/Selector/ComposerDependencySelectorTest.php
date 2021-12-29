@@ -57,7 +57,7 @@ class ComposerDependencySelectorTest extends TestCase
      */
     private function select(bool $devMode): array
     {
-        $selector = new ComposerDependencySelector('main', $devMode);
+        $selector            = new ComposerDependencySelector('main', $devMode);
         $eventDispatcherMock = $this->createMock(EventDispatcherInterface::class);
         $selector->injectDependencies([EventDispatcherInterface::class => $eventDispatcherMock]);
         $referenceMapMock = $this->createMock(ReferenceMap::class);

@@ -31,7 +31,7 @@ class CanOnlyInclude extends AbstractAssertion
         $matchingNodes = $this->filterMatchingNodes($origin, $map);
 
         foreach ($matchingNodes as $node) {
-            $traits = $this->getTraits($node, $map);
+            $traits  = $this->getTraits($node, $map);
             $success = true;
             foreach ($traits as $trait) {
                 $result = $this->relationMatchesDestinations($trait, $included, $excluded);
