@@ -15,12 +15,12 @@ use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 
 /**
- * Class MethodDependenciesCollector
+ * Class ClassDependenciesCollector
  * @package PhpAT\Parser\Ast\Collector
  * Based on maglnet/ComposerRequireChecker UsedSymbolCollector
  * Copyright (c) 2015 Marco Pivetta | MIT License
  */
-class MethodDependenciesCollector extends NodeVisitorAbstract
+class ClassDependenciesCollector extends NodeVisitorAbstract
 {
     /** @var array<AbstractRelation> */
     protected array $results = [];
@@ -58,6 +58,7 @@ class MethodDependenciesCollector extends NodeVisitorAbstract
         $this->recordClassExpressionUsage($node);
         $this->recordCatchUsage($node);
         //$this->recordFunctionCallUsage($node);
+        $this->recordClassPropertyTypesUsage($node);
         $this->recordFunctionParameterTypesUsage($node);
         $this->recordFunctionReturnTypeUsage($node);
         //$this->recordConstantFetchUsage($node);
@@ -117,6 +118,17 @@ class MethodDependenciesCollector extends NodeVisitorAbstract
         if ($node instanceof Node\Stmt\TraitUse) {
             foreach ($node->traits as $trait) {
                 $this->registerTypeAsDependency($trait);
+            }
+        }
+    }
+
+    private function recordClassPropertyTypesUsage(Node $node)
+    {
+        if ($node instanceof Node\Stmt\ClassLike) {
+            foreach ($node->getProperties() ?? [] as $property) {
+                if ($property->type instanceof Node\Name\FullyQualified) {
+                    $this->registerTypeAsDependency($property->type);
+                }
             }
         }
     }
