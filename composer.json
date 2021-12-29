@@ -23,9 +23,9 @@
     "symfony/yaml": "^3.4 || ^4.0 || ^5.0 || ^6.0"
   },
   "require-dev": {
-    "friendsofphp/php-cs-fixer": "^3.4",
+    "friendsofphp/php-cs-fixer": "^3.0",
     "phpstan/phpstan": "^0.12 || ^1.0",
-    "phpunit/phpunit": "^8.5",
+    "phpunit/phpunit": "^8.5 || ^9.0",
     "squizlabs/php_codesniffer": "^3.5",
     "vimeo/psalm": "^3.14 | ^4.0"
   },
