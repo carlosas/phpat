@@ -106,8 +106,8 @@ class ClassDependenciesCollector extends NodeVisitorAbstract
 
     private function recordImplementsUsage(Node $node)
     {
-        if ($node instanceof Node\Stmt\Class_) {
-            foreach (array_filter($node->implements) as $implements) {
+        if ($node instanceof Node\Stmt\ClassLike) {
+            foreach (array_filter($node->implements ?? []) as $implements) {
                 $this->registerTypeAsDependency($implements);
             }
         }
