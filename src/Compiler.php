@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace PhpAT;
 
-use RuntimeException;
-use Phar;
-use SplFileInfo;
 use Generator;
+use Phar;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use RuntimeException;
+use SplFileInfo;
 
 class Compiler
 {
@@ -40,9 +40,9 @@ class Compiler
 
     public function __construct(array $paths, string $name = 'phpat.phar')
     {
-        $this->name = $name;
+        $this->name  = $name;
         $this->paths = $paths;
-        $this->file = $this->paths['output'] . DIRECTORY_SEPARATOR . $name;
+        $this->file  = $this->paths['output'] . DIRECTORY_SEPARATOR . $name;
     }
 
     public function run(): void
@@ -77,7 +77,7 @@ class Compiler
 
     protected function getFilesFrom(string $path): Generator
     {
-        $files = new RecursiveDirectoryIterator($path);
+        $files    = new RecursiveDirectoryIterator($path);
         $iterator = new RecursiveIteratorIterator($files);
 
         foreach ($iterator as $path => $file) {
@@ -119,7 +119,7 @@ class Compiler
     protected function addFileToPhar(Phar $phar, string $path, SplFileInfo $file): void
     {
         if (! $file->isReadable()) {
-            throw new RuntimeException("Failed to read $path and couldn't add it to the archive");
+            throw new RuntimeException("Failed to read ${path} and couldn't add it to the archive");
         }
 
         $size = $file->getSize();
@@ -128,7 +128,7 @@ class Compiler
             return;
         }
 
-        $handle = $file->openFile();
+        $handle   = $file->openFile();
         $contents = $handle->fread($size);
 
         $phar->addFromString($path, $contents);

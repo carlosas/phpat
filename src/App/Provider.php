@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace PhpAT\App;
 
-use PhpAT\Rule\Baseline;
 use PHPAT\EventDispatcher\EventDispatcher;
 use PHPAT\EventDispatcher\ListenerProvider;
 use PhpAT\File\FileFinder;
 use PhpAT\File\SymfonyFinderAdapter;
 use PhpAT\Parser\Ast\MapBuilder;
 use PhpAT\Parser\Ast\Traverser\TraverserFactory;
-use PhpAT\Parser\Ast\Type\PhpStanDocTypeNodeResolver;
 use PhpAT\Parser\Ast\Type\PhpStanDocNodeTypeExtractor;
+use PhpAT\Parser\Ast\Type\PhpStanDocTypeNodeResolver;
 use PhpAT\Parser\ComposerFileParser;
-use PhpAT\Rule\RuleBuilder;
 use PhpAT\Rule\Assertion\Composition;
 use PhpAT\Rule\Assertion\Dependency;
 use PhpAT\Rule\Assertion\Inheritance;
 use PhpAT\Rule\Assertion\Mixin;
+use PhpAT\Rule\Baseline;
+use PhpAT\Rule\RuleBuilder;
 use PhpAT\Selector\SelectorResolver;
 use PhpAT\Statement\StatementBuilder;
 use PhpAT\Test\FileTestExtractor;
@@ -49,15 +49,15 @@ class Provider
     public function __construct(ContainerBuilder $builder, Configuration $configuration, OutputInterface $output)
     {
         $this->configuration = $configuration;
-        $this->builder  = $builder;
-        $this->output = $output;
+        $this->builder       = $builder;
+        $this->output        = $output;
     }
 
     public function register(): ContainerBuilder
     {
         $this->builder->set(Configuration::class, $this->configuration);
         $this->builder->set(ComposerFileParser::class, new ComposerFileParser());
-        $phpVersion = $this->configuration->getPhpVersion();
+        $phpVersion   = $this->configuration->getPhpVersion();
         $lexerOptions = $phpVersion ? ['phpVersion' => $phpVersion] : [];
         $this->builder->set(
             Parser::class,

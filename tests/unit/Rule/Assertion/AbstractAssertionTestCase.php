@@ -4,11 +4,11 @@ namespace Tests\PhpAT\unit\Rule\Assertion;
 
 use PhpAT\App\Configuration;
 use PHPAT\EventDispatcher\EventDispatcher;
-use PhpAT\Parser\Ast\ComposerPackage;
-use PhpAT\Parser\Ast\SrcNode;
-use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\Ast\ClassLike;
+use PhpAT\Parser\Ast\ComposerPackage;
 use PhpAT\Parser\Ast\FullClassName;
+use PhpAT\Parser\Ast\ReferenceMap;
+use PhpAT\Parser\Ast\SrcNode;
 use PhpAT\Parser\Relation\Composition;
 use PhpAT\Parser\Relation\Dependency;
 use PhpAT\Parser\Relation\Inheritance;
@@ -23,8 +23,6 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 abstract class AbstractAssertionTestCase extends TestCase
 {
     abstract public function dataProvider(): array;
-
-    abstract protected function getTestedClassName(): string;
 
     /**
      * @dataProvider dataProvider
@@ -41,9 +39,9 @@ abstract class AbstractAssertionTestCase extends TestCase
         ReferenceMap $map,
         array $expectedEvents
     ): void {
-        /** @var MockObject|EventDispatcherInterface $eventDispatcherMock */
+        /** @var EventDispatcherInterface|MockObject $eventDispatcherMock */
         $eventDispatcherMock = $this->createMock(EventDispatcherInterface::class);
-        /** @var MockObject|Configuration $configurationMock */
+        /** @var Configuration|MockObject $configurationMock */
         $configurationMock = $this->createMock(Configuration::class);
         $configurationMock->method('getIgnorePhpExtensions')->willReturn(true);
         $className = $this->getTestedClassName();
@@ -51,7 +49,7 @@ abstract class AbstractAssertionTestCase extends TestCase
         $class = new $className($eventDispatcherMock, $configurationMock);
 
         foreach ($expectedEvents as $valid) {
-            $eventType = $valid ? StatementValidEvent::class : StatementNotValidEvent::class;
+            $eventType     = $valid ? StatementValidEvent::class : StatementNotValidEvent::class;
             $consecutive[] = [$this->isInstanceOf($eventType)];
         }
 
@@ -62,6 +60,8 @@ abstract class AbstractAssertionTestCase extends TestCase
 
         $class->validate($origin, $included, $excluded, $map);
     }
+
+    abstract protected function getTestedClassName(): string;
 
     /**
      * Fake ReferenceMap for the tests

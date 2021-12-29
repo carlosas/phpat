@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace PhpAT\Rule\Assertion\Mixin;
 
 use PHPAT\EventDispatcher\EventDispatcher;
-use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\Ast\ClassLike;
+use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Rule\Assertion\AbstractAssertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
@@ -58,8 +58,8 @@ class MustOnlyInclude extends AbstractAssertion
 
     private function dispatchResult(bool $includes, string $fqcnOrigin, string $fqcnDestination): void
     {
-        $action = $includes ? ' includes ' : ' does not include ';
-        $event = $includes ? StatementValidEvent::class : StatementNotValidEvent::class;
+        $action  = $includes ? ' includes ' : ' does not include ';
+        $event   = $includes ? StatementValidEvent::class : StatementNotValidEvent::class;
         $message = $fqcnOrigin . $action . $fqcnDestination;
 
         $this->eventDispatcher->dispatch(new $event($message));

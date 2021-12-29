@@ -17,7 +17,7 @@ class PhpStanDocTypeNodeResolver
 
     public function __construct(PhpDocParser $docParser, PhpStanDocNodeTypeExtractor $typeExtractor)
     {
-        $this->docParser = $docParser;
+        $this->docParser     = $docParser;
         $this->typeExtractor = $typeExtractor;
     }
 
@@ -91,7 +91,7 @@ class PhpStanDocTypeNodeResolver
     private function resolveNameFromContext(NameContext $context, string $name): string
     {
         $isFullyQualified = substr($name, 0, 1) === '\\';
-        $name = $isFullyQualified ? substr($name, 1) : $name;
+        $name             = $isFullyQualified ? substr($name, 1) : $name;
 
         if (
             PhpType::isCoreType($name)

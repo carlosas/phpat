@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace PhpAT\App\Event\Listener;
 
-use PhpAT\App\Event\WarningEvent;
 use PhpAT\App\ErrorStorage;
+use PhpAT\App\Event\WarningEvent;
 use PHPAT\EventDispatcher\EventInterface;
 use PHPAT\EventDispatcher\EventListenerInterface;
 

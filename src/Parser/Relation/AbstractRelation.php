@@ -13,7 +13,7 @@ class AbstractRelation
     public function __construct(FullClassName $relatedClass, int $startLine, int $endLine)
     {
         $this->relatedClass = $relatedClass;
-        $this->startLine = $startLine;
-        $this->endLine = $endLine;
+        $this->startLine    = $startLine;
+        $this->endLine      = $endLine;
     }
 }

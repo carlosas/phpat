@@ -18,9 +18,9 @@ class ArchitectureMarkupTest implements TestInterface
 
     final public function __construct(array $methods, RuleBuilder $builder, EventDispatcherInterface $eventDispatcher)
     {
-        $this->newRule = $builder;
+        $this->newRule         = $builder;
         $this->eventDispatcher = $eventDispatcher;
-        $this->methods = $methods;
+        $this->methods         = $methods;
     }
 
     final public function __invoke(): RuleCollection
@@ -39,7 +39,7 @@ class ArchitectureMarkupTest implements TestInterface
 
     private function invokeTest(string $method): Rule
     {
-        $rule = call_user_func($this->$method);
+        $rule = call_user_func($this->{$method});
 
         if (!($rule instanceof Rule)) {
             $message = $method . ' must return an instance of ' . Rule::class . '.';

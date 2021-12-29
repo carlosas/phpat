@@ -6,9 +6,9 @@ namespace PhpAT\Rule\Assertion;
 
 use PhpAT\App\Configuration;
 use PHPAT\EventDispatcher\EventDispatcher;
-use PhpAT\Parser\Ast\SrcNode;
-use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\Ast\ClassLike;
+use PhpAT\Parser\Ast\ReferenceMap;
+use PhpAT\Parser\Ast\SrcNode;
 use PhpAT\Parser\Relation\Composition;
 use PhpAT\Parser\Relation\Dependency;
 use PhpAT\Parser\Relation\Inheritance;
@@ -22,7 +22,7 @@ abstract class AbstractAssertion
 
     public function __construct(EventDispatcherInterface $eventDispatcher, Configuration $configuration)
     {
-        $this->configuration = $configuration;
+        $this->configuration   = $configuration;
         $this->eventDispatcher = $eventDispatcher;
     }
 

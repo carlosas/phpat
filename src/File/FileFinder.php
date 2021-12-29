@@ -14,7 +14,7 @@ class FileFinder
 
     public function __construct(Finder $finder, Configuration $configuration)
     {
-        $this->finder = $finder;
+        $this->finder        = $finder;
         $this->configuration = $configuration;
     }
 

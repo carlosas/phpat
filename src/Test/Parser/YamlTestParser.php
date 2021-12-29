@@ -20,23 +20,23 @@ class YamlTestParser
 
     public function __construct(RuleBuilder $ruleBuilder, EventDispatcherInterface $eventDispatcher)
     {
-        $this->ruleBuilder = $ruleBuilder;
+        $this->ruleBuilder     = $ruleBuilder;
         $this->eventDispatcher = $eventDispatcher;
     }
 
     public function parseFile(string $pathToFile): ArchitectureMarkupTest
     {
         $fileContents = Yaml::parse(file_get_contents($pathToFile));
-        $rules = $fileContents['rules'];
-        $methods = array_keys($rules);
-        $class = new ArchitectureMarkupTest(
+        $rules        = $fileContents['rules'];
+        $methods      = array_keys($rules);
+        $class        = new ArchitectureMarkupTest(
             $methods,
             $this->ruleBuilder,
             $this->eventDispatcher
         );
 
         foreach ($rules as $key => $rule) {
-            $parsedRule = $this->parseRule($rule);
+            $parsedRule    = $this->parseRule($rule);
             $class->{$key} = function () use ($parsedRule) {
                 return $parsedRule;
             };
@@ -95,10 +95,10 @@ class YamlTestParser
 
     private function buildAssertion(string $assertion): void
     {
-        $reflector = new \ReflectionClass($this->ruleBuilder);
+        $reflector       = new \ReflectionClass($this->ruleBuilder);
         $methodReflector = $reflector->getMethod($assertion);
         if ($methodReflector->isPublic() && $methodReflector->getNumberOfParameters() === 0) {
-            $this->ruleBuilder->$assertion();
+            $this->ruleBuilder->{$assertion}();
         } else {
             $this->eventDispatcher->dispatch(
                 new FatalErrorEvent('Assertion ' . $assertion . 'can not have parameters')
@@ -109,15 +109,14 @@ class YamlTestParser
 
     private function buildSelector(string $selector, string $selectorRule): SelectorInterface
     {
-        $reflector = new \ReflectionClass(Selector::class);
+        $reflector       = new \ReflectionClass(Selector::class);
         $methodReflector = $reflector->getMethod($selector);
         if ($methodReflector->isStatic() && $methodReflector->isPublic()) {
             return Selector::$selector($selectorRule);
-        } else {
-            $this->eventDispatcher->dispatch(
-                new FatalErrorEvent('Selector ' . $selector . 'is not a static method')
-            );
-            throw new FatalErrorException();
         }
+        $this->eventDispatcher->dispatch(
+            new FatalErrorEvent('Selector ' . $selector . 'is not a static method')
+        );
+        throw new FatalErrorException();
     }
 }

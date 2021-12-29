@@ -22,21 +22,20 @@ use PhpParser\NodeVisitorAbstract;
  */
 class MethodDependenciesCollector extends NodeVisitorAbstract
 {
+    /** @var array<AbstractRelation> */
+    protected array $results = [];
     private Configuration $configuration;
     private PhpStanDocTypeNodeResolver $docTypeResolver;
     private NameContext $context;
-
-    /** @var array<AbstractRelation> */
-    protected array $results = [];
 
     public function __construct(
         Configuration $configuration,
         PhpStanDocTypeNodeResolver $docTypeResolver,
         NameContext $context
     ) {
-        $this->configuration = $configuration;
+        $this->configuration   = $configuration;
         $this->docTypeResolver = $docTypeResolver;
-        $this->context = $context;
+        $this->context         = $context;
     }
 
     /**

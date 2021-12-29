@@ -28,10 +28,10 @@ class ComposerPackage
         array $dependencies,
         array $devDependencies
     ) {
-        $this->packageAlias = $packageAlias;
-        $this->autoload = $autoload;
-        $this->devAutoload = $devAutoload;
-        $this->dependencies = $dependencies;
+        $this->packageAlias    = $packageAlias;
+        $this->autoload        = $autoload;
+        $this->devAutoload     = $devAutoload;
+        $this->dependencies    = $dependencies;
         $this->devDependencies = $devDependencies;
     }
 

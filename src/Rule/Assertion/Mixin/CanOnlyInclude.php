@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace PhpAT\Rule\Assertion\Mixin;
 
 use PHPAT\EventDispatcher\EventDispatcher;
-use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\Ast\ClassLike;
+use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Rule\Assertion\AbstractAssertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
@@ -31,7 +31,7 @@ class CanOnlyInclude extends AbstractAssertion
         $matchingNodes = $this->filterMatchingNodes($origin, $map);
 
         foreach ($matchingNodes as $node) {
-            $traits = $this->getTraits($node, $map);
+            $traits  = $this->getTraits($node, $map);
             $success = true;
             foreach ($traits as $trait) {
                 $result = $this->relationMatchesDestinations($trait, $included, $excluded);

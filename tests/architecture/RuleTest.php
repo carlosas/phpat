@@ -2,10 +2,10 @@
 
 namespace Tests\PhpAT\architecture;
 
-use PhpAT\Selector\Selector;
-use PhpAT\Selector\SelectorInterface;
 use PhpAT\Rule\Assertion\AbstractAssertion;
 use PhpAT\Rule\Rule;
+use PhpAT\Selector\Selector;
+use PhpAT\Selector\SelectorInterface;
 use PhpAT\Test\ArchitectureTest;
 
 class RuleTest extends ArchitectureTest

@@ -9,12 +9,12 @@ use Symfony\Component\Yaml\Yaml;
 class ConfigurationFactory
 {
     private array $defaults = [
-        'verbosity' => 0,
-        'php-version' => null,
-        'ignore-docblocks' => false,
+        'verbosity'             => 0,
+        'php-version'           => null,
+        'ignore-docblocks'      => false,
         'ignore-php-extensions' => true,
-        'composer' => ['main' => ['json' => 'composer.json', 'lock' => 'composer.lock']],
-        'baseline-path' => 'phpat-baseline.json',
+        'composer'              => ['main' => ['json' => 'composer.json', 'lock' => 'composer.lock']],
+        'baseline-path'         => 'phpat-baseline.json',
     ];
 
     public function create(InputInterface $input): Configuration
@@ -22,7 +22,7 @@ class ConfigurationFactory
         $configFilePath = $input->getArgument('config');
         $commandOptions = $input->getOptions();
 
-        $config = Yaml::parse(file_get_contents($configFilePath));
+        $config            = Yaml::parse(file_get_contents($configFilePath));
         $config['options'] = array_merge($config['options'] ?? [], array_filter($commandOptions));
 
         return new Configuration(

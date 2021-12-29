@@ -22,8 +22,8 @@ class ReferenceMap
         array $extensionNodes,
         array $composerPackages
     ) {
-        $this->srcNodes = $srcNodes;
-        $this->extensionNodes = $extensionNodes;
+        $this->srcNodes         = $srcNodes;
+        $this->extensionNodes   = $extensionNodes;
         $this->composerPackages = $composerPackages;
     }
 

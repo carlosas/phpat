@@ -23,11 +23,11 @@ class ComposerFileParserTest extends TestCase
 
     public function testExtractsNamespaces(): void
     {
-        $this->assertEquals(
+        $this->assertSame(
             ['Source\\Namespace\\'],
             $this->subject->getNamespaces(false)
         );
-        $this->assertEquals(
+        $this->assertSame(
             ['Test\\Namespace\\'],
             $this->subject->getNamespaces(true)
         );
@@ -35,11 +35,11 @@ class ComposerFileParserTest extends TestCase
 
     public function testShouldExtractDependencies(): void
     {
-        $this->assertEquals(
+        $this->assertSame(
             ['thecodingmachine/safe'],
             $this->subject->getDirectDependencies(false)
         );
-        $this->assertEquals(
+        $this->assertSame(
             ['phpunit/phpunit'],
             $this->subject->getDirectDependencies(true)
         );

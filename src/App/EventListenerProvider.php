@@ -24,8 +24,8 @@ class EventListenerProvider
 
     public function __construct(ContainerBuilder $builder, OutputInterface $output)
     {
-        $this->builder  = $builder;
-        $this->output = $output;
+        $this->builder = $builder;
+        $this->output  = $output;
     }
 
     public function register(): ContainerBuilder
