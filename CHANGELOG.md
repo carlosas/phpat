@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.8.2
+* Add Symfony 6 compatibility
+
 ## 0.8.1
 * Fix exception when no files found in path selector
 * Improve RegexClassName match performance
