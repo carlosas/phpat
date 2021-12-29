@@ -9,53 +9,55 @@ use PhpAT\File\FileFinder;
 
 class ComposerParser
 {
-    private array $composerPackage;
     private FileFinder $finder;
+    private Configuration $configuration;
 
-    public function __construct(FileFinder $finder, Configuration $config)
+    public function __construct(FileFinder $finder, Configuration $configuration)
     {
-        $composerFilePath = realpath($config->getComposerConfiguration()['main']['json']);
-        if (!is_file($composerFilePath)) {
-            throw new \Exception('Composer file ' . $composerFilePath . ' not found.');
-        }
-
-        $this->finder = $finder;
-        $this->composerPackage = json_decode(file_get_contents($composerFilePath), true);
+        $this->finder        = $finder;
+        $this->configuration = $configuration;
     }
 
     /**
+     * @throws \Exception
      * @return array<string>
      */
-    public function getFilesToAutoload(bool $includeDev = true): array
+    public function getFilesToAutoload(string $composerPackage, bool $includeDev): array
     {
+        $composerPath = $this->configuration->getComposerConfiguration()[$composerPackage]['json'] ?? null;
+        if (!is_file($composerPath)) {
+            throw new \Exception('Composer file ' . $composerPath . ' not found.');
+        }
+
+        $composer   = json_decode(file_get_contents($composerPath), true);
         $filesFound = [];
-        foreach ($this->composerPackage['autoload']['classmap'] ?? [] as $path) {
+        foreach ($composer['autoload']['classmap'] ?? [] as $path) {
             array_push($filesFound, ...$this->getFiles($path));
         }
-        foreach ($this->composerPackage['autoload']['files'] ?? [] as $path) {
+        foreach ($composer['autoload']['files'] ?? [] as $path) {
             array_push($filesFound, ...$this->getFiles($path));
         }
-        foreach ($this->composerPackage['autoload']['psr-0'] ?? [] as $path) {
+        foreach ($composer['autoload']['psr-0'] ?? [] as $path) {
             array_push($filesFound, ...$this->getFiles($path));
         }
-        foreach ($this->composerPackage['autoload']['psr-4'] ?? [] as $path) {
+        foreach ($composer['autoload']['psr-4'] ?? [] as $path) {
             array_push($filesFound, ...$this->getFiles($path));
         }
         if ($includeDev) {
-            foreach ($this->composerPackage['autoload-dev']['classmap'] ?? [] as $path) {
+            foreach ($composer['autoload-dev']['classmap'] ?? [] as $path) {
                 array_push($filesFound, ...$this->getFiles($path));
             }
-            foreach ($this->composerPackage['autoload-dev']['files'] ?? [] as $path) {
+            foreach ($composer['autoload-dev']['files'] ?? [] as $path) {
                 array_push($filesFound, ...$this->getFiles($path));
             }
-            foreach ($this->composerPackage['autoload-dev']['psr-0'] ?? [] as $path) {
+            foreach ($composer['autoload-dev']['psr-0'] ?? [] as $path) {
                 array_push($filesFound, ...$this->getFiles($path));
             }
-            foreach ($this->composerPackage['autoload-dev']['psr-4'] ?? [] as $path) {
+            foreach ($composer['autoload-dev']['psr-4'] ?? [] as $path) {
                 array_push($filesFound, ...$this->getFiles($path));
             }
         }
-        foreach ($this->composerPackage['autoload']['exclude-from-classmap'] ?? [] as $path) {
+        foreach ($composer['autoload']['exclude-from-classmap'] ?? [] as $path) {
             $filesFound = array_diff($filesFound, $this->getFiles($path));
         }
 

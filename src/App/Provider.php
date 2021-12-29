@@ -98,6 +98,7 @@ class Provider
             ->addArgument(new Reference(Parser::class))
             ->addArgument(new Reference(TraverserFactory::class))
             ->addArgument(new Reference(EventDispatcherInterface::class))
+            ->addArgument(new Reference(ComposerParser::class))
             ->addArgument(new Reference(ComposerFileParser::class))
             ->addArgument(new Reference(Configuration::class));
 

@@ -11,6 +11,7 @@ use PhpAT\Parser\Ast\Classmap\Classmap;
 use PhpAT\Parser\Ast\Traverser\TraverseContext;
 use PhpAT\Parser\Ast\Traverser\TraverserFactory;
 use PhpAT\Parser\ComposerFileParser;
+use PhpAT\Parser\ComposerParser;
 use PhpAT\PhpStubsMap\PhpStubsMap;
 use PhpParser\Parser;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -21,6 +22,7 @@ class MapBuilder
     private Parser $parser;
     private TraverserFactory $traverserFactory;
     private EventDispatcherInterface $eventDispatcher;
+    private ComposerParser $composerParser;
     private ComposerFileParser $composerFileParser;
     private Configuration $configuration;
 
@@ -29,6 +31,7 @@ class MapBuilder
         Parser $parser,
         TraverserFactory $traverserFactory,
         EventDispatcherInterface $eventDispatcher,
+        ComposerParser $composerParser,
         ComposerFileParser $composerFileParser,
         Configuration $configuration
     ) {
@@ -36,6 +39,7 @@ class MapBuilder
         $this->parser             = $parser;
         $this->traverserFactory   = $traverserFactory;
         $this->eventDispatcher    = $eventDispatcher;
+        $this->composerParser     = $composerParser;
         $this->composerFileParser = $composerFileParser;
         $this->configuration      = $configuration;
     }
@@ -50,14 +54,14 @@ class MapBuilder
      */
     private function buildSrcMap(): array
     {
-        $files = $this->finder->findPhpFilesInPath(
-            $this->configuration->getSrcPath(),
-            $this->configuration->getSrcExcluded()
-        );
+        $files = [];
+        foreach (array_keys($this->configuration->getComposerConfiguration()) as $package) {
+            $files = $this->composerParser->getFilesToAutoload($package, false);
+        }
         $traverser = $this->traverserFactory->create();
 
         foreach ($files as $file) {
-            $pathname = PathNormalizer::normalizePathname($file->getPathname());
+            $pathname = PathNormalizer::normalizePathname($file);
             $parsed   = $this->parser->parse(file_get_contents($pathname));
             TraverseContext::startFile($pathname);
             $traverser->traverse($parsed);
