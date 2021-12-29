@@ -13,6 +13,7 @@ use PhpAT\Parser\Ast\Traverser\TraverserFactory;
 use PhpAT\Parser\Ast\Type\PhpStanDocNodeTypeExtractor;
 use PhpAT\Parser\Ast\Type\PhpStanDocTypeNodeResolver;
 use PhpAT\Parser\ComposerFileParser;
+use PhpAT\Parser\ComposerParser;
 use PhpAT\Rule\Assertion\Composition;
 use PhpAT\Rule\Assertion\Dependency;
 use PhpAT\Rule\Assertion\Inheritance;
@@ -84,6 +85,11 @@ class Provider
         $this->builder
             ->register(FileFinder::class, FileFinder::class)
             ->addArgument(new SymfonyFinderAdapter(new Finder()))
+            ->addArgument(new Reference(Configuration::class));
+
+        $this->builder
+            ->register(ComposerParser::class, ComposerParser::class)
+            ->addArgument(new Reference(FileFinder::class))
             ->addArgument(new Reference(Configuration::class));
 
         $this->builder
