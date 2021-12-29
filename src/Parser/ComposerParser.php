@@ -29,27 +29,33 @@ class ComposerParser
     public function getFilesToAutoload(bool $includeDev = true): array
     {
         $filesFound = [];
-        foreach ($this->composerPackage['classmap'] ?? [] as $path) {
+        foreach ($this->composerPackage['autoload']['classmap'] ?? [] as $path) {
             array_push($filesFound, ...$this->getFiles($path));
         }
-        foreach ($this->composerPackage['files'] ?? [] as $path) {
+        foreach ($this->composerPackage['autoload']['files'] ?? [] as $path) {
             array_push($filesFound, ...$this->getFiles($path));
         }
         foreach ($this->composerPackage['autoload']['psr-0'] ?? [] as $path) {
-            array_push($filesFound, ...array_values($this->getFiles($path)));
+            array_push($filesFound, ...$this->getFiles($path));
         }
         foreach ($this->composerPackage['autoload']['psr-4'] ?? [] as $path) {
-            array_push($filesFound, ...array_values($this->getFiles($path)));
+            array_push($filesFound, ...$this->getFiles($path));
         }
         if ($includeDev) {
+            foreach ($this->composerPackage['autoload-dev']['classmap'] ?? [] as $path) {
+                array_push($filesFound, ...$this->getFiles($path));
+            }
+            foreach ($this->composerPackage['autoload-dev']['files'] ?? [] as $path) {
+                array_push($filesFound, ...$this->getFiles($path));
+            }
             foreach ($this->composerPackage['autoload-dev']['psr-0'] ?? [] as $path) {
-                array_push($filesFound, ...array_values($this->getFiles($path)));
+                array_push($filesFound, ...$this->getFiles($path));
             }
             foreach ($this->composerPackage['autoload-dev']['psr-4'] ?? [] as $path) {
-                array_push($filesFound, ...array_values($this->getFiles($path)));
+                array_push($filesFound, ...$this->getFiles($path));
             }
         }
-        foreach ($this->composerPackage['exclude-from-classmap'] ?? [] as $path) {
+        foreach ($this->composerPackage['autoload']['exclude-from-classmap'] ?? [] as $path) {
             $filesFound = array_diff($filesFound, $this->getFiles($path));
         }
 
@@ -61,6 +67,8 @@ class ComposerParser
      */
     private function getFiles(string $path): array
     {
-        return is_dir($path) ? $this->finder->findPhpFilesInPath($path) : [new \SplFileInfo($path)];
+        return is_file($path)
+            ? [new \SplFileInfo($path)]
+            : array_values($this->finder->findPhpFilesInPath($path));
     }
 }
