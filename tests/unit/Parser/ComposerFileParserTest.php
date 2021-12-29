@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Tests\PhpAT\unit\Parser;
@@ -22,11 +23,11 @@ class ComposerFileParserTest extends TestCase
 
     public function testExtractsNamespaces(): void
     {
-        $this->assertEquals(
+        $this->assertSame(
             ['Source\\Namespace\\'],
             $this->subject->getNamespaces(false)
         );
-        $this->assertEquals(
+        $this->assertSame(
             ['Test\\Namespace\\'],
             $this->subject->getNamespaces(true)
         );
@@ -34,11 +35,11 @@ class ComposerFileParserTest extends TestCase
 
     public function testShouldExtractDependencies(): void
     {
-        $this->assertEquals(
+        $this->assertSame(
             ['thecodingmachine/safe'],
             $this->subject->getDirectDependencies(false)
         );
-        $this->assertEquals(
+        $this->assertSame(
             ['phpunit/phpunit'],
             $this->subject->getDirectDependencies(true)
         );
@@ -59,5 +60,4 @@ class ComposerFileParserTest extends TestCase
         // phpunit/phpunit depends on doctrine/instantiator
         $this->assertContains('Doctrine\\Instantiator\\', $namespaces);
     }
-
 }

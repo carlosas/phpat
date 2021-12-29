@@ -6,9 +6,9 @@ namespace PhpAT\Selector;
 
 use PhpAT\App\Helper\PathNormalizer;
 use PhpAT\File\FileFinder;
-use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\Ast\ClassLike;
 use PhpAT\Parser\Ast\FullClassName;
+use PhpAT\Parser\Ast\ReferenceMap;
 
 /**
  * Class PathSelector

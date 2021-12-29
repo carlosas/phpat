@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace PhpAT\Selector;
 
 use PHPAT\EventDispatcher\EventDispatcher;
-use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\Ast\ClassLike;
+use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Rule\Event\BaselineObsoleteEvent;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
@@ -24,7 +24,7 @@ class ComposerDependencySelector implements SelectorInterface
     public function __construct(string $packageAlias, bool $devMode = false)
     {
         $this->packageAlias = $packageAlias;
-        $this->devMode = $devMode;
+        $this->devMode      = $devMode;
     }
 
     public function getDependencies(): array

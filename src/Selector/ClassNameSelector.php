@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace PhpAT\Selector;
 
-use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\Ast\ClassLike;
 use PhpAT\Parser\Ast\FullClassName;
+use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\Ast\RegexClassName;
 
 class ClassNameSelector implements SelectorInterface

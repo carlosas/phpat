@@ -19,7 +19,7 @@ abstract class ArchitectureTest implements TestInterface
 
     final public function __construct(RuleBuilder $builder, EventDispatcherInterface $eventDispatcher)
     {
-        $this->newRule = $builder;
+        $this->newRule         = $builder;
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -44,7 +44,7 @@ abstract class ArchitectureTest implements TestInterface
 
     protected function invokeTest(string $method): Rule
     {
-        $rule = $this->$method();
+        $rule = $this->{$method}();
 
         if (!($rule instanceof Rule)) {
             $message = $method . ' must return an instance of ' . Rule::class . '.';

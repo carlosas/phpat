@@ -25,7 +25,7 @@ class SelectorResolver
      */
     public function __construct(ContainerBuilder $container, EventDispatcherInterface $dispatcher)
     {
-        $this->container = $container;
+        $this->container  = $container;
         $this->dispatcher = $dispatcher;
     }
 

@@ -8,11 +8,6 @@ use Tests\PhpAT\unit\Rule\Assertion\AbstractAssertionTestCase;
 
 class MustNotImplementTest extends AbstractAssertionTestCase
 {
-    protected function getTestedClassName(): string
-    {
-        return MustNotImplement::class;
-    }
-
     public function dataProvider(): array
     {
         return [
@@ -53,5 +48,9 @@ class MustNotImplementTest extends AbstractAssertionTestCase
                 [false, false]
             ]
        ];
+    }
+    protected function getTestedClassName(): string
+    {
+        return MustNotImplement::class;
     }
 }

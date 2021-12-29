@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace PhpAT\Statement\Event\Listener;
 
 use PhpAT\App\ErrorStorage;
-use PhpAT\Rule\Baseline;
 use PHPAT\EventDispatcher\EventInterface;
 use PHPAT\EventDispatcher\EventListenerInterface;
+use PhpAT\Rule\Baseline;
 use PhpAT\Rule\RuleContext;
-use Symfony\Component\Console\Output\OutputInterface;
 use PhpAT\Statement\Event\StatementNotValidEvent;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class StatementNotValidListener implements EventListenerInterface
 {
@@ -19,7 +19,7 @@ class StatementNotValidListener implements EventListenerInterface
 
     public function __construct(OutputInterface $output, Baseline $baseline)
     {
-        $this->output = $output;
+        $this->output   = $output;
         $this->baseline = $baseline;
     }
 

@@ -20,7 +20,7 @@ class TraverserFactory
         Configuration $configuration,
         PhpStanDocTypeNodeResolver $docTypeResolver
     ) {
-        $this->configuration = $configuration;
+        $this->configuration   = $configuration;
         $this->docTypeResolver = $docTypeResolver;
     }
 

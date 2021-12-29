@@ -16,7 +16,7 @@ class Configuration
     private bool $ignoreDocBlocks;
     private bool $ignorePhpExtensions;
     private string $baselineFilePath;
-    private ?string $generateBaselineIn;
+    private ?string $generateBaseline;
     private string $rootPath;
 
     public function __construct(
@@ -28,23 +28,23 @@ class Configuration
         string $baselineFilePath,
         int $verbosity,
         ?string $phpVersion,
-        ?string $generateBaselineIn,
+        ?string $generateBaseline,
         bool $ignoreDocBlocks,
         bool $ignorePhpExtensions
     ) {
         $this->rootPath = $this->getRootPath();
 
-        $this->srcPath = $this->normalizePath($srcPath);
-        $this->srcIncluded = $srcIncluded;
-        $this->srcExcluded = $srcExcluded;
+        $this->srcPath               = $this->normalizePath($srcPath);
+        $this->srcIncluded           = $srcIncluded;
+        $this->srcExcluded           = $srcExcluded;
         $this->composerConfiguration = $composerConfiguration;
-        $this->testsPath = $testsPath;
-        $this->baselineFilePath = $this->normalizePath($baselineFilePath);
-        $this->verbosity = $verbosity;
-        $this->phpVersion = $phpVersion;
-        $this->generateBaselineIn = is_string($generateBaselineIn) ? $this->normalizePath($generateBaselineIn) : null;
-        $this->ignoreDocBlocks = $ignoreDocBlocks;
-        $this->ignorePhpExtensions = $ignorePhpExtensions;
+        $this->testsPath             = $testsPath;
+        $this->baselineFilePath      = $this->normalizePath($baselineFilePath);
+        $this->verbosity             = $verbosity;
+        $this->phpVersion            = $phpVersion;
+        $this->generateBaseline      = is_string($generateBaseline) ? $this->normalizePath($generateBaseline) : null;
+        $this->ignoreDocBlocks       = $ignoreDocBlocks;
+        $this->ignorePhpExtensions   = $ignorePhpExtensions;
     }
 
     public function getSrcPath(): string
@@ -97,9 +97,9 @@ class Configuration
         return $this->baselineFilePath;
     }
 
-    public function getGenerateBaselineIn(): ?string
+    public function getGenerateBaseline(): ?string
     {
-        return $this->generateBaselineIn;
+        return $this->generateBaseline;
     }
 
     private function normalizePath(?string $path): ?string

@@ -11,14 +11,14 @@ class FullClassName implements ClassLike
     private function __construct(string $namespace, string $name, string $fqcn)
     {
         $this->namespace = $namespace;
-        $this->name = $name;
-        $this->fqcn = $fqcn;
+        $this->name      = $name;
+        $this->fqcn      = $fqcn;
     }
 
     public static function createFromFQCN(string $fqcn): self
     {
-        $parts = explode('\\', ltrim($fqcn, '\\'));
-        $name = array_pop($parts);
+        $parts          = explode('\\', ltrim($fqcn, '\\'));
+        $name           = array_pop($parts);
         $normalizedFqcn = empty($parts) ? $name : $fqcn;
 
         return new self(implode('\\', $parts), $name, $normalizedFqcn);

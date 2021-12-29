@@ -6,9 +6,9 @@ namespace PhpAT\Rule\Event\Listener;
 
 use PHPAT\EventDispatcher\EventInterface;
 use PHPAT\EventDispatcher\EventListenerInterface;
+use PhpAT\Rule\Event\RuleValidationStartEvent;
 use PhpAT\Rule\RuleContext;
 use Symfony\Component\Console\Output\OutputInterface;
-use PhpAT\Rule\Event\RuleValidationStartEvent;
 
 class RuleValidationStartListener implements EventListenerInterface
 {

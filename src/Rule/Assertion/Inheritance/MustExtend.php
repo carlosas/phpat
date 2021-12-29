@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace PhpAT\Rule\Assertion\Inheritance;
 
 use PHPAT\EventDispatcher\EventDispatcher;
-use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\Ast\ClassLike;
+use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Rule\Assertion\AbstractAssertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
@@ -52,8 +52,8 @@ class MustExtend extends AbstractAssertion
 
     protected function dispatchResult(bool $result, string $fqcnOrigin, string $fqcnDestination): void
     {
-        $action = $result ? ' extends ' : ' does not extend ';
-        $event = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
+        $action  = $result ? ' extends ' : ' does not extend ';
+        $event   = $result ? StatementValidEvent::class : StatementNotValidEvent::class;
         $message = $fqcnOrigin . $action . $fqcnDestination;
 
         $this->eventDispatcher->dispatch(new $event($message));

@@ -2,8 +2,8 @@
 
 namespace Tests\PhpAT\architecture;
 
-use PhpAT\Selector\Selector;
 use PhpAT\Rule\Rule;
+use PhpAT\Selector\Selector;
 use PhpAT\Test\ArchitectureTest;
 
 class AssertionsTest extends ArchitectureTest

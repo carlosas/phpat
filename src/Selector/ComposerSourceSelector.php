@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace PhpAT\Selector;
 
 use PHPAT\EventDispatcher\EventDispatcher;
+use PhpAT\Parser\Ast\ClassLike;
 use PhpAT\Parser\Ast\FullClassName;
 use PhpAT\Parser\Ast\ReferenceMap;
-use PhpAT\Parser\Ast\ClassLike;
 use PhpAT\Rule\Event\BaselineObsoleteEvent;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
@@ -28,7 +28,7 @@ class ComposerSourceSelector implements SelectorInterface
     public function __construct(string $packageAlias, bool $devMode)
     {
         $this->packageAlias = $packageAlias;
-        $this->devMode = $devMode;
+        $this->devMode      = $devMode;
     }
 
     public function getDependencies(): array
@@ -59,12 +59,12 @@ class ComposerSourceSelector implements SelectorInterface
             return [];
         }
 
-        $regexs = $this->devMode ? $package->getDevAutoload() : $package->getAutoload();
+        $regexs               = $this->devMode ? $package->getDevAutoload() : $package->getAutoload();
         $regexsWithSrcClasses = [];
         foreach ($this->map->getSrcNodes() as $srcNode) {
             foreach ($regexs as $regex) {
                 if ($this->matchesPattern($srcNode->getClassName(), $regex->toString())) {
-                    $result[] = FullClassName::createFromFQCN($srcNode->getClassName());
+                    $result[]                                 = FullClassName::createFromFQCN($srcNode->getClassName());
                     $regexsWithSrcClasses[$regex->toString()] = $regex;
                 }
             }

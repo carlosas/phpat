@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace PhpAT\Selector;
 
-use PhpAT\Parser\Ast\SrcNode;
-use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\Ast\ClassLike;
 use PhpAT\Parser\Ast\FullClassName;
+use PhpAT\Parser\Ast\ReferenceMap;
+use PhpAT\Parser\Ast\SrcNode;
 use PhpAT\Parser\Relation\Mixin;
 
 class IncludeSelector implements SelectorInterface

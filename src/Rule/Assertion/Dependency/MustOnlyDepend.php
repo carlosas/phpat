@@ -6,8 +6,8 @@ namespace PhpAT\Rule\Assertion\Dependency;
 
 use PhpAT\App\Configuration;
 use PHPAT\EventDispatcher\EventDispatcher;
-use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Parser\Ast\ClassLike;
+use PhpAT\Parser\Ast\ReferenceMap;
 use PhpAT\Rule\Assertion\AbstractAssertion;
 use PhpAT\Statement\Event\StatementNotValidEvent;
 use PhpAT\Statement\Event\StatementValidEvent;
@@ -59,8 +59,8 @@ class MustOnlyDepend extends AbstractAssertion
 
     private function dispatchResult(bool $depends, string $fqcnOrigin, string $fqcnDestination): void
     {
-        $action = $depends ? ' depends on ' : ' does not depend on ';
-        $event = $depends ? StatementValidEvent::class : StatementNotValidEvent::class;
+        $action  = $depends ? ' depends on ' : ' does not depend on ';
+        $event   = $depends ? StatementValidEvent::class : StatementNotValidEvent::class;
         $message = $fqcnOrigin . $action . $fqcnDestination;
 
         $this->eventDispatcher->dispatch(new $event($message));

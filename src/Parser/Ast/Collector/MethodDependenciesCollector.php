@@ -22,21 +22,20 @@ use PhpParser\NodeVisitorAbstract;
  */
 class MethodDependenciesCollector extends NodeVisitorAbstract
 {
+    /** @var array<AbstractRelation> */
+    protected array $results = [];
     private Configuration $configuration;
     private PhpStanDocTypeNodeResolver $docTypeResolver;
     private NameContext $context;
-
-    /** @var array<AbstractRelation> */
-    protected array $results = [];
 
     public function __construct(
         Configuration $configuration,
         PhpStanDocTypeNodeResolver $docTypeResolver,
         NameContext $context
     ) {
-        $this->configuration = $configuration;
+        $this->configuration   = $configuration;
         $this->docTypeResolver = $docTypeResolver;
-        $this->context = $context;
+        $this->context         = $context;
     }
 
     /**
@@ -137,19 +136,19 @@ class MethodDependenciesCollector extends NodeVisitorAbstract
             $this->registerTypeAsDependency($node->getReturnType());
         }
     }
-/*
-    private function recordConstantFetchUsage(Node $node): void
-    {
-        if (
-            $node instanceof Node\Expr\ConstFetch
-            && !PhpType::isSpecialType($node->name->toString())
-            && !PhpType::isBuiltinType($node->name->toString())
-            && !PhpType::isCoreConstant($node->name->toString())
-        ) {
-            $this->registerTypeAsDependency($node->name);
+    /*
+        private function recordConstantFetchUsage(Node $node): void
+        {
+            if (
+                $node instanceof Node\Expr\ConstFetch
+                && !PhpType::isSpecialType($node->name->toString())
+                && !PhpType::isBuiltinType($node->name->toString())
+                && !PhpType::isCoreConstant($node->name->toString())
+            ) {
+                $this->registerTypeAsDependency($node->name);
+            }
         }
-    }
-*/
+    */
     private function recordDocBlockUsage(Node $node)
     {
         $doc = $node->getDocComment();
