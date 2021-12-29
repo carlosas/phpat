@@ -3,7 +3,6 @@
 namespace PhpAT\Rule;
 
 use PhpAT\App\Configuration;
-use PHPAT\EventDispatcher\EventDispatcher;
 use PhpAT\Rule\Event\BaselineObsoleteEvent;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
