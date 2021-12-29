@@ -51,8 +51,6 @@ You will have to use it executing `php phpat.phar phpat.yaml` and declare your t
 You will need to setup a minimum configuration:
 ```yaml
 # phpat.yaml
-src:
-  path: src/
 tests:
   path: tests/architecture/
 ```
@@ -62,8 +60,6 @@ tests:
 
 | Name                                      | Description                                              | Default      |
 |-------------------------------------------|----------------------------------------------------------|:------------:|
-| `src` `path`                              | The root path of your application                        | *no default* |
-|` src` `include`                           | Files you want to be tested excluding the rest           | *all files*  |
 | `src` `exclude`                           | Files you want to be excluded in the tests               | *no files*   |
 | `composer` `$ALIAS` `json`                | Path of your composer.json file (multiple)               | main json    |
 | `composer` `$ALIAS` `lock`                | Path of your composer.lock file (multiple)               | main lock    |
