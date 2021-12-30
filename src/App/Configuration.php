@@ -30,7 +30,7 @@ class Configuration
         bool $ignoreDocBlocks,
         bool $ignorePhpExtensions
     ) {
-        $this->rootPath = $this->getRootPath();
+        $this->rootPath = $this->buildRootPath();
 
         $this->parserInclude         = $parserInclude;
         $this->parserExclude         = $parserExcluded;
@@ -42,6 +42,11 @@ class Configuration
         $this->generateBaseline      = is_string($generateBaseline) ? $this->normalizePath($generateBaseline) : null;
         $this->ignoreDocBlocks       = $ignoreDocBlocks;
         $this->ignorePhpExtensions   = $ignorePhpExtensions;
+    }
+
+    public function getRootPath(): string
+    {
+        return $this->rootPath;
     }
 
     public function getParserInclude(): array
@@ -108,7 +113,7 @@ class Configuration
         return str_replace('\\', '/', $path);
     }
 
-    private function getRootPath(): string
+    private function buildRootPath(): string
     {
         $path = is_file(__DIR__ . '/../../../../autoload.php')
             ? realpath(__DIR__ . '/../../../../..')

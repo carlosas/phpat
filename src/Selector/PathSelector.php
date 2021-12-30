@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PhpAT\Selector;
 
+use PhpAT\App\Configuration;
 use PhpAT\File\FileFinder;
 use PhpAT\Parser\Ast\ClassLike;
 use PhpAT\Parser\Ast\FullClassName;
@@ -16,8 +17,13 @@ use PhpAT\Parser\Ast\ReferenceMap;
  */
 class PathSelector implements SelectorInterface
 {
+    private const DEPENDENCIES = [
+        Configuration::class
+    ];
+
     private string $path;
     private ?ReferenceMap $map = null;
+    private Configuration $configuration;
 
     public function __construct(string $path)
     {
@@ -26,11 +32,12 @@ class PathSelector implements SelectorInterface
 
     public function getDependencies(): array
     {
-        return [];
+        return self::DEPENDENCIES;
     }
 
     public function injectDependencies(array $dependencies): void
     {
+        $this->configuration = $dependencies[Configuration::class];
     }
 
     public function setReferenceMap(ReferenceMap $map): void
@@ -43,8 +50,9 @@ class PathSelector implements SelectorInterface
      */
     public function select(): array
     {
+        $path = $this->configuration->getRootPath() . '/' . $this->path;
         foreach ($this->map->getSrcNodes() as $srcNode) {
-            if ($this->matchesPattern($srcNode->getFilePathname(), $this->path)) {
+            if ($this->matchesPattern($srcNode->getFilePathname(), $path)) {
                 $result[] = FullClassName::createFromFQCN($srcNode->getClassName());
             }
         }

@@ -14,7 +14,7 @@ class CompositionTest extends ArchitectureTest
         return $this->newRule
             ->classesThat(Selector::havePath('*/Composition/Composed.php'))
             ->mustImplement()
-            ->classesThat(Selector::havePath(realpath('tests/functional/php7/fixtures/SimpleInterface.php')))
+            ->classesThat(Selector::havePath('tests/functional/php7/fixtures/SimpleInterface.php'))
             ->build();
     }
 
@@ -23,8 +23,8 @@ class CompositionTest extends ArchitectureTest
         return $this->newRule
             ->classesThat(Selector::havePath('*/Composition/MultipleComposed.php'))
             ->mustImplement()
-            ->classesThat(Selector::havePath(realpath('tests/functional/php7/fixtures/SimpleInterface.php')))
-            ->andClassesThat(Selector::havePath(realpath('tests/functional/php7/fixtures/Composition/CompositionNamespaceSimpleInterface.php')))
+            ->classesThat(Selector::havePath('tests/functional/php7/fixtures/SimpleInterface.php'))
+            ->andClassesThat(Selector::havePath('tests/functional/php7/fixtures/Composition/CompositionNamespaceSimpleInterface.php'))
             ->build();
     }
 
@@ -33,7 +33,7 @@ class CompositionTest extends ArchitectureTest
         return $this->newRule
             ->classesThat(Selector::havePath('*/Composition/CompositionNamespaceSimpleClass.php'))
             ->mustNotImplement()
-            ->classesThat(Selector::havePath(realpath('tests/functional/php7/fixtures/SimpleInterface.php')))
+            ->classesThat(Selector::havePath('tests/functional/php7/fixtures/SimpleInterface.php'))
             ->build();
     }
 
@@ -42,7 +42,7 @@ class CompositionTest extends ArchitectureTest
         return $this->newRule
             ->classesThat(Selector::haveClassName(ClassWithAnonymousClass::class))
             ->mustNotImplement()
-            ->classesThat(Selector::havePath(realpath('tests/functional/php7/fixtures/SimpleInterface.php')))
+            ->classesThat(Selector::havePath('tests/functional/php7/fixtures/SimpleInterface.php'))
             ->build();
     }
 }

@@ -24,42 +24,42 @@ class DependencyTest extends ArchitectureTest
     public function testDirectDependency(): Rule
     {
         return $this->newRule
-            ->classesThat(Selector::havePath(realpath('tests/functional/php7/fixtures/Dependency/Constructor.php')))
-            ->andClassesThat(Selector::havePath(realpath('tests/functional/php7/fixtures/Dependency/MethodParameter.php')))
-            ->andClassesThat(Selector::havePath(realpath('tests/functional/php7/fixtures/Dependency/MethodReturn.php')))
-            ->andClassesThat(Selector::havePath(realpath('tests/functional/php7/fixtures/Dependency/Instantiation.php')))
-//            ->andClassesThat(Selector::havePath(realpath('tests/functional/php7/fixtures/Dependency/UnusedDeclaration.php')))
-            ->andClassesThat(Selector::havePath(realpath('tests/functional/php7/fixtures/Dependency/DocBlock.php')))
+            ->classesThat(Selector::havePath('tests/functional/php7/fixtures/Dependency/Constructor.php'))
+            ->andClassesThat(Selector::havePath('tests/functional/php7/fixtures/Dependency/MethodParameter.php'))
+            ->andClassesThat(Selector::havePath('tests/functional/php7/fixtures/Dependency/MethodReturn.php'))
+            ->andClassesThat(Selector::havePath('tests/functional/php7/fixtures/Dependency/Instantiation.php'))
+//            ->andClassesThat(Selector::havePath('tests/functional/php7/fixtures/Dependency/UnusedDeclaration.php'))
+            ->andClassesThat(Selector::havePath('tests/functional/php7/fixtures/Dependency/DocBlock.php'))
             ->mustDependOn()
-            ->classesThat(Selector::havePath(realpath('tests/functional/php7/fixtures/SimpleClass.php')))
-            ->andClassesThat(Selector::havePath(realpath('tests/functional/php7/fixtures/AnotherSimpleClass.php')))
-            ->andClassesThat(Selector::havePath(realpath('tests/functional/php7/fixtures/Dependency/DependencyNamespaceSimpleClass.php')))
-            ->andClassesThat(Selector::havePath(realpath('tests/functional/php7/fixtures/Inheritance/InheritanceNamespaceSimpleClass.php')))
+            ->classesThat(Selector::havePath('tests/functional/php7/fixtures/SimpleClass.php'))
+            ->andClassesThat(Selector::havePath('tests/functional/php7/fixtures/AnotherSimpleClass.php'))
+            ->andClassesThat(Selector::havePath('tests/functional/php7/fixtures/Dependency/DependencyNamespaceSimpleClass.php'))
+            ->andClassesThat(Selector::havePath('tests/functional/php7/fixtures/Inheritance/InheritanceNamespaceSimpleClass.php'))
             ->build();
     }
 
     public function testNotDepends(): Rule
     {
         return $this->newRule
-            ->classesThat(Selector::havePath(realpath('tests/functional/php7/fixtures/Dependency/DependencyNamespaceSimpleClass.php')))
+            ->classesThat(Selector::havePath('tests/functional/php7/fixtures/Dependency/DependencyNamespaceSimpleClass.php'))
             ->mustNotDependOn()
-            ->classesThat(Selector::havePath(realpath('tests/functional/php7/fixtures/SimpleClass.php')))
+            ->classesThat(Selector::havePath('tests/functional/php7/fixtures/SimpleClass.php'))
             ->build();
     }
 
     public function testOtherStuffIsNotResolvedAsClasses(): Rule
     {
         return $this->newRule
-            ->classesThat(Selector::havePath(realpath('tests/functional/php7/fixtures/Dependency/Others.php')))
+            ->classesThat(Selector::havePath('tests/functional/php7/fixtures/Dependency/Others.php'))
             ->mustOnlyDependOn()
-            ->classesThat(Selector::havePath(realpath('tests/functional/php7/fixtures/SimpleClass.php')))
+            ->classesThat(Selector::havePath('tests/functional/php7/fixtures/SimpleClass.php'))
             ->build();
     }
 
     public function testCoreClassesGetIgnored(): Rule
     {
         return $this->newRule
-            ->andClassesThat(Selector::havePath(realpath('tests/functional/php7/fixtures/Dependency/CoreAndExtensions.php')))
+            ->andClassesThat(Selector::havePath('tests/functional/php7/fixtures/Dependency/CoreAndExtensions.php'))
             ->canOnlyDependOn()
             ->classesThat(Selector::haveClassName(SimpleClass::class))
             ->build();
@@ -68,7 +68,7 @@ class DependencyTest extends ArchitectureTest
     public function testSelfAndStaticGetIgnored(): Rule
     {
         return $this->newRule
-            ->andClassesThat(Selector::havePath(realpath('tests/functional/php7/fixtures/Dependency/SelfStatic.php')))
+            ->andClassesThat(Selector::havePath('tests/functional/php7/fixtures/Dependency/SelfStatic.php'))
             ->mustOnlyDependOn()
             ->classesThat(Selector::haveClassName(SimpleClass::class))
             ->build();
@@ -77,20 +77,12 @@ class DependencyTest extends ArchitectureTest
     public function testGroupUseDeclarationGetResolved(): Rule
     {
         return $this->newRule
-            ->classesThat(Selector::havePath(realpath('tests/functional/php7/fixtures/Dependency/GroupUse.php')))
+            ->classesThat(Selector::havePath('tests/functional/php7/fixtures/Dependency/GroupUse.php'))
             ->mustDependOn()
-            ->classesThat(Selector::havePath(realpath('tests/functional/php7/fixtures/SimpleClass.php')))
-            ->andClassesThat(Selector::havePath(realpath('tests/functional/php7/fixtures/AnotherSimpleClass.php')))
-            ->andClassesThat(
-                Selector::havePath(
-                    realpath('tests/functional/php7/fixtures/Dependency/DependencyNamespaceSimpleClass.php')
-                )
-            )
-            ->andClassesThat(
-                Selector::havePath(
-                    realpath('tests/functional/php7/fixtures/Inheritance/InheritanceNamespaceSimpleClass.php')
-                )
-            )
+            ->classesThat(Selector::havePath('tests/functional/php7/fixtures/SimpleClass.php'))
+            ->andClassesThat(Selector::havePath('tests/functional/php7/fixtures/AnotherSimpleClass.php'))
+            ->andClassesThat(Selector::havePath('tests/functional/php7/fixtures/Dependency/DependencyNamespaceSimpleClass.php'))
+            ->andClassesThat(Selector::havePath('tests/functional/php7/fixtures/Inheritance/InheritanceNamespaceSimpleClass.php'))
             ->build();
     }
 
@@ -99,9 +91,9 @@ class DependencyTest extends ArchitectureTest
         return $this->newRule
             ->classesThat(Selector::haveClassName(ClassWithAnonymousClass::class))
             ->mustOnlyDependOn()
-            ->classesThat(Selector::havePath(realpath('tests/functional/php7/fixtures/SimpleClass.php')))
-            ->classesThat(Selector::havePath(realpath('tests/functional/php7/fixtures/AnotherSimpleClass.php')))
-            ->classesThat(Selector::havePath(realpath('tests/functional/php7/fixtures/SimpleInterface.php')))
+            ->classesThat(Selector::havePath('tests/functional/php7/fixtures/SimpleClass.php'))
+            ->classesThat(Selector::havePath('tests/functional/php7/fixtures/AnotherSimpleClass.php'))
+            ->classesThat(Selector::havePath('tests/functional/php7/fixtures/SimpleInterface.php'))
             ->build();
     }
 
@@ -111,11 +103,9 @@ class DependencyTest extends ArchitectureTest
             ->classesThat(Selector::havePath('*/Dependency/DocBlock.php'))
             ->mustOnlyDependOn()
             ->classesThat(Selector::haveClassName(SimpleClass::class))
-            ->andClassesThat(Selector::havePath(realpath('tests/functional/php7/fixtures/AnotherSimpleClass.php')))
+            ->andClassesThat(Selector::havePath('tests/functional/php7/fixtures/AnotherSimpleClass.php'))
             ->andClassesThat(
-                Selector::havePath(
-                    realpath('tests/functional/php7/fixtures/Dependency/DependencyNamespaceSimpleClass.php')
-                )
+                Selector::havePath('tests/functional/php7/fixtures/Dependency/DependencyNamespaceSimpleClass.php')
             )
             ->andClassesThat(Selector::haveClassName(InheritanceNamespaceSimpleClass::class))
             ->andClassesThat(Selector::haveClassName(DummyException::class))

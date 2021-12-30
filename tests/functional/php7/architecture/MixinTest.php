@@ -13,7 +13,7 @@ class MixinTest extends ArchitectureTest
         return $this->newRule
             ->classesThat(Selector::havePath('*/Mixin/IncludeTrait.php'))
             ->mustInclude()
-            ->classesThat(Selector::havePath(realpath('tests/functional/php7/fixtures/SimpleTrait.php')))
+            ->classesThat(Selector::havePath('tests/functional/php7/fixtures/SimpleTrait.php'))
             ->build();
     }
 
@@ -22,9 +22,9 @@ class MixinTest extends ArchitectureTest
         return $this->newRule
             ->classesThat(Selector::havePath('*/Mixin/IncludeMultipleTraits.php'))
             ->mustInclude()
-            ->classesThat(Selector::havePath(realpath('tests/functional/php7/fixtures/SimpleTrait.php')))
+            ->classesThat(Selector::havePath('tests/functional/php7/fixtures/SimpleTrait.php'))
             ->andClassesThat(
-                Selector::havePath(realpath('tests/functional/php7/fixtures/Mixin/MixinNamespaceSimpleTrait.php'))
+                Selector::havePath('tests/functional/php7/fixtures/Mixin/MixinNamespaceSimpleTrait.php')
             )
             ->build();
     }

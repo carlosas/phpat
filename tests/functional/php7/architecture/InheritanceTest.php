@@ -15,9 +15,7 @@ class InheritanceTest extends ArchitectureTest
             ->classesThat(Selector::havePath('*/Inheritance/InheritanceNamespaceChild.php'))
             ->mustExtend()
             ->classesThat(
-                Selector::havePath(
-                    realpath('tests/functional/php7/fixtures/Inheritance/InheritanceNamespaceSimpleClass.php')
-                )
+                Selector::havePath('tests/functional/php7/fixtures/Inheritance/InheritanceNamespaceSimpleClass.php')
             )
             ->build();
     }
@@ -27,7 +25,7 @@ class InheritanceTest extends ArchitectureTest
         return $this->newRule
             ->classesThat(Selector::havePath('*/Inheritance/Child.php'))
             ->mustExtend()
-            ->classesThat(Selector::havePath(realpath('tests/functional/php7/fixtures/SimpleClass.php')))
+            ->classesThat(Selector::havePath('tests/functional/php7/fixtures/SimpleClass.php'))
             ->build();
     }
 
@@ -36,7 +34,7 @@ class InheritanceTest extends ArchitectureTest
         return $this->newRule
             ->classesThat(Selector::havePath('*/Inheritance/InheritanceNamespaceSimpleClass.php'))
             ->mustNotExtend()
-            ->classesThat(Selector::havePath(realpath('tests/functional/php7/fixtures/SimpleClass.php')))
+            ->classesThat(Selector::havePath('tests/functional/php7/fixtures/SimpleClass.php'))
             ->build();
     }
 
@@ -45,7 +43,7 @@ class InheritanceTest extends ArchitectureTest
         return $this->newRule
             ->classesThat(Selector::haveClassName(ClassWithAnonymousClass::class))
             ->mustNotExtend()
-            ->classesThat(Selector::havePath(realpath('tests/functional/php7/fixtures/SimpleClass.php')))
+            ->classesThat(Selector::havePath('tests/functional/php7/fixtures/SimpleClass.php'))
             ->build();
     }
 }
