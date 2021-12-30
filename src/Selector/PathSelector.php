@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PhpAT\Selector;
 
-use PhpAT\App\Helper\PathNormalizer;
 use PhpAT\File\FileFinder;
 use PhpAT\Parser\Ast\ClassLike;
 use PhpAT\Parser\Ast\FullClassName;
@@ -22,7 +21,6 @@ class PathSelector implements SelectorInterface
     ];
 
     private string $path;
-    private FileFinder $fileFinder;
     private ?ReferenceMap $map = null;
 
     public function __construct(string $path)
@@ -32,12 +30,11 @@ class PathSelector implements SelectorInterface
 
     public function getDependencies(): array
     {
-        return self::DEPENDENCIES;
+        return [];
     }
 
     public function injectDependencies(array $dependencies): void
     {
-        $this->fileFinder = $dependencies[FileFinder::class];
     }
 
     public function setReferenceMap(ReferenceMap $map): void
@@ -50,13 +47,9 @@ class PathSelector implements SelectorInterface
      */
     public function select(): array
     {
-        foreach ($this->fileFinder->findSrcFiles($this->path) as $file) {
-            $filePathname = PathNormalizer::normalizePathname($file->getPathname());
-
-            foreach ($this->map->getSrcNodes() as $srcNode) {
-                if ($srcNode->getFilePathname() === $filePathname) {
-                    $result[] = FullClassName::createFromFQCN($srcNode->getClassName());
-                }
+        foreach ($this->map->getSrcNodes() as $srcNode) {
+            if ($this->matchesPattern($srcNode->getFilePathname(), $this->path)) {
+                $result[] = FullClassName::createFromFQCN($srcNode->getClassName());
             }
         }
 
@@ -66,5 +59,19 @@ class PathSelector implements SelectorInterface
     public function getParameter(): string
     {
         return $this->path;
+    }
+
+    private function matchesPattern(string $path, string $pattern): bool
+    {
+        $pattern = preg_replace_callback(
+            '/([^*])/',
+            function ($m) {
+                return preg_quote($m[0], '/');
+            },
+            $pattern
+        );
+        $pattern = str_replace('*', '.*', $pattern);
+
+        return (bool) preg_match('/^' . $pattern . '$/i', $path);
     }
 }

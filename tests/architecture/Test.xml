@@ -3,12 +3,12 @@
        xsi:schemaLocation="https://raw.githubusercontent.com/carlosas/phpat/master/YAML/src/Test/Test.xsd">
     <rule name="testAssertionsImplementAssertionInterface">
         <classes>
-            <selector type="havePath">Rule/Assertion/*</selector>
+            <selector type="havePath">*/Rule/Assertion/*</selector>
         </classes>
         <excluding>
             <selector type="haveClassName">PhpAT\Rule\Assertion\*\MustNot*</selector>
-            <selector type="havePath">Rule/Assertion/MatchResult.php</selector>
-            <selector type="havePath">Rule/Assertion/AbstractAssertion.php</selector>
+            <selector type="havePath">*/Rule/Assertion/MatchResult.php</selector>
+            <selector type="havePath">*/Rule/Assertion/AbstractAssertion.php</selector>
         </excluding>
         <assert>mustExtend</assert>
         <classes>
@@ -17,7 +17,7 @@
     </rule>
     <rule name="testAssertionsDoNotDependOnVendors">
         <classes>
-            <selector type="havePath">Rule/Assertion/*</selector>
+            <selector type="havePath">*/Rule/Assertion/*</selector>
         </classes>
         <assert>canOnlyDependOn</assert>
         <classes>

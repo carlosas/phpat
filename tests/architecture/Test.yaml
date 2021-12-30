@@ -1,18 +1,18 @@
 rules:
   testAssertionsImplementAssertionInterface:
     - classes:
-        - havePath: Rule/Assertion/*
+        - havePath: '*/Rule/Assertion/*'
     - excluding:
-        - haveClassName: PhpAT\Rule\Assertion\*\MustNot*
-        - havePath: Rule/Assertion/MatchResult.php
-        - havePath: Rule/Assertion/AbstractAssertion.php
+        - haveClassName: 'PhpAT\Rule\Assertion\*\MustNot*'
+        - havePath: '*/Rule/Assertion/MatchResult.php'
+        - havePath: '*/Rule/Assertion/AbstractAssertion.php'
     - assert: mustExtend
     - classes:
-        - haveClassName: PhpAT\Rule\Assertion\AbstractAssertion
+        - haveClassName: 'PhpAT\Rule\Assertion\AbstractAssertion'
 
   testExtractorsDependOnRuleBuilder:
     - classes:
-        - implementInterface: PhpAT\Test\TestExtractor
+        - implementInterface: 'PhpAT\Test\TestExtractor'
     - assert: mustDependOn
     - classes:
-        - haveClassName: PhpAT\Rule\RuleBuilder
+        - haveClassName: 'PhpAT\Rule\RuleBuilder'

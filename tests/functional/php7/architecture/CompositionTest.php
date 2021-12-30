@@ -12,28 +12,28 @@ class CompositionTest extends ArchitectureTest
     public function testSimpleInterfaceComposition(): Rule
     {
         return $this->newRule
-            ->classesThat(Selector::havePath('Composition/Composed.php'))
+            ->classesThat(Selector::havePath('*/Composition/Composed.php'))
             ->mustImplement()
-            ->classesThat(Selector::havePath('SimpleInterface.php'))
+            ->classesThat(Selector::havePath(realpath('tests/functional/php7/fixtures/SimpleInterface.php')))
             ->build();
     }
 
     public function testMultipleInterfaceComposition(): Rule
     {
         return $this->newRule
-            ->classesThat(Selector::havePath('Composition/MultipleComposed.php'))
+            ->classesThat(Selector::havePath('*/Composition/MultipleComposed.php'))
             ->mustImplement()
-            ->classesThat(Selector::havePath('SimpleInterface.php'))
-            ->andClassesThat(Selector::havePath('Composition/CompositionNamespaceSimpleInterface.php'))
+            ->classesThat(Selector::havePath(realpath('tests/functional/php7/fixtures/SimpleInterface.php')))
+            ->andClassesThat(Selector::havePath(realpath('tests/functional/php7/fixtures/Composition/CompositionNamespaceSimpleInterface.php')))
             ->build();
     }
 
     public function testClassDoesNotImplement(): Rule
     {
         return $this->newRule
-            ->classesThat(Selector::havePath('Composition/CompositionNamespaceSimpleClass.php'))
+            ->classesThat(Selector::havePath('*/Composition/CompositionNamespaceSimpleClass.php'))
             ->mustNotImplement()
-            ->classesThat(Selector::havePath('SimpleInterface.php'))
+            ->classesThat(Selector::havePath(realpath('tests/functional/php7/fixtures/SimpleInterface.php')))
             ->build();
     }
 
@@ -42,7 +42,7 @@ class CompositionTest extends ArchitectureTest
         return $this->newRule
             ->classesThat(Selector::haveClassName(ClassWithAnonymousClass::class))
             ->mustNotImplement()
-            ->classesThat(Selector::havePath('SimpleInterface.php'))
+            ->classesThat(Selector::havePath(realpath('tests/functional/php7/fixtures/SimpleInterface.php')))
             ->build();
     }
 }

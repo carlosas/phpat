@@ -12,27 +12,31 @@ class InheritanceTest extends ArchitectureTest
     public function testSameNamespaceInheritance(): Rule
     {
         return $this->newRule
-            ->classesThat(Selector::havePath('Inheritance/InheritanceNamespaceChild.php'))
+            ->classesThat(Selector::havePath('*/Inheritance/InheritanceNamespaceChild.php'))
             ->mustExtend()
-            ->classesThat(Selector::havePath('Inheritance/InheritanceNamespaceSimpleClass.php'))
+            ->classesThat(
+                Selector::havePath(
+                    realpath('tests/functional/php7/fixtures/Inheritance/InheritanceNamespaceSimpleClass.php')
+                )
+            )
             ->build();
     }
 
     public function testDifferentNamespaceInheritance(): Rule
     {
         return $this->newRule
-            ->classesThat(Selector::havePath('Inheritance/Child.php'))
+            ->classesThat(Selector::havePath('*/Inheritance/Child.php'))
             ->mustExtend()
-            ->classesThat(Selector::havePath('SimpleClass.php'))
+            ->classesThat(Selector::havePath(realpath('tests/functional/php7/fixtures/SimpleClass.php')))
             ->build();
     }
 
     public function testNotExtends(): Rule
     {
         return $this->newRule
-            ->classesThat(Selector::havePath('Inheritance/InheritanceNamespaceSimpleClass.php'))
+            ->classesThat(Selector::havePath('*/Inheritance/InheritanceNamespaceSimpleClass.php'))
             ->mustNotExtend()
-            ->classesThat(Selector::havePath('SimpleClass.php'))
+            ->classesThat(Selector::havePath(realpath('tests/functional/php7/fixtures/SimpleClass.php')))
             ->build();
     }
 
@@ -41,7 +45,7 @@ class InheritanceTest extends ArchitectureTest
         return $this->newRule
             ->classesThat(Selector::haveClassName(ClassWithAnonymousClass::class))
             ->mustNotExtend()
-            ->classesThat(Selector::havePath('SimpleClass.php'))
+            ->classesThat(Selector::havePath(realpath('tests/functional/php7/fixtures/SimpleClass.php')))
             ->build();
     }
 }

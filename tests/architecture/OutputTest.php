@@ -16,8 +16,8 @@ class OutputTest extends ArchitectureTest
             ->excludingClassesThat(Selector::havePath('*/Event/Listener/*Listener.php'))
             ->excludingClassesThat(Selector::haveClassName(SingleCommandApplication::class))
             ->excludingClassesThat(Selector::haveClassName('PhpAT\App\Provider'))
-            ->excludingClassesThat(Selector::havePath('App/EventListenerProvider.php'))
-            ->excludingClassesThat(Selector::havePath('App.php'))
+            ->excludingClassesThat(Selector::havePath('*/App/EventListenerProvider.php'))
+            ->excludingClassesThat(Selector::havePath('*/App.php'))
             ->mustNotDependOn()
             ->classesThat(Selector::haveClassName(\Symfony\Component\Console\Output\OutputInterface::class))
             ->build();
