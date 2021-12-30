@@ -4,16 +4,11 @@ declare(strict_types=1);
 
 namespace PhpAT\Statement;
 
-use PhpAT\App\Configuration;
 use PhpAT\App\Event\WarningEvent;
 use PhpAT\Parser\Ast\ClassLike;
-use PhpAT\Parser\Ast\FullClassName;
 use PhpAT\Parser\Ast\ReferenceMap;
-use PhpAT\Parser\Ast\RegexClassName;
-use PhpAT\Parser\Ast\SrcNode;
 use PhpAT\Rule\Assertion\AbstractAssertion;
 use PhpAT\Rule\Rule;
-use PhpAT\Selector\PathSelector;
 use PhpAT\Selector\SelectorInterface;
 use PhpAT\Selector\SelectorResolver;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -22,19 +17,16 @@ class StatementBuilder
 {
     private SelectorResolver $selectorResolver;
     private EventDispatcherInterface $eventDispatcher;
-    private Configuration $configuration;
 
     /**
      * StatementBuilder constructor.
      */
     public function __construct(
         SelectorResolver $selectorResolver,
-        EventDispatcherInterface $eventDispatcher,
-        Configuration $configuration
+        EventDispatcherInterface $eventDispatcher
     ) {
         $this->selectorResolver = $selectorResolver;
         $this->eventDispatcher  = $eventDispatcher;
-        $this->configuration    = $configuration;
     }
 
     /**

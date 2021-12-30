@@ -39,7 +39,7 @@ class FileFinder
     }
 
     /**
-     * @return array<string>|null
+     * @return null|array<string>
      */
     private function splitFile(string $file): ?array
     {

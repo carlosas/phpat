@@ -16,10 +16,6 @@ use PhpAT\Parser\Ast\ReferenceMap;
  */
 class PathSelector implements SelectorInterface
 {
-    private const DEPENDENCIES = [
-        FileFinder::class
-    ];
-
     private string $path;
     private ?ReferenceMap $map = null;
 

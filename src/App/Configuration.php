@@ -33,7 +33,7 @@ class Configuration
         $this->rootPath = $this->getRootPath();
 
         $this->parserInclude         = $parserInclude;
-        $this->parserExclude        = $parserExcluded;
+        $this->parserExclude         = $parserExcluded;
         $this->composerConfiguration = $composerConfiguration;
         $this->testsPath             = $testsPath;
         $this->baselineFilePath      = $this->normalizePath($baselineFilePath);

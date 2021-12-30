@@ -131,8 +131,7 @@ class Provider
         $this->builder
             ->register(StatementBuilder::class, StatementBuilder::class)
             ->addArgument(new Reference(SelectorResolver::class))
-            ->addArgument(new Reference(EventDispatcherInterface::class))
-            ->addArgument(new Reference(Configuration::class));
+            ->addArgument(new Reference(EventDispatcherInterface::class));
 
         $this->builder
             ->register(Dependency\MustDepend::class, Dependency\MustDepend::class)
