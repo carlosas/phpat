@@ -1,5 +1,8 @@
-src:
-  path: tests/functional/php80/fixtures/
+parser:
+  include:
+    - tests/functional/php80/fixtures/
+  exclude:
+    - src/
 tests:
   path: tests/functional/php80/architecture/
   baseline: tests/functional/php80/phpat.baseline.json

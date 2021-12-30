@@ -60,7 +60,8 @@ tests:
 
 | Name                                      | Description                                              | Default      |
 |-------------------------------------------|----------------------------------------------------------|:------------:|
-| `src` `exclude`                           | Files you want to be excluded in the tests               | *no files*   |
+| `parser` `include`                        | Extra files you want to be parsed                        | *no files*   |
+| `parser` `exclude`                        | Files you want to be excluded from parsing               | *no files*   |
 | `composer` `$ALIAS` `json`                | Path of your composer.json file (multiple)               | main json    |
 | `composer` `$ALIAS` `lock`                | Path of your composer.lock file (multiple)               | main lock    |
 | `tests` `path`                            | The path where your tests are                            | *no default* |

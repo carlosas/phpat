@@ -84,8 +84,7 @@ class Provider
 
         $this->builder
             ->register(FileFinder::class, FileFinder::class)
-            ->addArgument(new SymfonyFinderAdapter(new Finder()))
-            ->addArgument(new Reference(Configuration::class));
+            ->addArgument(new SymfonyFinderAdapter(new Finder()));
 
         $this->builder
             ->register(ComposerParser::class, ComposerParser::class)

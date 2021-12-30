@@ -6,17 +6,13 @@ namespace PhpAT\File;
 
 class PathnameFilterIterator extends \FilterIterator
 {
-    protected array $matchRegexps   = [];
-    protected array $noMatchRegexps = [];
+    /** @var array<string> */
+    protected array $excluded = [];
 
-    public function __construct(\Iterator $iterator, array $matchPatterns, array $noMatchPatterns)
+    public function __construct(\Iterator $iterator, array $noMatchPatterns)
     {
-        foreach ($matchPatterns as $pattern) {
-            $this->matchRegexps[] = $this->toRegex($pattern);
-        }
-
         foreach ($noMatchPatterns as $pattern) {
-            $this->noMatchRegexps[] = $this->toRegex($pattern);
+            $this->excluded[] = $this->toRegex($pattern);
         }
 
         parent::__construct($iterator);
@@ -68,20 +64,10 @@ class PathnameFilterIterator extends \FilterIterator
 
     protected function isAccepted($string)
     {
-        foreach ($this->noMatchRegexps as $regex) {
+        foreach ($this->excluded as $regex) {
             if (preg_match($regex, $string)) {
                 return false;
             }
-        }
-
-        if ($this->matchRegexps) {
-            foreach ($this->matchRegexps as $regex) {
-                if (preg_match($regex, $string)) {
-                    return true;
-                }
-            }
-
-            return false;
         }
 
         return true;

@@ -1,5 +1,8 @@
-src:
-  path: tests/functional/php81/fixtures/
+parser:
+  include:
+    - tests/functional/php81/fixtures/
+  exclude:
+    - src/
 tests:
   path: tests/functional/php81/architecture/
 options:

@@ -4,21 +4,18 @@ declare(strict_types=1);
 
 namespace PhpAT\File;
 
-use PhpAT\App\Configuration;
 use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
 
 class FileFinder
 {
     private Finder $finder;
-    private Configuration $configuration;
 
-    public function __construct(Finder $finder, Configuration $configuration)
+    public function __construct(Finder $finder)
     {
-        $this->finder        = $finder;
-        $this->configuration = $configuration;
+        $this->finder = $finder;
     }
 
-    public function findFile(string $file): ?\SplFileInfo
+    public function findFile(string $file, array $excluded = []): ?\SplFileInfo
     {
         if (!file_exists($file)) {
             return null;
@@ -26,21 +23,7 @@ class FileFinder
 
         $parts = $this->splitFile($file);
 
-        return ($this->finder->locateFile($parts[0], $parts[1])) ?? null;
-    }
-
-    /**
-     * @return array<\SplFileInfo>
-     */
-    public function findSrcFiles(string $file, array $excluded = []): array
-    {
-        $parts = $this->splitFile($this->configuration->getSrcPath() . '/' . $file);
-
-        try {
-            return $this->finder->find($parts[0], $parts[1], [], $excluded);
-        } catch (DirectoryNotFoundException $e) {
-            return [];
-        }
+        return $this->finder->locateFile($parts[0], $parts[1], $excluded);
     }
 
     /**
@@ -49,12 +32,15 @@ class FileFinder
     public function findPhpFilesInPath(string $path, array $excluded = []): array
     {
         try {
-            return $this->finder->find($path, '*.php', [], $excluded);
+            return $this->finder->findFiles($path, '*.php', $excluded);
         } catch (DirectoryNotFoundException $e) {
             return [];
         }
     }
 
+    /**
+     * @return array<string>|null
+     */
     private function splitFile(string $file): ?array
     {
         $pos = strrpos($file, '/');

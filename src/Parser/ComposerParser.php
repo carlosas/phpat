@@ -69,8 +69,11 @@ class ComposerParser
      */
     private function getFiles(string $path): array
     {
-        return is_file($path)
-            ? [new \SplFileInfo($path)]
-            : array_values($this->finder->findPhpFilesInPath($path));
+        if (is_file($path)) {
+            $sfi = $this->finder->findFile($path, $this->configuration->getParserExclude());
+            return ($sfi === null) ? [] : [$sfi];
+        }
+
+        return array_values($this->finder->findPhpFilesInPath($path, $this->configuration->getParserExclude()));
     }
 }

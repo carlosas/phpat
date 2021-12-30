@@ -6,9 +6,8 @@ namespace PhpAT\App;
 
 class Configuration
 {
-    private string $srcPath;
-    private array $srcIncluded;
-    private array $srcExcluded;
+    private array $parserInclude;
+    private array $parserExclude;
     private array $composerConfiguration;
     private string $testsPath;
     private int $verbosity;
@@ -20,9 +19,8 @@ class Configuration
     private string $rootPath;
 
     public function __construct(
-        string $srcPath,
-        array $srcIncluded,
-        array $srcExcluded,
+        array $parserInclude,
+        array $parserExcluded,
         array $composerConfiguration,
         string $testsPath,
         string $baselineFilePath,
@@ -34,9 +32,8 @@ class Configuration
     ) {
         $this->rootPath = $this->getRootPath();
 
-        $this->srcPath               = $this->normalizePath($srcPath);
-        $this->srcIncluded           = $srcIncluded;
-        $this->srcExcluded           = $srcExcluded;
+        $this->parserInclude         = $parserInclude;
+        $this->parserExclude        = $parserExcluded;
         $this->composerConfiguration = $composerConfiguration;
         $this->testsPath             = $testsPath;
         $this->baselineFilePath      = $this->normalizePath($baselineFilePath);
@@ -47,19 +44,14 @@ class Configuration
         $this->ignorePhpExtensions   = $ignorePhpExtensions;
     }
 
-    public function getSrcPath(): string
+    public function getParserInclude(): array
     {
-        return $this->srcPath;
+        return $this->parserInclude;
     }
 
-    public function getSrcIncluded(): array
+    public function getParserExclude(): array
     {
-        return $this->srcIncluded;
-    }
-
-    public function getSrcExcluded(): array
-    {
-        return $this->srcExcluded;
+        return $this->parserExclude;
     }
 
     public function getComposerConfiguration(): array

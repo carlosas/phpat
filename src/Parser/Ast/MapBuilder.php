@@ -54,10 +54,7 @@ class MapBuilder
      */
     private function buildSrcMap(): array
     {
-        $files = [];
-        foreach (array_keys($this->configuration->getComposerConfiguration()) as $package) {
-            $files = $this->composerParser->getFilesToAutoload($package, false);
-        }
+        $files     = $this->getFilesToParse();
         $traverser = $this->traverserFactory->create();
 
         foreach ($files as $file) {
@@ -148,5 +145,31 @@ class MapBuilder
             $this->eventDispatcher->dispatch($error);
             throw new FatalErrorException();
         }
+    }
+
+    /**
+     * @throws \Exception
+     * @return array<string>
+     */
+    private function getFilesToParse(): array
+    {
+        $files = [];
+        foreach (array_keys($this->configuration->getComposerConfiguration()) as $package) {
+            $files = $this->composerParser->getFilesToAutoload($package, false);
+        }
+
+        foreach ($this->configuration->getParserInclude() as $path) {
+            $files = array_merge(
+                $files,
+                array_values(
+                    array_map(
+                        fn (\SplFileInfo $f) => $f->getPathname(),
+                        $this->finder->findPhpFilesInPath($path, $this->configuration->getParserExclude())
+                    )
+                )
+            );
+        }
+
+        return $files;
     }
 }

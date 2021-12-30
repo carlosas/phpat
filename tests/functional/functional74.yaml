@@ -1,6 +1,7 @@
-src:
-  path: tests/functional/php7/fixtures/
 tests:
   path: tests/functional/php7/architecture/
-options:
-  verbosity: 2
+parser:
+  include:
+    - tests/functional/php7/fixtures/
+  exclude:
+    - src/

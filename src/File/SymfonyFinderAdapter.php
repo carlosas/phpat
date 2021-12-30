@@ -15,30 +15,29 @@ class SymfonyFinderAdapter implements Finder
         $this->finder = $finder;
     }
 
-    public function find(string $filePath, string $fileName, array $include = [], array $exclude = []): array
+    public function findFiles(string $filePath, string $fileName, array $exclude = []): array
     {
         $finder = $this->finder->create();
 
         $finder
-            ->in($filePath . '/')
+            ->in($this->normalize($filePath))
             ->name($fileName)
             ->files()
             ->followLinks()
             ->ignoreUnreadableDirs(true)
             ->ignoreVCS(true);
 
-        $results = $finder->getIterator();
-        $results = new PathnameFilterIterator($results, $include, $exclude);
+        $results = new PathnameFilterIterator($finder->getIterator(), $exclude);
 
         return iterator_to_array($results);
     }
 
-    public function locateFile(string $filePath, string $fileName): ?\SplFileInfo
+    public function locateFile(string $filePath, string $fileName, array $exclude = []): ?\SplFileInfo
     {
         $finder = $this->finder->create();
 
         $finder
-            ->in($filePath . '/')
+            ->in($this->normalize($filePath))
             ->name($fileName)
             ->files()
             ->depth('== 0');
@@ -47,8 +46,17 @@ class SymfonyFinderAdapter implements Finder
             return null;
         }
 
-        $result = array_values(iterator_to_array($finder->getIterator()));
+        $results = new PathnameFilterIterator($finder->getIterator(), $exclude);
 
-        return $result[0] ?? null;
+        return iterator_to_array($results)[0] ?? null;
+    }
+
+    private function normalize(string $filePath): string
+    {
+        if (substr($filePath, -2) === '/*') {
+            $filePath = rtrim($filePath, '*');
+        }
+
+        return $filePath;
     }
 }

@@ -76,11 +76,11 @@ class StatementBuilder
             $classNamesToValidate = array_merge($classNamesToValidate, $this->selectorResolver->resolve($i, $map));
         }
 
-        foreach ($this->configuration->getSrcExcluded() as $exc) {
-            $excludedInConfig[] = new PathSelector($exc);
-        }
-        $excludedSelectors = array_merge($excludedInRule, $excludedInConfig ?? []);
-        foreach ($excludedSelectors as $excludedSelector) {
+        //foreach ($this->configuration->getParserExclude() as $exc) {
+        //    $excludedInConfig[] = new PathSelector($exc);
+        //}
+        //$excludedSelectors = array_merge($excludedInRule, $excludedInConfig ?? []);
+        foreach ($excludedInRule as $excludedSelector) {
             /** @var ClassLike $excludedClassName */
             foreach ($this->selectorResolver->resolve($excludedSelector, $map) as $excludedClassName) {
                 /** @var ClassLike $value */
@@ -92,28 +92,28 @@ class StatementBuilder
             }
         }
 
-        if (!empty($this->configuration->getSrcIncluded())) {
-            $resolvedIncludeRow = [];
-            foreach ($this->configuration->getSrcIncluded() as $inc) {
-                $resolvedIncludeRow[] = $this->selectorResolver->resolve(new PathSelector($inc), $map);
-            }
-            $filteredClassNames = [];
-            foreach ($resolvedIncludeRow as $includedClasses) {
-                /** @var ClassLike $includedClassName */
-                foreach ($includedClasses as $includedClassName) {
-                    /** @var ClassLike $value */
-                    foreach ($classNamesToValidate as $key => $value) {
-                        if (
-                            isset($map->getSrcNodes()[$value->toString()])
-                            && $includedClassName->matches($map->getSrcNodes()[$value->toString()]->getClassName())
-                        ) {
-                            $filteredClassNames[$key] = $value;
-                        }
-                    }
-                }
-            }
-            $classNamesToValidate = $filteredClassNames;
-        }
+//        if (!empty($this->configuration->getSrcIncluded())) {
+//            $resolvedIncludeRow = [];
+//            foreach ($this->configuration->getSrcIncluded() as $inc) {
+//                $resolvedIncludeRow[] = $this->selectorResolver->resolve(new PathSelector($inc), $map);
+//            }
+//            $filteredClassNames = [];
+//            foreach ($resolvedIncludeRow as $includedClasses) {
+//                /** @var ClassLike $includedClassName */
+//                foreach ($includedClasses as $includedClassName) {
+//                    /** @var ClassLike $value */
+//                    foreach ($classNamesToValidate as $key => $value) {
+//                        if (
+//                            isset($map->getSrcNodes()[$value->toString()])
+//                            && $includedClassName->matches($map->getSrcNodes()[$value->toString()]->getClassName())
+//                        ) {
+//                            $filteredClassNames[$key] = $value;
+//                        }
+//                    }
+//                }
+//            }
+//            $classNamesToValidate = $filteredClassNames;
+//        }
 
         $classNamesToValidate = $this->removeRegexClassNames($classNamesToValidate);
 

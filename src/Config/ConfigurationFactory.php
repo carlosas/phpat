@@ -26,9 +26,8 @@ class ConfigurationFactory
         $config['options'] = array_merge($config['options'] ?? [], array_filter($commandOptions));
 
         return new Configuration(
-            $config['src']['path'] ?? '',
-            $config['src']['include'] ?? [],
-            $config['src']['exclude'] ?? [],
+            $config['parser']['include'] ?? [],
+            $config['parser']['exclude'] ?? [],
             $config['composer'] ?? $this->defaults['composer'],
             $config['tests']['path'] ?? '',
             $commandOptions['baseline'] ?? $config['tests']['baseline'] ?? '',
