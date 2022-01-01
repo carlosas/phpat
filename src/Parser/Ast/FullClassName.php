@@ -4,33 +4,35 @@ namespace PhpAT\Parser\Ast;
 
 class FullClassName implements ClassLike
 {
-    private string $namespace;
-    private string $name;
+    private ?string $namespace = null;
+    private ?string $name = null;
     private string $fqcn;
 
-    private function __construct(string $namespace, string $name, string $fqcn)
+    private function __construct(string $fqcn)
     {
-        $this->namespace = $namespace;
-        $this->name      = $name;
-        $this->fqcn      = $fqcn;
+        $this->fqcn = $fqcn;
     }
 
     public static function createFromFQCN(string $fqcn): self
     {
-        $parts          = explode('\\', ltrim($fqcn, '\\'));
-        $name           = array_pop($parts);
-        $normalizedFqcn = empty($parts) ? $name : $fqcn;
-
-        return new self(implode('\\', $parts), $name, $normalizedFqcn);
+        return new self($fqcn);
     }
 
     public function getNamespace(): string
     {
+        if ($this->namespace === null) {
+            $this->namespace = $this->splitFQCN()[0];
+        }
+
         return $this->namespace;
     }
 
     public function getName(): string
     {
+        if ($this->name === null) {
+            $this->name = $this->splitFQCN()[1];
+        }
+
         return $this->name;
     }
 
@@ -52,5 +54,19 @@ class FullClassName implements ClassLike
     public function toString(): string
     {
         return $this->getFQCN();
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function splitFQCN(): array
+    {
+        $parts = explode('\\', ltrim($this->fqcn, '\\'));
+        $name  = array_pop($parts);
+
+        $this->namespace = implode('\\', $parts);
+        $this->name = $name;
+
+        return [$this->namespace, $this->name];
     }
 }
