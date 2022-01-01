@@ -72,25 +72,25 @@ abstract class AbstractAssertionTestCase extends TestCase
             [
                 'Example\\ClassExample' => new SrcNode(
                     'folder/Example/ClassExample.php',
-                    FullClassName::createFromFQCN('Example\\ClassExample'),
+                    new FullClassName('Example\\ClassExample'),
                     [
-                        new Inheritance(FullClassName::createFromFQCN('Example\\ParentClassExample'), 0, 0),
-                        new Inheritance(FullClassName::createFromFQCN('\\FilterIterator'), 0, 0),
-                        new Dependency(FullClassName::createFromFQCN('Example\\AnotherClassExample'), 0, 0),
-                        new Dependency(FullClassName::createFromFQCN('Vendor\\ThirdPartyExample'), 0, 0),
-                        new Dependency(FullClassName::createFromFQCN('iterable'), 0, 0),
-                        new Composition(FullClassName::createFromFQCN('Example\\InterfaceExample'), 0, 0),
-                        new Composition(FullClassName::createFromFQCN('Example\\AnotherInterface'), 0, 0),
-                        new Composition(FullClassName::createFromFQCN('iterable'), 0, 0),
-                        new Mixin(FullClassName::createFromFQCN('Example\\TraitExample'), 0, 0),
-                        new Mixin(FullClassName::createFromFQCN('PHPDocElement'), 0, 0)
+                        new Inheritance(new FullClassName('Example\\ParentClassExample'), 0, 0),
+                        new Inheritance(new FullClassName('\\FilterIterator'), 0, 0),
+                        new Dependency(new FullClassName('Example\\AnotherClassExample'), 0, 0),
+                        new Dependency(new FullClassName('Vendor\\ThirdPartyExample'), 0, 0),
+                        new Dependency(new FullClassName('iterable'), 0, 0),
+                        new Composition(new FullClassName('Example\\InterfaceExample'), 0, 0),
+                        new Composition(new FullClassName('Example\\AnotherInterface'), 0, 0),
+                        new Composition(new FullClassName('iterable'), 0, 0),
+                        new Mixin(new FullClassName('Example\\TraitExample'), 0, 0),
+                        new Mixin(new FullClassName('PHPDocElement'), 0, 0)
                     ]
                 )
             ],
             [
-                FullClassName::createFromFQCN('iterable'),
-                FullClassName::createFromFQCN('\\FilterIterator'),
-                FullClassName::createFromFQCN('PHPDocElement'),
+                new FullClassName('iterable'),
+                new FullClassName('\\FilterIterator'),
+                new FullClassName('PHPDocElement'),
             ],
             [
                 new ComposerPackage('main', [], [], [], [])

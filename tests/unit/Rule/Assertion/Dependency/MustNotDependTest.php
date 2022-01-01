@@ -12,17 +12,17 @@ class MustNotDependTest extends AbstractAssertionTestCase
     {
         return [
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
-                [FullClassName::createFromFQCN('NotARealClass')],
+                new FullClassName('Example\ClassExample'),
+                [new FullClassName('NotARealClass')],
                 [],
                 $this->getMap(),
                 [true]
             ],
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
+                new FullClassName('Example\ClassExample'),
                 [
-                    FullClassName::createFromFQCN('NopesOne'),
-                    FullClassName::createFromFQCN('NopesTwo')
+                    new FullClassName('NopesOne'),
+                    new FullClassName('NopesTwo')
                 ],
                 [],
                 $this->getMap(),
@@ -30,19 +30,19 @@ class MustNotDependTest extends AbstractAssertionTestCase
             ],
             //it fails because it depends on Example\AnotherClassExample
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
-                [FullClassName::createFromFQCN('Example\AnotherClassExample')],
+                new FullClassName('Example\ClassExample'),
+                [new FullClassName('Example\AnotherClassExample')],
                 [],
                 $this->getMap(),
                 [false]
             ],
             //it fails twice because it depends on two of them
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
+                new FullClassName('Example\ClassExample'),
                 [
-                    FullClassName::createFromFQCN('Example\AnotherClassExample'),
-                    FullClassName::createFromFQCN('Nopes'),
-                    FullClassName::createFromFQCN('Vendor\ThirdPartyExample'),
+                    new FullClassName('Example\AnotherClassExample'),
+                    new FullClassName('Nopes'),
+                    new FullClassName('Vendor\ThirdPartyExample'),
                 ],
                 [],
                 $this->getMap(),

@@ -12,9 +12,9 @@ class MustOnlyIncludeTest extends AbstractAssertionTestCase
     {
         return [
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
+                new FullClassName('Example\ClassExample'),
                 [
-                    FullClassName::createFromFQCN('Example\TraitExample')
+                    new FullClassName('Example\TraitExample')
                 ],
                 [],
                 $this->getMap(),
@@ -22,10 +22,10 @@ class MustOnlyIncludeTest extends AbstractAssertionTestCase
             ],
             //it fails because it does not include on NotAClass
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
+                new FullClassName('Example\ClassExample'),
                 [
-                    FullClassName::createFromFQCN('Example\TraitExample'),
-                    FullClassName::createFromFQCN('NotAClass')
+                    new FullClassName('Example\TraitExample'),
+                    new FullClassName('NotAClass')
                 ],
                 [],
                 $this->getMap(),
@@ -33,8 +33,8 @@ class MustOnlyIncludeTest extends AbstractAssertionTestCase
             ],
             //it fails because it includes a trait not listed and it does not include NotARealClass
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
-                [FullClassName::createFromFQCN('NotARealClass')],
+                new FullClassName('Example\ClassExample'),
+                [new FullClassName('NotARealClass')],
                 [],
                 $this->getMap(),
                 [false, false]

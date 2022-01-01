@@ -45,7 +45,7 @@ class IncludeSelector implements SelectorInterface
                     $relation instanceof Mixin
                     && $this->matchesPattern($relation->relatedClass->getFQCN(), $this->fqcn)
                 ) {
-                    $result[] = FullClassName::createFromFQCN($srcNode->getClassName());
+                    $result[] = new FullClassName($srcNode->getClassName());
                 }
             }
         }

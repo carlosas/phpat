@@ -26,7 +26,7 @@ class ClassNameSelectorTest extends AbstractSelectorTestCase
     public function testSelectsUnknownFQCN(): void
     {
         $selected = $this->select('Fake\\NotAClass');
-        $this->assertContainsEquals(FullClassName::createFromFQCN('Fake\\NotAClass'), $selected);
+        $this->assertContainsEquals(new FullClassName('Fake\\NotAClass'), $selected);
     }
 
     public function testSelectsUnknownRegex(): void

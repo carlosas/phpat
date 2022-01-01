@@ -12,24 +12,24 @@ class MustDependTest extends AbstractAssertionTestCase
     {
         return [
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
-                [FullClassName::createFromFQCN('Example\AnotherClassExample')],
+                new FullClassName('Example\ClassExample'),
+                [new FullClassName('Example\AnotherClassExample')],
                 [],
                 $this->getMap(),
                 [true]
             ],
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
-                [FullClassName::createFromFQCN('Vendor\ThirdPartyExample')],
+                new FullClassName('Example\ClassExample'),
+                [new FullClassName('Vendor\ThirdPartyExample')],
                 [],
                 $this->getMap(),
                 [true]
             ],
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
+                new FullClassName('Example\ClassExample'),
                 [
-                    FullClassName::createFromFQCN('Example\AnotherClassExample'),
-                    FullClassName::createFromFQCN('Vendor\ThirdPartyExample')
+                    new FullClassName('Example\AnotherClassExample'),
+                    new FullClassName('Vendor\ThirdPartyExample')
                 ],
                 [],
                 $this->getMap(),
@@ -37,18 +37,18 @@ class MustDependTest extends AbstractAssertionTestCase
             ],
             //it fails because it does not depend on NotARealClass
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
-                [FullClassName::createFromFQCN('NotARealClass')],
+                new FullClassName('Example\ClassExample'),
+                [new FullClassName('NotARealClass')],
                 [],
                 $this->getMap(),
                 [false]
             ],
             //it fails because it does not depend on NotARealClass
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
+                new FullClassName('Example\ClassExample'),
                 [
-                    FullClassName::createFromFQCN('Example\AnotherClassExample'),
-                    FullClassName::createFromFQCN('NotARealClass')
+                    new FullClassName('Example\AnotherClassExample'),
+                    new FullClassName('NotARealClass')
                 ],
                 [],
                 $this->getMap(),
@@ -56,10 +56,10 @@ class MustDependTest extends AbstractAssertionTestCase
             ],
             //it fails twice because it does not depend on any of both classes
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
+                new FullClassName('Example\ClassExample'),
                 [
-                    FullClassName::createFromFQCN('NopesOne'),
-                    FullClassName::createFromFQCN('NopesTwo')
+                    new FullClassName('NopesOne'),
+                    new FullClassName('NopesTwo')
                 ],
                 [],
                 $this->getMap(),

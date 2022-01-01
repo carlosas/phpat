@@ -93,7 +93,7 @@ final class Classmap
         foreach ($classmap as $className => $properties) {
             $srcNodes[$className] = new SrcNode(
                 $properties->getPathname(),
-                FullClassName::createFromFQCN($className),
+                new FullClassName($className),
                 array_merge(
                     Classmap::addRelations(Dependency::class, $properties->getDependencies()),
                     Classmap::addRelations(

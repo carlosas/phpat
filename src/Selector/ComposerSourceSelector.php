@@ -64,7 +64,7 @@ class ComposerSourceSelector implements SelectorInterface
         foreach ($this->map->getSrcNodes() as $srcNode) {
             foreach ($regexs as $regex) {
                 if ($this->matchesPattern($srcNode->getClassName(), $regex->toString())) {
-                    $result[]                                 = FullClassName::createFromFQCN($srcNode->getClassName());
+                    $result[]                                 = new FullClassName($srcNode->getClassName());
                     $regexsWithSrcClasses[$regex->toString()] = $regex;
                 }
             }

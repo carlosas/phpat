@@ -12,17 +12,17 @@ class MustNotImplementTest extends AbstractAssertionTestCase
     {
         return [
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
-                [FullClassName::createFromFQCN('NotARealInterface')],
+                new FullClassName('Example\ClassExample'),
+                [new FullClassName('NotARealInterface')],
                 [],
                 $this->getMap(),
                 [true]
             ],
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
+                new FullClassName('Example\ClassExample'),
                 [
-                    FullClassName::createFromFQCN('NopesOne'),
-                    FullClassName::createFromFQCN('NopesTwo')
+                    new FullClassName('NopesOne'),
+                    new FullClassName('NopesTwo')
                 ],
                 [],
                 $this->getMap(),
@@ -30,18 +30,18 @@ class MustNotImplementTest extends AbstractAssertionTestCase
             ],
             //it fails because Example\InterfaceExample is implemented
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
-                [FullClassName::createFromFQCN('Example\InterfaceExample')],
+                new FullClassName('Example\ClassExample'),
+                [new FullClassName('Example\InterfaceExample')],
                 [],
                 $this->getMap(),
                 [false]
             ],
             //it fails twice because both are implemented
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
+                new FullClassName('Example\ClassExample'),
                 [
-                    FullClassName::createFromFQCN('Example\InterfaceExample'),
-                    FullClassName::createFromFQCN('Example\AnotherInterface'),
+                    new FullClassName('Example\InterfaceExample'),
+                    new FullClassName('Example\AnotherInterface'),
                 ],
                 [],
                 $this->getMap(),

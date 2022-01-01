@@ -12,17 +12,17 @@ class CanOnlyIncludeTest extends AbstractAssertionTestCase
     {
         return [
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
-                [FullClassName::createFromFQCN('Example\TraitExample')],
+                new FullClassName('Example\ClassExample'),
+                [new FullClassName('Example\TraitExample')],
                 [],
                 $this->getMap(),
                 [true]
             ],
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
+                new FullClassName('Example\ClassExample'),
                 [
-                    FullClassName::createFromFQCN('Example\TraitExample'),
-                    FullClassName::createFromFQCN('AnotherTrait')
+                    new FullClassName('Example\TraitExample'),
+                    new FullClassName('AnotherTrait')
                 ],
                 [],
                 $this->getMap(),
@@ -30,8 +30,8 @@ class CanOnlyIncludeTest extends AbstractAssertionTestCase
             ],
             //it fails because it includes Example\TraitExample
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
-                [FullClassName::createFromFQCN('AnotherTrait')],
+                new FullClassName('Example\ClassExample'),
+                [new FullClassName('AnotherTrait')],
                 [],
                 $this->getMap(),
                 [false]

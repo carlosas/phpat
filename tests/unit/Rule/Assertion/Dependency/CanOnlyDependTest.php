@@ -12,21 +12,21 @@ class CanOnlyDependTest extends AbstractAssertionTestCase
     {
         return [
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
+                new FullClassName('Example\ClassExample'),
                 [
-                    FullClassName::createFromFQCN('Example\AnotherClassExample'),
-                    FullClassName::createFromFQCN('Vendor\ThirdPartyExample')
+                    new FullClassName('Example\AnotherClassExample'),
+                    new FullClassName('Vendor\ThirdPartyExample')
                 ],
                 [],
                 $this->getMap(),
                 [true]
             ],
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
+                new FullClassName('Example\ClassExample'),
                 [
-                    FullClassName::createFromFQCN('Example\AnotherClassExample'),
-                    FullClassName::createFromFQCN('Vendor\ThirdPartyExample'),
-                    FullClassName::createFromFQCN('ItDoesNotMatter')
+                    new FullClassName('Example\AnotherClassExample'),
+                    new FullClassName('Vendor\ThirdPartyExample'),
+                    new FullClassName('ItDoesNotMatter')
                 ],
                 [],
                 $this->getMap(),
@@ -34,15 +34,15 @@ class CanOnlyDependTest extends AbstractAssertionTestCase
             ],
             //it fails because it also depends on Vendor\ThirdPartyExample
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
-                [FullClassName::createFromFQCN('Example\AnotherClassExample')],
+                new FullClassName('Example\ClassExample'),
+                [new FullClassName('Example\AnotherClassExample')],
                 [],
                 $this->getMap(),
                 [false]],
             //it fails because there are 2 dependencies not listed
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
-                [FullClassName::createFromFQCN('NotARealClass')],
+                new FullClassName('Example\ClassExample'),
+                [new FullClassName('NotARealClass')],
                 [],
                 $this->getMap(),
                 [false,

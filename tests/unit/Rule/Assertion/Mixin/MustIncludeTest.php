@@ -12,18 +12,18 @@ class MustIncludeTest extends AbstractAssertionTestCase
     {
         return [
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
-                [FullClassName::createFromFQCN('Example\TraitExample')],
+                new FullClassName('Example\ClassExample'),
+                [new FullClassName('Example\TraitExample')],
                 [],
                 $this->getMap(),
                 [true]
             ],
             //it fails because NotATrait is not included
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
+                new FullClassName('Example\ClassExample'),
                 [
-                    FullClassName::createFromFQCN('Example\TraitExample'),
-                    FullClassName::createFromFQCN('NotATrait')
+                    new FullClassName('Example\TraitExample'),
+                    new FullClassName('NotATrait')
                 ],
                 [],
                 $this->getMap(),
@@ -31,18 +31,18 @@ class MustIncludeTest extends AbstractAssertionTestCase
             ],
             //it fails because NotATrait is not included
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
-                [FullClassName::createFromFQCN('NotATrait')],
+                new FullClassName('Example\ClassExample'),
+                [new FullClassName('NotATrait')],
                 [],
                 $this->getMap(),
                 [false]
             ],
             //it fails twice because any of them are included
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
+                new FullClassName('Example\ClassExample'),
                 [
-                    FullClassName::createFromFQCN('NopesOne'),
-                    FullClassName::createFromFQCN('NopesTwo')
+                    new FullClassName('NopesOne'),
+                    new FullClassName('NopesTwo')
                 ],
                 [],
                 $this->getMap(),

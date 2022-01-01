@@ -40,14 +40,14 @@ class ClassNameSelector implements SelectorInterface
     {
         foreach ($this->map->getSrcNodes() as $srcNode) {
             if ($this->matchesPattern($srcNode->getClassName(), $this->fqcn)) {
-                $result[] = FullClassName::createFromFQCN($srcNode->getClassName());
+                $result[] = new FullClassName($srcNode->getClassName());
             }
         }
 
         if ($this->isRegex($this->fqcn)) {
             $result[] = new RegexClassName($this->fqcn);
         } elseif (empty($result)) {
-            $result[] = FullClassName::createFromFQCN($this->fqcn);
+            $result[] = new FullClassName($this->fqcn);
         }
 
         return $result;

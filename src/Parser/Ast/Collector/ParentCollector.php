@@ -20,7 +20,7 @@ class ParentCollector extends NodeVisitorAbstract
         ) {
             Classmap::registerClassExtends(
                 TraverseContext::className(),
-                FullClassName::createFromFQCN($node->extends->toString()),
+                new FullClassName($node->extends->toString()),
                 $node->extends->getStartLine(),
                 $node->extends->getEndLine()
             );

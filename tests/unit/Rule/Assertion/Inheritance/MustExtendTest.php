@@ -12,16 +12,16 @@ class MustExtendTest extends AbstractAssertionTestCase
     {
         return [
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
-                [FullClassName::createFromFQCN('Example\ParentClassExample')],
+                new FullClassName('Example\ClassExample'),
+                [new FullClassName('Example\ParentClassExample')],
                 [],
                 $this->getMap(),
                 [true]
             ],
             //it fails because it does not extends NotARealParent
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
-                [FullClassName::createFromFQCN('NotARealParent')],
+                new FullClassName('Example\ClassExample'),
+                [new FullClassName('NotARealParent')],
                 [],
                 $this->getMap(),
                 [false]

@@ -74,7 +74,7 @@ class MapBuilder
     {
         return array_map(
             function (string $class) {
-                return FullClassName::createFromFQCN($class);
+                return new FullClassName($class);
             },
             array_keys(PhpStubsMap::CLASSES)
         );

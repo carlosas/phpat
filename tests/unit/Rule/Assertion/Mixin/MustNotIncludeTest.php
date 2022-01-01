@@ -12,10 +12,10 @@ class MustNotIncludeTest extends AbstractAssertionTestCase
     {
         return [
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
+                new FullClassName('Example\ClassExample'),
                 [
-                    FullClassName::createFromFQCN('NopesOne'),
-                    FullClassName::createFromFQCN('NopesTwo')
+                    new FullClassName('NopesOne'),
+                    new FullClassName('NopesTwo')
                 ],
                 [],
                 $this->getMap(),
@@ -23,10 +23,10 @@ class MustNotIncludeTest extends AbstractAssertionTestCase
             ],
             //it fails because Example\TraitExample is included
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
+                new FullClassName('Example\ClassExample'),
                 [
-                    FullClassName::createFromFQCN('NotATrait'),
-                    FullClassName::createFromFQCN('Example\TraitExample')
+                    new FullClassName('NotATrait'),
+                    new FullClassName('Example\TraitExample')
                 ],
                 [],
                 $this->getMap(),
@@ -34,8 +34,8 @@ class MustNotIncludeTest extends AbstractAssertionTestCase
             ],
             //it fails because Example\TraitExample is included
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
-                [FullClassName::createFromFQCN('Example\TraitExample')],
+                new FullClassName('Example\ClassExample'),
+                [new FullClassName('Example\TraitExample')],
                 [],
                 $this->getMap(),
                 [false]

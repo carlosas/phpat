@@ -12,10 +12,10 @@ class MustOnlyImplementTest extends AbstractAssertionTestCase
     {
         return [
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
+                new FullClassName('Example\ClassExample'),
                 [
-                    FullClassName::createFromFQCN('Example\InterfaceExample'),
-                    FullClassName::createFromFQCN('Example\AnotherInterface')
+                    new FullClassName('Example\InterfaceExample'),
+                    new FullClassName('Example\AnotherInterface')
                 ],
                 [],
                 $this->getMap(),
@@ -23,11 +23,11 @@ class MustOnlyImplementTest extends AbstractAssertionTestCase
             ],
             //it fails because it does not implement NotImplementedInterface
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
+                new FullClassName('Example\ClassExample'),
                 [
-                    FullClassName::createFromFQCN('Example\InterfaceExample'),
-                    FullClassName::createFromFQCN('Example\AnotherInterface'),
-                    FullClassName::createFromFQCN('NotImplementedInterface')
+                    new FullClassName('Example\InterfaceExample'),
+                    new FullClassName('Example\AnotherInterface'),
+                    new FullClassName('NotImplementedInterface')
                 ],
                 [],
                 $this->getMap(),
@@ -35,16 +35,16 @@ class MustOnlyImplementTest extends AbstractAssertionTestCase
             ],
             //it fails because Example\AnotherInterface is also implemented
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
-                [FullClassName::createFromFQCN('Example\InterfaceExample')],
+                new FullClassName('Example\ClassExample'),
+                [new FullClassName('Example\InterfaceExample')],
                 [],
                 $this->getMap(),
                 [true, false]
             ],
             //it fails because it implements 2 that are not listed and does not implement NotARealInterface
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
-                [FullClassName::createFromFQCN('NotARealInterface')],
+                new FullClassName('Example\ClassExample'),
+                [new FullClassName('NotARealInterface')],
                 [],
                 $this->getMap(),
                 [false, false, false]

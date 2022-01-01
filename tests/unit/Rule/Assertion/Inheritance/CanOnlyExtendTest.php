@@ -12,24 +12,24 @@ class CanOnlyExtendTest extends AbstractAssertionTestCase
     {
         return [
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
-                [FullClassName::createFromFQCN('Example\ParentClassExample')],
+                new FullClassName('Example\ClassExample'),
+                [new FullClassName('Example\ParentClassExample')],
                 [],
                 $this->getMap(),
                 [true]
             ],
             //it fails because it does not extend Example\AnotherClass
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
-                [FullClassName::createFromFQCN('Example\AnotherClass')],
+                new FullClassName('Example\ClassExample'),
+                [new FullClassName('Example\AnotherClass')],
                 [],
                 $this->getMap(),
                 [false]
             ],
             //it fails because it extends from a class not listed
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
-                [FullClassName::createFromFQCN('NotARealParent')],
+                new FullClassName('Example\ClassExample'),
+                [new FullClassName('NotARealParent')],
                 [],
                 $this->getMap(),
                 [false]

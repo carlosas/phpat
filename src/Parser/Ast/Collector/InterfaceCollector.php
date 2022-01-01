@@ -21,7 +21,7 @@ class InterfaceCollector extends NodeVisitorAbstract
                 if ($implements instanceof Node\Name\FullyQualified) {
                     Classmap::registerClassImplements(
                         TraverseContext::className(),
-                        FullClassName::createFromFQCN($implements->toString()),
+                        new FullClassName($implements->toString()),
                         $implements->getStartLine(),
                         $implements->getEndLine()
                     );

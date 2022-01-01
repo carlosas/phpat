@@ -53,7 +53,7 @@ class PathSelector implements SelectorInterface
         $path = $this->configuration->getRootPath() . '/' . $this->path;
         foreach ($this->map->getSrcNodes() as $srcNode) {
             if ($this->matchesPattern($srcNode->getFilePathname(), $path)) {
-                $result[] = FullClassName::createFromFQCN($srcNode->getClassName());
+                $result[] = new FullClassName($srcNode->getClassName());
             }
         }
 

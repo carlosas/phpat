@@ -8,14 +8,9 @@ class FullClassName implements ClassLike
     private ?string $name = null;
     private string $fqcn;
 
-    private function __construct(string $fqcn)
+    public function __construct(string $fqcn)
     {
         $this->fqcn = $fqcn;
-    }
-
-    public static function createFromFQCN(string $fqcn): self
-    {
-        return new self($fqcn);
     }
 
     public function getNamespace(): string

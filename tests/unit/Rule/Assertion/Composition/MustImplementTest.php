@@ -13,24 +13,24 @@ class MustImplementTest extends AbstractAssertionTestCase
     {
         return [
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
-                [FullClassName::createFromFQCN('Example\InterfaceExample')],
+                new FullClassName('Example\ClassExample'),
+                [new FullClassName('Example\InterfaceExample')],
                 [],
                 $this->getMap(),
                 [true]
             ],
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
-                [FullClassName::createFromFQCN('Example\AnotherInterface')],
+                new FullClassName('Example\ClassExample'),
+                [new FullClassName('Example\AnotherInterface')],
                 [],
                 $this->getMap(),
                 [true]
             ],
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
+                new FullClassName('Example\ClassExample'),
                 [
-                    FullClassName::createFromFQCN('Example\InterfaceExample'),
-                    FullClassName::createFromFQCN('Example\AnotherInterface')
+                    new FullClassName('Example\InterfaceExample'),
+                    new FullClassName('Example\AnotherInterface')
                 ],
                 [],
                 $this->getMap(),
@@ -38,10 +38,10 @@ class MustImplementTest extends AbstractAssertionTestCase
             ],
             //it fails because regex Example\Another* is excluded
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
+                new FullClassName('Example\ClassExample'),
                 [
-                    FullClassName::createFromFQCN('Example\InterfaceExample'),
-                    FullClassName::createFromFQCN('Example\AnotherInterface')
+                    new FullClassName('Example\InterfaceExample'),
+                    new FullClassName('Example\AnotherInterface')
                 ],
                 [new RegexClassName('Example\Another*')],
                 $this->getMap(),
@@ -49,18 +49,18 @@ class MustImplementTest extends AbstractAssertionTestCase
             ],
             //it fails because NotARealInterface is not implemented
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
-                [FullClassName::createFromFQCN('NotARealInterface')],
+                new FullClassName('Example\ClassExample'),
+                [new FullClassName('NotARealInterface')],
                 [],
                 $this->getMap(),
                 [false]
             ],
             //it fails twice because any of them are implemented
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
+                new FullClassName('Example\ClassExample'),
                 [
-                    FullClassName::createFromFQCN('NopesOne'),
-                    FullClassName::createFromFQCN('NopesTwo')
+                    new FullClassName('NopesOne'),
+                    new FullClassName('NopesTwo')
                 ],
                 [],
                 $this->getMap(),

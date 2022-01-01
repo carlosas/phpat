@@ -12,21 +12,21 @@ class CanOnlyImplementTest extends AbstractAssertionTestCase
     {
         return [
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
+                new FullClassName('Example\ClassExample'),
                 [
-                    FullClassName::createFromFQCN('Example\InterfaceExample'),
-                    FullClassName::createFromFQCN('Example\AnotherInterface')
+                    new FullClassName('Example\InterfaceExample'),
+                    new FullClassName('Example\AnotherInterface')
                 ],
                 [],
                 $this->getMap(),
                 [true]
             ],
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
+                new FullClassName('Example\ClassExample'),
                 [
-                    FullClassName::createFromFQCN('Example\InterfaceExample'),
-                    FullClassName::createFromFQCN('Example\AnotherInterface'),
-                    FullClassName::createFromFQCN('NotImplementedInterface')
+                    new FullClassName('Example\InterfaceExample'),
+                    new FullClassName('Example\AnotherInterface'),
+                    new FullClassName('NotImplementedInterface')
                 ],
                 [],
                 $this->getMap(),
@@ -34,16 +34,16 @@ class CanOnlyImplementTest extends AbstractAssertionTestCase
             ],
             //it fails because Example\AnotherInterface is also implemented
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
-                [FullClassName::createFromFQCN('Example\InterfaceExample')],
+                new FullClassName('Example\ClassExample'),
+                [new FullClassName('Example\InterfaceExample')],
                 [],
                 $this->getMap(),
                 [false]
             ],
             //it fails because there are 2 interface implementations not listed
             [
-                FullClassName::createFromFQCN('Example\ClassExample'),
-                [FullClassName::createFromFQCN('NotARealInterface')],
+                new FullClassName('Example\ClassExample'),
+                [new FullClassName('NotARealInterface')],
                 [],
                 $this->getMap(),
                 [false, false]
