@@ -95,6 +95,16 @@ class MapBuilder
 
         $result = [];
         foreach ($packages as $alias => $files) {
+            //TODO  apply this only to vendors without namespace declared in composer.lock
+            //$tinyParser = new TinyParser();
+            //$vendorFiles = $this->finder->findPhpFilesInPath(
+            //    $this->configuration->getRootPath() . '/vendor/',
+            //    $this->configuration->getParserExclude()
+            //);
+            //$result = [];
+            //foreach ($vendorFiles as $file) {
+            //    $result += $tinyParser->parse($file);
+            //}
             $composerJson = $files['json'];
             $composerLock = $files['lock'] ?? substr($composerJson, 0, -5) . '.lock';
             $this->assertComposerPackage($alias, $composerJson, $composerLock);
