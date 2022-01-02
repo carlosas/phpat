@@ -34,7 +34,8 @@ class StatementBuilder
      */
     public function build(Rule $rule, ReferenceMap $map): \Generator
     {
-        $origins      = $this->selectOrigins($rule->getOrigin(), $rule->getOriginExcluded(), $map);
+        $origins = $this->selectOrigins($rule->getOrigin(), $rule->getOriginExcluded(), $map);
+
         $destinations = $this->selectDestinations(
             $rule->getDestination(),
             $rule->getAssertion(),

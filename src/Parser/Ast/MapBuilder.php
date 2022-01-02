@@ -12,6 +12,7 @@ use PhpAT\Parser\Ast\Traverser\TraverseContext;
 use PhpAT\Parser\Ast\Traverser\TraverserFactory;
 use PhpAT\Parser\ComposerFileParser;
 use PhpAT\Parser\ComposerParser;
+use PhpAT\Parser\Parser\TinyParser;
 use PhpAT\PhpStubsMap\PhpStubsMap;
 use PhpParser\Parser;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -46,7 +47,11 @@ class MapBuilder
 
     public function build(): ReferenceMap
     {
-        return new ReferenceMap($this->buildSrcMap(), $this->buildExtensionMap(), $this->buildComposerMap());
+        return new ReferenceMap(
+            $this->buildSrcMap(),
+            $this->buildExtensionMap(),
+            $this->buildComposerMap()
+        );
     }
 
     /*
@@ -155,7 +160,11 @@ class MapBuilder
     {
         $files = [];
         foreach (array_keys($this->configuration->getComposerConfiguration()) as $package) {
-            $files = $this->composerParser->getFilesToAutoload($package, false);
+            $files = array_merge(
+                $files,
+                $this->composerParser->getAutoloadFiles($package, false),
+                $this->configuration->getParseDevFiles() ? $this->composerParser->getAutoloadFiles($package, true) : []
+            );
         }
 
         foreach ($this->configuration->getParserInclude() as $path) {

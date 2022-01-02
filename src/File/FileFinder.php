@@ -39,13 +39,13 @@ class FileFinder
     }
 
     /**
-     * @return null|array<string>
+     * @return array<string>
      */
-    private function splitFile(string $file): ?array
+    private function splitFile(string $file): array
     {
         $pos = strrpos($file, '/');
         if ($pos === false) {
-            return null;
+            return ['./', $file];
         }
 
         return [substr($file, 0, $pos), substr($file, $pos + 1)];

@@ -48,13 +48,16 @@ class SymfonyFinderAdapter implements Finder
 
         $results = new PathnameFilterIterator($finder->getIterator(), $exclude);
 
-        return iterator_to_array($results)[0] ?? null;
+        return array_values(iterator_to_array($results))[0] ?? null;
     }
 
     private function normalize(string $filePath): string
     {
         if (substr($filePath, -2) === '/*') {
             $filePath = rtrim($filePath, '*');
+        }
+        if (substr($filePath, -1) === '/') {
+            $filePath = rtrim($filePath, '/');
         }
 
         return $filePath;

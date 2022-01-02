@@ -12,7 +12,7 @@ class OutputTest extends ArchitectureTest
     public function testOnlyEventSubscriberWritesOutput(): Rule
     {
         return $this->newRule
-            ->classesThat(Selector::haveClassName('*'))
+            ->classesThat(Selector::areAutoloadableFromComposer())
             ->excludingClassesThat(Selector::havePath('*/Event/Listener/*Listener.php'))
             ->excludingClassesThat(Selector::haveClassName(SingleCommandApplication::class))
             ->excludingClassesThat(Selector::haveClassName('PhpAT\App\Provider'))

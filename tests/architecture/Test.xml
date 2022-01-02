@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <test xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="https://raw.githubusercontent.com/carlosas/phpat/master/YAML/src/Test/Test.xsd">
+       xsi:schemaLocation="https://raw.githubusercontent.com/carlosas/phpat/master/src/Test/Test.xsd">
     <rule name="testAssertionsImplementAssertionInterface">
         <classes>
-            <selector type="havePath">*/Rule/Assertion/*</selector>
+            <selector type="havePath">src/Rule/Assertion/*</selector>
         </classes>
         <excluding>
             <selector type="haveClassName">PhpAT\Rule\Assertion\*\MustNot*</selector>
@@ -17,7 +17,7 @@
     </rule>
     <rule name="testAssertionsDoNotDependOnVendors">
         <classes>
-            <selector type="havePath">*/Rule/Assertion/*</selector>
+            <selector type="havePath">src/Rule/Assertion/*</selector>
         </classes>
         <assert>canOnlyDependOn</assert>
         <classes>

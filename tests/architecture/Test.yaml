@@ -1,7 +1,7 @@
 rules:
   testAssertionsImplementAssertionInterface:
     - classes:
-        - havePath: '*/Rule/Assertion/*'
+        - havePath: 'src/Rule/Assertion/*'
     - excluding:
         - haveClassName: 'PhpAT\Rule\Assertion\*\MustNot*'
         - havePath: '*/Rule/Assertion/MatchResult.php'
