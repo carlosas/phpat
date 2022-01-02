@@ -12,6 +12,7 @@ class Configuration
     private string $testsPath;
     private int $verbosity;
     private ?string $phpVersion;
+    private bool $parseDevFiles;
     private bool $ignoreDocBlocks;
     private bool $ignorePhpExtensions;
     private string $baselineFilePath;
@@ -27,6 +28,7 @@ class Configuration
         int $verbosity,
         ?string $phpVersion,
         ?string $generateBaseline,
+        bool $parseDevFiles,
         bool $ignoreDocBlocks,
         bool $ignorePhpExtensions
     ) {
@@ -40,6 +42,7 @@ class Configuration
         $this->verbosity             = $verbosity;
         $this->phpVersion            = $phpVersion;
         $this->generateBaseline      = is_string($generateBaseline) ? $this->normalizePath($generateBaseline) : null;
+        $this->parseDevFiles         = $parseDevFiles;
         $this->ignoreDocBlocks       = $ignoreDocBlocks;
         $this->ignorePhpExtensions   = $ignorePhpExtensions;
     }
@@ -77,6 +80,11 @@ class Configuration
     public function getPhpVersion(): ?string
     {
         return $this->phpVersion;
+    }
+
+    public function getParseDevFiles(): bool
+    {
+        return $this->parseDevFiles;
     }
 
     public function getIgnoreDocBlocks(): bool

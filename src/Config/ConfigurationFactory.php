@@ -11,6 +11,7 @@ class ConfigurationFactory
     private array $defaults = [
         'verbosity'             => 0,
         'php-version'           => null,
+        'parse-dev-files'       => true,
         'ignore-docblocks'      => false,
         'ignore-php-extensions' => true,
         'composer'              => ['main' => ['json' => 'composer.json', 'lock' => 'composer.lock']],
@@ -34,6 +35,7 @@ class ConfigurationFactory
             $this->decideVerbosity($commandOptions, $config),
             $config['options']['php-version'] ?? $this->defaults['php-version'],
             $this->decideBaselineGeneration($input),
+            (bool) ($config['options']['parse-dev-files'] ?? $this->defaults['parse-dev-files']),
             (bool) ($config['options']['ignore-docblocks'] ?? $this->defaults['ignore-docblocks']),
             (bool) ($config['options']['ignore-php-extensions'] ?? $this->defaults['ignore-php-extensions'])
         );

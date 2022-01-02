@@ -68,6 +68,7 @@ tests:
 | `tests` `baseline`                        | Path to a generated baseline file                        | *no default* |
 | `options` `verbosity`                     | Output verbosity level (-1/0/1/2)                        | 0            |
 | `options` `php-version`                   | PHP version of the src code (x.x.x)                      | PHP_VERSION  |
+| `options` `parse-dev-files`               | Parse composer dev files (T/F)                           | true        |
 | `options` `ignore-docblocks`              | Ignore relations on docblocks (T/F)                      | false        |
 | `options` `ignore-php-extensions`         | Ignore relations to core and extensions classes (T/F)    | true         |
 | `--generate-baseline`                     | Option to generate a json baseline file (null/filename)  | false        |
