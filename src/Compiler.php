@@ -19,7 +19,7 @@ class Compiler
      * @var array<string>
      */
     protected const EXCLUDED_FILES = [
-        'phpat',
+        'bin/phpat',
         'build.php',
         'src/Compiler.php'
     ];
@@ -30,7 +30,10 @@ class Compiler
      * @var array<string>
      */
     protected const EXCLUDED_PATTERNS = [
-        '/^\/?vendor\/phpunit\/?(.*)?/'
+        '/^\/?vendor\/phpunit\/?(.*)?/',
+        '/^\/?vendor\/phpstan\/?(.*)?/',
+        '/^\/?vendor\/vimeo\/psalm\/?(.*)?/',
+        '/^\/?vendor\/friendsofphp\/php-cs-fixer\/?(.*)?/',
     ];
 
     /** @var array<string> */
@@ -56,9 +59,14 @@ class Compiler
         $this->iterateDirectory($phar, $this->paths['src']);
         $this->iterateDirectory($phar, $this->paths['vendor']);
         $this->addBinaryToPhar($phar);
+        $phar->setMetadata([
+            'name' => $this->name,
+            'description' => 'PHP Architecture Tester',
+            'author' => 'Carlos Alandete Sastre and contributors',
+            'license' => 'MIT',
+        ]);
 
-        $stub = $this->getStub();
-        $phar->setStub($stub);
+        $phar->setStub($this->buildStub());
 
         $phar->stopBuffering();
     }
@@ -143,7 +151,7 @@ class Compiler
         $phar->addFromString('phpat', $bin);
     }
 
-    protected function getStub(): string
+    protected function buildStub(): string
     {
         return <<<STUB
 #!/usr/bin/env php
