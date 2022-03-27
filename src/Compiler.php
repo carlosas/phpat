@@ -31,7 +31,6 @@ class Compiler
      */
     protected const EXCLUDED_PATTERNS = [
         '/^\/?vendor\/phpunit\/?(.*)?/',
-        '/^\/?vendor\/phpstan\/phpstan\/?(.*)?/',
         '/^\/?vendor\/vimeo\/psalm\/?(.*)?/',
         '/^\/?vendor\/friendsofphp\/php-cs-fixer\/?(.*)?/',
     ];
