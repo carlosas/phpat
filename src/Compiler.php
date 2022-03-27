@@ -24,15 +24,6 @@ class Compiler
         'src/Compiler.php'
     ];
 
-    /**
-     * A list of patterns that will cause a matched file path to be excluded
-     *
-     * @var array<string>
-     */
-    protected const EXCLUDED_PATTERNS = [
-        '/^\/?vendor\/phpunit\/?(.*)?/',
-    ];
-
     /** @var array<string> */
     protected array $paths;
     protected string $name;
@@ -92,20 +83,7 @@ class Compiler
 
     protected function fileIsValid(string $path, SplFileInfo $file): bool
     {
-        if (! $file->isDir() && ! in_array($path, self::EXCLUDED_FILES, true)) {
-            $isValid = true;
-
-            foreach (self::EXCLUDED_PATTERNS as $pattern) {
-                if (preg_match($pattern, $path)) {
-                    $isValid = false;
-                    break;
-                }
-            }
-
-            return $isValid;
-        }
-
-        return false;
+        return (!$file->isDir() && !in_array($path, self::EXCLUDED_FILES, true));
     }
 
     protected function iterateDirectory(Phar $phar, string $directory): void
