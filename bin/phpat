@@ -12,9 +12,9 @@ $autoloads = [
 
 foreach ($autoloads as $autoload) {
     if (is_file($autoload)) {
-        require $autoload;
         break;
     }
 }
+require $autoload;
 
 exit((new \PhpAT\App())->run());
