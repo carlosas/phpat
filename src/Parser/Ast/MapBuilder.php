@@ -91,7 +91,10 @@ class MapBuilder
         foreach ($packages as $alias => $files) {
             $composerJson = $files['json'];
             $composerLock = $files['lock'] ?? substr($composerJson, 0, -5) . '.lock';
-            $this->assertComposerPackage($alias, $composerJson, $composerLock);
+
+            if ($this->assertComposerPackage($alias, $composerJson, $composerLock) === false) {
+                continue;
+            }
 
             try {
                 $parsed = $this->composerFileParser->parse($composerJson, $composerLock);
@@ -128,21 +131,24 @@ class MapBuilder
         );
     }
 
-    /**
-     * @throws FatalErrorException
-     */
-    private function assertComposerPackage(string $alias, string $composerJson, string $composerLock): void
+    private function assertComposerPackage(string $alias, string $composerJson, string $composerLock): bool
     {
         if (!is_file($composerJson)) {
-            $error = new FatalErrorEvent('Composer package "' . $alias . '" is not properly configured');
-            $this->eventDispatcher->dispatch($error);
-            throw new FatalErrorException();
+            return false;
+            //TODO: Fail only when rules include composer selectors
+            //$error = new FatalErrorEvent('Composer package "' . $alias . '" is not properly configured');
+            //$this->eventDispatcher->dispatch($error);
+            //throw new FatalErrorException();
         }
 
         if (!is_file($composerLock)) {
-            $error = new FatalErrorEvent('Unable to find the composer package "' . $alias . '" lock file');
-            $this->eventDispatcher->dispatch($error);
-            throw new FatalErrorException();
+            return false;
+            //TODO: Fail only when rules include composer selectors
+            //$error = new FatalErrorEvent('Unable to find the composer package "' . $alias . '" lock file');
+            //$this->eventDispatcher->dispatch($error);
+            //throw new FatalErrorException();
         }
+
+        return true;
     }
 }

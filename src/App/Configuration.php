@@ -20,6 +20,7 @@ class Configuration
     private string $rootPath;
 
     public function __construct(
+        string $rootPath,
         string $srcPath,
         array $srcIncluded,
         array $srcExcluded,
@@ -32,13 +33,12 @@ class Configuration
         bool $ignoreDocBlocks,
         bool $ignorePhpExtensions
     ) {
-        $this->rootPath = $this->getRootPath();
-
+        $this->rootPath              = $rootPath;
         $this->srcPath               = $this->normalizePath($srcPath);
-        $this->srcIncluded           = $srcIncluded;
-        $this->srcExcluded           = $srcExcluded;
-        $this->composerConfiguration = $composerConfiguration;
-        $this->testsPath             = $testsPath;
+        $this->srcIncluded           = $this->normalizePaths($srcIncluded);
+        $this->srcExcluded           = $this->normalizePaths($srcExcluded);
+        $this->composerConfiguration = $this->normalizeComposerPaths($composerConfiguration);
+        $this->testsPath             = $this->normalizePath($testsPath);
         $this->baselineFilePath      = $this->normalizePath($baselineFilePath);
         $this->verbosity             = $verbosity;
         $this->phpVersion            = $phpVersion;
@@ -102,6 +102,32 @@ class Configuration
         return $this->generateBaseline;
     }
 
+    /**
+     * @param array<string, array{json: null|string, lock?: null|string}> $composerConfig
+     * @return array<string, array{json: null|string, lock?: null|string}>
+     */
+    private function normalizeComposerPaths(array $composerConfig): array
+    {
+        $result = [];
+        foreach ($composerConfig as $packageName => $packageConfig) {
+            $result[$packageName]['json'] = $this->normalizePath($packageConfig['json']);
+            $result[$packageName]['lock'] = $this->normalizePath($packageConfig['lock']);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param array<null|string> $path
+     * @return array<null|string>
+     */
+    private function normalizePaths(array $path): array
+    {
+        return array_map(function (string $path) {
+            return $this->normalizePath($path);
+        }, $path);
+    }
+
     private function normalizePath(?string $path): ?string
     {
         if ($path === null) {
@@ -114,18 +140,5 @@ class Configuration
         }
 
         return str_replace('\\', '/', $path);
-    }
-
-    private function getRootPath(): string
-    {
-        $path = is_file(__DIR__ . '/../../../../autoload.php')
-            ? realpath(__DIR__ . '/../../../../..')
-            : realpath(__DIR__ . '/../..');
-
-        if ($path === false) {
-            throw new \Exception('Unable to find your autoload.php file');
-        }
-
-        return $path;
     }
 }

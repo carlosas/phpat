@@ -1,6 +1,6 @@
 src:
-  path: tests/functional/php81/fixtures/
+  path: php81/fixtures/
 tests:
-  path: tests/functional/php81/architecture/
+  path: php81/architecture/
 options:
   verbosity: 2
