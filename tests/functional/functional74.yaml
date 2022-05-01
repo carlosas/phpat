@@ -1,6 +1,6 @@
 src:
-  path: tests/functional/php7/fixtures/
+  path: php7/fixtures/
 tests:
-  path: tests/functional/php7/architecture/
+  path: php7/architecture/
 options:
   verbosity: 2

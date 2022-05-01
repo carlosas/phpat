@@ -26,6 +26,7 @@ class ConfigurationFactory
         $config['options'] = array_merge($config['options'] ?? [], array_filter($commandOptions));
 
         return new Configuration(
+            dirname($configFilePath),
             $config['src']['path'] ?? '',
             $config['src']['include'] ?? [],
             $config['src']['exclude'] ?? [],

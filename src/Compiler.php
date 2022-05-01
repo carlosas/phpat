@@ -19,7 +19,7 @@ class Compiler
      * @var array<string>
      */
     protected const EXCLUDED_FILES = [
-        'phpat',
+        'bin/phpat',
         'build.php',
         'src/Compiler.php'
     ];

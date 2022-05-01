@@ -1,8 +1,8 @@
 src:
-  path: src/
+  path: ../src/
 composer:
   main:
-    json: composer.json
-    lock: composer.lock
+    json: ../composer.json
+    lock: ../composer.lock
 tests:
-  path: tests/architecture/
+  path: ../tests/architecture/

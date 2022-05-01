@@ -1,7 +1,7 @@
 src:
-  path: tests/functional/php80/fixtures/
+  path: php80/fixtures/
 tests:
-  path: tests/functional/php80/architecture/
-  baseline: tests/functional/php80/phpat.baseline.json
+  path: php80/architecture/
+  baseline: php80/phpat.baseline.json
 options:
   verbosity: 2

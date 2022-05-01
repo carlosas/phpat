@@ -8,7 +8,7 @@
         <exclude name="Generic.Files.LineEndings.InvalidEOLChar"/>
     </rule>
     <rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
-    <rule ref="Generic.Commenting.Todo"/>
+    <!--rule ref="Generic.Commenting.Todo"/-->
     <rule ref="Generic.ControlStructures.DisallowYodaConditions"/>
     <rule ref="Generic.ControlStructures.InlineControlStructure"/>
     <rule ref="Generic.Formatting.DisallowMultipleStatements"/>
