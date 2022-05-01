@@ -2,7 +2,7 @@ name: release-phar
 
 on:
   release:
-    types: [published, prereleased]
+    types: [published]
 
 jobs:
   release-phar:
