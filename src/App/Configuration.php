@@ -123,9 +123,10 @@ class Configuration
      */
     private function normalizePaths(array $path): array
     {
-        return array_map(function (string $path) {
-            return $this->normalizePath($path);
-        }, $path);
+        return array_map(
+            fn (string $path) => $this->normalizePath($path),
+            $path
+        );
     }
 
     private function normalizePath(?string $path): ?string
