@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.9.0
+* Fix phar file generation
+* Make paths relative to configuration file
+
+## 0.8.4
+* Update event-dispatcher to allow psr/container v2
+
 ## 0.8.3
 * Fix class property types not caught as dependencies
 * Support PHP 8.1 features:
