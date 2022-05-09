@@ -2,4 +2,6 @@ parameters:
     level: 5
     paths:
         - ../src
-    reportUnmatchedIgnoredErrors: false
+includes:
+	- ../extension.neon
+	- phpat.neon

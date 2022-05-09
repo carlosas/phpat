@@ -1,0 +1,18 @@
+services:
+	- PhpAT\Test\TestParser
+	- PhpAT\Statement\Builder\StatementBuilderFactory
+
+	# DEPENDENCY RULES
+	-
+		class: PhpAT\Rule\Assertion\Dependency\MustNotDepend\New_Rule
+		tags:
+			- phpstan.rules.rule
+	-
+		class: PhpAT\Rule\Assertion\Dependency\MustNotDepend\ClassPropertiesNodeRule
+		tags:
+			- phpstan.rules.rule
+
+	-
+		class: PhpAT\Rule\Assertion\VarDump
+		tags:
+			- phpstan.rules.rule
