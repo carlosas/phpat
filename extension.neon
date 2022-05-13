@@ -11,6 +11,10 @@ services:
 		class: PhpAT\Rule\Assertion\Dependency\MustNotDepend\ClassPropertiesNodeRule
 		tags:
 			- phpstan.rules.rule
+	-
+		class: PhpAT\Rule\Assertion\Dependency\MustNotDepend\ClassConstantRule
+		tags:
+			- phpstan.rules.rule
 
 	-
 		class: PhpAT\Rule\Assertion\VarDump
