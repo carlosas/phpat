@@ -4,8 +4,10 @@ namespace PhpAT;
 
 class SimpleClass
 {
-    public function __construct(DumbShit $dumb)
+    public function asdf(DumbShit $dumb)
     {
-        $dumb->doSomething();
+        $dumb->doSomething(DumbShit::DUMB_SHIT);
+
+        $a = new DumbShitTwo();
     }
 }

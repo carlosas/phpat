@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace PhpAT\Test;
 
 use PhpAT\DumbShit;
+use PhpAT\DumbShitTwo;
 use PhpAT\Rule\Assertion\Composition;
 use PhpAT\Rule\Assertion\Dependency;
 use PhpAT\Rule\Assertion\Inheritance;
 use PhpAT\Rule\Assertion\Mixin;
+use PhpAT\Selector\Classname;
 use PhpAT\SimpleClass;
 use PHPStan\Rules\Rule as PHPStanRule;
 
@@ -29,9 +31,9 @@ class TestParser
     {
         return [
             [
+                'subjects' => [(new Classname(SimpleClass::class))],
                 'assertion' => Dependency\MustNotDepend\MustNotDepend::class,
-                'subjects' => [SimpleClass::class],
-                'targets' => [DumbShit::class],
+                'targets' => [DumbShit::class, DumbShitTwo::class],
             ],
         ];
     }

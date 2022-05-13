@@ -2,7 +2,8 @@
 
 namespace PhpAT\Rule\Assertion\Dependency\MustNotDepend;
 
-use PhpAT\Rule\ErrorBuilder;
+use PhpAT\Selector\Classname;
+use PhpAT\Selector\Selector;
 use PhpAT\Statement\Builder\StatementBuilderFactory;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
@@ -14,6 +15,7 @@ abstract class MustNotDepend implements PHPStanRule
 {
     protected const MESSAGE = '%s must not depend on %s';
 
+    /** @var array<array{Selector, array<class-string>}> */
     protected array $statements;
 
     public function __construct(StatementBuilderFactory $statementBuilderFactory)
@@ -48,7 +50,7 @@ abstract class MustNotDepend implements PHPStanRule
      */
     protected function ruleApplies(Scope $scope, string $target): bool
     {
-        return !($scope->isInClass() && $scope->getClassReflection()->getName() === $target);
+        return !($scope->isInClass() && (new Classname($target))->matches($scope->getClassReflection()));
     }
 
     /**
@@ -58,16 +60,30 @@ abstract class MustNotDepend implements PHPStanRule
      */
     protected function validateGetErrors(Scope $scope, string $target): array
     {
-        $currentClassName = $scope->getClassReflection()->getName();
+        $subject = $scope->getClassReflection();
+        $errors = [];
 
-        if (in_array($target, $this->statements[$currentClassName] ?? [], true)) {
+        foreach ($this->statements as [$selector, $ruleTargets]) {
+            if (!$selector->matches($subject)) {
+                continue;
+            }
+
+            foreach ($ruleTargets as $ruleTarget) {
+                if ($ruleTarget === $target) {
+                    $errors[] = RuleErrorBuilder::message(sprintf(self::MESSAGE, $subject->getName(), $target))
+                        ->tip(static::class)
+                        ->build();
+                }
+            }
+        }
+/*        if (in_array($target, $this->statements[$subject] ?? [], true)) {
             return [
-                RuleErrorBuilder::message(sprintf(self::MESSAGE, $currentClassName, $target))
+                RuleErrorBuilder::message(sprintf(self::MESSAGE, $subject, $target))
                     ->tip(static::class)
                     ->build()
             ];
-        }
+        }*/
 
-        return [];
+        return $errors;
     }
 }

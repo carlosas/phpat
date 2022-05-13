@@ -2,10 +2,12 @@
 
 namespace PhpAT\Statement\Builder;
 
+use PhpAT\Selector\Selector;
+
 interface StatementBuilder
 {
     /**
-     * @return array<class-string, array<class-string>>
+     * @return array<array{Selector, array<class-string>}>
      */
     public function build(): array;
 }
