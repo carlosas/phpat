@@ -7,7 +7,7 @@ use PhpAT\Selector\Selector;
 interface StatementBuilder
 {
     /**
-     * @return array<array{Selector, array<class-string>}>
+     * @return array<array{Selector, array<Selector>}>
      */
     public function build(): array;
 }

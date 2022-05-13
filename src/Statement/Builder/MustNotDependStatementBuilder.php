@@ -7,7 +7,7 @@ use PhpAT\Selector\Selector;
 
 class MustNotDependStatementBuilder implements StatementBuilder
 {
-    /** @var array<array{Selector, array<class-string>}> */
+    /** @var array<array{Selector, array<Selector>}> */
     private $statements = [];
     private array $rules;
 
@@ -28,7 +28,7 @@ class MustNotDependStatementBuilder implements StatementBuilder
     }
 
     /*
-     * @param array<class-string> $targets
+     * @param array<Selector> $targets
      */
     public function addStatement(Selector $subject, array $targets): void
     {
