@@ -4,7 +4,7 @@ namespace PhpAT\Selector;
 
 use PHPStan\Reflection\ClassReflection;
 
-class Classname implements Selector
+class ClassExtends implements Selector
 {
     private string $classname;
 
@@ -15,6 +15,11 @@ class Classname implements Selector
 
     public function matches(ClassReflection $classReflection): bool
     {
-        return $classReflection->getName() === $this->classname;
+        $parent = $classReflection->getParentClass();
+        if ($parent === null) {
+            return false;
+        }
+
+        return $parent->getName() === $this->classname;
     }
 }
