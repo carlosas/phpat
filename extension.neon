@@ -4,11 +4,11 @@ services:
 
 	# DEPENDENCY RULES
 	-
-		class: PhpAT\Rule\Assertion\Dependency\MustNotDepend\New_Rule
+		class: PhpAT\Rule\Assertion\Dependency\MustNotDepend\NewRule
 		tags:
 			- phpstan.rules.rule
 	-
-		class: PhpAT\Rule\Assertion\Dependency\MustNotDepend\ClassPropertiesNodeRule
+		class: PhpAT\Rule\Assertion\Dependency\MustNotDepend\MethodParamRule
 		tags:
 			- phpstan.rules.rule
 	-

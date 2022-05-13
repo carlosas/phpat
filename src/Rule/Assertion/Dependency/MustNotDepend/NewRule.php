@@ -9,7 +9,7 @@ use PHPStan\Rules\Rule as PHPStanRule;
 /**
  * @implements PHPStanRule<Node\Expr\New_>
  */
-class New_Rule extends MustNotDepend implements PHPStanRule
+class NewRule extends MustNotDepend implements PHPStanRule
 {
     public function getNodeType(): string
     {

@@ -2,7 +2,7 @@
 
 namespace Tests\PhpAT\functional\rules\MustNotDepend;
 
-use PhpAT\Rule\Assertion\Dependency\MustNotDepend\ClassPropertiesNodeRule;
+use PhpAT\Rule\Assertion\Dependency\MustNotDepend\MethodParamRule;
 use PhpAT\Rule\Assertion\Dependency\MustNotDepend\MustNotDepend;
 use PhpAT\Rule\Assertion\Dependency\MustNotDepend\New_Rule_;
 use PhpAT\Statement\Builder\StatementBuilderFactory;
@@ -13,7 +13,7 @@ use Tests\PhpAT\functional\fixtures\Dependency\Constructor;
 use Tests\PhpAT\functional\fixtures\Dependency\DependencyNamespaceSimpleClass;
 
 /**
- * @extends RuleTestCase<ClassPropertiesNodeRule>
+ * @extends RuleTestCase<MethodParamRule>
  */
 class ClassPropertiesNodeTest extends RuleTestCase
 {
@@ -23,7 +23,7 @@ class ClassPropertiesNodeTest extends RuleTestCase
         $subjects = [Constructor::class];
         $targets = [DependencyNamespaceSimpleClass::class];
 
-        return new ClassPropertiesNodeRule(new StatementBuilderFactory(new FakeTestParser($assertion, $subjects, $targets)));
+        return new MethodParamRule(new StatementBuilderFactory(new FakeTestParser($assertion, $subjects, $targets)));
     }
 
     public function testRule(): void
@@ -36,7 +36,7 @@ class ClassPropertiesNodeTest extends RuleTestCase
                     DependencyNamespaceSimpleClass::class,
                     PHP_EOL,
                     '    💡 ',
-                    ClassPropertiesNodeRule::class
+                    MethodParamRule::class
                 ),
                 14,
             ],

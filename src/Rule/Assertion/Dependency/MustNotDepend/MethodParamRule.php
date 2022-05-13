@@ -10,7 +10,7 @@ use PHPStan\Rules\Rule as PHPStanRule;
 /**
  * @implements PHPStanRule<ClassPropertiesNode>
  */
-class ClassPropertiesNodeRule extends MustNotDepend implements PHPStanRule
+class MethodParamRule extends MustNotDepend implements PHPStanRule
 {
     public function getNodeType(): string
     {
