@@ -2,29 +2,14 @@
 
 namespace PhpAT\Rule\Assertion\Dependency\MustNotDepend;
 
+use PhpAT\Rule\Assertion\Traits\ClassConstantNode;
 use PhpParser\Node;
-use PHPStan\Analyser\Scope;
-use PHPStan\Rules\Rule as PHPStanRule;
+use PHPStan\Rules\Rule;
 
 /**
- * @implements PHPStanRule<Node\Expr\ClassConstFetch>
+ * @implements Rule<Node\Expr\ClassConstFetch>
  */
-class ClassConstantRule extends MustNotDepend implements PHPStanRule
+class ClassConstantRule extends MustNotDepend implements Rule
 {
-    public function getNodeType(): string
-    {
-        return Node\Expr\ClassConstFetch::class;
-    }
-
-    /**
-     * @param Node\Expr\ClassConstFetch $node
-     */
-    protected function extractTargetClassName(Node $node, Scope $scope): ?string
-    {
-        if (!($node->class instanceof Node\Name)) {
-            return null;
-        }
-
-        return $node->class->toString();
-    }
+    use ClassConstantNode;
 }

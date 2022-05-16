@@ -2,29 +2,14 @@
 
 namespace PhpAT\Rule\Assertion\Dependency\MustNotDepend;
 
+use PhpAT\Rule\Assertion\Traits\NewNode;
 use PhpParser\Node;
-use PHPStan\Analyser\Scope;
-use PHPStan\Rules\Rule as PHPStanRule;
+use PHPStan\Rules\Rule;
 
 /**
- * @implements PHPStanRule<Node\Expr\New_>
+ * @implements Rule<Node\Expr\New_>
  */
-class NewRule extends MustNotDepend implements PHPStanRule
+class NewRule extends MustNotDepend implements Rule
 {
-    public function getNodeType(): string
-    {
-        return Node\Expr\New_::class;
-    }
-
-    /**
-     * @param Node\Expr\New_ $node
-     */
-    protected function extractTargetClassName(Node $node, Scope $scope): ?string
-    {
-        if (!($node->class instanceof Node\Name)) {
-            return null;
-        }
-
-        return $node->class->toString();
-    }
+    use NewNode;
 }
