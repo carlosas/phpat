@@ -8,7 +8,7 @@ use PhpAT\Rule\Assertion\Dependency\MustNotDepend\MustNotDepend;
 use PhpAT\Selector\SelectorInterface;
 use PHPStan\Rules\Rule as PHPSanRule;
 
-class RuleBuilder
+class TestCase
 {
     /** @var array<SelectorInterface> */
     private array $subjects = [];
@@ -16,6 +16,11 @@ class RuleBuilder
     private array $targets = [];
     /** @var null|class-string<PHPSanRule> */
     private ?string $assertion = null;
+
+    public static function rule(): self
+    {
+        return new self();
+    }
 
     public function classes(SelectorInterface ...$selectors): self
     {
