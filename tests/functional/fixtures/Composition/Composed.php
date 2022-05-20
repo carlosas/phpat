@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\PhpAT\functional\fixtures\Composition;
+namespace Tests\PHPat\functional\fixtures\Composition;
 
-use Tests\PhpAT\functional\fixtures\SimpleInterface;
+use Tests\PHPat\functional\fixtures\SimpleInterface;
 
 class Composed implements SimpleInterface
 {

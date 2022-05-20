@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpAT\Statement\Builder;
+namespace PHPat\Statement\Builder;
 
-use PhpAT\Rule\Assertion\Dependency\MustNotDepend\MustNotDepend;
-use PhpAT\Selector\SelectorInterface;
-use PhpAT\Test\Rule;
+use PHPat\Rule\Assertion\Dependency\MustNotDepend\MustNotDepend;
+use PHPat\Selector\SelectorInterface;
+use PHPat\Test\Rule;
 
 class MustNotDependStatementBuilder implements StatementBuilder
 {

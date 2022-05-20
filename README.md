@@ -78,15 +78,15 @@ This could be a test with a couple of rules:
 ```php
 <?php
 
-use PhpAT\Selector\Selector;
-use PhpAT\Test\Rule;
-use PhpAT\Test\Phpat;
+use PHPat\Selector\Selector;
+use PHPat\Test\Rule;
+use PHPat\Test\PHPat;
 
 class MyFirstTest
 {
     public function test_domain_does_not_depend_on_other_layers(): Rule
     {
-        return Phpat::rule()
+        return PHPat::rule()
             ->classes(Selector::namespace('App\Domain'))
             ->mustNotDependOn()
             ->classes(

@@ -1,15 +1,15 @@
 <?php
 
-namespace Tests\PhpAT\functional\fixtures\Dependency;
+namespace Tests\PHPat\functional\fixtures\Dependency;
 
-use Tests\PhpAT\functional\fixtures\DummyException;
-use Tests\PhpAT\functional\fixtures\GenericInner;
-use Tests\PhpAT\functional\fixtures\GenericOuter;
-use Tests\PhpAT\functional\fixtures\SimpleClass;
-use Tests\PhpAT\functional\fixtures\AnotherSimpleClass as AliasedClass;
-use Tests\PhpAT\functional\fixtures\Inheritance;
-use Tests\PhpAT\functional\fixtures\CallableArgument;
-use Tests\PhpAT\functional\fixtures\CallableReturn;
+use Tests\PHPat\functional\fixtures\DummyException;
+use Tests\PHPat\functional\fixtures\GenericInner;
+use Tests\PHPat\functional\fixtures\GenericOuter;
+use Tests\PHPat\functional\fixtures\SimpleClass;
+use Tests\PHPat\functional\fixtures\AnotherSimpleClass as AliasedClass;
+use Tests\PHPat\functional\fixtures\Inheritance;
+use Tests\PHPat\functional\fixtures\CallableArgument;
+use Tests\PHPat\functional\fixtures\CallableReturn;
 
 class DocBlock
 {

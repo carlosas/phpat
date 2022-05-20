@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\PhpAT\functional\fixtures\Dependency;
+namespace Tests\PHPat\functional\fixtures\Dependency;
 
-if ('hello' === \Tests\PhpAT\functional\php7\fixtures\SimpleClass::class) {
+if ('hello' === \Tests\PHPat\functional\php7\fixtures\SimpleClass::class) {
     echo 'bye';
 }
 

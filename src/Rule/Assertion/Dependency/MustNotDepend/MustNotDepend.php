@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpAT\Rule\Assertion\Dependency\MustNotDepend;
+namespace PHPat\Rule\Assertion\Dependency\MustNotDepend;
 
-use PhpAT\Selector\Classname;
-use PhpAT\Selector\SelectorInterface;
-use PhpAT\Statement\Builder\StatementBuilderFactory;
+use PHPat\Selector\Classname;
+use PHPat\Selector\SelectorInterface;
+use PHPat\Statement\Builder\StatementBuilderFactory;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;

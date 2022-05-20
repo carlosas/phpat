@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace PhpAT\Test;
+namespace PHPat\Test;
 
-use PhpAT\Rule\Assertion\Dependency;
+use PHPat\Rule\Assertion\Dependency;
 
 class TestParser
 {

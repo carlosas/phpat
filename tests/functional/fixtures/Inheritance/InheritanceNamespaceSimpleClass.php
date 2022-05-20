@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\PhpAT\functional\fixtures\Inheritance;
+namespace Tests\PHPat\functional\fixtures\Inheritance;
 
 class InheritanceNamespaceSimpleClass
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\PhpAT\functional\fixtures;
+namespace Tests\PHPat\functional\fixtures;
 
 /**
  * @property PropertyClass $myProperty
@@ -14,7 +14,7 @@ class DocBlock
     /**
      * @param ParamClass $p
      * @param ParamClass2 $p2 Parameter with description
-     * @param \Tests\PhpAT\functional\php7\fixtures\ParamClass3 $p3
+     * @param \Tests\PHPat\functional\php7\fixtures\ParamClass3 $p3
      * @param GenericOuterClass<GenericInnerClass> $p4
      * @param array<GenericInnerClass2> $p5
      * @param UnionClassOne|UnionClassTwo $p6

@@ -1,15 +1,15 @@
 <?php declare(strict_types=1);
 
-namespace Tests\PhpAT\functional\rules\MustNotDepend;
+namespace Tests\PHPat\functional\rules\MustNotDepend;
 
-use PhpAT\Rule\Assertion\Dependency\MustNotDepend\MustNotDepend;
-use PhpAT\Rule\Assertion\Dependency\MustNotDepend\New_Rule;
-use PhpAT\Rule\Assertion\Dependency\MustNotDepend\New_Rule_;
-use PhpAT\Statement\Builder\StatementBuilderFactory;
+use PHPat\Rule\Assertion\Dependency\MustNotDepend\MustNotDepend;
+use PHPat\Rule\Assertion\Dependency\MustNotDepend\New_Rule;
+use PHPat\Rule\Assertion\Dependency\MustNotDepend\New_Rule_;
+use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
-use Tests\PhpAT\functional\FakeTestParser;
-use Tests\PhpAT\functional\fixtures\Dependency\Constructor;
+use Tests\PHPat\functional\FakeTestParser;
+use Tests\PHPat\functional\fixtures\Dependency\Constructor;
 
 /**
  * @extends RuleTestCase<New_Rule>

@@ -1,7 +1,7 @@
 {
   "name": "phpat/phpat",
   "type": "library",
-  "description": "PHP Architecture Tester",
+  "description": "PHP Architecture Tester (PHPStan extension)",
   "license": "MIT",
   "authors": [
     {
@@ -23,13 +23,14 @@
     "sort-packages": true
   },
   "autoload": {
+    "files": ["helpers.php"],
     "psr-4": {
-      "PhpAT\\": "src/"
+      "PHPat\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Tests\\PhpAT\\": "tests/"
+      "Tests\\PHPat\\": "tests/"
     }
   }
 }

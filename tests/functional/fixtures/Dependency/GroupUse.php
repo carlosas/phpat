@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\PhpAT\functional\fixtures\Dependency;
+namespace Tests\PHPat\functional\fixtures\Dependency;
 
-use Tests\PhpAT\functional\fixtures\{SimpleClass, Inheritance, AnotherSimpleClass as AliasedClass};
+use Tests\PHPat\functional\fixtures\{SimpleClass, Inheritance, AnotherSimpleClass as AliasedClass};
 
 class GroupUse
 {

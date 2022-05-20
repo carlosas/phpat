@@ -2,10 +2,15 @@
 
 declare(strict_types=1);
 
-namespace PhpAT\Selector;
+namespace PHPat\Selector;
 
 class Selector
 {
+    public static function namespace(string $namespace): ClassNamespace
+    {
+        return new ClassNamespace($namespace);
+    }
+
     public static function classname(string $fqcn): Classname
     {
         return new Classname($fqcn);
@@ -15,6 +20,7 @@ class Selector
     {
         return new ClassImplements($fqcn);
     }
+
     public static function extends(string $fqcn): ClassExtends
     {
         return new ClassExtends($fqcn);

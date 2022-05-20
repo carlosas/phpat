@@ -1,8 +1,8 @@
 <?php
 
-namespace PhpAT\Rule\Assertion\Dependency\MustNotDepend;
+namespace PHPat\Rule\Assertion\Dependency\MustNotDepend;
 
-use PhpAT\Rule\Assertion\Traits\MethodParamNode;
+use PHPat\Rule\Assertion\Traits\MethodParamNode;
 use PHPStan\Node\ClassPropertiesNode;
 use PHPStan\Rules\Rule;
 

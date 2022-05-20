@@ -1,25 +1,25 @@
 services:
-	- PhpAT\Test\TestExtractor
-	- PhpAT\Test\TestParser
-	- PhpAT\Statement\Builder\StatementBuilderFactory
-	- PhpAT\Configuration(tests: %phpat.tests%)
+	- PHPat\Test\TestExtractor
+	- PHPat\Test\TestParser
+	- PHPat\Statement\Builder\StatementBuilderFactory
+	- PHPat\Configuration(tests: %phpat.tests%)
 
 	# DEPENDENCY RULES
 	-
-		class: PhpAT\Rule\Assertion\Dependency\MustNotDepend\NewRule
+		class: PHPat\Rule\Assertion\Dependency\MustNotDepend\NewRule
 		tags:
 			- phpstan.rules.rule
 	-
-		class: PhpAT\Rule\Assertion\Dependency\MustNotDepend\MethodParamRule
+		class: PHPat\Rule\Assertion\Dependency\MustNotDepend\MethodParamRule
 		tags:
 			- phpstan.rules.rule
 	-
-		class: PhpAT\Rule\Assertion\Dependency\MustNotDepend\ClassConstantRule
+		class: PHPat\Rule\Assertion\Dependency\MustNotDepend\ClassConstantRule
 		tags:
 			- phpstan.rules.rule
 
 	-
-		class: PhpAT\Rule\Assertion\VarDump
+		class: PHPat\Rule\Assertion\VarDump
 		tags:
 			- phpstan.rules.rule
 

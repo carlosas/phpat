@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace PhpAT\Test;
+namespace PHPat\Test;
 
-use PhpAT\Rule\Assertion\Dependency\MustNotDepend\MustNotDepend;
-use PhpAT\Selector\SelectorInterface;
+use PHPat\Rule\Assertion\Dependency\MustNotDepend\MustNotDepend;
+use PHPat\Selector\SelectorInterface;
 use PHPStan\Rules\Rule as PHPSanRule;
 
-class Phpat
+class PHPat
 {
     /** @var array<SelectorInterface> */
     private array $subjects = [];
@@ -19,7 +19,7 @@ class Phpat
 
     public static function rule(): self
     {
-        return new Phpat();
+        return new PHPat();
     }
 
     public function classes(SelectorInterface ...$selectors): self

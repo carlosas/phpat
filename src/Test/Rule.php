@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace PhpAT\Test;
+namespace PHPat\Test;
 
-use PhpAT\Selector\SelectorInterface;
+use PHPat\Selector\SelectorInterface;
 
 class Rule
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\PhpAT\functional\fixtures;
+namespace Tests\PHPat\functional\fixtures;
 
 class AnotherSimpleClass
 {

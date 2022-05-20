@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace PhpAT\Test;
+namespace PHPat\Test;
 
-use PhpAT\Configuration;
+use PHPat\Configuration;
 use PHPStan\Reflection\ClassReflection;
 
 class TestExtractor

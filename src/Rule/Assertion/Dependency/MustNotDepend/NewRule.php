@@ -1,8 +1,8 @@
 <?php
 
-namespace PhpAT\Rule\Assertion\Dependency\MustNotDepend;
+namespace PHPat\Rule\Assertion\Dependency\MustNotDepend;
 
-use PhpAT\Rule\Assertion\Traits\NewNode;
+use PHPat\Rule\Assertion\Traits\NewNode;
 use PhpParser\Node;
 use PHPStan\Rules\Rule;
 

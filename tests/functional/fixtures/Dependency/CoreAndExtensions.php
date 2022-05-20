@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\PhpAT\functional\fixtures\Dependency;
+namespace Tests\PHPat\functional\fixtures\Dependency;
 
 class CoreAndExtensions
 {

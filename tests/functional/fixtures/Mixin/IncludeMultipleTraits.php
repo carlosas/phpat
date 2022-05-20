@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\PhpAT\functional\fixtures\Mixin;
+namespace Tests\PHPat\functional\fixtures\Mixin;
 
-use Tests\PhpAT\functional\fixtures\SimpleTrait;
+use Tests\PHPat\functional\fixtures\SimpleTrait;
 
 class IncludeMultipleTraits
 {

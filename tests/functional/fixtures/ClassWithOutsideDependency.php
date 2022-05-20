@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests\PhpAT\functional\fixtures;
+namespace Tests\PHPat\functional\fixtures;
 
-use Tests\PhpAT\functional\FixtureOutOfPathOne;
-use Tests\PhpAT\functional\FixtureOutOfPathTwo;
+use Tests\PHPat\functional\FixtureOutOfPathOne;
+use Tests\PHPat\functional\FixtureOutOfPathTwo;
 
 class ClassWithOutsideDependency
 {

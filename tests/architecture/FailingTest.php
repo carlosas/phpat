@@ -1,19 +1,19 @@
 <?php
 
-namespace Tests\PhpAT\architecture;
+namespace Tests\PHPat\architecture;
 
-use PhpAT\DumbShit;
-use PhpAT\Selector\Selector;
-use PhpAT\SimpleClass;
-use PhpAT\SomeInterface;
-use PhpAT\Test\Rule;
-use PhpAT\Test\Phpat;
+use PHPat\DumbShit;
+use PHPat\Selector\Selector;
+use PHPat\SimpleClass;
+use PHPat\SomeInterface;
+use PHPat\Test\Rule;
+use PHPat\Test\PHPat;
 
 class FailingTest
 {
     public function test_configuration_does_not_depend_on_rules(): Rule
     {
-        return Phpat::rule()
+        return PHPat::rule()
             ->classes(Selector::classname(SimpleClass::class))
             ->mustNotDependOn()
             ->classes(

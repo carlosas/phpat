@@ -1,8 +1,8 @@
 <?php
 
-namespace PhpAT\Statement\Builder;
+namespace PHPat\Statement\Builder;
 
-use PhpAT\Selector\SelectorInterface;
+use PHPat\Selector\SelectorInterface;
 
 interface StatementBuilder
 {

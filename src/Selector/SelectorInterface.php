@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpAT\Selector;
+namespace PHPat\Selector;
 
 use PHPStan\Reflection\ClassReflection;
 

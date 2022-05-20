@@ -1,20 +1,20 @@
 <?php
 
-namespace Tests\PhpAT\architecture;
+namespace Tests\PHPat\architecture;
 
-use PhpAT\Configuration;
-use PhpAT\Selector\Selector;
-use PhpAT\Test\Rule;
-use PhpAT\Test\Phpat;
+use PHPat\Configuration;
+use PHPat\Selector\Selector;
+use PHPat\Test\Rule;
+use PHPat\Test\PHPat;
 
 class ConfigurationTest
 {
     public function test_configuration_does_not_depend_on_rules(): Rule
     {
-        return Phpat::rule()
+        return PHPat::rule()
             ->classes(Selector::classname(Configuration::class))
             ->mustNotDependOn()
-            ->classes(Selector::classname(Rule::class)) //change to all namespace
+            ->classes(Selector::namespace('PHPat\\'))
             ->build();
     }
 }

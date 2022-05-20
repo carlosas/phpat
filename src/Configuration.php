@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PhpAT;
+namespace PHPat;
 
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;

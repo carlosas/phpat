@@ -1,8 +1,9 @@
 <?php
 
-namespace PhpAT\Selector;
+namespace PHPat\Selector;
 
 use PHPStan\Reflection\ClassReflection;
+use function removePrefixAndSuffixSeparators;
 
 class Classname implements SelectorInterface
 {
@@ -15,6 +16,7 @@ class Classname implements SelectorInterface
 
     public function matches(ClassReflection $classReflection): bool
     {
-        return $classReflection->getName() === $this->classname;
+        return removePrefixAndSuffixSeparators($classReflection->getName())
+            === removePrefixAndSuffixSeparators($this->classname);
     }
 }

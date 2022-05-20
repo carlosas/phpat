@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Tests\PhpAT\functional;
+namespace Tests\PHPat\functional;
 
-use PhpAT\Test\TestParser;
+use PHPat\Test\TestParser;
 
 class FakeTestParser extends TestParser
 {

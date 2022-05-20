@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpAT;
+namespace PHPat;
 
 class DumbShit
 {

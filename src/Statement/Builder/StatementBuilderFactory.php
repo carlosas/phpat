@@ -1,9 +1,9 @@
 <?php
 
-namespace PhpAT\Statement\Builder;
+namespace PHPat\Statement\Builder;
 
-use PhpAT\Test\Rule;
-use PhpAT\Test\TestParser;
+use PHPat\Test\Rule;
+use PHPat\Test\TestParser;
 
 class StatementBuilderFactory
 {

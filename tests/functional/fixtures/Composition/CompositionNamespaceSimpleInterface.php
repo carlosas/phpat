@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\PhpAT\functional\fixtures\Composition;
+namespace Tests\PHPat\functional\fixtures\Composition;
 
 interface CompositionNamespaceSimpleInterface
 {
