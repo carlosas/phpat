@@ -8,8 +8,10 @@ use PhpAT\Test\RuleBuilder;
 
 class ArchitectureTest
 {
-    protected function rule(): RuleBuilder
+    protected RuleBuilder $rule;
+
+    public function __construct()
     {
-        return new RuleBuilder();
+        $this->rule = new RuleBuilder();
     }
 }

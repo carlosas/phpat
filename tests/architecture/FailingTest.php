@@ -4,7 +4,7 @@ namespace Tests\PhpAT\architecture;
 
 use PhpAT\ArchitectureTest;
 use PhpAT\DumbShit;
-use PhpAT\Selector;
+use PhpAT\Selector\Selector;
 use PhpAT\SimpleClass;
 use PhpAT\SomeInterface;
 use PhpAT\Test\Rule;

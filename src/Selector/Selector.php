@@ -2,11 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PhpAT;
-
-use PhpAT\Selector\ClassExtends;
-use PhpAT\Selector\ClassImplements;
-use PhpAT\Selector\Classname;
+namespace PhpAT\Selector;
 
 class Selector
 {
