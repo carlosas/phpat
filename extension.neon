@@ -1,6 +1,8 @@
 services:
+	- PhpAT\Test\TestExtractor
 	- PhpAT\Test\TestParser
 	- PhpAT\Statement\Builder\StatementBuilderFactory
+	- PhpAT\Configuration(tests: %phpat.tests%)
 
 	# DEPENDENCY RULES
 	-
@@ -20,3 +22,8 @@ services:
 		class: PhpAT\Rule\Assertion\VarDump
 		tags:
 			- phpstan.rules.rule
+
+parametersSchema:
+	phpat: structure([
+		tests: listOf(string())
+	])

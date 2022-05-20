@@ -4,7 +4,7 @@ namespace PhpAT\Selector;
 
 use PHPStan\Reflection\ClassReflection;
 
-class ClassImplements implements Selector
+class ClassImplements implements SelectorInterface
 {
     private string $classname;
 

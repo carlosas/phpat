@@ -3,14 +3,19 @@
 namespace PhpAT\Statement\Builder;
 
 use PhpAT\Rule\Assertion\Dependency\MustNotDepend\MustNotDepend;
-use PhpAT\Selector\Selector;
+use PhpAT\Selector\SelectorInterface;
+use PhpAT\Test\Rule;
 
 class MustNotDependStatementBuilder implements StatementBuilder
 {
-    /** @var array<array{Selector, array<Selector>}> */
+    /** @var array<array{SelectorInterface, array<SelectorInterface>}> */
     private $statements = [];
+    /** @var array<Rule> */
     private array $rules;
 
+    /**
+     * @param array<Rule> $rules
+     */
     public function __construct(array $rules)
     {
         $this->rules = $rules;
@@ -30,7 +35,7 @@ class MustNotDependStatementBuilder implements StatementBuilder
     /*
      * @param array<Selector> $targets
      */
-    public function addStatement(Selector $subject, array $targets): void
+    public function addStatement(SelectorInterface $subject, array $targets): void
     {
         $this->statements[] = [$subject, $targets];
     }
@@ -39,9 +44,9 @@ class MustNotDependStatementBuilder implements StatementBuilder
     {
         $result = [];
         foreach ($rules as $rule) {
-            if ($rule['assertion'] === MustNotDepend::class) {
-                foreach ($rule['subjects'] as $selector) {
-                    $result[] = [$selector, $rule['targets']];
+            if ($rule->assertion === MustNotDepend::class) {
+                foreach ($rule->subjects as $selector) {
+                    $result[] = [$selector, $rule->targets];
                 }
             }
         }

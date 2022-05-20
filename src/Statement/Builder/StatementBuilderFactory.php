@@ -2,11 +2,12 @@
 
 namespace PhpAT\Statement\Builder;
 
+use PhpAT\Test\Rule;
 use PhpAT\Test\TestParser;
 
 class StatementBuilderFactory
 {
-    /** @var array<mixed> */
+    /** @var array<Rule> */
     private array $rules;
 
     public function __construct(TestParser $testParser)

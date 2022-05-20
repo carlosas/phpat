@@ -1,3 +1,5 @@
 parameters:
-#	tests:
-#		- ../tests
+	phpat:
+		tests:
+			- Tests\PhpAT\architecture\ConfigurationTest
+			- Tests\PhpAT\architecture\FailingTest

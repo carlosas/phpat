@@ -4,26 +4,47 @@ declare(strict_types=1);
 
 namespace PhpAT\Test;
 
-use PhpAT\DumbShit;
 use PhpAT\Rule\Assertion\Dependency;
-use PhpAT\Selector\ClassImplements;
-use PhpAT\Selector\Classname;
-use PhpAT\SimpleClass;
-use PhpAT\SomeInterface;
 
 class TestParser
 {
-    public function __invoke()
+    private static array $result = [];
+    private TestExtractor $extractor;
+
+    public function __construct(TestExtractor $extractor)
     {
-        return [
-            [
-                'subjects' => [(new Classname(SimpleClass::class))],
-                'assertion' => Dependency\MustNotDepend\MustNotDepend::class,
-                'targets' => [
-                    (new Classname(DumbShit::class)),
-                    (new ClassImplements(SomeInterface::class))
-                ],
-            ],
-        ];
+        $this->extractor = $extractor;
+    }
+
+    public function __invoke(): array
+    {
+        if (empty(self::$result)) {
+            self::$result = $this->parse();
+        }
+
+        return self::$result;
+    }
+
+    private function parse(): array
+    {
+        $tests = ($this->extractor)();
+
+        $rules = [];
+        foreach ($tests as $test) {
+            $methods = [];
+            $reflected = $test->getNativeReflection();
+            foreach ($reflected->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
+                if (preg_match('/^(test)[A-Za-z0-9_\x80-\xff]*/', $method->getName())) {
+                    $methods[] = $method->getName();
+                }
+            }
+
+            $object = $reflected->newInstanceWithoutConstructor();
+            foreach ($methods as $method) {
+                $rules[] = $object->{$method}();
+            }
+        }
+
+        return $rules;
     }
 }

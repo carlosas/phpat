@@ -3,7 +3,7 @@
 namespace PhpAT\Rule\Assertion\Dependency\MustNotDepend;
 
 use PhpAT\Selector\Classname;
-use PhpAT\Selector\Selector;
+use PhpAT\Selector\SelectorInterface;
 use PhpAT\Statement\Builder\StatementBuilderFactory;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
@@ -14,7 +14,7 @@ use PHPStan\Rules\RuleErrorBuilder;
 
 abstract class MustNotDepend implements PHPStanRule
 {
-    /** @var array<array{Selector, array<Selector>}> */
+    /** @var array<array{SelectorInterface, array<SelectorInterface>}> */
     protected array $statements;
 
     private ReflectionProvider $reflectionProvider;
