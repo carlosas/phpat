@@ -2,16 +2,16 @@
 
 namespace Tests\PhpAT\architecture;
 
-use PhpAT\ArchitectureTest;
 use PhpAT\Configuration;
 use PhpAT\Selector\Selector;
 use PhpAT\Test\Rule;
+use PhpAT\Test\Phpat;
 
-class ConfigurationTest extends ArchitectureTest
+class ConfigurationTest
 {
     public function test_configuration_does_not_depend_on_rules(): Rule
     {
-        return $this->rule()
+        return Phpat::rule()
             ->classes(Selector::classname(Configuration::class))
             ->mustNotDependOn()
             ->classes(Selector::classname(Rule::class)) //change to all namespace

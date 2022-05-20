@@ -80,13 +80,13 @@ This could be a test with a couple of rules:
 
 use PhpAT\Selector\Selector;
 use PhpAT\Test\Rule;
-use PhpAT\Test\ArchitectureTest;
+use PhpAT\Test\Phpat;
 
-class MyFirstTest extends ArchitectureTest
+class MyFirstTest
 {
     public function test_domain_does_not_depend_on_other_layers(): Rule
     {
-        return $this->rule
+        return Phpat::rule()
             ->classes(Selector::namespace('App\Domain'))
             ->mustNotDependOn()
             ->classes(

@@ -8,7 +8,7 @@ use PhpAT\Rule\Assertion\Dependency\MustNotDepend\MustNotDepend;
 use PhpAT\Selector\SelectorInterface;
 use PHPStan\Rules\Rule as PHPSanRule;
 
-class TestCase
+class Phpat
 {
     /** @var array<SelectorInterface> */
     private array $subjects = [];
@@ -19,7 +19,7 @@ class TestCase
 
     public static function rule(): self
     {
-        return new self();
+        return new Phpat();
     }
 
     public function classes(SelectorInterface ...$selectors): self
