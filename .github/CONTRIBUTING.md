@@ -16,22 +16,10 @@ There are several ways to help out:
 composer validate --strict
 vendor/bin/phpcs src/ --standard=ci/phpcs.xml
 vendor/bin/php-cs-fixer fix --config ./ci/php-cs-fixer.php
-vendor/bin/psalm -c ci/psalm.xml
 vendor/bin/phpstan analyse -c ci/phpstan.neon
+vendor/bin/psalm -c ci/psalm.xml
 vendor/bin/phpunit tests/unit/
-php bin/phpat ci/phpat.yaml
-php bin/phpat tests/functional/functional74.yaml
-php bin/phpat tests/functional/functional80.yaml
-php bin/phpat tests/functional/functional81.yaml
 ```
-
-## The internals
-
-Brief summary of how phpat works internally. The execution consists in several steps:
-* **Boot and configuration**: Boots the application reading the configuration file and input args.
-* **Reference mapping**: Finds and parses the files that can be analyzed and builds a ReferenceMap.
-* **Statement construction**: Finds the tests, reads the rules and creates statements by resolving the selectors using the ReferenceMap.
-* **Assertions**: Validates the assertions of each statement and emits the result events.
 
 ## Slack channel
 
