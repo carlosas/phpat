@@ -6,6 +6,16 @@ namespace PHPat\Selector;
 
 class Selector
 {
+    public static function any(): ClassAll
+    {
+        return self::all();
+    }
+
+    public static function all(): ClassAll
+    {
+        return new ClassAll();
+    }
+
     public static function namespace(string $namespace): ClassNamespace
     {
         return new ClassNamespace($namespace);

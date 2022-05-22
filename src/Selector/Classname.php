@@ -9,6 +9,9 @@ class Classname implements SelectorInterface
 {
     private string $classname;
 
+    /**
+     * @param class-string $classname
+     */
     public function __construct(string $classname)
     {
         $this->classname = $classname;
