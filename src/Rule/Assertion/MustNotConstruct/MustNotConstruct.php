@@ -30,40 +30,46 @@ abstract class MustNotConstruct implements PHPStanRule
      */
     public function processNode(Node $node, Scope $scope): array
     {
-        $target = $this->extractTargetClassName($node, $scope);
-        if ($target === null) {
+        $targets = $this->extractTargetClassNames($node, $scope);
+
+        if (!$this->ruleApplies($scope, $targets)) {
             return [];
         }
 
-        if (!$this->ruleApplies($scope, $target)) {
-            return [];
-        }
-
-        return $this->validateGetErrors($scope, $target);
+        return $this->validateGetErrors($scope, $targets);
     }
 
     /**
-     * @return null|class-string
+     * @return iterable<class-string>
      */
-    abstract protected function extractTargetClassName(Node $node, Scope $scope): ?string;
+    abstract protected function extractTargetClassNames(Node $node, Scope $scope): iterable;
 
     /**
-     * @param class-string $target
+     * @param iterable<class-string> $targets
      */
-    protected function ruleApplies(Scope $scope, string $target): bool
+    protected function ruleApplies(Scope $scope, iterable $targets): bool
     {
-        return !($scope->isInClass() && (new Classname($target))->matches($scope->getClassReflection()));
+        if (empty($targets) || !($scope->isInClass())) {
+            return false;
+        }
+
+        foreach ($targets as $target) {
+            if (!(new Classname($target))->matches($scope->getClassReflection())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
-     * @param class-string $target
+     * @param iterable<class-string> $targets
      * @return array<RuleError>
      * @throws \PHPStan\ShouldNotHappenException
      */
-    protected function validateGetErrors(Scope $scope, string $target): array
+    protected function validateGetErrors(Scope $scope, iterable $targets): array
     {
         $subject = $scope->getClassReflection();
-        $target = $this->reflectionProvider->getClass($target);
         $errors = [];
 
         foreach ($this->statements as [$selector, $ruleTargets]) {
@@ -72,10 +78,17 @@ abstract class MustNotConstruct implements PHPStanRule
             }
 
             foreach ($ruleTargets as $ruleTarget) {
-                if ($ruleTarget->matches($target)) {
-                    $errors[] = RuleErrorBuilder::message(
-                        sprintf('%s must not construct %s', $subject->getName(), $target->getName())
-                    )->build();
+                foreach ($targets as $target) {
+                    $t = $this->reflectionProvider->getClass($target);
+                    if ($ruleTarget->matches($t)) {
+                        $errors[] = RuleErrorBuilder::message(
+                            sprintf(
+                                '%s must not construct %s',
+                                $subject->getName(),
+                                $target
+                            )
+                        )->build();
+                    }
                 }
             }
         }

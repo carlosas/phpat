@@ -2,6 +2,7 @@
 
 namespace PHPat\Rule\Traits;
 
+use PHPat\Parser\ComplexTypeParser;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
@@ -15,13 +16,21 @@ trait MethodReturnNode
 
     /**
      * @param ClassMethod $node
+     * @return iterable<class-string>
      */
-    protected function extractTargetClassName(Node $node, Scope $scope): ?string
+    protected function extractTargetClassNames(Node $node, Scope $scope): iterable
     {
-        if (!($node->getReturnType() instanceof Node\Name)) {
-            return null;
+        if (!(
+            $node->getReturnType() instanceof Node\Name
+            || $node->getReturnType() instanceof Node\ComplexType
+        )) {
+            return [];
         }
 
-        return $node->getReturnType()->toString();
+        if ($node->getReturnType() instanceof Node\ComplexType) {
+            return ComplexTypeParser::parse($node->getReturnType());
+        }
+
+        return [$node->getReturnType()->toString()];
     }
 }

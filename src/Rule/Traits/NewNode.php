@@ -14,13 +14,14 @@ trait NewNode
 
     /**
      * @param Node\Expr\New_ $node
+     * @return iterable<class-string>
      */
-    protected function extractTargetClassName(Node $node, Scope $scope): ?string
+    protected function extractTargetClassNames(Node $node, Scope $scope): iterable
     {
         if (!($node->class instanceof Node\Name)) {
-            return null;
+            return [];
         }
 
-        return $node->class->toString();
+        return [$node->class->toString()];
     }
 }

@@ -15,8 +15,8 @@ trait FullyQualifiedNode
     /**
      * @param Node\Name\FullyQualified $node
      */
-    protected function extractTargetClassName(Node $node, Scope $scope): ?string
+    protected function extractTargetClassNames(Node $node, Scope $scope): ?string
     {
-        return $node instanceof Node\Name\FullyQualified ? $node->toString() : $scope->resolveName($node);
+        return $node instanceof Node\Name\FullyQualified ? [$node->toString()] : [$scope->resolveName($node)];
     }
 }

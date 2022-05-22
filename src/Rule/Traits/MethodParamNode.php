@@ -14,13 +14,14 @@ trait MethodParamNode
 
     /**
      * @param Node\Param $node
+     * @return iterable<class-string>
      */
-    protected function extractTargetClassName(Node $node, Scope $scope): ?string
+    protected function extractTargetClassNames(Node $node, Scope $scope): iterable
     {
         if (!$node->type instanceof Node\Name) {
-            return null;
+            return [];
         }
 
-        return $node->type->toString();
+        return [$node->type->toString()];
     }
 }

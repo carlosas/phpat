@@ -2,8 +2,10 @@
 
 namespace PHPat\Rule\Assertion;
 
+use PHPat\SimpleClass;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
+use PHPStan\Node\InClassNode;
 
 class VarDump implements \PHPStan\Rules\Rule
 {
@@ -14,7 +16,9 @@ class VarDump implements \PHPStan\Rules\Rule
 
     public function processNode(Node $node, Scope $scope): array
     {
+        /*if ($scope->isInClass() && $scope->getClassReflection()->getName() === SimpleClass::class) {
+            return [get_class($node)];
+        }*/
         return [];
-        //return [get_class($node)];
     }
 }

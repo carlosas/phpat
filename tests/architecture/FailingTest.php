@@ -28,7 +28,7 @@ class FailingTest
         return PHPat::rule()
             ->classes(Selector::classname(SimpleClass::class))
             ->mustNotConstruct()
-            ->classes(Selector::classname(DumbShit::class))
+            ->classes(Selector::implements(SomeInterface::class))
             ->build();
     }
 }
