@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PHPat\Test;
 
-use PHPat\Rule\Assertion\Dependency\MustNotDepend\MustNotDepend;
+use PHPat\Rule\Assertion\MustNotDepend\MustNotDepend;
 use PHPat\Selector\SelectorInterface;
 use PHPStan\Rules\Rule as PHPSanRule;
 

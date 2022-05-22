@@ -1,26 +1,26 @@
 <?php
 
-namespace PHPat\Rule\Assertion\Traits;
+namespace PHPat\Rule\Traits;
 
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 
-trait MethodParamNode
+trait ClassConstantNode
 {
     public function getNodeType(): string
     {
-        return Node\Param::class;
+        return Node\Expr\ClassConstFetch::class;
     }
 
     /**
-     * @param Node\Param $node
+     * @param Node\Expr\ClassConstFetch $node
      */
     protected function extractTargetClassName(Node $node, Scope $scope): ?string
     {
-        if (!$node->type instanceof Node\Name) {
+        if (!($node->class instanceof Node\Name)) {
             return null;
         }
 
-        return $node->type->toString();
+        return $node->class->toString();
     }
 }

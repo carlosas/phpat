@@ -4,22 +4,21 @@ services:
 	- PHPat\Statement\Builder\StatementBuilderFactory
 	- PHPat\Configuration(tests: %phpat.tests%)
 
-	# DEPENDENCY RULES
+	# MustNotDepend rules
 	-
-		class: PHPat\Rule\Assertion\Dependency\MustNotDepend\NewRule
+		class: PHPat\Rule\Assertion\MustNotDepend\ClassConstantRule
 		tags:
 			- phpstan.rules.rule
 	-
-		class: PHPat\Rule\Assertion\Dependency\MustNotDepend\MethodParamRule
+		class: PHPat\Rule\Assertion\MustNotDepend\MethodParamRule
 		tags:
 			- phpstan.rules.rule
 	-
-		class: PHPat\Rule\Assertion\Dependency\MustNotDepend\ClassConstantRule
+		class: PHPat\Rule\Assertion\MustNotDepend\NewRule
 		tags:
 			- phpstan.rules.rule
-
 	-
-		class: PHPat\Rule\Assertion\VarDump
+		class: PHPat\Rule\Assertion\MustNotConstruct\NewRule
 		tags:
 			- phpstan.rules.rule
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace PHPat\Rule\Assertion\Dependency\MustNotDepend;
+namespace PHPat\Rule\Assertion\MustNotDepend;
 
 use PHPat\Selector\Classname;
 use PHPat\Selector\SelectorInterface;

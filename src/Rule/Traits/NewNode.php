@@ -1,6 +1,6 @@
 <?php
 
-namespace PHPat\Rule\Assertion\Traits;
+namespace PHPat\Rule\Traits;
 
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
