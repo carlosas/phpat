@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PHPat\Test;
 
+use PHPat\Rule\Assertion\MustNotConstruct\MustNotConstruct;
 use PHPat\Rule\Assertion\MustNotDepend\MustNotDepend;
 use PHPat\Selector\SelectorInterface;
 use PHPStan\Rules\Rule as PHPSanRule;
@@ -38,6 +39,13 @@ class PHPat
     public function mustNotDependOn(): self
     {
         $this->assertion = MustNotDepend::class;
+
+        return $this;
+    }
+
+    public function mustNotConstruct(): self
+    {
+        $this->assertion = MustNotConstruct::class;
 
         return $this;
     }

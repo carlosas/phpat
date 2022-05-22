@@ -22,6 +22,12 @@ services:
 		tags:
 			- phpstan.rules.rule
 
+	# MustNotConstruct rules
+	-
+		class: PHPat\Rule\Assertion\VarDump
+		tags:
+			- phpstan.rules.rule
+
 parametersSchema:
 	phpat: structure([
 		tests: listOf(string())
