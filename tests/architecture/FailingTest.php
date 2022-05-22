@@ -22,4 +22,13 @@ class FailingTest
             )
             ->build();
     }
+
+    public function test_configuration_does_not_construct_class(): Rule
+    {
+        return PHPat::rule()
+            ->classes(Selector::classname(SimpleClass::class))
+            ->mustNotConstruct()
+            ->classes(Selector::classname(DumbShit::class))
+            ->build();
+    }
 }

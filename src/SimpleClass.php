@@ -4,10 +4,10 @@ namespace PHPat;
 
 class SimpleClass
 {
-    public function asdf(DumbShit $dumb)
+    public function asdf(DumbShit $dumb): DumbShitTwo
     {
         $dumb->doSomething(DumbShit::DUMB_SHIT);
 
-        $a = new DumbShitTwo();
+        return new DumbShitTwo();
     }
 }
