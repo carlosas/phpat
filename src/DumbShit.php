@@ -2,7 +2,7 @@
 
 namespace PHPat;
 
-class DumbShit
+class DumbShit extends SomeAbstractClass
 {
     public const DUMB_SHIT = 'dumb shit';
 

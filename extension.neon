@@ -21,12 +21,20 @@ services:
 		class: PHPat\Rule\Assertion\MustNotDepend\NewRule
 		tags:
 			- phpstan.rules.rule
+
+	# MustNotConstruct rules
 	-
 		class: PHPat\Rule\Assertion\MustNotConstruct\NewRule
 		tags:
 			- phpstan.rules.rule
 
-	# MustNotConstruct rules
+	# MustNotExtend rules
+	-
+		class: PHPat\Rule\Assertion\MustNotExtend\ParentClassRule
+		tags:
+			- phpstan.rules.rule
+
+	# DEBUG rules
 	-
 		class: PHPat\Rule\Assertion\VarDump
 		tags:
