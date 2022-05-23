@@ -17,7 +17,7 @@ abstract class MustNotDepend implements PHPStanRule
     /** @var array<array{SelectorInterface, array<SelectorInterface>}> */
     protected array $statements;
 
-    private ReflectionProvider $reflectionProvider;
+    protected ReflectionProvider $reflectionProvider;
 
     public function __construct(StatementBuilderFactory $statementBuilderFactory, ReflectionProvider $reflectionProvider)
     {
