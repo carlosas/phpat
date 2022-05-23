@@ -34,6 +34,12 @@ services:
 		tags:
 			- phpstan.rules.rule
 
+	# MustNotImplement rules
+	-
+		class: PHPat\Rule\Assertion\MustNotImplement\ImplementedInterfacesRule
+		tags:
+			- phpstan.rules.rule
+
 	# DEBUG rules
 	-
 		class: PHPat\Rule\Assertion\VarDump

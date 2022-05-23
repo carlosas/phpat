@@ -3,6 +3,7 @@
 namespace Tests\PHPat\architecture;
 
 use PHPat\DumbShit;
+use PHPat\DumbShitTwo;
 use PHPat\Selector\Selector;
 use PHPat\SimpleClass;
 use PHPat\SomeAbstractClass;
@@ -39,6 +40,15 @@ class FailingTest
             ->classes(Selector::classname(DumbShit::class))
             ->mustNotExtend()
             ->classes(Selector::classname(SomeAbstractClass::class))
+            ->build();
+    }
+
+    public function test_dumbshittwo_does_not_implement_interface(): Rule
+    {
+        return PHPat::rule()
+            ->classes(Selector::classname(DumbShitTwo::class))
+            ->mustNotImplement()
+            ->classes(Selector::classname(SomeInterface::class))
             ->build();
     }
 }

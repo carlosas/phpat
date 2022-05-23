@@ -7,6 +7,7 @@ namespace PHPat\Test;
 use PHPat\Rule\Assertion\MustNotConstruct\MustNotConstruct;
 use PHPat\Rule\Assertion\MustNotDepend\MustNotDepend;
 use PHPat\Rule\Assertion\MustNotExtend\MustNotExtend;
+use PHPat\Rule\Assertion\MustNotImplement\MustNotImplement;
 use PHPat\Selector\SelectorInterface;
 use PHPStan\Rules\Rule as PHPSanRule;
 
@@ -54,6 +55,13 @@ class PHPat
     public function mustNotExtend(): self
     {
         $this->assertion = MustNotExtend::class;
+
+        return $this;
+    }
+
+    public function mustNotImplement(): self
+    {
+        $this->assertion = MustNotImplement::class;
 
         return $this;
     }
