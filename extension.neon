@@ -4,39 +4,39 @@ services:
 	- PHPat\Statement\Builder\StatementBuilderFactory
 	- PHPat\Configuration(tests: %phpat.tests%)
 
-	# MustNotDepend rules
+	# ShouldNotDepend rules
 	-
-		class: PHPat\Rule\Assertion\MustNotDepend\ClassConstantRule
+		class: PHPat\Rule\Assertion\ShouldNotDepend\ClassConstantRule
 		tags:
 			- phpstan.rules.rule
 	-
-		class: PHPat\Rule\Assertion\MustNotDepend\MethodParamRule
+		class: PHPat\Rule\Assertion\ShouldNotDepend\MethodParamRule
 		tags:
 			- phpstan.rules.rule
 	-
-		class: PHPat\Rule\Assertion\MustNotDepend\MethodReturnRule
+		class: PHPat\Rule\Assertion\ShouldNotDepend\MethodReturnRule
 		tags:
 			- phpstan.rules.rule
 	-
-		class: PHPat\Rule\Assertion\MustNotDepend\NewRule
-		tags:
-			- phpstan.rules.rule
-
-	# MustNotConstruct rules
-	-
-		class: PHPat\Rule\Assertion\MustNotConstruct\NewRule
+		class: PHPat\Rule\Assertion\ShouldNotDepend\NewRule
 		tags:
 			- phpstan.rules.rule
 
-	# MustNotExtend rules
+	# ShouldNotConstruct rules
 	-
-		class: PHPat\Rule\Assertion\MustNotExtend\ParentClassRule
+		class: PHPat\Rule\Assertion\ShouldNotConstruct\NewRule
 		tags:
 			- phpstan.rules.rule
 
-	# MustNotImplement rules
+	# ShouldNotExtend rules
 	-
-		class: PHPat\Rule\Assertion\MustNotImplement\ImplementedInterfacesRule
+		class: PHPat\Rule\Assertion\ShouldNotExtend\ParentClassRule
+		tags:
+			- phpstan.rules.rule
+
+	# ShouldNotImplement rules
+	-
+		class: PHPat\Rule\Assertion\ShouldNotImplement\ImplementedInterfacesRule
 		tags:
 			- phpstan.rules.rule
 

@@ -1,12 +1,12 @@
 <?php
 
-namespace PHPat\Rule\Assertion\MustNotConstruct;
+namespace PHPat\Rule\Assertion\ShouldNotDepend;
 
 use PHPat\Rule\Assertion\Assertion;
 use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Reflection\ReflectionProvider;
 
-abstract class MustNotConstruct extends Assertion
+abstract class ShouldNotDepend extends Assertion
 {
     public function __construct(StatementBuilderFactory $statementBuilderFactory, ReflectionProvider $reflectionProvider)
     {
@@ -15,6 +15,6 @@ abstract class MustNotConstruct extends Assertion
 
     protected function getMessage(string $subject, string $target): string
     {
-        return sprintf('%s must not construct %s', $subject, $target);
+        return sprintf('%s should not depend on %s', $subject, $target);
     }
 }

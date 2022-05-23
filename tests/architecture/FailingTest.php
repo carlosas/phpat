@@ -17,7 +17,7 @@ class FailingTest
     {
         return PHPat::rule()
             ->classes(Selector::classname(SimpleClass::class))
-            ->mustNotDependOn()
+            ->shouldNotDependOn()
             ->classes(
                 Selector::classname(DumbShit::class),
                 Selector::implements(SomeInterface::class)
@@ -29,7 +29,7 @@ class FailingTest
     {
         return PHPat::rule()
             ->classes(Selector::classname(SimpleClass::class))
-            ->mustNotConstruct()
+            ->shouldNotConstruct()
             ->classes(Selector::implements(SomeInterface::class))
             ->build();
     }
@@ -38,7 +38,7 @@ class FailingTest
     {
         return PHPat::rule()
             ->classes(Selector::classname(DumbShit::class))
-            ->mustNotExtend()
+            ->shouldNotExtend()
             ->classes(Selector::classname(SomeAbstractClass::class))
             ->build();
     }
@@ -47,7 +47,7 @@ class FailingTest
     {
         return PHPat::rule()
             ->classes(Selector::classname(DumbShitTwo::class))
-            ->mustNotImplement()
+            ->shouldNotImplement()
             ->classes(Selector::classname(SomeInterface::class))
             ->build();
     }

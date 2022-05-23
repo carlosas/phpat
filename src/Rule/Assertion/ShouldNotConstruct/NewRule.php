@@ -1,6 +1,6 @@
 <?php
 
-namespace PHPat\Rule\Assertion\MustNotConstruct;
+namespace PHPat\Rule\Assertion\ShouldNotConstruct;
 
 use PHPat\Rule\Traits\NewNode;
 use PhpParser\Node;
@@ -9,7 +9,7 @@ use PHPStan\Rules\Rule;
 /**
  * @implements Rule<Node\Expr\New_>
  */
-class NewRule extends MustNotConstruct implements Rule
+class NewRule extends ShouldNotConstruct implements Rule
 {
     use NewNode;
 }

@@ -88,7 +88,7 @@ class MyFirstTest
     {
         return PHPat::rule()
             ->classes(Selector::namespace('App\Domain'))
-            ->mustNotDependOn()
+            ->shouldNotDependOn()
             ->classes(
                 Selector::namespace('App\Application'),
                 Selector::namespace('App\Infrastructure')

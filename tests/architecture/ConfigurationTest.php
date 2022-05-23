@@ -13,7 +13,7 @@ class ConfigurationTest
     {
         return PHPat::rule()
             ->classes(Selector::classname(Configuration::class))
-            ->mustNotDependOn()
+            ->shouldNotDependOn()
             ->classes(Selector::namespace('PHPat\\'))
             ->build();
     }

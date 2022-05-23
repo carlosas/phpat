@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace PHPat\Test;
 
-use PHPat\Rule\Assertion\MustNotConstruct\MustNotConstruct;
-use PHPat\Rule\Assertion\MustNotDepend\MustNotDepend;
-use PHPat\Rule\Assertion\MustNotExtend\MustNotExtend;
-use PHPat\Rule\Assertion\MustNotImplement\MustNotImplement;
+use PHPat\Rule\Assertion\ShouldNotConstruct\ShouldNotConstruct;
+use PHPat\Rule\Assertion\ShouldNotDepend\ShouldNotDepend;
+use PHPat\Rule\Assertion\ShouldNotExtend\ShouldNotExtend;
+use PHPat\Rule\Assertion\ShouldNotImplement\ShouldNotImplement;
 use PHPat\Selector\SelectorInterface;
 use PHPStan\Rules\Rule as PHPSanRule;
 
@@ -38,30 +38,30 @@ class PHPat
         return $this;
     }
 
-    public function mustNotDependOn(): self
+    public function shouldNotDependOn(): self
     {
-        $this->assertion = MustNotDepend::class;
+        $this->assertion = ShouldNotDepend::class;
 
         return $this;
     }
 
-    public function mustNotConstruct(): self
+    public function shouldNotConstruct(): self
     {
-        $this->assertion = MustNotConstruct::class;
+        $this->assertion = ShouldNotConstruct::class;
 
         return $this;
     }
 
-    public function mustNotExtend(): self
+    public function shouldNotExtend(): self
     {
-        $this->assertion = MustNotExtend::class;
+        $this->assertion = ShouldNotExtend::class;
 
         return $this;
     }
 
-    public function mustNotImplement(): self
+    public function shouldNotImplement(): self
     {
-        $this->assertion = MustNotImplement::class;
+        $this->assertion = ShouldNotImplement::class;
 
         return $this;
     }
