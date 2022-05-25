@@ -23,7 +23,7 @@ abstract class StatementBuilder
 
     /**
      * @return array<array{SelectorInterface, array<SelectorInterface>}>
-    */
+     */
     public function build(): array
     {
         $params = $this->extractCurrentAssertion($this->rules);
@@ -34,6 +34,11 @@ abstract class StatementBuilder
 
         return $this->statements;
     }
+
+    /**
+     * @return class-string<PHPStanRule>
+     */
+    abstract protected function getRuleClassname(): string;
 
     /*
      * @param array<Selector> $targets
@@ -56,9 +61,4 @@ abstract class StatementBuilder
 
         return $result;
     }
-
-    /**
-     * @return class-string<PHPStanRule>
-     */
-    abstract protected function getRuleClassname(): string;
 }

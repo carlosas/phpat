@@ -21,7 +21,7 @@ class Configuration
         array $tests = []
     ) {
         $this->reflectionProvider = $reflectionProvider;
-        $this->tests = $this->buildTests($tests);
+        $this->tests              = $this->buildTests($tests);
     }
 
     private function buildTests(array $tests): array

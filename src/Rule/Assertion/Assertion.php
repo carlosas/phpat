@@ -22,9 +22,12 @@ abstract class Assertion implements PHPStanRule
     /**
      * @param class-string<Assertion> $assertion
      */
-    public function __construct(string $assertion, StatementBuilderFactory $statementBuilderFactory, ReflectionProvider $reflectionProvider)
-    {
-        $this->statements = $statementBuilderFactory->create($assertion)->build();
+    public function __construct(
+        string $assertion,
+        StatementBuilderFactory $statementBuilderFactory,
+        ReflectionProvider $reflectionProvider
+    ) {
+        $this->statements         = $statementBuilderFactory->create($assertion)->build();
         $this->reflectionProvider = $reflectionProvider;
     }
 
@@ -48,6 +51,12 @@ abstract class Assertion implements PHPStanRule
     abstract protected function extractTargetClassNames(Node $node, Scope $scope): iterable;
 
     /**
+     * @param class-string $subject
+     * @param class-string $target
+     */
+    abstract protected function getMessage(string $subject, string $target): string;
+
+    /**
      * @param iterable<class-string> $targets
      */
     protected function ruleApplies(Scope $scope, iterable $targets): bool
@@ -67,16 +76,16 @@ abstract class Assertion implements PHPStanRule
 
     /**
      * @param iterable<class-string> $targets
-     * @return array<RuleError>
      * @throws \PHPStan\ShouldNotHappenException
+     * @return array<RuleError>
      */
     protected function validateGetErrors(Scope $scope, iterable $targets): array
     {
         $subject = $scope->getClassReflection();
-        $errors = [];
+        $errors  = [];
 
         foreach ($this->statements as [$selector, $ruleTargets]) {
-            if (!$selector->matches($subject)) {
+            if ($subject->isBuiltin() || !$selector->matches($subject)) {
                 continue;
             }
 
@@ -91,10 +100,4 @@ abstract class Assertion implements PHPStanRule
 
         return $errors;
     }
-
-    /**
-     * @param class-string $subject
-     * @param class-string $target
-     */
-    abstract protected function getMessage(string $subject, string $target): string;
 }

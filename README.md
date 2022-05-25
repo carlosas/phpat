@@ -102,15 +102,13 @@ class MyFirstTest
 
 ### Usage 🚀
 
-Run the bin with your configuration file:
-```bash
-vendor/bin/phpat phpat.yaml
-```
+Run **PHPStan** as usual.
 
 <h2></h2>
+<hr>
 
-⚠ Launching early stage releases (0.x.x) could break the API according to [Semantic Versioning 2.0](https://semver.org/). We are using *minor* for breaking changes.
-This will change with the release of the stable `1.0.0` version.
+⚠ Launching early stage releases (0.x.x) could break the API according to [Semantic Versioning 2.0](https://semver.org/).
+We are using *minor* for breaking changes. This will change with the release of the stable `1.0.0` version.
 
 <h2></h2>
 

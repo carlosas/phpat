@@ -2,6 +2,7 @@
 
 namespace PHPat\Rule\Traits;
 
+use PHPat\Parser\TypeNodeParser;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 
@@ -18,10 +19,6 @@ trait NewNode
      */
     protected function extractTargetClassNames(Node $node, Scope $scope): iterable
     {
-        if (!($node->class instanceof Node\Name)) {
-            return [];
-        }
-
-        return [$node->class->toString()];
+        return namesToClassStrings(TypeNodeParser::parse($node->class, $scope));
     }
 }

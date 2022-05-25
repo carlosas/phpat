@@ -2,8 +2,8 @@
 
 namespace PHPat\Selector;
 
-use PHPStan\Reflection\ClassReflection;
 use function extractNamespaceFromFQCN;
+use PHPStan\Reflection\ClassReflection;
 use function removePrefixAndSuffixSeparators;
 
 class ClassNamespace implements SelectorInterface

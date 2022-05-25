@@ -17,8 +17,8 @@ class Rule
 
     public function __construct(array $subjects, array $targets, ?string $assertion)
     {
-        $this->subjects = $subjects;
-        $this->targets = $targets;
+        $this->subjects  = $subjects;
+        $this->targets   = $targets;
         $this->assertion = $assertion;
     }
 }

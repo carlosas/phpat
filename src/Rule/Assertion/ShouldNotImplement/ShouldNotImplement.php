@@ -8,8 +8,10 @@ use PHPStan\Reflection\ReflectionProvider;
 
 abstract class ShouldNotImplement extends Assertion
 {
-    public function __construct(StatementBuilderFactory $statementBuilderFactory, ReflectionProvider $reflectionProvider)
-    {
+    public function __construct(
+        StatementBuilderFactory $statementBuilderFactory,
+        ReflectionProvider $reflectionProvider
+    ) {
         parent::__construct(__CLASS__, $statementBuilderFactory, $reflectionProvider);
     }
 

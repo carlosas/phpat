@@ -80,8 +80,8 @@ class PHPat
 
     private function reset(): void
     {
-        $this->subjects = [];
-        $this->targets = [];
+        $this->subjects  = [];
+        $this->targets   = [];
         $this->assertion = null;
     }
 }

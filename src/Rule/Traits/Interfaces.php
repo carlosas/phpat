@@ -21,7 +21,7 @@ trait Interfaces
     protected function extractTargetClassNames(Node $node, Scope $scope): iterable
     {
         return array_map(
-            fn (ClassReflection $c) => $c->getName(),
+            static fn (ClassReflection $c) => $c->getName(),
             $node->getClassReflection()->getInterfaces()
         );
     }
