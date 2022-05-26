@@ -3,7 +3,7 @@
 namespace PHPat\Selector;
 
 use PHPStan\Reflection\ClassReflection;
-use function removePrefixAndSuffixSeparators;
+use function trimSeparators;
 
 class ClassAll implements SelectorInterface
 {

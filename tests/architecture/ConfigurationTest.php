@@ -4,8 +4,8 @@ namespace Tests\PHPat\architecture;
 
 use PHPat\Configuration;
 use PHPat\Selector\Selector;
-use PHPat\Test\Rule;
 use PHPat\Test\PHPat;
+use PHPat\Test\Rule;
 
 class ConfigurationTest
 {

@@ -7,12 +7,20 @@ function extractNamespaceFromFQCN(string $classname): string
     $parts = explode('\\', $classname);
     array_pop($parts);
 
-    return removePrefixAndSuffixSeparators(implode('\\', $parts));
+    return implode('\\', $parts);
 }
 
-function removePrefixAndSuffixSeparators(string $name): string
+function trimSeparators(string $name): string
 {
     return rtrim(ltrim($name, '\\'), '\\');
+}
+
+function isRegularExpression(string $string) {
+    set_error_handler(function() {}, E_WARNING);
+    $isRegularExpression = preg_match($string, "") !== FALSE;
+    restore_error_handler();
+
+    return $isRegularExpression;
 }
 
 /**

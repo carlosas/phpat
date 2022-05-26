@@ -8,8 +8,8 @@ use PHPat\Selector\Selector;
 use PHPat\SimpleClass;
 use PHPat\SomeAbstractClass;
 use PHPat\SomeInterface;
-use PHPat\Test\Rule;
 use PHPat\Test\PHPat;
+use PHPat\Test\Rule;
 
 class FailingTest
 {
