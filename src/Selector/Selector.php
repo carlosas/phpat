@@ -6,9 +6,9 @@ namespace PHPat\Selector;
 
 class Selector
 {
-    public static function all(): ClassAll
+    public static function all(): All
     {
-        return new ClassAll();
+        return new All();
     }
 
     public static function interface(): IsInterface
@@ -16,19 +16,19 @@ class Selector
         return new IsInterface();
     }
 
-    public static function abstract(): ClassAbstract
+    public static function abstract(): IsAbstract
     {
-        return new ClassAbstract();
+        return new IsAbstract();
     }
 
-    public static function final(): ClassFinal
+    public static function final(): IsFinal
     {
-        return new ClassFinal();
+        return new IsFinal();
     }
 
-    public static function enum(): ClassEnum
+    public static function enum(): IsEnum
     {
-        return new ClassEnum();
+        return new IsEnum();
     }
 
     public static function namespace(string $namespace): ClassNamespace

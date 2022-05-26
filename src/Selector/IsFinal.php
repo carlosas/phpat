@@ -5,10 +5,10 @@ namespace PHPat\Selector;
 use PHPStan\Reflection\ClassReflection;
 use function trimSeparators;
 
-class ClassAbstract implements SelectorInterface
+class IsFinal implements SelectorInterface
 {
     public function matches(ClassReflection $classReflection): bool
     {
-        return $classReflection->isAbstract();
+        return $classReflection->isFinal();
     }
 }

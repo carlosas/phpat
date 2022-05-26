@@ -3,11 +3,12 @@
 namespace PHPat\Selector;
 
 use PHPStan\Reflection\ClassReflection;
+use function trimSeparators;
 
-class ClassEnum implements SelectorInterface
+class All implements SelectorInterface
 {
     public function matches(ClassReflection $classReflection): bool
     {
-        return $classReflection->isEnum();
+        return true;
     }
 }
