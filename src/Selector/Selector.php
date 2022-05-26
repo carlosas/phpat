@@ -16,6 +16,11 @@ class Selector
         return new ClassAll();
     }
 
+    public static function interface(): IsInterface
+    {
+        return new IsInterface();
+    }
+
     public static function abstract(): ClassAbstract
     {
         return new ClassAbstract();
