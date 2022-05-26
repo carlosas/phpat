@@ -36,7 +36,7 @@ abstract class Assertion implements PHPStanRule
      */
     public function processNode(Node $node, Scope $scope): array
     {
-        $targets = $this->extractTargetClassNames($node, $scope);
+        $targets = $this->extractNodeClassNames($node, $scope);
 
         if (!$this->ruleApplies($scope, $targets)) {
             return [];
@@ -48,7 +48,7 @@ abstract class Assertion implements PHPStanRule
     /**
      * @return iterable<class-string>
      */
-    abstract protected function extractTargetClassNames(Node $node, Scope $scope): iterable;
+    abstract protected function extractNodeClassNames(Node $node, Scope $scope): iterable;
 
     /**
      * @param class-string $subject

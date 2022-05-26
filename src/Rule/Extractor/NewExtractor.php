@@ -1,23 +1,23 @@
 <?php
 
-namespace PHPat\Rule\Traits;
+namespace PHPat\Rule\Extractor;
 
 use PHPat\Parser\TypeNodeParser;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 
-trait ClassConstantNode
+trait NewExtractor
 {
     public function getNodeType(): string
     {
-        return Node\Expr\ClassConstFetch::class;
+        return Node\Expr\New_::class;
     }
 
     /**
-     * @param Node\Expr\ClassConstFetch $node
+     * @param Node\Expr\New_ $node
      * @return iterable<class-string>
      */
-    protected function extractTargetClassNames(Node $node, Scope $scope): iterable
+    protected function extractNodeClassNames(Node $node, Scope $scope): iterable
     {
         return namesToClassStrings(TypeNodeParser::parse($node->class, $scope));
     }

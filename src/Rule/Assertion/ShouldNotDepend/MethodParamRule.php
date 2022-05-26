@@ -2,7 +2,7 @@
 
 namespace PHPat\Rule\Assertion\ShouldNotDepend;
 
-use PHPat\Rule\Traits\MethodParamNode;
+use PHPat\Rule\Extractor\MethodParamExtractor;
 use PhpParser\Node;
 use PHPStan\Rules\Rule;
 
@@ -11,5 +11,5 @@ use PHPStan\Rules\Rule;
  */
 class MethodParamRule extends ShouldNotDepend implements Rule
 {
-    use MethodParamNode;
+    use MethodParamExtractor;
 }

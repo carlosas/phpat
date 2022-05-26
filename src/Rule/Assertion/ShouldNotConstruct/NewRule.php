@@ -2,7 +2,7 @@
 
 namespace PHPat\Rule\Assertion\ShouldNotConstruct;
 
-use PHPat\Rule\Traits\NewNode;
+use PHPat\Rule\Extractor\NewExtractor;
 use PhpParser\Node;
 use PHPStan\Rules\Rule;
 
@@ -11,5 +11,5 @@ use PHPStan\Rules\Rule;
  */
 class NewRule extends ShouldNotConstruct implements Rule
 {
-    use NewNode;
+    use NewExtractor;
 }

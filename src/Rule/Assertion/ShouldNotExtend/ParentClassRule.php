@@ -2,7 +2,7 @@
 
 namespace PHPat\Rule\Assertion\ShouldNotExtend;
 
-use PHPat\Rule\Traits\ParentClass;
+use PHPat\Rule\Extractor\AllParentsExtractor;
 use PHPStan\Node\InClassNode;
 use PHPStan\Rules\Rule;
 
@@ -11,5 +11,5 @@ use PHPStan\Rules\Rule;
  */
 class ParentClassRule extends ShouldNotExtend implements Rule
 {
-    use ParentClass;
+    use AllParentsExtractor;
 }

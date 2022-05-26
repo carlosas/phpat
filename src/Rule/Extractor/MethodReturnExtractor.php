@@ -1,13 +1,13 @@
 <?php
 
-namespace PHPat\Rule\Traits;
+namespace PHPat\Rule\Extractor;
 
 use PHPat\Parser\TypeNodeParser;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 
-trait MethodReturnNode
+trait MethodReturnExtractor
 {
     public function getNodeType(): string
     {
@@ -18,7 +18,7 @@ trait MethodReturnNode
      * @param ClassMethod $node
      * @return iterable<class-string>
      */
-    protected function extractTargetClassNames(Node $node, Scope $scope): iterable
+    protected function extractNodeClassNames(Node $node, Scope $scope): iterable
     {
         return namesToClassStrings(TypeNodeParser::parse($node->getReturnType(), $scope));
     }

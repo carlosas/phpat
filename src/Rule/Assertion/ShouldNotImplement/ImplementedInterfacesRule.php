@@ -2,7 +2,7 @@
 
 namespace PHPat\Rule\Assertion\ShouldNotImplement;
 
-use PHPat\Rule\Traits\Interfaces;
+use PHPat\Rule\Extractor\AllInterfacesExtractor;
 use PHPStan\Node\InClassNode;
 use PHPStan\Rules\Rule;
 
@@ -11,5 +11,5 @@ use PHPStan\Rules\Rule;
  */
 class ImplementedInterfacesRule extends ShouldNotImplement implements Rule
 {
-    use Interfaces;
+    use AllInterfacesExtractor;
 }

@@ -1,13 +1,13 @@
 <?php
 
-namespace PHPat\Rule\Traits;
+namespace PHPat\Rule\Extractor;
 
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassNode;
 use PHPStan\Reflection\ClassReflection;
 
-trait ParentClass
+trait AllInterfacesExtractor
 {
     public function getNodeType(): string
     {
@@ -18,11 +18,11 @@ trait ParentClass
      * @param InClassNode $node
      * @return iterable<class-string>
      */
-    protected function extractTargetClassNames(Node $node, Scope $scope): iterable
+    protected function extractNodeClassNames(Node $node, Scope $scope): iterable
     {
         return array_map(
             static fn (ClassReflection $c) => $c->getName(),
-            $node->getClassReflection()->getAncestors()
+            $node->getClassReflection()->getInterfaces()
         );
     }
 }

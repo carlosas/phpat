@@ -2,7 +2,7 @@
 
 namespace PHPat\Rule\Assertion\ShouldNotDepend;
 
-use PHPat\Rule\Traits\NewNode;
+use PHPat\Rule\Extractor\NewExtractor;
 use PhpParser\Node;
 use PHPStan\Rules\Rule;
 
@@ -11,5 +11,5 @@ use PHPStan\Rules\Rule;
  */
 class NewRule extends ShouldNotDepend implements Rule
 {
-    use NewNode;
+    use NewExtractor;
 }
