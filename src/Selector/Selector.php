@@ -6,11 +6,6 @@ namespace PHPat\Selector;
 
 class Selector
 {
-    public static function any(): ClassAll
-    {
-        return self::all();
-    }
-
     public static function all(): ClassAll
     {
         return new ClassAll();
