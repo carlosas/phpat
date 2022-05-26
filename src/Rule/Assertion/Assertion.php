@@ -7,10 +7,12 @@ use PHPat\Selector\SelectorInterface;
 use PHPat\Statement\Builder\StatementBuilderFactory;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\Rule as PHPStanRule;
 use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 
 abstract class Assertion implements PHPStanRule
 {
@@ -32,7 +34,7 @@ abstract class Assertion implements PHPStanRule
     }
 
     /**
-     * @throws \PHPStan\ShouldNotHappenException
+     * @throws ShouldNotHappenException
      */
     public function processNode(Node $node, Scope $scope): array
     {
@@ -56,6 +58,8 @@ abstract class Assertion implements PHPStanRule
      */
     abstract protected function getMessage(string $subject, string $target): string;
 
+    abstract protected function getAssertionType(): string;
+
     /**
      * @param iterable<class-string> $targets
      */
@@ -76,7 +80,7 @@ abstract class Assertion implements PHPStanRule
 
     /**
      * @param iterable<class-string> $targets
-     * @throws \PHPStan\ShouldNotHappenException
+     * @throws ShouldNotHappenException
      * @return array<RuleError>
      */
     protected function validateGetErrors(Scope $scope, iterable $targets): array
@@ -89,11 +93,38 @@ abstract class Assertion implements PHPStanRule
                 continue;
             }
 
-            foreach ($ruleTargets as $ruleTarget) {
-                foreach ($targets as $target) {
-                    if ($ruleTarget->matches($this->reflectionProvider->getClass($target))) {
-                        $errors[] = RuleErrorBuilder::message($this->getMessage($subject->getName(), $target))->build();
-                    }
+            array_push($errors, ...$this->applyValidation($subject, $ruleTargets, $targets));
+        }
+
+        return $errors;
+    }
+
+    /**
+     * @param iterable<class-string> $targets
+     * @throws ShouldNotHappenException
+     * @return array<RuleError>
+     */
+    private function applyValidation(ClassReflection $subject, array $ruleTargets, array $targets): array
+    {
+        switch ($this->getAssertionType()) {
+            case AssertionType::SHOULD_NOT:
+                return $this->applyShouldNotValidation($subject, $ruleTargets, $targets);
+            default:
+                throw new ShouldNotHappenException('PHPat');
+        }
+    }
+
+    /**
+     * @param iterable<class-string> $targets
+     * @return array<RuleError>
+     */
+    private function applyShouldNotValidation(ClassReflection $subject, array $ruleTargets, array $targets): array
+    {
+        $errors = [];
+        foreach ($ruleTargets as $ruleTarget) {
+            foreach ($targets as $target) {
+                if ($ruleTarget->matches($this->reflectionProvider->getClass($target))) {
+                    $errors[] = RuleErrorBuilder::message($this->getMessage($subject->getName(), $target))->build();
                 }
             }
         }
