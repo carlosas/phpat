@@ -16,6 +16,11 @@ class Selector
         return new ClassAll();
     }
 
+    public static function abstract(): ClassAbstract
+    {
+        return new ClassAbstract();
+    }
+
     public static function namespace(string $namespace): ClassNamespace
     {
         return new ClassNamespace($namespace);
