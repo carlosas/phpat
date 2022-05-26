@@ -26,6 +26,11 @@ class Selector
         return new ClassFinal();
     }
 
+    public static function enum(): ClassEnum
+    {
+        return new ClassEnum();
+    }
+
     public static function namespace(string $namespace): ClassNamespace
     {
         return new ClassNamespace($namespace);
