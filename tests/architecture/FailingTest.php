@@ -13,6 +13,15 @@ use PHPat\Test\Rule;
 
 class FailingTest
 {
+    public function test_dumbshit_implements_interface(): Rule
+    {
+        return PHPat::rule()
+            ->classes(Selector::classname(DumbShit::class))
+            ->shouldImplement()
+            ->classes(Selector::classname(SomeInterface::class))
+            ->build();
+    }
+
     public function test_simple_does_not_depend_on_dumbshits(): Rule
     {
         return PHPat::rule()

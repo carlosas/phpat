@@ -7,4 +7,6 @@ use PHPStan\Reflection\ClassReflection;
 interface SelectorInterface
 {
     public function matches(ClassReflection $classReflection): bool;
+
+    public function getName(): string;
 }

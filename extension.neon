@@ -5,10 +5,10 @@ services:
 	- PHPat\Configuration(tests: %phpat.tests%)
 
 	# ShouldImplement rules
-	#-
-	#	class: PHPat\Rule\Assertion\ShouldImplement\ImplementedInterfacesRule
-	#	tags:
-	#		- phpstan.rules.rule
+	-
+		class: PHPat\Rule\Assertion\ShouldImplement\ImplementedInterfacesRule
+		tags:
+			- phpstan.rules.rule
 
 	# ShouldNotDepend rules
 	-

@@ -18,6 +18,11 @@ class ClassImplements implements SelectorInterface
         $this->isRegex   = isRegularExpression($classname);
     }
 
+    public function getName(): string
+    {
+        return $this->classname;
+    }
+
     public function matches(ClassReflection $classReflection): bool
     {
         if ($this->isRegex) {

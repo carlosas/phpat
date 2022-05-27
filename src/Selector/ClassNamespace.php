@@ -17,6 +17,11 @@ class ClassNamespace implements SelectorInterface
         $this->isRegex   = isRegularExpression($namespace);
     }
 
+    public function getName(): string
+    {
+        return $this->namespace;
+    }
+
     public function matches(ClassReflection $classReflection): bool
     {
         $namespace = extractNamespaceFromFQCN($classReflection->getName());

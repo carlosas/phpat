@@ -6,6 +6,11 @@ use PHPStan\Reflection\ClassReflection;
 
 class IsEnum implements SelectorInterface
 {
+    public function getName(): string
+    {
+        return '-all enums-';
+    }
+
     public function matches(ClassReflection $classReflection): bool
     {
         return $classReflection->isEnum();
