@@ -56,6 +56,7 @@ parameters:
     phpat:
         tests:
             - Tests\Architecture\MyFirstTest
+            - Tests\Architecture\MySecondTest
 ```
 
 <details><summary>Complete list of options</summary>
