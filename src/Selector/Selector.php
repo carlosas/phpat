@@ -21,6 +21,11 @@ class Selector
         return new IsAbstract();
     }
 
+    public static function notAbstract(): IsNotAbstract
+    {
+        return new IsNotAbstract();
+    }
+
     public static function final(): IsFinal
     {
         return new IsFinal();
