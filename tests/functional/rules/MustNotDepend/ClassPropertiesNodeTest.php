@@ -2,12 +2,14 @@
 
 namespace Tests\PHPat\functional\rules\MustNotDepend;
 
-use PHPat\Rule\Assertion\Dependency\MustNotDepend\MethodParamRule;
-use PHPat\Rule\Assertion\Dependency\MustNotDepend\MustNotDepend;
-use PHPat\Rule\Assertion\Dependency\MustNotDepend\New_Rule_;
+use PHPat\Rule\Assertion\ShouldNotDepend\MethodParamRule;
+use PHPat\Rule\Assertion\ShouldNotDepend\ShouldNotDepend;
+use PHPat\Selector\Classname;
 use PHPat\Statement\Builder\StatementBuilderFactory;
+use PHPStan\Reflection\ReflectionProvider\DummyReflectionProvider;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
+use Tests\PHPat\functional\FakeReflectionProvider;
 use Tests\PHPat\functional\FakeTestParser;
 use Tests\PHPat\functional\fixtures\Dependency\Constructor;
 use Tests\PHPat\functional\fixtures\Dependency\DependencyNamespaceSimpleClass;
@@ -19,11 +21,14 @@ class ClassPropertiesNodeTest extends RuleTestCase
 {
     protected function getRule(): Rule
     {
-        $assertion = MustNotDepend::class;
-        $subjects = [Constructor::class];
-        $targets = [DependencyNamespaceSimpleClass::class];
+        $assertion = ShouldNotDepend::class;
+        $subjects = [new Classname(Constructor::class)];
+        $targets = [new Classname(DependencyNamespaceSimpleClass::class)];
 
-        return new MethodParamRule(new StatementBuilderFactory(new FakeTestParser($assertion, $subjects, $targets)));
+        return new MethodParamRule(
+            new StatementBuilderFactory(FakeTestParser::create($assertion, $subjects, $targets)),
+            new FakeReflectionProvider()
+        );
     }
 
     public function testRule(): void
@@ -31,12 +36,9 @@ class ClassPropertiesNodeTest extends RuleTestCase
         $this->analyse(['tests/functional/fixtures/Dependency/Constructor.php'], [
             [
                 sprintf(
-                    '%s must not depend on %s%s%s%s',
+                    '%s should not depend on %s',
                     Constructor::class,
                     DependencyNamespaceSimpleClass::class,
-                    PHP_EOL,
-                    '    💡 ',
-                    MethodParamRule::class
                 ),
                 14,
             ],
