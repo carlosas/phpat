@@ -1,26 +1,34 @@
 # Selectors
 
-Selectors are the way to tell PHPAT which classes are going to intervene in a rule.
+###### Selectors are the way to tell PHPat which classes are going to intervene in a rule.
 
-You can always use any amount of `*` in the middle of any selector parameter to select everything that match that expression.
+You can always use a regular expression to select everything that matches that expression.
 
-### `ClassNameSelector`
-With `Selector::haveClassName()` you can select classes using their Fully Qualified Class Name.
+---
 
-### `PathSelector`
-With `Selector::havePath()` you can select classes in those PHP files.
+### `Selector::all()`
+Select all classes.
 
-### `ImplementSelector`
-With `Selector::implementInterface()` you can select classes that implement a certain interface.
+### `Selector::classname()`
+Select classes with the given fully qualified name.
 
-### `ExtendSelector`
-With `Selector::extendClass()` you can select classes that extend a certain class.
+### `Selector::namespace()`
+Select classes in the given namespace.
 
-### `IncludeSelector`
-With `Selector::includeTrait()` you can select classes that include a certain trait.
+### `Selector::implements()`
+Select classes that implement a given interface.
 
-### `ComposerSourceSelector`
-With `Selector::areAutoloadableFromComposer()` and `Selector::areDevAutoloadableFromComposer()` you can select classes that are declared as sources in the given `composer.json` file
+### `Selector::extends()`
+Select classes that extend a given class.
 
-### `ComposerDependencySelector`
-With `Selector::areDependenciesFromComposer()` and `Selector::areDevDependenciesFromComposer()` you can select classes that are declared composer dependencies of the given `composer.json` and `composer.lock` combination.
+### `Selector::interface()`
+Select all interfaces.
+
+### `Selector::enum()`
+Select all enums.
+
+### `Selector::abstract()`
+Select all classes that are abstract.
+
+### `Selector::final()`
+Select all classes that are abstract.
