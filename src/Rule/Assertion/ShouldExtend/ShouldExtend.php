@@ -1,17 +1,14 @@
 <?php
 
-namespace PHPat\Rule\Assertion\ShouldImplement;
+namespace PHPat\Rule\Assertion\ShouldExtend;
 
 use PHPat\Rule\Assertion\Assertion;
-use PHPat\Rule\Assertion\AssertionType;
-use PHPat\Selector\SelectorInterface;
 use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
 
-abstract class ShouldImplement extends Assertion
+abstract class ShouldExtend extends Assertion
 {
     public function __construct(
         StatementBuilderFactory $statementBuilderFactory,
@@ -43,6 +40,6 @@ abstract class ShouldImplement extends Assertion
 
     protected function getMessage(string $subject, string $target): string
     {
-        return sprintf('%s should implement %s', $subject, $target);
+        return sprintf('%s should extend %s', $subject, $target);
     }
 }

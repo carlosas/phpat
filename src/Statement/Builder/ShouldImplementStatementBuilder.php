@@ -6,7 +6,7 @@ use PHPat\Rule\Assertion\ShouldImplement\ShouldImplement;
 
 class ShouldImplementStatementBuilder extends StatementBuilder
 {
-    protected function getRuleClassname(): string
+    protected function getAssertionClassname(): string
     {
         return ShouldImplement::class;
     }

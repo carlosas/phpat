@@ -6,7 +6,7 @@ use PHPat\Rule\Assertion\ShouldNotDepend\ShouldNotDepend;
 
 class ShouldNotDependStatementBuilder extends StatementBuilder
 {
-    protected function getRuleClassname(): string
+    protected function getAssertionClassname(): string
     {
         return ShouldNotDepend::class;
     }

@@ -6,7 +6,7 @@ use PHPat\Rule\Assertion\ShouldNotExtend\ShouldNotExtend;
 
 class ShouldNotExtendStatementBuilder extends StatementBuilder
 {
-    protected function getRuleClassname(): string
+    protected function getAssertionClassname(): string
     {
         return ShouldNotExtend::class;
     }

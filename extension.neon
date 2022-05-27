@@ -10,6 +10,12 @@ services:
 		tags:
 			- phpstan.rules.rule
 
+	# ShouldExtend rules
+	-
+		class: PHPat\Rule\Assertion\ShouldExtend\ParentClassRule
+		tags:
+			- phpstan.rules.rule
+
 	# ShouldNotDepend rules
 	-
 		class: PHPat\Rule\Assertion\ShouldNotDepend\ConstantUseRule

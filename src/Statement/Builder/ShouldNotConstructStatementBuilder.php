@@ -6,7 +6,7 @@ use PHPat\Rule\Assertion\ShouldNotConstruct\ShouldNotConstruct;
 
 class ShouldNotConstructStatementBuilder extends StatementBuilder
 {
-    protected function getRuleClassname(): string
+    protected function getAssertionClassname(): string
     {
         return ShouldNotConstruct::class;
     }

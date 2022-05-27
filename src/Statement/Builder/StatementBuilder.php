@@ -22,6 +22,11 @@ abstract class StatementBuilder
     }
 
     /**
+     * @return class-string<PHPStanRule>
+     */
+    abstract protected function getAssertionClassname(): string;
+
+    /**
      * @return array<array{SelectorInterface, array<SelectorInterface>}>
      */
     public function build(): array
@@ -35,11 +40,6 @@ abstract class StatementBuilder
         return $this->statements;
     }
 
-    /**
-     * @return class-string<PHPStanRule>
-     */
-    abstract protected function getRuleClassname(): string;
-
     /*
      * @param array<Selector> $targets
      */
@@ -52,7 +52,7 @@ abstract class StatementBuilder
     {
         $result = [];
         foreach ($rules as $rule) {
-            if ($rule->assertion === $this->getRuleClassname()) {
+            if ($rule->assertion === $this->getAssertionClassname()) {
                 foreach ($rule->subjects as $selector) {
                     $result[] = [$selector, $rule->targets];
                 }
