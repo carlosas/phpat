@@ -2,37 +2,42 @@
 
 namespace Tests\PHPat\functional;
 
+use PHPat\Selector\SelectorInterface;
+use PHPat\Test\Rule;
 use PHPat\Test\TestParser;
 
 class FakeTestParser extends TestParser
 {
     /** @var class-string */
     private string $assertion;
-    /** @var array<class-string> */
+    /** @var array<SelectorInterface> */
     private array $subjects;
-    /** @var array<class-string> */
+    /** @var array<SelectorInterface> */
     private array $targets;
 
     /**
      * @param class-string $assertion
-     * @param array<class-string> $subjects
-     * @param array<class-string> $targets
+     * @param array<SelectorInterface> $subjects
+     * @param array<SelectorInterface> $targets
      */
-    public function __construct(string $assertion, array $subjects, array $targets)
+    public static function create(string $assertion, array $subjects, array $targets): self
     {
-        $this->assertion = $assertion;
-        $this->subjects = $subjects;
-        $this->targets = $targets;
+        /** @var self $self */
+        $self = (new \ReflectionClass(self::class))->newInstanceWithoutConstructor();
+        $self->assertion = $assertion;
+        $self->subjects = $subjects;
+        $self->targets = $targets;
+
+        return $self;
     }
 
-    public function __invoke()
+    public function __invoke(): array
     {
-        return [
-            [
-                'assertion' => $this->assertion,
-                'subjects' => $this->subjects,
-                'targets' => $this->targets,
-            ],
-        ];
+        $rule = new Rule();
+        $rule->assertion = $this->assertion;
+        $rule->subjects = $this->subjects;
+        $rule->targets = $this->targets;
+
+        return [$rule];
     }
 }
