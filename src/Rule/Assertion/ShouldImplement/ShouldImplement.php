@@ -26,6 +26,9 @@ abstract class ShouldImplement extends Assertion
         foreach ($targets as $target) {
             $targetFound = false;
             foreach ($nodes as $node) {
+                if (!$this->reflectionProvider->hasClass($node)) {
+                    continue;
+                }
                 if ($target->matches($this->reflectionProvider->getClass($node))) {
                     $targetFound = true;
                     break;

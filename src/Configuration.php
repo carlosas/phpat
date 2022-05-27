@@ -27,7 +27,9 @@ class Configuration
     private function buildTests(array $tests): array
     {
         foreach ($tests as $test) {
-            $return[] = $this->reflectionProvider->getClass($test);
+            if ($this->reflectionProvider->hasClass($test)) {
+                $return[] = $this->reflectionProvider->getClass($test);
+            }
         }
 
         return $return ?? [];

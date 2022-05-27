@@ -25,6 +25,9 @@ abstract class ShouldNotExtend extends Assertion
         $errors = [];
         foreach ($targets as $target) {
             foreach ($nodes as $node) {
+                if (!$this->reflectionProvider->hasClass($node)) {
+                    continue;
+                }
                 if ($target->matches($this->reflectionProvider->getClass($node))) {
                     $errors[] = RuleErrorBuilder::message($this->getMessage($subject->getName(), $node))->build();
                 }

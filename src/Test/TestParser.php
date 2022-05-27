@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace PHPat\Test;
 
-use PHPat\Rule\Assertion\Dependency;
-
 class TestParser
 {
     private static array $result = [];
@@ -25,6 +23,9 @@ class TestParser
         return self::$result;
     }
 
+    /**
+     * @return array<Rule>
+     */
     private function parse(): array
     {
         $tests = ($this->extractor)();
