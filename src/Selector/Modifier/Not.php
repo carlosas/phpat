@@ -1,0 +1,26 @@
+<?php
+
+namespace PHPat\Selector\Modifier;
+
+use PHPat\Selector\SelectorInterface;
+use PHPStan\Reflection\ClassReflection;
+
+class Not implements SelectorInterface
+{
+    private SelectorInterface $selector;
+
+    public function __construct(SelectorInterface $selector)
+    {
+        $this->selector = $selector;
+    }
+
+    public function matches(ClassReflection $classReflection): bool
+    {
+        return !($this->selector->matches($classReflection));
+    }
+
+    public function getName(): string
+    {
+        return $this->selector->getName() . ':not';
+    }
+}

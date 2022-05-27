@@ -14,7 +14,7 @@ class ConfigurationTest
         return PHPat::rule()
             ->classes(Selector::classname(Configuration::class))
             ->shouldNotDependOn()
-            ->classes(Selector::namespace('PHPat\\'))
+            ->classes(Selector::namespace('PHPat'))
             ->build();
     }
 }
