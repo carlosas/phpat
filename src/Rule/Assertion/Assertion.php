@@ -100,22 +100,26 @@ abstract class Assertion implements PHPStanRule
     }
 
     /**
-     * @param iterable<class-string> $targets
+     * @param array<SelectorInterface> $ruleTargets
+     * @param array<class-string> $targets
      * @throws ShouldNotHappenException
      * @return array<RuleError>
      */
     private function applyValidation(ClassReflection $subject, array $ruleTargets, array $targets): array
     {
         switch ($this->getAssertionType()) {
+            //case AssertionType::SHOULD:
+            //    return $this->applyShouldValidation($subject, $ruleTargets, $targets);
             case AssertionType::SHOULD_NOT:
                 return $this->applyShouldNotValidation($subject, $ruleTargets, $targets);
             default:
-                throw new ShouldNotHappenException('PHPat');
+                throw new ShouldNotHappenException('[PHPat] Unknown assertion type');
         }
     }
 
     /**
-     * @param iterable<class-string> $targets
+     * @param array<SelectorInterface> $ruleTargets
+     * @param array<class-string> $targets
      * @return array<RuleError>
      */
     private function applyShouldNotValidation(ClassReflection $subject, array $ruleTargets, array $targets): array
@@ -131,4 +135,24 @@ abstract class Assertion implements PHPStanRule
 
         return $errors;
     }
+
+    /**
+     * @param array<SelectorInterface> $ruleTargets
+     * @param array<class-string> $targets
+     * @return array<RuleError>
+     */
+    /*private function applyShouldValidation(ClassReflection $subject, array $ruleTargets, array $targets): array
+    {
+        $errors = [];
+        $errors[] = RuleErrorBuilder::message('ASDF')->build();
+        foreach ($ruleTargets as $ruleTarget) {
+            foreach ($targets as $target) {
+                if (!$ruleTarget->matches($this->reflectionProvider->getClass($target))) {
+                    $errors[] = RuleErrorBuilder::message('AAAAA'.$this->getMessage($subject->getName(), $target))->build();
+                }
+            }
+        }
+
+        return $errors;
+    }*/
 }

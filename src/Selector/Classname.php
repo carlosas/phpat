@@ -16,14 +16,14 @@ class Classname implements SelectorInterface
     public function __construct(string $classname)
     {
         $this->classname = $classname;
-        $this->isRegex = isRegularExpression($classname);
+        $this->isRegex   = isRegularExpression($classname);
     }
 
     public function matches(ClassReflection $classReflection): bool
     {
         if ($this->isRegex) {
             return (
-                preg_match($this->classname, $classReflection->getName()) > 0
+                preg_match($this->classname, $classReflection->getName())                    > 0
                 || preg_match($this->classname, trimSeparators($classReflection->getName())) > 0
             );
         }

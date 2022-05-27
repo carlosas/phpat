@@ -14,7 +14,7 @@ class ClassNamespace implements SelectorInterface
     public function __construct(string $namespace)
     {
         $this->namespace = $namespace;
-        $this->isRegex = isRegularExpression($namespace);
+        $this->isRegex   = isRegularExpression($namespace);
     }
 
     public function matches(ClassReflection $classReflection): bool
@@ -31,7 +31,7 @@ class ClassNamespace implements SelectorInterface
     private function matchesRegex(string $namespace): bool
     {
         return (
-            preg_match($this->namespace, $namespace) > 0
+            preg_match($this->namespace, $namespace)                    > 0
             || preg_match($this->namespace, trimSeparators($namespace)) > 0
         );
     }

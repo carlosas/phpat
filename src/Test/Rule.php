@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PHPat\Test;
 
+use PHPat\Rule\Assertion\Assertion;
 use PHPat\Selector\SelectorInterface;
 
 class Rule
@@ -11,14 +12,11 @@ class Rule
     /** @var array<SelectorInterface> */
     public array $subjects = [];
     /** @var array<SelectorInterface> */
+    public array $subjectExcludes = [];
+    /** @var array<SelectorInterface> */
     public array $targets = [];
-    /** @var null|class-string<Rule> */
+    /** @var array<SelectorInterface> */
+    public array $targetExcludes = [];
+    /** @var null|class-string<Assertion> */
     public ?string $assertion = null;
-
-    public function __construct(array $subjects, array $targets, ?string $assertion)
-    {
-        $this->subjects  = $subjects;
-        $this->targets   = $targets;
-        $this->assertion = $assertion;
-    }
 }

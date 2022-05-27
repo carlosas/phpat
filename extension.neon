@@ -4,6 +4,12 @@ services:
 	- PHPat\Statement\Builder\StatementBuilderFactory
 	- PHPat\Configuration(tests: %phpat.tests%)
 
+	# ShouldImplement rules
+	#-
+	#	class: PHPat\Rule\Assertion\ShouldImplement\ImplementedInterfacesRule
+	#	tags:
+	#		- phpstan.rules.rule
+
 	# ShouldNotDepend rules
 	-
 		class: PHPat\Rule\Assertion\ShouldNotDepend\ConstantUseRule
