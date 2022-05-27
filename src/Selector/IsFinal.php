@@ -3,7 +3,6 @@
 namespace PHPat\Selector;
 
 use PHPStan\Reflection\ClassReflection;
-use function trimSeparators;
 
 class IsFinal implements SelectorInterface
 {

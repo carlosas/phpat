@@ -39,6 +39,7 @@ $rules = [
     'no_useless_else'             => true,
     'no_useless_return'           => true,
     'ordered_class_elements'      => true,
+    'no_unused_imports'           => true,
     'ordered_imports'             => true,
     'php_unit_strict'             => true,
     'phpdoc_order'                => true,

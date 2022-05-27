@@ -3,12 +3,9 @@
 namespace PHPat\Rule\Assertion\ShouldNotImplement;
 
 use PHPat\Rule\Assertion\Assertion;
-use PHPat\Rule\Assertion\AssertionType;
-use PHPat\Selector\SelectorInterface;
 use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
 
 abstract class ShouldNotImplement extends Assertion

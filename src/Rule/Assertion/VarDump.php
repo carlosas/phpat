@@ -5,7 +5,6 @@ namespace PHPat\Rule\Assertion;
 use PHPat\SimpleClass;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
-use PHPStan\Node\InClassNode;
 
 class VarDump implements \PHPStan\Rules\Rule
 {
