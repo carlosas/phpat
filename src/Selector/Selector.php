@@ -31,6 +31,11 @@ class Selector
         return new IsFinal();
     }
 
+    public static function notFinal(): IsNotFinal
+    {
+        return new IsNotFinal();
+    }
+
     public static function enum(): IsEnum
     {
         return new IsEnum();
