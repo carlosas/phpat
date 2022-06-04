@@ -2,6 +2,7 @@
 
 namespace PHPat\Statement\Builder;
 
+use PHPat\Selector\Selector;
 use PHPat\Selector\SelectorInterface;
 use PHPat\Test\Rule;
 use PHPStan\Rules\Rule as PHPStanRule;
@@ -40,7 +41,7 @@ abstract class StatementBuilder
      */
     abstract protected function getAssertionClassname(): string;
 
-    /*
+    /**
      * @param array<Selector> $targets
      */
     private function addStatement(SelectorInterface $subject, array $targets): void

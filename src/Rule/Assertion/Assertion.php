@@ -7,11 +7,13 @@ use PHPat\Selector\SelectorInterface;
 use PHPat\Statement\Builder\StatementBuilderFactory;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
+use PHPStan\PhpDoc\TypeNodeResolver;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\Rule as PHPStanRule;
 use PHPStan\Rules\RuleError;
 use PHPStan\ShouldNotHappenException;
+use PHPStan\Type\FileTypeMapper;
 
 abstract class Assertion implements PHPStanRule
 {
@@ -19,6 +21,7 @@ abstract class Assertion implements PHPStanRule
     protected array $statements;
 
     protected ReflectionProvider $reflectionProvider;
+    private FileTypeMapper $fileTypeMapper;
 
     /**
      * @param class-string<Assertion> $assertion
@@ -26,10 +29,12 @@ abstract class Assertion implements PHPStanRule
     public function __construct(
         string $assertion,
         StatementBuilderFactory $statementBuilderFactory,
-        ReflectionProvider $reflectionProvider
+        ReflectionProvider $reflectionProvider,
+        FileTypeMapper $fileTypeMapper
     ) {
         $this->statements         = $statementBuilderFactory->create($assertion)->build();
         $this->reflectionProvider = $reflectionProvider;
+        $this->fileTypeMapper = $fileTypeMapper;
     }
 
     /**
