@@ -23,7 +23,7 @@ class ClassPropertiesNodeTest extends RuleTestCase
 {
     public function testRule(): void
     {
-        $this->analyse(['tests/functional/fixtures/Dependency/Constructor.php'], [
+        $this->analyse(['tests/unit/fixtures/Dependency/Constructor.php'], [
             [
                 sprintf(
                     '%s should not depend on %s',
