@@ -1,0 +1,164 @@
+<?php
+
+namespace PHPatOld;
+
+use PHPatOld\App\Cli\SingleCommandApplication;
+use PHPatOld\App\ErrorStorage;
+use PHPatOld\App\Event\SuiteEndEvent;
+use PHPatOld\App\Event\SuiteStartEvent;
+use PHPatOld\App\Provider;
+use PHPatOld\Config\ConfigurationFactory;
+use PHPatOld\Parser\Ast\MapBuilder;
+use PHPatOld\Parser\Ast\ReferenceMap;
+use PHPatOld\Rule\Baseline;
+use PHPatOld\Rule\Event\RuleValidationEndEvent;
+use PHPatOld\Rule\Event\RuleValidationStartEvent;
+use PHPatOld\Rule\RuleCollection;
+use PHPatOld\Statement\Statement;
+use PHPatOld\Statement\StatementBuilder;
+use PHPatOld\Test\TestExtractor;
+use Psr\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+
+class App extends SingleCommandApplication
+{
+    private ?TestExtractor $extractor             = null;
+    private ?StatementBuilder $statementBuilder   = null;
+    private ?EventDispatcherInterface $dispatcher = null;
+    private ?MapBuilder $mapBuilder               = null;
+    private ?Baseline $baseline                   = null;
+
+    protected function configure()
+    {
+        $this
+            ->addArgument(
+                'config',
+                InputArgument::OPTIONAL,
+                'Configuration file',
+                file_exists('phpat.yaml') ? 'phpat.yaml' : 'phpat.yml'
+            )
+            ->addOption(
+                'baseline',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Path to baseline file to use'
+            )
+            ->addOption(
+                'generate-baseline',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Generate a baseline file and exit without error code'
+            )
+            ->addOption(
+                'php-version',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'PHP version of the src code'
+            )
+            ->addOption(
+                'ignore-docblocks',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Ignore relations in docblocks'
+            )
+            ->addOption(
+                'ignore-php-extensions',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Ignore relations to core and extensions classes'
+            );
+    }
+
+    protected function initialize(InputInterface $input, OutputInterface $output)
+    {
+        if (!(file_exists($input->getArgument('config')))) {
+            throw new \RuntimeException('Configuration file not found.');
+        }
+
+        $configuration = (new ConfigurationFactory())->create($input);
+
+        if (!$this->hasCommandVerbosity($output)) {
+            $output->setVerbosity($this->getConsoleVerbosity($configuration->getVerbosity()));
+        }
+
+        $provider = new Provider(
+            new ContainerBuilder(),
+            $configuration,
+            $output
+        );
+        $container = $provider->register();
+
+        $this->extractor        = $container->get(TestExtractor::class);
+        $this->statementBuilder = $container->get(StatementBuilder::class);
+        $this->dispatcher       = $container->get(EventDispatcherInterface::class);
+        $this->mapBuilder       = $container->get(MapBuilder::class);
+        $this->baseline         = $container->get(Baseline::class);
+    }
+
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $this->dispatcher->dispatch(new SuiteStartEvent());
+
+        $map = $this->mapBuilder->build();
+
+        $testSuite = $this->extractor->execute();
+
+        $rules = new RuleCollection();
+        foreach ($testSuite->getValues() as $test) {
+            $rules = $rules->merge($test());
+        }
+
+        foreach ($rules->getValues() as $rule) {
+            $statements = $this->statementBuilder->build($rule, $map);
+
+            $this->dispatcher->dispatch(new RuleValidationStartEvent($rule->getName()));
+            /** @var Statement $statement */
+            foreach ($statements as $statement) {
+                $this->validateStatement($statement, $map);
+            }
+
+            $this->dispatcher->dispatch(new RuleValidationEndEvent());
+        }
+
+        $this->baseline->checkNonCompensatedErrors();
+        $baselineGenerated = $this->baseline->generateBaselineFileIfNeeded();
+
+        $this->dispatcher->dispatch(new SuiteEndEvent());
+
+        return ($baselineGenerated || (ErrorStorage::getTotalErrors() === 0)) ? 0 : 1;
+    }
+
+    private function validateStatement(Statement $statement, ReferenceMap $map): void
+    {
+        $statement->getAssertion()->validate(
+            $statement->getOrigin(),
+            $statement->getDestinations(),
+            $statement->getExcludedDestinations(),
+            $map
+        );
+    }
+
+    private function hasCommandVerbosity(OutputInterface $output): bool
+    {
+        return $output->getVerbosity() !== OutputInterface::VERBOSITY_NORMAL;
+    }
+
+    private function getConsoleVerbosity(int $verbosity): int
+    {
+        switch ($verbosity) {
+            case 2:
+                return OutputInterface::VERBOSITY_VERY_VERBOSE;
+            case 1:
+                return OutputInterface::VERBOSITY_VERBOSE;
+            case -1:
+                return OutputInterface::VERBOSITY_QUIET;
+            case 0:
+            default:
+                return OutputInterface::VERBOSITY_NORMAL;
+        }
+    }
+}

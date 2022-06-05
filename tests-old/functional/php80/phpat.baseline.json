@@ -1,0 +1,6 @@
+{
+  "Baseline Makes Pass Failing Test": [
+    "Tests\\PHPat\\functional\\php80\\fixtures\\TwiceDependingClass depends on Tests\\PHPat\\functional\\php80\\fixtures\\SimpleClassOne",
+    "Tests\\PHPat\\functional\\php80\\fixtures\\TwiceDependingClass depends on Tests\\PHPat\\functional\\php80\\fixtures\\SimpleClassOne"
+  ]
+}

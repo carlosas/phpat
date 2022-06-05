@@ -1,0 +1,6 @@
+src:
+  path: php81/fixtures/
+tests:
+  path: php81/architecture/
+options:
+  verbosity: 2

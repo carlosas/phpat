@@ -14,6 +14,8 @@
 	</a>
 </p>
 <br />
+<b>IMPORTANT:</b> PHPat will be converted to a PHPStan extension in the next release. Stay tuned!
+<br />
 
 ### Introduction 📜
 
