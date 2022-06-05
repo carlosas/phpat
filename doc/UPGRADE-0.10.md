@@ -50,3 +50,16 @@ Selectors
 * Arguments do not accept the `*` wildcard anymore. Instead, you can now write a regular expression.
 * Composer selectors are not available anymore, at least not for now.
 * Selector methods have changed slightly and some new have been added. Check the [Selectors docs](SELECTORS.md) for more information.
+
+Assertions
+----------
+
+* The verb `must` has been replaced by `should`.
+* Assertions have changed slightly as well, this is the list of current assertions:
+  * should extend
+  * should implement
+  * should not extend
+  * should not implement
+  * should not depend on
+  * should not construct
+* See the [Assertions docs](ASSERTIONS.md) for more information.
