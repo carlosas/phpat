@@ -10,6 +10,7 @@ use PHPat\Selector\Classname;
 use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
+use Tests\PHPat\functional\FakeFileTypeMapper;
 use Tests\PHPat\functional\FakeReflectionProvider;
 use Tests\PHPat\functional\FakeTestParser;
 use Tests\PHPat\functional\fixtures\Dependency\Constructor;
@@ -29,10 +30,11 @@ class ClassPropertiesNodeTest extends RuleTestCase
                     Constructor::class,
                     DependencyNamespaceSimpleClass::class,
                 ),
-                14,
+                17,
             ],
         ]);
     }
+
     protected function getRule(): Rule
     {
         $assertion = ShouldNotDepend::class;
@@ -41,7 +43,8 @@ class ClassPropertiesNodeTest extends RuleTestCase
 
         return new MethodParamRule(
             new StatementBuilderFactory(FakeTestParser::create($assertion, $subjects, $targets)),
-            new FakeReflectionProvider()
+            new FakeReflectionProvider(),
+            FakeFileTypeMapper::create()
         );
     }
 }

@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 $finder = PhpCsFixer\Finder::create()
     ->in(dirname(__DIR__) . '/src')
-    ->in(dirname(__DIR__) . '/tests');
+    ->in(dirname(__DIR__) . '/tests')
+    ->exclude('tests/functional');
 
 $rules = [
     '@PSR12'          => true,

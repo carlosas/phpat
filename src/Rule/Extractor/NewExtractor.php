@@ -7,7 +7,6 @@ namespace PHPat\Rule\Extractor;
 use PHPat\Parser\TypeNodeParser;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
-use function PHPUnit\Framework\assertInstanceOf;
 
 trait NewExtractor
 {
