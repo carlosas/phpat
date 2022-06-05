@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Tests\PHPat\functional\rules\MustNotDepend;
 
@@ -6,7 +8,6 @@ use PHPat\Rule\Assertion\ShouldNotDepend\MethodParamRule;
 use PHPat\Rule\Assertion\ShouldNotDepend\ShouldNotDepend;
 use PHPat\Selector\Classname;
 use PHPat\Statement\Builder\StatementBuilderFactory;
-use PHPStan\Reflection\ReflectionProvider\DummyReflectionProvider;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use Tests\PHPat\functional\FakeReflectionProvider;
@@ -19,18 +20,6 @@ use Tests\PHPat\functional\fixtures\Dependency\DependencyNamespaceSimpleClass;
  */
 class ClassPropertiesNodeTest extends RuleTestCase
 {
-    protected function getRule(): Rule
-    {
-        $assertion = ShouldNotDepend::class;
-        $subjects = [new Classname(Constructor::class)];
-        $targets = [new Classname(DependencyNamespaceSimpleClass::class)];
-
-        return new MethodParamRule(
-            new StatementBuilderFactory(FakeTestParser::create($assertion, $subjects, $targets)),
-            new FakeReflectionProvider()
-        );
-    }
-
     public function testRule(): void
     {
         $this->analyse(['tests/functional/fixtures/Dependency/Constructor.php'], [
@@ -43,5 +32,16 @@ class ClassPropertiesNodeTest extends RuleTestCase
                 14,
             ],
         ]);
+    }
+    protected function getRule(): Rule
+    {
+        $assertion = ShouldNotDepend::class;
+        $subjects  = [new Classname(Constructor::class)];
+        $targets   = [new Classname(DependencyNamespaceSimpleClass::class)];
+
+        return new MethodParamRule(
+            new StatementBuilderFactory(FakeTestParser::create($assertion, $subjects, $targets)),
+            new FakeReflectionProvider()
+        );
     }
 }

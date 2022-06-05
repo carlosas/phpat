@@ -4,47 +4,75 @@ namespace Tests\PHPat\functional\fixtures\Dependency;
 
 class MethodDependency
 {
-    public function __construct(ConstructParamClassOne $one, ConstructParamClassTwo $two) {
+    public function __construct(ConstructParamClassOne $one, ConstructParamClassTwo $two)
+    {
         throw new ConstructException();
     }
 
     private function methodOne(
         ParamClassOne $one,
         ParamClassTwo $two
-    ): ReturnClass
-    {
+    ): ReturnClass {
         $varOne = new VarClass();
         $varTwo = ConstClass::CONSTANT;
         StaticMethodClass::someMethod();
         $closure = function () {
-                $closureVar = new ClosureVarClass();
-                return new ClosureReturnClass();
-            };
+            $closureVar = new ClosureVarClass();
+            return new ClosureReturnClass();
+        };
 
         return new ReturnVarClass();
     }
 }
 
-class ConstructParamClassOne {}
+class ConstructParamClassOne
+{
+}
 
-class ConstructParamClassTwo {}
+class ConstructParamClassTwo
+{
+}
 
-class ConstructException extends \Exception {}
+class ConstructException extends \Exception
+{
+}
 
-class ParamClassOne {}
+class ParamClassOne
+{
+}
 
-class ParamClassTwo {}
+class ParamClassTwo
+{
+}
 
-class ReturnClass {}
+class ReturnClass
+{
+}
 
-class ReturnVarClass {}
+class ReturnVarClass
+{
+}
 
-class VarClass {}
+class VarClass
+{
+}
 
-class ConstClass { public const CONSTANT = 'value'; }
+class ConstClass
+{
+    public const CONSTANT = 'value';
+}
 
-class StaticMethodClass { public static function someMethod() {} }
+class StaticMethodClass
+{
+    public static function someMethod()
+    {
+    }
+}
 
-class ClosureVarClass {}
+class ClosureVarClass
+{
+}
 
-class ClosureReturnClass {}
+class ClosureReturnClass
+{
+}

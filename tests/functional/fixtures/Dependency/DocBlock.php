@@ -2,14 +2,14 @@
 
 namespace Tests\PHPat\functional\fixtures\Dependency;
 
+use Tests\PHPat\functional\fixtures\AnotherSimpleClass as AliasedClass;
+use Tests\PHPat\functional\fixtures\CallableArgument;
+use Tests\PHPat\functional\fixtures\CallableReturn;
 use Tests\PHPat\functional\fixtures\DummyException;
 use Tests\PHPat\functional\fixtures\GenericInner;
 use Tests\PHPat\functional\fixtures\GenericOuter;
-use Tests\PHPat\functional\fixtures\SimpleClass;
-use Tests\PHPat\functional\fixtures\AnotherSimpleClass as AliasedClass;
 use Tests\PHPat\functional\fixtures\Inheritance;
-use Tests\PHPat\functional\fixtures\CallableArgument;
-use Tests\PHPat\functional\fixtures\CallableReturn;
+use Tests\PHPat\functional\fixtures\SimpleClass;
 
 class DocBlock
 {
@@ -48,18 +48,15 @@ class DocBlock
     /** @param (callable(CallableArgument): CallableReturn) $genericArgument */
     public function acceptsCallable(callable $callableArgument): void
     {
-
     }
 
     /** @param GenericOuter<GenericInner> $genericArgument */
     public function classGeneric($genericArgument): void
     {
-
     }
 
     /** @param array<GenericInner> $genericArgument */
     public function arrayGeneric($genericArgument): void
     {
-
     }
 }

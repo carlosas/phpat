@@ -1,16 +1,15 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Tests\PHPat\functional;
 
-use PHPat\Selector\SelectorInterface;
-use PHPat\Test\Rule;
-use PHPat\Test\TestParser;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider\DummyReflectionProvider;
 
 class FakeReflectionProvider extends DummyReflectionProvider
 {
-    public function hasClass(string $className) : bool
+    public function hasClass(string $className): bool
     {
         try {
             (new \ReflectionClass($className));
@@ -21,10 +20,10 @@ class FakeReflectionProvider extends DummyReflectionProvider
         return true;
     }
 
-    public function getClass(string $className) : ClassReflection
+    public function getClass(string $className): ClassReflection
     {
         $reflection = (new \ReflectionClass(ClassReflection::class));
-        $property = $reflection->getProperty('reflection');
+        $property   = $reflection->getProperty('reflection');
         $property->setAccessible(true);
 
         /** @var ClassReflection $instance */

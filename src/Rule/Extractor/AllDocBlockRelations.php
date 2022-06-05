@@ -36,7 +36,7 @@ trait AllDocBlockRelations
         );
 
         $names = [];
-        $tags = array_filter(
+        $tags  = array_filter(
             array_merge(
                 $resolvedPhpDoc->getVarTags(),
                 $resolvedPhpDoc->getMethodTags(),

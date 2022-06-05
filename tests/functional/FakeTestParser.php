@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Tests\PHPat\functional;
 
@@ -15,6 +17,16 @@ class FakeTestParser extends TestParser
     /** @var array<SelectorInterface> */
     private array $targets;
 
+    public function __invoke(): array
+    {
+        $rule            = new Rule();
+        $rule->assertion = $this->assertion;
+        $rule->subjects  = $this->subjects;
+        $rule->targets   = $this->targets;
+
+        return [$rule];
+    }
+
     /**
      * @param class-string $assertion
      * @param array<SelectorInterface> $subjects
@@ -23,21 +35,11 @@ class FakeTestParser extends TestParser
     public static function create(string $assertion, array $subjects, array $targets): self
     {
         /** @var self $self */
-        $self = (new \ReflectionClass(self::class))->newInstanceWithoutConstructor();
+        $self            = (new \ReflectionClass(self::class))->newInstanceWithoutConstructor();
         $self->assertion = $assertion;
-        $self->subjects = $subjects;
-        $self->targets = $targets;
+        $self->subjects  = $subjects;
+        $self->targets   = $targets;
 
         return $self;
-    }
-
-    public function __invoke(): array
-    {
-        $rule = new Rule();
-        $rule->assertion = $this->assertion;
-        $rule->subjects = $this->subjects;
-        $rule->targets = $this->targets;
-
-        return [$rule];
     }
 }

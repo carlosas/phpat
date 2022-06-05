@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 $finder = PhpCsFixer\Finder::create()
-    ->in(realpath(__DIR__ . '/..'))
-    ->exclude('tests/functional');
+    ->in(dirname(__DIR__) . '/src')
+    ->in(dirname(__DIR__) . '/tests');
 
 $rules = [
     '@PSR12'          => true,

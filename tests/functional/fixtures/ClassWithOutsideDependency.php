@@ -9,11 +9,11 @@ class ClassWithOutsideDependency
 {
     public function methodOne(FixtureOutOfPathOne $fixture)
     {
-        return;
+
     }
 
     public function methodTwo(FixtureOutOfPathTwo $fixture)
     {
-        return;
+
     }
 }

@@ -18,8 +18,8 @@ class DocBlock
      * @param GenericOuterClass<GenericInnerClass> $p4
      * @param array<GenericInnerClass2> $p5
      * @param UnionClassOne|UnionClassTwo $p6
-     * @return ReturnClass nicedescription
      * @throws DummyExceptionClass
+     * @return ReturnClass nicedescription
      */
     public function methodOne($p, $p2, $p3, $p4, $p5, $p6)
     {
@@ -28,36 +28,70 @@ class DocBlock
     }
 }
 
-class PropertyClass {}
+class PropertyClass
+{
+}
 
-class PropertyWriteClass {}
+class PropertyWriteClass
+{
+}
 
-class PropertyReadClass {}
+class PropertyReadClass
+{
+}
 
-class MethodReturnClass {}
+class MethodReturnClass
+{
+}
 
-class MethodParamClass {}
+class MethodParamClass
+{
+}
 
-class MixinClass {}
+class MixinClass
+{
+}
 
-class ParamClass {}
+class ParamClass
+{
+}
 
-class ParamClass2 {}
+class ParamClass2
+{
+}
 
-class ParamClass3 {}
+class ParamClass3
+{
+}
 
-class ReturnClass {}
+class ReturnClass
+{
+}
 
-class GenericOuterClass {}
+class GenericOuterClass
+{
+}
 
-class GenericInnerClass {}
+class GenericInnerClass
+{
+}
 
-class GenericInnerClass2 {}
+class GenericInnerClass2
+{
+}
 
-class UnionClassOne {}
+class UnionClassOne
+{
+}
 
-class UnionClassTwo {}
+class UnionClassTwo
+{
+}
 
-class DummyExceptionClass {}
+class DummyExceptionClass
+{
+}
 
-class VarClass {}
+class VarClass
+{
+}

@@ -2,9 +2,9 @@
 
 namespace Tests\PHPat\functional\fixtures\Dependency;
 
-use Tests\PHPat\functional\fixtures\SimpleClass;
 use Tests\PHPat\functional\fixtures\AnotherSimpleClass as AliasedClass;
 use Tests\PHPat\functional\fixtures\Inheritance;
+use Tests\PHPat\functional\fixtures\SimpleClass;
 
 class Constructor
 {

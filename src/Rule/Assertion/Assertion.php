@@ -32,7 +32,7 @@ abstract class Assertion implements PHPStanRule
     ) {
         $this->statements         = $statementBuilderFactory->create($assertion)->build();
         $this->reflectionProvider = $reflectionProvider;
-        $this->fileTypeMapper = $fileTypeMapper;
+        $this->fileTypeMapper     = $fileTypeMapper;
     }
 
     /**

@@ -6,5 +6,6 @@ use Tests\PHPat\functional\fixtures\SimpleTrait;
 
 class IncludeMultipleTraits
 {
-    use SimpleTrait, MixinNamespaceSimpleTrait;
+    use SimpleTrait;
+    use MixinNamespaceSimpleTrait;
 }

@@ -7,8 +7,14 @@ class ClassDependency extends ParentClass implements ClassInterface
     use ClassTrait;
 }
 
-abstract class ParentClass {}
+abstract class ParentClass
+{
+}
 
-interface ClassInterface {}
+interface ClassInterface
+{
+}
 
-trait ClassTrait {}
+trait ClassTrait
+{
+}
