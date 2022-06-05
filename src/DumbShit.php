@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PHPat;
 
 class DumbShit extends SomeAbstractClass
@@ -11,7 +13,7 @@ class DumbShit extends SomeAbstractClass
         $a = new DumbShit();
     }
 
-    public function doSomething(string $asdf)
+    public function doSomething(string $asdf): void
     {
         echo $asdf;
     }

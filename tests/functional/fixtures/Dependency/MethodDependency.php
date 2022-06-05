@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\PHPat\functional\fixtures\Dependency;
 
 use Exception;
@@ -66,7 +68,7 @@ class ConstClass
 
 class StaticMethodClass
 {
-    public static function someMethod()
+    public static function someMethod(): void
     {
     }
 }

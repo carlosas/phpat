@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PHPat\Test\Builder;
 
 use PHPat\Rule\Assertion\ShouldImplement\ShouldImplement;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\PHPat\functional\fixtures\Dependency;
 
 use BadMethodCallException;
@@ -10,7 +12,7 @@ class CoreAndExtensions
     /**
      * @throws Exception
      */
-    public function doSomething()
+    public function doSomething(): void
     {
         throw new BadMethodCallException();
     }

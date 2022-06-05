@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PHPat\Rule\Assertion\ShouldExtend;
 
 use PHPat\Rule\Assertion\Assertion;

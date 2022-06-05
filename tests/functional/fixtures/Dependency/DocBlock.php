@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\PHPat\functional\fixtures\Dependency;
 
 use Exception;
@@ -17,7 +19,7 @@ class DocBlock
     /**
      * @throws DummyException
      */
-    public function doSomething()
+    public function doSomething(): void
     {
         /** @var SimpleClass[] $a */
         $a = 1;
@@ -32,7 +34,7 @@ class DocBlock
     /**
      * @throws Exception
      */
-    public function shouldNotBeCatched()
+    public function shouldNotBeCatched(): void
     {
         /** @var string $a */
         $a = 1;

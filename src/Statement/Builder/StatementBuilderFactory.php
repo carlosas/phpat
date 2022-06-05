@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PHPat\Statement\Builder;
 
 use PHPat\Test\Rule;

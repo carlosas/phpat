@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PHPat\Rule\Extractor;
 
 use PHPat\Parser\TypeNodeParser;

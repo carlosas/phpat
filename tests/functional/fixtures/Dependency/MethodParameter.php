@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\PHPat\functional\fixtures\Dependency;
 
 use Tests\PHPat\functional\fixtures\AnotherSimpleClass as AliasedClass;
@@ -13,6 +15,6 @@ class MethodParameter
         AliasedClass $aliasedClass,
         DependencyNamespaceSimpleClass $dependencyNamespaceSimpleClass,
         Inheritance\InheritanceNamespaceSimpleClass $inheritanceNamespaceSimpleClass
-    ) {
+    ): void {
     }
 }
