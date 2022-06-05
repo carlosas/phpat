@@ -1,0 +1,7 @@
+parameters:
+    level: 1
+    paths:
+        - ../src
+includes:
+	- ../extension.neon
+	- phpat.neon
