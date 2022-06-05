@@ -52,9 +52,9 @@ abstract class Assertion implements PHPStanRule
     }
 
     /**
-     * @return iterable<class-string>
+     * @return array<class-string>
      */
-    abstract protected function extractNodeClassNames(Node $node, Scope $scope): iterable;
+    abstract protected function extractNodeClassNames(Node $node, Scope $scope): array;
 
     /**
      * @param class-string $subject
@@ -70,9 +70,9 @@ abstract class Assertion implements PHPStanRule
     abstract protected function applyValidation(ClassReflection $subject, array $targets, array $nodes): array;
 
     /**
-     * @param iterable<class-string> $nodes
+     * @param array<class-string> $nodes
      */
-    protected function ruleApplies(Scope $scope, iterable $nodes): bool
+    protected function ruleApplies(Scope $scope, array $nodes): bool
     {
         if (!($scope->isInClass())) {
             return false;
@@ -92,11 +92,11 @@ abstract class Assertion implements PHPStanRule
     }
 
     /**
-     * @param iterable<class-string> $nodes
+     * @param array<class-string> $nodes
      * @throws ShouldNotHappenException
      * @return array<RuleError>
      */
-    protected function validateGetErrors(Scope $scope, iterable $nodes): array
+    protected function validateGetErrors(Scope $scope, array $nodes): array
     {
         $subject = $scope->getClassReflection();
         $errors  = [];

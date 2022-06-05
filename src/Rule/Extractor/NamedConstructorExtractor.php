@@ -17,9 +17,9 @@ trait NamedConstructorExtractor
 
     /**
      * @param Node\Expr\ClassConstFetch $node
-     * @return iterable<class-string>
+     * @return array<class-string>
      */
-    protected function extractNodeClassNames(Node $node, Scope $scope): iterable
+    protected function extractNodeClassNames(Node $node, Scope $scope): array
     {
         $classes         = TypeNodeParser::parse($node->class, $scope);
         $class           = reset($classes);

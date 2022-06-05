@@ -17,9 +17,9 @@ use PHPStan\Analyser\Scope;
 class TypeNodeParser
 {
     /**
-     * @return iterable<Node\Name>
+     * @return array<Node\Name>
      */
-    public static function parse(?NodeAbstract $type, Scope $scope): iterable
+    public static function parse(?NodeAbstract $type, Scope $scope): array
     {
         if ($type instanceof Node\Name) {
             return [self::parseName($type, $scope)];
@@ -33,9 +33,9 @@ class TypeNodeParser
     }
 
     /**
-     * @return iterable<Name>
+     * @return array<Name>
      */
-    private static function parseComplex(ComplexType $type, Scope $scope): iterable
+    private static function parseComplex(ComplexType $type, Scope $scope): array
     {
         switch (true) {
             case $type instanceof NullableType:
@@ -56,10 +56,10 @@ class TypeNodeParser
     }
 
     /**
-     * @param iterable<Identifier|Name> $type
+     * @param array<Identifier|Name> $type
      * @return array<Name>
      */
-    private static function filterNameNodes(iterable $type): array
+    private static function filterNameNodes(array $type): array
     {
         return array_filter($type, static fn ($type) => $type instanceof Name);
     }

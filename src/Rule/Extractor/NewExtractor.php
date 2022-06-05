@@ -7,6 +7,7 @@ namespace PHPat\Rule\Extractor;
 use PHPat\Parser\TypeNodeParser;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
+use function PHPUnit\Framework\assertInstanceOf;
 
 trait NewExtractor
 {
@@ -17,9 +18,9 @@ trait NewExtractor
 
     /**
      * @param Node\Expr\New_ $node
-     * @return iterable<class-string>
+     * @return array<class-string>
      */
-    protected function extractNodeClassNames(Node $node, Scope $scope): iterable
+    protected function extractNodeClassNames(Node $node, Scope $scope): array
     {
         return namesToClassStrings(TypeNodeParser::parse($node->class, $scope));
     }

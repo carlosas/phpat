@@ -10,7 +10,7 @@ class TargetExcludeOrAssertionStep extends BuildStep
 {
     public function excluding(SelectorInterface ...$selectors): BuildStep
     {
-        $this->rule->targetExcludes = [...$selectors];
+        $this->rule->targetExcludes = array_values($selectors);
 
         return new BuildStep($this->rule);
     }

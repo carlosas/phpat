@@ -17,9 +17,9 @@ trait MethodParamExtractor
 
     /**
      * @param Node\Param $node
-     * @return iterable<class-string>
+     * @return array<class-string>
      */
-    protected function extractNodeClassNames(Node $node, Scope $scope): iterable
+    protected function extractNodeClassNames(Node $node, Scope $scope): array
     {
         return namesToClassStrings(TypeNodeParser::parse($node->type, $scope));
     }

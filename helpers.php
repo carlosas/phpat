@@ -26,10 +26,10 @@ function isRegularExpression(string $string)
 }
 
 /**
- * @param iterable<Name> $names
- * @return iterable<class-string>
+ * @param array<Name> $names
+ * @return array<class-string>
  */
-function namesToClassStrings(iterable $names): iterable
+function namesToClassStrings(iterable $names): array
 {
     return array_map(
         static fn (Name $name): string => $name->toString(),

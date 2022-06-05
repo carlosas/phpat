@@ -10,7 +10,7 @@ class SubjectExcludeOrBuildStep extends AssertionStep
 {
     public function excluding(SelectorInterface ...$selectors): AssertionStep
     {
-        $this->rule->subjectExcludes = [...$selectors];
+        $this->rule->subjectExcludes = array_values($selectors);
 
         return new AssertionStep($this->rule);
     }

@@ -12,4 +12,13 @@
             <directory name="../vendor" />
         </ignoreFiles>
     </projectFiles>
+
+    <issueHandlers>
+        <MoreSpecificImplementedParamType>
+            <errorLevel type="suppress"><directory name="../src/Rule/Extractor" /></errorLevel>
+        </MoreSpecificImplementedParamType>
+        <LessSpecificImplementedReturnType>
+            <errorLevel type="suppress"><directory name="../src/Rule/Extractor" /></errorLevel>
+        </LessSpecificImplementedReturnType>
+    </issueHandlers>
 </psalm>

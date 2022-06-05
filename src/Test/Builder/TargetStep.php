@@ -18,7 +18,7 @@ class TargetStep
 
     public function classes(SelectorInterface ...$selectors): TargetExcludeOrAssertionStep
     {
-        $this->rule->targets = [...$selectors];
+        $this->rule->targets = array_values($selectors);
 
         return new TargetExcludeOrAssertionStep($this->rule);
     }

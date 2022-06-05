@@ -18,7 +18,7 @@ class SubjectStep
 
     public function classes(SelectorInterface ...$selectors): SubjectExcludeOrBuildStep
     {
-        $this->rule->subjects = [...$selectors];
+        $this->rule->subjects = array_values($selectors);
 
         return new SubjectExcludeOrBuildStep($this->rule);
     }

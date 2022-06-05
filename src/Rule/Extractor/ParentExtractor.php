@@ -18,9 +18,9 @@ trait ParentExtractor
 
     /**
      * @param InClassNode $node
-     * @return iterable<class-string>
+     * @return array<class-string>
      */
-    protected function extractNodeClassNames(Node $node, Scope $scope): iterable
+    protected function extractNodeClassNames(Node $node, Scope $scope): array
     {
         return array_map(
             static fn (ClassReflection $c) => $c->getName(),
