@@ -57,9 +57,9 @@ class TypeNodeParser
 
     /**
      * @param iterable<Identifier|Name> $type
-     * @return iterable<Name>
+     * @return array<Name>
      */
-    private static function filterNameNodes(iterable $type): iterable
+    private static function filterNameNodes(iterable $type): array
     {
         return array_filter($type, static fn ($type) => $type instanceof Name);
     }

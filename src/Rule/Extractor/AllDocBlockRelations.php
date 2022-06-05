@@ -16,9 +16,9 @@ trait AllDocBlockRelations
 
     /**
      * @param Node $node
-     * @return iterable<class-string>
+     * @return array<int, mixed>
      */
-    protected function extractNodeClassNames(Node $node, Scope $scope): iterable
+    protected function extractNodeClassNames(Node $node, Scope $scope): array
     {
         if (!$scope->isInClass()) {
             return [];
