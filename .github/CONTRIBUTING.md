@@ -14,7 +14,6 @@ There are several ways to help out:
 * All tests and coding standard checks should pass
 ```bash
 composer validate --strict
-vendor/bin/phpcs src/ --standard=ci/phpcs.xml
 vendor/bin/php-cs-fixer fix --config ./ci/php-cs-fixer.php
 vendor/bin/phpstan analyse -c ci/phpstan.neon
 vendor/bin/psalm -c ci/psalm.xml
