@@ -7,6 +7,7 @@ namespace Tests\PHPat\functional;
 use PHPat\Selector\SelectorInterface;
 use PHPat\Test\Rule;
 use PHPat\Test\TestParser;
+use ReflectionClass;
 
 class FakeTestParser extends TestParser
 {
@@ -35,7 +36,7 @@ class FakeTestParser extends TestParser
     public static function create(string $assertion, array $subjects, array $targets): self
     {
         /** @var self $self */
-        $self            = (new \ReflectionClass(self::class))->newInstanceWithoutConstructor();
+        $self            = (new ReflectionClass(self::class))->newInstanceWithoutConstructor();
         $self->assertion = $assertion;
         $self->subjects  = $subjects;
         $self->targets   = $targets;

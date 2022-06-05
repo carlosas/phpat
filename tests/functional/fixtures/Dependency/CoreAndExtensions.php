@@ -2,13 +2,16 @@
 
 namespace Tests\PHPat\functional\fixtures\Dependency;
 
+use BadMethodCallException;
+use Exception;
+
 class CoreAndExtensions
 {
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function doSomething()
     {
-        throw new \BadMethodCallException();
+        throw new BadMethodCallException();
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Tests\PHPat\functional\fixtures\Dependency;
 
+use Exception;
 use Tests\PHPat\functional\fixtures\AnotherSimpleClass as AliasedClass;
 use Tests\PHPat\functional\fixtures\CallableArgument;
 use Tests\PHPat\functional\fixtures\CallableReturn;
@@ -29,7 +30,7 @@ class DocBlock
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function shouldNotBeCatched()
     {

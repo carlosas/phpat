@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace PHPat\Test;
 
+use ReflectionMethod;
+
 class TestParser
 {
     private static array $result = [];
@@ -34,7 +36,7 @@ class TestParser
         foreach ($tests as $test) {
             $methods   = [];
             $reflected = $test->getNativeReflection();
-            foreach ($reflected->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
+            foreach ($reflected->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
                 if (preg_match('/^(test)[A-Za-z0-9_\x80-\xff]*/', $method->getName())) {
                     $methods[] = $method->getName();
                 }

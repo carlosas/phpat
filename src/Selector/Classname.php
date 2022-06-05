@@ -3,6 +3,7 @@
 namespace PHPat\Selector;
 
 use PHPStan\Reflection\ClassReflection;
+
 use function trimSeparators;
 
 class Classname implements SelectorInterface

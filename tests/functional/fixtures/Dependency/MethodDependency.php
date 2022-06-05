@@ -2,6 +2,8 @@
 
 namespace Tests\PHPat\functional\fixtures\Dependency;
 
+use Exception;
+
 class MethodDependency
 {
     public function __construct(ConstructParamClassOne $one, ConstructParamClassTwo $two)
@@ -33,7 +35,7 @@ class ConstructParamClassTwo
 {
 }
 
-class ConstructException extends \Exception
+class ConstructException extends Exception
 {
 }
 

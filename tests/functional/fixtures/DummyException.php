@@ -2,6 +2,8 @@
 
 namespace Tests\PHPat\functional\fixtures;
 
-class DummyException extends \Exception
+use Exception;
+
+class DummyException extends Exception
 {
 }

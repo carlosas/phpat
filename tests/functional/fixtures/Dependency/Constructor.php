@@ -2,6 +2,7 @@
 
 namespace Tests\PHPat\functional\fixtures\Dependency;
 
+use BadMethodCallException;
 use Tests\PHPat\functional\fixtures\AnotherSimpleClass as AliasedClass;
 use Tests\PHPat\functional\fixtures\Inheritance;
 use Tests\PHPat\functional\fixtures\SimpleClass;
@@ -14,6 +15,6 @@ class Constructor
         DependencyNamespaceSimpleClass $dependencyNamespaceSimpleClass,
         Inheritance\InheritanceNamespaceSimpleClass $inheritanceNamespaceSimpleClass
     ) {
-        throw new \BadMethodCallException();
+        throw new BadMethodCallException();
     }
 }
