@@ -29,7 +29,7 @@ trait AllDocBlockRelations
 
         $resolvedPhpDoc = $this->fileTypeMapper->getResolvedPhpDoc(
             $scope->getFile(),
-            $scope->isInClass() ? $scope->getClassReflection()->getName() : null,
+            $scope->getClassReflection()->getName(),
             $scope->isInTrait() ? $scope->getTraitReflection()->getName() : null,
             $scope->getFunction() !== null ? $scope->getFunction()->getName() : null,
             $docComment->getText()

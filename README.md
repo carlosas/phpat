@@ -41,7 +41,7 @@ Enable the extension in your PHPStan configuration:
 ```neon
 # phpstan.neon
 includes:
-    - %vendorDir%/phpat/phpat/extension.neon
+    - vendor/phpat/phpat/extension.neon
     - phpat.neon  
 ```
 

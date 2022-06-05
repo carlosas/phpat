@@ -7,7 +7,6 @@ use PHPat\Selector\SelectorInterface;
 use PHPat\Statement\Builder\StatementBuilderFactory;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
-use PHPStan\PhpDoc\TypeNodeResolver;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\Rule as PHPStanRule;
@@ -19,9 +18,8 @@ abstract class Assertion implements PHPStanRule
 {
     /** @var array<array{SelectorInterface, array<SelectorInterface>}> */
     protected array $statements;
-
     protected ReflectionProvider $reflectionProvider;
-    private FileTypeMapper $fileTypeMapper;
+    protected FileTypeMapper $fileTypeMapper;
 
     /**
      * @param class-string<Assertion> $assertion
