@@ -158,4 +158,4 @@ jobs:
         with:
           dependencies: "${{ matrix.dependencies }}"
       - name: "Run tests with phpunit/phpunit"
-        run: "vendor/bin/phpunit tests/unit/"
+        run: "vendor/bin/phpunit tests/unit/rules/"
