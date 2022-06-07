@@ -20,5 +20,12 @@
         <LessSpecificImplementedReturnType>
             <errorLevel type="suppress"><directory name="../src/Rule/Extractor" /></errorLevel>
         </LessSpecificImplementedReturnType>
+
+        <UndefinedDocblockClass>
+            <errorLevel type="suppress"><file name="../src/Test/TestParser.php" /></errorLevel>
+        </UndefinedDocblockClass>
+        <UndefinedClass>
+            <errorLevel type="suppress"><file name="../src/Test/TestParser.php" /></errorLevel>
+        </UndefinedClass>
     </issueHandlers>
 </psalm>
