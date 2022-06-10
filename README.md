@@ -37,13 +37,19 @@ Require **phpat** with [Composer](https://getcomposer.org/):
 ```bash
 composer require --dev phpat/phpat
 ```
-Enable the extension in your PHPStan configuration:
+
+If you also install [phpstan/extension-installer](https://github.com/phpstan/extension-installer) then you're all set!
+
+<details>
+  <summary>Manual installation</summary>
+
+If you don't want to use `phpstan/extension-installer`, enable the extension in your PHPStan configuration:
 ```neon
 # phpstan.neon
 includes:
     - vendor/phpat/phpat/extension.neon
-    - phpat.neon  
 ```
+</details>
 
 <h2></h2>
 
@@ -51,7 +57,7 @@ includes:
 
 You will need to setup a minimum configuration:
 ```neon
-# phpat.neon
+# phpstan.neon
 parameters:
     phpat:
         tests:
@@ -113,4 +119,4 @@ We are using *minor* for breaking changes. This will change with the release of 
 
 <h2></h2>
 
-**PHP Architecture Tester** is in a early stage, contributions are welcome. Please have a look to the [Contribution docs](.github/CONTRIBUTING.md).
+**PHP Architecture Tester** is in an early stage, contributions are welcome. Please have a look to the [Contribution docs](.github/CONTRIBUTING.md).

@@ -1,7 +1,7 @@
 {
   "name": "phpat/phpat",
-  "type": "library",
-  "description": "PHP Architecture Tester (PHPStan extension)",
+  "type": "phpstan-extension",
+  "description": "PHP Architecture Tester",
   "license": "MIT",
   "authors": [
     {
@@ -31,6 +31,13 @@
   "autoload-dev": {
     "psr-4": {
       "Tests\\PHPat\\": "tests/"
+    }
+  },
+  "extra": {
+    "phpstan": {
+      "includes": [
+        "extension.neon"
+      ]
     }
   }
 }
