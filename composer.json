@@ -1,8 +1,8 @@
 {
   "name": "phpat/phpat",
-  "type": "phpstan-extension",
   "description": "PHP Architecture Tester",
   "license": "MIT",
+  "type": "phpstan-extension",
   "authors": [
     {
       "name": "Carlos Alandete Sastre",
@@ -18,19 +18,21 @@
     "phpunit/phpunit": "^9.0",
     "vimeo/psalm": "^4.0"
   },
-  "config": {
-    "sort-packages": true
-  },
   "autoload": {
-    "files": ["helpers.php"],
     "psr-4": {
       "PHPat\\": "src/"
-    }
+    },
+    "files": [
+      "helpers.php"
+    ]
   },
   "autoload-dev": {
     "psr-4": {
       "Tests\\PHPat\\": "tests/"
     }
+  },
+  "config": {
+    "sort-packages": true
   },
   "extra": {
     "phpstan": {
