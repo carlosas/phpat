@@ -10,7 +10,7 @@ use ReflectionClass;
 
 class FakeFileTypeMapper extends FileTypeMapper
 {
-    public function getResolvedPhpDoc(string $fileName, ?string $className, ?string $traitName, ?string $functionName, string $docComment) : ResolvedPhpDocBlock
+    public function getResolvedPhpDoc(string $fileName, ?string $className, ?string $traitName, ?string $functionName, string $docComment): ResolvedPhpDocBlock
     {
         return ResolvedPhpDocBlock::createEmpty();
     }

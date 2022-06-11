@@ -5,18 +5,18 @@ declare(strict_types=1);
 $finder = PhpCsFixer\Finder::create()
     ->in(dirname(__DIR__) . '/src')
     ->in(dirname(__DIR__) . '/tests')
-    ->exclude('tests/functional');
+    ->exclude('tests/unit/fixtures');
 
 $rules = [
-    '@PSR12'          => true,
-    '@PHP71Migration' => true,
-    '@PHP71Migration:risky'      => true,
-    '@PHP73Migration'            => true,
-    '@PHP74Migration'            => true,
-    '@PHP74Migration:risky'      => true,
-    '@PHP80Migration'            => true,
-    '@PHP80Migration:risky'      => true,
-    '@PHP81Migration'            => true,
+    '@PSR12'                      => true,
+    '@PHP71Migration'             => true,
+    '@PHP71Migration:risky'       => true,
+    '@PHP73Migration'             => true,
+    '@PHP74Migration'             => true,
+    '@PHP74Migration:risky'       => true,
+    '@PHP80Migration'             => true,
+    '@PHP80Migration:risky'       => true,
+    '@PHP81Migration'             => true,
     'array_syntax'                => ['syntax' => 'short'],
     'binary_operator_spaces'      => ['default' => 'align_single_space_minimal'],
     'align_multiline_comment'     => ['comment_type' => 'phpdocs_like'],
