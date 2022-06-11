@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PHPat\Statement\Builder;
 
-use PHPat\Selector\Selector;
 use PHPat\Selector\SelectorInterface;
 use PHPat\Test\Rule;
 use PHPStan\Rules\Rule as PHPStanRule;
@@ -40,17 +39,22 @@ abstract class StatementBuilder
 
     /**
      * @return class-string<PHPStanRule>
+     * @phpstan-ignore-next-line
      */
     abstract protected function getAssertionClassname(): string;
 
     /**
-     * @param array<Selector> $targets
+     * @param array<SelectorInterface> $targets
      */
     private function addStatement(SelectorInterface $subject, array $targets): void
     {
         $this->statements[] = [$subject, $targets];
     }
 
+    /**
+     * @param array<Rule> $rules
+     * @return array<array{SelectorInterface, array<SelectorInterface>}>
+     */
     private function extractCurrentAssertion(array $rules): array
     {
         $result = [];

@@ -8,6 +8,9 @@ use PHPat\Rule\Assertion\ShouldImplement\ShouldImplement;
 
 class ShouldImplementStatementBuilder extends StatementBuilder
 {
+    /**
+     * @return class-string<ShouldImplement>
+     */
     protected function getAssertionClassname(): string
     {
         return ShouldImplement::class;

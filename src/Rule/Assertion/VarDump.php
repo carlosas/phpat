@@ -4,15 +4,18 @@ declare(strict_types=1);
 
 namespace PHPat\Rule\Assertion;
 
-use PHPat\SimpleClass;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
+use PHPStan\Rules\Rule;
 
-class VarDump implements \PHPStan\Rules\Rule
+/**
+ * @implements Rule<Node>
+ */
+class VarDump implements Rule
 {
     public function getNodeType(): string
     {
-        return \PhpParser\Node::class;
+        return Node::class;
     }
 
     public function processNode(Node $node, Scope $scope): array

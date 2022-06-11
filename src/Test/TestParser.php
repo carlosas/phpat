@@ -8,6 +8,7 @@ use ReflectionMethod;
 
 class TestParser
 {
+    /** @var array<Rule> */
     private static array $result = [];
     private TestExtractor $extractor;
 
@@ -16,6 +17,9 @@ class TestParser
         $this->extractor = $extractor;
     }
 
+    /**
+     * @return array<Rule>
+     */
     public function __invoke(): array
     {
         if (empty(self::$result)) {

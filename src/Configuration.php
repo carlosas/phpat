@@ -24,6 +24,10 @@ class Configuration
         $this->tests              = $this->buildTests($tests);
     }
 
+    /**
+     * @param array<class-string> $tests
+     * @return array<ClassReflection>
+     */
     private function buildTests(array $tests): array
     {
         foreach ($tests as $test) {
