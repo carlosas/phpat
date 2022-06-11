@@ -29,11 +29,15 @@ trait AllDocBlockRelations
             return [];
         }
 
+        $classReflection    = $scope->getClassReflection();
+        $traitReflection    = $scope->getTraitReflection();
+        $functionReflection = $scope->getFunction();
+
         $resolvedPhpDoc = $this->fileTypeMapper->getResolvedPhpDoc(
             $scope->getFile(),
-            $scope->getClassReflection()->getName(),
-            $scope->isInTrait() ? $scope->getTraitReflection()->getName() : null,
-            $scope->getFunction() !== null ? $scope->getFunction()->getName() : null,
+            $classReflection ? $classReflection->getName() : null,
+            $traitReflection ? $traitReflection->getName() : null,
+            $functionReflection ? $functionReflection->getName() : null,
             $docComment->getText()
         );
 

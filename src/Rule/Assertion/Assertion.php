@@ -6,6 +6,7 @@ namespace PHPat\Rule\Assertion;
 
 use PHPat\Selector\Classname;
 use PHPat\Selector\SelectorInterface;
+use PHPat\ShouldNotHappenException;
 use PHPat\Statement\Builder\StatementBuilderFactory;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
@@ -13,7 +14,6 @@ use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\Rule as PHPStanRule;
 use PHPStan\Rules\RuleError;
-use PHPStan\ShouldNotHappenException;
 use PHPStan\Type\FileTypeMapper;
 
 /** @phpstan-ignore-next-line */
@@ -83,7 +83,10 @@ abstract class Assertion implements PHPStanRule
         }
 
         foreach ($nodes as $node) {
-            if (!(new Classname($node))->matches($scope->getClassReflection())) {
+            if (
+                $scope->getClassReflection() !== null
+                && !(new Classname($node))->matches($scope->getClassReflection())
+            ) {
                 return true;
             }
         }
@@ -98,8 +101,11 @@ abstract class Assertion implements PHPStanRule
      */
     protected function validateGetErrors(Scope $scope, array $nodes): array
     {
-        $subject = $scope->getClassReflection();
         $errors  = [];
+        $subject = $scope->getClassReflection();
+        if ($subject === null) {
+            throw new ShouldNotHappenException();
+        }
 
         foreach ($this->statements as [$selector, $targets]) {
             if ($subject->isBuiltin() || !$selector->matches($subject)) {
