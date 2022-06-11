@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <psalm
-    errorLevel="4"
+    errorLevel="3"
     resolveFromConfigFile="true"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
@@ -27,5 +27,9 @@
         <UndefinedClass>
             <errorLevel type="suppress"><file name="../src/Test/TestParser.php" /></errorLevel>
         </UndefinedClass>
+
+        <PossiblyNullArgument>
+            <errorLevel type="suppress"><file name="../src/Rule/Assertion/Assertion.php" /></errorLevel>
+        </PossiblyNullArgument>
     </issueHandlers>
 </psalm>

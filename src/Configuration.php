@@ -30,12 +30,13 @@ class Configuration
      */
     private function buildTests(array $tests): array
     {
+        $return = [];
         foreach ($tests as $test) {
             if ($this->reflectionProvider->hasClass($test)) {
                 $return[] = $this->reflectionProvider->getClass($test);
             }
         }
 
-        return $return ?? [];
+        return $return;
     }
 }

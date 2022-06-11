@@ -19,11 +19,14 @@ class StatementBuilderFactory
 
     public function create(string $classname): StatementBuilder
     {
+        $lastSeparatorPos = strrpos($classname, '\\');
+        $classnamePos     = $lastSeparatorPos !== false ? $lastSeparatorPos + 1 : 0;
+
         /** @var class-string<StatementBuilder> $statementBuilder */
         $statementBuilder = sprintf(
             '%s\\%sStatementBuilder',
             __NAMESPACE__,
-            substr($classname, strrpos($classname, '\\') + 1)
+            substr($classname, $classnamePos)
         );
 
         return new $statementBuilder($this->rules);
