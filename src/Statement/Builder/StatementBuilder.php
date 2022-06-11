@@ -18,7 +18,7 @@ abstract class StatementBuilder
     /**
      * @param array<Rule> $rules
      */
-    public function __construct(array $rules)
+    final public function __construct(array $rules)
     {
         $this->rules = $rules;
     }
