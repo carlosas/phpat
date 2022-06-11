@@ -57,7 +57,9 @@ trait AllDocBlockRelations
             )
         );
         foreach ($tags as $tag) {
-            array_push($names, ...$tag->getType()->getReferencedClasses());
+            if (method_exists($tag, 'getType')) {
+                array_push($names, ...$tag->getType()->getReferencedClasses());
+            }
         }
 
         return $names;

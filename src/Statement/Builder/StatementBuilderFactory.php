@@ -19,6 +19,7 @@ class StatementBuilderFactory
 
     public function create(string $classname): StatementBuilder
     {
+        /** @var class-string<StatementBuilder> $statementBuilder */
         $statementBuilder = sprintf(
             '%s\\%sStatementBuilder',
             __NAMESPACE__,

@@ -59,7 +59,6 @@ abstract class Assertion implements PHPStanRule
 
     /**
      * @param class-string $subject
-     * @param class-string $target
      */
     abstract protected function getMessage(string $subject, string $target): string;
 
