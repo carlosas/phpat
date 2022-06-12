@@ -2,37 +2,45 @@
 
 use PhpParser\Node\Name;
 
-function extractNamespaceFromFQCN(string $classname): string
-{
-    $parts = explode('\\', $classname);
-    array_pop($parts);
+if (!function_exists('extractNamespaceFromFQCN')) {
+    function extractNamespaceFromFQCN(string $classname): string
+    {
+        $parts = explode('\\', $classname);
+        array_pop($parts);
 
-    return implode('\\', $parts);
+        return implode('\\', $parts);
+    }
 }
 
-function trimSeparators(string $name): string
-{
-    return rtrim(ltrim($name, '\\'), '\\');
+if (!function_exists('trimSeparators')) {
+    function trimSeparators(string $name): string
+    {
+        return rtrim(ltrim($name, '\\'), '\\');
+    }
 }
 
-function isRegularExpression(string $string)
-{
-    set_error_handler(function () {
-    }, E_WARNING);
-    $isRegularExpression = preg_match($string, "") !== false;
-    restore_error_handler();
+if (!function_exists('isRegularExpression')) {
+    function isRegularExpression(string $string): bool
+    {
+        set_error_handler(function () {
+        }, E_WARNING);
+        $isRegularExpression = preg_match($string, "") !== false;
+        restore_error_handler();
 
-    return $isRegularExpression;
+        return $isRegularExpression;
+    }
 }
 
-/**
- * @param array<Name> $names
- * @return array<class-string>
- */
-function namesToClassStrings(iterable $names): array
-{
-    return array_map(
-        static fn (Name $name): string => $name->toString(),
-        $names
-    );
+if (!function_exists('namesToClassStrings')) {
+    /**
+     * @param array<Name> $names
+     * @return array<class-string>
+     */
+    function namesToClassStrings(array $names): array
+    {
+        return array_map(
+            static fn(Name $name): string => (string) $name,
+            $names
+        );
+    }
 }
