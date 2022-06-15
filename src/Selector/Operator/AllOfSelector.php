@@ -9,7 +9,7 @@ use PhpAT\Selector\SelectorInterface;
 
 final class AllOfSelector implements SelectorInterface
 {
-    /** @var SelectorInterface */
+    /** @var list<SelectorInterface> */
     private array $selectors;
 
     public function __construct(SelectorInterface ...$selectors)
@@ -42,7 +42,7 @@ final class AllOfSelector implements SelectorInterface
         return [
             new AllOf(
                 ...array_map(fn (SelectorInterface $selector) => new AllOf(...$selector->select()), $this->selectors)
-            )
+            ),
         ];
     }
 

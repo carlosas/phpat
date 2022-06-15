@@ -10,11 +10,13 @@ use PhpAT\Selector\SelectorInterface;
 
 final class AtLeastCountOfSelector implements SelectorInterface
 {
-    /** @var SelectorInterface */
+    /** @var list<SelectorInterface> */
     private array $selectors;
+    private int $threshold;
 
-    public function __construct(private int $threshold, SelectorInterface ...$selectors)
+    public function __construct(int $threshold, SelectorInterface ...$selectors)
     {
+        $this->threshold = $threshold;
         $this->selectors = $selectors;
     }
 
@@ -44,7 +46,7 @@ final class AtLeastCountOfSelector implements SelectorInterface
             new AtLeastCountOf(
                 $this->threshold,
                 ...array_map(fn (SelectorInterface $selector) => new AllOf(...$selector->select()), $this->selectors)
-            )
+            ),
         ];
     }
 

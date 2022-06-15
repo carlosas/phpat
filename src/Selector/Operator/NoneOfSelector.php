@@ -10,7 +10,7 @@ use PhpAT\Selector\SelectorInterface;
 
 final class NoneOfSelector implements SelectorInterface
 {
-    /** @var SelectorInterface */
+    /** @var list<SelectorInterface> */
     private array $selectors;
 
     public function __construct(SelectorInterface ...$selectors)
@@ -43,7 +43,7 @@ final class NoneOfSelector implements SelectorInterface
         return [
             new NoneOf(
                 ...array_map(fn (SelectorInterface $selector) => new AllOf(...$selector->select()), $this->selectors)
-            )
+            ),
         ];
     }
 
