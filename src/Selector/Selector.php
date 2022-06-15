@@ -6,6 +6,36 @@ namespace PhpAT\Selector;
 
 class Selector
 {
+    public static function anyOf(SelectorInterface ...$selectors): Operator\AnyOfSelector
+    {
+        return new Operator\AnyOfSelector(...$selectors);
+    }
+
+    public static function allOf(SelectorInterface ...$selectors): Operator\AllOfSelector
+    {
+        return new Operator\AllOfSelector(...$selectors);
+    }
+
+    public static function oneOf(SelectorInterface ...$selectors): Operator\OneOfSelector
+    {
+        return new Operator\OneOfSelector(...$selectors);
+    }
+
+    public static function noneOf(SelectorInterface ...$selectors): Operator\NoneOfSelector
+    {
+        return new Operator\NoneOfSelector(...$selectors);
+    }
+
+    public static function atLeastCountOf(int $count, SelectorInterface ...$selectors): Operator\AtLeastCountOfSelector
+    {
+        return new Operator\AtLeastCountOfSelector($count, ...$selectors);
+    }
+
+    public static function atMostCountOf(int $count, SelectorInterface ...$selectors): Operator\AtMostCountOfSelector
+    {
+        return new Operator\AtMostCountOfSelector($count, ...$selectors);
+    }
+
     public static function havePath(string $path): PathSelector
     {
         return new PathSelector($path);
