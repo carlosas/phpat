@@ -2,9 +2,28 @@
 
 declare(strict_types=1);
 
-namespace PhpAT\Test;
+namespace PHPat\Test;
 
-interface TestExtractor
+use PHPat\Configuration;
+use PHPStan\Reflection\ClassReflection;
+
+class TestExtractor
 {
-    public function execute(): ArchitectureTestCollection;
+    private Configuration $configuration;
+
+    public function __construct(
+        Configuration $configuration
+    ) {
+        $this->configuration = $configuration;
+    }
+
+    /**
+     * @return iterable<ClassReflection>
+     */
+    public function __invoke(): iterable
+    {
+        foreach ($this->configuration->tests as $test) {
+            yield $test;
+        }
+    }
 }

@@ -1,8 +1,8 @@
-<p align="center">
+<p style="text-align: center;">
     <img width="500px" src="https://raw.githubusercontent.com/carlosas/phpat/master/.github/logo.png" alt="PHP Architecture Tester">
 </p>
-<h2 align="center">Easy to use architecture testing tool for PHP</h2>
-<p align="center">
+<h2 style="text-align: center;">Easy to use architecture testing tool for PHP</h2>
+<p style="text-align: center;">
 	<a>
 		<img src="https://img.shields.io/packagist/v/phpat/phpat?label=version&style=for-the-badge" alt="Version">
     </a>
@@ -13,35 +13,42 @@
 		<img src="https://img.shields.io/badge/contributions-welcome-green.svg?style=for-the-badge" alt="Contributions welcome">
 	</a>
 </p>
-<br />
+
+ℹ️ With **v0.10**, phpat has been converted into a [PHPStan](https://phpstan.org/) extension. Read the [UPGRADE notes](doc/UPGRADE-0.10.md).
+
+<hr />
 
 ### Introduction 📜
 
 **PHP Architecture Tester** is a static analysis tool to verify architectural requirements.
 
 It provides a natural language abstraction to define your own architectural rules and test them against your software.
-You can also integrate *phpat* easily into your toolchain.
 
 There are four groups of supported assertions: **Dependency**, **Inheritance**, **Composition** and **Mixin**.
 
-ℹ️ Check out the section [WHAT TO TEST](doc/WHAT_TO_TEST.md) to see some examples of typical use cases.
+Check out the section [WHAT TO TEST](doc/WHAT_TO_TEST.md) to see some examples of typical use cases.
+
 
 <h2></h2>
 
 ### Installation 💽
 
-Just require **phpat** with [Composer](https://getcomposer.org/):
+Require **phpat** with [Composer](https://getcomposer.org/):
 ```bash
 composer require --dev phpat/phpat
 ```
 
-<details><summary>Manual download</summary>
-<br />
+If you also install [phpstan/extension-installer](https://github.com/phpstan/extension-installer) then you're all set!
 
-If you have dependency conflicts, you can also download the latest PHAR file from [Releases](https://github.com/carlosas/phpat/releases). 
+<details>
+  <summary>Manual installation</summary>
 
-You will have to use it executing `php phpat.phar phpat.yaml` and declare your tests in XML or YAML.
-
+If you don't want to use `phpstan/extension-installer`, enable the extension in your PHPStan configuration:
+```neon
+# phpstan.neon
+includes:
+    - vendor/phpat/phpat/extension.neon
+```
 </details>
 
 <h2></h2>
@@ -49,12 +56,13 @@ You will have to use it executing `php phpat.phar phpat.yaml` and declare your t
 ### Configuration 🔧
 
 You will need to setup a minimum configuration:
-```yaml
-# phpat.yaml
-src:
-  path: src/
-tests:
-  path: tests/architecture/
+```neon
+# phpstan.neon
+parameters:
+    phpat:
+        tests:
+            - Tests\Architecture\MyFirstTest
+            - Tests\Architecture\MySecondTest
 ```
 
 <details><summary>Complete list of options</summary>
@@ -62,18 +70,7 @@ tests:
 
 | Name                                      | Description                                              | Default      |
 |-------------------------------------------|----------------------------------------------------------|:------------:|
-| `src` `path`                              | The root path of your application                        | *no default* |
-|` src` `include`                           | Files you want to be tested excluding the rest           | *all files*  |
-| `src` `exclude`                           | Files you want to be excluded in the tests               | *no files*   |
-| `composer` `$ALIAS` `json`                | Path of your composer.json file (multiple)               | main json    |
-| `composer` `$ALIAS` `lock`                | Path of your composer.lock file (multiple)               | main lock    |
-| `tests` `path`                            | The path where your tests are                            | *no default* |
-| `tests` `baseline`                        | Path to a generated baseline file                        | *no default* |
-| `options` `verbosity`                     | Output verbosity level (-1/0/1/2)                        | 0            |
-| `options` `php-version`                   | PHP version of the src code (x.x.x)                      | PHP_VERSION  |
-| `options` `ignore-docblocks`              | Ignore relations on docblocks (T/F)                      | false        |
-| `options` `ignore-php-extensions`         | Ignore relations to core and extensions classes (T/F)    | true         |
-| `--generate-baseline`                     | Option to generate a json baseline file (null/filename)  | false        |
+| `tests`                                   | List of tests to execute (fully qualified classnames)    | *no default* |
 
 </details>
 
@@ -84,91 +81,42 @@ tests:
 There are different [Selectors](doc/SELECTORS.md) to choose which classes will intervene in a rule and a wide range of [Assertions](doc/ASSERTIONS.md).
 
 This could be a test with a couple of rules:
+
 ```php
 <?php
 
-use PhpAT\Rule\Rule;
-use PhpAT\Selector\Selector;
-use PhpAT\Test\ArchitectureTest;
-use App\Domain\BlackMagicInterface;
+use PHPat\Selector\Selector;
+use PHPat\Test\Rule;
+use PHPat\Test\PHPat;
 
-class ExampleTest extends ArchitectureTest
+class MyFirstTest
 {
-    public function testDomainDoesNotDependOnOtherLayers(): Rule
+    public function test_domain_does_not_depend_on_other_layers(): Rule
     {
-        return $this->newRule
-            ->classesThat(Selector::haveClassName('App\Domain\*'))
-            ->excludingClassesThat(Selector::implementInterface(BlackMagicInterface::class))
-            ->canOnlyDependOn()
-            ->classesThat(Selector::havePath('Domain/*'))
-            ->andClassesThat(Selector::haveClassName('App\Application\Shared\Service\KnownBadApproach'))
-            ->build();
-    }
-    
-    public function testAllHandlersExtendAbstractCommandHandler(): Rule
-    {
-        return $this->newRule
-            ->classesThat(Selector::havePath('Application/*/UseCase/*Handler.php'))
-            ->excludingClassesThat(Selector::extendClass('App\Application\Shared\UseCase\DifferentHandler'))
-            ->andExcludingClassesThat(Selector::includeTrait('App\Legacy\LegacyTrait'))
-            ->andExcludingClassesThat(Selector::haveClassName(\App\Application\Shared\UseCase\AbstractCommandHandler::class))
-            ->mustExtend()
-            ->classesThat(Selector::haveClassName('App\Application\Shared\UseCase\AbstractCommandHandler'))
+        return PHPat::rule()
+            ->classes(Selector::namespace('App\Domain'))
+            ->shouldNotDependOn()
+            ->classes(
+                Selector::namespace('App\Application'),
+                Selector::namespace('App\Infrastructure')
+            )
             ->build();
     }
 }
 ```
 
-<details><summary>YAML / XML test definition</summary>
-<br />
-
-You can also define tests whether in YAML or XML.
-
-```yaml
-rules:
-  testAssertionsImplementAssertionInterface:
-    - classes:
-        - havePath: Rule/Assertion/*
-    - excluding:
-        - haveClassName: PhpAT\Rule\Assertion\*\MustNot*
-        - havePath: Rule/Assertion/MatchResult.php
-    - assert: mustExtend
-    - classes:
-        - haveClassName: PhpAT\Rule\Assertion\AbstractAssertion
-```
-```xml
-<?xml version="1.0" encoding="UTF-8" ?>
-<test xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="https://raw.githubusercontent.com/carlosas/phpat/master/src/Test/Test.xsd">
-    <rule name="testAssertionsDoNotDependOnVendors">
-        <classes>
-            <selector type="havePath">Rule/Assertion/*</selector>
-        </classes>
-        <assert>canOnlyDependOn</assert>
-        <classes>
-            <selector type="haveClassName">PhpAT\*</selector>
-            <selector type="haveClassName">Psr\*</selector>
-        </classes>
-    </rule>
-</test>
-```
-
-</details>
-
 <h2></h2>
 
 ### Usage 🚀
 
-Run the bin with your configuration file:
-```bash
-vendor/bin/phpat phpat.yaml
-```
+Run **PHPStan** as usual.
+
+<h2></h2>
+<hr>
+
+⚠ Launching early stage releases (0.x.x) could break the API according to [Semantic Versioning 2.0](https://semver.org/).
+We are using *minor* for breaking changes. This will change with the release of the stable `1.0.0` version.
 
 <h2></h2>
 
-⚠ Launching early stage releases (0.x.x) could break the API according to [Semantic Versioning 2.0](https://semver.org/). We are using *minor* for breaking changes.
-This will change with the release of the stable `1.0.0` version.
-
-<h2></h2>
-
-**PHP Architecture Tester** is in a early stage, contributions are welcome. Please have a look to the [Contribution docs](.github/CONTRIBUTING.md).
+**PHP Architecture Tester** is in an early stage, contributions are welcome. Please have a look to the [Contribution docs](.github/CONTRIBUTING.md).

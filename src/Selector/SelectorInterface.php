@@ -2,24 +2,13 @@
 
 declare(strict_types=1);
 
-namespace PhpAT\Selector;
+namespace PHPat\Selector;
 
-use PhpAT\Parser\Ast\ReferenceMap;
+use PHPStan\Reflection\ClassReflection;
 
-/**
- * Interface SelectorInterface
- *
- * @package PhpAT\Selector
- */
 interface SelectorInterface
 {
-    public function getDependencies(): array;
+    public function matches(ClassReflection $classReflection): bool;
 
-    public function injectDependencies(array $dependencies);
-
-    public function setReferenceMap(ReferenceMap $map): void;
-
-    public function select(): array;
-
-    public function getParameter(): string;
+    public function getName(): string;
 }

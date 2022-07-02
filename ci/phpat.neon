@@ -1,0 +1,5 @@
+parameters:
+	phpat:
+		tests:
+			- Tests\PHPat\architecture\ConfigurationTest
+			- Tests\PHPat\architecture\FailingTest

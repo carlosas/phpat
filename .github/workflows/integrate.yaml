@@ -48,8 +48,6 @@ jobs:
         uses: "./.github/actions/composer/composer/install"
         with:
           dependencies: "${{ matrix.dependencies }}"
-      - name: "Run squizlabs/php_codesniffer"
-        run: "vendor/bin/phpcs src/ --standard=ci/phpcs.xml"
       - name: "Run friendsofphp/php-cs-fixer"
         run: "vendor/bin/php-cs-fixer fix --config ./ci/php-cs-fixer.php"
 
@@ -85,14 +83,8 @@ jobs:
         uses: "./.github/actions/composer/composer/install"
         with:
           dependencies: "${{ matrix.dependencies }}"
-      - name: "Run phpat/phpat for architecture tests"
-        run: "php bin/phpat ci/phpat.yaml"
-      - name: "Run phpat/phpat for functional tests (PHP 7.4)"
-        run: "php bin/phpat tests/functional/functional74.yaml"
-      - name: "Run phpat/phpat for functional tests (PHP 8.0)"
-        run: "php bin/phpat tests/functional/functional80.yaml"
-      - name: "Run phpat/phpat for functional tests (PHP 8.1)"
-        run: "php bin/phpat tests/functional/functional81.yaml"
+      - name: "Run phpstan+phpat for architecture tests"
+        run: "vendor/bin/phpstan analyse -c ci/phpstan-phpat.neon"
 
   static-code-analysis:
     name: "Static Code Analysis"
@@ -166,4 +158,4 @@ jobs:
         with:
           dependencies: "${{ matrix.dependencies }}"
       - name: "Run tests with phpunit/phpunit"
-        run: "vendor/bin/phpunit tests/unit/"
+        run: "vendor/bin/phpunit tests/unit/rules/"

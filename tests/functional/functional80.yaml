@@ -1,7 +1,0 @@
-src:
-  path: php80/fixtures/
-tests:
-  path: php80/architecture/
-  baseline: php80/phpat.baseline.json
-options:
-  verbosity: 2

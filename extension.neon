@@ -1,0 +1,68 @@
+services:
+	- PHPat\Test\TestExtractor
+	- PHPat\Test\TestParser
+	- PHPat\Statement\Builder\StatementBuilderFactory
+	- PHPat\Configuration(tests: %phpat.tests%)
+
+	# ShouldImplement rules
+	-
+		class: PHPat\Rule\Assertion\ShouldImplement\ImplementedInterfacesRule
+		tags:
+			- phpstan.rules.rule
+
+	# ShouldExtend rules
+	-
+		class: PHPat\Rule\Assertion\ShouldExtend\ParentClassRule
+		tags:
+			- phpstan.rules.rule
+
+	# ShouldNotDepend rules
+	-
+		class: PHPat\Rule\Assertion\ShouldNotDepend\ConstantUseRule
+		tags:
+			- phpstan.rules.rule
+	-
+		class: PHPat\Rule\Assertion\ShouldNotDepend\ClassPropertyRule
+		tags:
+			- phpstan.rules.rule
+	-
+		class: PHPat\Rule\Assertion\ShouldNotDepend\MethodParamRule
+		tags:
+			- phpstan.rules.rule
+	-
+		class: PHPat\Rule\Assertion\ShouldNotDepend\MethodReturnRule
+		tags:
+			- phpstan.rules.rule
+	-
+		class: PHPat\Rule\Assertion\ShouldNotDepend\NewRule
+		tags:
+			- phpstan.rules.rule
+
+	# ShouldNotConstruct rules
+	-
+		class: PHPat\Rule\Assertion\ShouldNotConstruct\NewRule
+		tags:
+			- phpstan.rules.rule
+
+	# ShouldNotExtend rules
+	-
+		class: PHPat\Rule\Assertion\ShouldNotExtend\ParentClassRule
+		tags:
+			- phpstan.rules.rule
+
+	# ShouldNotImplement rules
+	-
+		class: PHPat\Rule\Assertion\ShouldNotImplement\ImplementedInterfacesRule
+		tags:
+			- phpstan.rules.rule
+
+	# DEBUG rules
+	-
+		class: PHPat\Rule\Assertion\VarDump
+		tags:
+			- phpstan.rules.rule
+
+parametersSchema:
+	phpat: structure([
+		tests: listOf(string())
+	])

@@ -4,4 +4,7 @@
 /composer.phar
 /composer.lock
 /Makefile
-/.php-cs-fixer.cache
+*.php-cs-fixer.cache
+
+/src-old/
+/tests-old/

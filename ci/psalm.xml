@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <psalm
-    errorLevel="4"
+    errorLevel="2"
     resolveFromConfigFile="true"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
@@ -8,8 +8,25 @@
 >
     <projectFiles>
         <directory name="../src" />
-        <ignoreFiles>
-            <directory name="../vendor" />
-        </ignoreFiles>
     </projectFiles>
+
+    <issueHandlers>
+        <MoreSpecificImplementedParamType>
+            <errorLevel type="suppress"><directory name="../src/Rule/Extractor" /></errorLevel>
+        </MoreSpecificImplementedParamType>
+        <LessSpecificImplementedReturnType>
+            <errorLevel type="suppress"><directory name="../src/Rule/Extractor" /></errorLevel>
+        </LessSpecificImplementedReturnType>
+
+        <UndefinedDocblockClass>
+            <errorLevel type="suppress"><file name="../src/Test/TestParser.php" /></errorLevel>
+        </UndefinedDocblockClass>
+        <UndefinedClass>
+            <errorLevel type="suppress"><file name="../src/Test/TestParser.php" /></errorLevel>
+        </UndefinedClass>
+
+        <PossiblyNullArgument>
+            <errorLevel type="suppress"><file name="../src/Rule/Assertion/Assertion.php" /></errorLevel>
+        </PossiblyNullArgument>
+    </issueHandlers>
 </psalm>

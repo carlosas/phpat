@@ -3,18 +3,19 @@
 declare(strict_types=1);
 
 $finder = PhpCsFixer\Finder::create()
-    ->in(realpath(__DIR__ . '/..'))
-    ->exclude('tests/functional');
+    ->in([dirname(__DIR__) . '/src', dirname(__DIR__) . '/tests'])
+    ->exclude('unit/fixtures');
 
 $rules = [
-    '@PSR12'          => true,
-    '@PHP71Migration' => true,
-    //'@PHP71Migration:risky'      => true,
-    //'@PHP73Migration'            => true,
-    //'@PHP73Migration:risky'      => true,
-    //'@PHP74Migration'            => true,
-    //'@PHP74Migration:risky'      => true,
-    //'@PHP80Migration'            => true,
+    '@PSR12'                      => true,
+    '@PHP71Migration'             => true,
+    '@PHP71Migration:risky'       => true,
+    '@PHP73Migration'             => true,
+    '@PHP74Migration'             => true,
+    '@PHP74Migration:risky'       => true,
+    '@PHP80Migration'             => true,
+    '@PHP80Migration:risky'       => true,
+    '@PHP81Migration'             => true,
     'array_syntax'                => ['syntax' => 'short'],
     'binary_operator_spaces'      => ['default' => 'align_single_space_minimal'],
     'align_multiline_comment'     => ['comment_type' => 'phpdocs_like'],
@@ -39,7 +40,10 @@ $rules = [
     'no_useless_else'             => true,
     'no_useless_return'           => true,
     'ordered_class_elements'      => true,
+    'no_unused_imports'           => true,
     'ordered_imports'             => true,
+    'single_line_after_imports'   => true,
+    'global_namespace_import'     => true,
     'php_unit_strict'             => true,
     'phpdoc_order'                => true,
     'phpdoc_types_order'          => true,
