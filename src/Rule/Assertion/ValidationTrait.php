@@ -2,11 +2,20 @@
 
 namespace PHPat\Rule\Assertion;
 
+use PHPat\Selector\SelectorInterface;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 
 trait ValidationTrait
 {
+    /**
+     * @param array<SelectorInterface> $targets
+     * @param array<class-string> $nodes
+     * @return array<RuleError>
+     * @throws ShouldNotHappenException
+     */
     protected function applyShould(ClassReflection $subject, array $targets, array $nodes): array
     {
         $errors = [];
@@ -31,6 +40,12 @@ trait ValidationTrait
         return $errors;
     }
 
+    /**
+     * @param array<SelectorInterface> $targets
+     * @param array<class-string> $nodes
+     * @return array<RuleError>
+     * @throws ShouldNotHappenException
+     */
     protected function applyShouldNot(ClassReflection $subject, array $targets, array $nodes): array
     {
         $errors = [];
