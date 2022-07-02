@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PHPat\Rule\Assertion;
 
 use PHPat\Selector\SelectorInterface;
@@ -13,8 +15,8 @@ trait ValidationTrait
     /**
      * @param array<SelectorInterface> $targets
      * @param array<class-string> $nodes
-     * @return array<RuleError>
      * @throws ShouldNotHappenException
+     * @return array<RuleError>
      */
     protected function applyShould(ClassReflection $subject, array $targets, array $nodes): array
     {
@@ -43,8 +45,8 @@ trait ValidationTrait
     /**
      * @param array<SelectorInterface> $targets
      * @param array<class-string> $nodes
-     * @return array<RuleError>
      * @throws ShouldNotHappenException
+     * @return array<RuleError>
      */
     protected function applyShouldNot(ClassReflection $subject, array $targets, array $nodes): array
     {
