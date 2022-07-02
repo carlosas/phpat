@@ -6,6 +6,7 @@ namespace PHPat\Statement\Builder;
 
 use PHPat\Selector\SelectorInterface;
 use PHPat\Test\Rule;
+use PhpParser\Node;
 use PHPStan\Rules\Rule as PHPStanRule;
 
 abstract class StatementBuilder
@@ -38,8 +39,7 @@ abstract class StatementBuilder
     }
 
     /**
-     * @return class-string<PHPStanRule>
-     * @phpstan-ignore-next-line
+     * @return class-string<PHPStanRule<Node>>
      */
     abstract protected function getAssertionClassname(): string;
 

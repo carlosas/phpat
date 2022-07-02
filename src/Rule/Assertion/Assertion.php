@@ -16,7 +16,9 @@ use PHPStan\Rules\Rule as PHPStanRule;
 use PHPStan\Rules\RuleError;
 use PHPStan\Type\FileTypeMapper;
 
-/** @phpstan-ignore-next-line */
+/**
+ * @implements PHPStanRule<Node>
+ */
 abstract class Assertion implements PHPStanRule
 {
     /** @var array<array{SelectorInterface, array<SelectorInterface>}> */
