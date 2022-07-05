@@ -9,7 +9,7 @@ use PHPStan\Analyser\Scope;
 
 trait AllDocBlockRelations
 {
-    /** @var array<class-string, array<int, bool>> */
+    /** @var array<string, array<int, bool>> */
     protected $commentMap = [];
 
     public function getNodeType(): string
