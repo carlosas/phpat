@@ -9,14 +9,17 @@ use PHPStan\Analyser\Scope;
 
 trait AllDocBlockRelations
 {
+    /** @var array<class-string, array<int, bool>> */
+    protected $commentMap = [];
+
     public function getNodeType(): string
     {
         return Node::class;
     }
 
     /**
-     * @param Node $node
      * @return array<int, mixed>
+     * @throws \PHPStan\ShouldNotHappenException
      */
     protected function extractNodeClassNames(Node $node, Scope $scope): array
     {
@@ -29,13 +32,19 @@ trait AllDocBlockRelations
             return [];
         }
 
-        $classReflection    = $scope->getClassReflection();
+        $classReflection     = $scope->getClassReflection();
+        $classReflectionName = $classReflection ? $classReflection->getName() : null;
+
+        if (isset($this->commentMap[$classReflectionName][$docComment->getStartLine()])) {
+            return [];
+        }
+
         $traitReflection    = $scope->getTraitReflection();
         $functionReflection = $scope->getFunction();
 
         $resolvedPhpDoc = $this->fileTypeMapper->getResolvedPhpDoc(
             $scope->getFile(),
-            $classReflection ? $classReflection->getName() : null,
+            $classReflectionName,
             $traitReflection ? $traitReflection->getName() : null,
             $functionReflection ? $functionReflection->getName() : null,
             $docComment->getText()
@@ -65,6 +74,7 @@ trait AllDocBlockRelations
                 array_push($names, ...$tag->getType()->getReferencedClasses());
             }
         }
+        $this->commentMap[$classReflectionName][$docComment->getStartLine()] = true;
 
         return $names;
     }
