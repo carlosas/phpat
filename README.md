@@ -13,6 +13,9 @@
 		<img src="https://img.shields.io/badge/contributions-welcome-green.svg?style=for-the-badge" alt="Contributions welcome">
 	</a>
 </p>
+<p align="center">
+⚠⚠⚠ PHPat is being converted into a PHPStan extension. See the branch [v0.10x](https://github.com/carlosas/phpat/tree/v0.10x) ⚠⚠⚠
+</p>
 <br />
 
 ### Introduction 📜
