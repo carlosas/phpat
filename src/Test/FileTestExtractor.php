@@ -50,7 +50,7 @@ class FileTestExtractor implements TestExtractor
     {
         $testPath = $testPath ?: $this->testPath;
 
-        $files = array_diff(scandir($testPath), ['.', '..'] );
+        $files = array_diff(scandir($testPath), ['.', '..']);
 
         if (!$files) {
             return [];
@@ -58,8 +58,8 @@ class FileTestExtractor implements TestExtractor
         $classes = [];
 
         foreach ($files as $file) {
-            if (is_dir($testPath. '/' .$file)) {
-                array_push($classes , ...$this->getTestClasses($testPath. '/' .$file));
+            if (is_dir($testPath . '/' . $file)) {
+                array_push($classes, ...$this->getTestClasses($testPath . '/' . $file));
             }
 
             if (preg_match('/^[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*(\.php)$/', $file)) {
