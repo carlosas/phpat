@@ -56,12 +56,6 @@ services:
 		tags:
 			- phpstan.rules.rule
 
-	# DEBUG rules
-	-
-		class: PHPat\Rule\Assertion\VarDump
-		tags:
-			- phpstan.rules.rule
-
 parametersSchema:
 	phpat: structure([
 		tests: listOf(string())
