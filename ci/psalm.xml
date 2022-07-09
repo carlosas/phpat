@@ -28,5 +28,9 @@
         <PossiblyNullArgument>
             <errorLevel type="suppress"><file name="../src/Rule/Assertion/Assertion.php" /></errorLevel>
         </PossiblyNullArgument>
+
+        <PropertyNotSetInConstructor>
+            <errorLevel type="suppress"><directory name="../test/unit/rules/" /></errorLevel>
+        </PropertyNotSetInConstructor>
     </issueHandlers>
 </psalm>
