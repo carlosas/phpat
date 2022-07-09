@@ -32,8 +32,11 @@ trait AllDocBlockRelations
             return [];
         }
 
-        $classReflection     = $scope->getClassReflection();
-        $classReflectionName = $classReflection ? $classReflection->getName() : null;
+        $classReflection = $scope->getClassReflection();
+        if ($classReflection === null) {
+            return [];
+        }
+        $classReflectionName = $classReflection->getName();
 
         if (isset($this->commentMap[$classReflectionName][$docComment->getStartLine()])) {
             return [];
@@ -74,7 +77,11 @@ trait AllDocBlockRelations
                 array_push($names, ...$tag->getType()->getReferencedClasses());
             }
         }
-        $this->commentMap[$classReflectionName][$docComment->getStartLine()] = true;
+        if (isset($this->commentMap[$classReflectionName])) {
+            $this->commentMap[$classReflectionName][$docComment->getStartLine()] = true;
+        } else {
+            $this->commentMap[$classReflectionName] = [$docComment->getStartLine() => true];
+        }
 
         return $names;
     }
