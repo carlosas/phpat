@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PHPat\Test\Builder;
 
+use PHPat\Rule\Assertion\ShouldExtend\ShouldExtend;
 use PHPat\Rule\Assertion\ShouldImplement\ShouldImplement;
 use PHPat\Rule\Assertion\ShouldNotConstruct\ShouldNotConstruct;
 use PHPat\Rule\Assertion\ShouldNotDepend\ShouldNotDepend;
@@ -55,10 +56,10 @@ class AssertionStep
         return new TargetStep($this->rule);
     }
 
-    /*public function shouldImplement(): TargetStep
+    public function shouldExtend(): TargetStep
     {
-        $this->rule->assertion = ShouldImplement::class;
+        $this->rule->assertion = ShouldExtend::class;
 
         return new TargetStep($this->rule);
-    }*/
+    }
 }
