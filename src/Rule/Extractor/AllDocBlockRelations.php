@@ -18,8 +18,8 @@ trait AllDocBlockRelations
     }
 
     /**
-     * @return array<int, mixed>
      * @throws \PHPStan\ShouldNotHappenException
+     * @return array<int, mixed>
      */
     protected function extractNodeClassNames(Node $node, Scope $scope): array
     {

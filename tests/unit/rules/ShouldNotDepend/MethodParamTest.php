@@ -12,9 +12,8 @@ use PHPStan\PhpDoc\ResolvedPhpDocBlock;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\SuperClass;
-use Tests\PHPat\fixtures\Simple\SimpleClass;
 use Tests\PHPat\fixtures\Simple\SimpleInterface;
+use Tests\PHPat\fixtures\SuperClass;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**

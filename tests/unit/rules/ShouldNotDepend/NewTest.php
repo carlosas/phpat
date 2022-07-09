@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\PHPat\unit\rules\ShouldNotDepend;
 
-use PHPat\Rule\Assertion\ShouldNotDepend\ClassPropertyRule;
-use PHPat\Rule\Assertion\ShouldNotDepend\MethodParamRule;
-use PHPat\Rule\Assertion\ShouldNotDepend\MethodReturnRule;
 use PHPat\Rule\Assertion\ShouldNotDepend\NewRule;
 use PHPat\Rule\Assertion\ShouldNotDepend\ShouldNotDepend;
 use PHPat\Selector\Classname;
@@ -15,8 +12,8 @@ use PHPStan\PhpDoc\ResolvedPhpDocBlock;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\SuperClass;
 use Tests\PHPat\fixtures\Simple\SimpleClass;
+use Tests\PHPat\fixtures\SuperClass;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**

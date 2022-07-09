@@ -9,13 +9,12 @@ use PHPat\Rule\Assertion\ValidationTrait;
 use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\FileTypeMapper;
 
 abstract class ShouldImplement extends Assertion
 {
     use ValidationTrait;
-    
+
     public function __construct(
         StatementBuilderFactory $statementBuilderFactory,
         ReflectionProvider $reflectionProvider,
