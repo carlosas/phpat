@@ -1,8 +1,8 @@
-<p style="text-align: center;">
+<p align="center">
     <img width="500px" src="https://raw.githubusercontent.com/carlosas/phpat/master/.github/logo.png" alt="PHP Architecture Tester">
 </p>
-<h2 style="text-align: center;">Easy to use architecture testing tool for PHP</h2>
-<p style="text-align: center;">
+<h2 align="center">Easy to use architecture testing tool for PHP</h2>
+<p align="center">
 	<a>
 		<img src="https://img.shields.io/packagist/v/phpat/phpat?label=version&style=for-the-badge" alt="Version">
     </a>
@@ -14,7 +14,7 @@
 	</a>
 </p>
 
-ℹ️ With **v0.10**, phpat has been converted into a [PHPStan](https://phpstan.org/) extension. Read the [UPGRADE notes](doc/UPGRADE-0.10.md).
+ℹ️ **PHPat** has been converted into a [PHPStan](https://phpstan.org/) extension. Read the [UPGRADE notes](doc/UPGRADE-0.10.md)!
 
 <hr />
 
@@ -24,8 +24,6 @@
 
 It provides a natural language abstraction to define your own architectural rules and test them against your software.
 
-There are four groups of supported assertions: **Dependency**, **Inheritance**, **Composition** and **Mixin**.
-
 Check out the section [WHAT TO TEST](doc/WHAT_TO_TEST.md) to see some examples of typical use cases.
 
 
@@ -33,7 +31,7 @@ Check out the section [WHAT TO TEST](doc/WHAT_TO_TEST.md) to see some examples o
 
 ### Installation 💽
 
-Require **phpat** with [Composer](https://getcomposer.org/):
+Require **PHPat** with [Composer](https://getcomposer.org/):
 ```bash
 composer require --dev phpat/phpat
 ```
@@ -88,6 +86,7 @@ This could be a test with a couple of rules:
 use PHPat\Selector\Selector;
 use PHPat\Test\Rule;
 use PHPat\Test\PHPat;
+use App\Domain\SuperForbiddenClass;
 
 class MyFirstTest
 {
@@ -98,7 +97,8 @@ class MyFirstTest
             ->shouldNotDependOn()
             ->classes(
                 Selector::namespace('App\Application'),
-                Selector::namespace('App\Infrastructure')
+                Selector::namespace('App\Infrastructure'),
+                Selector::classname(SuperForbiddenClass::class)))
             )
             ->build();
     }
@@ -109,9 +109,11 @@ class MyFirstTest
 
 ### Usage 🚀
 
-Run **PHPStan** as usual.
+Run **PHPStan** as usual:
+```bash
+php vendor/bin/phpstan analyse -c phpstan.neon
+```
 
-<h2></h2>
 <hr>
 
 ⚠ Launching early stage releases (0.x.x) could break the API according to [Semantic Versioning 2.0](https://semver.org/).
@@ -119,4 +121,4 @@ We are using *minor* for breaking changes. This will change with the release of 
 
 <h2></h2>
 
-**PHP Architecture Tester** is in an early stage, contributions are welcome. Please have a look to the [Contribution docs](.github/CONTRIBUTING.md).
+**PHP Architecture Tester** is open source, contributions are welcome. Please have a look to the [Contribution docs](.github/CONTRIBUTING.md).
