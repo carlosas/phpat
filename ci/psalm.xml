@@ -30,7 +30,7 @@
         </PossiblyNullArgument>
 
         <PropertyNotSetInConstructor>
-            <errorLevel type="suppress"><directory name="../test/unit/rules/" /></errorLevel>
+            <errorLevel type="suppress"><directory name="../tests/unit/rules/" /></errorLevel>
         </PropertyNotSetInConstructor>
     </issueHandlers>
 </psalm>
