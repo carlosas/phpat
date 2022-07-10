@@ -4,6 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\PHPat\fixtures\Simple;
 
-abstract class AbstractClass
+abstract class SimpleAbstractClass
 {
 }
