@@ -14,10 +14,10 @@
 	</a>
 </p>
 <p align="center">
-⚠⚠⚠ PHPat is being converted into a PHPStan extension https://github.com/carlosas/phpat/tree/v0.10x ⚠⚠⚠
-</p>
+⚠⚠⚠ PHPat has been converted into a PHPStan extension in [v0.10](https://github.com/carlosas/phpat/releases/tag/0.10.0) ⚠⚠⚠
 <br />
-<b>IMPORTANT:</b> PHPat will be converted to a PHPStan extension in the next release. Stay tuned!
+The standalone version (v0.9) will be still available and will receive critical bugfixes if needed.
+</p>
 <br />
 
 ### Introduction 📜
