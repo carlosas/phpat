@@ -18,6 +18,10 @@ services:
 
 	# ShouldNotDepend rules
 	-
+		class: PHPat\Rule\Assertion\ShouldNotDepend\AllDocBlockRelationsRule
+		tags:
+			- phpstan.rules.rule
+	-
 		class: PHPat\Rule\Assertion\ShouldNotDepend\ConstantUseRule
 		tags:
 			- phpstan.rules.rule
