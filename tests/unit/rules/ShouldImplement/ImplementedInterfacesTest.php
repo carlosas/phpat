@@ -1,0 +1,44 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Tests\PHPat\unit\rules\ShouldImplement;
+
+use PHPat\Rule\Assertion\ShouldImplement\ImplementedInterfacesRule;
+use PHPat\Rule\Assertion\ShouldImplement\ShouldImplement;
+use PHPat\Selector\Classname;
+use PHPat\Statement\Builder\StatementBuilderFactory;
+use PHPStan\Rules\Rule;
+use PHPStan\Testing\RuleTestCase;
+use PHPStan\Type\FileTypeMapper;
+use Tests\PHPat\fixtures\FixtureClass;
+use Tests\PHPat\fixtures\Simple\SimpleInterfaceTwo;
+use Tests\PHPat\unit\FakeTestParser;
+
+/**
+ * @extends RuleTestCase<ImplementedInterfacesRule>
+ */
+class ImplementedInterfacesTest extends RuleTestCase
+{
+    public function testRule(): void
+    {
+        $this->analyse(['tests/fixtures/FixtureClass.php'], [
+            [sprintf('%s should implement %s', FixtureClass::class, SimpleInterfaceTwo::class), 28],
+        ]);
+    }
+
+    protected function getRule(): Rule
+    {
+        $testParser = FakeTestParser::create(
+            ShouldImplement::class,
+            [new Classname(FixtureClass::class)],
+            [new Classname(SimpleInterfaceTwo::class)]
+        );
+
+        return new ImplementedInterfacesRule(
+            new StatementBuilderFactory($testParser),
+            $this->createReflectionProvider(),
+            self::getContainer()->getByType(FileTypeMapper::class)
+        );
+    }
+}
