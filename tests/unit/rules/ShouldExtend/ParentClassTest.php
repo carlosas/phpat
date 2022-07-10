@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\PHPat\unit\rules\ShouldExtend;
 
+use PHPat\Configuration;
 use PHPat\Rule\Assertion\ShouldExtend\ParentClassRule;
 use PHPat\Rule\Assertion\ShouldExtend\ShouldExtend;
 use PHPat\Selector\Classname;
@@ -37,6 +38,7 @@ class ParentClassTest extends RuleTestCase
 
         return new ParentClassRule(
             new StatementBuilderFactory($testParser),
+            $this->createMock(Configuration::class),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

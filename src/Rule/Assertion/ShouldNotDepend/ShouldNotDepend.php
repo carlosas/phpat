@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PHPat\Rule\Assertion\ShouldNotDepend;
 
+use PHPat\Configuration;
 use PHPat\Rule\Assertion\Assertion;
 use PHPat\Rule\Assertion\ValidationTrait;
 use PHPat\Statement\Builder\StatementBuilderFactory;
@@ -17,10 +18,17 @@ abstract class ShouldNotDepend extends Assertion
 
     public function __construct(
         StatementBuilderFactory $statementBuilderFactory,
+        Configuration $configuration,
         ReflectionProvider $reflectionProvider,
         FileTypeMapper $fileTypeMapper
     ) {
-        parent::__construct(__CLASS__, $statementBuilderFactory, $reflectionProvider, $fileTypeMapper);
+        parent::__construct(
+            __CLASS__,
+            $statementBuilderFactory,
+            $configuration,
+            $reflectionProvider,
+            $fileTypeMapper
+        );
     }
 
     protected function applyValidation(ClassReflection $subject, array $targets, array $nodes): array

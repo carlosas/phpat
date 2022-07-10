@@ -22,7 +22,7 @@ class TestExtractor
      */
     public function __invoke(): iterable
     {
-        foreach ($this->configuration->tests as $test) {
+        foreach ($this->configuration->getTests() as $test) {
             yield $test;
         }
     }

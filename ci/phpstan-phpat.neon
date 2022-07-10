@@ -7,5 +7,6 @@ parameters:
         - ../src
         - ../tests/fixtures
     phpat:
+        ignore_doc_comments: true
         tests:
             - Tests\PHPat\architecture\ConfigurationTest

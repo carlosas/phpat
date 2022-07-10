@@ -23,6 +23,10 @@ trait AllDocBlockRelations
      */
     protected function extractNodeClassNames(Node $node, Scope $scope): array
     {
+        if ($this->configuration->ignoreDocComments()) {
+            return [];
+        }
+
         if (!$scope->isInClass()) {
             return [];
         }

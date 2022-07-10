@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\PHPat\unit\rules\ShouldNotDepend;
 
+use PHPat\Configuration;
 use PHPat\Rule\Assertion\ShouldNotDepend\AllDocBlockRelationsRule;
 use PHPat\Rule\Assertion\ShouldNotDepend\ShouldNotDepend;
 use PHPat\Selector\Classname;
@@ -27,25 +28,8 @@ use Tests\PHPat\unit\FakeTestParser;
 /**
  * @extends RuleTestCase<AllDocBlockRelationsRule>
  */
-class AllDocBlockRelationsTest extends RuleTestCase
+class AllDocBlockRelationsWithoutIgnoreTest extends RuleTestCase
 {
-    /*
-     * @property SimpleClass $myProperty
-     * @property-write SimpleClassTwo $myProperty2
-     * @property-read SimpleClassThree $myProperty3
-     * @method SimpleClassFour someMethod(SimpleClassFive $m)
-     * @mixin SimpleClassSix
-     */
-    /*
-     * SimpleClass $p
-     * @param SimpleClassTwo $p2 Parameter with description
-     * @param \Tests\PHPat\fixtures\Simple\SimpleClassThree $p3
-     * @param InterfaceWithTemplate<ClassImplementing> $p4
-     * @param array<SimpleClassFive> $p5
-     * @param SimpleAbstractClass|SimpleClassSix $p6
-     * @throws SimpleException
-     * @return SimpleInterface Some nice description here
-     */
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
@@ -88,8 +72,12 @@ class AllDocBlockRelationsTest extends RuleTestCase
             ]
         );
 
+        $configuration = $this->createMock(Configuration::class);
+        $configuration->method('ignoreDocComments')->willReturn(false);
+
         return new AllDocBlockRelationsRule(
             new StatementBuilderFactory($testParser),
+            $configuration,
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

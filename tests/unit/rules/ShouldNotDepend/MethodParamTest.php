@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\PHPat\unit\rules\ShouldNotDepend;
 
+use PHPat\Configuration;
 use PHPat\Rule\Assertion\ShouldNotDepend\MethodParamRule;
 use PHPat\Rule\Assertion\ShouldNotDepend\ShouldNotDepend;
 use PHPat\Selector\Classname;
@@ -37,6 +38,7 @@ class MethodParamTest extends RuleTestCase
 
         return new MethodParamRule(
             new StatementBuilderFactory($testParser),
+            $this->createMock(Configuration::class),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

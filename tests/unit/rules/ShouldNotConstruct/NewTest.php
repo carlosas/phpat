@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\PHPat\unit\rules\ShouldNotConstruct;
 
+use PHPat\Configuration;
 use PHPat\Rule\Assertion\ShouldNotConstruct\NewRule;
 use PHPat\Rule\Assertion\ShouldNotConstruct\ShouldNotConstruct;
 use PHPat\Selector\Classname;
@@ -37,6 +38,7 @@ class NewTest extends RuleTestCase
 
         return new NewRule(
             new StatementBuilderFactory($testParser),
+            $this->createMock(Configuration::class),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

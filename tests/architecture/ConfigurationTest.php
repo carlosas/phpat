@@ -8,6 +8,7 @@ use PHPat\Configuration;
 use PHPat\Selector\Selector;
 use PHPat\Test\PHPat;
 use PHPat\Test\Rule;
+use PHPStan\Reflection\ClassReflection;
 
 class ConfigurationTest
 {
@@ -16,7 +17,10 @@ class ConfigurationTest
         return PHPat::rule()
             ->classes(Selector::classname(Configuration::class))
             ->shouldNotDependOn()
-            ->classes(Selector::namespace('PHPat'))
+            ->classes(
+                Selector::namespace('PHPat'),
+                Selector::classname(ClassReflection::class),
+            )
             ->build();
     }
 }

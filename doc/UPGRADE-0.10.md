@@ -3,12 +3,16 @@ UPGRADE to 0.10.0
 
 ###### The tool has been converted to a PHPStan extension. Now it requires the user to run it with the PHPat extension activated.
 
+ℹ️ Some features have been removed, but will come back in future versions.
+
 Configuration
 -------------
 
 * Remove your `phpat.yaml`, use `phpat.neon` instead.
 * Instead of a test suite path, use fully qualified names of your test classes. 
 * Enable the extension in your PHPStan configuration.
+* The configuration `ignore-docblocks` is now called `ignore_doc_comments`.
+* The rest of configurations do not exist anymore.
 
 ```neon
 # phpstan.neon

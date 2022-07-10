@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\PHPat\unit\rules\ShouldNotImplement;
 
+use PHPat\Configuration;
 use PHPat\Rule\Assertion\ShouldNotImplement\ImplementedInterfacesRule;
 use PHPat\Rule\Assertion\ShouldNotImplement\ShouldNotImplement;
 use PHPat\Selector\Classname;
@@ -37,6 +38,7 @@ class ImplementedInterfacesTest extends RuleTestCase
 
         return new ImplementedInterfacesRule(
             new StatementBuilderFactory($testParser),
+            $this->createMock(Configuration::class),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

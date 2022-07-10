@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PHPat\Rule\Assertion;
 
+use PHPat\Configuration;
 use PHPat\Selector\Classname;
 use PHPat\Selector\SelectorInterface;
 use PHPat\ShouldNotHappenException;
@@ -23,6 +24,7 @@ abstract class Assertion implements PHPStanRule
 {
     /** @var array<array{SelectorInterface, array<SelectorInterface>}> */
     protected array $statements;
+    protected Configuration $configuration;
     protected ReflectionProvider $reflectionProvider;
     protected FileTypeMapper $fileTypeMapper;
 
@@ -32,10 +34,12 @@ abstract class Assertion implements PHPStanRule
     public function __construct(
         string $assertion,
         StatementBuilderFactory $statementBuilderFactory,
+        Configuration $configuration,
         ReflectionProvider $reflectionProvider,
         FileTypeMapper $fileTypeMapper
     ) {
         $this->statements         = $statementBuilderFactory->create($assertion)->build();
+        $this->configuration      = $configuration;
         $this->reflectionProvider = $reflectionProvider;
         $this->fileTypeMapper     = $fileTypeMapper;
     }
