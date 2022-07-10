@@ -5,6 +5,7 @@ parameters:
     level: 1
     paths:
         - ../src
+        - ../tests/fixtures
     phpat:
         tests:
             - Tests\PHPat\architecture\ConfigurationTest
