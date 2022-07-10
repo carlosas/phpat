@@ -46,23 +46,30 @@ class FileTestExtractor implements TestExtractor
         return $tests;
     }
 
-    private function getTestClasses(): array
+    private function getTestClasses(?string $testPath = null): array
     {
-        $files = scandir($this->testPath);
+        $testPath = $testPath ?: $this->testPath;
+
+        $files = array_diff(scandir($testPath), ['.', '..']);
+
         if (!$files) {
             return [];
         }
         $classes = [];
 
         foreach ($files as $file) {
+            if (is_dir($testPath . '/' . $file)) {
+                array_push($classes, ...$this->getTestClasses($testPath . '/' . $file));
+            }
+
             if (preg_match('/^[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*(\.php)$/', $file)) {
-                include $this->testPath . '/' . $file;
+                include $testPath . '/' . $file;
             }
             if (preg_match('/^[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*((\.yaml)|(\.yml))$/', $file)) {
-                $classes[] = $this->yamlTestParser->parseFile($this->testPath . $file);
+                $classes[] = $this->yamlTestParser->parseFile($testPath . $file);
             }
             if (preg_match('/^[a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*(\.xml)$/', $file)) {
-                $classes[] = $this->xmlTestParser->parseFile($this->testPath . $file);
+                $classes[] = $this->xmlTestParser->parseFile($testPath . $file);
             }
         }
 
