@@ -76,6 +76,14 @@ trait AllDocBlockRelations
             if (method_exists($tag, 'getType')) {
                 array_push($names, ...$tag->getType()->getReferencedClasses());
             }
+            if (method_exists($tag, 'getReturnType')) {
+                array_push($names, ...$tag->getReturnType()->getReferencedClasses());
+            }
+            if (method_exists($tag, 'getParameters')) {
+                foreach ($tag->getParameters() as $parameter) {
+                    array_push($names, ...$parameter->getType()->getReferencedClasses());
+                }
+            }
         }
         if (isset($this->commentMap[$classReflectionName])) {
             $this->commentMap[$classReflectionName][$docComment->getStartLine()] = true;
