@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 
   Read the [upgrade guide](doc/UPGRADE-0.10.md) for more information.
 
+## 0.9.1
+* Read configured `tests.path` recursively
+
 ## 0.9.0
 * Fix phar file generation
 * Make paths relative to configuration file

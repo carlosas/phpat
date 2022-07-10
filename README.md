@@ -15,6 +15,8 @@
 </p>
 
 ℹ️ **PHPat** has been converted into a [PHPStan](https://phpstan.org/) extension. Read the [UPGRADE notes](doc/UPGRADE-0.10.md)!
+<br />
+The standalone version (v0.9) will be still available and will receive critical bugfixes if needed.
 
 <hr />
 
