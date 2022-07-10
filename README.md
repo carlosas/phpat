@@ -66,9 +66,10 @@ parameters:
 <details><summary>Complete list of options</summary>
 <br />
 
-| Name                                      | Description                                              | Default      |
-|-------------------------------------------|----------------------------------------------------------|:------------:|
-| `tests`                                   | List of tests to execute (fully qualified classnames)    | *no default* |
+| Name                                      | Description                                           |   Default    |
+|-------------------------------------------|-------------------------------------------------------|:------------:|
+| `tests`                                   | List of tests to execute (fully qualified classnames) | *no default* |
+| `ignore_doc_comments`                     | Ignore relations on Doc Comments                      |   *false*    |
 
 </details>
 
