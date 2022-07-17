@@ -6,7 +6,9 @@ parameters:
     paths:
         - ../src
         - ../tests/fixtures
-    phpat:
-        ignore_doc_comments: true
-        tests:
-            - Tests\PHPat\architecture\ConfigurationTest
+
+services:
+    -
+        class: Tests\PHPat\architecture\ConfigurationTest
+        tags:
+            - phpat.test

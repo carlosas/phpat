@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace PHPat\Rule\Assertion;
 
 use PHPat\Selector\SelectorInterface;
+use PHPat\ShouldNotHappenException;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
-use PHPStan\ShouldNotHappenException;
 
 trait ValidationTrait
 {

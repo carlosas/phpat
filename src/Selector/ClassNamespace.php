@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace PHPat\Selector;
 
 use function extractNamespaceFromFQCN;
+
 use PHPStan\Reflection\ClassReflection;
+
 use function trimSeparators;
 
 class ClassNamespace implements SelectorInterface

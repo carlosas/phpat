@@ -1,7 +1,6 @@
 # Default parameters
 parameters:
 	phpat:
-		tests: []
 		ignore_doc_comments: false
 
 services:
@@ -9,7 +8,6 @@ services:
 	- PHPat\Test\TestParser
 	- PHPat\Statement\Builder\StatementBuilderFactory
 	- PHPat\Configuration(
-		tests: %phpat.tests%,
 		ignore_doc_comments: %phpat.ignore_doc_comments%,
 	)
 
@@ -71,6 +69,5 @@ services:
 
 parametersSchema:
 	phpat: structure([
-		tests: listOf(string())
 		ignore_doc_comments: bool()
 	])

@@ -8,8 +8,8 @@ use Exception;
 
 final class ShouldNotHappenException extends Exception
 {
-    public function __construct()
+    public function __construct(string $message = 'Internal error')
     {
-        parent::__construct('PHPat internal error.');
+        parent::__construct('PHPat: '.$message);
     }
 }

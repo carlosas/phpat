@@ -4,10 +4,13 @@
 <h2 align="center">Easy to use architecture testing tool for PHP</h2>
 <p align="center">
 	<a>
-		<img src="https://img.shields.io/packagist/v/phpat/phpat?label=version&style=for-the-badge" alt="Version">
+		<img src="https://img.shields.io/packagist/v/phpat/phpat?label=last%20version&style=for-the-badge" alt="Version">
     </a>
 	<a>
 		<img src="https://img.shields.io/packagist/php-v/phpat/phpat?style=for-the-badge" alt="PHP Version">
+	</a>
+	<a>
+		<img src="https://img.shields.io/badge/phpstan-%5E1.3-blue?style=for-the-badge" alt="PHPStan Version">
 	</a>
 	<a>
 		<img src="https://img.shields.io/badge/contributions-welcome-green.svg?style=for-the-badge" alt="Contributions welcome">
@@ -56,14 +59,25 @@ includes:
 
 ### Configuration 🔧
 
-You will need to setup a minimum configuration:
+You will need to register your test classes in your PHPStan configuration:
+```neon
+# phpstan.neon
+services:
+    -
+        class: Tests\Architecture\MyFirstTest
+        tags:
+            - phpat.test
+    -
+        class: Tests\Architecture\MySecondTest
+        tags:
+            - phpat.test
+```
+You can also configure some PHPat options, for instance:
 ```neon
 # phpstan.neon
 parameters:
     phpat:
-        tests:
-            - Tests\Architecture\MyFirstTest
-            - Tests\Architecture\MySecondTest
+        ignore_doc_comments: true
 ```
 
 <details><summary>Complete list of options</summary>
@@ -71,7 +85,6 @@ parameters:
 
 | Name                                      | Description                                           |   Default    |
 |-------------------------------------------|-------------------------------------------------------|:------------:|
-| `tests`                                   | List of tests to execute (fully qualified classnames) | *no default* |
 | `ignore_doc_comments`                     | Ignore relations on Doc Comments                      |   *false*    |
 
 </details>
