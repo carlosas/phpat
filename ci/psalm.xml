@@ -26,7 +26,7 @@
         </UndefinedClass>
 
         <PossiblyNullArgument>
-            <errorLevel type="suppress"><file name="../src/Rule/Assertion/Assertion.php" /></errorLevel>
+            <errorLevel type="suppress"><file name="../src/Rule/Assertion/Relation/RelationAssertion.php" /></errorLevel>
         </PossiblyNullArgument>
 
         <PropertyNotSetInConstructor>
