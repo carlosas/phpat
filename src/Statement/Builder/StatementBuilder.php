@@ -11,7 +11,7 @@ use PHPStan\Rules\Rule as PHPStanRule;
 
 abstract class StatementBuilder
 {
-    /** @var array<array{SelectorInterface, array<SelectorInterface>}> */
+    /** @var array<array{SelectorInterface, array<SelectorInterface>, array<SelectorInterface>, array<SelectorInterface>}> */
     protected $statements = [];
     /** @var array<Rule> */
     protected array $rules;
@@ -25,14 +25,14 @@ abstract class StatementBuilder
     }
 
     /**
-     * @return array<array{SelectorInterface, array<SelectorInterface>}>
+     * @return array<array{SelectorInterface, array<SelectorInterface>, array<SelectorInterface>, array<SelectorInterface>}>
      */
     public function build(): array
     {
         $params = $this->extractCurrentAssertion($this->rules);
 
         foreach ($params as $param) {
-            $this->addStatement($param[0], $param[1]);
+            $this->addStatement($param[0], $param[1], $param[2], $param[3]);
         }
 
         return $this->statements;
@@ -44,16 +44,22 @@ abstract class StatementBuilder
     abstract protected function getAssertionClassname(): string;
 
     /**
+     * @param array<SelectorInterface> $subjectExcludes
      * @param array<SelectorInterface> $targets
+     * @param array<SelectorInterface> $targetExcludes
      */
-    private function addStatement(SelectorInterface $subject, array $targets): void
-    {
-        $this->statements[] = [$subject, $targets];
+    private function addStatement(
+        SelectorInterface $subject,
+        array $subjectExcludes,
+        array $targets,
+        array $targetExcludes
+    ): void {
+        $this->statements[] = [$subject, $subjectExcludes, $targets, $targetExcludes];
     }
 
     /**
      * @param array<Rule> $rules
-     * @return array<array{SelectorInterface, array<SelectorInterface>}>
+     * @return array<array{SelectorInterface, array<SelectorInterface>, array<SelectorInterface>, array<SelectorInterface>}>
      */
     private function extractCurrentAssertion(array $rules): array
     {
@@ -61,7 +67,7 @@ abstract class StatementBuilder
         foreach ($rules as $rule) {
             if ($rule->assertion === $this->getAssertionClassname()) {
                 foreach ($rule->subjects as $selector) {
-                    $result[] = [$selector, $rule->targets];
+                    $result[] = [$selector, $rule->subjectExcludes, $rule->targets, $rule->targetExcludes];
                 }
             }
         }

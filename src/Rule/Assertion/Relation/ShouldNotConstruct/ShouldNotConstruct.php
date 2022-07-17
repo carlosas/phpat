@@ -31,9 +31,9 @@ abstract class ShouldNotConstruct extends Assertion
         );
     }
 
-    protected function applyValidation(ClassReflection $subject, array $targets, array $nodes): array
+    protected function applyValidation(ClassReflection $subject, array $targets, array $targetExcludes, array $nodes): array
     {
-        return $this->applyShouldNot($subject, $targets, $nodes);
+        return $this->applyShouldNot($subject, $targets, $targetExcludes, $nodes);
     }
 
     protected function getMessage(string $subject, string $target): string

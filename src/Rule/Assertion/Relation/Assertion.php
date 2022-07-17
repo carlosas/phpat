@@ -22,7 +22,7 @@ use PHPStan\Type\FileTypeMapper;
  */
 abstract class Assertion implements PHPStanRule
 {
-    /** @var array<array{SelectorInterface, array<SelectorInterface>}> */
+    /** @var array<array{SelectorInterface, array<SelectorInterface>, array<SelectorInterface>, array<SelectorInterface>}> */
     protected array $statements;
     protected Configuration $configuration;
     protected ReflectionProvider $reflectionProvider;
@@ -70,10 +70,11 @@ abstract class Assertion implements PHPStanRule
 
     /**
      * @param array<SelectorInterface> $targets
+     * @param array<SelectorInterface> $targetExcludes
      * @param array<class-string> $nodes
      * @return array<RuleError>
      */
-    abstract protected function applyValidation(ClassReflection $subject, array $targets, array $nodes): array;
+    abstract protected function applyValidation(ClassReflection $subject, array $targets, array $targetExcludes, array $nodes): array;
 
     /**
      * @param array<class-string> $nodes
@@ -113,12 +114,17 @@ abstract class Assertion implements PHPStanRule
             throw new ShouldNotHappenException();
         }
 
-        foreach ($this->statements as [$selector, $targets]) {
+        foreach ($this->statements as [$selector, $subjectExcludes, $targets, $targetExcludes]) {
             if ($subject->isBuiltin() || !$selector->matches($subject)) {
                 continue;
             }
+            foreach ($subjectExcludes as $exclude) {
+                if ($exclude->matches($subject)) {
+                    continue 2;
+                }
+            }
 
-            array_push($errors, ...$this->applyValidation($subject, $targets, $nodes));
+            array_push($errors, ...$this->applyValidation($subject, $targets, $targetExcludes, $nodes));
         }
 
         return $errors;
