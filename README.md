@@ -16,11 +16,12 @@
 		<img src="https://img.shields.io/badge/contributions-welcome-green.svg?style=for-the-badge" alt="Contributions welcome">
 	</a>
 </p>
-<p align="center">
+
+<hr />
+
 ℹ️ **PHPat** has been converted into a [PHPStan](https://phpstan.org/) extension. Read the [UPGRADE notes](doc/UPGRADE-0.10.md)!
 <br />
 The standalone version (v0.9) will be still available and will receive critical bugfixes if needed.
-</p>
 
 <hr />
 
