@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Tests\PHPat\unit\rules\ShouldNotDepend;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\ShouldNotDepend\MethodReturnRule;
-use PHPat\Rule\Assertion\ShouldNotDepend\ShouldNotDepend;
+use PHPat\Rule\Assertion\Relation\ShouldNotDepend\MethodReturnRule;
+use PHPat\Rule\Assertion\Relation\ShouldNotDepend\ShouldNotDepend;
 use PHPat\Selector\Classname;
 use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;
@@ -41,7 +41,7 @@ class MethodReturnTest extends RuleTestCase
             ]
         );
 
-        return new MethodReturnRule(
+        return new \PHPat\Rule\Assertion\Relation\ShouldNotDepend\MethodReturnRule(
             new StatementBuilderFactory($testParser),
             $this->createMock(Configuration::class),
             $this->createReflectionProvider(),

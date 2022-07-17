@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Tests\PHPat\unit\rules\ShouldNotExtend;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\ShouldNotExtend\ParentClassRule;
-use PHPat\Rule\Assertion\ShouldNotExtend\ShouldNotExtend;
+use PHPat\Rule\Assertion\Relation\ShouldNotExtend\ParentClassRule;
 use PHPat\Selector\Classname;
 use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;
@@ -17,7 +16,7 @@ use Tests\PHPat\fixtures\Simple\SimpleAbstractClass;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
- * @extends RuleTestCase<ParentClassRule>
+ * @extends RuleTestCase<\PHPat\Rule\Assertion\Relation\ShouldNotExtend\ParentClassRule>
  */
 class ParentClassTest extends RuleTestCase
 {
@@ -31,12 +30,12 @@ class ParentClassTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            ShouldNotExtend::class,
+            \PHPat\Rule\Assertion\Relation\ShouldNotExtend\ShouldNotExtend::class,
             [new Classname(FixtureClass::class)],
             [new Classname(SimpleAbstractClass::class)]
         );
 
-        return new ParentClassRule(
+        return new \PHPat\Rule\Assertion\Relation\ShouldNotExtend\ParentClassRule(
             new StatementBuilderFactory($testParser),
             $this->createMock(Configuration::class),
             $this->createReflectionProvider(),

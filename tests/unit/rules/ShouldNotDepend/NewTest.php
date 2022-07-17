@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Tests\PHPat\unit\rules\ShouldNotDepend;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\ShouldNotDepend\NewRule;
-use PHPat\Rule\Assertion\ShouldNotDepend\ShouldNotDepend;
+use PHPat\Rule\Assertion\Relation\ShouldNotDepend\NewRule;
+use PHPat\Rule\Assertion\Relation\ShouldNotDepend\ShouldNotDepend;
 use PHPat\Selector\Classname;
 use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;
@@ -17,7 +17,7 @@ use Tests\PHPat\fixtures\Simple\SimpleClass;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
- * @extends RuleTestCase<NewRule>
+ * @extends RuleTestCase<\PHPat\Rule\Assertion\Relation\ShouldNotDepend\NewRule>
  */
 class NewTest extends RuleTestCase
 {
@@ -36,7 +36,7 @@ class NewTest extends RuleTestCase
             [new Classname(SimpleClass::class)]
         );
 
-        return new NewRule(
+        return new \PHPat\Rule\Assertion\Relation\ShouldNotDepend\NewRule(
             new StatementBuilderFactory($testParser),
             $this->createMock(Configuration::class),
             $this->createReflectionProvider(),

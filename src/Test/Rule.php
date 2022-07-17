@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PHPat\Test;
 
-use PHPat\Rule\Assertion\Assertion;
+use PHPat\Rule\Assertion\Relation\Assertion;
 use PHPat\Selector\SelectorInterface;
 
 class Rule
@@ -17,6 +17,6 @@ class Rule
     public array $targets = [];
     /** @var array<SelectorInterface> */
     public array $targetExcludes = [];
-    /** @var null|class-string<Assertion> */
+    /** @var null|class-string<\PHPat\Rule\Assertion\Relation\Assertion> */
     public ?string $assertion = null;
 }

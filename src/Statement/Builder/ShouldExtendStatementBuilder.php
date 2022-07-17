@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PHPat\Statement\Builder;
 
-use PHPat\Rule\Assertion\ShouldExtend\ShouldExtend;
+use PHPat\Rule\Assertion\Relation\ShouldExtend\ShouldExtend;
 
 class ShouldExtendStatementBuilder extends StatementBuilder
 {

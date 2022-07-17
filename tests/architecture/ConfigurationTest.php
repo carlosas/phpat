@@ -11,7 +11,7 @@ use PHPat\Test\Rule;
 
 class ConfigurationTest
 {
-    public function test_configuration_does_not_depend_on_rules(): Rule
+    public function test_configuration_does_not_have_dependencies(): Rule
     {
         return PHPat::rule()
             ->classes(Selector::classname(Configuration::class))

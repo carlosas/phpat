@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Tests\PHPat\unit\rules\ShouldNotDepend;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\ShouldNotDepend\AllDocBlockRelationsRule;
-use PHPat\Rule\Assertion\ShouldNotDepend\ShouldNotDepend;
+use PHPat\Rule\Assertion\Relation\ShouldNotDepend\AllDocBlockRelationsRule;
+use PHPat\Rule\Assertion\Relation\ShouldNotDepend\ShouldNotDepend;
 use PHPat\Selector\Classname;
 use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;
@@ -26,7 +26,7 @@ use Tests\PHPat\fixtures\Special\InterfaceWithTemplate;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
- * @extends RuleTestCase<AllDocBlockRelationsRule>
+ * @extends RuleTestCase<\PHPat\Rule\Assertion\Relation\ShouldNotDepend\AllDocBlockRelationsRule>
  */
 class AllDocBlockRelationsWithIgnoreTest extends RuleTestCase
 {
@@ -57,7 +57,7 @@ class AllDocBlockRelationsWithIgnoreTest extends RuleTestCase
         $configuration = $this->createMock(Configuration::class);
         $configuration->method('ignoreDocComments')->willReturn(true);
 
-        return new AllDocBlockRelationsRule(
+        return new \PHPat\Rule\Assertion\Relation\ShouldNotDepend\AllDocBlockRelationsRule(
             new StatementBuilderFactory($testParser),
             $configuration,
             $this->createReflectionProvider(),

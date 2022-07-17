@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PHPat\Statement\Builder;
 
-use PHPat\Rule\Assertion\ShouldNotConstruct\ShouldNotConstruct;
+use PHPat\Rule\Assertion\Relation\ShouldNotConstruct\ShouldNotConstruct;
 
 class ShouldNotConstructStatementBuilder extends StatementBuilder
 {

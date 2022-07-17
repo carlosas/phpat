@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Tests\PHPat\unit\rules\ShouldNotDepend;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\ShouldNotDepend\ClassPropertyRule;
-use PHPat\Rule\Assertion\ShouldNotDepend\ShouldNotDepend;
+use PHPat\Rule\Assertion\Relation\ShouldNotDepend\ClassPropertyRule;
+use PHPat\Rule\Assertion\Relation\ShouldNotDepend\ShouldNotDepend;
 use PHPat\Selector\Classname;
 use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;
@@ -36,7 +36,7 @@ class ClassPropertyTest extends RuleTestCase
             [new Classname(SimpleInterface::class)]
         );
 
-        return new ClassPropertyRule(
+        return new \PHPat\Rule\Assertion\Relation\ShouldNotDepend\ClassPropertyRule(
             new StatementBuilderFactory($testParser),
             $this->createMock(Configuration::class),
             $this->createReflectionProvider(),

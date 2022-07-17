@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Tests\PHPat\unit\rules\ShouldNotImplement;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\ShouldNotImplement\ImplementedInterfacesRule;
-use PHPat\Rule\Assertion\ShouldNotImplement\ShouldNotImplement;
+use PHPat\Rule\Assertion\Relation\ShouldNotImplement\ImplementedInterfacesRule;
 use PHPat\Selector\Classname;
 use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;
@@ -17,7 +16,7 @@ use Tests\PHPat\fixtures\Simple\SimpleInterface;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
- * @extends RuleTestCase<ImplementedInterfacesRule>
+ * @extends RuleTestCase<\PHPat\Rule\Assertion\Relation\ShouldNotImplement\ImplementedInterfacesRule>
  */
 class ImplementedInterfacesTest extends RuleTestCase
 {
@@ -31,12 +30,12 @@ class ImplementedInterfacesTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            ShouldNotImplement::class,
+            \PHPat\Rule\Assertion\Relation\ShouldNotImplement\ShouldNotImplement::class,
             [new Classname(FixtureClass::class)],
             [new Classname(SimpleInterface::class)]
         );
 
-        return new ImplementedInterfacesRule(
+        return new \PHPat\Rule\Assertion\Relation\ShouldNotImplement\ImplementedInterfacesRule(
             new StatementBuilderFactory($testParser),
             $this->createMock(Configuration::class),
             $this->createReflectionProvider(),
