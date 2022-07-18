@@ -14,7 +14,7 @@
 	</a>
 </p>
 <p align="center">
-⚠⚠⚠ PHPat has been converted into a PHPStan extension in [v0.10](https://github.com/carlosas/phpat/releases/tag/0.10.0) ⚠⚠⚠
+⚠⚠⚠ PHPat has been converted into a PHPStan extension in [v0.10](https://github.com/carlosas/phpat/releases/tag/0.10.0-beta.1) ⚠⚠⚠
 <br />
 The standalone version (v0.9) will be still available and will receive critical bugfixes if needed.
 </p>
