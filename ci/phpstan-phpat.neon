@@ -5,7 +5,7 @@ parameters:
     level: 1
     paths:
         - ../src
-        - ../tests/fixtures
+        - ../tests/architecture
 
 services:
     -
