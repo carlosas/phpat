@@ -6,7 +6,7 @@ namespace PHPat\Test\Builder;
 
 use PHPat\Selector\SelectorInterface;
 
-class TargetExcludeOrAssertionStep extends BuildStep
+class TargetExcludeOrBuildStep extends BuildStep
 {
     public function excluding(SelectorInterface ...$selectors): BuildStep
     {

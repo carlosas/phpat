@@ -16,10 +16,10 @@ class SubjectStep
         $this->rule = $rule;
     }
 
-    public function classes(SelectorInterface ...$selectors): SubjectExcludeOrBuildStep
+    public function classes(SelectorInterface ...$selectors): SubjectExcludeOrAssertionStep
     {
         $this->rule->subjects = array_values($selectors);
 
-        return new SubjectExcludeOrBuildStep($this->rule);
+        return new SubjectExcludeOrAssertionStep($this->rule);
     }
 }

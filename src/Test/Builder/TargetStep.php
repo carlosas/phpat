@@ -16,10 +16,10 @@ class TargetStep
         $this->rule = $rule;
     }
 
-    public function classes(SelectorInterface ...$selectors): TargetExcludeOrAssertionStep
+    public function classes(SelectorInterface ...$selectors): TargetExcludeOrBuildStep
     {
         $this->rule->targets = array_values($selectors);
 
-        return new TargetExcludeOrAssertionStep($this->rule);
+        return new TargetExcludeOrBuildStep($this->rule);
     }
 }
