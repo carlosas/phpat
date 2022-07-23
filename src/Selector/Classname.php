@@ -6,7 +6,6 @@ namespace PHPat\Selector;
 
 use PHPStan\Reflection\ClassReflection;
 
-use PHPStan\ShouldNotHappenException;
 use function trimSeparators;
 
 class Classname implements SelectorInterface
