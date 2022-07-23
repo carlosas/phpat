@@ -39,9 +39,6 @@ class ClassNamespace implements SelectorInterface
 
     private function matchesRegex(string $namespace): bool
     {
-        return (
-            preg_match($this->namespace, trimSeparators($namespace)) === 1
-            || preg_match($this->namespace, $namespace)              === 1
-        );
+        return preg_match($this->namespace, $namespace) === 1;
     }
 }

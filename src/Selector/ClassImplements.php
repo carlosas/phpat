@@ -40,10 +40,7 @@ class ClassImplements implements SelectorInterface
     private function matchesRegex(array $interfaces): bool
     {
         foreach ($interfaces as $interface) {
-            if (
-                preg_match($this->classname, $interface->getName()) > 0
-                || preg_match($this->classname, trimSeparators($interface->getName())) > 0
-            ) {
+            if (preg_match($this->classname, $interface->getName()) === 1) {
                 return true;
             }
         }

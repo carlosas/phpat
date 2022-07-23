@@ -36,8 +36,9 @@ class ClassExtends implements SelectorInterface
             return $this->matchesRegex($parents);
         }
 
+        $classname = trimSeparators($this->classname);
         foreach ($parents as $parent) {
-            if (trimSeparators($parent->getName()) === trimSeparators($this->classname)) {
+            if ($parent->getName() === $classname) {
                 return true;
             }
         }
@@ -51,10 +52,7 @@ class ClassExtends implements SelectorInterface
     private function matchesRegex(array $parents): bool
     {
         foreach ($parents as $parent) {
-            if (
-                preg_match($this->classname, $parent->getName()) > 0
-                || preg_match($this->classname, trimSeparators($parent->getName())) > 0
-            ) {
+            if (preg_match($this->classname, $parent->getName()) === 1) {
                 return true;
             }
         }

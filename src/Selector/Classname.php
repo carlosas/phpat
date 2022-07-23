@@ -30,12 +30,9 @@ class Classname implements SelectorInterface
     public function matches(ClassReflection $classReflection): bool
     {
         if ($this->isRegex) {
-            return (
-                preg_match($this->classname, $classReflection->getName())                    > 0
-                || preg_match($this->classname, trimSeparators($classReflection->getName())) > 0
-            );
+            return preg_match($this->classname, $classReflection->getName()) === 1;
         }
 
-        return trimSeparators($classReflection->getName()) === trimSeparators($this->classname);
+        return $classReflection->getName() === trimSeparators($this->classname);
     }
 }
