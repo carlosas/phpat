@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace PHPat\Test\Builder;
 
+use PHPat\Rule\Assertion\Relation\ShouldExtend\ShouldExtend;
 use PHPat\Rule\Assertion\Relation\ShouldImplement\ShouldImplement;
 use PHPat\Rule\Assertion\Relation\ShouldNotConstruct\ShouldNotConstruct;
 use PHPat\Rule\Assertion\Relation\ShouldNotDepend\ShouldNotDepend;
 use PHPat\Rule\Assertion\Relation\ShouldNotExtend\ShouldNotExtend;
 use PHPat\Rule\Assertion\Relation\ShouldNotImplement\ShouldNotImplement;
-use PHPat\Rule\Assertion\Relation\ShouldExtend\ShouldExtend;
 use PHPat\Test\Rule;
 
 class AssertionStep

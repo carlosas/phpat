@@ -90,10 +90,8 @@ abstract class RelationAssertion implements PHPStanRule
         }
 
         foreach ($nodes as $node) {
-            if (
-                $scope->getClassReflection() !== null
-                && !(new Classname($node))->matches($scope->getClassReflection())
-            ) {
+            $class = $scope->getClassReflection();
+            if ($class !== null && !(new Classname($node))->matches($class)) {
                 return true;
             }
         }

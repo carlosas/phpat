@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tests\PHPat\unit\rules\ShouldNotDepend;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\Relation\ShouldNotDepend\AllDocBlockRelationsRule;
 use PHPat\Rule\Assertion\Relation\ShouldNotDepend\ShouldNotDepend;
 use PHPat\Selector\Classname;
 use PHPat\Statement\Builder\StatementBuilderFactory;

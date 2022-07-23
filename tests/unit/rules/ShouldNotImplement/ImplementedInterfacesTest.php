@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tests\PHPat\unit\rules\ShouldNotImplement;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\Relation\ShouldNotImplement\ImplementedInterfacesRule;
 use PHPat\Selector\Classname;
 use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;

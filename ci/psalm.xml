@@ -25,10 +25,6 @@
             <errorLevel type="suppress"><file name="../src/Test/TestParser.php" /></errorLevel>
         </UndefinedClass>
 
-        <PossiblyNullArgument>
-            <errorLevel type="suppress"><file name="../src/Rule/Assertion/Relation/Assertion.php" /></errorLevel>
-        </PossiblyNullArgument>
-
         <PropertyNotSetInConstructor>
             <errorLevel type="suppress"><directory name="../tests/unit/rules/" /></errorLevel>
         </PropertyNotSetInConstructor>
