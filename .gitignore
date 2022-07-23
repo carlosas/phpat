@@ -1,10 +1,5 @@
 /.idea/
-/ops/
 /vendor/
 /composer.phar
 /composer.lock
-/Makefile
 *.php-cs-fixer.cache
-
-/src-old/
-/tests-old/
