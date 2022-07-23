@@ -104,7 +104,7 @@ This could be a test with a couple of rules:
 <?php
 
 use PHPat\Selector\Selector;
-use PHPat\Test\Rule;
+use PHPat\Test\Builder\Rule;
 use PHPat\Test\PHPat;
 use App\Domain\SuperForbiddenClass;
 
@@ -120,8 +120,7 @@ class MyFirstTest
                 Selector::namespace('App\Infrastructure'),
                 Selector::classname(SuperForbiddenClass::class),
                 Selector::classname('/^SomeVendor\\.*\\ForbiddenSubfolder\\.*/', true)
-            )
-            ->build();
+            );
     }
 }
 ```

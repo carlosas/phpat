@@ -5,19 +5,18 @@ declare(strict_types=1);
 namespace PHPat\Statement\Builder;
 
 use PHPat\Selector\SelectorInterface;
-use PHPat\Test\Rule;
+use PHPat\Test\RelationRule;
 use PhpParser\Node;
-use PHPStan\Rules\Rule as PHPStanRule;
 
 abstract class StatementBuilder
 {
     /** @var array<array{SelectorInterface, array<SelectorInterface>, array<SelectorInterface>, array<SelectorInterface>}> */
     protected $statements = [];
-    /** @var array<Rule> */
+    /** @var array<RelationRule> */
     protected array $rules;
 
     /**
-     * @param array<Rule> $rules
+     * @param array<RelationRule> $rules
      */
     final public function __construct(array $rules)
     {
@@ -58,7 +57,7 @@ abstract class StatementBuilder
     }
 
     /**
-     * @param array<Rule> $rules
+     * @param array<RelationRule> $rules
      * @return array<array{SelectorInterface, array<SelectorInterface>, array<SelectorInterface>, array<SelectorInterface>}>
      */
     private function extractCurrentAssertion(array $rules): array

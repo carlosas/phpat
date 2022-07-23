@@ -41,6 +41,7 @@ Tests
 * Instead of ```$this->rule```, the rule builder gets started with ```PHPat::rule()```.
 * Instead of using ```andClassesThat()```, all selectors are now passed as consecutive arguments
 of a single ```classes()``` method.
+* The build process does not need to end with a `build()` anymore.
 ```php
 PHPat::rule()
     ->classes(Selector::namespace('App\Domain'))
@@ -49,8 +50,7 @@ PHPat::rule()
     ->classes(
         Selector::namespace('App\Application'),
         Selector::namespace('App\Infrastructure')
-    )
-    ->build();
+    );
 ```
 
 Selectors

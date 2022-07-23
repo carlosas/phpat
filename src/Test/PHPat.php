@@ -10,6 +10,6 @@ class PHPat
 {
     public static function rule(): SubjectStep
     {
-        return new SubjectStep(new Rule());
+        return new SubjectStep(new RelationRule());
     }
 }

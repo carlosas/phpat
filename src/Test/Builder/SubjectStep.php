@@ -5,17 +5,10 @@ declare(strict_types=1);
 namespace PHPat\Test\Builder;
 
 use PHPat\Selector\SelectorInterface;
-use PHPat\Test\Rule;
+use PHPat\Test\RelationRule;
 
-class SubjectStep
+class SubjectStep extends AbstractStep
 {
-    private Rule $rule;
-
-    public function __construct(Rule $rule)
-    {
-        $this->rule = $rule;
-    }
-
     public function classes(SelectorInterface ...$selectors): SubjectExcludeOrAssertionStep
     {
         $this->rule->subjects = array_values($selectors);

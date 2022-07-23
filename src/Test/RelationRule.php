@@ -6,7 +6,7 @@ namespace PHPat\Test;
 
 use PHPat\Selector\SelectorInterface;
 
-class Rule
+class RelationRule
 {
     /** @var array<SelectorInterface> */
     public array $subjects = [];

@@ -7,7 +7,7 @@ namespace Tests\PHPat\architecture;
 use PHPat\Configuration;
 use PHPat\Selector\Selector;
 use PHPat\Test\PHPat;
-use PHPat\Test\Rule;
+use PHPat\Test\Builder\Rule;
 
 class ConfigurationTest
 {
@@ -16,7 +16,6 @@ class ConfigurationTest
         return PHPat::rule()
             ->classes(Selector::classname(Configuration::class))
             ->shouldNotDependOn()
-            ->classes(Selector::all())
-            ->build();
+            ->classes(Selector::all());
     }
 }

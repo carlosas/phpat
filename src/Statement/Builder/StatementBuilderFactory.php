@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace PHPat\Statement\Builder;
 
-use PHPat\Test\Rule;
+use PHPat\Test\RelationRule;
 use PHPat\Test\TestParser;
 
 class StatementBuilderFactory
 {
-    /** @var array<Rule> */
+    /** @var array<RelationRule> */
     private array $rules;
 
     public function __construct(TestParser $testParser)

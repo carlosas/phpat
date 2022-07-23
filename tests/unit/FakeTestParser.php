@@ -6,7 +6,7 @@ namespace Tests\PHPat\unit;
 
 use PHPat\Rule\Assertion\Relation\RelationAssertion;
 use PHPat\Selector\SelectorInterface;
-use PHPat\Test\Rule;
+use PHPat\Test\RelationRule;
 use PHPat\Test\TestParser;
 use ReflectionClass;
 
@@ -21,7 +21,7 @@ class FakeTestParser extends TestParser
 
     public function __invoke(): array
     {
-        $rule            = new Rule();
+        $rule            = new RelationRule();
         $rule->assertion = $this->assertion;
         $rule->subjects  = $this->subjects;
         $rule->targets   = $this->targets;

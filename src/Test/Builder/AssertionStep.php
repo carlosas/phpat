@@ -10,17 +10,10 @@ use PHPat\Rule\Assertion\Relation\ShouldNotConstruct\ShouldNotConstruct;
 use PHPat\Rule\Assertion\Relation\ShouldNotDepend\ShouldNotDepend;
 use PHPat\Rule\Assertion\Relation\ShouldNotExtend\ShouldNotExtend;
 use PHPat\Rule\Assertion\Relation\ShouldNotImplement\ShouldNotImplement;
-use PHPat\Test\Rule;
+use PHPat\Test\RelationRule;
 
-class AssertionStep
+class AssertionStep extends AbstractStep
 {
-    protected Rule $rule;
-
-    public function __construct(Rule $rule)
-    {
-        $this->rule = $rule;
-    }
-
     public function shouldNotDependOn(): TargetStep
     {
         $this->rule->assertion = ShouldNotDepend::class;
