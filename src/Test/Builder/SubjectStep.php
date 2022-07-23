@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace PHPat\Test\Builder;
 
 use PHPat\Selector\SelectorInterface;
-use PHPat\Test\RelationRule;
 
 class SubjectStep extends AbstractStep
 {

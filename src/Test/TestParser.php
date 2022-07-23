@@ -16,7 +16,7 @@ class TestParser
 
     public function __construct(TestExtractor $extractor, RuleValidator $ruleValidator)
     {
-        $this->extractor = $extractor;
+        $this->extractor     = $extractor;
         $this->ruleValidator = $ruleValidator;
     }
 
@@ -44,9 +44,7 @@ class TestParser
             $methods   = [];
             $reflected = $test->getNativeReflection();
             foreach ($reflected->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
-                if (
-                    preg_match('/^(test)[A-Za-z0-9_\x80-\xff]*/', $method->getName())
-                    && $method->getReturnType()->getName() === Rule::class
+                if (preg_match('/^(test)[A-Za-z0-9_\x80-\xff]*/', $method->getName())
                 ) {
                     $methods[] = $method->getName();
                 }

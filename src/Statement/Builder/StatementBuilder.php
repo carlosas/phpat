@@ -7,6 +7,7 @@ namespace PHPat\Statement\Builder;
 use PHPat\Selector\SelectorInterface;
 use PHPat\Test\RelationRule;
 use PhpParser\Node;
+use PHPStan\Rules\Rule as PHPStanRule;
 
 abstract class StatementBuilder
 {
