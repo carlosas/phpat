@@ -32,8 +32,8 @@ class ParentClassTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             ShouldExtend::class,
-            [new Classname(FixtureClass::class)],
-            [new Classname(SimpleAbstractClassTwo::class)]
+            [new Classname(FixtureClass::class, false)],
+            [new Classname(SimpleAbstractClassTwo::class, false)]
         );
 
         return new ParentClassRule(

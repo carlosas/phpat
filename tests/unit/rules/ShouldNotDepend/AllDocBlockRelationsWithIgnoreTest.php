@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\PHPat\unit\rules\ShouldNotDepend;
 
 use PHPat\Configuration;
+use PHPat\Rule\Assertion\Relation\ShouldNotDepend\AllDocBlockRelationsRule;
 use PHPat\Rule\Assertion\Relation\ShouldNotDepend\ShouldNotDepend;
 use PHPat\Selector\Classname;
 use PHPat\Statement\Builder\StatementBuilderFactory;
@@ -25,7 +26,7 @@ use Tests\PHPat\fixtures\Special\InterfaceWithTemplate;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
- * @extends RuleTestCase<\PHPat\Rule\Assertion\Relation\ShouldNotDepend\AllDocBlockRelationsRule>
+ * @extends RuleTestCase<AllDocBlockRelationsRule>
  */
 class AllDocBlockRelationsWithIgnoreTest extends RuleTestCase
 {
@@ -38,25 +39,25 @@ class AllDocBlockRelationsWithIgnoreTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             ShouldNotDepend::class,
-            [new Classname(FixtureClass::class)],
+            [new Classname(FixtureClass::class, false)],
             [
-                new Classname(SimpleClass::class),
-                new Classname(SimpleClassTwo::class),
-                new Classname(SimpleClassThree::class),
-                new Classname(SimpleClassFour::class),
-                new Classname(SimpleClassFive::class),
-                new Classname(SimpleClassSix::class),
-                new Classname(InterfaceWithTemplate::class),
-                new Classname(ClassImplementing::class),
-                new Classname(SimpleException::class),
-                new Classname(SimpleInterface::class),
+                new Classname(SimpleClass::class, false),
+                new Classname(SimpleClassTwo::class, false),
+                new Classname(SimpleClassThree::class, false),
+                new Classname(SimpleClassFour::class, false),
+                new Classname(SimpleClassFive::class, false),
+                new Classname(SimpleClassSix::class, false),
+                new Classname(InterfaceWithTemplate::class, false),
+                new Classname(ClassImplementing::class, false),
+                new Classname(SimpleException::class, false),
+                new Classname(SimpleInterface::class, false),
             ]
         );
 
         $configuration = $this->createMock(Configuration::class);
         $configuration->method('ignoreDocComments')->willReturn(true);
 
-        return new \PHPat\Rule\Assertion\Relation\ShouldNotDepend\AllDocBlockRelationsRule(
+        return new AllDocBlockRelationsRule(
             new StatementBuilderFactory($testParser),
             $configuration,
             $this->createReflectionProvider(),

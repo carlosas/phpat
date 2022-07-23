@@ -34,14 +34,14 @@ class MethodReturnTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             ShouldNotDepend::class,
-            [new Classname(FixtureClass::class)],
+            [new Classname(FixtureClass::class, false)],
             [
-                new Classname(SimpleClass::class),
-                new Classname(SimpleInterface::class),
+                new Classname(SimpleClass::class, false),
+                new Classname(SimpleInterface::class, false),
             ]
         );
 
-        return new \PHPat\Rule\Assertion\Relation\ShouldNotDepend\MethodReturnRule(
+        return new MethodReturnRule(
             new StatementBuilderFactory($testParser),
             $this->createMock(Configuration::class),
             $this->createReflectionProvider(),

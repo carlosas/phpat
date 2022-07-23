@@ -32,8 +32,8 @@ class NewTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             ShouldNotConstruct::class,
-            [new Classname(FixtureClass::class)],
-            [new Classname(SimpleClass::class)]
+            [new Classname(FixtureClass::class, false)],
+            [new Classname(SimpleClass::class, false)]
         );
 
         return new NewRule(

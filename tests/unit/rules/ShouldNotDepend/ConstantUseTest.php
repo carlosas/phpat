@@ -6,6 +6,7 @@ namespace Tests\PHPat\unit\rules\ShouldNotDepend;
 
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\Relation\ShouldNotDepend\ConstantUseRule;
+use PHPat\Rule\Assertion\Relation\ShouldNotDepend\ShouldNotDepend;
 use PHPat\Selector\Classname;
 use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;
@@ -30,9 +31,9 @@ class ConstantUseTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            \PHPat\Rule\Assertion\Relation\ShouldNotDepend\ShouldNotDepend::class,
-            [new Classname(FixtureClass::class)],
-            [new Classname(ClassWithConstant::class)]
+            ShouldNotDepend::class,
+            [new Classname(FixtureClass::class, false)],
+            [new Classname(ClassWithConstant::class, false)]
         );
 
         return new ConstantUseRule(

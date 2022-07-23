@@ -32,11 +32,11 @@ class ClassPropertyTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             ShouldNotDepend::class,
-            [new Classname(FixtureClass::class)],
-            [new Classname(SimpleInterface::class)]
+            [new Classname(FixtureClass::class, false)],
+            [new Classname(SimpleInterface::class, false)]
         );
 
-        return new \PHPat\Rule\Assertion\Relation\ShouldNotDepend\ClassPropertyRule(
+        return new ClassPropertyRule(
             new StatementBuilderFactory($testParser),
             $this->createMock(Configuration::class),
             $this->createReflectionProvider(),

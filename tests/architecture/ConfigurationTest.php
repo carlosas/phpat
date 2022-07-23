@@ -6,8 +6,8 @@ namespace Tests\PHPat\architecture;
 
 use PHPat\Configuration;
 use PHPat\Selector\Selector;
-use PHPat\Test\PHPat;
 use PHPat\Test\Builder\Rule;
+use PHPat\Test\PHPat;
 
 class ConfigurationTest
 {
