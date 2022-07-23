@@ -14,10 +14,10 @@ class ClassExtends implements SelectorInterface
     /**
      * @param class-string|string $classname
      */
-    public function __construct(string $classname)
+    public function __construct(string $classname, bool $isRegex)
     {
         $this->classname = $classname;
-        $this->isRegex   = isRegularExpression($classname);
+        $this->isRegex   = $isRegex;
     }
 
     public function getName(): string

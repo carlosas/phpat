@@ -15,10 +15,10 @@ class ClassNamespace implements SelectorInterface
     private string $namespace;
     private bool $isRegex;
 
-    public function __construct(string $namespace)
+    public function __construct(string $namespace, bool $isRegex)
     {
         $this->namespace = $namespace;
-        $this->isRegex   = isRegularExpression($namespace);
+        $this->isRegex   = $isRegex;
     }
 
     public function getName(): string

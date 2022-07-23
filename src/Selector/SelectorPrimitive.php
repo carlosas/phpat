@@ -41,23 +41,23 @@ class SelectorPrimitive
         return new IsEnum();
     }
 
-    public static function namespace(string $namespace): ClassNamespace
+    public static function namespace(string $namespace, bool $regex = false): ClassNamespace
     {
-        return new ClassNamespace($namespace);
+        return new ClassNamespace($namespace, $regex);
     }
 
-    public static function classname(string $fqcn): Classname
+    public static function classname(string $fqcn, bool $regex = false): Classname
     {
-        return new Classname($fqcn);
+        return new Classname($fqcn, $regex);
     }
 
-    public static function implements(string $fqcn): ClassImplements
+    public static function implements(string $fqcn, bool $regex = false): ClassImplements
     {
-        return new ClassImplements($fqcn);
+        return new ClassImplements($fqcn, $regex);
     }
 
-    public static function extends(string $fqcn): ClassExtends
+    public static function extends(string $fqcn, bool $regex = false): ClassExtends
     {
-        return new ClassExtends($fqcn);
+        return new ClassExtends($fqcn, $regex);
     }
 }

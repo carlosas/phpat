@@ -19,18 +19,6 @@ if (!function_exists('trimSeparators')) {
     }
 }
 
-if (!function_exists('isRegularExpression')) {
-    function isRegularExpression(string $string): bool
-    {
-        set_error_handler(function () {
-        }, E_WARNING);
-        $isRegularExpression = preg_match($string, "") !== false;
-        restore_error_handler();
-
-        return $isRegularExpression;
-    }
-}
-
 if (!function_exists('namesToClassStrings')) {
     /**
      * @param array<Name> $names

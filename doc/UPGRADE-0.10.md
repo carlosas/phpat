@@ -22,12 +22,17 @@ includes:
 ```
 ```neon
 # phpat.neon
-parameters:
-    phpat:
-        tests:
-            - Tests\Architecture\MyFirstTest
-            - Tests\Architecture\MySecondTest
+services:
+    -
+        class: Tests\Architecture\MyFirstTest
+        tags:
+            - phpat.test
+    -
+        class: Tests\Architecture\MySecondTest
+        tags:
+            - phpat.test
 ```
+⚠️ Your architecture tests folder should be included in the PHPStan analysed paths.
 
 Tests
 -----
@@ -51,7 +56,7 @@ PHPat::rule()
 Selectors
 ---------
 
-* Arguments do not accept the `*` wildcard anymore. Instead, you can now write a regular expression.
+* Arguments do not accept the `*` wildcard anymore. Instead, you can now use a regular expression setting the second parameter to true.
 * Composer selectors are not available anymore, at least not for now.
 * Selector methods have changed slightly and some new have been added. Check the [Selectors docs](SELECTORS.md) for more information.
 
