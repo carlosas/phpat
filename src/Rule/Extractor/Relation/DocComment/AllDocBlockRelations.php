@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PHPat\Rule\Extractor\Relation;
+namespace PHPat\Rule\Extractor\Relation\DocComment;
 
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
@@ -60,7 +60,6 @@ trait AllDocBlockRelations
         $names = [];
         $tags  = array_filter(
             array_merge(
-                $resolvedPhpDoc->getVarTags(),
                 $resolvedPhpDoc->getMethodTags(),
                 $resolvedPhpDoc->getPropertyTags(),
                 $resolvedPhpDoc->getTemplateTags(),

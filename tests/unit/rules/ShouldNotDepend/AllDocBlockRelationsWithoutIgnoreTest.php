@@ -49,7 +49,6 @@ class AllDocBlockRelationsWithoutIgnoreTest extends RuleTestCase
             [sprintf('%s should not depend on %s', FixtureClass::class, ClassImplementing::class), 64],
             [sprintf('%s should not depend on %s', FixtureClass::class, SimpleException::class), 64],
             [sprintf('%s should not depend on %s', FixtureClass::class, SimpleInterface::class), 64],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClass::class), 67],
         ]);
     }
 

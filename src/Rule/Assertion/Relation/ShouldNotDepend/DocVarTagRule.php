@@ -1,0 +1,17 @@
+<?php
+
+declare(strict_types=1);
+
+namespace PHPat\Rule\Assertion\Relation\ShouldNotDepend;
+
+use PHPat\Rule\Extractor\Relation\DocComment\VarTagExtractor;
+use PhpParser\Node;
+use PHPStan\Rules\Rule;
+
+/**
+ * @implements Rule<Node\Expr\Variable>
+ */
+class DocVarTagRule extends ShouldNotDepend implements Rule
+{
+    use VarTagExtractor;
+}
