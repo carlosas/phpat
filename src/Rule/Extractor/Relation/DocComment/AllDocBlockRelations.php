@@ -67,7 +67,6 @@ trait AllDocBlockRelations
                 $resolvedPhpDoc->getImplementsTags(),
                 $resolvedPhpDoc->getUsesTags(),
                 [$resolvedPhpDoc->getReturnTag()],
-                [$resolvedPhpDoc->getThrowsTag()],
                 $resolvedPhpDoc->getMixinTags(),
                 $resolvedPhpDoc->getTypeAliasTags(),
                 $resolvedPhpDoc->getTypeAliasImportTags(),
