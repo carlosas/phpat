@@ -42,6 +42,10 @@ services:
 		tags:
 			- phpstan.rules.rule
 	-
+		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\DocReturnTagRule
+		tags:
+			- phpstan.rules.rule
+	-
 		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\ConstantUseRule
 		tags:
 			- phpstan.rules.rule
