@@ -61,7 +61,6 @@ trait AllDocBlockRelations
         $tags  = array_filter(
             array_merge(
                 $resolvedPhpDoc->getMethodTags(),
-                $resolvedPhpDoc->getPropertyTags(),
                 $resolvedPhpDoc->getTemplateTags(),
                 $resolvedPhpDoc->getExtendsTags(),
                 $resolvedPhpDoc->getImplementsTags(),

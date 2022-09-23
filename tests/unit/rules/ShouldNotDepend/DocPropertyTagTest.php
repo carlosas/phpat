@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests\PHPat\unit\rules\ShouldNotDepend;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\Relation\ShouldNotDepend\AllDocBlockRelationsRule;
+use PHPat\Rule\Assertion\Relation\ShouldNotDepend\DocPropertyTagRule;
 use PHPat\Rule\Assertion\Relation\ShouldNotDepend\ShouldNotDepend;
 use PHPat\Selector\Classname;
 use PHPat\Statement\Builder\StatementBuilderFactory;
@@ -26,16 +26,16 @@ use Tests\PHPat\fixtures\Special\InterfaceWithTemplate;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
- * @extends RuleTestCase<AllDocBlockRelationsRule>
+ * @extends RuleTestCase<DocPropertyTagRule>
  */
-class AllDocBlockRelationsWithoutIgnoreTest extends RuleTestCase
+class DocPropertyTagTest extends RuleTestCase
 {
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassFour::class), 28],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassFive::class), 28],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassSix::class), 28],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClass::class), 28],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassTwo::class), 28],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassThree::class), 28],
         ]);
     }
 
@@ -61,7 +61,7 @@ class AllDocBlockRelationsWithoutIgnoreTest extends RuleTestCase
         $configuration = $this->createMock(Configuration::class);
         $configuration->method('ignoreDocComments')->willReturn(false);
 
-        return new AllDocBlockRelationsRule(
+        return new DocPropertyTagRule(
             new StatementBuilderFactory($testParser),
             $configuration,
             $this->createReflectionProvider(),
