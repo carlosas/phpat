@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Tests\PHPat\unit\rules\ShouldNotDepend;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\Relation\ShouldNotDepend\AllDocBlockRelationsRule;
+use PHPat\Rule\Assertion\Relation\ShouldNotDepend\DocMethodTagRule;
+use PHPat\Rule\Assertion\Relation\ShouldNotDepend\DocMixinTagRule;
 use PHPat\Rule\Assertion\Relation\ShouldNotDepend\ShouldNotDepend;
 use PHPat\Selector\Classname;
 use PHPat\Statement\Builder\StatementBuilderFactory;
@@ -26,13 +27,14 @@ use Tests\PHPat\fixtures\Special\InterfaceWithTemplate;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
- * @extends RuleTestCase<AllDocBlockRelationsRule>
+ * @extends RuleTestCase<DocMixinTagRule>
  */
-class AllDocBlockRelationsWithoutIgnoreTest extends RuleTestCase
+class DocMixinTagTest extends RuleTestCase
 {
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassSix::class), 28],
         ]);
     }
 
@@ -58,7 +60,7 @@ class AllDocBlockRelationsWithoutIgnoreTest extends RuleTestCase
         $configuration = $this->createMock(Configuration::class);
         $configuration->method('ignoreDocComments')->willReturn(false);
 
-        return new AllDocBlockRelationsRule(
+        return new DocMixinTagRule(
             new StatementBuilderFactory($testParser),
             $configuration,
             $this->createReflectionProvider(),
