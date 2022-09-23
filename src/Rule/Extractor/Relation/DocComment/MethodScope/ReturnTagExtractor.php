@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace PHPat\Rule\Extractor\Relation\DocComment;
+namespace PHPat\Rule\Extractor\Relation\DocComment\MethodScope;
 
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
+use PHPStan\PhpDoc\Tag\ReturnTag;
 
-trait ParamTagExtractor
+trait ReturnTagExtractor
 {
     public function getNodeType(): string
     {
@@ -51,7 +52,8 @@ trait ParamTagExtractor
         );
 
         $names = [];
-        foreach ($resolvedPhpDoc->getParamTags() as $tag) {
+        $tag   = $resolvedPhpDoc->getReturnTag();
+        if ($tag instanceof ReturnTag) {
             array_push($names, ...$tag->getType()->getReferencedClasses());
         }
 

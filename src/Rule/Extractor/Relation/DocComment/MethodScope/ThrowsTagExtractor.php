@@ -2,16 +2,17 @@
 
 declare(strict_types=1);
 
-namespace PHPat\Rule\Extractor\Relation\DocComment;
+namespace PHPat\Rule\Extractor\Relation\DocComment\MethodScope;
 
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
+use PHPStan\PhpDoc\Tag\ThrowsTag;
 
-trait VarTagExtractor
+trait ThrowsTagExtractor
 {
     public function getNodeType(): string
     {
-        return Node\Expr\Variable::class;
+        return Node\Stmt\ClassMethod::class;
     }
 
     /**
@@ -51,7 +52,8 @@ trait VarTagExtractor
         );
 
         $names = [];
-        foreach (array_filter($resolvedPhpDoc->getVarTags()) as $tag) {
+        $tag   = $resolvedPhpDoc->getThrowsTag();
+        if ($tag instanceof ThrowsTag) {
             array_push($names, ...$tag->getType()->getReferencedClasses());
         }
 

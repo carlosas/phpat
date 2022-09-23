@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PHPat\Rule\Assertion\Relation\ShouldNotDepend;
 
-use PHPat\Rule\Extractor\Relation\DocComment\VarTagExtractor;
+use PHPat\Rule\Extractor\Relation\DocComment\MethodScope\VarTagExtractor;
 use PhpParser\Node;
 use PHPStan\Rules\Rule;
 
