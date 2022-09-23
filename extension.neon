@@ -26,23 +26,7 @@ services:
 
 	# ShouldNotDepend rules
 	-
-		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\AllDocBlockRelationsRule
-		tags:
-			- phpstan.rules.rule
-	-
-		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\DocVarTagRule
-		tags:
-			- phpstan.rules.rule
-	-
-		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\DocParamTagRule
-		tags:
-			- phpstan.rules.rule
-	-
-		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\DocThrowsTagRule
-		tags:
-			- phpstan.rules.rule
-	-
-		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\DocReturnTagRule
+		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\ClassPropertyRule
 		tags:
 			- phpstan.rules.rule
 	-
@@ -50,7 +34,31 @@ services:
 		tags:
 			- phpstan.rules.rule
 	-
-		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\ClassPropertyRule
+		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\DocMethodTagRule
+		tags:
+			- phpstan.rules.rule
+	-
+		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\DocMixinTagRule
+		tags:
+			- phpstan.rules.rule
+	-
+		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\DocParamTagRule
+		tags:
+			- phpstan.rules.rule
+	-
+		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\DocPropertyTagRule
+		tags:
+			- phpstan.rules.rule
+	-
+		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\DocReturnTagRule
+		tags:
+			- phpstan.rules.rule
+	-
+		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\DocThrowsTagRule
+		tags:
+			- phpstan.rules.rule
+	-
+		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\DocVarTagRule
 		tags:
 			- phpstan.rules.rule
 	-
