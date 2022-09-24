@@ -18,7 +18,7 @@
 
 ⚠ PHPat has been converted into a PHPStan extension in **v0.10**
 <br />
-The standalone version (v0.9) will be still available and will receive critical bugfixes if needed.
+The standalone version (v0.9) will still be available and receive critical bugfixes if needed.
 
 <hr />
 
