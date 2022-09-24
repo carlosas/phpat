@@ -53,6 +53,12 @@ PHPat::rule()
     );
 ```
 
+You can use regular expressions in selectors, but be aware that you might need to escape the backlashes properly.
+Example:
+```php
+Selector::namespace('/^App\\\\.*\\\\Application\\\\.*/', true),
+```
+
 Selectors
 ---------
 
