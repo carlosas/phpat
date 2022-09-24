@@ -8,5 +8,5 @@ use PHPat\Test\RelationRule;
 
 interface Rule
 {
-    public function return(): RelationRule;
+    public function __invoke(): RelationRule;
 }

@@ -66,7 +66,7 @@ class TestParser
     private function buildRules(array $rules): array
     {
         $rules = array_map(
-            static fn (Rule $rule): RelationRule => $rule->return(),
+            static fn (Rule $rule): RelationRule => $rule(),
             $rules
         );
 

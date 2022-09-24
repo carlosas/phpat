@@ -15,7 +15,7 @@ abstract class AbstractStep implements Rule
         $this->rule = $rule;
     }
 
-    final public function return(): RelationRule
+    final public function __invoke(): RelationRule
     {
         return $this->rule;
     }
