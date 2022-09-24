@@ -1,0 +1,14 @@
+includes:
+	- ../extension.neon
+
+parameters:
+    level: 1
+    paths:
+        - ../src
+        - ../tests/architecture
+
+services:
+    -
+        class: Tests\PHPat\architecture\ConfigurationTest
+        tags:
+            - phpat.test

@@ -1,6 +1,0 @@
-src:
-  path: php7/fixtures/
-tests:
-  path: php7/architecture/
-options:
-  verbosity: 2

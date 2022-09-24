@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.10.0 ⚠
+* **Reconversion of the project as a PHPStan extension**
+
+  Read the [upgrade guide](doc/UPGRADE-0.10.md) for more information.
+
 ## 0.9.1
 * Read configured `tests.path` recursively
 
