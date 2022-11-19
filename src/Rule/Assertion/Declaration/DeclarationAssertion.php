@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PHPat\Rule\Assertion\Relation;
+namespace PHPat\Rule\Assertion\Declaration;
 
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\Assertion;
@@ -17,7 +17,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\RuleError;
 use PHPStan\Type\FileTypeMapper;
 
-abstract class RelationAssertion implements Assertion
+abstract class DeclarationAssertion implements Assertion
 {
     /** @var array<array{SelectorInterface, array<SelectorInterface>, array<SelectorInterface>, array<SelectorInterface>}> */
     protected array $statements;
@@ -26,7 +26,7 @@ abstract class RelationAssertion implements Assertion
     protected FileTypeMapper $fileTypeMapper;
 
     /**
-     * @param class-string<RelationAssertion> $assertion
+     * @param class-string<DeclarationAssertion> $assertion
      */
     public function __construct(
         string $assertion,

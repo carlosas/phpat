@@ -4,24 +4,20 @@ declare(strict_types=1);
 
 namespace PHPat\Test;
 
-use PHPat\Rule\Assertion\Relation\RelationAssertion;
+use PHPat\Rule\Assertion\Declaration\DeclarationAssertion;
 use PHPat\Selector\SelectorInterface;
 
-class RelationRule implements Rule
+class DeclarationRule implements Rule
 {
     /** @var array<SelectorInterface> */
     public array $subjects = [];
     /** @var array<SelectorInterface> */
     public array $subjectExcludes = [];
-    /** @var array<SelectorInterface> */
-    public array $targets = [];
-    /** @var array<SelectorInterface> */
-    public array $targetExcludes = [];
-    /** @var null|class-string<RelationAssertion> */
+    /** @var null|class-string<DeclarationAssertion> */
     public ?string $assertion = null;
 
     /**
-     * @return null|class-string<RelationAssertion>
+     * @return null|class-string<DeclarationAssertion>
      */
     public function getAssertion(): ?string
     {
@@ -40,11 +36,11 @@ class RelationRule implements Rule
 
     public function getTargets(): array
     {
-        return $this->targets;
+        return [];
     }
 
     public function getTargetExcludes(): array
     {
-        return $this->targetExcludes;
+        return [];
     }
 }

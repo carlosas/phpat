@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace PHPat\Statement\Builder;
+namespace PHPat\Statement\Builder\Relation;
 
 use PHPat\Rule\Assertion\Relation\ShouldExtend\ShouldExtend;
+use PHPat\Statement\Builder\RelationStatementBuilder;
 
-class ShouldExtendStatementBuilder extends StatementBuilder
+class ShouldExtendStatementBuilder extends RelationStatementBuilder
 {
     /**
      * @return class-string<ShouldExtend>
