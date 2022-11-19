@@ -8,7 +8,7 @@ use PhpParser\Node;
 use PHPStan\Rules\Rule as PHPStanRule;
 
 /**
- * @implements Assertion<Node>
+ * @extends PHPStanRule<Node>
  */
 interface Assertion extends PHPStanRule
 {
