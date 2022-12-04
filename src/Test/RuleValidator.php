@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PHPat\Test;
 
 use Exception;
+use PHPat\Rule\Assertion\Relation\RelationAssertion;
 
 class RuleValidator
 {
@@ -24,7 +25,7 @@ class RuleValidator
         if ($rule->assertion === null) {
             throw new Exception('One of your PHPat rules has no assertion');
         }
-        if ($rule->targets === []) {
+        if (is_a($rule->assertion, RelationAssertion::class) && $rule->targets === []) {
             throw new Exception('One of your PHPat rules has no targets');
         }
     }

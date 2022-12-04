@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PHPat\Statement\Builder;
 
 use InvalidArgumentException;
+use PHPat\Rule\Assertion\Declaration\DeclarationAssertion;
 use PHPat\Rule\Assertion\Relation\RelationAssertion;
 use PHPat\Test\Rule;
 use PHPat\Test\TestParser;
@@ -28,6 +29,13 @@ class StatementBuilderFactory
             /** @var class-string<RelationStatementBuilder> $statementBuilder */
             $statementBuilder = sprintf(
                 '%s\\Relation\\%sStatementBuilder',
+                __NAMESPACE__,
+                substr($classname, $classnamePos)
+            );
+        } elseif (is_a($classname, DeclarationAssertion::class, true)) {
+            /** @var class-string<DeclarationStatementBuilder> $statementBuilder */
+            $statementBuilder = sprintf(
+                '%s\\Declaration\\%sStatementBuilder',
                 __NAMESPACE__,
                 substr($classname, $classnamePos)
             );

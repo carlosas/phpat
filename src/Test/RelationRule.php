@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PHPat\Test;
 
+use PHPat\Rule\Assertion\Declaration\DeclarationAssertion;
 use PHPat\Rule\Assertion\Relation\RelationAssertion;
 use PHPat\Selector\SelectorInterface;
 
@@ -17,11 +18,11 @@ class RelationRule implements Rule
     public array $targets = [];
     /** @var array<SelectorInterface> */
     public array $targetExcludes = [];
-    /** @var null|class-string<RelationAssertion> */
+    /** @var null|class-string<DeclarationAssertion|RelationAssertion> */
     public ?string $assertion = null;
 
     /**
-     * @return null|class-string<RelationAssertion>
+     * @return null|class-string<DeclarationAssertion|RelationAssertion>
      */
     public function getAssertion(): ?string
     {

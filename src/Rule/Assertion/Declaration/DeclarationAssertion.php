@@ -6,7 +6,6 @@ namespace PHPat\Rule\Assertion\Declaration;
 
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\Assertion;
-use PHPat\Selector\Classname;
 use PHPat\Selector\SelectorInterface;
 use PHPat\ShouldNotHappenException;
 use PHPat\Statement\Builder\StatementBuilderFactory;
@@ -46,62 +45,41 @@ abstract class DeclarationAssertion implements Assertion
      */
     public function processNode(Node $node, Scope $scope): array
     {
-        $nodes = $this->extractNodeClassNames($node, $scope);
-
-        if (!$this->ruleApplies($scope, $nodes)) {
+        if (!$this->ruleApplies($scope)) {
             return [];
         }
 
-        return $this->validateGetErrors($scope, $nodes);
+        $meetsDeclaration = $this->meetsDeclaration($node, $scope);
+
+        return $this->validateGetErrors($scope, $meetsDeclaration);
     }
 
-    /**
-     * @return array<class-string>
-     */
-    abstract protected function extractNodeClassNames(Node $node, Scope $scope): array;
+    abstract protected function meetsDeclaration(Node $node, Scope $scope): bool;
 
     /**
      * @param class-string $subject
      */
-    abstract protected function getMessage(string $subject, string $target): string;
+    abstract protected function getMessage(string $subject): string;
 
     /**
-     * @param array<SelectorInterface> $targets
-     * @param array<SelectorInterface> $targetExcludes
-     * @param array<class-string> $nodes
      * @return array<RuleError>
      */
-    abstract protected function applyValidation(ClassReflection $subject, array $targets, array $targetExcludes, array $nodes): array;
+    abstract protected function applyValidation(ClassReflection $subject, bool $meetsDeclaration): array;
 
-    /**
-     * @param array<class-string> $nodes
-     */
-    protected function ruleApplies(Scope $scope, array $nodes): bool
+    protected function ruleApplies(Scope $scope): bool
     {
         if (!($scope->isInClass())) {
             return false;
         }
 
-        if (empty($nodes)) {
-            return false;
-        }
-
-        foreach ($nodes as $node) {
-            $class = $scope->getClassReflection();
-            if ($class !== null && !(new Classname($node, false))->matches($class)) {
-                return true;
-            }
-        }
-
-        return false;
+        return $scope->getClassReflection() !== null;
     }
 
     /**
-     * @param array<class-string> $nodes
      * @throws ShouldNotHappenException
      * @return array<RuleError>
      */
-    protected function validateGetErrors(Scope $scope, array $nodes): array
+    protected function validateGetErrors(Scope $scope, bool $meetsDeclaration): array
     {
         $errors  = [];
         $subject = $scope->getClassReflection();
@@ -109,7 +87,7 @@ abstract class DeclarationAssertion implements Assertion
             throw new ShouldNotHappenException();
         }
 
-        foreach ($this->statements as [$selector, $subjectExcludes, $targets, $targetExcludes]) {
+        foreach ($this->statements as [$selector, $subjectExcludes]) {
             if ($subject->isBuiltin() || !$selector->matches($subject)) {
                 continue;
             }
@@ -119,7 +97,7 @@ abstract class DeclarationAssertion implements Assertion
                 }
             }
 
-            array_push($errors, ...$this->applyValidation($subject, $targets, $targetExcludes, $nodes));
+            array_push($errors, ...$this->applyValidation($subject, $meetsDeclaration));
         }
 
         return $errors;
