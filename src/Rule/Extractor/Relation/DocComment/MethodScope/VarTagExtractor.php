@@ -33,18 +33,13 @@ trait VarTagExtractor
             return [];
         }
 
-        $classReflection = $scope->getClassReflection();
-        if ($classReflection === null) {
-            return [];
-        }
-        $classReflectionName = $classReflection->getName();
-
+        $classReflection    = $scope->getClassReflection();
         $traitReflection    = $scope->getTraitReflection();
         $functionReflection = $scope->getFunction();
 
         $resolvedPhpDoc = $this->fileTypeMapper->getResolvedPhpDoc(
             $scope->getFile(),
-            $classReflectionName,
+            $classReflection->getName(),
             $traitReflection ? $traitReflection->getName() : null,
             $functionReflection ? $functionReflection->getName() : null,
             $docComment->getText()
