@@ -16,6 +16,9 @@ trait FinalExtractor
         return InClassNode::class;
     }
 
+    /**
+     * @param InClassNode $node
+     */
     protected function meetsDeclaration(Node $node, Scope $scope): bool
     {
         return $node->getClassReflection()->isFinal();

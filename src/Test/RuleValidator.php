@@ -12,20 +12,15 @@ class RuleValidator
     /**
      * @throws Exception
      */
-    public function validate(RelationRule $rule): void
+    public function validate(Rule $rule): void
     {
-        $this->validateRelationRule($rule);
-    }
-
-    private function validateRelationRule(RelationRule $rule): void
-    {
-        if ($rule->subjects === []) {
+        if ($rule->getSubjects() === []) {
             throw new Exception('One of your PHPat rules has no subjects');
         }
-        if ($rule->assertion === null) {
+        if ($rule->getAssertion() === null) {
             throw new Exception('One of your PHPat rules has no assertion');
         }
-        if (is_a($rule->assertion, RelationAssertion::class) && $rule->targets === []) {
+        if (is_subclass_of($rule->getAssertion(), RelationAssertion::class) && $rule->getTargets() === []) {
             throw new Exception('One of your PHPat rules has no targets');
         }
     }
