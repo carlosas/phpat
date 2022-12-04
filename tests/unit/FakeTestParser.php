@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tests\PHPat\unit;
 
 use PHPat\Rule\Assertion\Assertion;
-use PHPat\Rule\Assertion\Relation\RelationAssertion;
 use PHPat\Selector\SelectorInterface;
 use PHPat\Test\RelationRule;
 use PHPat\Test\TestParser;

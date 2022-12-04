@@ -7,8 +7,6 @@ namespace Tests\PHPat\unit\rules\ShouldBeFinal;
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\Declaration\ShouldBeFinal\IsFinalRule;
 use PHPat\Rule\Assertion\Declaration\ShouldBeFinal\ShouldBeFinal;
-use PHPat\Rule\Assertion\Relation\ShouldExtend\ParentClassRule;
-use PHPat\Rule\Assertion\Relation\ShouldExtend\ShouldExtend;
 use PHPat\Selector\Classname;
 use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;

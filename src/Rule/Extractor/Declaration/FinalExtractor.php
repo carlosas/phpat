@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PHPat\Rule\Extractor\Declaration;
 
-use PHPat\Rule\Assertion\Declaration\Declaration;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassNode;
