@@ -18,11 +18,11 @@ class RelationRule implements Rule
     public array $targets = [];
     /** @var array<SelectorInterface> */
     public array $targetExcludes = [];
-    /** @var null|class-string<RelationAssertion>|class-string<DeclarationAssertion> */
+    /** @var null|class-string<DeclarationAssertion>|class-string<RelationAssertion> */
     public ?string $assertion = null;
 
     /**
-     * @return null|class-string<RelationAssertion>|class-string<DeclarationAssertion>
+     * @return null|class-string<DeclarationAssertion>|class-string<RelationAssertion>
      */
     public function getAssertion(): ?string
     {
