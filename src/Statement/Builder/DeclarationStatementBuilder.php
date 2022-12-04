@@ -25,6 +25,9 @@ abstract class DeclarationStatementBuilder implements StatementBuilder
         $this->rules = $rules;
     }
 
+    /**
+     * @return array<array{SelectorInterface, array<SelectorInterface>}>
+     */
     public function build(): array
     {
         $params = $this->extractCurrentAssertion($this->rules);

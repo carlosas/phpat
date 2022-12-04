@@ -17,10 +17,14 @@ class RuleValidator
         if ($rule->getSubjects() === []) {
             throw new Exception('One of your PHPat rules has no subjects');
         }
-        if ($rule->getAssertion() === null) {
+
+        $assertion = $rule->getAssertion();
+
+        if ($assertion === null) {
             throw new Exception('One of your PHPat rules has no assertion');
         }
-        if (is_subclass_of($rule->getAssertion(), RelationAssertion::class) && $rule->getTargets() === []) {
+
+        if (is_subclass_of($assertion, RelationAssertion::class) && $rule->getTargets() === []) {
             throw new Exception('One of your PHPat rules has no targets');
         }
     }

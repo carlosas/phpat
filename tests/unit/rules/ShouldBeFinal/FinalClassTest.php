@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Tests\PHPat\unit\rules\ShouldExtend;
+namespace Tests\PHPat\unit\rules\ShouldBeFinal;
 
 use PHPat\Configuration;
+use PHPat\Rule\Assertion\Declaration\ShouldBeFinal\IsFinalRule;
 use PHPat\Rule\Assertion\Declaration\ShouldBeFinal\ShouldBeFinal;
 use PHPat\Rule\Assertion\Relation\ShouldExtend\ParentClassRule;
 use PHPat\Rule\Assertion\Relation\ShouldExtend\ShouldExtend;
@@ -18,7 +19,7 @@ use Tests\PHPat\fixtures\Simple\SimpleAbstractClassTwo;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
- * @extends RuleTestCase<ParentClassRule>
+ * @extends RuleTestCase<IsFinalRule>
  */
 class FinalClassTest extends RuleTestCase
 {
@@ -37,7 +38,7 @@ class FinalClassTest extends RuleTestCase
             [new Classname(SimpleAbstractClassTwo::class, false)]
         );
 
-        return new ParentClassRule(
+        return new IsFinalRule(
             new StatementBuilderFactory($testParser),
             $this->createMock(Configuration::class),
             $this->createReflectionProvider(),

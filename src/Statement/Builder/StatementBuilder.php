@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace PHPat\Statement\Builder;
 
-use PHPat\Selector\SelectorInterface;
-
 interface StatementBuilder
 {
     /**
-     * @return array<array{SelectorInterface, array<SelectorInterface>, array<SelectorInterface>, array<SelectorInterface>}>
+     * @return array<mixed>
      */
     public function build(): array;
 }

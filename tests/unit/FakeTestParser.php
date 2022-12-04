@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\PHPat\unit;
 
+use PHPat\Rule\Assertion\Assertion;
 use PHPat\Rule\Assertion\Relation\RelationAssertion;
 use PHPat\Selector\SelectorInterface;
 use PHPat\Test\RelationRule;
@@ -12,7 +13,7 @@ use ReflectionClass;
 
 class FakeTestParser extends TestParser
 {
-    /** @var class-string<\PHPat\Rule\Assertion\Relation\RelationAssertion> */
+    /** @var class-string<Assertion> */
     public string $assertion;
     /** @var array<SelectorInterface> */
     public array $subjects;
@@ -30,7 +31,7 @@ class FakeTestParser extends TestParser
     }
 
     /**
-     * @param class-string<RelationAssertion> $assertion
+     * @param class-string<Assertion> $assertion
      * @param array<SelectorInterface> $subjects
      * @param array<SelectorInterface> $targets
      */
