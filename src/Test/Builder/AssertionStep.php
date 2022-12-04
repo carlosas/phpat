@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PHPat\Test\Builder;
 
 use PHPat\Rule\Assertion\Declaration\ShouldBeFinal\ShouldBeFinal;
+use PHPat\Rule\Assertion\Declaration\ShouldNotBeFinal\ShouldNotBeFinal;
 use PHPat\Rule\Assertion\Relation\ShouldExtend\ShouldExtend;
 use PHPat\Rule\Assertion\Relation\ShouldImplement\ShouldImplement;
 use PHPat\Rule\Assertion\Relation\ShouldNotConstruct\ShouldNotConstruct;
@@ -17,6 +18,13 @@ class AssertionStep extends AbstractStep
     public function shouldBeFinal(): Rule
     {
         $this->rule->assertion = ShouldBeFinal::class;
+
+        return new BuildStep($this->rule);
+    }
+
+    public function shouldNotBeFinal(): Rule
+    {
+        $this->rule->assertion = ShouldNotBeFinal::class;
 
         return new BuildStep($this->rule);
     }

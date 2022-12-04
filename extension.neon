@@ -21,6 +21,12 @@ services:
 		tags:
 			- phpstan.rules.rule
 
+	# ShouldNotBeFinal rules
+	-
+		class: PHPat\Rule\Assertion\Declaration\ShouldNotBeFinal\IsFinalRule
+		tags:
+			- phpstan.rules.rule
+
     # # # # # RELATION RULES # # # # #
 
 	# ShouldImplement rules
