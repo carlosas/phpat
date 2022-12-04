@@ -43,7 +43,7 @@ class MethodReturnTest extends RuleTestCase
 
         return new MethodReturnRule(
             new StatementBuilderFactory($testParser),
-            $this->createMock(Configuration::class),
+            new Configuration(false),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );
