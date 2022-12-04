@@ -57,12 +57,9 @@ class DocMethodTagTest extends RuleTestCase
             ]
         );
 
-        $configuration = $this->createMock(Configuration::class);
-        $configuration->method('ignoreDocComments')->willReturn(false);
-
         return new DocMethodTagRule(
             new StatementBuilderFactory($testParser),
-            $configuration,
+            new Configuration(false),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

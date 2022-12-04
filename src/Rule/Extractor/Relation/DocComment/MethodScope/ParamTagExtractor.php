@@ -39,7 +39,7 @@ trait ParamTagExtractor
 
         $resolvedPhpDoc = $this->fileTypeMapper->getResolvedPhpDoc(
             $scope->getFile(),
-            $classReflection->getName(),
+            $classReflection !== null ? $classReflection->getName() : null,
             $traitReflection ? $traitReflection->getName() : null,
             $functionReflection ? $functionReflection->getName() : null,
             $docComment->getText()
