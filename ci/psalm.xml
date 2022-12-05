@@ -17,6 +17,9 @@
         <LessSpecificImplementedReturnType>
             <errorLevel type="suppress"><directory name="../src/Rule/Extractor" /></errorLevel>
         </LessSpecificImplementedReturnType>
+        <PossiblyNullReference>
+            <errorLevel type="suppress"><directory name="../src/Rule/Extractor/Relation/DocComment" /></errorLevel>
+        </PossiblyNullReference>
 
         <UndefinedDocblockClass>
             <errorLevel type="suppress"><file name="../src/Test/TestParser.php" /></errorLevel>
