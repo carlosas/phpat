@@ -40,7 +40,7 @@ trait ReturnTagExtractor
 
         $resolvedPhpDoc = $this->fileTypeMapper->getResolvedPhpDoc(
             $scope->getFile(),
-            $classReflection !== null ? $classReflection->getName() : null,
+            $classReflection->getName(),
             $traitReflection ? $traitReflection->getName() : null,
             $functionReflection ? $functionReflection->getName() : null,
             $docComment->getText()
