@@ -31,4 +31,4 @@ Select all enums.
 Select all classes that are abstract.
 
 ### `Selector::final()`
-Select all classes that are abstract.
+Select all classes that are final.
