@@ -15,6 +15,12 @@ services:
 
     # # # # # DECLARATION RULES # # # # #
 
+	# ShouldBeAbstract rules
+	-
+		class: PHPat\Rule\Assertion\Declaration\ShouldBeAbstract\AbstractRule
+		tags:
+			- phpstan.rules.rule
+
 	# ShouldBeFinal rules
 	-
 		class: PHPat\Rule\Assertion\Declaration\ShouldBeFinal\IsFinalRule
