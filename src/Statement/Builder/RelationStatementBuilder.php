@@ -10,19 +10,23 @@ use PHPat\Test\Rule;
 use PhpParser\Node;
 use PHPStan\Rules\Rule as PHPStanRule;
 
-abstract class RelationStatementBuilder implements StatementBuilder
+class RelationStatementBuilder implements StatementBuilder
 {
     /** @var array<array{SelectorInterface, array<SelectorInterface>, array<SelectorInterface>, array<SelectorInterface>}> */
     protected $statements = [];
     /** @var array<RelationRule> */
     protected array $rules;
+    /** @var class-string<PHPStanRule<Node>> */
+    private string $assertion;
 
     /**
+     * @param class-string<PHPStanRule<Node>> $assertion
      * @param array<RelationRule> $rules
      */
-    final public function __construct(array $rules)
+    final public function __construct(string $assertion, array $rules)
     {
-        $this->rules = $rules;
+        $this->assertion = $assertion;
+        $this->rules     = $rules;
     }
 
     /**
@@ -38,11 +42,6 @@ abstract class RelationStatementBuilder implements StatementBuilder
 
         return $this->statements;
     }
-
-    /**
-     * @return class-string<PHPStanRule<Node>>
-     */
-    abstract protected function getAssertionClassname(): string;
 
     /**
      * @param array<SelectorInterface> $subjectExcludes
@@ -66,7 +65,7 @@ abstract class RelationStatementBuilder implements StatementBuilder
     {
         $result = [];
         foreach ($rules as $rule) {
-            if ($rule->getAssertion() === $this->getAssertionClassname()) {
+            if ($rule->getAssertion() === $this->assertion) {
                 foreach ($rule->getSubjects() as $selector) {
                     $result[] = [$selector, $rule->getSubjectExcludes(), $rule->getTargets(), $rule->getTargetExcludes()];
                 }
