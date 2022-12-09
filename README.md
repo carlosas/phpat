@@ -119,7 +119,7 @@ class MyFirstTest
                 Selector::namespace('App\Application'),
                 Selector::namespace('App\Infrastructure'),
                 Selector::classname(SuperForbiddenClass::class),
-                Selector::classname('/^SomeVendor\\.*\\ForbiddenSubfolder\\.*/', true)
+                Selector::classname('/^SomeVendor\\\.*\\\ForbiddenSubfolder\\\.*/', true)
             );
     }
 }
