@@ -50,7 +50,7 @@ jobs:
         with:
           dependencies: "${{ matrix.dependencies }}"
       - name: "Run friendsofphp/php-cs-fixer"
-        run: "vendor/bin/php-cs-fixer fix --config ./ci/php-cs-fixer.php"
+        run: "PHP_CS_FIXER_IGNORE_ENV=1 vendor/bin/php-cs-fixer fix --config ./ci/php-cs-fixer.php"
 
   architecture-analysis:
     name: "Architecture analysis"
