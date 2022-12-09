@@ -37,11 +37,6 @@ abstract class ShouldNotBeFinal extends DeclarationAssertion
         return $this->applyShouldNot($subject, $meetsDeclaration);
     }
 
-    protected function getDeclarationType(): string
-    {
-        return Declaration::FINAL;
-    }
-
     protected function getMessage(string $subject): string
     {
         return sprintf('%s should not be final', $subject);

@@ -37,11 +37,6 @@ abstract class ShouldBeFinal extends DeclarationAssertion
         return $this->applyShould($subject, $meetsDeclaration);
     }
 
-    protected function getDeclarationType(): string
-    {
-        return Declaration::FINAL;
-    }
-
     protected function getMessage(string $subject): string
     {
         return sprintf('%s should be final', $subject);
