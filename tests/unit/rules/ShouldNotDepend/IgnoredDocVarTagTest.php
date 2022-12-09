@@ -54,12 +54,9 @@ class IgnoredDocVarTagTest extends RuleTestCase
             ]
         );
 
-        $configuration = $this->createMock(Configuration::class);
-        $configuration->method('ignoreDocComments')->willReturn(true);
-
         return new DocVarTagRule(
             new StatementBuilderFactory($testParser),
-            $configuration,
+            new Configuration(true),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

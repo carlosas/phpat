@@ -38,7 +38,7 @@ class MethodParamTest extends RuleTestCase
 
         return new MethodParamRule(
             new StatementBuilderFactory($testParser),
-            $this->createMock(Configuration::class),
+            new Configuration(false),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

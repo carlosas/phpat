@@ -18,4 +18,11 @@ class ConfigurationTest
             ->shouldNotDependOn()
             ->classes(Selector::all());
     }
+
+    public function test_configuration_is_final(): Rule
+    {
+        return PHPat::rule()
+            ->classes(Selector::classname(Configuration::class))
+            ->shouldBeFinal();
+    }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PHPat\Rule\Assertion\Relation;
 
 use PHPat\Configuration;
+use PHPat\Rule\Assertion\Assertion;
 use PHPat\Selector\Classname;
 use PHPat\Selector\SelectorInterface;
 use PHPat\ShouldNotHappenException;
@@ -13,14 +14,10 @@ use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Rules\Rule as PHPStanRule;
 use PHPStan\Rules\RuleError;
 use PHPStan\Type\FileTypeMapper;
 
-/**
- * @implements PHPStanRule<Node>
- */
-abstract class RelationAssertion implements PHPStanRule
+abstract class RelationAssertion implements Assertion
 {
     /** @var array<array{SelectorInterface, array<SelectorInterface>, array<SelectorInterface>, array<SelectorInterface>}> */
     protected array $statements;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PHPat;
 
-class Configuration
+final class Configuration
 {
     private bool $ignore_doc_comments;
 

@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace PHPat\Statement\Builder;
 
-use PHPat\Test\RelationRule;
+use InvalidArgumentException;
+use PHPat\Rule\Assertion\Declaration\DeclarationAssertion;
+use PHPat\Rule\Assertion\Relation\RelationAssertion;
+use PHPat\Test\Rule;
 use PHPat\Test\TestParser;
 
 class StatementBuilderFactory
 {
-    /** @var array<RelationRule> */
+    /** @var array<Rule> */
     private array $rules;
 
     public function __construct(TestParser $testParser)
@@ -22,12 +25,23 @@ class StatementBuilderFactory
         $lastSeparatorPos = strrpos($classname, '\\');
         $classnamePos     = $lastSeparatorPos !== false ? $lastSeparatorPos + 1 : 0;
 
-        /** @var class-string<StatementBuilder> $statementBuilder */
-        $statementBuilder = sprintf(
-            '%s\\%sStatementBuilder',
-            __NAMESPACE__,
-            substr($classname, $classnamePos)
-        );
+        if (is_a($classname, RelationAssertion::class, true)) {
+            /** @var class-string<RelationStatementBuilder> $statementBuilder */
+            $statementBuilder = sprintf(
+                '%s\\Relation\\%sStatementBuilder',
+                __NAMESPACE__,
+                substr($classname, $classnamePos)
+            );
+        } elseif (is_a($classname, DeclarationAssertion::class, true)) {
+            /** @var class-string<DeclarationStatementBuilder> $statementBuilder */
+            $statementBuilder = sprintf(
+                '%s\\Declaration\\%sStatementBuilder',
+                __NAMESPACE__,
+                substr($classname, $classnamePos)
+            );
+        } else {
+            throw new InvalidArgumentException(sprintf('"%s" is not a valid statement builder', $classname));
+        }
 
         return new $statementBuilder($this->rules);
     }

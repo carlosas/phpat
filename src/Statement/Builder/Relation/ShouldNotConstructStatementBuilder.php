@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace PHPat\Statement\Builder;
+namespace PHPat\Statement\Builder\Relation;
 
 use PHPat\Rule\Assertion\Relation\ShouldNotConstruct\ShouldNotConstruct;
+use PHPat\Statement\Builder\RelationStatementBuilder;
 
-class ShouldNotConstructStatementBuilder extends StatementBuilder
+class ShouldNotConstructStatementBuilder extends RelationStatementBuilder
 {
     /**
      * @return class-string<ShouldNotConstruct>

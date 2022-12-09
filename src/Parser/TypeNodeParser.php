@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PHPat\Parser;
 
+use PHPat\ShouldNotHappenException;
 use PhpParser\Node;
 use PhpParser\Node\ComplexType;
 use PhpParser\Node\Identifier;
@@ -37,31 +38,35 @@ class TypeNodeParser
      */
     private static function parseComplex(ComplexType $type, Scope $scope): array
     {
-        switch (true) {
-            case $type instanceof NullableType:
-                $toParse = [$type->type];
-                break;
-            case $type instanceof UnionType:
-            case $type instanceof IntersectionType:
-                $toParse = $type->types;
-                break;
-            default:
-                return [];
-        }
-
         return array_map(
             static fn (Name $n) => self::parseName($n, $scope),
-            self::filterNameNodes($toParse)
+            array_filter(self::flattenType($type), static fn ($type) => $type instanceof Name)
         );
     }
 
     /**
-     * @param array<Identifier|Name> $type
-     * @return array<Name>
+     * @param NodeAbstract $type
+     * @return array<Identifier|Name>
      */
-    private static function filterNameNodes(array $type): array
+    private static function flattenType(NodeAbstract $type): array
     {
-        return array_filter($type, static fn ($type) => $type instanceof Name);
+        switch (true) {
+            case $type instanceof NullableType:
+                return self::flattenType($type->type);
+            case $type instanceof UnionType:
+            case $type instanceof IntersectionType:
+                return array_merge_recursive(
+                    ...array_map(
+                        static fn (NodeAbstract $n) => self::flattenType($n),
+                        $type->types
+                    )
+                );
+            case $type instanceof Name:
+            case $type instanceof Identifier:
+                return [$type];
+            default:
+                throw new ShouldNotHappenException();
+        }
     }
 
     private static function parseName(Name $type, Scope $scope): Name

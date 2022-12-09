@@ -12,6 +12,23 @@ services:
 		ignore_doc_comments: %phpat.ignore_doc_comments%,
 	)
 
+
+    # # # # # DECLARATION RULES # # # # #
+
+	# ShouldBeFinal rules
+	-
+		class: PHPat\Rule\Assertion\Declaration\ShouldBeFinal\IsFinalRule
+		tags:
+			- phpstan.rules.rule
+
+	# ShouldNotBeFinal rules
+	-
+		class: PHPat\Rule\Assertion\Declaration\ShouldNotBeFinal\IsFinalRule
+		tags:
+			- phpstan.rules.rule
+
+    # # # # # RELATION RULES # # # # #
+
 	# ShouldImplement rules
 	-
 		class: PHPat\Rule\Assertion\Relation\ShouldImplement\ImplementedInterfacesRule

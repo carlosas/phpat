@@ -2,17 +2,14 @@
 
 Assertion is the type of verification that can be done in the selected classes.
 
-### `shouldExtend()`
+### `shouldBeFinal()` / `shouldNotBeFinal()`
+It asserts that the selected classes are declared as **final**.
+
+### `shouldExtend()` / `shouldNotExtend()`
 It asserts that the selected classes **extend** the selected class.
 
-### `shouldNotExtend()`
-It asserts that the selected classes **do not extend** the selected classes.
-
-### `shouldImplement()`
+### `shouldImplement()` / `shouldNotImplement()`
 It asserts that the selected classes **implement** the selected interfaces.
-
-### `shouldNotImplement()`
-It asserts that the selected classes **do not implement** the selected interfaces.
 
 ### `shouldNotDependOn()`
 It asserts that the selected classes **do not depend** on the other selected classes.

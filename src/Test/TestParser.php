@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace PHPat\Test;
 
-use PHPat\Test\Builder\Rule;
+use PHPat\Test\Builder\Rule as RuleBuilder;
 use ReflectionMethod;
 
 class TestParser
 {
-    /** @var array<RelationRule> */
+    /** @var array<Rule> */
     private static array $result = [];
     private TestExtractor $extractor;
     private RuleValidator $ruleValidator;
@@ -21,7 +21,7 @@ class TestParser
     }
 
     /**
-     * @return array<RelationRule>
+     * @return array<Rule>
      */
     public function __invoke(): array
     {
@@ -33,7 +33,7 @@ class TestParser
     }
 
     /**
-     * @return array<RelationRule>
+     * @return array<Rule>
      */
     private function parse(): array
     {
@@ -60,19 +60,19 @@ class TestParser
     }
 
     /**
-     * @param array<Rule> $rules
-     * @return array<RelationRule>
+     * @param array<RuleBuilder> $ruleBuilders
+     * @return array<Rule>
      */
-    private function buildRules(array $rules): array
+    private function buildRules(array $ruleBuilders): array
     {
         $rules = array_map(
-            static fn (Rule $rule): RelationRule => $rule(),
-            $rules
+            static fn (RuleBuilder $rule): Rule => $rule(),
+            $ruleBuilders
         );
 
         array_walk(
             $rules,
-            fn (RelationRule $rule) => $this->ruleValidator->validate($rule)
+            fn (Rule $rule) => $this->ruleValidator->validate($rule)
         );
 
         return $rules;
