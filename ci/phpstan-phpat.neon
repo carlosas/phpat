@@ -12,3 +12,7 @@ services:
         class: Tests\PHPat\architecture\ConfigurationTest
         tags:
             - phpat.test
+    -
+        class: Tests\PHPat\architecture\AssertionTest
+        tags:
+            - phpat.test
