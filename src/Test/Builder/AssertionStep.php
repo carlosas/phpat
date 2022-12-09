@@ -6,6 +6,7 @@ namespace PHPat\Test\Builder;
 
 use PHPat\Rule\Assertion\Declaration\ShouldBeAbstract\ShouldBeAbstract;
 use PHPat\Rule\Assertion\Declaration\ShouldBeFinal\ShouldBeFinal;
+use PHPat\Rule\Assertion\Declaration\ShouldNotBeAbstract\ShouldNotBeAbstract;
 use PHPat\Rule\Assertion\Declaration\ShouldNotBeFinal\ShouldNotBeFinal;
 use PHPat\Rule\Assertion\Relation\ShouldExtend\ShouldExtend;
 use PHPat\Rule\Assertion\Relation\ShouldImplement\ShouldImplement;
@@ -19,6 +20,13 @@ class AssertionStep extends AbstractStep
     public function shouldBeAbstract(): Rule
     {
         $this->rule->assertion = ShouldBeAbstract::class;
+
+        return new BuildStep($this->rule);
+    }
+
+    public function shouldNotBeAbstract(): Rule
+    {
+        $this->rule->assertion = ShouldNotBeAbstract::class;
 
         return new BuildStep($this->rule);
     }

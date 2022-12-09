@@ -21,6 +21,12 @@ services:
 		tags:
 			- phpstan.rules.rule
 
+	# ShouldNotBeAbstract rules
+	-
+		class: PHPat\Rule\Assertion\Declaration\ShouldNotBeAbstract\AbstractRule
+		tags:
+			- phpstan.rules.rule
+
 	# ShouldBeFinal rules
 	-
 		class: PHPat\Rule\Assertion\Declaration\ShouldBeFinal\IsFinalRule

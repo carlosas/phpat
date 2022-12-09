@@ -18,4 +18,11 @@ class AssertionTest
             ->excluding(Selector::classname('/.*Rule$/', true))
             ->shouldBeAbstract();
     }
+
+    public function test_rules_are_not_abstract(): Rule
+    {
+        return PHPat::rule()
+            ->classes(Selector::classname('/.*\\\Assertion\\\.*Rule$/', true))
+            ->shouldNotBeAbstract();
+    }
 }
