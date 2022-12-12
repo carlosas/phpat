@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PHPat\Rule\Assertion\Declaration\ShouldNotBeFinal;
+namespace PHPat\Rule\Assertion\Declaration\ShouldBeAbstract;
 
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\Declaration\DeclarationAssertion;
@@ -12,7 +12,7 @@ use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\FileTypeMapper;
 
-abstract class ShouldNotBeFinal extends DeclarationAssertion
+abstract class ShouldBeAbstract extends DeclarationAssertion
 {
     use ValidationTrait;
 
@@ -33,11 +33,12 @@ abstract class ShouldNotBeFinal extends DeclarationAssertion
 
     protected function applyValidation(ClassReflection $subject, bool $meetsDeclaration): array
     {
-        return $this->applyShouldNot($subject, $meetsDeclaration);
+        return $this->applyShould($subject, $meetsDeclaration);
     }
+
 
     protected function getMessage(string $subject): string
     {
-        return sprintf('%s should not be final', $subject);
+        return sprintf('%s should be abstract', $subject);
     }
 }

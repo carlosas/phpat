@@ -22,27 +22,19 @@ class StatementBuilderFactory
 
     public function create(string $classname): StatementBuilder
     {
-        $lastSeparatorPos = strrpos($classname, '\\');
-        $classnamePos     = $lastSeparatorPos !== false ? $lastSeparatorPos + 1 : 0;
-
         if (is_a($classname, RelationAssertion::class, true)) {
             /** @var class-string<RelationStatementBuilder> $statementBuilder */
-            $statementBuilder = sprintf(
-                '%s\\Relation\\%sStatementBuilder',
-                __NAMESPACE__,
-                substr($classname, $classnamePos)
-            );
+            $statementBuilder = sprintf('%s\\RelationStatementBuilder', __NAMESPACE__);
         } elseif (is_a($classname, DeclarationAssertion::class, true)) {
             /** @var class-string<DeclarationStatementBuilder> $statementBuilder */
-            $statementBuilder = sprintf(
-                '%s\\Declaration\\%sStatementBuilder',
-                __NAMESPACE__,
-                substr($classname, $classnamePos)
-            );
+            $statementBuilder = sprintf('%s\\DeclarationStatementBuilder', __NAMESPACE__);
         } else {
             throw new InvalidArgumentException(sprintf('"%s" is not a valid statement builder', $classname));
         }
 
-        return new $statementBuilder($this->rules);
+        $lastSeparatorPos = strrpos($classname, '\\');
+        $classnamePos     = $lastSeparatorPos !== false ? $lastSeparatorPos + 1 : 0;
+
+        return new $statementBuilder($classname, $this->rules);
     }
 }

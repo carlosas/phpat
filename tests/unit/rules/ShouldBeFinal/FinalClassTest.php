@@ -23,7 +23,7 @@ class FinalClassTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should be final', FixtureClass::class), 28],
+            [sprintf('%s should be final', FixtureClass::class), 29],
         ]);
     }
 

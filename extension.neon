@@ -15,6 +15,18 @@ services:
 
     # # # # # DECLARATION RULES # # # # #
 
+	# ShouldBeAbstract rules
+	-
+		class: PHPat\Rule\Assertion\Declaration\ShouldBeAbstract\AbstractRule
+		tags:
+			- phpstan.rules.rule
+
+	# ShouldNotBeAbstract rules
+	-
+		class: PHPat\Rule\Assertion\Declaration\ShouldNotBeAbstract\AbstractRule
+		tags:
+			- phpstan.rules.rule
+
 	# ShouldBeFinal rules
 	-
 		class: PHPat\Rule\Assertion\Declaration\ShouldBeFinal\IsFinalRule
@@ -88,6 +100,10 @@ services:
 			- phpstan.rules.rule
 	-
 		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\NewRule
+		tags:
+			- phpstan.rules.rule
+	-
+		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\StaticMethodRule
 		tags:
 			- phpstan.rules.rule
 

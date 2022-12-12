@@ -24,7 +24,7 @@ class ConstantUseTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, ClassWithConstant::class), 51],
+            [sprintf('%s should not depend on %s', FixtureClass::class, ClassWithConstant::class), 52],
         ]);
     }
 

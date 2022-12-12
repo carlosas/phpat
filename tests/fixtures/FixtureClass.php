@@ -16,6 +16,7 @@ use Tests\PHPat\fixtures\Simple\SimpleInterface;
 use Tests\PHPat\fixtures\Simple\SimpleTrait;
 use Tests\PHPat\fixtures\Special\ClassImplementing;
 use Tests\PHPat\fixtures\Special\ClassWithConstant;
+use Tests\PHPat\fixtures\Special\ClassWithStaticMethod;
 use Tests\PHPat\fixtures\Special\InterfaceWithTemplate;
 
 /**
@@ -49,6 +50,11 @@ class FixtureClass extends SimpleAbstractClass implements SimpleInterface
     public function usingConstant(): string
     {
         return ClassWithConstant::CONSTANT;
+    }
+
+    public function usingStaticMethod(): void
+    {
+        ClassWithStaticMethod::staticMethod();
     }
 
     /**
