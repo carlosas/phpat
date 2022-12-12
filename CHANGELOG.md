@@ -3,9 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## 0.10.2
 * Added `shouldBeAbstract()` and `shouldNotBeAbstract()` assertions.
+* Fixed `shouldNotDependOn()` assertion ignoring static method calls.
 
 ## 0.10.1
-* Added support for assertions over a single class, named _Declaration Assertions_.
 * Added `shouldBeFinal()` and `shouldNotBeFinal()` assertions.
 
 ## 0.10.0 ⚠
