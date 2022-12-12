@@ -33,7 +33,7 @@ class DocThrowsTagTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleException::class), 64],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleException::class), 70],
         ]);
     }
 

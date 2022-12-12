@@ -102,6 +102,10 @@ services:
 		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\NewRule
 		tags:
 			- phpstan.rules.rule
+	-
+		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\StaticMethodRule
+		tags:
+			- phpstan.rules.rule
 
 	# ShouldNotConstruct rules
 	-
