@@ -14,6 +14,7 @@ use PHPat\Rule\Assertion\Relation\ShouldNotConstruct\ShouldNotConstruct;
 use PHPat\Rule\Assertion\Relation\ShouldNotDepend\ShouldNotDepend;
 use PHPat\Rule\Assertion\Relation\ShouldNotExtend\ShouldNotExtend;
 use PHPat\Rule\Assertion\Relation\ShouldNotImplement\ShouldNotImplement;
+use PHPat\Rule\Assertion\Relation\CanOnlyDepend\CanOnlyDepend;
 
 class AssertionStep extends AbstractStep
 {
@@ -48,6 +49,13 @@ class AssertionStep extends AbstractStep
     public function shouldNotDependOn(): TargetStep
     {
         $this->rule->assertion = ShouldNotDepend::class;
+
+        return new TargetStep($this->rule);
+    }
+
+    public function canOnlyDependOn(): TargetStep
+    {
+        $this->rule->assertion = CanOnlyDepend::class;
 
         return new TargetStep($this->rule);
     }

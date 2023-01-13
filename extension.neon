@@ -107,6 +107,60 @@ services:
 		tags:
 			- phpstan.rules.rule
 
+	# CanOnlyDepend rules
+	-
+		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\ClassPropertyRule
+		tags:
+			- phpstan.rules.rule
+	-
+		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\ConstantUseRule
+		tags:
+			- phpstan.rules.rule
+	-
+		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\DocMethodTagRule
+		tags:
+			- phpstan.rules.rule
+	-
+		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\DocMixinTagRule
+		tags:
+			- phpstan.rules.rule
+	-
+		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\DocParamTagRule
+		tags:
+			- phpstan.rules.rule
+	-
+		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\DocPropertyTagRule
+		tags:
+			- phpstan.rules.rule
+	-
+		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\DocReturnTagRule
+		tags:
+			- phpstan.rules.rule
+	-
+		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\DocThrowsTagRule
+		tags:
+			- phpstan.rules.rule
+	-
+		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\DocVarTagRule
+		tags:
+			- phpstan.rules.rule
+	-
+		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\MethodParamRule
+		tags:
+			- phpstan.rules.rule
+	-
+		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\MethodReturnRule
+		tags:
+			- phpstan.rules.rule
+	-
+		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\NewRule
+		tags:
+			- phpstan.rules.rule
+	-
+		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\StaticMethodRule
+		tags:
+			- phpstan.rules.rule
+
 	# ShouldNotConstruct rules
 	-
 		class: PHPat\Rule\Assertion\Relation\ShouldNotConstruct\NewRule
