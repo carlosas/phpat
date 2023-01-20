@@ -19,11 +19,11 @@
 
 <hr />
 
-ℹ️ **PHPat** has been converted into a [PHPStan](https://phpstan.org/) extension. Read the [UPGRADE notes](doc/UPGRADE-0.10.md)!
+ℹ️ **PHPat** has been converted into a [PHPStan](https://phpstan.org/) extension. Read the [UPGRADE notes](doc/UPGRADE-0.10.md).
 <br />
 The standalone version (v0.9) will still be available and receive critical bugfixes if needed.
 
-<hr />
+<h2></h2>
 
 ### Introduction 📜
 
@@ -32,7 +32,6 @@ The standalone version (v0.9) will still be available and receive critical bugfi
 It provides a natural language abstraction to define your own architectural rules and test them against your software.
 
 Check out the section [WHAT TO TEST](doc/WHAT_TO_TEST.md) to see some examples of typical use cases.
-
 
 <h2></h2>
 
@@ -134,11 +133,22 @@ Run **PHPStan** as usual:
 php vendor/bin/phpstan analyse -c phpstan.neon
 ```
 
-<hr>
-
-⚠ Launching early stage releases (0.x.x) could break the API according to [Semantic Versioning 2.0](https://semver.org/).
-We are using *minor* for breaking changes. This will change with the release of the stable `1.0.0` version.
-
 <h2></h2>
 
+> **Warning**<br />
+> Launching early stage releases (0.x.x) could break the API according to [Semantic Versioning 2.0](https://semver.org/).
+> We are using *minor* for breaking changes. This will change with the release of the stable `1.0.0` version.
+
 **PHP Architecture Tester** is open source, contributions are welcome. Please have a look to the [Contribution docs](.github/CONTRIBUTING.md).
+
+<br />
+
+**Sponsors** (free license)
+
+<a href="https://jb.gg/OpenSourceSupport">
+    <img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png" alt="JetBrains Logo" width="100"/>
+</a>
+
+<a href="https://www.blackfire.io">
+    <img src="https://avatars.githubusercontent.com/u/8961067?s=100" alt="BlackFire Logo" width="100"/>
+</a>
