@@ -14,6 +14,7 @@ use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
 use Tests\PHPat\fixtures\FixtureClass;
 use Tests\PHPat\fixtures\Simple\SimpleInterface;
+use Tests\PHPat\fixtures\Simple\SimpleInterfaceTwo;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -24,7 +25,7 @@ class ClassPropertyTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleInterface::class), 33],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleInterface::class), 34],
         ]);
     }
 
@@ -33,7 +34,7 @@ class ClassPropertyTest extends RuleTestCase
         $testParser = FakeTestParser::create(
             CanOnlyDepend::class,
             [new Classname(FixtureClass::class, false)],
-            [new Classname(SimpleInterface::class, false)]
+            [new Classname(SimpleInterfaceTwo::class, false)]
         );
 
         return new ClassPropertyRule(

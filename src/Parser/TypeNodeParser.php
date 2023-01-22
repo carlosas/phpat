@@ -56,9 +56,11 @@ class TypeNodeParser
             case $type instanceof UnionType:
             case $type instanceof IntersectionType:
                 return array_merge_recursive(
-                    ...array_map(
-                        static fn (NodeAbstract $n) => self::flattenType($n),
-                        $type->types
+                    ...array_values(
+                        array_map(
+                            static fn (NodeAbstract $n) => self::flattenType($n),
+                            $type->types
+                        )
                     )
                 );
             case $type instanceof Name:

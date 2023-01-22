@@ -33,14 +33,14 @@ class DocParamTagTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClass::class), 70],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassTwo::class), 70],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassThree::class), 70],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassFour::class), 70],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassFive::class), 70],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassSix::class), 70],
-            [sprintf('%s should not depend on %s', FixtureClass::class, InterfaceWithTemplate::class), 70],
-            [sprintf('%s should not depend on %s', FixtureClass::class, ClassImplementing::class), 70],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClass::class), 72],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassTwo::class), 72],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassThree::class), 72],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassFour::class), 72],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassFive::class), 72],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassSix::class), 72],
+            [sprintf('%s should not depend on %s', FixtureClass::class, InterfaceWithTemplate::class), 72],
+            [sprintf('%s should not depend on %s', FixtureClass::class, ClassImplementing::class), 72],
         ]);
     }
 
@@ -50,14 +50,6 @@ class DocParamTagTest extends RuleTestCase
             CanOnlyDepend::class,
             [new Classname(FixtureClass::class, false)],
             [
-                new Classname(SimpleClass::class, false),
-                new Classname(SimpleClassTwo::class, false),
-                new Classname(SimpleClassThree::class, false),
-                new Classname(SimpleClassFour::class, false),
-                new Classname(SimpleClassFive::class, false),
-                new Classname(SimpleClassSix::class, false),
-                new Classname(InterfaceWithTemplate::class, false),
-                new Classname(ClassImplementing::class, false),
                 new Classname(SimpleException::class, false),
                 new Classname(SimpleInterface::class, false),
             ]

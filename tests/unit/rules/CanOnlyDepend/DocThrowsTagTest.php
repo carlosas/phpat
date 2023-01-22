@@ -20,6 +20,7 @@ use Tests\PHPat\fixtures\Simple\SimpleClassSix;
 use Tests\PHPat\fixtures\Simple\SimpleClassThree;
 use Tests\PHPat\fixtures\Simple\SimpleClassTwo;
 use Tests\PHPat\fixtures\Simple\SimpleException;
+use Tests\PHPat\fixtures\Simple\SimpleExceptionTwo;
 use Tests\PHPat\fixtures\Simple\SimpleInterface;
 use Tests\PHPat\fixtures\Special\ClassImplementing;
 use Tests\PHPat\fixtures\Special\InterfaceWithTemplate;
@@ -33,7 +34,7 @@ class DocThrowsTagTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleException::class), 70],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleException::class), 72],
         ]);
     }
 
@@ -43,16 +44,7 @@ class DocThrowsTagTest extends RuleTestCase
             CanOnlyDepend::class,
             [new Classname(FixtureClass::class, false)],
             [
-                new Classname(SimpleClass::class, false),
-                new Classname(SimpleClassTwo::class, false),
-                new Classname(SimpleClassThree::class, false),
-                new Classname(SimpleClassFour::class, false),
-                new Classname(SimpleClassFive::class, false),
-                new Classname(SimpleClassSix::class, false),
-                new Classname(InterfaceWithTemplate::class, false),
-                new Classname(ClassImplementing::class, false),
-                new Classname(SimpleException::class, false),
-                new Classname(SimpleInterface::class, false),
+                new Classname(SimpleExceptionTwo::class, false),
             ]
         );
 

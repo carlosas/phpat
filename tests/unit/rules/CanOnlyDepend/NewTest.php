@@ -14,6 +14,9 @@ use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
 use Tests\PHPat\fixtures\FixtureClass;
 use Tests\PHPat\fixtures\Simple\SimpleClass;
+use Tests\PHPat\fixtures\Simple\SimpleClassTwo;
+use Tests\PHPat\fixtures\Simple\SimpleException;
+use Tests\PHPat\fixtures\Special\ClassImplementing;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -24,7 +27,8 @@ class NewTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClass::class), 47],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleException::class), 77],
+            [sprintf('%s should not depend on %s', FixtureClass::class, ClassImplementing::class), 80],
         ]);
     }
 

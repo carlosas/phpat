@@ -33,9 +33,9 @@ class DocPropertyTagTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClass::class), 29],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassTwo::class), 29],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassThree::class), 29],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClass::class), 30],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassTwo::class), 30],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassThree::class), 30],
         ]);
     }
 
@@ -45,9 +45,6 @@ class DocPropertyTagTest extends RuleTestCase
             CanOnlyDepend::class,
             [new Classname(FixtureClass::class, false)],
             [
-                new Classname(SimpleClass::class, false),
-                new Classname(SimpleClassTwo::class, false),
-                new Classname(SimpleClassThree::class, false),
                 new Classname(SimpleClassFour::class, false),
                 new Classname(SimpleClassFive::class, false),
                 new Classname(SimpleClassSix::class, false),

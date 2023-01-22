@@ -33,7 +33,7 @@ class DocMixinTagTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassSix::class), 29],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassSix::class), 30],
         ]);
     }
 
@@ -48,7 +48,6 @@ class DocMixinTagTest extends RuleTestCase
                 new Classname(SimpleClassThree::class, false),
                 new Classname(SimpleClassFour::class, false),
                 new Classname(SimpleClassFive::class, false),
-                new Classname(SimpleClassSix::class, false),
                 new Classname(InterfaceWithTemplate::class, false),
                 new Classname(ClassImplementing::class, false),
                 new Classname(SimpleException::class, false),

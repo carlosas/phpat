@@ -25,8 +25,7 @@ class MethodReturnTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleInterface::class), 40],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClass::class), 45],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleInterface::class), 42],
         ]);
     }
 
@@ -37,7 +36,6 @@ class MethodReturnTest extends RuleTestCase
             [new Classname(FixtureClass::class, false)],
             [
                 new Classname(SimpleClass::class, false),
-                new Classname(SimpleInterface::class, false),
             ]
         );
 

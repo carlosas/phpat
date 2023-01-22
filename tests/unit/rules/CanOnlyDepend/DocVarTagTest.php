@@ -33,7 +33,7 @@ class DocVarTagTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClass::class), 73],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClass::class), 75],
         ]);
     }
 
@@ -43,7 +43,6 @@ class DocVarTagTest extends RuleTestCase
             CanOnlyDepend::class,
             [new Classname(FixtureClass::class, false)],
             [
-                new Classname(SimpleClass::class, false),
                 new Classname(SimpleClassTwo::class, false),
                 new Classname(SimpleClassThree::class, false),
                 new Classname(SimpleClassFour::class, false),

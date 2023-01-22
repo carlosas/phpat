@@ -14,6 +14,7 @@ use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
 use Tests\PHPat\fixtures\FixtureClass;
 use Tests\PHPat\fixtures\Special\ClassWithStaticMethod;
+use Tests\PHPat\fixtures\Special\ClassWithStaticMethodTwo;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -24,7 +25,7 @@ class StaticCallTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, ClassWithStaticMethod::class), 57],
+            [sprintf('%s should not depend on %s', FixtureClass::class, ClassWithStaticMethod::class), 59],
         ]);
     }
 
@@ -33,7 +34,7 @@ class StaticCallTest extends RuleTestCase
         $testParser = FakeTestParser::create(
             CanOnlyDepend::class,
             [new Classname(FixtureClass::class, false)],
-            [new Classname(ClassWithStaticMethod::class, false)]
+            [new Classname(ClassWithStaticMethodTwo::class, false)]
         );
 
         return new StaticMethodRule(
