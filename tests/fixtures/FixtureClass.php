@@ -13,6 +13,7 @@ use Tests\PHPat\fixtures\Simple\SimpleClassThree;
 use Tests\PHPat\fixtures\Simple\SimpleClassTwo;
 use Tests\PHPat\fixtures\Simple\SimpleException;
 use Tests\PHPat\fixtures\Simple\SimpleInterface;
+use Tests\PHPat\fixtures\Simple\SimpleInterfaceTwo;
 use Tests\PHPat\fixtures\Simple\SimpleTrait;
 use Tests\PHPat\fixtures\Special\ClassImplementing;
 use Tests\PHPat\fixtures\Special\ClassWithConstant;
@@ -21,8 +22,8 @@ use Tests\PHPat\fixtures\Special\InterfaceWithTemplate;
 
 /**
  * @property SimpleClass $myProperty
- * @property-write SimpleClassTwo $myProperty2
- * @property-read SimpleClassThree $myProperty3
+ * @property-read SimpleClassTwo $myProperty2
+ * @property-write SimpleClassThree $myProperty3
  * @method SimpleClassFour someMethod(SimpleClassFive $m)
  * @mixin SimpleClassSix
  */
@@ -31,6 +32,7 @@ class FixtureClass extends SimpleAbstractClass implements SimpleInterface
     use SimpleTrait;
 
     private SimpleInterface $simple;
+    private SimpleInterfaceTwo $simple2;
 
     public function __construct(SimpleInterface $simple)
     {

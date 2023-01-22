@@ -2,41 +2,42 @@
 
 declare(strict_types=1);
 
-namespace Tests\PHPat\unit\rules\ShouldImplement;
+namespace Tests\PHPat\unit\rules\CanOnlyDepend;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\Relation\ShouldImplement\ImplementedInterfacesRule;
-use PHPat\Rule\Assertion\Relation\ShouldImplement\ShouldImplement;
+use PHPat\Rule\Assertion\Relation\CanOnlyDepend\MethodParamRule;
+use PHPat\Rule\Assertion\Relation\CanOnlyDepend\CanOnlyDepend;
 use PHPat\Selector\Classname;
 use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
 use Tests\PHPat\fixtures\FixtureClass;
-use Tests\PHPat\fixtures\Simple\SimpleInterfaceTwo;
+use Tests\PHPat\fixtures\Simple\SimpleClass;
+use Tests\PHPat\fixtures\Simple\SimpleInterface;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
- * @extends RuleTestCase<ImplementedInterfacesRule>
+ * @extends RuleTestCase<MethodParamRule>
  */
-class ImplementedInterfacesTest extends RuleTestCase
+class MethodParamTest extends RuleTestCase
 {
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should implement %s', FixtureClass::class, SimpleInterfaceTwo::class), 30],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleInterface::class), 37],
         ]);
     }
 
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            ShouldImplement::class,
+            CanOnlyDepend::class,
             [new Classname(FixtureClass::class, false)],
-            [new Classname(SimpleInterfaceTwo::class, false)]
+            [new Classname(SimpleClass::class, false)]
         );
 
-        return new ImplementedInterfacesRule(
+        return new MethodParamRule(
             new StatementBuilderFactory($testParser),
             new Configuration(false),
             $this->createReflectionProvider(),

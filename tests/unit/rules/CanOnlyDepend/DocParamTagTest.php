@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Tests\PHPat\unit\rules\ShouldNotDepend;
+namespace Tests\PHPat\unit\rules\CanOnlyDepend;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\Relation\ShouldNotDepend\DocParamTagRule;
-use PHPat\Rule\Assertion\Relation\ShouldNotDepend\ShouldNotDepend;
+use PHPat\Rule\Assertion\Relation\CanOnlyDepend\DocParamTagRule;
+use PHPat\Rule\Assertion\Relation\CanOnlyDepend\CanOnlyDepend;
 use PHPat\Selector\Classname;
 use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;
@@ -47,17 +47,9 @@ class DocParamTagTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            ShouldNotDepend::class,
+            CanOnlyDepend::class,
             [new Classname(FixtureClass::class, false)],
             [
-                new Classname(SimpleClass::class, false),
-                new Classname(SimpleClassTwo::class, false),
-                new Classname(SimpleClassThree::class, false),
-                new Classname(SimpleClassFour::class, false),
-                new Classname(SimpleClassFive::class, false),
-                new Classname(SimpleClassSix::class, false),
-                new Classname(InterfaceWithTemplate::class, false),
-                new Classname(ClassImplementing::class, false),
                 new Classname(SimpleException::class, false),
                 new Classname(SimpleInterface::class, false),
             ]
