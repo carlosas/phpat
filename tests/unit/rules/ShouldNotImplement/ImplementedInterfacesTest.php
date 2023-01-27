@@ -24,7 +24,7 @@ class ImplementedInterfacesTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not implement %s', FixtureClass::class, SimpleInterface::class), 30],
+            [sprintf('%s should not implement %s', FixtureClass::class, SimpleInterface::class), 31],
         ]);
     }
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\PHPat\fixtures;
 
 use Tests\PHPat\fixtures\Simple\SimpleAbstractClass;
+use Tests\PHPat\fixtures\Simple\SimpleAttribute;
 use Tests\PHPat\fixtures\Simple\SimpleClass;
 use Tests\PHPat\fixtures\Simple\SimpleClassFive;
 use Tests\PHPat\fixtures\Simple\SimpleClassFour;
@@ -27,6 +28,7 @@ use Tests\PHPat\fixtures\Special\InterfaceWithTemplate;
  * @method SimpleClassFour someMethod(SimpleClassFive $m)
  * @mixin SimpleClassSix
  */
+#[SimpleAttribute]
 class FixtureClass extends SimpleAbstractClass implements SimpleInterface
 {
     use SimpleTrait;
