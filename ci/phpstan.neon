@@ -5,3 +5,4 @@ parameters:
         - ../tests/unit/rules
     ignoreErrors:
         - '#Class Tests\\PHPat\\fixtures\\FixtureClass not found\.#' # Reported while running on PHP 7.4
+    reportUnmatchedIgnoredErrors: false
