@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.10.3
+* Added `canOnlyDepend()` assertion.
+
 ## 0.10.2
 * Added `shouldBeAbstract()` and `shouldNotBeAbstract()` assertions.
 * Fixed `shouldNotDependOn()` assertion ignoring static method calls.
