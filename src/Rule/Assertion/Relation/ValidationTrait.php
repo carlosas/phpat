@@ -61,6 +61,27 @@ trait ValidationTrait
         return $errors;
     }
 
+    /**
+     * @param array<SelectorInterface> $targets
+     * @param array<SelectorInterface> $targetExcludes
+     * @param array<class-string> $nodes
+     * @throws ShouldNotHappenException
+     * @return array<RuleError>
+     */
+    protected function applyCanOnly(ClassReflection $subject, array $targets, array $targetExcludes, array $nodes): array
+    {
+        $errors = [];
+        foreach ($nodes as $node) {
+            foreach ($targets as $target) {
+                if ($this->nodeMatchesTarget($node, $target, $targetExcludes)) {
+                    continue 2;
+                }
+            }
+            $errors[] = RuleErrorBuilder::message($this->getMessage($subject->getName(), $node))->build();
+        }
+
+        return $errors;
+    }
 
     /**
      * @param class-string $classname

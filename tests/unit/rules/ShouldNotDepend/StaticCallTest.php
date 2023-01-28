@@ -24,7 +24,7 @@ class StaticCallTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, ClassWithStaticMethod::class), 57],
+            [sprintf('%s should not depend on %s', FixtureClass::class, ClassWithStaticMethod::class), 61],
         ]);
     }
 
