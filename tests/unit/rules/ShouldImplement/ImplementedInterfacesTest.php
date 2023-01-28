@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\PHPat\unit\rules\ShouldImplement;
+namespace Tests\PHPat\Unit\Rules\ShouldImplement;
 
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\Relation\ShouldImplement\ImplementedInterfacesRule;
@@ -12,9 +12,10 @@ use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\FixtureClass;
-use Tests\PHPat\fixtures\Simple\SimpleInterfaceTwo;
-use Tests\PHPat\unit\FakeTestParser;
+use Tests\PHPat\Fixtures\FixtureClass;
+use Tests\PHPat\Fixtures\Simple\SimpleInterfaceTwo;
+use Tests\PHPat\Unit\FakeTestParser;
+use Tests\PHPat\Unit\ErrorMessage;
 
 /**
  * @extends RuleTestCase<ImplementedInterfacesRule>
@@ -24,7 +25,7 @@ class ImplementedInterfacesTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should implement %s', FixtureClass::class, SimpleInterfaceTwo::class), 31],
+            [sprintf(ErrorMessage::SHOULD_IMPLEMENT, FixtureClass::class, SimpleInterfaceTwo::class), 31],
         ]);
     }
 

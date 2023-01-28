@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\PHPat\unit\rules\ShouldBeAbstract;
+namespace Tests\PHPat\Unit\Rules\ShouldBeAbstract;
 
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\Declaration\ShouldBeAbstract\AbstractRule;
@@ -12,8 +12,9 @@ use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\FixtureClass;
-use Tests\PHPat\unit\FakeTestParser;
+use Tests\PHPat\Fixtures\FixtureClass;
+use Tests\PHPat\Unit\FakeTestParser;
+use Tests\PHPat\Unit\ErrorMessage;
 
 /**
  * @extends RuleTestCase<AbstractRule>
@@ -23,7 +24,7 @@ class AbstractClassTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should be abstract', FixtureClass::class), 31],
+            [sprintf(ErrorMessage::SHOULD_BE_ABSTRACT, FixtureClass::class), 31],
         ]);
     }
 

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tests\PHPat\fixtures\Special;
+namespace Tests\PHPat\Fixtures\Special;
 
-use Tests\PHPat\fixtures\Simple\SimpleInterface;
+use Tests\PHPat\Fixtures\Simple\SimpleInterface;
 
 class ClassImplementing implements SimpleInterface
 {

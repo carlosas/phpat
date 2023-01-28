@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\PHPat\unit\rules\ShouldNotConstruct;
+namespace Tests\PHPat\Unit\Rules\ShouldNotConstruct;
 
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\Relation\ShouldNotConstruct\NewRule;
@@ -12,9 +12,10 @@ use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\FixtureClass;
-use Tests\PHPat\fixtures\Simple\SimpleClass;
-use Tests\PHPat\unit\FakeTestParser;
+use Tests\PHPat\Fixtures\FixtureClass;
+use Tests\PHPat\Fixtures\Simple\SimpleClass;
+use Tests\PHPat\Unit\FakeTestParser;
+use Tests\PHPat\Unit\ErrorMessage;
 
 /**
  * @extends RuleTestCase<NewRule>
@@ -24,7 +25,7 @@ class NewTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not construct %s', FixtureClass::class, SimpleClass::class), 55],
+            [sprintf(ErrorMessage::SHOULD_NOT_CONSTRUCT, FixtureClass::class, SimpleClass::class), 55],
         ]);
     }
 

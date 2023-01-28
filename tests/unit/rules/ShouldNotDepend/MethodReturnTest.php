@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\PHPat\unit\rules\ShouldNotDepend;
+namespace Tests\PHPat\Unit\Rules\ShouldNotDepend;
 
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\Relation\ShouldNotDepend\MethodReturnRule;
@@ -12,10 +12,11 @@ use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\FixtureClass;
-use Tests\PHPat\fixtures\Simple\SimpleClass;
-use Tests\PHPat\fixtures\Simple\SimpleInterface;
-use Tests\PHPat\unit\FakeTestParser;
+use Tests\PHPat\Fixtures\FixtureClass;
+use Tests\PHPat\Fixtures\Simple\SimpleClass;
+use Tests\PHPat\Fixtures\Simple\SimpleInterface;
+use Tests\PHPat\Unit\FakeTestParser;
+use Tests\PHPat\Unit\ErrorMessage;
 
 /**
  * @extends RuleTestCase<MethodReturnRule>
@@ -25,8 +26,8 @@ class MethodReturnTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleInterface::class), 48],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClass::class), 53],
+            [sprintf(ErrorMessage::SHOULD_NOT_DEPEND, FixtureClass::class, SimpleInterface::class), 48],
+            [sprintf(ErrorMessage::SHOULD_NOT_DEPEND, FixtureClass::class, SimpleClass::class), 53],
         ]);
     }
 

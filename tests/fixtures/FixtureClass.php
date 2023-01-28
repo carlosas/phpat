@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Tests\PHPat\fixtures;
+namespace Tests\PHPat\Fixtures;
 
-use Tests\PHPat\fixtures\Simple\SimpleAbstractClass;
-use Tests\PHPat\fixtures\Simple\SimpleAttribute;
-use Tests\PHPat\fixtures\Simple\SimpleClass;
-use Tests\PHPat\fixtures\Simple\SimpleClassFive;
-use Tests\PHPat\fixtures\Simple\SimpleClassFour;
-use Tests\PHPat\fixtures\Simple\SimpleClassSix;
-use Tests\PHPat\fixtures\Simple\SimpleClassThree;
-use Tests\PHPat\fixtures\Simple\SimpleClassTwo;
-use Tests\PHPat\fixtures\Simple\SimpleException;
-use Tests\PHPat\fixtures\Simple\SimpleInterface;
-use Tests\PHPat\fixtures\Simple\SimpleInterfaceTwo;
-use Tests\PHPat\fixtures\Simple\SimpleTrait;
-use Tests\PHPat\fixtures\Special\ClassImplementing;
-use Tests\PHPat\fixtures\Special\ClassWithConstant;
-use Tests\PHPat\fixtures\Special\ClassWithStaticMethod;
-use Tests\PHPat\fixtures\Special\InterfaceWithTemplate;
+use Tests\PHPat\Fixtures\Simple\SimpleAbstractClass;
+use Tests\PHPat\Fixtures\Simple\SimpleAttribute;
+use Tests\PHPat\Fixtures\Simple\SimpleClass;
+use Tests\PHPat\Fixtures\Simple\SimpleClassFive;
+use Tests\PHPat\Fixtures\Simple\SimpleClassFour;
+use Tests\PHPat\Fixtures\Simple\SimpleClassSix;
+use Tests\PHPat\Fixtures\Simple\SimpleClassThree;
+use Tests\PHPat\Fixtures\Simple\SimpleClassTwo;
+use Tests\PHPat\Fixtures\Simple\SimpleException;
+use Tests\PHPat\Fixtures\Simple\SimpleInterface;
+use Tests\PHPat\Fixtures\Simple\SimpleInterfaceTwo;
+use Tests\PHPat\Fixtures\Simple\SimpleTrait;
+use Tests\PHPat\Fixtures\Special\ClassImplementing;
+use Tests\PHPat\Fixtures\Special\ClassWithConstant;
+use Tests\PHPat\Fixtures\Special\ClassWithStaticMethod;
+use Tests\PHPat\Fixtures\Special\InterfaceWithTemplate;
 
 /**
  * @property SimpleClass $myProperty
@@ -68,7 +68,7 @@ class FixtureClass extends SimpleAbstractClass implements SimpleInterface
     /**
      * @param SimpleClass $p
      * @param SimpleClassTwo $p2 Parameter with description
-     * @param \Tests\PHPat\fixtures\Simple\SimpleClassThree $p3
+     * @param \Tests\PHPat\Fixtures\Simple\SimpleClassThree $p3
      * @param array<SimpleClassFour> $p4
      * @param SimpleClassFive|SimpleClassSix $p5_6
      * @param InterfaceWithTemplate<ClassImplementing> $t

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\PHPat\unit\rules\CanOnlyDepend;
+namespace Tests\PHPat\Unit\Rules\CanOnlyDepend;
 
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\Relation\CanOnlyDepend\CanOnlyDepend;
@@ -12,9 +12,10 @@ use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\FixtureClass;
-use Tests\PHPat\fixtures\Simple\SimpleAttribute;
-use Tests\PHPat\unit\FakeTestParser;
+use Tests\PHPat\Fixtures\FixtureClass;
+use Tests\PHPat\Fixtures\Simple\SimpleAttribute;
+use Tests\PHPat\Unit\FakeTestParser;
+use Tests\PHPat\Unit\ErrorMessage;
 
 /**
  * @extends RuleTestCase<AttributeRule>
@@ -24,11 +25,11 @@ class AttributeTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class), 31],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class), 36],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class), 39],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class), 43],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class), 89],
+            [sprintf(ErrorMessage::SHOULD_NOT_DEPEND, FixtureClass::class, SimpleAttribute::class), 31],
+            [sprintf(ErrorMessage::SHOULD_NOT_DEPEND, FixtureClass::class, SimpleAttribute::class), 36],
+            [sprintf(ErrorMessage::SHOULD_NOT_DEPEND, FixtureClass::class, SimpleAttribute::class), 39],
+            [sprintf(ErrorMessage::SHOULD_NOT_DEPEND, FixtureClass::class, SimpleAttribute::class), 43],
+            [sprintf(ErrorMessage::SHOULD_NOT_DEPEND, FixtureClass::class, SimpleAttribute::class), 89],
         ]);
     }
 
