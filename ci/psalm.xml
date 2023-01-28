@@ -29,11 +29,9 @@
         <MissingClosureReturnType>
             <errorLevel type="suppress"><file name="../src/Rule/Extractor/Relation/ClassAttributeExtractor.php" /></errorLevel>
         </MissingClosureReturnType>
-        <UndefinedDocblockClass>
-            <errorLevel type="suppress"><file name="../src/Rule/Extractor/Relation/ClassAttributeExtractor.php" /></errorLevel>
-        </UndefinedDocblockClass>
 
         <UndefinedDocblockClass>
+            <errorLevel type="suppress"><file name="../src/Rule/Extractor/Relation/ClassAttributeExtractor.php" /></errorLevel>
             <errorLevel type="suppress"><file name="../src/Test/TestParser.php" /></errorLevel>
         </UndefinedDocblockClass>
         <UndefinedClass>
