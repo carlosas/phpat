@@ -17,13 +17,12 @@ trait ClassAttributeExtractor
 
     /**
      * @param InClassNode $node
-     * @return array<class-string>
+     * @return list<class-string>
      */
     protected function extractNodeClassNames(Node $node, Scope $scope): array
     {
-        return array_map(
-            static fn ($a) => $a->getName(),
-            $node->getClassReflection()->getNativeReflection()->getAttributes()
-        );
+        $fn = static fn ($a) => $a->getName();
+
+        return array_map($fn, $node->getClassReflection()->getNativeReflection()->getAttributes());
     }
 }

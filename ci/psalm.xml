@@ -20,6 +20,18 @@
         <PossiblyNullReference>
             <errorLevel type="suppress"><directory name="../src/Rule/Extractor/Relation/DocComment" /></errorLevel>
         </PossiblyNullReference>
+        <MoreSpecificReturnType>
+            <errorLevel type="suppress"><file name="../src/Rule/Extractor/Relation/ClassAttributeExtractor.php" /></errorLevel>
+        </MoreSpecificReturnType>
+        <MissingClosureParamType>
+            <errorLevel type="suppress"><file name="../src/Rule/Extractor/Relation/ClassAttributeExtractor.php" /></errorLevel>
+        </MissingClosureParamType>
+        <MissingClosureReturnType>
+            <errorLevel type="suppress"><file name="../src/Rule/Extractor/Relation/ClassAttributeExtractor.php" /></errorLevel>
+        </MissingClosureReturnType>
+        <UndefinedDocblockClass>
+            <errorLevel type="suppress"><file name="../src/Rule/Extractor/Relation/ClassAttributeExtractor.php" /></errorLevel>
+        </UndefinedDocblockClass>
 
         <UndefinedDocblockClass>
             <errorLevel type="suppress"><file name="../src/Test/TestParser.php" /></errorLevel>
