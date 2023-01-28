@@ -27,8 +27,8 @@ class NewTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleException::class), 79],
-            [sprintf('%s should not depend on %s', FixtureClass::class, ClassImplementing::class), 82],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleException::class), 83],
+            [sprintf('%s should not depend on %s', FixtureClass::class, ClassImplementing::class), 86],
         ]);
     }
 

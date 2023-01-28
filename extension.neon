@@ -55,7 +55,7 @@ services:
 
 	# ShouldNotDepend rules
 	-
-		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\ClassAttributeRule
+		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\AttributeRule
 		tags:
 			- phpstan.rules.rule
 	-
@@ -113,7 +113,7 @@ services:
 
 	# CanOnlyDepend rules
 	-
-		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\ClassAttributeRule
+		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\AttributeRule
 		tags:
 			- phpstan.rules.rule
 	-

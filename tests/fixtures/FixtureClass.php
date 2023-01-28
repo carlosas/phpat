@@ -33,10 +33,14 @@ class FixtureClass extends SimpleAbstractClass implements SimpleInterface
 {
     use SimpleTrait;
 
+    #[SimpleAttribute]
+    private const CONSTANT = 'constant';
+
+    #[SimpleAttribute]
     private SimpleInterface $simple;
     private SimpleInterfaceTwo $simple2;
 
-    public function __construct(SimpleInterface $simple)
+    public function __construct(#[SimpleAttribute] SimpleInterface $simple)
     {
         $this->simple = $simple;
     }
@@ -80,5 +84,11 @@ class FixtureClass extends SimpleAbstractClass implements SimpleInterface
         }
 
         return new ClassImplementing();
+    }
+
+    #[SimpleAttribute]
+    public function methodWithAttribute(): bool
+    {
+        return true;
     }
 }

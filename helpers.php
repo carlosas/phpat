@@ -32,3 +32,13 @@ if (!function_exists('namesToClassStrings')) {
         );
     }
 }
+
+if (!function_exists('nameToClassString')) {
+    /**
+     * @return class-string
+     */
+    function nameToClassString(Name $name): string
+    {
+        return (string) $name;
+    }
+}
