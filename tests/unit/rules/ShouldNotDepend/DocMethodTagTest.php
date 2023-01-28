@@ -33,8 +33,8 @@ class DocMethodTagTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassFour::class), 30],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassFive::class), 30],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassFour::class), 31],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassFive::class), 31],
         ]);
     }
 

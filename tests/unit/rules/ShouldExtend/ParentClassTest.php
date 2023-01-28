@@ -24,7 +24,7 @@ class ParentClassTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should extend %s', FixtureClass::class, SimpleAbstractClassTwo::class), 30],
+            [sprintf('%s should extend %s', FixtureClass::class, SimpleAbstractClassTwo::class), 31],
         ]);
     }
 

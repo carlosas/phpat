@@ -41,6 +41,11 @@ class SelectorPrimitive
         return new IsEnum();
     }
 
+    public static function attribute(): IsAttribute
+    {
+        return new IsAttribute();
+    }
+
     public static function namespace(string $namespace, bool $regex = false): ClassNamespace
     {
         return new ClassNamespace($namespace, $regex);
