@@ -19,17 +19,17 @@
 
 <hr />
 
-ℹ️ **PHPat** has been converted into a [PHPStan](https://phpstan.org/) extension. Read the [UPGRADE notes](doc/UPGRADE-0.10.md).
+ℹ️ **PHPat** has been transformed into a [PHPStan](https://phpstan.org/) extension. Read the [UPGRADE notes](doc/UPGRADE-0.10.md).
 <br />
-The standalone version (v0.9) will still be available and receive critical bugfixes if needed.
+The standalone version (v0.9) will remain available and will receive critical bugfixes if required.
 
 <h2></h2>
 
 ### Introduction 📜
 
-**PHP Architecture Tester** is a static analysis tool to verify architectural requirements.
+**PHP Architecture Tester** is a static analysis tool designed to verify architectural requirements.
 
-It provides a natural language abstraction to define your own architectural rules and test them against your software.
+It provides a natural language abstraction that enables you to define your own architectural rules and and assess their compliance in your code.
 
 Check out the section [WHAT TO TEST](doc/WHAT_TO_TEST.md) to see some examples of typical use cases.
 
@@ -74,7 +74,7 @@ services:
 ```
 ⚠️ Your architecture tests folder should be included in the PHPStan analysed paths. See [PHPat's own PHPat configuration](ci/phpstan-phpat.neon) as an example.
 
-You can also configure some PHPat options, for instance:
+You can configure some PHPat options as follows:
 ```neon
 # phpstan.neon
 parameters:
@@ -95,9 +95,9 @@ parameters:
 
 ### Test definition 📓
 
-There are different [Selectors](doc/SELECTORS.md) to choose which classes will intervene in a rule and a wide range of [Assertions](doc/ASSERTIONS.md).
+There are different [Selectors](doc/SELECTORS.md) available to select the classes involved in a rule, and a wide set of [Assertions](doc/ASSERTIONS.md).
 
-This could be a test with a couple of rules:
+Here's an example test with a rule:
 
 ```php
 <?php
@@ -136,8 +136,8 @@ php vendor/bin/phpstan analyse -c phpstan.neon
 <h2></h2>
 
 > **Warning**<br />
-> Launching early stage releases (0.x.x) could break the API according to [Semantic Versioning 2.0](https://semver.org/).
-> We are using *minor* for breaking changes. This will change with the release of the stable `1.0.0` version.
+> The launch of early-stage releases (0.x.x) could break the API according to [Semantic Versioning 2.0](https://semver.org/).
+> We are using *minor* for breaking changes until the release of the stable `1.0.0` version.
 
 **PHP Architecture Tester** is open source, contributions are welcome. Please have a look to the [Contribution docs](.github/CONTRIBUTING.md).
 
