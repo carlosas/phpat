@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace PHPat\Test;
 
 use PHPat\Test\Builder\Rule as RuleBuilder;
+use PHPat\Test\Builder\RuleBuilderWithName;
 use ReflectionMethod;
 
 class TestParser
 {
-    /** @var array<Rule> */
+    /** @var array<RuleWithName<RelationRule>> */
     private static array $result = [];
     private TestExtractor $extractor;
     private RuleValidator $ruleValidator;
@@ -21,7 +22,7 @@ class TestParser
     }
 
     /**
-     * @return array<Rule>
+     * @return array<RuleWithName<RelationRule>>
      */
     public function __invoke(): array
     {
@@ -33,7 +34,7 @@ class TestParser
     }
 
     /**
-     * @return array<Rule>
+     * @return array<RuleWithName<RelationRule>>
      */
     private function parse(): array
     {
@@ -50,9 +51,13 @@ class TestParser
                 }
             }
 
+
             $object = $reflected->newInstanceWithoutConstructor();
             foreach ($methods as $method) {
-                $rules[] = $object->{$method}();
+                $rule = $object->{$method}();
+                if ($rule instanceof RuleBuilder) {
+                    $rules[] = new RuleBuilderWithName(new TestName($method), $rule);
+                }
             }
         }
 
@@ -60,19 +65,19 @@ class TestParser
     }
 
     /**
-     * @param array<RuleBuilder> $ruleBuilders
-     * @return array<Rule>
+     * @param array<RuleBuilderWithName> $ruleBuilders
+     * @return array<RuleWithName<RelationRule>>
      */
     private function buildRules(array $ruleBuilders): array
     {
         $rules = array_map(
-            static fn (RuleBuilder $rule): Rule => $rule(),
+            static fn (RuleBuilderWithName $rule): RuleWithName => new RuleWithName($rule->getTestName(), ($rule->getRuleBuilder())()),
             $ruleBuilders
         );
 
         array_walk(
             $rules,
-            fn (Rule $rule) => $this->ruleValidator->validate($rule)
+            fn (RuleWithName $rule) => $this->ruleValidator->validate($rule)
         );
 
         return $rules;

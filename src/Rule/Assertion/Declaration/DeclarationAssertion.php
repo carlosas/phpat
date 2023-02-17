@@ -9,6 +9,7 @@ use PHPat\Rule\Assertion\Assertion;
 use PHPat\Selector\SelectorInterface;
 use PHPat\ShouldNotHappenException;
 use PHPat\Statement\Builder\StatementBuilderFactory;
+use PHPat\Test\TestName;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
@@ -18,7 +19,7 @@ use PHPStan\Type\FileTypeMapper;
 
 abstract class DeclarationAssertion implements Assertion
 {
-    /** @var array<array{SelectorInterface, array<SelectorInterface>, array<SelectorInterface>, array<SelectorInterface>}> */
+    /** @var array<array{TestName, SelectorInterface, array<SelectorInterface>, array<SelectorInterface>, array<SelectorInterface>}> */
     protected array $statements;
     protected Configuration $configuration;
     protected ReflectionProvider $reflectionProvider;
@@ -57,14 +58,15 @@ abstract class DeclarationAssertion implements Assertion
     abstract protected function meetsDeclaration(Node $node, Scope $scope): bool;
 
     /**
+     * @param TestName $testName
      * @param class-string $subject
      */
-    abstract protected function getMessage(string $subject): string;
+    abstract protected function getMessage(TestName $testName, string $subject): string;
 
     /**
      * @return array<RuleError>
      */
-    abstract protected function applyValidation(ClassReflection $subject, bool $meetsDeclaration): array;
+    abstract protected function applyValidation(TestName $testName, ClassReflection $subject, bool $meetsDeclaration): array;
 
     protected function ruleApplies(Scope $scope): bool
     {
@@ -86,8 +88,7 @@ abstract class DeclarationAssertion implements Assertion
         if ($subject === null) {
             throw new ShouldNotHappenException();
         }
-
-        foreach ($this->statements as [$selector, $subjectExcludes]) {
+        foreach ($this->statements as [$testName, $selector, $subjectExcludes]) {
             if ($subject->isBuiltin() || !$selector->matches($subject)) {
                 continue;
             }
@@ -97,7 +98,7 @@ abstract class DeclarationAssertion implements Assertion
                 }
             }
 
-            array_push($errors, ...$this->applyValidation($subject, $meetsDeclaration));
+            array_push($errors, ...$this->applyValidation($testName, $subject, $meetsDeclaration));
         }
 
         return $errors;

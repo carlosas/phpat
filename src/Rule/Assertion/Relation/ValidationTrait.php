@@ -6,6 +6,7 @@ namespace PHPat\Rule\Assertion\Relation;
 
 use PHPat\Selector\SelectorInterface;
 use PHPat\ShouldNotHappenException;
+use PHPat\Test\TestName;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
@@ -13,13 +14,14 @@ use PHPStan\Rules\RuleErrorBuilder;
 trait ValidationTrait
 {
     /**
+     * @param TestName $testName
      * @param array<SelectorInterface> $targets
      * @param array<SelectorInterface> $targetExcludes
      * @param array<class-string> $nodes
      * @throws ShouldNotHappenException
      * @return array<RuleError>
      */
-    protected function applyShould(ClassReflection $subject, array $targets, array $targetExcludes, array $nodes): array
+    protected function applyShould(TestName $testName, ClassReflection $subject, array $targets, array $targetExcludes, array $nodes): array
     {
         $errors = [];
         foreach ($targets as $target) {
@@ -32,7 +34,7 @@ trait ValidationTrait
             }
             if (!$targetFound) {
                 $errors[] = RuleErrorBuilder::message(
-                    $this->getMessage($subject->getName(), $target->getName())
+                    $this->getMessage($testName, $subject->getName(), $target->getName())
                 )->build();
             }
         }
@@ -41,19 +43,20 @@ trait ValidationTrait
     }
 
     /**
+     * @param TestName $testName
      * @param array<SelectorInterface> $targets
      * @param array<SelectorInterface> $targetExcludes
      * @param array<class-string> $nodes
      * @throws ShouldNotHappenException
      * @return array<RuleError>
      */
-    protected function applyShouldNot(ClassReflection $subject, array $targets, array $targetExcludes, array $nodes): array
+    protected function applyShouldNot(TestName $testName, ClassReflection $subject, array $targets, array $targetExcludes, array $nodes): array
     {
         $errors = [];
         foreach ($targets as $target) {
             foreach ($nodes as $node) {
                 if ($this->nodeMatchesTarget($node, $target, $targetExcludes)) {
-                    $errors[] = RuleErrorBuilder::message($this->getMessage($subject->getName(), $node))->build();
+                    $errors[] = RuleErrorBuilder::message($this->getMessage($testName, $subject->getName(), $node))->build();
                 }
             }
         }
@@ -62,13 +65,14 @@ trait ValidationTrait
     }
 
     /**
+     * @param TestName $testName
      * @param array<SelectorInterface> $targets
      * @param array<SelectorInterface> $targetExcludes
      * @param array<class-string> $nodes
      * @throws ShouldNotHappenException
      * @return array<RuleError>
      */
-    protected function applyCanOnly(ClassReflection $subject, array $targets, array $targetExcludes, array $nodes): array
+    protected function applyCanOnly(TestName $testName, ClassReflection $subject, array $targets, array $targetExcludes, array $nodes): array
     {
         $errors = [];
         foreach ($nodes as $node) {
@@ -77,7 +81,7 @@ trait ValidationTrait
                     continue 2;
                 }
             }
-            $errors[] = RuleErrorBuilder::message($this->getMessage($subject->getName(), $node))->build();
+            $errors[] = RuleErrorBuilder::message($this->getMessage($testName, $subject->getName(), $node))->build();
         }
 
         return $errors;

@@ -9,6 +9,7 @@ use PHPat\Rule\Assertion\Declaration\ShouldBeFinal\IsFinalRule;
 use PHPat\Rule\Assertion\Declaration\ShouldBeFinal\ShouldBeFinal;
 use PHPat\Selector\Classname;
 use PHPat\Statement\Builder\StatementBuilderFactory;
+use PHPat\Test\TestName;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
@@ -20,16 +21,19 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class FinalClassTest extends RuleTestCase
 {
+    public const TEST_FUNCTION_NAME_DETECTED_BY_PARSER = 'test_FixtureClassShouldBeFinal';
+
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should be final', FixtureClass::class), 31],
+            [sprintf('%s: %s should be final', self::TEST_FUNCTION_NAME_DETECTED_BY_PARSER, FixtureClass::class), 31],
         ]);
     }
 
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
+            new TestName(self::TEST_FUNCTION_NAME_DETECTED_BY_PARSER),
             ShouldBeFinal::class,
             [new Classname(FixtureClass::class, false)],
             []

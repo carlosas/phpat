@@ -7,6 +7,8 @@ namespace Tests\PHPat\unit;
 use PHPat\Rule\Assertion\Assertion;
 use PHPat\Selector\SelectorInterface;
 use PHPat\Test\RelationRule;
+use PHPat\Test\RuleWithName;
+use PHPat\Test\TestName;
 use PHPat\Test\TestParser;
 use ReflectionClass;
 
@@ -19,6 +21,8 @@ class FakeTestParser extends TestParser
     /** @var array<SelectorInterface> */
     public array $targets;
 
+    public TestName $testName;
+
     public function __invoke(): array
     {
         $rule            = new RelationRule();
@@ -26,21 +30,23 @@ class FakeTestParser extends TestParser
         $rule->subjects  = $this->subjects;
         $rule->targets   = $this->targets;
 
-        return [$rule];
+        return [new RuleWithName($this->testName, $rule)];
     }
 
     /**
+     * @param TestName $testName
      * @param class-string<Assertion> $assertion
      * @param array<SelectorInterface> $subjects
      * @param array<SelectorInterface> $targets
      */
-    public static function create(string $assertion, array $subjects, array $targets): self
+    public static function create(TestName $testName, string $assertion, array $subjects, array $targets): self
     {
         /** @var self $self */
         $self            = (new ReflectionClass(self::class))->newInstanceWithoutConstructor();
         $self->assertion = $assertion;
         $self->subjects  = $subjects;
         $self->targets   = $targets;
+        $self->testName  = $testName;
 
         return $self;
     }

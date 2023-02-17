@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace Tests\PHPat\unit\rules\CanOnlyDepend;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\Relation\CanOnlyDepend\DocParamTagRule;
 use PHPat\Rule\Assertion\Relation\CanOnlyDepend\CanOnlyDepend;
+use PHPat\Rule\Assertion\Relation\CanOnlyDepend\DocParamTagRule;
 use PHPat\Selector\Classname;
 use PHPat\Statement\Builder\StatementBuilderFactory;
+use PHPat\Test\TestName;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
@@ -30,23 +31,26 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class DocParamTagTest extends RuleTestCase
 {
+    public const TEST_FUNCTION_NAME_DETECTED_BY_PARSER = 'test_FixtureClassCanOnlyDependSimpleAndSpecial';
+
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClass::class), 74],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassTwo::class), 74],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassThree::class), 74],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassFour::class), 74],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassFive::class), 74],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassSix::class), 74],
-            [sprintf('%s should not depend on %s', FixtureClass::class, InterfaceWithTemplate::class), 74],
-            [sprintf('%s should not depend on %s', FixtureClass::class, ClassImplementing::class), 74],
+            [sprintf('%s: %s should not depend on %s', self::TEST_FUNCTION_NAME_DETECTED_BY_PARSER, FixtureClass::class, SimpleClass::class), 74],
+            [sprintf('%s: %s should not depend on %s', self::TEST_FUNCTION_NAME_DETECTED_BY_PARSER, FixtureClass::class, SimpleClassTwo::class), 74],
+            [sprintf('%s: %s should not depend on %s', self::TEST_FUNCTION_NAME_DETECTED_BY_PARSER, FixtureClass::class, SimpleClassThree::class), 74],
+            [sprintf('%s: %s should not depend on %s', self::TEST_FUNCTION_NAME_DETECTED_BY_PARSER, FixtureClass::class, SimpleClassFour::class), 74],
+            [sprintf('%s: %s should not depend on %s', self::TEST_FUNCTION_NAME_DETECTED_BY_PARSER, FixtureClass::class, SimpleClassFive::class), 74],
+            [sprintf('%s: %s should not depend on %s', self::TEST_FUNCTION_NAME_DETECTED_BY_PARSER, FixtureClass::class, SimpleClassSix::class), 74],
+            [sprintf('%s: %s should not depend on %s', self::TEST_FUNCTION_NAME_DETECTED_BY_PARSER, FixtureClass::class, InterfaceWithTemplate::class), 74],
+            [sprintf('%s: %s should not depend on %s', self::TEST_FUNCTION_NAME_DETECTED_BY_PARSER, FixtureClass::class, ClassImplementing::class), 74],
         ]);
     }
 
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
+            new TestName(self::TEST_FUNCTION_NAME_DETECTED_BY_PARSER),
             CanOnlyDepend::class,
             [new Classname(FixtureClass::class, false)],
             [

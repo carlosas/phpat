@@ -9,6 +9,7 @@ use PHPat\Rule\Assertion\Declaration\ShouldBeAbstract\AbstractRule;
 use PHPat\Rule\Assertion\Declaration\ShouldBeAbstract\ShouldBeAbstract;
 use PHPat\Selector\Classname;
 use PHPat\Statement\Builder\StatementBuilderFactory;
+use PHPat\Test\TestName;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
@@ -20,16 +21,19 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class AbstractClassTest extends RuleTestCase
 {
+    public const TEST_FUNCTION_NAME_DETECTED_BY_PARSER = 'test_FixtureClassShouldBeAbstract';
+
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should be abstract', FixtureClass::class), 31],
+            [sprintf('%s: %s should be abstract', self::TEST_FUNCTION_NAME_DETECTED_BY_PARSER, FixtureClass::class), 31],
         ]);
     }
 
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
+            new TestName(self::TEST_FUNCTION_NAME_DETECTED_BY_PARSER),
             ShouldBeAbstract::class,
             [new Classname(FixtureClass::class, false)],
             []

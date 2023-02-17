@@ -10,6 +10,7 @@ use PHPat\Selector\Classname;
 use PHPat\Selector\SelectorInterface;
 use PHPat\ShouldNotHappenException;
 use PHPat\Statement\Builder\StatementBuilderFactory;
+use PHPat\Test\TestName;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
@@ -19,7 +20,7 @@ use PHPStan\Type\FileTypeMapper;
 
 abstract class RelationAssertion implements Assertion
 {
-    /** @var array<array{SelectorInterface, array<SelectorInterface>, array<SelectorInterface>, array<SelectorInterface>}> */
+    /** @var array<array{TestName, SelectorInterface, array<SelectorInterface>, array<SelectorInterface>, array<SelectorInterface>}> */
     protected array $statements;
     protected Configuration $configuration;
     protected ReflectionProvider $reflectionProvider;
@@ -61,17 +62,20 @@ abstract class RelationAssertion implements Assertion
     abstract protected function extractNodeClassNames(Node $node, Scope $scope): array;
 
     /**
+     * @param TestName $testName
      * @param class-string $subject
      */
-    abstract protected function getMessage(string $subject, string $target): string;
+    abstract protected function getMessage(TestName $testName, string $subject, string $target): string;
 
     /**
+     * @param TestName                 $testName
+     * @param ClassReflection          $subject
      * @param array<SelectorInterface> $targets
      * @param array<SelectorInterface> $targetExcludes
-     * @param array<class-string> $nodes
+     * @param array<class-string>      $nodes
      * @return array<RuleError>
      */
-    abstract protected function applyValidation(ClassReflection $subject, array $targets, array $targetExcludes, array $nodes): array;
+    abstract protected function applyValidation(TestName $testName, ClassReflection $subject, array $targets, array $targetExcludes, array $nodes): array;
 
     /**
      * @param array<class-string> $nodes
@@ -109,7 +113,7 @@ abstract class RelationAssertion implements Assertion
             throw new ShouldNotHappenException();
         }
 
-        foreach ($this->statements as [$selector, $subjectExcludes, $targets, $targetExcludes]) {
+        foreach ($this->statements as [$testName, $selector, $subjectExcludes, $targets, $targetExcludes]) {
             if ($subject->isBuiltin() || !$selector->matches($subject)) {
                 continue;
             }
@@ -119,7 +123,7 @@ abstract class RelationAssertion implements Assertion
                 }
             }
 
-            array_push($errors, ...$this->applyValidation($subject, $targets, $targetExcludes, $nodes));
+            array_push($errors, ...$this->applyValidation($testName, $subject, $targets, $targetExcludes, $nodes));
         }
 
         return $errors;

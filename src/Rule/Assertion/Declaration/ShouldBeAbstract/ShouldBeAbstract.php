@@ -8,6 +8,7 @@ use PHPat\Configuration;
 use PHPat\Rule\Assertion\Declaration\DeclarationAssertion;
 use PHPat\Rule\Assertion\Declaration\ValidationTrait;
 use PHPat\Statement\Builder\StatementBuilderFactory;
+use PHPat\Test\TestName;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\FileTypeMapper;
@@ -31,14 +32,14 @@ abstract class ShouldBeAbstract extends DeclarationAssertion
         );
     }
 
-    protected function applyValidation(ClassReflection $subject, bool $meetsDeclaration): array
+    protected function applyValidation(TestName $testName, ClassReflection $subject, bool $meetsDeclaration): array
     {
-        return $this->applyShould($subject, $meetsDeclaration);
+        return $this->applyShould($testName, $subject, $meetsDeclaration);
     }
 
 
-    protected function getMessage(string $subject): string
+    protected function getMessage(TestName $testName, string $subject): string
     {
-        return sprintf('%s should be abstract', $subject);
+        return sprintf('%s: %s should be abstract', $testName->getTestName(), $subject);
     }
 }

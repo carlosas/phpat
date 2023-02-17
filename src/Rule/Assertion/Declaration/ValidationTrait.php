@@ -6,6 +6,7 @@ namespace PHPat\Rule\Assertion\Declaration;
 
 use PHPat\Selector\SelectorInterface;
 use PHPat\ShouldNotHappenException;
+use PHPat\Test\TestName;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
@@ -16,13 +17,13 @@ trait ValidationTrait
      * @throws ShouldNotHappenException
      * @return array<RuleError>
      */
-    protected function applyShould(ClassReflection $subject, bool $meetsDeclaration): array
+    protected function applyShould(TestName $testName, ClassReflection $subject, bool $meetsDeclaration): array
     {
         $errors = [];
 
         if (!$meetsDeclaration) {
             $errors[] = RuleErrorBuilder::message(
-                $this->getMessage($subject->getName())
+                $this->getMessage($testName, $subject->getName())
             )->build();
         }
 
@@ -33,13 +34,13 @@ trait ValidationTrait
      * @throws ShouldNotHappenException
      * @return array<RuleError>
      */
-    protected function applyShouldNot(ClassReflection $subject, bool $meetsDeclaration): array
+    protected function applyShouldNot(TestName $testName, ClassReflection $subject, bool $meetsDeclaration): array
     {
         $errors = [];
 
         if ($meetsDeclaration) {
             $errors[] = RuleErrorBuilder::message(
-                $this->getMessage($subject->getName())
+                $this->getMessage($testName, $subject->getName())
             )->build();
         }
 

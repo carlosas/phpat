@@ -8,6 +8,7 @@ use PHPat\Configuration;
 use PHPat\Rule\Assertion\Relation\RelationAssertion;
 use PHPat\Rule\Assertion\Relation\ValidationTrait;
 use PHPat\Statement\Builder\StatementBuilderFactory;
+use PHPat\Test\TestName;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\FileTypeMapper;
@@ -31,13 +32,13 @@ abstract class CanOnlyDepend extends RelationAssertion
         );
     }
 
-    protected function applyValidation(ClassReflection $subject, array $targets, array $targetExcludes, array $nodes): array
+    protected function applyValidation(TestName $testName, ClassReflection $subject, array $targets, array $targetExcludes, array $nodes): array
     {
-        return $this->applyCanOnly($subject, $targets, $targetExcludes, $nodes);
+        return $this->applyCanOnly($testName, $subject, $targets, $targetExcludes, $nodes);
     }
 
-    protected function getMessage(string $subject, string $target): string
+    protected function getMessage(TestName $testName, string $subject, string $target): string
     {
-        return sprintf('%s should not depend on %s', $subject, $target);
+        return sprintf('%s: %s should not depend on %s', $testName->getTestName(), $subject, $target);
     }
 }

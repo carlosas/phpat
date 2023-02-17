@@ -9,6 +9,7 @@ use PHPat\Rule\Assertion\Relation\ShouldNotDepend\DocVarTagRule;
 use PHPat\Rule\Assertion\Relation\ShouldNotDepend\ShouldNotDepend;
 use PHPat\Selector\Classname;
 use PHPat\Statement\Builder\StatementBuilderFactory;
+use PHPat\Test\TestName;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
@@ -30,6 +31,8 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class IgnoredDocVarTagTest extends RuleTestCase
 {
+    public const TEST_FUNCTION_NAME_DETECTED_BY_PARSER = 'test_FixtureClassShouldNotDependSimpleAndSpecial';
+
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], []);
@@ -38,6 +41,7 @@ class IgnoredDocVarTagTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
+            new TestName(self::TEST_FUNCTION_NAME_DETECTED_BY_PARSER),
             ShouldNotDepend::class,
             [new Classname(FixtureClass::class, false)],
             [

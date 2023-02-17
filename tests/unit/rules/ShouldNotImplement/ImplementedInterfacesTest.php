@@ -9,6 +9,7 @@ use PHPat\Rule\Assertion\Relation\ShouldNotImplement\ImplementedInterfacesRule;
 use PHPat\Rule\Assertion\Relation\ShouldNotImplement\ShouldNotImplement;
 use PHPat\Selector\Classname;
 use PHPat\Statement\Builder\StatementBuilderFactory;
+use PHPat\Test\TestName;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
@@ -21,16 +22,19 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class ImplementedInterfacesTest extends RuleTestCase
 {
+    public const TEST_FUNCTION_NAME_DETECTED_BY_PARSER = 'test_FixtureClassShouldNotImplementSimpleInterface';
+
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not implement %s', FixtureClass::class, SimpleInterface::class), 31],
+            [sprintf('%s: %s should not implement %s', self::TEST_FUNCTION_NAME_DETECTED_BY_PARSER, FixtureClass::class, SimpleInterface::class), 31],
         ]);
     }
 
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
+            new TestName(self::TEST_FUNCTION_NAME_DETECTED_BY_PARSER),
             ShouldNotImplement::class,
             [new Classname(FixtureClass::class, false)],
             [new Classname(SimpleInterface::class, false)]
