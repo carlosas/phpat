@@ -58,6 +58,8 @@ abstract class RelationAssertion implements Assertion
         return $this->validateGetErrors($scope, $nodes);
     }
 
+    abstract public function getType(): string;
+
     /**
      * @return array<class-string>
      */
@@ -67,8 +69,6 @@ abstract class RelationAssertion implements Assertion
      * @param class-string $subject
      */
     abstract protected function getMessage(string $subject, string $target): string;
-
-    abstract public function getType(): string;
 
     /**
      * @param array<SelectorInterface> $targets

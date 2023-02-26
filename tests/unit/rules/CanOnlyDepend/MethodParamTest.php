@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Tests\PHPat\unit\rules\CanOnlyDepend;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\Relation\CanOnlyDepend\MethodParamRule;
 use PHPat\Rule\Assertion\Relation\CanOnlyDepend\CanOnlyDepend;
+use PHPat\Rule\Assertion\Relation\CanOnlyDepend\MethodParamRule;
 use PHPat\Selector\Classname;
 use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;

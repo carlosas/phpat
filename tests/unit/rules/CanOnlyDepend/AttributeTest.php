@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Tests\PHPat\unit\rules\CanOnlyDepend;
 
+use Attribute;
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\Relation\CanOnlyDepend\CanOnlyDepend;
 use PHPat\Rule\Assertion\Relation\CanOnlyDepend\AttributeRule;
+use PHPat\Rule\Assertion\Relation\CanOnlyDepend\CanOnlyDepend;
 use PHPat\Selector\Classname;
 use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;
@@ -37,7 +38,7 @@ class AttributeTest extends RuleTestCase
         $testParser = FakeTestParser::create(
             CanOnlyDepend::class,
             [new Classname(FixtureClass::class, false)],
-            [new Classname(\Attribute::class, false)]
+            [new Classname(Attribute::class, false)]
         );
 
         return new AttributeRule(
