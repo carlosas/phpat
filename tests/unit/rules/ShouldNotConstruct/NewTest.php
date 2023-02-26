@@ -15,6 +15,7 @@ use PHPStan\Type\FileTypeMapper;
 use Tests\PHPat\fixtures\FixtureClass;
 use Tests\PHPat\fixtures\Simple\SimpleClass;
 use Tests\PHPat\unit\FakeTestParser;
+use Tests\PHPat\unit\ErrorMessage;
 
 /**
  * @extends RuleTestCase<NewRule>
@@ -24,7 +25,7 @@ class NewTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not construct %s', FixtureClass::class, SimpleClass::class), 55],
+            [sprintf(ErrorMessage::SHOULD_NOT_CONSTRUCT, FixtureClass::class, SimpleClass::class), 55],
         ]);
     }
 

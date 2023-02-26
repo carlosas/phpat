@@ -16,6 +16,7 @@ use Tests\PHPat\fixtures\FixtureClass;
 use Tests\PHPat\fixtures\Simple\SimpleClass;
 use Tests\PHPat\fixtures\Simple\SimpleInterface;
 use Tests\PHPat\unit\FakeTestParser;
+use Tests\PHPat\unit\ErrorMessage;
 
 /**
  * @extends RuleTestCase<MethodReturnRule>
@@ -25,8 +26,8 @@ class MethodReturnTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleInterface::class), 48],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClass::class), 53],
+            [sprintf(ErrorMessage::SHOULD_NOT_DEPEND, FixtureClass::class, SimpleInterface::class), 48],
+            [sprintf(ErrorMessage::SHOULD_NOT_DEPEND, FixtureClass::class, SimpleClass::class), 53],
         ]);
     }
 

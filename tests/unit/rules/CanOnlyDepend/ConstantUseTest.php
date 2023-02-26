@@ -16,6 +16,7 @@ use Tests\PHPat\fixtures\FixtureClass;
 use Tests\PHPat\fixtures\Special\ClassWithConstant;
 use Tests\PHPat\fixtures\Special\ClassWithConstantTwo;
 use Tests\PHPat\unit\FakeTestParser;
+use Tests\PHPat\unit\ErrorMessage;
 
 /**
  * @extends RuleTestCase<\PHPat\Rule\Assertion\Relation\CanOnlyDepend\ConstantUseRule>
@@ -25,7 +26,7 @@ class ConstantUseTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, ClassWithConstant::class), 60],
+            [sprintf(ErrorMessage::SHOULD_NOT_DEPEND, FixtureClass::class, ClassWithConstant::class), 60],
         ]);
     }
 

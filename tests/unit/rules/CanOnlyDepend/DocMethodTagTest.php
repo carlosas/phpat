@@ -24,6 +24,7 @@ use Tests\PHPat\fixtures\Simple\SimpleInterface;
 use Tests\PHPat\fixtures\Special\ClassImplementing;
 use Tests\PHPat\fixtures\Special\InterfaceWithTemplate;
 use Tests\PHPat\unit\FakeTestParser;
+use Tests\PHPat\unit\ErrorMessage;
 
 /**
  * @extends RuleTestCase<DocMethodTagRule>
@@ -33,7 +34,7 @@ class DocMethodTagTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassFive::class), 31],
+            [sprintf(ErrorMessage::SHOULD_NOT_DEPEND, FixtureClass::class, SimpleClassFive::class), 31],
         ]);
     }
 

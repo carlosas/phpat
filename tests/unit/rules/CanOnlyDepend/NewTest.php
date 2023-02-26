@@ -16,6 +16,7 @@ use Tests\PHPat\fixtures\FixtureClass;
 use Tests\PHPat\fixtures\Simple\SimpleClass;
 use Tests\PHPat\fixtures\Simple\SimpleException;
 use Tests\PHPat\fixtures\Special\ClassImplementing;
+use Tests\PHPat\unit\ErrorMessage;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -26,8 +27,8 @@ class NewTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleException::class), 83],
-            [sprintf('%s should not depend on %s', FixtureClass::class, ClassImplementing::class), 86],
+            [sprintf(ErrorMessage::SHOULD_NOT_DEPEND, FixtureClass::class, SimpleException::class), 83],
+            [sprintf(ErrorMessage::SHOULD_NOT_DEPEND, FixtureClass::class, ClassImplementing::class), 86],
         ]);
     }
 

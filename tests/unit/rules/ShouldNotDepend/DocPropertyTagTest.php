@@ -24,6 +24,7 @@ use Tests\PHPat\fixtures\Simple\SimpleInterface;
 use Tests\PHPat\fixtures\Special\ClassImplementing;
 use Tests\PHPat\fixtures\Special\InterfaceWithTemplate;
 use Tests\PHPat\unit\FakeTestParser;
+use Tests\PHPat\unit\ErrorMessage;
 
 /**
  * @extends RuleTestCase<DocPropertyTagRule>
@@ -33,9 +34,9 @@ class DocPropertyTagTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClass::class), 31],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassTwo::class), 31],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassThree::class), 31],
+            [sprintf(ErrorMessage::SHOULD_NOT_DEPEND, FixtureClass::class, SimpleClass::class), 31],
+            [sprintf(ErrorMessage::SHOULD_NOT_DEPEND, FixtureClass::class, SimpleClassTwo::class), 31],
+            [sprintf(ErrorMessage::SHOULD_NOT_DEPEND, FixtureClass::class, SimpleClassThree::class), 31],
         ]);
     }
 

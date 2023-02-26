@@ -14,6 +14,7 @@ use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
 use Tests\PHPat\fixtures\Simple\SimpleFinalClass;
 use Tests\PHPat\unit\FakeTestParser;
+use Tests\PHPat\unit\ErrorMessage;
 
 /**
  * @extends RuleTestCase<IsFinalRule>
@@ -23,7 +24,7 @@ class FinalClassTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/Simple/SimpleFinalClass.php'], [
-            [sprintf('%s should not be final', SimpleFinalClass::class), 7],
+            [sprintf(ErrorMessage::SHOULD_NOT_BE_FINAL, SimpleFinalClass::class), 7],
         ]);
     }
 

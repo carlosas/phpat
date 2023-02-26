@@ -16,6 +16,7 @@ use PHPStan\Type\FileTypeMapper;
 use Tests\PHPat\fixtures\FixtureClass;
 use Tests\PHPat\fixtures\Simple\SimpleAttribute;
 use Tests\PHPat\unit\FakeTestParser;
+use Tests\PHPat\unit\ErrorMessage;
 
 /**
  * @extends RuleTestCase<AttributeRule>
@@ -25,11 +26,11 @@ class AttributeTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class), 31],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class), 36],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class), 39],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class), 43],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class), 89],
+            [sprintf(ErrorMessage::SHOULD_NOT_DEPEND, FixtureClass::class, SimpleAttribute::class), 31],
+            [sprintf(ErrorMessage::SHOULD_NOT_DEPEND, FixtureClass::class, SimpleAttribute::class), 36],
+            [sprintf(ErrorMessage::SHOULD_NOT_DEPEND, FixtureClass::class, SimpleAttribute::class), 39],
+            [sprintf(ErrorMessage::SHOULD_NOT_DEPEND, FixtureClass::class, SimpleAttribute::class), 43],
+            [sprintf(ErrorMessage::SHOULD_NOT_DEPEND, FixtureClass::class, SimpleAttribute::class), 89],
         ]);
     }
 

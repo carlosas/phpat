@@ -15,6 +15,7 @@ use PHPStan\Type\FileTypeMapper;
 use Tests\PHPat\fixtures\FixtureClass;
 use Tests\PHPat\fixtures\Simple\SimpleAbstractClassTwo;
 use Tests\PHPat\unit\FakeTestParser;
+use Tests\PHPat\unit\ErrorMessage;
 
 /**
  * @extends RuleTestCase<ParentClassRule>
@@ -24,7 +25,7 @@ class ParentClassTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should extend %s', FixtureClass::class, SimpleAbstractClassTwo::class), 31],
+            [sprintf(ErrorMessage::SHOULD_EXTEND, FixtureClass::class, SimpleAbstractClassTwo::class), 31],
         ]);
     }
 
