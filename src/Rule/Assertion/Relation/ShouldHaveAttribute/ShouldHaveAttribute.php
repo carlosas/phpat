@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PHPat\Rule\Assertion\Relation\ShouldNotDepend;
+namespace PHPat\Rule\Assertion\Relation\ShouldHaveAttribute;
 
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\AssertionType;
@@ -13,7 +13,7 @@ use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\FileTypeMapper;
 
-abstract class ShouldNotDepend extends RelationAssertion
+abstract class ShouldHaveAttribute extends RelationAssertion
 {
     public function __construct(
         StatementBuilderFactory $statementBuilderFactory,
@@ -32,11 +32,11 @@ abstract class ShouldNotDepend extends RelationAssertion
 
     public function getType(): string
     {
-        return AssertionType::SHOULD_NOT;
+        return AssertionType::SHOULD;
     }
 
     protected function getMessage(string $subject, string $target): string
     {
-        return sprintf('%s should not depend on %s', $subject, $target);
+        return sprintf('%s should have as attribute %s', $subject, $target);
     }
 }

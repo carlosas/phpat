@@ -6,6 +6,7 @@ namespace PHPat\Rule\Assertion\Relation;
 
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\Assertion;
+use PHPat\Rule\Assertion\AssertionType;
 use PHPat\Selector\Classname;
 use PHPat\Selector\SelectorInterface;
 use PHPat\ShouldNotHappenException;
@@ -19,6 +20,8 @@ use PHPStan\Type\FileTypeMapper;
 
 abstract class RelationAssertion implements Assertion
 {
+    use ValidationTrait;
+
     /** @var array<array{SelectorInterface, array<SelectorInterface>, array<SelectorInterface>, array<SelectorInterface>}> */
     protected array $statements;
     protected Configuration $configuration;
@@ -65,13 +68,27 @@ abstract class RelationAssertion implements Assertion
      */
     abstract protected function getMessage(string $subject, string $target): string;
 
+    abstract public function getType(): string;
+
     /**
      * @param array<SelectorInterface> $targets
      * @param array<SelectorInterface> $targetExcludes
      * @param array<class-string> $nodes
      * @return array<RuleError>
      */
-    abstract protected function applyValidation(ClassReflection $subject, array $targets, array $targetExcludes, array $nodes): array;
+    final protected function applyValidation(ClassReflection $subject, array $targets, array $targetExcludes, array $nodes): array
+    {
+        switch ($this->getType()) {
+            case AssertionType::SHOULD:
+                return $this->applyShould($subject, $targets, $targetExcludes, $nodes);
+            case AssertionType::SHOULD_NOT:
+                return $this->applyShouldNot($subject, $targets, $targetExcludes, $nodes);
+            case AssertionType::CAN_ONLY:
+                return $this->applyCanOnly($subject, $targets, $targetExcludes, $nodes);
+            default:
+                throw new ShouldNotHappenException('Assertion type not supported');
+        }
+    }
 
     /**
      * @param array<class-string> $nodes

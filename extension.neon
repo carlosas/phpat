@@ -12,48 +12,53 @@ services:
 		ignore_doc_comments: %phpat.ignore_doc_comments%,
 	)
 
+	# DECLARATION RULES ================================================================================================
 
-    # # # # # DECLARATION RULES # # # # #
-
-	# ShouldBeAbstract rules
+	# ShouldBeAbstract rules -------------------------------------------------------------------------------------------
 	-
 		class: PHPat\Rule\Assertion\Declaration\ShouldBeAbstract\AbstractRule
 		tags:
 			- phpstan.rules.rule
 
-	# ShouldNotBeAbstract rules
+	# ShouldNotBeAbstract rules ----------------------------------------------------------------------------------------
 	-
 		class: PHPat\Rule\Assertion\Declaration\ShouldNotBeAbstract\AbstractRule
 		tags:
 			- phpstan.rules.rule
 
-	# ShouldBeFinal rules
+	# ShouldBeFinal rules ----------------------------------------------------------------------------------------------
 	-
 		class: PHPat\Rule\Assertion\Declaration\ShouldBeFinal\IsFinalRule
 		tags:
 			- phpstan.rules.rule
 
-	# ShouldNotBeFinal rules
+	# ShouldNotBeFinal rules -------------------------------------------------------------------------------------------
 	-
 		class: PHPat\Rule\Assertion\Declaration\ShouldNotBeFinal\IsFinalRule
 		tags:
 			- phpstan.rules.rule
 
-    # # # # # RELATION RULES # # # # #
+	# RELATION RULES ===================================================================================================
 
-	# ShouldImplement rules
+	# ShouldHaveAttribute rules ----------------------------------------------------------------------------------------
+	-
+		class: PHPat\Rule\Assertion\Relation\ShouldHaveAttribute\ClassAttributeRule
+		tags:
+			- phpstan.rules.rule
+
+	# ShouldImplement rules --------------------------------------------------------------------------------------------
 	-
 		class: PHPat\Rule\Assertion\Relation\ShouldImplement\ImplementedInterfacesRule
 		tags:
 			- phpstan.rules.rule
 
-	# ShouldExtend rules
+	# ShouldExtend rules -----------------------------------------------------------------------------------------------
 	-
 		class: PHPat\Rule\Assertion\Relation\ShouldExtend\ParentClassRule
 		tags:
 			- phpstan.rules.rule
 
-	# ShouldNotDepend rules
+	# ShouldNotDepend rules --------------------------------------------------------------------------------------------
 	-
 		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\AttributeRule
 		tags:
@@ -111,7 +116,7 @@ services:
 		tags:
 			- phpstan.rules.rule
 
-	# CanOnlyDepend rules
+	# CanOnlyDepend rules ----------------------------------------------------------------------------------------------
 	-
 		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\AttributeRule
 		tags:
@@ -169,19 +174,19 @@ services:
 		tags:
 			- phpstan.rules.rule
 
-	# ShouldNotConstruct rules
+	# ShouldNotConstruct rules -----------------------------------------------------------------------------------------
 	-
 		class: PHPat\Rule\Assertion\Relation\ShouldNotConstruct\NewRule
 		tags:
 			- phpstan.rules.rule
 
-	# ShouldNotExtend rules
+	# ShouldNotExtend rules --------------------------------------------------------------------------------------------
 	-
 		class: PHPat\Rule\Assertion\Relation\ShouldNotExtend\ParentClassRule
 		tags:
 			- phpstan.rules.rule
 
-	# ShouldNotImplement rules
+	# ShouldNotImplement rules -----------------------------------------------------------------------------------------
 	-
 		class: PHPat\Rule\Assertion\Relation\ShouldNotImplement\ImplementedInterfacesRule
 		tags:

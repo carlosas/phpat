@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PHPat\Rule\Assertion\Relation\ShouldNotExtend;
 
 use PHPat\Configuration;
+use PHPat\Rule\Assertion\AssertionType;
 use PHPat\Rule\Assertion\Relation\RelationAssertion;
 use PHPat\Rule\Assertion\Relation\ValidationTrait;
 use PHPat\Statement\Builder\StatementBuilderFactory;
@@ -14,8 +15,6 @@ use PHPStan\Type\FileTypeMapper;
 
 abstract class ShouldNotExtend extends RelationAssertion
 {
-    use ValidationTrait;
-
     public function __construct(
         StatementBuilderFactory $statementBuilderFactory,
         Configuration $configuration,
@@ -31,9 +30,9 @@ abstract class ShouldNotExtend extends RelationAssertion
         );
     }
 
-    protected function applyValidation(ClassReflection $subject, array $targets, array $targetExcludes, array $nodes): array
+    public function getType(): string
     {
-        return $this->applyShouldNot($subject, $targets, $targetExcludes, $nodes);
+        return AssertionType::SHOULD_NOT;
     }
 
     protected function getMessage(string $subject, string $target): string

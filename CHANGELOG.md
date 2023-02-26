@@ -2,14 +2,14 @@
 All notable changes to this project will be documented in this file.
 
 ## 0.10.3
-* Added `canOnlyDepend()` assertion.
+* Added `canOnlyDepend` assertion.
 
 ## 0.10.2
-* Added `shouldBeAbstract()` and `shouldNotBeAbstract()` assertions.
-* Fixed `shouldNotDependOn()` assertion ignoring static method calls.
+* Added `shouldBeAbstract` and `shouldNotBeAbstract` assertions.
+* Fixed `shouldNotDependOn` assertion ignoring static method calls.
 
 ## 0.10.1
-* Added `shouldBeFinal()` and `shouldNotBeFinal()` assertions.
+* Added `shouldBeFinal` and `shouldNotBeFinal` assertions.
 
 ## 0.10.0 ⚠
 * **Reconversion of the project as a PHPStan extension**
@@ -64,7 +64,7 @@ All notable changes to this project will be documented in this file.
 * Remove regex selections with results from origins to avoid duplicated statements
 
 ## 0.7.7
-* Do not analyze excluded files ([+info](https://github.com/carlosas/phpat/pull/157#issuecomment-967341532))
+* Do not analyze excluded files
 
 ## 0.7.6
 * Move CI to GitHub Actions
@@ -77,7 +77,7 @@ All notable changes to this project will be documented in this file.
 
 ## 0.7.4
 * Fix exclusions when they are not part of the src
-* Allow to include test files with more valid names
+* Allow including test files with more valid names
 
 ## 0.7.3
 * Change composer package name to `phpat/phpat`
