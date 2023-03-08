@@ -18,13 +18,13 @@ use Tests\PHPat\unit\FakeTestParser;
 /**
  * @extends RuleTestCase<AbstractRule>
  */
-class AbstractClassTest extends RuleTestCase
+class ShowRuleNameAbstractClassTest extends RuleTestCase
 {
     public const RULE_NAME = 'test_SimpleAbstractClassShouldNotBeAbstract';
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/Simple/SimpleAbstractClass.php'], [
-            [sprintf('%s should not be abstract', SimpleAbstractClass::class), 7],
+            [sprintf('%s: %s should not be abstract', self::RULE_NAME, SimpleAbstractClass::class), 7],
         ]);
     }
 
@@ -39,7 +39,7 @@ class AbstractClassTest extends RuleTestCase
 
         return new AbstractRule(
             new StatementBuilderFactory($testParser),
-            new Configuration(false, false),
+            new Configuration(false, true),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

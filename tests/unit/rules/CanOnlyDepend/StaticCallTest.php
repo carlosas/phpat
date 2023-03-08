@@ -22,6 +22,7 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class StaticCallTest extends RuleTestCase
 {
+    public const RULE_NAME = 'test_FixtureClassCanOnlyDependSimpleAndSpecial';
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
@@ -32,6 +33,7 @@ class StaticCallTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
+            self::RULE_NAME,
             CanOnlyDepend::class,
             [new Classname(FixtureClass::class, false)],
             [new Classname(ClassWithStaticMethodTwo::class, false)]
@@ -39,7 +41,7 @@ class StaticCallTest extends RuleTestCase
 
         return new StaticMethodRule(
             new StatementBuilderFactory($testParser),
-            new Configuration(false),
+            new Configuration(false, false),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

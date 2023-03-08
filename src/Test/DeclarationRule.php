@@ -16,6 +16,9 @@ class DeclarationRule implements Rule
     /** @var null|class-string<DeclarationAssertion> */
     public ?string $assertion = null;
 
+    /** @var string */
+    public string $ruleName = '';
+
     /**
      * @return null|class-string<DeclarationAssertion>
      */
@@ -42,5 +45,10 @@ class DeclarationRule implements Rule
     public function getTargetExcludes(): array
     {
         return [];
+    }
+
+    public function getRuleName(): string
+    {
+        return $this->ruleName;
     }
 }

@@ -2,6 +2,7 @@
 parameters:
 	phpat:
 		ignore_doc_comments: false
+		show_rule_name: false
 
 services:
 	- PHPat\Test\TestExtractor
@@ -10,6 +11,7 @@ services:
 	- PHPat\Statement\Builder\StatementBuilderFactory
 	- PHPat\Configuration(
 		ignore_doc_comments: %phpat.ignore_doc_comments%,
+		show_rule_name: %phpat.show_rule_name%,
 	)
 
 
@@ -189,5 +191,6 @@ services:
 
 parametersSchema:
 	phpat: structure([
-		ignore_doc_comments: bool()
+		ignore_doc_comments: bool(),
+		show_rule_name: bool(),
 	])

@@ -30,6 +30,7 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class DocReturnsTagTest extends RuleTestCase
 {
+    public const RULE_NAME = 'test_FixtureClassShouldNotDependSimpleAndSpecial';
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
@@ -40,6 +41,7 @@ class DocReturnsTagTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
+            self::RULE_NAME,
             ShouldNotDepend::class,
             [new Classname(FixtureClass::class, false)],
             [
@@ -58,7 +60,7 @@ class DocReturnsTagTest extends RuleTestCase
 
         return new DocReturnTagRule(
             new StatementBuilderFactory($testParser),
-            new Configuration(false),
+            new Configuration(false, false),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

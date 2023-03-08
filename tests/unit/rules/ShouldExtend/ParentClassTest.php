@@ -21,6 +21,7 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class ParentClassTest extends RuleTestCase
 {
+    public const RULE_NAME = 'test_FixtureClassShouldExtendSimpleAbstractClassTwo';
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
@@ -31,6 +32,7 @@ class ParentClassTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
+            self::RULE_NAME,
             ShouldExtend::class,
             [new Classname(FixtureClass::class, false)],
             [new Classname(SimpleAbstractClassTwo::class, false)]
@@ -38,7 +40,7 @@ class ParentClassTest extends RuleTestCase
 
         return new ParentClassRule(
             new StatementBuilderFactory($testParser),
-            new Configuration(false),
+            new Configuration(false, false),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );
