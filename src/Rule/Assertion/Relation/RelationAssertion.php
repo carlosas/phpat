@@ -131,7 +131,7 @@ abstract class RelationAssertion implements Assertion
         return $errors;
     }
 
-    /*
+    /**
      * @param array<class-string> $nodes
      * @return array<class-string>
      */
