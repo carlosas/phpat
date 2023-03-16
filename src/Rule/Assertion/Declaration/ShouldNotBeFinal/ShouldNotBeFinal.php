@@ -31,13 +31,20 @@ abstract class ShouldNotBeFinal extends DeclarationAssertion
         );
     }
 
-    protected function applyValidation(ClassReflection $subject, bool $meetsDeclaration): array
+    protected function applyValidation(string $ruleName, ClassReflection $subject, bool $meetsDeclaration): array
     {
-        return $this->applyShouldNot($subject, $meetsDeclaration);
+        return $this->applyShouldNot($ruleName, $subject, $meetsDeclaration);
     }
 
-    protected function getMessage(string $subject): string
+    protected function getMessage(string $ruleName, string $subject): string
     {
-        return sprintf('%s should not be final', $subject);
+        return strtr(
+            $this->configuration->getDeclarationMessageFormat(),
+            [
+                '{subject}'     => $subject,
+                '{declaration}' => 'should not be final',
+                '{ruleName}'    => $ruleName,
+            ]
+        );
     }
 }

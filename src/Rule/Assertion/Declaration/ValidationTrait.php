@@ -16,13 +16,13 @@ trait ValidationTrait
      * @throws ShouldNotHappenException
      * @return array<RuleError>
      */
-    protected function applyShould(ClassReflection $subject, bool $meetsDeclaration): array
+    protected function applyShould(string $ruleName, ClassReflection $subject, bool $meetsDeclaration): array
     {
         $errors = [];
 
         if (!$meetsDeclaration) {
             $errors[] = RuleErrorBuilder::message(
-                $this->getMessage($subject->getName())
+                $this->getMessage($ruleName, $subject->getName())
             )->build();
         }
 
@@ -33,13 +33,13 @@ trait ValidationTrait
      * @throws ShouldNotHappenException
      * @return array<RuleError>
      */
-    protected function applyShouldNot(ClassReflection $subject, bool $meetsDeclaration): array
+    protected function applyShouldNot(string $ruleName, ClassReflection $subject, bool $meetsDeclaration): array
     {
         $errors = [];
 
         if ($meetsDeclaration) {
             $errors[] = RuleErrorBuilder::message(
-                $this->getMessage($subject->getName())
+                $this->getMessage($ruleName, $subject->getName())
             )->build();
         }
 

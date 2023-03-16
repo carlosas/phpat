@@ -31,14 +31,21 @@ abstract class ShouldBeAbstract extends DeclarationAssertion
         );
     }
 
-    protected function applyValidation(ClassReflection $subject, bool $meetsDeclaration): array
+    protected function applyValidation(string $ruleName, ClassReflection $subject, bool $meetsDeclaration): array
     {
-        return $this->applyShould($subject, $meetsDeclaration);
+        return $this->applyShould($ruleName, $subject, $meetsDeclaration);
     }
 
 
-    protected function getMessage(string $subject): string
+    protected function getMessage(string $ruleName, string $subject): string
     {
-        return sprintf('%s should be abstract', $subject);
+        return strtr(
+            $this->configuration->getDeclarationMessageFormat(),
+            [
+                '{subject}'     => $subject,
+                '{declaration}' => 'should be abstract',
+                '{ruleName}'    => $ruleName,
+            ]
+        );
     }
 }

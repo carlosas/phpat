@@ -31,13 +31,21 @@ abstract class ShouldExtend extends RelationAssertion
         );
     }
 
-    protected function applyValidation(ClassReflection $subject, array $targets, array $targetExcludes, array $nodes): array
+    protected function applyValidation(string $ruleName, ClassReflection $subject, array $targets, array $targetExcludes, array $nodes): array
     {
-        return $this->applyShould($subject, $targets, $targetExcludes, $nodes);
+        return $this->applyShould($ruleName, $subject, $targets, $targetExcludes, $nodes);
     }
 
-    protected function getMessage(string $subject, string $target): string
+    protected function getMessage(string $ruleName, string $subject, string $target): string
     {
-        return sprintf('%s should extend %s', $subject, $target);
+        return strtr(
+            $this->configuration->getRelationMessageFormat(),
+            [
+                '{subject}'  => $subject,
+                '{relation}' => 'should extend',
+                '{target}'   => $target,
+                '{ruleName}' => $ruleName,
+            ]
+        );
     }
 }
