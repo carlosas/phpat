@@ -33,4 +33,9 @@ interface Rule
      * @return array<SelectorInterface>
      */
     public function getTargetExcludes(): array;
+
+    /**
+     * @return string
+     */
+    public function getRuleName(): string;
 }

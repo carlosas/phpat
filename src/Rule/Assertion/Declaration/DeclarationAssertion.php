@@ -18,7 +18,7 @@ use PHPStan\Type\FileTypeMapper;
 
 abstract class DeclarationAssertion implements Assertion
 {
-    /** @var array<array{SelectorInterface, array<SelectorInterface>, array<SelectorInterface>, array<SelectorInterface>}> */
+    /** @var array<array{string, SelectorInterface, array<SelectorInterface>, array<SelectorInterface>, array<SelectorInterface>}> */
     protected array $statements;
     protected Configuration $configuration;
     protected ReflectionProvider $reflectionProvider;
@@ -57,14 +57,15 @@ abstract class DeclarationAssertion implements Assertion
     abstract protected function meetsDeclaration(Node $node, Scope $scope): bool;
 
     /**
+     * @param string $ruleName
      * @param class-string $subject
      */
-    abstract protected function getMessage(string $subject): string;
+    abstract protected function getMessage(string $ruleName, string $subject): string;
 
     /**
      * @return array<RuleError>
      */
-    abstract protected function applyValidation(ClassReflection $subject, bool $meetsDeclaration): array;
+    abstract protected function applyValidation(string $ruleName, ClassReflection $subject, bool $meetsDeclaration): array;
 
     protected function ruleApplies(Scope $scope): bool
     {
@@ -87,7 +88,7 @@ abstract class DeclarationAssertion implements Assertion
             throw new ShouldNotHappenException();
         }
 
-        foreach ($this->statements as [$selector, $subjectExcludes]) {
+        foreach ($this->statements as [$ruleName, $selector, $subjectExcludes]) {
             if ($subject->isBuiltin() || !$selector->matches($subject)) {
                 continue;
             }
@@ -97,7 +98,7 @@ abstract class DeclarationAssertion implements Assertion
                 }
             }
 
-            array_push($errors, ...$this->applyValidation($subject, $meetsDeclaration));
+            array_push($errors, ...$this->applyValidation($ruleName, $subject, $meetsDeclaration));
         }
 
         return $errors;

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Tests\PHPat\unit\rules\CanOnlyDepend;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\Relation\CanOnlyDepend\DocParamTagRule;
 use PHPat\Rule\Assertion\Relation\CanOnlyDepend\CanOnlyDepend;
+use PHPat\Rule\Assertion\Relation\CanOnlyDepend\DocParamTagRule;
 use PHPat\Selector\Classname;
 use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;
@@ -30,6 +30,7 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class DocParamTagTest extends RuleTestCase
 {
+    public const RULE_NAME = 'test_FixtureClassCanOnlyDependSimpleAndSpecial';
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
@@ -47,6 +48,7 @@ class DocParamTagTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
+            self::RULE_NAME,
             CanOnlyDepend::class,
             [new Classname(FixtureClass::class, false)],
             [
@@ -57,7 +59,7 @@ class DocParamTagTest extends RuleTestCase
 
         return new DocParamTagRule(
             new StatementBuilderFactory($testParser),
-            new Configuration(false),
+            new Configuration(false, false),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

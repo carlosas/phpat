@@ -20,6 +20,8 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class FinalClassTest extends RuleTestCase
 {
+    public const RULE_NAME = 'test_SimpleFinalClassShouldNotBeFinal';
+
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/Simple/SimpleFinalClass.php'], [
@@ -30,6 +32,7 @@ class FinalClassTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
+            self::RULE_NAME,
             ShouldNotBeFinal::class,
             [new Classname(SimpleFinalClass::class, false)],
             []
@@ -37,7 +40,7 @@ class FinalClassTest extends RuleTestCase
 
         return new IsFinalRule(
             new StatementBuilderFactory($testParser),
-            new Configuration(false),
+            new Configuration(false, false),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

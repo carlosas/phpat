@@ -19,7 +19,7 @@ use PHPStan\Type\FileTypeMapper;
 
 abstract class RelationAssertion implements Assertion
 {
-    /** @var array<array{SelectorInterface, array<SelectorInterface>, array<SelectorInterface>, array<SelectorInterface>}> */
+    /** @var array<array{string, SelectorInterface, array<SelectorInterface>, array<SelectorInterface>, array<SelectorInterface>}> */
     protected array $statements;
     protected Configuration $configuration;
     protected ReflectionProvider $reflectionProvider;
@@ -61,17 +61,20 @@ abstract class RelationAssertion implements Assertion
     abstract protected function extractNodeClassNames(Node $node, Scope $scope): array;
 
     /**
+     * @param string $ruleName
      * @param class-string $subject
      */
-    abstract protected function getMessage(string $subject, string $target): string;
+    abstract protected function getMessage(string $ruleName, string $subject, string $target): string;
 
     /**
+     * @param string                 $ruleName
+     * @param ClassReflection          $subject
      * @param array<SelectorInterface> $targets
      * @param array<SelectorInterface> $targetExcludes
-     * @param array<class-string> $nodes
+     * @param array<class-string>      $nodes
      * @return array<RuleError>
      */
-    abstract protected function applyValidation(ClassReflection $subject, array $targets, array $targetExcludes, array $nodes): array;
+    abstract protected function applyValidation(string $ruleName, ClassReflection $subject, array $targets, array $targetExcludes, array $nodes): array;
 
     /**
      * @param array<class-string> $nodes
@@ -109,7 +112,7 @@ abstract class RelationAssertion implements Assertion
             throw new ShouldNotHappenException();
         }
 
-        foreach ($this->statements as [$selector, $subjectExcludes, $targets, $targetExcludes]) {
+        foreach ($this->statements as [$ruleName, $selector, $subjectExcludes, $targets, $targetExcludes]) {
             if ($subject->isBuiltin() || !$selector->matches($subject)) {
                 continue;
             }
@@ -119,7 +122,7 @@ abstract class RelationAssertion implements Assertion
                 }
             }
 
-            array_push($errors, ...$this->applyValidation($subject, $targets, $targetExcludes, $nodes));
+            array_push($errors, ...$this->applyValidation($ruleName, $subject, $targets, $targetExcludes, $nodes));
         }
 
         return $errors;

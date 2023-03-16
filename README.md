@@ -80,14 +80,16 @@ You can configure some PHPat options as follows:
 parameters:
     phpat:
         ignore_doc_comments: true
+        show_rule_name: true
 ```
 
 <details><summary>Complete list of options</summary>
 <br />
 
-| Name                                      | Description                                           |   Default    |
-|-------------------------------------------|-------------------------------------------------------|:------------:|
-| `ignore_doc_comments`                     | Ignore relations on Doc Comments                      |   *false*    |
+| Name                      | Description                         |   Default    |
+|---------------------------|-------------------------------------|:------------:|
+| `ignore_doc_comments`     | Ignore relations on Doc Comments    |   *false*    |
+| `show_rule_name`          | Show rule name to assertion message |   *false*    |
 
 </details>
 

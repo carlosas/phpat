@@ -12,7 +12,7 @@ use PHPStan\Rules\Rule as PHPStanRule;
 
 class RelationStatementBuilder implements StatementBuilder
 {
-    /** @var array<array{SelectorInterface, array<SelectorInterface>, array<SelectorInterface>, array<SelectorInterface>}> */
+    /** @var array<array{string, SelectorInterface, array<SelectorInterface>, array<SelectorInterface>, array<SelectorInterface>}> */
     protected $statements = [];
     /** @var array<RelationRule> */
     protected array $rules;
@@ -30,14 +30,14 @@ class RelationStatementBuilder implements StatementBuilder
     }
 
     /**
-     * @return array<array{SelectorInterface, array<SelectorInterface>, array<SelectorInterface>, array<SelectorInterface>}>
+     * @return array<array{string, SelectorInterface, array<SelectorInterface>, array<SelectorInterface>, array<SelectorInterface>}>
      */
     public function build(): array
     {
         $params = $this->extractCurrentAssertion($this->rules);
 
         foreach ($params as $param) {
-            $this->addStatement($param[0], $param[1], $param[2], $param[3]);
+            $this->addStatement($param[0], $param[1], $param[2], $param[3], $param[4]);
         }
 
         return $this->statements;
@@ -49,17 +49,18 @@ class RelationStatementBuilder implements StatementBuilder
      * @param array<SelectorInterface> $targetExcludes
      */
     private function addStatement(
+        string $ruleName,
         SelectorInterface $subject,
         array $subjectExcludes,
         array $targets,
         array $targetExcludes
     ): void {
-        $this->statements[] = [$subject, $subjectExcludes, $targets, $targetExcludes];
+        $this->statements[] = [$ruleName, $subject, $subjectExcludes, $targets, $targetExcludes];
     }
 
     /**
      * @param array<Rule> $rules
-     * @return array<array{SelectorInterface, array<SelectorInterface>, array<SelectorInterface>, array<SelectorInterface>}>
+     * @return array<array{string, SelectorInterface, array<SelectorInterface>, array<SelectorInterface>, array<SelectorInterface>}>
      */
     private function extractCurrentAssertion(array $rules): array
     {
@@ -67,7 +68,7 @@ class RelationStatementBuilder implements StatementBuilder
         foreach ($rules as $rule) {
             if ($rule->getAssertion() === $this->assertion) {
                 foreach ($rule->getSubjects() as $selector) {
-                    $result[] = [$selector, $rule->getSubjectExcludes(), $rule->getTargets(), $rule->getTargetExcludes()];
+                    $result[] = [$rule->getRuleName(), $selector, $rule->getSubjectExcludes(), $rule->getTargets(), $rule->getTargetExcludes()];
                 }
             }
         }

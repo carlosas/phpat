@@ -30,6 +30,7 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class DocPropertyTagTest extends RuleTestCase
 {
+    public const RULE_NAME = 'test_FixtureClassShouldNotDependSimpleAndSpecial';
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
@@ -42,6 +43,7 @@ class DocPropertyTagTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
+            self::RULE_NAME,
             ShouldNotDepend::class,
             [new Classname(FixtureClass::class, false)],
             [
@@ -60,7 +62,7 @@ class DocPropertyTagTest extends RuleTestCase
 
         return new DocPropertyTagRule(
             new StatementBuilderFactory($testParser),
-            new Configuration(false),
+            new Configuration(false, false),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

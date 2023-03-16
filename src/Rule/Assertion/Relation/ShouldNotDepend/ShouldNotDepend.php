@@ -31,13 +31,21 @@ abstract class ShouldNotDepend extends RelationAssertion
         );
     }
 
-    protected function applyValidation(ClassReflection $subject, array $targets, array $targetExcludes, array $nodes): array
+    protected function applyValidation(string $ruleName, ClassReflection $subject, array $targets, array $targetExcludes, array $nodes): array
     {
-        return $this->applyShouldNot($subject, $targets, $targetExcludes, $nodes);
+        return $this->applyShouldNot($ruleName, $subject, $targets, $targetExcludes, $nodes);
     }
 
-    protected function getMessage(string $subject, string $target): string
+    protected function getMessage(string $ruleName, string $subject, string $target): string
     {
-        return sprintf('%s should not depend on %s', $subject, $target);
+        return strtr(
+            $this->configuration->getRelationMessageFormat(),
+            [
+                '{subject}'  => $subject,
+                '{relation}' => 'should not depend on',
+                '{target}'   => $target,
+                '{ruleName}' => $ruleName,
+            ]
+        );
     }
 }

@@ -12,6 +12,8 @@ use ReflectionClass;
 
 class FakeTestParser extends TestParser
 {
+    /** @var string */
+    public string $ruleName;
     /** @var class-string<Assertion> */
     public string $assertion;
     /** @var array<SelectorInterface> */
@@ -22,6 +24,7 @@ class FakeTestParser extends TestParser
     public function __invoke(): array
     {
         $rule            = new RelationRule();
+        $rule->ruleName  = $this->ruleName;
         $rule->assertion = $this->assertion;
         $rule->subjects  = $this->subjects;
         $rule->targets   = $this->targets;
@@ -34,10 +37,11 @@ class FakeTestParser extends TestParser
      * @param array<SelectorInterface> $subjects
      * @param array<SelectorInterface> $targets
      */
-    public static function create(string $assertion, array $subjects, array $targets): self
+    public static function create(string $ruleName, string $assertion, array $subjects, array $targets): self
     {
         /** @var self $self */
         $self            = (new ReflectionClass(self::class))->newInstanceWithoutConstructor();
+        $self->ruleName  = $ruleName;
         $self->assertion = $assertion;
         $self->subjects  = $subjects;
         $self->targets   = $targets;

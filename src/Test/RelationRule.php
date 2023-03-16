@@ -21,6 +21,9 @@ class RelationRule implements Rule
     /** @var null|class-string<DeclarationAssertion>|class-string<RelationAssertion> */
     public ?string $assertion = null;
 
+    /** @var string */
+    public string $ruleName = '';
+
     /**
      * @return null|class-string<DeclarationAssertion>|class-string<RelationAssertion>
      */
@@ -47,5 +50,10 @@ class RelationRule implements Rule
     public function getTargetExcludes(): array
     {
         return $this->targetExcludes;
+    }
+
+    public function getRuleName(): string
+    {
+        return $this->ruleName;
     }
 }

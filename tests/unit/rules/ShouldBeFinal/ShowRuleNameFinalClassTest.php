@@ -2,31 +2,29 @@
 
 declare(strict_types=1);
 
-namespace Tests\PHPat\unit\rules\CanOnlyDepend;
+namespace Tests\PHPat\unit\rules\ShouldBeFinal;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\Relation\CanOnlyDepend\CanOnlyDepend;
-use PHPat\Rule\Assertion\Relation\CanOnlyDepend\DocThrowsTagRule;
+use PHPat\Rule\Assertion\Declaration\ShouldBeFinal\IsFinalRule;
+use PHPat\Rule\Assertion\Declaration\ShouldBeFinal\ShouldBeFinal;
 use PHPat\Selector\Classname;
 use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
 use Tests\PHPat\fixtures\FixtureClass;
-use Tests\PHPat\fixtures\Simple\SimpleException;
-use Tests\PHPat\fixtures\Simple\SimpleExceptionTwo;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
- * @extends RuleTestCase<DocThrowsTagRule>
+ * @extends RuleTestCase<IsFinalRule>
  */
-class DocThrowsTagTest extends RuleTestCase
+class ShowRuleNameFinalClassTest extends RuleTestCase
 {
-    public const RULE_NAME = 'test_FixtureClassCanOnlyDependSimpleAndSpecial';
+    public const RULE_NAME = 'test_FixtureClassShouldBeFinal';
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleException::class), 74],
+            [sprintf('%s: %s should be final', self::RULE_NAME, FixtureClass::class), 31],
         ]);
     }
 
@@ -34,16 +32,14 @@ class DocThrowsTagTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            CanOnlyDepend::class,
+            ShouldBeFinal::class,
             [new Classname(FixtureClass::class, false)],
-            [
-                new Classname(SimpleExceptionTwo::class, false),
-            ]
+            []
         );
 
-        return new DocThrowsTagRule(
+        return new IsFinalRule(
             new StatementBuilderFactory($testParser),
-            new Configuration(false, false),
+            new Configuration(false, true),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

@@ -19,4 +19,9 @@ abstract class AbstractStep implements Rule
     {
         return $this->rule;
     }
+
+    final public function setRuleName(string $ruleName): void
+    {
+        $this->rule->ruleName = $ruleName;
+    }
 }
