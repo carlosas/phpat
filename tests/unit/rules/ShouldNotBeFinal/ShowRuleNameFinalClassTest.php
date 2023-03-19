@@ -40,7 +40,7 @@ class ShowRuleNameFinalClassTest extends RuleTestCase
 
         return new IsFinalRule(
             new StatementBuilderFactory($testParser),
-            new Configuration(false, true),
+            new Configuration(false, true, true),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

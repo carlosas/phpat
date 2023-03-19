@@ -40,7 +40,7 @@ class ShowRuleNameParentClassTest extends RuleTestCase
 
         return new ParentClassRule(
             new StatementBuilderFactory($testParser),
-            new Configuration(false, true),
+            new Configuration(false, true, true),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

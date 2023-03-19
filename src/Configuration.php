@@ -18,20 +18,28 @@ final class Configuration
     private const DECLARATION_MESSAGE_DEFAULT_FORMAT        = '{subject} {declaration}';
     private const DECLARATION_MESSAGE_WITH_RULE_NAME_FORMAT = '{ruleName}: {subject} {declaration}';
     private bool $ignore_doc_comments;
+    private bool $ignore_built_in_classes;
     private bool $show_rule_name;
 
 
     public function __construct(
         bool $ignore_doc_comments,
+        bool $ignore_built_in_classes,
         bool $show_rule_name
     ) {
         $this->ignore_doc_comments = $ignore_doc_comments;
+        $this->ignore_built_in_classes = $ignore_built_in_classes;
         $this->show_rule_name      = $show_rule_name;
     }
 
     public function ignoreDocComments(): bool
     {
         return $this->ignore_doc_comments;
+    }
+
+    public function ignoreBuiltInClasses(): bool
+    {
+        return $this->ignore_built_in_classes;
     }
 
     public function getRelationMessageFormat(): string
@@ -43,4 +51,5 @@ final class Configuration
     {
         return $this->show_rule_name ? self::DECLARATION_MESSAGE_WITH_RULE_NAME_FORMAT : self::DECLARATION_MESSAGE_DEFAULT_FORMAT;
     }
+
 }

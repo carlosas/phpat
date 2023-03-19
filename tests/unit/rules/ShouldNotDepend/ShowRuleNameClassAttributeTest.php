@@ -40,7 +40,7 @@ class ShowRuleNameClassAttributeTest extends RuleTestCase
 
         return new ClassAttributeRule(
             new StatementBuilderFactory($testParser),
-            new Configuration(false, true),
+            new Configuration(false, true, true),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

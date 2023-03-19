@@ -40,7 +40,7 @@ class ConstantUseTest extends RuleTestCase
 
         return new ConstantUseRule(
             new StatementBuilderFactory($testParser),
-            new Configuration(false, false),
+            new Configuration(false, true, false),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

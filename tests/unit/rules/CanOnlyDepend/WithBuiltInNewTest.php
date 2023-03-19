@@ -4,29 +4,31 @@ declare(strict_types=1);
 
 namespace Tests\PHPat\unit\rules\CanOnlyDepend;
 
-use Attribute;
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\Relation\CanOnlyDepend\CanOnlyDepend;
-use PHPat\Rule\Assertion\Relation\CanOnlyDepend\ClassAttributeRule;
+use PHPat\Rule\Assertion\Relation\CanOnlyDepend\NewRule;
 use PHPat\Selector\Classname;
 use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
 use Tests\PHPat\fixtures\FixtureClass;
-use Tests\PHPat\fixtures\Simple\SimpleAttribute;
+use Tests\PHPat\fixtures\Simple\SimpleClass;
+use Tests\PHPat\fixtures\Simple\SimpleException;
+use Tests\PHPat\fixtures\Special\ClassImplementing;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
- * @extends RuleTestCase<ClassAttributeRule>
+ * @extends RuleTestCase<NewRule>
  */
-class ClassAttributeTest extends RuleTestCase
+class WithBuiltInNewTest extends RuleTestCase
 {
     public const RULE_NAME = 'test_FixtureClassCanOnlyDependSimpleAndSpecial';
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class), 31],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleException::class), 79],
+            [sprintf('%s should not depend on %s', FixtureClass::class, ClassImplementing::class), 82],
         ]);
     }
 
@@ -36,10 +38,10 @@ class ClassAttributeTest extends RuleTestCase
             self::RULE_NAME,
             CanOnlyDepend::class,
             [new Classname(FixtureClass::class, false)],
-            [new Classname(Attribute::class, false)]
+            [new Classname(SimpleClass::class, false)]
         );
 
-        return new ClassAttributeRule(
+        return new NewRule(
             new StatementBuilderFactory($testParser),
             new Configuration(false, true, false),
             $this->createReflectionProvider(),

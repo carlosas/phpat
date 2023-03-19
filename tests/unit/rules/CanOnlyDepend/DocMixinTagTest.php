@@ -59,7 +59,7 @@ class DocMixinTagTest extends RuleTestCase
 
         return new DocMixinTagRule(
             new StatementBuilderFactory($testParser),
-            new Configuration(false, false),
+            new Configuration(false, true, false),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

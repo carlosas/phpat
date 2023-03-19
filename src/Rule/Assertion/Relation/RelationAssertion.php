@@ -122,9 +122,13 @@ abstract class RelationAssertion implements Assertion
                 }
             }
 
+            if ($this->configuration->ignoreBuiltInClasses() === true) {
+                $nodes = $this->removeBuiltInClasses($nodes);
+            }
+
             array_push(
                 $errors,
-                ...$this->applyValidation($ruleName, $subject, $targets, $targetExcludes, $this->removeBuiltInClasses($nodes))
+                ...$this->applyValidation($ruleName, $subject, $targets, $targetExcludes, $nodes)
             );
         }
 

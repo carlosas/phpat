@@ -73,9 +73,9 @@ class FixtureClass extends SimpleAbstractClass implements SimpleInterface
      */
     public function methodWithDocBlocks($p, $p2, $p3, $p4, $p5_6, $t)
     {
-        /** @var null|SimpleClass $v */
-        $v = random_int(0, 1) > 0 ? $p : null;
-        if ($v === null) {
+        /** @var null|SimpleClass $random */
+        $random = (new \DateTime('now'))->getTimestamp() % 2 === 0 ? $p : null;
+        if ($random) {
             throw new SimpleException();
         }
 

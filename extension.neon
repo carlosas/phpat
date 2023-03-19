@@ -2,6 +2,7 @@
 parameters:
 	phpat:
 		ignore_doc_comments: false
+		ignore_built_in_classes: false
 		show_rule_name: false
 
 services:
@@ -11,9 +12,9 @@ services:
 	- PHPat\Statement\Builder\StatementBuilderFactory
 	- PHPat\Configuration(
 		ignore_doc_comments: %phpat.ignore_doc_comments%,
+		ignore_built_in_classes: %phpat.ignore_built_in_classes%,
 		show_rule_name: %phpat.show_rule_name%,
 	)
-
 
     # # # # # DECLARATION RULES # # # # #
 
@@ -192,5 +193,6 @@ services:
 parametersSchema:
 	phpat: structure([
 		ignore_doc_comments: bool(),
+		ignore_built_in_classes: bool(),
 		show_rule_name: bool(),
 	])

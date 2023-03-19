@@ -40,7 +40,7 @@ class ImplementedInterfacesTest extends RuleTestCase
 
         return new ImplementedInterfacesRule(
             new StatementBuilderFactory($testParser),
-            new Configuration(false, false),
+            new Configuration(false, true, false),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

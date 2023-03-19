@@ -79,17 +79,17 @@ You can configure some PHPat options as follows:
 # phpstan.neon
 parameters:
     phpat:
-        ignore_doc_comments: true
-        show_rule_name: true
+        ignore_built_in_classes: true
 ```
 
 <details><summary>Complete list of options</summary>
 <br />
 
-| Name                      | Description                         |   Default    |
-|---------------------------|-------------------------------------|:------------:|
-| `ignore_doc_comments`     | Ignore relations on Doc Comments    |   *false*    |
-| `show_rule_name`          | Show rule name to assertion message |   *false*    |
+| Name                      | Description                           | Default |
+|---------------------------|---------------------------------------|:-------:|
+| `ignore_doc_comments`     | Ignore relations on Doc Comments      | *false* |
+| `ignore_built_in_classes` | Ignore relations with PHP+ext classes | *false* |
+| `show_rule_name`          | Show rule name to assertion message   | *false* |
 
 </details>
 
