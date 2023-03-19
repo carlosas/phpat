@@ -27,6 +27,7 @@ class WithBuiltInNewTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
+            [sprintf('%s should not depend on %s', FixtureClass::class, \DateTime::class), 77],
             [sprintf('%s should not depend on %s', FixtureClass::class, SimpleException::class), 79],
             [sprintf('%s should not depend on %s', FixtureClass::class, ClassImplementing::class), 82],
         ]);
@@ -43,7 +44,7 @@ class WithBuiltInNewTest extends RuleTestCase
 
         return new NewRule(
             new StatementBuilderFactory($testParser),
-            new Configuration(false, true, false),
+            new Configuration(false, false, false),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );
