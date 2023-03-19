@@ -58,7 +58,7 @@ class IgnoredDocVarTagTest extends RuleTestCase
 
         return new DocVarTagRule(
             new StatementBuilderFactory($testParser),
-            new Configuration(true, false),
+            new Configuration(true, true, false),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

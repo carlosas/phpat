@@ -40,7 +40,7 @@ class ShowRuleNameAbstractClassTest extends RuleTestCase
 
         return new AbstractRule(
             new StatementBuilderFactory($testParser),
-            new Configuration(false, true),
+            new Configuration(false, true, true),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );
