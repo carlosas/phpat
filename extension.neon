@@ -3,7 +3,7 @@ parameters:
 	phpat:
 		ignore_doc_comments: false
 		ignore_built_in_classes: false
-		show_rule_name: false
+		show_rule_names: false
 
 services:
 	- PHPat\Test\TestExtractor
@@ -13,7 +13,7 @@ services:
 	- PHPat\Configuration(
 		ignore_doc_comments: %phpat.ignore_doc_comments%,
 		ignore_built_in_classes: %phpat.ignore_built_in_classes%,
-		show_rule_name: %phpat.show_rule_name%,
+		show_rule_names: %phpat.show_rule_names%,
 	)
 
     # # # # # DECLARATION RULES # # # # #
@@ -194,5 +194,5 @@ parametersSchema:
 	phpat: structure([
 		ignore_doc_comments: bool(),
 		ignore_built_in_classes: bool(),
-		show_rule_name: bool(),
+		show_rule_names: bool(),
 	])

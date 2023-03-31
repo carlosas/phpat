@@ -38,13 +38,9 @@ abstract class ShouldNotBeFinal extends DeclarationAssertion
 
     protected function getMessage(string $ruleName, string $subject): string
     {
-        return strtr(
-            $this->configuration->getDeclarationMessageFormat(),
-            [
-                '{subject}'     => $subject,
-                '{declaration}' => 'should not be final',
-                '{ruleName}'    => $ruleName,
-            ]
+        return $this->prepareMessage(
+            $ruleName,
+            sprintf('%s should not be final', $subject)
         );
     }
 }

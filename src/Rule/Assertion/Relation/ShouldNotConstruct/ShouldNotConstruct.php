@@ -38,14 +38,9 @@ abstract class ShouldNotConstruct extends RelationAssertion
 
     protected function getMessage(string $ruleName, string $subject, string $target): string
     {
-        return strtr(
-            $this->configuration->getRelationMessageFormat(),
-            [
-                '{subject}'  => $subject,
-                '{relation}' => 'should not construct',
-                '{target}'   => $target,
-                '{ruleName}' => $ruleName,
-            ]
+        return $this->prepareMessage(
+            $ruleName,
+            sprintf('%s should not construct %s', $subject, $target)
         );
     }
 }

@@ -38,13 +38,9 @@ abstract class ShouldNotBeAbstract extends DeclarationAssertion
 
     protected function getMessage(string $ruleName, string $subject): string
     {
-        return strtr(
-            $this->configuration->getDeclarationMessageFormat(),
-            [
-                '{subject}'     => $subject,
-                '{declaration}' => 'should not be abstract',
-                '{ruleName}'    => $ruleName,
-            ]
+        return $this->prepareMessage(
+            $ruleName,
+            sprintf('%s should not be abstract', $subject)
         );
     }
 }

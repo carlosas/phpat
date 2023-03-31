@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\PHPat\fixtures;
 
+use DateTime;
 use Tests\PHPat\fixtures\Simple\SimpleAbstractClass;
 use Tests\PHPat\fixtures\Simple\SimpleAttribute;
 use Tests\PHPat\fixtures\Simple\SimpleClass;
@@ -74,7 +75,7 @@ class FixtureClass extends SimpleAbstractClass implements SimpleInterface
     public function methodWithDocBlocks($p, $p2, $p3, $p4, $p5_6, $t)
     {
         /** @var null|SimpleClass $random */
-        $random = (new \DateTime('now'))->getTimestamp() % 2 === 0 ? $p : null;
+        $random = (new DateTime('now'))->getTimestamp() % 2 === 0 ? $p : null;
         if ($random) {
             throw new SimpleException();
         }
