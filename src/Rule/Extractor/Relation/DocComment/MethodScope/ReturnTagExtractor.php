@@ -6,16 +6,18 @@ namespace PHPat\Rule\Extractor\Relation\DocComment\MethodScope;
 
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
+use PHPStan\Node\InClassMethodNode;
 use PHPStan\PhpDoc\Tag\ReturnTag;
 
 trait ReturnTagExtractor
 {
     public function getNodeType(): string
     {
-        return Node\Stmt\ClassMethod::class;
+        return InClassMethodNode::class;
     }
 
     /**
+     * @param InClassMethodNode $node
      * @throws \PHPStan\ShouldNotHappenException
      * @return array<int, mixed>
      */
@@ -48,6 +50,7 @@ trait ReturnTagExtractor
 
         $names = [];
         $tag   = $resolvedPhpDoc->getReturnTag();
+
         if ($tag instanceof ReturnTag) {
             array_push($names, ...$tag->getType()->getReferencedClasses());
         }

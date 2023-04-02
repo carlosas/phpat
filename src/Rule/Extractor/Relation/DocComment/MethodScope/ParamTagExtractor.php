@@ -6,15 +6,17 @@ namespace PHPat\Rule\Extractor\Relation\DocComment\MethodScope;
 
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
+use PHPStan\Node\InClassMethodNode;
 
 trait ParamTagExtractor
 {
     public function getNodeType(): string
     {
-        return Node\Stmt\ClassMethod::class;
+        return InClassMethodNode::class;
     }
 
     /**
+     * @param InClassMethodNode $node
      * @throws \PHPStan\ShouldNotHappenException
      * @return array<int, mixed>
      */

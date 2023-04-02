@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace PHPat\Rule\Assertion\Relation\CanOnlyDepend;
 
 use PHPat\Rule\Extractor\Relation\DocComment\MethodScope\ReturnTagExtractor;
-use PhpParser\Node;
+use PHPStan\Node\InClassMethodNode;
 use PHPStan\Rules\Rule;
 
 /**
- * @implements Rule<Node\Stmt\ClassMethod>
+ * @implements Rule<InClassMethodNode>
  */
 class DocReturnTagRule extends CanOnlyDepend implements Rule
 {

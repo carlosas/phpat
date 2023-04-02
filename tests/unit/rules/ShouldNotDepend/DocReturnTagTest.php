@@ -28,7 +28,7 @@ use Tests\PHPat\unit\FakeTestParser;
 /**
  * @extends RuleTestCase<DocReturnTagRule>
  */
-class DocReturnsTagTest extends RuleTestCase
+class DocReturnTagTest extends RuleTestCase
 {
     public const RULE_NAME = 'test_FixtureClassShouldNotDependSimpleAndSpecial';
     public function testRule(): void
