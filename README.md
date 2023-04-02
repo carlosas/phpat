@@ -89,7 +89,7 @@ parameters:
 |---------------------------|---------------------------------------|:-------:|
 | `ignore_doc_comments`     | Ignore relations on Doc Comments      | *false* |
 | `ignore_built_in_classes` | Ignore relations with PHP+ext classes | *false* |
-| `show_rule_name`          | Show rule name to assertion message   | *false* |
+| `show_rule_names`         | Show rule name to assertion message   | *false* |
 
 </details>
 

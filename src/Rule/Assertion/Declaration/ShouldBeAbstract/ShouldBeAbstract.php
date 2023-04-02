@@ -36,16 +36,11 @@ abstract class ShouldBeAbstract extends DeclarationAssertion
         return $this->applyShould($ruleName, $subject, $meetsDeclaration);
     }
 
-
     protected function getMessage(string $ruleName, string $subject): string
     {
-        return strtr(
-            $this->configuration->getDeclarationMessageFormat(),
-            [
-                '{subject}'     => $subject,
-                '{declaration}' => 'should be abstract',
-                '{ruleName}'    => $ruleName,
-            ]
+        return $this->prepareMessage(
+            $ruleName,
+            sprintf('%s should be abstract', $subject)
         );
     }
 }

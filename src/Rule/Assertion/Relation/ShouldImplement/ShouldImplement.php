@@ -38,14 +38,9 @@ abstract class ShouldImplement extends RelationAssertion
 
     protected function getMessage(string $ruleName, string $subject, string $target): string
     {
-        return strtr(
-            $this->configuration->getRelationMessageFormat(),
-            [
-                '{subject}'  => $subject,
-                '{relation}' => 'should implement',
-                '{target}'   => $target,
-                '{ruleName}' => $ruleName,
-            ]
+        return $this->prepareMessage(
+            $ruleName,
+            sprintf('%s should implement %s', $subject, $target),
         );
     }
 }

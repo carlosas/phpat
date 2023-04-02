@@ -54,6 +54,13 @@ abstract class DeclarationAssertion implements Assertion
         return $this->validateGetErrors($scope, $meetsDeclaration);
     }
 
+    public function prepareMessage(string $ruleName, string $message): string
+    {
+        return $this->configuration->showRuleNames()
+            ? sprintf('%s: %s', $ruleName, $message)
+            : $message;
+    }
+
     abstract protected function meetsDeclaration(Node $node, Scope $scope): bool;
 
     /**

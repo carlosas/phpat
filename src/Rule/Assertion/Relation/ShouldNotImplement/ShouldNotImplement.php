@@ -38,14 +38,9 @@ abstract class ShouldNotImplement extends RelationAssertion
 
     protected function getMessage(string $ruleName, string $subject, string $target): string
     {
-        return strtr(
-            $this->configuration->getRelationMessageFormat(),
-            [
-                '{subject}'  => $subject,
-                '{relation}' => 'should not implement',
-                '{target}'   => $target,
-                '{ruleName}' => $ruleName,
-            ]
+        return $this->prepareMessage(
+            $ruleName,
+            sprintf('%s should not implement %s', $subject, $target)
         );
     }
 }
