@@ -10,13 +10,13 @@ use PHPStan\Reflection\ClassReflection;
 class AndModifier implements SelectorInterface
 {
     /**
-     * @var list<SelectorInterface>
+     * @var array<SelectorInterface>
      */
     private array $selectors;
 
     public function __construct(SelectorInterface ...$selector)
     {
-        $this->selectors = $selector;
+        $this->selectors = array_values($selector);
     }
 
     public function matches(ClassReflection $classReflection): bool
