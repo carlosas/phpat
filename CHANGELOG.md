@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 ## 0.10.4
 * Added `ignore_built_in_classes` option to ignore built-in classes on relation assertions.
 * Added `show_rule_names` option to output the rule name before the error message.
+* Added class Attributes as dependencies.
 * Fixed template names getting resolved as FQCNs.
 
 ## 0.10.3
