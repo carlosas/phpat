@@ -81,4 +81,14 @@ class FixtureClass extends SimpleAbstractClass implements SimpleInterface
 
         return new ClassImplementing();
     }
+
+    /**
+     * @template T
+     * @param class-string<T> $modelClass
+     * @return T
+     */
+    public function doSomething(string $modelClass)
+    {
+        return new $modelClass();
+    }
 }
