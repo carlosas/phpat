@@ -6,6 +6,12 @@ You can always use a regular expression to select everything that matches that e
 
 ---
 
+### `Selector::AND()`
+Select classes that match all the inner Selectors.
+
+### `Selector::NOT()`
+Select classes that do not match the inner Selector.
+
 ### `Selector::all()`
 Select all classes.
 
@@ -28,7 +34,7 @@ Select all interfaces.
 Select all enums.
 
 ### `Selector::abstract()`
-Select all classes that are abstract.
+Select all abstract classes.
 
 ### `Selector::final()`
-Select all classes that are final.
+Select all final classes.

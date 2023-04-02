@@ -21,6 +21,9 @@ class SelectorPrimitive
         return new IsAbstract();
     }
 
+    /**
+     * @deprecated use Selector::NOT(Selector::abstract())
+     */
     public static function notAbstract(): IsNotAbstract
     {
         return new IsNotAbstract();
@@ -31,6 +34,9 @@ class SelectorPrimitive
         return new IsFinal();
     }
 
+    /**
+     * @deprecated use Selector::NOT(Selector::final())
+     */
     public static function notFinal(): IsNotFinal
     {
         return new IsNotFinal();
