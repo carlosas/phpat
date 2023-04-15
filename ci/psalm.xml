@@ -41,5 +41,9 @@
         <PropertyNotSetInConstructor>
             <errorLevel type="suppress"><directory name="../tests/unit/rules/" /></errorLevel>
         </PropertyNotSetInConstructor>
+
+        <DeprecatedMethod>
+            <errorLevel type="suppress"><file name="../src/Rule/Extractor/Relation/DocComment/ClassScope/PropertyTagExtractor.php" /></errorLevel>
+        </DeprecatedMethod>
     </issueHandlers>
 </psalm>
