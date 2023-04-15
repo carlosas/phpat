@@ -7,7 +7,6 @@ namespace PHPat\Rule\Extractor\Relation;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassNode;
-use PHPStan\Reflection\ClassReflection;
 
 trait ParentExtractor
 {
@@ -22,9 +21,8 @@ trait ParentExtractor
      */
     protected function extractNodeClassNames(Node $node, Scope $scope): array
     {
-        return array_map(
-            static fn (ClassReflection $c) => $c->getName(),
-            [$node->getClassReflection()->getParentClass()]
-        );
+        $parent = $node->getClassReflection()->getParentClass();
+
+        return $parent === null ? [] : [$parent->getName()];
     }
 }
