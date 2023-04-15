@@ -148,6 +148,15 @@ abstract class RelationAssertion implements Assertion
      */
     private function removeBuiltInClasses(array $nodes): array
     {
-        return array_filter($nodes, fn (string $node): bool => !$this->reflectionProvider->hasClass($node) || !$this->reflectionProvider->getClass($node)->isBuiltin());
+        return array_filter(
+            $nodes,
+            fn (string $node): bool => !$this->isBuiltInClass($node)
+        );
+    }
+
+    private function isBuiltInClass(string $node): bool
+    {
+        return $node === 'Stringable'
+            || ($this->reflectionProvider->hasClass($node) && $this->reflectionProvider->getClass($node)->isBuiltin());
     }
 }

@@ -6,6 +6,9 @@ parameters:
     paths:
         - ../src
         - ../tests/architecture
+    phpat:
+        ignore_built_in_classes: false
+        show_rule_names: true
 
 services:
     -
