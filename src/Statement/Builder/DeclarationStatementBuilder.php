@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace PHPat\Statement\Builder;
 
 use PHPat\Selector\SelectorInterface;
-use PHPat\Test\RelationRule;
+use PHPat\Test\DeclarationRule;
 use PHPat\Test\Rule;
 use PhpParser\Node;
 use PHPStan\Rules\Rule as PHPStanRule;
@@ -14,19 +14,19 @@ class DeclarationStatementBuilder implements StatementBuilder
 {
     /** @var array<array{string, SelectorInterface, array<SelectorInterface>}> */
     protected $statements = [];
-    /** @var array<RelationRule> */
+    /** @var array<DeclarationRule> */
     protected array $rules;
     /** @var class-string<PHPStanRule<Node>> */
     private string $assertion;
 
     /**
      * @param class-string<PHPStanRule<Node>> $assertion
-     * @param array<RelationRule> $rules
+     * @param array<Rule> $rules
      */
     final public function __construct(string $assertion, array $rules)
     {
         $this->assertion = $assertion;
-        $this->rules     = $rules;
+        $this->rules     = array_filter($rules, static fn ($rule) => is_a($rule, DeclarationRule::class, true));
     }
 
     /**

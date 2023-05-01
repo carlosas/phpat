@@ -21,12 +21,12 @@ class RelationStatementBuilder implements StatementBuilder
 
     /**
      * @param class-string<PHPStanRule<Node>> $assertion
-     * @param array<RelationRule> $rules
+     * @param array<Rule> $rules
      */
     final public function __construct(string $assertion, array $rules)
     {
         $this->assertion = $assertion;
-        $this->rules     = $rules;
+        $this->rules     = array_filter($rules, static fn ($rule) => is_a($rule, RelationRule::class, true));
     }
 
     /**
