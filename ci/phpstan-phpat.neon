@@ -2,7 +2,7 @@ includes:
 	- ../extension.neon
 
 parameters:
-    level: 1
+    level: 0
     paths:
         - ../src
         - ../tests/architecture
