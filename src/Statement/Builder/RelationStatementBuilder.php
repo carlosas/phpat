@@ -12,7 +12,7 @@ use PHPStan\Rules\Rule as PHPStanRule;
 
 class RelationStatementBuilder implements StatementBuilder
 {
-    /** @var array<array{string, SelectorInterface, array<SelectorInterface>, array<SelectorInterface>, array<SelectorInterface>}> */
+    /** @var array<array{string, SelectorInterface, array<SelectorInterface>, array<SelectorInterface>, array<SelectorInterface>, array<string>}> */
     protected $statements = [];
     /** @var array<RelationRule> */
     protected array $rules;
@@ -47,6 +47,7 @@ class RelationStatementBuilder implements StatementBuilder
      * @param array<SelectorInterface> $subjectExcludes
      * @param array<SelectorInterface> $targets
      * @param array<SelectorInterface> $targetExcludes
+     * @param array<string> $tips
      */
     private function addStatement(
         string $ruleName,
@@ -61,7 +62,7 @@ class RelationStatementBuilder implements StatementBuilder
 
     /**
      * @param array<Rule> $rules
-     * @return array<array{string, SelectorInterface, array<SelectorInterface>, array<SelectorInterface>, array<SelectorInterface>}>
+     * @return array<array{string, SelectorInterface, array<SelectorInterface>, array<SelectorInterface>, array<SelectorInterface>, array<string>}>
      */
     private function extractCurrentAssertion(array $rules): array
     {
