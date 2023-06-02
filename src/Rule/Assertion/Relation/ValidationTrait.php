@@ -60,7 +60,7 @@ trait ValidationTrait
             foreach ($nodes as $node) {
                 if ($this->nodeMatchesTarget($node, $target, $targetExcludes)) {
 
-                    $ruleError = RuleErrorBuilder::message($this->getMessage($ruleName, $subject->getName(), $target->getName()));
+                    $ruleError = RuleErrorBuilder::message($this->getMessage($ruleName, $subject->getName(), $node));
                     foreach($tips as $tip) {
                         $ruleError->addTip($tip);
                     }
