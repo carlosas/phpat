@@ -50,8 +50,8 @@ trait ValidationTrait
      * @param array<SelectorInterface> $targetExcludes
      * @param array<class-string> $nodes
      * @param array<string> $tips
-     * @return array<RuleError>
      *@throws ShouldNotHappenException
+     * @return array<RuleError>
      */
     protected function applyShouldNot(string $ruleName, ClassReflection $subject, array $targets, array $targetExcludes, array $nodes, array $tips): array
     {
