@@ -24,6 +24,9 @@ class RelationRule implements Rule
     /** @var string */
     public string $ruleName = '';
 
+    /** @var string[] */
+    public array $tips = [];
+
     /**
      * @return null|class-string<DeclarationAssertion>|class-string<RelationAssertion>
      */
@@ -55,5 +58,10 @@ class RelationRule implements Rule
     public function getRuleName(): string
     {
         return $this->ruleName;
+    }
+
+    public function getTips(): array
+    {
+        return $this->tips;
     }
 }

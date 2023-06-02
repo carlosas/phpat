@@ -17,10 +17,11 @@ trait ValidationTrait
      * @param array<SelectorInterface> $targets
      * @param array<SelectorInterface> $targetExcludes
      * @param array<class-string> $nodes
+     * @param array<string> $tips
      * @throws ShouldNotHappenException
      * @return array<RuleError>
      */
-    protected function applyShould(string $ruleName, ClassReflection $subject, array $targets, array $targetExcludes, array $nodes): array
+    protected function applyShould(string $ruleName, ClassReflection $subject, array $targets, array $targetExcludes, array $nodes, array $tips): array
     {
         $errors = [];
         foreach ($targets as $target) {
@@ -32,9 +33,11 @@ trait ValidationTrait
                 }
             }
             if (!$targetFound) {
-                $errors[] = RuleErrorBuilder::message(
-                    $this->getMessage($ruleName, $subject->getName(), $target->getName())
-                )->build();
+                $ruleError = RuleErrorBuilder::message($this->getMessage($ruleName, $subject->getName(), $target->getName()));
+                foreach($tips as $tip) {
+                    $ruleError->addTip($tip);
+                }
+                $errors[] = $ruleError->build();
             }
         }
 
@@ -46,16 +49,22 @@ trait ValidationTrait
      * @param array<SelectorInterface> $targets
      * @param array<SelectorInterface> $targetExcludes
      * @param array<class-string> $nodes
-     * @throws ShouldNotHappenException
+     * @param array<string> $tips
      * @return array<RuleError>
+     *@throws ShouldNotHappenException
      */
-    protected function applyShouldNot(string $ruleName, ClassReflection $subject, array $targets, array $targetExcludes, array $nodes): array
+    protected function applyShouldNot(string $ruleName, ClassReflection $subject, array $targets, array $targetExcludes, array $nodes, array $tips): array
     {
         $errors = [];
         foreach ($targets as $target) {
             foreach ($nodes as $node) {
                 if ($this->nodeMatchesTarget($node, $target, $targetExcludes)) {
-                    $errors[] = RuleErrorBuilder::message($this->getMessage($ruleName, $subject->getName(), $node))->build();
+
+                    $ruleError = RuleErrorBuilder::message($this->getMessage($ruleName, $subject->getName(), $target->getName()));
+                    foreach($tips as $tip) {
+                        $ruleError->addTip($tip);
+                    }
+                    $errors[] = $ruleError->build();
                 }
             }
         }
@@ -68,10 +77,11 @@ trait ValidationTrait
      * @param array<SelectorInterface> $targets
      * @param array<SelectorInterface> $targetExcludes
      * @param array<class-string> $nodes
+     * @param array<string> $tips
      * @throws ShouldNotHappenException
      * @return array<RuleError>
      */
-    protected function applyCanOnly(string $ruleName, ClassReflection $subject, array $targets, array $targetExcludes, array $nodes): array
+    protected function applyCanOnly(string $ruleName, ClassReflection $subject, array $targets, array $targetExcludes, array $nodes, array $tips): array
     {
         $errors = [];
         foreach ($nodes as $node) {
@@ -80,7 +90,11 @@ trait ValidationTrait
                     continue 2;
                 }
             }
-            $errors[] = RuleErrorBuilder::message($this->getMessage($ruleName, $subject->getName(), $node))->build();
+            $ruleError = RuleErrorBuilder::message($this->getMessage($ruleName, $subject->getName(), $node));
+            foreach($tips as $tip) {
+                $ruleError->addTip($tip);
+            }
+            $errors[] = $ruleError->build();
         }
 
         return $errors;

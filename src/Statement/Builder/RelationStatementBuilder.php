@@ -30,14 +30,14 @@ class RelationStatementBuilder implements StatementBuilder
     }
 
     /**
-     * @return array<array{string, SelectorInterface, array<SelectorInterface>, array<SelectorInterface>, array<SelectorInterface>}>
+     * @return array<array{string, SelectorInterface, array<SelectorInterface>, array<SelectorInterface>, array<SelectorInterface>, array<string>}>
      */
     public function build(): array
     {
         $params = $this->extractCurrentAssertion($this->rules);
 
         foreach ($params as $param) {
-            $this->addStatement($param[0], $param[1], $param[2], $param[3], $param[4]);
+            $this->addStatement($param[0], $param[1], $param[2], $param[3], $param[4], $param[5]);
         }
 
         return $this->statements;
@@ -53,9 +53,10 @@ class RelationStatementBuilder implements StatementBuilder
         SelectorInterface $subject,
         array $subjectExcludes,
         array $targets,
-        array $targetExcludes
+        array $targetExcludes,
+        array $tips
     ): void {
-        $this->statements[] = [$ruleName, $subject, $subjectExcludes, $targets, $targetExcludes];
+        $this->statements[] = [$ruleName, $subject, $subjectExcludes, $targets, $targetExcludes, $tips];
     }
 
     /**
@@ -68,7 +69,7 @@ class RelationStatementBuilder implements StatementBuilder
         foreach ($rules as $rule) {
             if ($rule->getAssertion() === $this->assertion) {
                 foreach ($rule->getSubjects() as $selector) {
-                    $result[] = [$rule->getRuleName(), $selector, $rule->getSubjectExcludes(), $rule->getTargets(), $rule->getTargetExcludes()];
+                    $result[] = [$rule->getRuleName(), $selector, $rule->getSubjectExcludes(), $rule->getTargets(), $rule->getTargetExcludes(), $rule->getTips()];
                 }
             }
         }

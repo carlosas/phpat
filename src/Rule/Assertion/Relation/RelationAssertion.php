@@ -81,7 +81,14 @@ abstract class RelationAssertion implements Assertion
      * @param array<class-string>      $nodes
      * @return array<RuleError>
      */
-    abstract protected function applyValidation(string $ruleName, ClassReflection $subject, array $targets, array $targetExcludes, array $nodes): array;
+    abstract protected function applyValidation(
+        string $ruleName,
+        ClassReflection $subject,
+        array $targets,
+        array $targetExcludes,
+        array $nodes,
+        array $tips
+    ): array;
 
     /**
      * @param array<class-string> $nodes
@@ -119,7 +126,7 @@ abstract class RelationAssertion implements Assertion
             throw new ShouldNotHappenException();
         }
 
-        foreach ($this->statements as [$ruleName, $selector, $subjectExcludes, $targets, $targetExcludes]) {
+        foreach ($this->statements as [$ruleName, $selector, $subjectExcludes, $targets, $targetExcludes, $tips]) {
             if ($subject->isBuiltin() || !$selector->matches($subject)) {
                 continue;
             }
@@ -135,7 +142,7 @@ abstract class RelationAssertion implements Assertion
 
             array_push(
                 $errors,
-                ...$this->applyValidation($ruleName, $subject, $targets, $targetExcludes, $nodes)
+                ...$this->applyValidation($ruleName, $subject, $targets, $targetExcludes, $nodes, $tips)
             );
         }
 

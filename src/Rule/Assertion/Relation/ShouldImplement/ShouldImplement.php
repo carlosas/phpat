@@ -31,9 +31,15 @@ abstract class ShouldImplement extends RelationAssertion
         );
     }
 
-    protected function applyValidation(string $ruleName, ClassReflection $subject, array $targets, array $targetExcludes, array $nodes): array
-    {
-        return $this->applyShould($ruleName, $subject, $targets, $targetExcludes, $nodes);
+    protected function applyValidation(
+        string $ruleName,
+        ClassReflection $subject,
+        array $targets,
+        array $targetExcludes,
+        array $nodes,
+        array $tips
+    ): array {
+        return $this->applyShould($ruleName, $subject, $targets, $targetExcludes, $nodes, $tips);
     }
 
     protected function getMessage(string $ruleName, string $subject, string $target): string
