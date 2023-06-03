@@ -74,11 +74,12 @@ abstract class RelationAssertion implements Assertion
     abstract protected function getMessage(string $ruleName, string $subject, string $target): string;
 
     /**
-     * @param string                 $ruleName
+     * @param string                   $ruleName
      * @param ClassReflection          $subject
      * @param array<SelectorInterface> $targets
      * @param array<SelectorInterface> $targetExcludes
      * @param array<class-string>      $nodes
+     * @param array<string>            $tips
      * @return array<RuleError>
      */
     abstract protected function applyValidation(
