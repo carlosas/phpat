@@ -121,7 +121,8 @@ class MyFirstTest
                 Selector::namespace('App\Infrastructure'),
                 Selector::classname(SuperForbiddenClass::class),
                 Selector::classname('/^SomeVendor\\\.*\\\ForbiddenSubfolder\\\.*/', true)
-            );
+            )
+            ->because('this will break our architecture, implement it another way! see /docs/howto.md');
     }
 }
 ```
