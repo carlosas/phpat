@@ -13,6 +13,7 @@ use PHPStan\Rules\RuleErrorBuilder;
 trait ValidationTrait
 {
     /**
+     * @param string[] $tips
      * @throws ShouldNotHappenException
      * @return array<RuleError>
      */
@@ -35,6 +36,7 @@ trait ValidationTrait
     }
 
     /**
+     * @param string[] $tips
      * @throws ShouldNotHappenException
      * @return array<RuleError>
      */

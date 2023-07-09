@@ -18,7 +18,7 @@ use PHPStan\Type\FileTypeMapper;
 
 abstract class DeclarationAssertion implements Assertion
 {
-    /** @var array<array{string, SelectorInterface, array<SelectorInterface>, array<SelectorInterface>, array<SelectorInterface>}> */
+    /** @var array<array{string, SelectorInterface, array<SelectorInterface>, string[]}> */
     protected array $statements;
     protected Configuration $configuration;
     protected ReflectionProvider $reflectionProvider;
