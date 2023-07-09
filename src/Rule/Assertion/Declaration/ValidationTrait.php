@@ -16,14 +16,19 @@ trait ValidationTrait
      * @throws ShouldNotHappenException
      * @return array<RuleError>
      */
-    protected function applyShould(string $ruleName, ClassReflection $subject, bool $meetsDeclaration): array
+    protected function applyShould(string $ruleName, ClassReflection $subject, bool $meetsDeclaration, array $tips): array
     {
         $errors = [];
 
         if (!$meetsDeclaration) {
-            $errors[] = RuleErrorBuilder::message(
+            $ruleError = RuleErrorBuilder::message(
                 $this->getMessage($ruleName, $subject->getName())
-            )->build();
+            );
+
+            foreach($tips as $tip) {
+                $ruleError->addTip($tip);
+            }
+            $errors[] = $ruleError->build();
         }
 
         return $errors;
@@ -33,14 +38,19 @@ trait ValidationTrait
      * @throws ShouldNotHappenException
      * @return array<RuleError>
      */
-    protected function applyShouldNot(string $ruleName, ClassReflection $subject, bool $meetsDeclaration): array
+    protected function applyShouldNot(string $ruleName, ClassReflection $subject, bool $meetsDeclaration, array $tips): array
     {
         $errors = [];
 
         if ($meetsDeclaration) {
-            $errors[] = RuleErrorBuilder::message(
+            $ruleError = RuleErrorBuilder::message(
                 $this->getMessage($ruleName, $subject->getName())
-            )->build();
+            );
+
+            foreach($tips as $tip) {
+                $ruleError->addTip($tip);
+            }
+            $errors[] = $ruleError->build();
         }
 
         return $errors;

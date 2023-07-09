@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\PHPat\unit\tips;
+namespace Tests\PHPat\unit\tips\Relation;
 
 use Attribute;
 use PHPat\Configuration;
@@ -17,16 +17,25 @@ use Tests\PHPat\fixtures\FixtureClass;
 use Tests\PHPat\fixtures\Simple\SimpleAttribute;
 use Tests\PHPat\unit\FakeTestParser;
 
+use function sprintf;
+
 /**
  * @extends RuleTestCase<ClassAttributeRule>
  */
-class OneTipTest extends RuleTestCase
+class MultipleTipTest extends RuleTestCase
 {
     public const RULE_NAME = 'test_FixtureClassCanOnlyDependSimpleAndSpecial';
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class), 31, 'tip #1'],
+            [
+                sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class),
+                31,
+                <<<TIPS
+                    • #tip 1
+                    • #tip 2
+                    TIPS,
+            ],
         ]);
     }
 
@@ -37,7 +46,7 @@ class OneTipTest extends RuleTestCase
             CanOnlyDepend::class,
             [new Classname(FixtureClass::class, false)],
             [new Classname(Attribute::class, false)],
-            ['tip #1']
+            ['#tip 1', '#tip 2']
         );
 
         return new ClassAttributeRule(

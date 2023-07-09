@@ -31,9 +31,9 @@ abstract class ShouldNotBeFinal extends DeclarationAssertion
         );
     }
 
-    protected function applyValidation(string $ruleName, ClassReflection $subject, bool $meetsDeclaration): array
+    protected function applyValidation(string $ruleName, ClassReflection $subject, bool $meetsDeclaration, array $tips): array
     {
-        return $this->applyShouldNot($ruleName, $subject, $meetsDeclaration);
+        return $this->applyShouldNot($ruleName, $subject, $meetsDeclaration, $tips);
     }
 
     protected function getMessage(string $ruleName, string $subject): string

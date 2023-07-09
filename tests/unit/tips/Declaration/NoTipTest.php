@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Tests\PHPat\unit\tips;
+namespace Tests\PHPat\unit\tips\Declaration;
 
 use Attribute;
 use PHPat\Configuration;
+use PHPat\Rule\Assertion\Declaration\ShouldBeFinal\IsFinalRule;
+use PHPat\Rule\Assertion\Declaration\ShouldBeFinal\ShouldBeFinal;
 use PHPat\Rule\Assertion\Relation\CanOnlyDepend\CanOnlyDepend;
 use PHPat\Rule\Assertion\Relation\CanOnlyDepend\ClassAttributeRule;
 use PHPat\Selector\Classname;
@@ -17,16 +19,18 @@ use Tests\PHPat\fixtures\FixtureClass;
 use Tests\PHPat\fixtures\Simple\SimpleAttribute;
 use Tests\PHPat\unit\FakeTestParser;
 
+use function sprintf;
+
 /**
  * @extends RuleTestCase<ClassAttributeRule>
  */
 class NoTipTest extends RuleTestCase
 {
-    public const RULE_NAME = 'test_FixtureClassCanOnlyDependSimpleAndSpecial';
+    public const RULE_NAME = 'test_FixtureClassShouldBeFinal';
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class), 31, 'tip #1'],
+            [sprintf('%s should be final', FixtureClass::class), 31],
         ]);
     }
 
@@ -34,13 +38,13 @@ class NoTipTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            CanOnlyDepend::class,
+            ShouldBeFinal::class,
             [new Classname(FixtureClass::class, false)],
-            [new Classname(Attribute::class, false)],
-            ['tip #1']
+            [],
+            []
         );
 
-        return new ClassAttributeRule(
+        return new IsFinalRule(
             new StatementBuilderFactory($testParser),
             new Configuration(false, true, false),
             $this->createReflectionProvider(),

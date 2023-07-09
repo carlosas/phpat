@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Tests\PHPat\unit\tips;
+namespace Tests\PHPat\unit\tips\Declaration;
 
 use Attribute;
 use PHPat\Configuration;
+use PHPat\Rule\Assertion\Declaration\ShouldBeFinal\IsFinalRule;
+use PHPat\Rule\Assertion\Declaration\ShouldBeFinal\ShouldBeFinal;
 use PHPat\Rule\Assertion\Relation\CanOnlyDepend\CanOnlyDepend;
 use PHPat\Rule\Assertion\Relation\CanOnlyDepend\ClassAttributeRule;
 use PHPat\Selector\Classname;
@@ -13,30 +15,25 @@ use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-
-use function sprintf;
-
 use Tests\PHPat\fixtures\FixtureClass;
 use Tests\PHPat\fixtures\Simple\SimpleAttribute;
-
 use Tests\PHPat\unit\FakeTestParser;
+
+use function sprintf;
 
 /**
  * @extends RuleTestCase<ClassAttributeRule>
  */
-class MultipleTipTest extends RuleTestCase
+class OneTipTest extends RuleTestCase
 {
-    public const RULE_NAME = 'test_FixtureClassCanOnlyDependSimpleAndSpecial';
+    public const RULE_NAME = 'test_FixtureClassShouldBeFinal';
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
             [
-                sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class),
+                sprintf('%s should be final', FixtureClass::class),
                 31,
-                <<<TIPS
-                    • #tip 1
-                    • #tip 2
-                    TIPS,
+                'tip #1'
             ],
         ]);
     }
@@ -45,13 +42,13 @@ class MultipleTipTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            CanOnlyDepend::class,
+            ShouldBeFinal::class,
             [new Classname(FixtureClass::class, false)],
-            [new Classname(Attribute::class, false)],
-            ['#tip 1', '#tip 2']
+            [],
+            ['tip #1']
         );
 
-        return new ClassAttributeRule(
+        return new IsFinalRule(
             new StatementBuilderFactory($testParser),
             new Configuration(false, true, false),
             $this->createReflectionProvider(),
