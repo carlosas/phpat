@@ -28,7 +28,7 @@ $rules = [
     'final_internal_class'        => true,
     'linebreak_after_opening_tag' => true,
     'list_syntax'                 => ['syntax' => 'short'],
-    //'mb_str_functions'            => true,
+    'mb_str_functions'            => true,
     'method_argument_space' => [
         'keep_multiple_spaces_after_comma' => false,
         'on_multiline'                     => 'ensure_fully_multiline',
@@ -50,6 +50,8 @@ $rules = [
     'simplified_null_return'      => true,
     'strict_comparison'           => true,
     'strict_param'                => true,
+    //enable when min php >= 8.0
+    'get_class_to_class_keyword'  => false,
 ];
 
 return (new PhpCsFixer\Config())
