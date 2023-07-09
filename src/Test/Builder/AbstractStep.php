@@ -24,9 +24,4 @@ abstract class AbstractStep implements Rule
     {
         $this->rule->ruleName = $ruleName;
     }
-
-    final public function addTip(string $tip): void
-    {
-        $this->rule->tips[] = $tip;
-    }
 }
