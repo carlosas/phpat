@@ -16,7 +16,17 @@ services:
 		show_rule_names: %phpat.show_rule_names%,
 	)
 
-    # # # # # DECLARATION RULES # # # # #
+	# # # # # DECLARATION RULES # # # # #
+
+	# ShouldBeImmutable rules
+	-
+		class: PHPat\Rule\Assertion\Declaration\ShouldBeImmutable\PropertyAssignationRule
+		tags:
+			- phpstan.rules.rule
+	-
+		class: PHPat\Rule\Assertion\Declaration\ShouldBeImmutable\MutablePropertyRule
+		tags:
+			- phpstan.rules.rule
 
 	# ShouldBeAbstract rules
 	-
@@ -42,7 +52,7 @@ services:
 		tags:
 			- phpstan.rules.rule
 
-    # # # # # RELATION RULES # # # # #
+	# # # # # RELATION RULES # # # # #
 
 	# ShouldImplement rules
 	-

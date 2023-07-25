@@ -25,4 +25,11 @@ class ConfigurationTest
             ->classes(Selector::classname(Configuration::class))
             ->shouldBeFinal();
     }
+
+    public function test_configuration_is_immutable(): Rule
+    {
+        return PHPat::rule()
+            ->classes(Selector::classname(Configuration::class))
+            ->shouldBeImmutable();
+    }
 }

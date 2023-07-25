@@ -6,6 +6,7 @@ namespace PHPat\Test\Builder;
 
 use PHPat\Rule\Assertion\Declaration\ShouldBeAbstract\ShouldBeAbstract;
 use PHPat\Rule\Assertion\Declaration\ShouldBeFinal\ShouldBeFinal;
+use PHPat\Rule\Assertion\Declaration\ShouldBeImmutable\ShouldBeImmutable;
 use PHPat\Rule\Assertion\Declaration\ShouldNotBeAbstract\ShouldNotBeAbstract;
 use PHPat\Rule\Assertion\Declaration\ShouldNotBeFinal\ShouldNotBeFinal;
 use PHPat\Rule\Assertion\Relation\CanOnlyDepend\CanOnlyDepend;
@@ -18,6 +19,13 @@ use PHPat\Rule\Assertion\Relation\ShouldNotImplement\ShouldNotImplement;
 
 class AssertionStep extends AbstractStep
 {
+    public function shouldBeImmutable(): Rule
+    {
+        $this->rule->assertion = ShouldBeImmutable::class;
+
+        return new BuildStep($this->rule);
+    }
+
     public function shouldBeAbstract(): Rule
     {
         $this->rule->assertion = ShouldBeAbstract::class;
