@@ -20,6 +20,11 @@ trait MutablePropertyExtractor
      */
     protected function meetsDeclaration(Node $node, Scope $scope): bool
     {
+        $class = $scope->getClassReflection();
+        if ($class && $class->isReadOnly()) {
+            return true;
+        }
+
         if (!$node->isPublic() || $node->isReadonly()) {
             return true;
         }
