@@ -6,12 +6,12 @@ namespace PHPat\Test\Builder;
 
 use PHPat\Selector\SelectorInterface;
 
-class TargetExcludeOrBuildStep extends BuildStep
+class TargetExcludeOrBuildStep extends TipOrBuildStep
 {
     public function excluding(SelectorInterface ...$selectors): BuildStep
     {
         $this->rule->targetExcludes = array_values($selectors);
 
-        return new BuildStep($this->rule);
+        return new TipOrBuildStep($this->rule);
     }
 }

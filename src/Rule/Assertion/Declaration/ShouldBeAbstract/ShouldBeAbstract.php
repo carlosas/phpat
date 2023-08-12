@@ -31,9 +31,9 @@ abstract class ShouldBeAbstract extends DeclarationAssertion
         );
     }
 
-    protected function applyValidation(string $ruleName, ClassReflection $subject, bool $meetsDeclaration): array
+    protected function applyValidation(string $ruleName, ClassReflection $subject, bool $meetsDeclaration, array $tips): array
     {
-        return $this->applyShould($ruleName, $subject, $meetsDeclaration);
+        return $this->applyShould($ruleName, $subject, $meetsDeclaration, $tips);
     }
 
     protected function getMessage(string $ruleName, string $subject): string

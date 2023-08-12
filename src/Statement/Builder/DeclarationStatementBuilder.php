@@ -12,7 +12,7 @@ use PHPStan\Rules\Rule as PHPStanRule;
 
 class DeclarationStatementBuilder implements StatementBuilder
 {
-    /** @var array<array{string, SelectorInterface, array<SelectorInterface>}> */
+    /** @var array<array{string, SelectorInterface, array<SelectorInterface>, string[]}> */
     protected $statements = [];
     /** @var array<RelationRule> */
     protected array $rules;
@@ -30,14 +30,14 @@ class DeclarationStatementBuilder implements StatementBuilder
     }
 
     /**
-     * @return array<array{string, SelectorInterface, array<SelectorInterface>}>
+     * @return array<array{string, SelectorInterface, array<SelectorInterface>, string[]}>
      */
     public function build(): array
     {
         $params = $this->extractCurrentAssertion($this->rules);
 
         foreach ($params as $param) {
-            $this->addStatement($param[0], $param[1], $param[2]);
+            $this->addStatement($param[0], $param[1], $param[2], $param[3]);
         }
 
         return $this->statements;
@@ -45,18 +45,20 @@ class DeclarationStatementBuilder implements StatementBuilder
 
     /**
      * @param array<SelectorInterface> $subjectExcludes
+     * @param string[] $tips
      */
     private function addStatement(
         string $ruleName,
         SelectorInterface $subject,
-        array $subjectExcludes
+        array $subjectExcludes,
+        array $tips
     ): void {
-        $this->statements[] = [$ruleName, $subject, $subjectExcludes];
+        $this->statements[] = [$ruleName, $subject, $subjectExcludes, $tips];
     }
 
     /**
      * @param array<Rule> $rules
-     * @return array<array{string, SelectorInterface, array<SelectorInterface>}>
+     * @return array<array{string, SelectorInterface, array<SelectorInterface>, string[]}>
      */
     private function extractCurrentAssertion(array $rules): array
     {
@@ -64,7 +66,7 @@ class DeclarationStatementBuilder implements StatementBuilder
         foreach ($rules as $rule) {
             if ($rule->getAssertion() === $this->assertion) {
                 foreach ($rule->getSubjects() as $selector) {
-                    $result[] = [$rule->getRuleName(), $selector, $rule->getSubjectExcludes()];
+                    $result[] = [$rule->getRuleName(), $selector, $rule->getSubjectExcludes(), $rule->getTips()];
                 }
             }
         }

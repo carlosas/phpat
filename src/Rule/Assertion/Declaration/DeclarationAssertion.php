@@ -18,7 +18,7 @@ use PHPStan\Type\FileTypeMapper;
 
 abstract class DeclarationAssertion implements Assertion
 {
-    /** @var array<array{string, SelectorInterface, array<SelectorInterface>, array<SelectorInterface>, array<SelectorInterface>}> */
+    /** @var array<array{string, SelectorInterface, array<SelectorInterface>, string[]}> */
     protected array $statements;
     protected Configuration $configuration;
     protected ReflectionProvider $reflectionProvider;
@@ -70,9 +70,10 @@ abstract class DeclarationAssertion implements Assertion
     abstract protected function getMessage(string $ruleName, string $subject): string;
 
     /**
+     * @param string[] $tips
      * @return array<RuleError>
      */
-    abstract protected function applyValidation(string $ruleName, ClassReflection $subject, bool $meetsDeclaration): array;
+    abstract protected function applyValidation(string $ruleName, ClassReflection $subject, bool $meetsDeclaration, array $tips): array;
 
     protected function ruleApplies(Scope $scope): bool
     {
@@ -95,7 +96,7 @@ abstract class DeclarationAssertion implements Assertion
             throw new ShouldNotHappenException();
         }
 
-        foreach ($this->statements as [$ruleName, $selector, $subjectExcludes]) {
+        foreach ($this->statements as [$ruleName, $selector, $subjectExcludes, $tips]) {
             if ($subject->isBuiltin() || !$selector->matches($subject)) {
                 continue;
             }
@@ -105,7 +106,7 @@ abstract class DeclarationAssertion implements Assertion
                 }
             }
 
-            array_push($errors, ...$this->applyValidation($ruleName, $subject, $meetsDeclaration));
+            array_push($errors, ...$this->applyValidation($ruleName, $subject, $meetsDeclaration, $tips));
         }
 
         return $errors;

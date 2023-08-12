@@ -51,4 +51,9 @@ class DeclarationRule implements Rule
     {
         return $this->ruleName;
     }
+
+    public function getTips(): array
+    {
+        return [];
+    }
 }

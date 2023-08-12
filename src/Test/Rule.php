@@ -38,4 +38,10 @@ interface Rule
      * @return string
      */
     public function getRuleName(): string;
+
+    /**
+     * @return array<string>
+     */
+    public function getTips(): array;
+
 }

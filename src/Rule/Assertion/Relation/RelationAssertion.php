@@ -19,7 +19,7 @@ use PHPStan\Type\FileTypeMapper;
 
 abstract class RelationAssertion implements Assertion
 {
-    /** @var array<array{string, SelectorInterface, array<SelectorInterface>, array<SelectorInterface>, array<SelectorInterface>}> */
+    /** @var array<array{string, SelectorInterface, array<SelectorInterface>, array<SelectorInterface>, array<SelectorInterface>, array<string>}> */
     protected array $statements;
     protected Configuration $configuration;
     protected ReflectionProvider $reflectionProvider;
@@ -74,14 +74,22 @@ abstract class RelationAssertion implements Assertion
     abstract protected function getMessage(string $ruleName, string $subject, string $target): string;
 
     /**
-     * @param string                 $ruleName
+     * @param string                   $ruleName
      * @param ClassReflection          $subject
      * @param array<SelectorInterface> $targets
      * @param array<SelectorInterface> $targetExcludes
      * @param array<class-string>      $nodes
+     * @param array<string>            $tips
      * @return array<RuleError>
      */
-    abstract protected function applyValidation(string $ruleName, ClassReflection $subject, array $targets, array $targetExcludes, array $nodes): array;
+    abstract protected function applyValidation(
+        string $ruleName,
+        ClassReflection $subject,
+        array $targets,
+        array $targetExcludes,
+        array $nodes,
+        array $tips
+    ): array;
 
     /**
      * @param array<class-string> $nodes
@@ -119,7 +127,7 @@ abstract class RelationAssertion implements Assertion
             throw new ShouldNotHappenException();
         }
 
-        foreach ($this->statements as [$ruleName, $selector, $subjectExcludes, $targets, $targetExcludes]) {
+        foreach ($this->statements as [$ruleName, $selector, $subjectExcludes, $targets, $targetExcludes, $tips]) {
             if ($subject->isBuiltin() || !$selector->matches($subject)) {
                 continue;
             }
@@ -135,7 +143,7 @@ abstract class RelationAssertion implements Assertion
 
             array_push(
                 $errors,
-                ...$this->applyValidation($ruleName, $subject, $targets, $targetExcludes, $nodes)
+                ...$this->applyValidation($ruleName, $subject, $targets, $targetExcludes, $nodes, $tips)
             );
         }
 
