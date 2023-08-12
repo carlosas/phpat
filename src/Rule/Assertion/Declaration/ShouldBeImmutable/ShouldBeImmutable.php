@@ -20,7 +20,7 @@ abstract class ShouldBeImmutable extends DeclarationAssertion
         StatementBuilderFactory $statementBuilderFactory,
         Configuration $configuration,
         ReflectionProvider $reflectionProvider,
-        FileTypeMapper $fileTypeMapper,
+        FileTypeMapper $fileTypeMapper
     ) {
         parent::__construct(
             __CLASS__,
