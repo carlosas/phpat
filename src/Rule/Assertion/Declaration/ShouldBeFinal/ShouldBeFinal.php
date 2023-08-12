@@ -10,6 +10,7 @@ use PHPat\Rule\Assertion\Declaration\ValidationTrait;
 use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Rules\RuleError;
 use PHPStan\Type\FileTypeMapper;
 
 abstract class ShouldBeFinal extends DeclarationAssertion
@@ -31,9 +32,16 @@ abstract class ShouldBeFinal extends DeclarationAssertion
         );
     }
 
-    protected function applyValidation(string $ruleName, ClassReflection $subject, bool $meetsDeclaration): array
+    /**
+     * @param string $ruleName
+     * @param ClassReflection $subject
+     * @param bool $meetsDeclaration
+     * @param string[] $tips
+     * @return array<RuleError>
+     */
+    protected function applyValidation(string $ruleName, ClassReflection $subject, bool $meetsDeclaration, array $tips): array
     {
-        return $this->applyShould($ruleName, $subject, $meetsDeclaration);
+        return $this->applyShould($ruleName, $subject, $meetsDeclaration, $tips);
     }
 
     protected function getMessage(string $ruleName, string $subject): string

@@ -20,6 +20,8 @@ class FakeTestParser extends TestParser
     public array $subjects;
     /** @var array<SelectorInterface> */
     public array $targets;
+    /** @var string[] */
+    public array $tips = [];
 
     public function __invoke(): array
     {
@@ -28,6 +30,7 @@ class FakeTestParser extends TestParser
         $rule->assertion = $this->assertion;
         $rule->subjects  = $this->subjects;
         $rule->targets   = $this->targets;
+        $rule->tips      = $this->tips;
 
         return [$rule];
     }
@@ -36,8 +39,9 @@ class FakeTestParser extends TestParser
      * @param class-string<Assertion> $assertion
      * @param array<SelectorInterface> $subjects
      * @param array<SelectorInterface> $targets
+     * @param string[] $tips
      */
-    public static function create(string $ruleName, string $assertion, array $subjects, array $targets): self
+    public static function create(string $ruleName, string $assertion, array $subjects, array $targets, array $tips = []): self
     {
         /** @var self $self */
         $self            = (new ReflectionClass(self::class))->newInstanceWithoutConstructor();
@@ -45,6 +49,7 @@ class FakeTestParser extends TestParser
         $self->assertion = $assertion;
         $self->subjects  = $subjects;
         $self->targets   = $targets;
+        $self->tips      = $tips;
 
         return $self;
     }
