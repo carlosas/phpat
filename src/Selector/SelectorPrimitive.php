@@ -34,6 +34,11 @@ class SelectorPrimitive
         return new IsFinal();
     }
 
+    public static function readonly(): IsReadonly
+    {
+        return new IsReadonly();
+    }
+
     /**
      * @deprecated use Selector::NOT(Selector::final())
      */
