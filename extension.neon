@@ -16,7 +16,13 @@ services:
 		show_rule_names: %phpat.show_rule_names%,
 	)
 
-    # # # # # DECLARATION RULES # # # # #
+	# # # # # DECLARATION RULES # # # # #
+
+	# ShouldBeReadonly rules
+	-
+		class: PHPat\Rule\Assertion\Declaration\ShouldBeReadonly\IsReadonlyRule
+		tags:
+			- phpstan.rules.rule
 
 	# ShouldBeAbstract rules
 	-

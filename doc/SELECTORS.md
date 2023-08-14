@@ -38,3 +38,9 @@ Select all abstract classes.
 
 ### `Selector::final()`
 Select all final classes.
+
+### `Selector::readonly()`
+Select all readonly classes.
+
+### `Selector::attribute()`
+Select all attribute classes.
