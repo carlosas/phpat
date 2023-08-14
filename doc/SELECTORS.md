@@ -41,3 +41,6 @@ Select all final classes.
 
 ### `Selector::readonly()`
 Select all readonly classes.
+
+### `Selector::attribute()`
+Select all attribute classes.
