@@ -51,5 +51,9 @@
         <DeprecatedMethod>
             <errorLevel type="suppress"><file name="../src/Rule/Extractor/Relation/DocComment/ClassScope/PropertyTagExtractor.php" /></errorLevel>
         </DeprecatedMethod>
+
+        <ArgumentTypeCoercion>
+            <errorLevel type="suppress"><directory name="../src/Selector/" /></errorLevel>
+        </ArgumentTypeCoercion>
     </issueHandlers>
 </psalm>
