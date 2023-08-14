@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.10.7
+* Add tips to rule building using `because()`.
+* Add `readonly()` selector and `shouldBeReadonly()` assertion. 
+
 ## 0.10.6
 * Added parent and direct interfaces as dependencies.
 * Fixed Stringable not treated as built-in class.
