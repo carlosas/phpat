@@ -14,8 +14,7 @@ trait StaticMethodCallExtractor
     }
 
     /**
-     * @param Node\Expr\StaticCall $node
-     *
+     * @param  Node\Expr\StaticCall $node
      * @return array<class-string>
      */
     protected function extractNodeClassNames(Node $node, Scope $scope): array

@@ -15,8 +15,7 @@ trait AllInterfacesExtractor
     }
 
     /**
-     * @param InClassNode $node
-     *
+     * @param  InClassNode         $node
      * @return array<class-string>
      */
     protected function extractNodeClassNames(Node $node, Scope $scope): array

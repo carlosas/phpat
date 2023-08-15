@@ -16,9 +16,7 @@ use Tests\PHPat\unit\FakeTestParser;
 
 /**
  * @extends RuleTestCase<\PHPat\Rule\Assertion\Relation\ShouldNotDepend\ConstantUseRule>
- *
  * @internal
- *
  * @coversNothing
  */
 class ConstantUseTest extends RuleTestCase
@@ -28,7 +26,7 @@ class ConstantUseTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, ClassWithConstant::class), 56],
+            [sprintf('%s should not depend on %s', FixtureClass::class, ClassWithConstant::class), 54],
         ]);
     }
 

@@ -61,8 +61,7 @@ class RelationStatementBuilder implements StatementBuilder
     }
 
     /**
-     * @param array<Rule> $rules
-     *
+     * @param  array<Rule>                                                                                                                          $rules
      * @return array<array{string, SelectorInterface, array<SelectorInterface>, array<SelectorInterface>, array<SelectorInterface>, array<string>}>
      */
     private function extractCurrentAssertion(array $rules): array

@@ -59,8 +59,7 @@ class TestParser
     }
 
     /**
-     * @param array<RuleBuilder> $ruleBuilders
-     *
+     * @param  array<RuleBuilder> $ruleBuilders
      * @return array<Rule>
      */
     private function buildRules(array $ruleBuilders): array

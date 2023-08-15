@@ -15,9 +15,7 @@ use Tests\PHPat\unit\FakeTestParser;
 
 /**
  * @extends RuleTestCase<IsFinalRule>
- *
  * @internal
- *
  * @coversNothing
  */
 class FinalClassTest extends RuleTestCase

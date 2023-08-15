@@ -10,10 +10,8 @@ use Tests\PHPat\fixtures\Simple\SimpleInterface;
 interface InterfaceWithTemplate
 {
     /**
-     * @param T $simple
-     *
+     * @param  T          $simple
      * @return null|T
-     *
      * @throws \Exception
      */
     public function something(SimpleInterface $simple);

@@ -50,7 +50,6 @@ class TypeNodeParser
         switch (true) {
             case $type instanceof NullableType:
                 return self::flattenType($type->type);
-
             case $type instanceof UnionType:
             case $type instanceof IntersectionType:
                 return array_merge_recursive(
@@ -61,11 +60,9 @@ class TypeNodeParser
                         )
                     )
                 );
-
             case $type instanceof Name:
             case $type instanceof Identifier:
                 return [$type];
-
             default:
                 throw new ShouldNotHappenException();
         }

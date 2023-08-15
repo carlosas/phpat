@@ -16,9 +16,7 @@ use Tests\PHPat\unit\FakeTestParser;
 
 /**
  * @extends RuleTestCase<ImplementedInterfacesRule>
- *
  * @internal
- *
  * @coversNothing
  */
 class ShowRuleNameImplementedInterfacesTest extends RuleTestCase
@@ -28,7 +26,7 @@ class ShowRuleNameImplementedInterfacesTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s: %s should implement %s', self::RULE_NAME, FixtureClass::class, SimpleInterfaceTwo::class), 31],
+            [sprintf('%s: %s should implement %s', self::RULE_NAME, FixtureClass::class, SimpleInterfaceTwo::class), 29],
         ]);
     }
 

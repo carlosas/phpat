@@ -25,9 +25,7 @@ use Tests\PHPat\unit\FakeTestParser;
 
 /**
  * @extends RuleTestCase<DocVarTagRule>
- *
  * @internal
- *
  * @coversNothing
  */
 class IgnoredDocVarTagTest extends RuleTestCase

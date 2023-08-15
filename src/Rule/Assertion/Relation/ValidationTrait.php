@@ -11,13 +11,11 @@ use PHPStan\Rules\RuleErrorBuilder;
 trait ValidationTrait
 {
     /**
-     * @param array<SelectorInterface> $targets
-     * @param array<SelectorInterface> $targetExcludes
-     * @param array<class-string>      $nodes
-     * @param array<string>            $tips
-     *
+     * @param  array<SelectorInterface> $targets
+     * @param  array<SelectorInterface> $targetExcludes
+     * @param  array<class-string>      $nodes
+     * @param  array<string>            $tips
      * @return array<RuleError>
-     *
      * @throws ShouldNotHappenException
      */
     protected function applyShould(string $ruleName, ClassReflection $subject, array $targets, array $targetExcludes, array $nodes, array $tips): array
@@ -45,13 +43,11 @@ trait ValidationTrait
     }
 
     /**
-     * @param array<SelectorInterface> $targets
-     * @param array<SelectorInterface> $targetExcludes
-     * @param array<class-string>      $nodes
-     * @param array<string>            $tips
-     *
+     * @param  array<SelectorInterface> $targets
+     * @param  array<SelectorInterface> $targetExcludes
+     * @param  array<class-string>      $nodes
+     * @param  array<string>            $tips
      * @return array<RuleError>
-     *
      * @throws ShouldNotHappenException
      */
     protected function applyShouldNot(string $ruleName, ClassReflection $subject, array $targets, array $targetExcludes, array $nodes, array $tips): array
@@ -73,13 +69,11 @@ trait ValidationTrait
     }
 
     /**
-     * @param array<SelectorInterface> $targets
-     * @param array<SelectorInterface> $targetExcludes
-     * @param array<class-string>      $nodes
-     * @param array<string>            $tips
-     *
+     * @param  array<SelectorInterface> $targets
+     * @param  array<SelectorInterface> $targetExcludes
+     * @param  array<class-string>      $nodes
+     * @param  array<string>            $tips
      * @return array<RuleError>
-     *
      * @throws ShouldNotHappenException
      */
     protected function applyCanOnly(string $ruleName, ClassReflection $subject, array $targets, array $targetExcludes, array $nodes, array $tips): array

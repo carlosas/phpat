@@ -15,9 +15,7 @@ use Tests\PHPat\unit\FakeTestParser;
 
 /**
  * @extends RuleTestCase<IsReadonlyRule>
- *
  * @internal
- *
  * @coversNothing
  */
 class ReadonlyClassTest extends RuleTestCase
@@ -27,7 +25,7 @@ class ReadonlyClassTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should be readonly', FixtureClass::class), 31],
+            [sprintf('%s should be readonly', FixtureClass::class), 29],
         ]);
     }
 

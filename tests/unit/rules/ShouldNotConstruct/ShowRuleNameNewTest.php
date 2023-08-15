@@ -16,9 +16,7 @@ use Tests\PHPat\unit\FakeTestParser;
 
 /**
  * @extends RuleTestCase<NewRule>
- *
  * @internal
- *
  * @coversNothing
  */
 class ShowRuleNameNewTest extends RuleTestCase
@@ -28,7 +26,7 @@ class ShowRuleNameNewTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s: %s should not construct %s', self::RULE_NAME, FixtureClass::class, SimpleClass::class), 51],
+            [sprintf('%s: %s should not construct %s', self::RULE_NAME, FixtureClass::class, SimpleClass::class), 49],
         ]);
     }
 

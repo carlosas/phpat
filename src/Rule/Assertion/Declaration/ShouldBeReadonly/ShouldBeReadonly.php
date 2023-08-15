@@ -31,8 +31,7 @@ abstract class ShouldBeReadonly extends DeclarationAssertion
     }
 
     /**
-     * @param array<string> $tips
-     *
+     * @param  array<string>    $tips
      * @return array<RuleError>
      */
     protected function applyValidation(string $ruleName, ClassReflection $subject, bool $meetsDeclaration, array $tips): array

@@ -14,8 +14,7 @@ trait NewExtractor
     }
 
     /**
-     * @param Node\Expr\New_ $node
-     *
+     * @param  Node\Expr\New_      $node
      * @return array<class-string>
      */
     protected function extractNodeClassNames(Node $node, Scope $scope): array

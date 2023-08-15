@@ -67,8 +67,7 @@ abstract class DeclarationAssertion implements Assertion
     abstract protected function getMessage(string $ruleName, string $subject): string;
 
     /**
-     * @param array<string> $tips
-     *
+     * @param  array<string>    $tips
      * @return array<RuleError>
      */
     abstract protected function applyValidation(string $ruleName, ClassReflection $subject, bool $meetsDeclaration, array $tips): array;
@@ -84,7 +83,6 @@ abstract class DeclarationAssertion implements Assertion
 
     /**
      * @return array<RuleError>
-     *
      * @throws ShouldNotHappenException
      */
     protected function validateGetErrors(Scope $scope, bool $meetsDeclaration): array

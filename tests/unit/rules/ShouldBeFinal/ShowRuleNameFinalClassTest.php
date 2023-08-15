@@ -15,9 +15,7 @@ use Tests\PHPat\unit\FakeTestParser;
 
 /**
  * @extends RuleTestCase<IsFinalRule>
- *
  * @internal
- *
  * @coversNothing
  */
 class ShowRuleNameFinalClassTest extends RuleTestCase
@@ -27,7 +25,7 @@ class ShowRuleNameFinalClassTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s: %s should be final', self::RULE_NAME, FixtureClass::class), 31],
+            [sprintf('%s: %s should be final', self::RULE_NAME, FixtureClass::class), 29],
         ]);
     }
 

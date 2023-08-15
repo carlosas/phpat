@@ -15,9 +15,7 @@ use Tests\PHPat\unit\FakeTestParser;
 
 /**
  * @extends RuleTestCase<AbstractRule>
- *
  * @internal
- *
  * @coversNothing
  */
 class AbstractClassTest extends RuleTestCase

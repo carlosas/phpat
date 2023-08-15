@@ -71,11 +71,10 @@ abstract class RelationAssertion implements Assertion
     abstract protected function getMessage(string $ruleName, string $subject, string $target): string;
 
     /**
-     * @param array<SelectorInterface> $targets
-     * @param array<SelectorInterface> $targetExcludes
-     * @param array<class-string>      $nodes
-     * @param array<string>            $tips
-     *
+     * @param  array<SelectorInterface> $targets
+     * @param  array<SelectorInterface> $targetExcludes
+     * @param  array<class-string>      $nodes
+     * @param  array<string>            $tips
      * @return array<RuleError>
      */
     abstract protected function applyValidation(
@@ -111,10 +110,8 @@ abstract class RelationAssertion implements Assertion
     }
 
     /**
-     * @param array<class-string> $nodes
-     *
+     * @param  array<class-string>      $nodes
      * @return array<RuleError>
-     *
      * @throws ShouldNotHappenException
      */
     protected function validateGetErrors(Scope $scope, array $nodes): array
@@ -149,8 +146,7 @@ abstract class RelationAssertion implements Assertion
     }
 
     /**
-     * @param array<class-string> $nodes
-     *
+     * @param  array<class-string> $nodes
      * @return array<class-string>
      */
     private function removeBuiltInClasses(array $nodes): array

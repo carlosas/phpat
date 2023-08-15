@@ -14,7 +14,6 @@ trait VarTagExtractor
 
     /**
      * @return array<int, mixed>
-     *
      * @throws \PHPStan\ShouldNotHappenException
      */
     protected function extractNodeClassNames(Node $node, Scope $scope): array

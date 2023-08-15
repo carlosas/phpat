@@ -25,9 +25,7 @@ use Tests\PHPat\unit\FakeTestParser;
 
 /**
  * @extends RuleTestCase<DocParamTagRule>
- *
  * @internal
- *
  * @coversNothing
  */
 class DocParamTagTest extends RuleTestCase
@@ -37,14 +35,14 @@ class DocParamTagTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClass::class), 76],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassTwo::class), 76],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassThree::class), 76],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassFour::class), 76],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassFive::class), 76],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassSix::class), 76],
-            [sprintf('%s should not depend on %s', FixtureClass::class, InterfaceWithTemplate::class), 76],
-            [sprintf('%s should not depend on %s', FixtureClass::class, ClassImplementing::class), 76],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClass::class), 72],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassTwo::class), 72],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassThree::class), 72],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassFour::class), 72],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassFive::class), 72],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassSix::class), 72],
+            [sprintf('%s should not depend on %s', FixtureClass::class, InterfaceWithTemplate::class), 72],
+            [sprintf('%s should not depend on %s', FixtureClass::class, ClassImplementing::class), 72],
         ]);
     }
 

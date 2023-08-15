@@ -16,9 +16,7 @@ use Tests\PHPat\unit\FakeTestParser;
 
 /**
  * @extends RuleTestCase<ClassAttributeRule>
- *
  * @internal
- *
  * @coversNothing
  */
 class OneTipTest extends RuleTestCase
@@ -30,7 +28,7 @@ class OneTipTest extends RuleTestCase
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
             [
                 \sprintf('%s should be final', FixtureClass::class),
-                31,
+                29,
                 'tip #1',
             ],
         ]);

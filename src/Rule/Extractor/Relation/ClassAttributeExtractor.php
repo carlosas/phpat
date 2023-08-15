@@ -14,8 +14,7 @@ trait ClassAttributeExtractor
     }
 
     /**
-     * @param InClassNode $node
-     *
+     * @param  InClassNode        $node
      * @return list<class-string>
      */
     protected function extractNodeClassNames(Node $node, Scope $scope): array

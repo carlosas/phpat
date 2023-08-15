@@ -11,10 +11,8 @@ use PHPStan\Rules\RuleErrorBuilder;
 trait ValidationTrait
 {
     /**
-     * @param array<string> $tips
-     *
+     * @param  array<string>            $tips
      * @return array<RuleError>
-     *
      * @throws ShouldNotHappenException
      */
     protected function applyShould(string $ruleName, ClassReflection $subject, bool $meetsDeclaration, array $tips): array
@@ -36,10 +34,8 @@ trait ValidationTrait
     }
 
     /**
-     * @param array<string> $tips
-     *
+     * @param  array<string>            $tips
      * @return array<RuleError>
-     *
      * @throws ShouldNotHappenException
      */
     protected function applyShouldNot(string $ruleName, ClassReflection $subject, bool $meetsDeclaration, array $tips): array

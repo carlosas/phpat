@@ -7,9 +7,7 @@ use PHPStan\Reflection\ClassReflection;
 
 class AndModifier implements SelectorInterface
 {
-    /**
-     * @var array<SelectorInterface>
-     */
+    /** @var array<SelectorInterface> */
     private array $selectors;
 
     public function __construct(SelectorInterface ...$selector)

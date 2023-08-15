@@ -15,9 +15,7 @@ use Tests\PHPat\unit\FakeTestParser;
 
 /**
  * @extends RuleTestCase<AbstractRule>
- *
  * @internal
- *
  * @coversNothing
  */
 class AbstractClassTest extends RuleTestCase
@@ -27,7 +25,7 @@ class AbstractClassTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should be abstract', FixtureClass::class), 31],
+            [sprintf('%s should be abstract', FixtureClass::class), 29],
         ]);
     }
 

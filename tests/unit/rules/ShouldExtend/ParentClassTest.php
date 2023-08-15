@@ -16,9 +16,7 @@ use Tests\PHPat\unit\FakeTestParser;
 
 /**
  * @extends RuleTestCase<ParentClassRule>
- *
  * @internal
- *
  * @coversNothing
  */
 class ParentClassTest extends RuleTestCase
@@ -28,7 +26,7 @@ class ParentClassTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should extend %s', FixtureClass::class, SimpleAbstractClassTwo::class), 31],
+            [sprintf('%s should extend %s', FixtureClass::class, SimpleAbstractClassTwo::class), 29],
         ]);
     }
 

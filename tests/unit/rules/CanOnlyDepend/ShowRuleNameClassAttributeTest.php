@@ -16,9 +16,7 @@ use Tests\PHPat\unit\FakeTestParser;
 
 /**
  * @extends RuleTestCase<ClassAttributeRule>
- *
  * @internal
- *
  * @coversNothing
  */
 class ShowRuleNameClassAttributeTest extends RuleTestCase
@@ -28,7 +26,7 @@ class ShowRuleNameClassAttributeTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s: %s should not depend on %s', self::RULE_NAME, FixtureClass::class, SimpleAttribute::class), 31],
+            [sprintf('%s: %s should not depend on %s', self::RULE_NAME, FixtureClass::class, SimpleAttribute::class), 29],
         ]);
     }
 

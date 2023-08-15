@@ -15,8 +15,7 @@ trait MethodReturnExtractor
     }
 
     /**
-     * @param ClassMethod $node
-     *
+     * @param  ClassMethod         $node
      * @return array<class-string>
      */
     protected function extractNodeClassNames(Node $node, Scope $scope): array

@@ -25,9 +25,7 @@ use Tests\PHPat\unit\FakeTestParser;
 
 /**
  * @extends RuleTestCase<DocMixinTagRule>
- *
  * @internal
- *
  * @coversNothing
  */
 class DocMixinTagTest extends RuleTestCase
@@ -37,7 +35,7 @@ class DocMixinTagTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassSix::class), 31],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassSix::class), 29],
         ]);
     }
 
