@@ -27,7 +27,7 @@ class FinalClassTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/Simple/SimpleFinalClass.php'], [
-            [sprintf('%s should not be final', SimpleFinalClass::class), 7],
+            [sprintf('%s should not be final', SimpleFinalClass::class), 5],
         ]);
     }
 

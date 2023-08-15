@@ -27,7 +27,7 @@ class ShowRuleNameAbstractClassTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/Simple/SimpleAbstractClass.php'], [
-            [sprintf('%s: %s should not be abstract', self::RULE_NAME, SimpleAbstractClass::class), 7],
+            [sprintf('%s: %s should not be abstract', self::RULE_NAME, SimpleAbstractClass::class), 5],
         ]);
     }
 

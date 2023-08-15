@@ -37,7 +37,7 @@ class DocReturnTagTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleInterface::class), 74],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleInterface::class), 76],
         ]);
     }
 
