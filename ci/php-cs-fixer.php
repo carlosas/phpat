@@ -1,8 +1,7 @@
 <?php declare(strict_types=1);
 
 $finder = PhpCsFixer\Finder::create()
-    ->in([dirname(__DIR__) . '/src', dirname(__DIR__) . '/tests'])
-    ->exclude('unit/fixtures');
+    ->in([dirname(__DIR__) . '/src', dirname(__DIR__) . '/tests']);
 
 $rules = [
     '@PER'                        => true,
