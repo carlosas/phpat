@@ -50,7 +50,7 @@ class TestParser
             $object = $reflected->newInstanceWithoutConstructor();
             foreach ($methods as $method) {
                 $ruleBuilder = $object->{$method}();
-                $rules[] = $ruleBuilder;
+                $rules[$method] = $ruleBuilder;
             }
         }
 
@@ -58,14 +58,20 @@ class TestParser
     }
 
     /**
-     * @param  array<RuleBuilder> $ruleBuilders
+     * @param  array<string, RuleBuilder> $ruleBuilders
      * @return array<Rule>
      */
     private function buildRules(array $ruleBuilders): array
     {
         $rules = array_map(
-            static fn (RuleBuilder $rule): Rule => $rule(),
-            $ruleBuilders
+            static function (string $ruleName, RuleBuilder $builder): Rule {
+                $rule = $builder();
+                $rule->ruleName = $ruleName;
+
+                return $rule;
+            },
+            array_keys($ruleBuilders),
+            array_values($ruleBuilders)
         );
 
         array_walk(
