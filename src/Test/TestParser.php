@@ -50,7 +50,6 @@ class TestParser
             $object = $reflected->newInstanceWithoutConstructor();
             foreach ($methods as $method) {
                 $ruleBuilder = $object->{$method}();
-                $ruleBuilder->setRuleName($method);
                 $rules[] = $ruleBuilder;
             }
         }
