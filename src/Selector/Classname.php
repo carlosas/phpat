@@ -1,12 +1,8 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace PHPat\Selector;
 
 use PHPStan\Reflection\ClassReflection;
-
-use function trimSeparators;
 
 class Classname implements SelectorInterface
 {
@@ -19,7 +15,7 @@ class Classname implements SelectorInterface
     public function __construct(string $classname, bool $isRegex)
     {
         $this->classname = $classname;
-        $this->isRegex   = $isRegex;
+        $this->isRegex = $isRegex;
     }
 
     public function getName(): string
@@ -33,6 +29,6 @@ class Classname implements SelectorInterface
             return preg_match($this->classname, $classReflection->getName()) === 1;
         }
 
-        return $classReflection->getName() === trimSeparators($this->classname);
+        return $classReflection->getName() === \trimSeparators($this->classname);
     }
 }

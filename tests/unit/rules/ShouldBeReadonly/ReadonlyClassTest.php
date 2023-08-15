@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Tests\PHPat\unit\rules\ShouldBeReadonly;
 
@@ -17,14 +15,17 @@ use Tests\PHPat\unit\FakeTestParser;
 
 /**
  * @extends RuleTestCase<IsReadonlyRule>
+ * @internal
+ * @coversNothing
  */
 class ReadonlyClassTest extends RuleTestCase
 {
     public const RULE_NAME = 'test_FixtureClassShouldBeReadonly';
+
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should be readonly', FixtureClass::class), 31],
+            [sprintf('%s should be readonly', FixtureClass::class), 29],
         ]);
     }
 

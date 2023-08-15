@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Tests\PHPat\fixtures;
 
@@ -22,10 +20,10 @@ use Tests\PHPat\fixtures\Special\ClassWithStaticMethod;
 use Tests\PHPat\fixtures\Special\InterfaceWithTemplate;
 
 /**
- * @property SimpleClass $myProperty
- * @property-read SimpleClassTwo $myProperty2
- * @property-write SimpleClassThree $myProperty3
- * @method SimpleClassFour someMethod(SimpleClassFive $m)
+ * @property SimpleClass      $myProperty
+ * @property SimpleClassTwo   $myProperty2
+ * @property SimpleClassThree $myProperty3
+ * @method   SimpleClassFour  someMethod(SimpleClassFive $m)
  * @mixin SimpleClassSix
  */
 #[SimpleAttribute]
@@ -62,14 +60,14 @@ class FixtureClass extends SimpleAbstractClass implements SimpleInterface
     }
 
     /**
-     * @param SimpleClass $p
-     * @param SimpleClassTwo $p2 Parameter with description
-     * @param \Tests\PHPat\fixtures\Simple\SimpleClassThree $p3
-     * @param array<SimpleClassFour> $p4
-     * @param SimpleClassFive|SimpleClassSix $p5_6
-     * @param InterfaceWithTemplate<ClassImplementing> $t
+     * @param  SimpleClass                                   $p
+     * @param  SimpleClassTwo                                $p2   Parameter with description
+     * @param  \Tests\PHPat\fixtures\Simple\SimpleClassThree $p3
+     * @param  array<SimpleClassFour>                        $p4
+     * @param  SimpleClassFive|SimpleClassSix                $p5_6
+     * @param  InterfaceWithTemplate<ClassImplementing>      $t
+     * @return SimpleInterface                               Some nice description here
      * @throws SimpleException
-     * @return SimpleInterface Some nice description here
      */
     public function methodWithDocBlocks($p, $p2, $p3, $p4, $p5_6, $t)
     {
@@ -84,7 +82,8 @@ class FixtureClass extends SimpleAbstractClass implements SimpleInterface
 
     /**
      * @template T
-     * @param class-string<T> $modelClass
+     *
+     * @param  class-string<T> $modelClass
      * @return T
      */
     public function doSomething(string $modelClass)

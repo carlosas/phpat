@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Tests\PHPat\unit\rules\CanOnlyDepend;
 
@@ -19,14 +17,17 @@ use Tests\PHPat\unit\FakeTestParser;
 
 /**
  * @extends RuleTestCase<StaticMethodRule>
+ * @internal
+ * @coversNothing
  */
 class StaticCallTest extends RuleTestCase
 {
     public const RULE_NAME = 'test_FixtureClassCanOnlyDependSimpleAndSpecial';
+
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, ClassWithStaticMethod::class), 61],
+            [sprintf('%s should not depend on %s', FixtureClass::class, ClassWithStaticMethod::class), 59],
         ]);
     }
 

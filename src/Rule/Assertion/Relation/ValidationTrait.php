@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace PHPat\Rule\Assertion\Relation;
 
@@ -13,13 +11,12 @@ use PHPStan\Rules\RuleErrorBuilder;
 trait ValidationTrait
 {
     /**
-     * @param string $ruleName
-     * @param array<SelectorInterface> $targets
-     * @param array<SelectorInterface> $targetExcludes
-     * @param array<class-string> $nodes
-     * @param array<string> $tips
-     * @throws ShouldNotHappenException
+     * @param  array<SelectorInterface> $targets
+     * @param  array<SelectorInterface> $targetExcludes
+     * @param  array<class-string>      $nodes
+     * @param  array<string>            $tips
      * @return array<RuleError>
+     * @throws ShouldNotHappenException
      */
     protected function applyShould(string $ruleName, ClassReflection $subject, array $targets, array $targetExcludes, array $nodes, array $tips): array
     {
@@ -29,12 +26,13 @@ trait ValidationTrait
             foreach ($nodes as $node) {
                 if ($this->nodeMatchesTarget($node, $target, $targetExcludes)) {
                     $targetFound = true;
+
                     break;
                 }
             }
             if (!$targetFound) {
                 $ruleError = RuleErrorBuilder::message($this->getMessage($ruleName, $subject->getName(), $target->getName()));
-                foreach($tips as $tip) {
+                foreach ($tips as $tip) {
                     $ruleError->addTip($tip);
                 }
                 $errors[] = $ruleError->build();
@@ -45,13 +43,12 @@ trait ValidationTrait
     }
 
     /**
-     * @param string $ruleName
-     * @param array<SelectorInterface> $targets
-     * @param array<SelectorInterface> $targetExcludes
-     * @param array<class-string> $nodes
-     * @param array<string> $tips
-     * @throws ShouldNotHappenException
+     * @param  array<SelectorInterface> $targets
+     * @param  array<SelectorInterface> $targetExcludes
+     * @param  array<class-string>      $nodes
+     * @param  array<string>            $tips
      * @return array<RuleError>
+     * @throws ShouldNotHappenException
      */
     protected function applyShouldNot(string $ruleName, ClassReflection $subject, array $targets, array $targetExcludes, array $nodes, array $tips): array
     {
@@ -59,9 +56,8 @@ trait ValidationTrait
         foreach ($targets as $target) {
             foreach ($nodes as $node) {
                 if ($this->nodeMatchesTarget($node, $target, $targetExcludes)) {
-
                     $ruleError = RuleErrorBuilder::message($this->getMessage($ruleName, $subject->getName(), $node));
-                    foreach($tips as $tip) {
+                    foreach ($tips as $tip) {
                         $ruleError->addTip($tip);
                     }
                     $errors[] = $ruleError->build();
@@ -73,13 +69,12 @@ trait ValidationTrait
     }
 
     /**
-     * @param string $ruleName
-     * @param array<SelectorInterface> $targets
-     * @param array<SelectorInterface> $targetExcludes
-     * @param array<class-string> $nodes
-     * @param array<string> $tips
-     * @throws ShouldNotHappenException
+     * @param  array<SelectorInterface> $targets
+     * @param  array<SelectorInterface> $targetExcludes
+     * @param  array<class-string>      $nodes
+     * @param  array<string>            $tips
      * @return array<RuleError>
+     * @throws ShouldNotHappenException
      */
     protected function applyCanOnly(string $ruleName, ClassReflection $subject, array $targets, array $targetExcludes, array $nodes, array $tips): array
     {
@@ -91,7 +86,7 @@ trait ValidationTrait
                 }
             }
             $ruleError = RuleErrorBuilder::message($this->getMessage($ruleName, $subject->getName(), $node));
-            foreach($tips as $tip) {
+            foreach ($tips as $tip) {
                 $ruleError->addTip($tip);
             }
             $errors[] = $ruleError->build();
@@ -101,7 +96,7 @@ trait ValidationTrait
     }
 
     /**
-     * @param class-string $classname
+     * @param class-string             $classname
      * @param array<SelectorInterface> $targetExcludes
      */
     private function nodeMatchesTarget(string $classname, SelectorInterface $target, array $targetExcludes): bool

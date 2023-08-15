@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace PHPat\Test;
 
@@ -11,12 +9,13 @@ class DeclarationRule implements Rule
 {
     /** @var array<SelectorInterface> */
     public array $subjects = [];
+
     /** @var array<SelectorInterface> */
     public array $subjectExcludes = [];
+
     /** @var null|class-string<DeclarationAssertion> */
     public ?string $assertion = null;
 
-    /** @var string */
     public string $ruleName = '';
 
     /**

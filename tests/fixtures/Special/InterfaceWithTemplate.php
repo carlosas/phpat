@@ -1,10 +1,7 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Tests\PHPat\fixtures\Special;
 
-use Exception;
 use Tests\PHPat\fixtures\Simple\SimpleInterface;
 
 /**
@@ -13,9 +10,9 @@ use Tests\PHPat\fixtures\Simple\SimpleInterface;
 interface InterfaceWithTemplate
 {
     /**
-     * @param T $simple
-     * @throws Exception
+     * @param  T          $simple
      * @return null|T
+     * @throws \Exception
      */
     public function something(SimpleInterface $simple);
 }

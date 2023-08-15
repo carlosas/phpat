@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace PHPat\Rule\Extractor\Relation;
 
@@ -16,7 +14,7 @@ trait ParentExtractor
     }
 
     /**
-     * @param InClassNode $node
+     * @param  InClassNode         $node
      * @return array<class-string>
      */
     protected function extractNodeClassNames(Node $node, Scope $scope): array

@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Tests\PHPat\unit\tips\Declaration;
 
@@ -13,23 +11,22 @@ use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-
-use function sprintf;
-
 use Tests\PHPat\fixtures\FixtureClass;
-
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
  * @extends RuleTestCase<ClassAttributeRule>
+ * @internal
+ * @coversNothing
  */
 class NoTipTest extends RuleTestCase
 {
     public const RULE_NAME = 'test_FixtureClassShouldBeFinal';
+
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should be final', FixtureClass::class), 31],
+            [\sprintf('%s should be final', FixtureClass::class), 29],
         ]);
     }
 

@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Tests\PHPat\unit\rules\CanOnlyDepend;
 
@@ -27,21 +25,24 @@ use Tests\PHPat\unit\FakeTestParser;
 
 /**
  * @extends RuleTestCase<DocParamTagRule>
+ * @internal
+ * @coversNothing
  */
 class DocParamTagTest extends RuleTestCase
 {
     public const RULE_NAME = 'test_FixtureClassCanOnlyDependSimpleAndSpecial';
+
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClass::class), 74],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassTwo::class), 74],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassThree::class), 74],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassFour::class), 74],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassFive::class), 74],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassSix::class), 74],
-            [sprintf('%s should not depend on %s', FixtureClass::class, InterfaceWithTemplate::class), 74],
-            [sprintf('%s should not depend on %s', FixtureClass::class, ClassImplementing::class), 74],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClass::class), 72],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassTwo::class), 72],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassThree::class), 72],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassFour::class), 72],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassFive::class), 72],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassSix::class), 72],
+            [sprintf('%s should not depend on %s', FixtureClass::class, InterfaceWithTemplate::class), 72],
+            [sprintf('%s should not depend on %s', FixtureClass::class, ClassImplementing::class), 72],
         ]);
     }
 

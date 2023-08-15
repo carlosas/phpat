@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace PHPat\Selector;
 
@@ -17,7 +15,7 @@ class ClassImplements implements SelectorInterface
     public function __construct(string $classname, bool $isRegex)
     {
         $this->classname = $classname;
-        $this->isRegex   = $isRegex;
+        $this->isRegex = $isRegex;
     }
 
     public function getName(): string

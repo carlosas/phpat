@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Tests\PHPat\unit\rules\ShouldNotBeFinal;
 
@@ -17,6 +15,8 @@ use Tests\PHPat\unit\FakeTestParser;
 
 /**
  * @extends RuleTestCase<IsFinalRule>
+ * @internal
+ * @coversNothing
  */
 class FinalClassTest extends RuleTestCase
 {
@@ -25,7 +25,7 @@ class FinalClassTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/Simple/SimpleFinalClass.php'], [
-            [sprintf('%s should not be final', SimpleFinalClass::class), 7],
+            [sprintf('%s should not be final', SimpleFinalClass::class), 5],
         ]);
     }
 

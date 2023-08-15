@@ -1,10 +1,7 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Tests\PHPat\unit\rules\CanOnlyDepend;
 
-use DateTime;
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\Relation\CanOnlyDepend\CanOnlyDepend;
 use PHPat\Rule\Assertion\Relation\CanOnlyDepend\NewRule;
@@ -21,16 +18,19 @@ use Tests\PHPat\unit\FakeTestParser;
 
 /**
  * @extends RuleTestCase<NewRule>
+ * @internal
+ * @coversNothing
  */
 class WithBuiltInNewTest extends RuleTestCase
 {
     public const RULE_NAME = 'test_FixtureClassCanOnlyDependSimpleAndSpecial';
+
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, DateTime::class), 77],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleException::class), 79],
-            [sprintf('%s should not depend on %s', FixtureClass::class, ClassImplementing::class), 82],
+            [sprintf('%s should not depend on %s', FixtureClass::class, \DateTime::class), 75],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleException::class), 77],
+            [sprintf('%s should not depend on %s', FixtureClass::class, ClassImplementing::class), 80],
         ]);
     }
 

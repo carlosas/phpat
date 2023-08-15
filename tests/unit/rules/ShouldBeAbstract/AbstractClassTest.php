@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Tests\PHPat\unit\rules\ShouldBeAbstract;
 
@@ -17,14 +15,17 @@ use Tests\PHPat\unit\FakeTestParser;
 
 /**
  * @extends RuleTestCase<AbstractRule>
+ * @internal
+ * @coversNothing
  */
 class AbstractClassTest extends RuleTestCase
 {
     public const RULE_NAME = 'test_FixtureClassShouldBeAbstract';
+
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should be abstract', FixtureClass::class), 31],
+            [sprintf('%s should be abstract', FixtureClass::class), 29],
         ]);
     }
 

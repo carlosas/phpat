@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Tests\PHPat\unit\rules\ShouldNotImplement;
 
@@ -18,6 +16,8 @@ use Tests\PHPat\unit\FakeTestParser;
 
 /**
  * @extends RuleTestCase<ImplementedInterfacesRule>
+ * @internal
+ * @coversNothing
  */
 class ImplementedInterfacesTest extends RuleTestCase
 {
@@ -26,7 +26,7 @@ class ImplementedInterfacesTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not implement %s', FixtureClass::class, SimpleInterface::class), 31],
+            [sprintf('%s should not implement %s', FixtureClass::class, SimpleInterface::class), 29],
         ]);
     }
 

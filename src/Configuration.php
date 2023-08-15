@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace PHPat;
 
@@ -15,9 +13,9 @@ final class Configuration
         bool $ignore_built_in_classes,
         bool $show_rule_names
     ) {
-        $this->ignore_doc_comments     = $ignore_doc_comments;
+        $this->ignore_doc_comments = $ignore_doc_comments;
         $this->ignore_built_in_classes = $ignore_built_in_classes;
-        $this->show_rule_names         = $show_rule_names;
+        $this->show_rule_names = $show_rule_names;
     }
 
     public function ignoreDocComments(): bool

@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Tests\PHPat\unit\rules\ShouldNotDepend;
 
@@ -18,14 +16,17 @@ use Tests\PHPat\unit\FakeTestParser;
 
 /**
  * @extends RuleTestCase<MethodParamRule>
+ * @internal
+ * @coversNothing
  */
 class MethodParamTest extends RuleTestCase
 {
     public const RULE_NAME = 'test_FixtureClassShouldNotDependSimpleAndSpecial';
+
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleInterface::class), 39],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleInterface::class), 37],
         ]);
     }
 

@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace PHPat\Statement\Builder;
 
@@ -14,19 +12,21 @@ class RelationStatementBuilder implements StatementBuilder
 {
     /** @var array<array{string, SelectorInterface, array<SelectorInterface>, array<SelectorInterface>, array<SelectorInterface>, array<string>}> */
     protected $statements = [];
+
     /** @var array<RelationRule> */
     protected array $rules;
+
     /** @var class-string<PHPStanRule<Node>> */
     private string $assertion;
 
     /**
      * @param class-string<PHPStanRule<Node>> $assertion
-     * @param array<RelationRule> $rules
+     * @param array<RelationRule>             $rules
      */
     final public function __construct(string $assertion, array $rules)
     {
         $this->assertion = $assertion;
-        $this->rules     = $rules;
+        $this->rules = $rules;
     }
 
     /**
@@ -47,7 +47,7 @@ class RelationStatementBuilder implements StatementBuilder
      * @param array<SelectorInterface> $subjectExcludes
      * @param array<SelectorInterface> $targets
      * @param array<SelectorInterface> $targetExcludes
-     * @param array<string> $tips
+     * @param array<string>            $tips
      */
     private function addStatement(
         string $ruleName,
@@ -61,7 +61,7 @@ class RelationStatementBuilder implements StatementBuilder
     }
 
     /**
-     * @param array<Rule> $rules
+     * @param  array<Rule>                                                                                                                          $rules
      * @return array<array{string, SelectorInterface, array<SelectorInterface>, array<SelectorInterface>, array<SelectorInterface>, array<string>}>
      */
     private function extractCurrentAssertion(array $rules): array

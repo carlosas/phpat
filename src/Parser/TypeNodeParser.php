@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace PHPat\Parser;
 
@@ -45,7 +43,6 @@ class TypeNodeParser
     }
 
     /**
-     * @param NodeAbstract $type
      * @return array<Identifier|Name>
      */
     private static function flattenType(NodeAbstract $type): array

@@ -1,31 +1,28 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace PHPat\Test;
 
-use Exception;
 use PHPat\Rule\Assertion\Relation\RelationAssertion;
 
 class RuleValidator
 {
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function validate(Rule $rule): void
     {
         if ($rule->getSubjects() === []) {
-            throw new Exception('One of your PHPat rules has no subjects');
+            throw new \Exception('One of your PHPat rules has no subjects');
         }
 
         $assertion = $rule->getAssertion();
 
         if ($assertion === null) {
-            throw new Exception('One of your PHPat rules has no assertion');
+            throw new \Exception('One of your PHPat rules has no assertion');
         }
 
         if (is_subclass_of($assertion, RelationAssertion::class) && $rule->getTargets() === []) {
-            throw new Exception('One of your PHPat rules has no targets');
+            throw new \Exception('One of your PHPat rules has no targets');
         }
     }
 }

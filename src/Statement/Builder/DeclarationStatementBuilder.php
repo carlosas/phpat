@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace PHPat\Statement\Builder;
 
@@ -12,25 +10,27 @@ use PHPStan\Rules\Rule as PHPStanRule;
 
 class DeclarationStatementBuilder implements StatementBuilder
 {
-    /** @var array<array{string, SelectorInterface, array<SelectorInterface>, string[]}> */
+    /** @var array<array{string, SelectorInterface, array<SelectorInterface>, array<string>}> */
     protected $statements = [];
+
     /** @var array<RelationRule> */
     protected array $rules;
+
     /** @var class-string<PHPStanRule<Node>> */
     private string $assertion;
 
     /**
      * @param class-string<PHPStanRule<Node>> $assertion
-     * @param array<RelationRule> $rules
+     * @param array<RelationRule>             $rules
      */
     final public function __construct(string $assertion, array $rules)
     {
         $this->assertion = $assertion;
-        $this->rules     = $rules;
+        $this->rules = $rules;
     }
 
     /**
-     * @return array<array{string, SelectorInterface, array<SelectorInterface>, string[]}>
+     * @return array<array{string, SelectorInterface, array<SelectorInterface>, array<string>}>
      */
     public function build(): array
     {
@@ -45,7 +45,7 @@ class DeclarationStatementBuilder implements StatementBuilder
 
     /**
      * @param array<SelectorInterface> $subjectExcludes
-     * @param string[] $tips
+     * @param array<string>            $tips
      */
     private function addStatement(
         string $ruleName,
@@ -57,8 +57,8 @@ class DeclarationStatementBuilder implements StatementBuilder
     }
 
     /**
-     * @param array<Rule> $rules
-     * @return array<array{string, SelectorInterface, array<SelectorInterface>, string[]}>
+     * @param  array<Rule>                                                                      $rules
+     * @return array<array{string, SelectorInterface, array<SelectorInterface>, array<string>}>
      */
     private function extractCurrentAssertion(array $rules): array
     {

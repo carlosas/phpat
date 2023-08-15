@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace PHPat\Test;
 
@@ -34,14 +32,10 @@ interface Rule
      */
     public function getTargetExcludes(): array;
 
-    /**
-     * @return string
-     */
     public function getRuleName(): string;
 
     /**
      * @return array<string>
      */
     public function getTips(): array;
-
 }
