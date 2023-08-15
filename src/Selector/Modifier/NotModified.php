@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace PHPat\Selector\Modifier;
 
@@ -18,11 +16,11 @@ class NotModified implements SelectorInterface
 
     public function matches(ClassReflection $classReflection): bool
     {
-        return !($this->selector->matches($classReflection));
+        return !$this->selector->matches($classReflection);
     }
 
     public function getName(): string
     {
-        return $this->selector->getName() . ':not';
+        return $this->selector->getName().':not';
     }
 }

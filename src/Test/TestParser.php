@@ -1,11 +1,8 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace PHPat\Test;
 
 use PHPat\Test\Builder\Rule as RuleBuilder;
-use ReflectionMethod;
 
 class TestParser
 {
@@ -16,7 +13,7 @@ class TestParser
 
     public function __construct(TestExtractor $extractor, RuleValidator $ruleValidator)
     {
-        $this->extractor     = $extractor;
+        $this->extractor = $extractor;
         $this->ruleValidator = $ruleValidator;
     }
 
@@ -41,9 +38,9 @@ class TestParser
 
         $rules = [];
         foreach ($tests as $test) {
-            $methods   = [];
+            $methods = [];
             $reflected = $test->getNativeReflection();
-            foreach ($reflected->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
+            foreach ($reflected->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
                 if (preg_match('/^(test)[A-Za-z0-9_\x80-\xff]*/', $method->getName())
                 ) {
                     $methods[] = $method->getName();
@@ -63,6 +60,7 @@ class TestParser
 
     /**
      * @param array<RuleBuilder> $ruleBuilders
+     *
      * @return array<Rule>
      */
     private function buildRules(array $ruleBuilders): array

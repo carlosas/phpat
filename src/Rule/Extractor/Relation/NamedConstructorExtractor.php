@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace PHPat\Rule\Extractor\Relation;
 
@@ -17,15 +15,16 @@ trait NamedConstructorExtractor
 
     /**
      * @param Node\Expr\ClassConstFetch $node
+     *
      * @return array<class-string>
      */
     protected function extractNodeClassNames(Node $node, Scope $scope): array
     {
-        $classes         = TypeNodeParser::parse($node->class, $scope);
-        $class           = reset($classes);
-        $reflectedClass  = $this->reflectionProvider->getClass($class->toString());
+        $classes = TypeNodeParser::parse($node->class, $scope);
+        $class = reset($classes);
+        $reflectedClass = $this->reflectionProvider->getClass($class->toString());
         $reflectedMethod = $reflectedClass->getMethod($node->name, $scope);
-        //TODO: check if the method is a named constructor
+        // TODO: check if the method is a named constructor
 
         return namesToClassStrings(TypeNodeParser::parse($node->class, $scope));
     }

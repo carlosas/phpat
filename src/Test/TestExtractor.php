@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace PHPat\Test;
 
@@ -18,7 +16,7 @@ class TestExtractor
 
     public function __construct(Container $container, ReflectionProvider $reflectionProvider)
     {
-        $this->container          = $container;
+        $this->container = $container;
         $this->reflectionProvider = $reflectionProvider;
     }
 

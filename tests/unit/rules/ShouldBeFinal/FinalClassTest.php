@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Tests\PHPat\unit\rules\ShouldBeFinal;
 
@@ -17,10 +15,15 @@ use Tests\PHPat\unit\FakeTestParser;
 
 /**
  * @extends RuleTestCase<IsFinalRule>
+ *
+ * @internal
+ *
+ * @coversNothing
  */
 class FinalClassTest extends RuleTestCase
 {
     public const RULE_NAME = 'test_FixtureClassShouldBeFinal';
+
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [

@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Tests\PHPat\unit\rules\ShouldNotDepend;
 
@@ -27,10 +25,15 @@ use Tests\PHPat\unit\FakeTestParser;
 
 /**
  * @extends RuleTestCase<DocMixinTagRule>
+ *
+ * @internal
+ *
+ * @coversNothing
  */
 class DocMixinTagTest extends RuleTestCase
 {
     public const RULE_NAME = 'test_FixtureClassShouldNotDependSimpleAndSpecial';
+
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [

@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace PHPat\Rule\Assertion\Relation;
 
@@ -35,10 +33,10 @@ abstract class RelationAssertion implements Assertion
         ReflectionProvider $reflectionProvider,
         FileTypeMapper $fileTypeMapper
     ) {
-        $this->statements         = $statementBuilderFactory->create($assertion)->build();
-        $this->configuration      = $configuration;
+        $this->statements = $statementBuilderFactory->create($assertion)->build();
+        $this->configuration = $configuration;
         $this->reflectionProvider = $reflectionProvider;
-        $this->fileTypeMapper     = $fileTypeMapper;
+        $this->fileTypeMapper = $fileTypeMapper;
     }
 
     /**
@@ -68,18 +66,16 @@ abstract class RelationAssertion implements Assertion
     abstract protected function extractNodeClassNames(Node $node, Scope $scope): array;
 
     /**
-     * @param string $ruleName
      * @param class-string $subject
      */
     abstract protected function getMessage(string $ruleName, string $subject, string $target): string;
 
     /**
-     * @param string                   $ruleName
-     * @param ClassReflection          $subject
      * @param array<SelectorInterface> $targets
      * @param array<SelectorInterface> $targetExcludes
      * @param array<class-string>      $nodes
      * @param array<string>            $tips
+     *
      * @return array<RuleError>
      */
     abstract protected function applyValidation(
@@ -96,7 +92,7 @@ abstract class RelationAssertion implements Assertion
      */
     protected function ruleApplies(Scope $scope, array $nodes): bool
     {
-        if (!($scope->isInClass())) {
+        if (!$scope->isInClass()) {
             return false;
         }
 
@@ -116,12 +112,14 @@ abstract class RelationAssertion implements Assertion
 
     /**
      * @param array<class-string> $nodes
-     * @throws ShouldNotHappenException
+     *
      * @return array<RuleError>
+     *
+     * @throws ShouldNotHappenException
      */
     protected function validateGetErrors(Scope $scope, array $nodes): array
     {
-        $errors  = [];
+        $errors = [];
         $subject = $scope->getClassReflection();
         if ($subject === null) {
             throw new ShouldNotHappenException();
@@ -152,6 +150,7 @@ abstract class RelationAssertion implements Assertion
 
     /**
      * @param array<class-string> $nodes
+     *
      * @return array<class-string>
      */
     private function removeBuiltInClasses(array $nodes): array

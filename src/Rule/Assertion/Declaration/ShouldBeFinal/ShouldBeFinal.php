@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace PHPat\Rule\Assertion\Declaration\ShouldBeFinal;
 
@@ -33,10 +31,8 @@ abstract class ShouldBeFinal extends DeclarationAssertion
     }
 
     /**
-     * @param string $ruleName
-     * @param ClassReflection $subject
-     * @param bool $meetsDeclaration
-     * @param string[] $tips
+     * @param array<string> $tips
+     *
      * @return array<RuleError>
      */
     protected function applyValidation(string $ruleName, ClassReflection $subject, bool $meetsDeclaration, array $tips): array

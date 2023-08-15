@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Tests\PHPat\architecture;
 
@@ -16,13 +14,15 @@ class ConfigurationTest
         return PHPat::rule()
             ->classes(Selector::classname(Configuration::class))
             ->shouldNotDependOn()
-            ->classes(Selector::all());
+            ->classes(Selector::all())
+        ;
     }
 
     public function test_configuration_is_final(): Rule
     {
         return PHPat::rule()
             ->classes(Selector::classname(Configuration::class))
-            ->shouldBeFinal();
+            ->shouldBeFinal()
+        ;
     }
 }

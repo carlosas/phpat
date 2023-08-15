@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace PHPat\Rule\Assertion\Declaration;
 
@@ -18,7 +16,7 @@ use PHPStan\Type\FileTypeMapper;
 
 abstract class DeclarationAssertion implements Assertion
 {
-    /** @var array<array{string, SelectorInterface, array<SelectorInterface>, string[]}> */
+    /** @var array<array{string, SelectorInterface, array<SelectorInterface>, array<string>}> */
     protected array $statements;
     protected Configuration $configuration;
     protected ReflectionProvider $reflectionProvider;
@@ -34,10 +32,10 @@ abstract class DeclarationAssertion implements Assertion
         ReflectionProvider $reflectionProvider,
         FileTypeMapper $fileTypeMapper
     ) {
-        $this->statements         = $statementBuilderFactory->create($assertion)->build();
-        $this->configuration      = $configuration;
+        $this->statements = $statementBuilderFactory->create($assertion)->build();
+        $this->configuration = $configuration;
         $this->reflectionProvider = $reflectionProvider;
-        $this->fileTypeMapper     = $fileTypeMapper;
+        $this->fileTypeMapper = $fileTypeMapper;
     }
 
     /**
@@ -64,20 +62,20 @@ abstract class DeclarationAssertion implements Assertion
     abstract protected function meetsDeclaration(Node $node, Scope $scope): bool;
 
     /**
-     * @param string $ruleName
      * @param class-string $subject
      */
     abstract protected function getMessage(string $ruleName, string $subject): string;
 
     /**
-     * @param string[] $tips
+     * @param array<string> $tips
+     *
      * @return array<RuleError>
      */
     abstract protected function applyValidation(string $ruleName, ClassReflection $subject, bool $meetsDeclaration, array $tips): array;
 
     protected function ruleApplies(Scope $scope): bool
     {
-        if (!($scope->isInClass())) {
+        if (!$scope->isInClass()) {
             return false;
         }
 
@@ -85,12 +83,13 @@ abstract class DeclarationAssertion implements Assertion
     }
 
     /**
-     * @throws ShouldNotHappenException
      * @return array<RuleError>
+     *
+     * @throws ShouldNotHappenException
      */
     protected function validateGetErrors(Scope $scope, bool $meetsDeclaration): array
     {
-        $errors  = [];
+        $errors = [];
         $subject = $scope->getClassReflection();
         if ($subject === null) {
             throw new ShouldNotHappenException();

@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace PHPat\Rule\Assertion\Declaration;
 
@@ -13,9 +11,11 @@ use PHPStan\Rules\RuleErrorBuilder;
 trait ValidationTrait
 {
     /**
-     * @param string[] $tips
-     * @throws ShouldNotHappenException
+     * @param array<string> $tips
+     *
      * @return array<RuleError>
+     *
+     * @throws ShouldNotHappenException
      */
     protected function applyShould(string $ruleName, ClassReflection $subject, bool $meetsDeclaration, array $tips): array
     {
@@ -26,7 +26,7 @@ trait ValidationTrait
                 $this->getMessage($ruleName, $subject->getName())
             );
 
-            foreach($tips as $tip) {
+            foreach ($tips as $tip) {
                 $ruleError->addTip($tip);
             }
             $errors[] = $ruleError->build();
@@ -36,9 +36,11 @@ trait ValidationTrait
     }
 
     /**
-     * @param string[] $tips
-     * @throws ShouldNotHappenException
+     * @param array<string> $tips
+     *
      * @return array<RuleError>
+     *
+     * @throws ShouldNotHappenException
      */
     protected function applyShouldNot(string $ruleName, ClassReflection $subject, bool $meetsDeclaration, array $tips): array
     {
@@ -49,7 +51,7 @@ trait ValidationTrait
                 $this->getMessage($ruleName, $subject->getName())
             );
 
-            foreach($tips as $tip) {
+            foreach ($tips as $tip) {
                 $ruleError->addTip($tip);
             }
             $errors[] = $ruleError->build();
@@ -58,9 +60,8 @@ trait ValidationTrait
         return $errors;
     }
 
-
     /**
-     * @param class-string $classname
+     * @param class-string             $classname
      * @param array<SelectorInterface> $targetExcludes
      */
     private function nodeMatchesTarget(string $classname, SelectorInterface $target, array $targetExcludes): bool

@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Tests\PHPat\unit\rules\ShouldNotConstruct;
 
@@ -18,6 +16,10 @@ use Tests\PHPat\unit\FakeTestParser;
 
 /**
  * @extends RuleTestCase<NewRule>
+ *
+ * @internal
+ *
+ * @coversNothing
  */
 class ShowRuleNameNewTest extends RuleTestCase
 {

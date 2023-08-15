@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace PHPat\Rule\Extractor\Relation\DocComment\MethodScope;
 
@@ -16,8 +14,9 @@ trait ThrowsTagExtractor
     }
 
     /**
-     * @throws \PHPStan\ShouldNotHappenException
      * @return array<int, mixed>
+     *
+     * @throws \PHPStan\ShouldNotHappenException
      */
     protected function extractNodeClassNames(Node $node, Scope $scope): array
     {
@@ -34,8 +33,8 @@ trait ThrowsTagExtractor
             return [];
         }
 
-        $classReflection    = $scope->getClassReflection();
-        $traitReflection    = $scope->getTraitReflection();
+        $classReflection = $scope->getClassReflection();
+        $traitReflection = $scope->getTraitReflection();
         $functionReflection = $scope->getFunction();
 
         $resolvedPhpDoc = $this->fileTypeMapper->getResolvedPhpDoc(
@@ -47,7 +46,7 @@ trait ThrowsTagExtractor
         );
 
         $names = [];
-        $tag   = $resolvedPhpDoc->getThrowsTag();
+        $tag = $resolvedPhpDoc->getThrowsTag();
         if ($tag instanceof ThrowsTag) {
             array_push($names, ...$tag->getType()->getReferencedClasses());
         }

@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Tests\PHPat\architecture;
 
@@ -19,14 +17,16 @@ class AssertionTest
         return PHPat::rule()
             ->classes(Selector::implements(Assertion::class))
             ->excluding(Selector::classname('/.*Rule$/', true))
-            ->shouldBeAbstract();
+            ->shouldBeAbstract()
+        ;
     }
 
     public function test_rules_are_not_abstract(): Rule
     {
         return PHPat::rule()
             ->classes(Selector::classname('/.*\\\Assertion\\\.*Rule$/', true))
-            ->shouldNotBeAbstract();
+            ->shouldNotBeAbstract()
+        ;
     }
 
     public function test_rules_dependencies(): Rule
@@ -41,6 +41,7 @@ class AssertionTest
                 Selector::extends(DeclarationAssertion::class),
                 Selector::namespace('PhpParser'),
                 Selector::namespace('PHPStan'),
-            );
+            )
+        ;
     }
 }

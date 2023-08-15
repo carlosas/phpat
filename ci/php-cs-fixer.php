@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 $finder = PhpCsFixer\Finder::create()
     ->in([dirname(__DIR__) . '/src', dirname(__DIR__) . '/tests'])
@@ -16,7 +14,8 @@ $rules = [
     '@PHP80Migration'             => true,
     '@PHP80Migration:risky'       => true,
     '@PHP81Migration'             => true,
-    'array_syntax'                => ['syntax' => 'short'],
+    '@PhpCsFixer'                 => true,
+    /*'array_syntax'                => ['syntax' => 'short'],
     'binary_operator_spaces'      => ['default' => 'align_single_space_minimal'],
     'align_multiline_comment'     => ['comment_type' => 'phpdocs_like'],
     'combine_consecutive_issets'  => true,
@@ -49,12 +48,17 @@ $rules = [
     'phpdoc_types_order'          => true,
     'simplified_null_return'      => true,
     'strict_comparison'           => true,
-    'strict_param'                => true,
+    'strict_param'                => true,*/
+    PhpCsFixerCustomFixers\Fixer\DeclareAfterOpeningTagFixer::name() => true,
+    PhpCsFixerCustomFixers\Fixer\PhpdocArrayStyleFixer::name() => true,
+    PhpCsFixerCustomFixers\Fixer\ConstructorEmptyBracesFixer::name() => true,
+    'yoda_style'                  =>  ['equal' => false, 'identical' => false, 'less_and_greater' => false],
     //enable when min php >= 8.0
     'get_class_to_class_keyword'  => false,
 ];
 
 return (new PhpCsFixer\Config())
+    ->registerCustomFixers(new PhpCsFixerCustomFixers\Fixers())
     ->setFinder($finder)
     ->setRules($rules)
     ->setRiskyAllowed(true);

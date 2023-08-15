@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace PHPat\Parser;
 
@@ -45,7 +43,6 @@ class TypeNodeParser
     }
 
     /**
-     * @param NodeAbstract $type
      * @return array<Identifier|Name>
      */
     private static function flattenType(NodeAbstract $type): array
@@ -53,6 +50,7 @@ class TypeNodeParser
         switch (true) {
             case $type instanceof NullableType:
                 return self::flattenType($type->type);
+
             case $type instanceof UnionType:
             case $type instanceof IntersectionType:
                 return array_merge_recursive(
@@ -63,9 +61,11 @@ class TypeNodeParser
                         )
                     )
                 );
+
             case $type instanceof Name:
             case $type instanceof Identifier:
                 return [$type];
+
             default:
                 throw new ShouldNotHappenException();
         }

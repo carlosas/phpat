@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Tests\PHPat\unit\rules\ShouldImplement;
 
@@ -18,10 +16,15 @@ use Tests\PHPat\unit\FakeTestParser;
 
 /**
  * @extends RuleTestCase<ImplementedInterfacesRule>
+ *
+ * @internal
+ *
+ * @coversNothing
  */
 class ImplementedInterfacesTest extends RuleTestCase
 {
     public const RULE_NAME = 'test_FixtureClassShouldImplementSimpleInterfaceTwo';
+
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [

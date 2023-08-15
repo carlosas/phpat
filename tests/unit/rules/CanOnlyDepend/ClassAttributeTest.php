@@ -1,10 +1,7 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Tests\PHPat\unit\rules\CanOnlyDepend;
 
-use Attribute;
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\Relation\CanOnlyDepend\CanOnlyDepend;
 use PHPat\Rule\Assertion\Relation\CanOnlyDepend\ClassAttributeRule;
@@ -19,10 +16,15 @@ use Tests\PHPat\unit\FakeTestParser;
 
 /**
  * @extends RuleTestCase<ClassAttributeRule>
+ *
+ * @internal
+ *
+ * @coversNothing
  */
 class ClassAttributeTest extends RuleTestCase
 {
     public const RULE_NAME = 'test_FixtureClassCanOnlyDependSimpleAndSpecial';
+
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
@@ -36,7 +38,7 @@ class ClassAttributeTest extends RuleTestCase
             self::RULE_NAME,
             CanOnlyDepend::class,
             [new Classname(FixtureClass::class, false)],
-            [new Classname(Attribute::class, false)]
+            [new Classname(\Attribute::class, false)]
         );
 
         return new ClassAttributeRule(

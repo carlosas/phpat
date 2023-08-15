@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Tests\PHPat\unit\rules\CanOnlyDepend;
 
@@ -27,10 +25,15 @@ use Tests\PHPat\unit\FakeTestParser;
 
 /**
  * @extends RuleTestCase<DocMethodTagRule>
+ *
+ * @internal
+ *
+ * @coversNothing
  */
 class DocMethodTagTest extends RuleTestCase
 {
     public const RULE_NAME = 'test_FixtureClassCanOnlyDependSimpleAndSpecial';
+
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [

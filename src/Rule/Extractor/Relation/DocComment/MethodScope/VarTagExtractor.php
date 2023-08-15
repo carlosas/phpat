@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace PHPat\Rule\Extractor\Relation\DocComment\MethodScope;
 
@@ -15,8 +13,9 @@ trait VarTagExtractor
     }
 
     /**
-     * @throws \PHPStan\ShouldNotHappenException
      * @return array<int, mixed>
+     *
+     * @throws \PHPStan\ShouldNotHappenException
      */
     protected function extractNodeClassNames(Node $node, Scope $scope): array
     {
@@ -33,8 +32,8 @@ trait VarTagExtractor
             return [];
         }
 
-        $classReflection    = $scope->getClassReflection();
-        $traitReflection    = $scope->getTraitReflection();
+        $classReflection = $scope->getClassReflection();
+        $traitReflection = $scope->getTraitReflection();
         $functionReflection = $scope->getFunction();
 
         $resolvedPhpDoc = $this->fileTypeMapper->getResolvedPhpDoc(

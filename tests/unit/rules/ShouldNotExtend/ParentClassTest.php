@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Tests\PHPat\unit\rules\ShouldNotExtend;
 
@@ -18,6 +16,10 @@ use Tests\PHPat\unit\FakeTestParser;
 
 /**
  * @extends RuleTestCase<ParentClassRule>
+ *
+ * @internal
+ *
+ * @coversNothing
  */
 class ParentClassTest extends RuleTestCase
 {
