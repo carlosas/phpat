@@ -9,7 +9,7 @@ use PHPStan\Rules\Rule;
 /**
  * @implements Rule<Node\Expr\Variable>
  */
-class DocVarTagRule extends CanOnlyDepend implements Rule
+final class DocVarTagRule extends CanOnlyDepend implements Rule
 {
     use VarTagExtractor;
 }

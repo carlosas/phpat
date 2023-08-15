@@ -10,7 +10,7 @@ use PHPat\Selector\Selector;
 use PHPat\Test\Builder\Rule;
 use PHPat\Test\PHPat;
 
-class AssertionTest
+final class AssertionTest
 {
     public function test_assertions_are_abstract(): Rule
     {

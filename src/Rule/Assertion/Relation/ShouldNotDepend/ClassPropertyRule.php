@@ -9,7 +9,7 @@ use PHPStan\Rules\Rule;
 /**
  * @implements Rule<Node\Stmt\Property>
  */
-class ClassPropertyRule extends ShouldNotDepend implements Rule
+final class ClassPropertyRule extends ShouldNotDepend implements Rule
 {
     use ClassPropertyExtractor;
 }

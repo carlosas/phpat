@@ -9,7 +9,7 @@ use PHPStan\Rules\Rule;
 /**
  * @implements Rule<InClassNode>
  */
-class DocMixinTagRule extends ShouldNotDepend implements Rule
+final class DocMixinTagRule extends ShouldNotDepend implements Rule
 {
     use MixinTagExtractor;
 }

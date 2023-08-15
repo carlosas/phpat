@@ -9,7 +9,7 @@ use PHPStan\Rules\Rule;
 /**
  * @implements Rule<Node\Stmt\ClassMethod>
  */
-class DocThrowsTagRule extends ShouldNotDepend implements Rule
+final class DocThrowsTagRule extends ShouldNotDepend implements Rule
 {
     use ThrowsTagExtractor;
 }

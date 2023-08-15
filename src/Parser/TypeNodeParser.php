@@ -13,7 +13,7 @@ use PhpParser\Node\UnionType;
 use PhpParser\NodeAbstract;
 use PHPStan\Analyser\Scope;
 
-class TypeNodeParser
+final class TypeNodeParser
 {
     /**
      * @return array<Node\Name>

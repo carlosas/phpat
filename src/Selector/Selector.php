@@ -3,17 +3,17 @@
 namespace PHPat\Selector;
 
 use PHPat\Selector\Modifier\AndModifier;
-use PHPat\Selector\Modifier\NotModified;
+use PHPat\Selector\Modifier\NotModifier;
 
-class Selector extends SelectorPrimitive
+final class Selector extends SelectorPrimitive
 {
     public static function AND(SelectorInterface ...$selector): AndModifier
     {
         return new AndModifier(...$selector);
     }
 
-    public static function NOT(SelectorInterface $selector): NotModified
+    public static function NOT(SelectorInterface $selector): NotModifier
     {
-        return new NotModified($selector);
+        return new NotModifier($selector);
     }
 }

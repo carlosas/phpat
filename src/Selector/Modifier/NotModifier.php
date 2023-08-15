@@ -5,7 +5,7 @@ namespace PHPat\Selector\Modifier;
 use PHPat\Selector\SelectorInterface;
 use PHPStan\Reflection\ClassReflection;
 
-class NotModified implements SelectorInterface
+final class NotModifier implements SelectorInterface
 {
     private SelectorInterface $selector;
 

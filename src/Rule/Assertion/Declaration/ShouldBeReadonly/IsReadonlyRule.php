@@ -9,7 +9,7 @@ use PHPStan\Rules\Rule;
 /**
  * @implements Rule<InClassNode>
  */
-class IsReadonlyRule extends ShouldBeReadonly implements Rule
+final class IsReadonlyRule extends ShouldBeReadonly implements Rule
 {
     use ReadonlyExtractor;
 }

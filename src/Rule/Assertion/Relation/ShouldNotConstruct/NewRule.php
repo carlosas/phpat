@@ -9,7 +9,7 @@ use PHPStan\Rules\Rule;
 /**
  * @implements Rule<Node\Expr\New_>
  */
-class NewRule extends ShouldNotConstruct implements Rule
+final class NewRule extends ShouldNotConstruct implements Rule
 {
     use NewExtractor;
 }

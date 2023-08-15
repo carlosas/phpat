@@ -9,7 +9,7 @@ use PHPStan\Rules\Rule;
 /**
  * @implements Rule<InClassNode>
  */
-class ParentClassRule extends ShouldNotExtend implements Rule
+final class ParentClassRule extends ShouldNotExtend implements Rule
 {
     use AllParentsExtractor;
 }

@@ -5,7 +5,7 @@ namespace PHPat\Test;
 use PHPat\Rule\Assertion\Declaration\DeclarationAssertion;
 use PHPat\Selector\SelectorInterface;
 
-class DeclarationRule implements Rule
+final class DeclarationRule implements Rule
 {
     /** @var array<SelectorInterface> */
     public array $subjects = [];

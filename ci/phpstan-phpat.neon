@@ -19,3 +19,7 @@ services:
         class: Tests\PHPat\architecture\AssertionTest
         tags:
             - phpat.test
+    -
+        class: Tests\PHPat\architecture\CleanClassesTest
+        tags:
+            - phpat.test

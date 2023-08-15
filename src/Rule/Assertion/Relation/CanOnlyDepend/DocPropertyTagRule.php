@@ -9,7 +9,7 @@ use PHPStan\Rules\Rule;
 /**
  * @implements Rule<InClassNode>
  */
-class DocPropertyTagRule extends CanOnlyDepend implements Rule
+final class DocPropertyTagRule extends CanOnlyDepend implements Rule
 {
     use PropertyTagExtractor;
 }

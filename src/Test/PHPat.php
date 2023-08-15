@@ -4,7 +4,7 @@ namespace PHPat\Test;
 
 use PHPat\Test\Builder\SubjectStep;
 
-class PHPat
+final class PHPat
 {
     public static function rule(): SubjectStep
     {

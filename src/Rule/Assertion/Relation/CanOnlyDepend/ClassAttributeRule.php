@@ -9,7 +9,7 @@ use PHPStan\Rules\Rule;
 /**
  * @implements Rule<InClassNode>
  */
-class ClassAttributeRule extends CanOnlyDepend implements Rule
+final class ClassAttributeRule extends CanOnlyDepend implements Rule
 {
     use ClassAttributeExtractor;
 }

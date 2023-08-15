@@ -6,7 +6,7 @@ use PHPat\Rule\Assertion\Declaration\DeclarationAssertion;
 use PHPat\Rule\Assertion\Relation\RelationAssertion;
 use PHPat\Selector\SelectorInterface;
 
-class RelationRule implements Rule
+final class RelationRule implements Rule
 {
     /** @var array<SelectorInterface> */
     public array $subjects = [];

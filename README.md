@@ -109,7 +109,7 @@ use PHPat\Test\Builder\Rule;
 use PHPat\Test\PHPat;
 use App\Domain\SuperForbiddenClass;
 
-class MyFirstTest
+final class MyFirstTest
 {
     public function test_domain_does_not_depend_on_other_layers(): Rule
     {

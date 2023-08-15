@@ -9,7 +9,7 @@ use PHPStan\Rules\Rule;
 /**
  * @implements Rule<Node\Expr\ClassConstFetch>
  */
-class ConstantUseRule extends CanOnlyDepend implements Rule
+final class ConstantUseRule extends CanOnlyDepend implements Rule
 {
     use ConstantUseExtractor;
 }

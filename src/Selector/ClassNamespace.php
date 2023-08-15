@@ -4,7 +4,7 @@ namespace PHPat\Selector;
 
 use PHPStan\Reflection\ClassReflection;
 
-class ClassNamespace implements SelectorInterface
+final class ClassNamespace implements SelectorInterface
 {
     private string $namespace;
     private bool $isRegex;

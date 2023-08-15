@@ -4,7 +4,7 @@ namespace PHPat\Test;
 
 use PHPat\Rule\Assertion\Relation\RelationAssertion;
 
-class RuleValidator
+final class RuleValidator
 {
     /**
      * @throws \Exception
@@ -12,17 +12,17 @@ class RuleValidator
     public function validate(Rule $rule): void
     {
         if ($rule->getSubjects() === []) {
-            throw new \Exception('One of your PHPat rules has no subjects');
+            throw new \Exception(sprintf('The PHPat rule %s has no subjects', $rule->getRuleName()));
         }
 
         $assertion = $rule->getAssertion();
 
         if ($assertion === null) {
-            throw new \Exception('One of your PHPat rules has no assertion');
+            throw new \Exception(sprintf('The PHPat rule %s has no assertion', $rule->getRuleName()));
         }
 
         if (is_subclass_of($assertion, RelationAssertion::class) && $rule->getTargets() === []) {
-            throw new \Exception('One of your PHPat rules has no targets');
+            throw new \Exception(sprintf('The PHPat rule %s has no targets', $rule->getRuleName()));
         }
     }
 }

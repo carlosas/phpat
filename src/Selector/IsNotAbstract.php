@@ -4,7 +4,7 @@ namespace PHPat\Selector;
 
 use PHPStan\Reflection\ClassReflection;
 
-class IsNotAbstract implements SelectorInterface
+final class IsNotAbstract implements SelectorInterface
 {
     public function getName(): string
     {

@@ -8,7 +8,7 @@ use PHPat\Test\RelationRule;
 use PHPat\Test\Rule;
 use PHPat\Test\TestParser;
 
-class StatementBuilderFactory
+final class StatementBuilderFactory
 {
     /** @var array<Rule> */
     private array $rules;

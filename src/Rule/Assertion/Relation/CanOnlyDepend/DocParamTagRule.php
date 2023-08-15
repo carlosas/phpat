@@ -9,7 +9,7 @@ use PHPStan\Rules\Rule;
 /**
  * @implements Rule<InClassMethodNode>
  */
-class DocParamTagRule extends CanOnlyDepend implements Rule
+final class DocParamTagRule extends CanOnlyDepend implements Rule
 {
     use ParamTagExtractor;
 }

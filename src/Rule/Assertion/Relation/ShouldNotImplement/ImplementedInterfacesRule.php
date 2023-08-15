@@ -9,7 +9,7 @@ use PHPStan\Rules\Rule;
 /**
  * @implements Rule<InClassNode>
  */
-class ImplementedInterfacesRule extends ShouldNotImplement implements Rule
+final class ImplementedInterfacesRule extends ShouldNotImplement implements Rule
 {
     use AllInterfacesExtractor;
 }

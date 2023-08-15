@@ -4,7 +4,7 @@ namespace PHPat\Selector;
 
 use PHPStan\Reflection\ClassReflection;
 
-class All implements SelectorInterface
+final class All implements SelectorInterface
 {
     public function getName(): string
     {

@@ -8,13 +8,13 @@ use PHPat\Test\Rule;
 use PhpParser\Node;
 use PHPStan\Rules\Rule as PHPStanRule;
 
-class RelationStatementBuilder implements StatementBuilder
+final class RelationStatementBuilder implements StatementBuilder
 {
     /** @var array<array{string, SelectorInterface, array<SelectorInterface>, array<SelectorInterface>, array<SelectorInterface>, array<string>}> */
-    protected $statements = [];
+    private array $statements = [];
 
     /** @var array<RelationRule> */
-    protected array $rules;
+    private array $rules;
 
     /** @var class-string<PHPStanRule<Node>> */
     private string $assertion;
@@ -23,7 +23,7 @@ class RelationStatementBuilder implements StatementBuilder
      * @param class-string<PHPStanRule<Node>> $assertion
      * @param array<RelationRule>             $rules
      */
-    final public function __construct(string $assertion, array $rules)
+    public function __construct(string $assertion, array $rules)
     {
         $this->assertion = $assertion;
         $this->rules = $rules;

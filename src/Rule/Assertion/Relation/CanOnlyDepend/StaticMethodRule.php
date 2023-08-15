@@ -9,7 +9,7 @@ use PHPStan\Rules\Rule;
 /**
  * @implements Rule<Node\Expr\StaticCall>
  */
-class StaticMethodRule extends CanOnlyDepend implements Rule
+final class StaticMethodRule extends CanOnlyDepend implements Rule
 {
     use StaticMethodCallExtractor;
 }

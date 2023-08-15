@@ -7,7 +7,7 @@ use PHPat\Selector\Selector;
 use PHPat\Test\Builder\Rule;
 use PHPat\Test\PHPat;
 
-class ConfigurationTest
+final class ConfigurationTest
 {
     public function test_configuration_does_not_have_dependencies(): Rule
     {

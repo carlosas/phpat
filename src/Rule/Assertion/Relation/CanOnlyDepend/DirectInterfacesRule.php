@@ -9,7 +9,7 @@ use PHPStan\Rules\Rule;
 /**
  * @implements Rule<InClassNode>
  */
-class DirectInterfacesRule extends CanOnlyDepend implements Rule
+final class DirectInterfacesRule extends CanOnlyDepend implements Rule
 {
     use DirectInterfacesExtractor;
 }

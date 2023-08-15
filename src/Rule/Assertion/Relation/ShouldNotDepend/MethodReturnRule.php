@@ -9,7 +9,7 @@ use PHPStan\Rules\Rule;
 /**
  * @implements Rule<Node\Stmt\ClassMethod>
  */
-class MethodReturnRule extends ShouldNotDepend implements Rule
+final class MethodReturnRule extends ShouldNotDepend implements Rule
 {
     use MethodReturnExtractor;
 }

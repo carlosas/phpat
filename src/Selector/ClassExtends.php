@@ -4,7 +4,7 @@ namespace PHPat\Selector;
 
 use PHPStan\Reflection\ClassReflection;
 
-class ClassExtends implements SelectorInterface
+final class ClassExtends implements SelectorInterface
 {
     private string $classname;
     private bool $isRegex;

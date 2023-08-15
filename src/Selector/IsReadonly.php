@@ -4,7 +4,7 @@ namespace PHPat\Selector;
 
 use PHPStan\Reflection\ClassReflection;
 
-class IsReadonly implements SelectorInterface
+final class IsReadonly implements SelectorInterface
 {
     public function getName(): string
     {

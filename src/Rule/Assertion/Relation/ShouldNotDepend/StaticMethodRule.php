@@ -9,7 +9,7 @@ use PHPStan\Rules\Rule;
 /**
  * @implements Rule<Node\Expr\StaticCall>
  */
-class StaticMethodRule extends ShouldNotDepend implements Rule
+final class StaticMethodRule extends ShouldNotDepend implements Rule
 {
     use StaticMethodCallExtractor;
 }

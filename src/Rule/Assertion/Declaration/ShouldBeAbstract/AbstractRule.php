@@ -9,7 +9,7 @@ use PHPStan\Rules\Rule;
 /**
  * @implements Rule<InClassNode>
  */
-class AbstractRule extends ShouldBeAbstract implements Rule
+final class AbstractRule extends ShouldBeAbstract implements Rule
 {
     use AbstractExtractor;
 }

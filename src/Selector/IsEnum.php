@@ -4,7 +4,7 @@ namespace PHPat\Selector;
 
 use PHPStan\Reflection\ClassReflection;
 
-class IsEnum implements SelectorInterface
+final class IsEnum implements SelectorInterface
 {
     public function getName(): string
     {

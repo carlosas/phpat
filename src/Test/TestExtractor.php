@@ -7,7 +7,7 @@ use PHPStan\DependencyInjection\Container;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 
-class TestExtractor
+final class TestExtractor
 {
     private const TEST_TAG = 'phpat.test';
 

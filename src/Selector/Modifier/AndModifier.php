@@ -5,7 +5,7 @@ namespace PHPat\Selector\Modifier;
 use PHPat\Selector\SelectorInterface;
 use PHPStan\Reflection\ClassReflection;
 
-class AndModifier implements SelectorInterface
+final class AndModifier implements SelectorInterface
 {
     /** @var array<SelectorInterface> */
     private array $selectors;

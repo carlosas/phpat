@@ -9,7 +9,7 @@ use PHPStan\Rules\Rule;
 /**
  * @implements Rule<InClassNode>
  */
-class IsFinalRule extends ShouldNotBeFinal implements Rule
+final class IsFinalRule extends ShouldNotBeFinal implements Rule
 {
     use FinalExtractor;
 }
