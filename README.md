@@ -31,6 +31,10 @@ The standalone version (v0.9) will remain available and will receive critical bu
 
 It provides a natural language abstraction that enables you to define your own architectural rules and and assess their compliance in your code.
 
+<p align="center">
+    <img width="500px" src="https://raw.githubusercontent.com/carlosas/phpat/master/doc/img/example.png" alt="Example">
+</p>
+
 Check out the section [WHAT TO TEST](doc/WHAT_TO_TEST.md) to see some examples of typical use cases.
 
 <h2></h2>
