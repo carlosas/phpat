@@ -6,9 +6,8 @@ The following sections illustrate some typical checks you could perform.
 
 #### Layered Architecture
 
-<p align="center">
-    <img width="500px" src="assets/layered.png" alt="Layered">
-</p>
+
+![image-layered](assets/layered.png)
 
 If you are organizing your code in layers (e.g. with an onion structure), you might want to ensure that
 the inner layers do not depend on the outer ones:
@@ -21,9 +20,7 @@ the inner layers do not depend on the outer ones:
 
 #### Model-View-Controller
 
-<p align="center">
-    <img width="500px" src="assets/mvc.png" alt="MVC">
-</p>
+![image-mvc](assets/mvc.png)
 
 If you are using a MVC approach, you could ensure that both model and view are not coupled to controllers. You also might want to check that they are not coupled to each other:
 
@@ -41,9 +38,7 @@ If you are using a MVC approach, you could ensure that both model and view are n
 
 #### Aggregates
 
-<p align="center">
-    <img width="500px" src="assets/aggregates.png" alt="Aggregates">
-</p>
+![image-aggregates](assets/aggregates.png)
 
 You won't want your classes to have direct access to the members of an aggregate, except for the aggregate root.
 You can use a lot of different approaches to identify the root and its members: by namespace, filepath, an abstract or interface for the aggregate root, etc.
@@ -58,9 +53,7 @@ If you have, for instance, an AggregateRootInterface you can create a rule like 
 
 #### Enforcing or forbidding an abstract extension
 
-<p align="center">
-    <img width="500px" src="assets/abstract.png" alt="Abstract">
-</p>
+![image-abstract](assets/abstract.png)
 
 You might want to ensure that a specific type of classes are extending a certain abstract class. Services, Controllers, CommandHandlers, etc.
 
@@ -74,9 +67,7 @@ You might want to ensure that a specific type of classes are extending a certain
 
 #### Enforcing or forbidding an interface implementation
 
-<p align="center">
-    <img width="500px" src="assets/interface.png" alt="Interface">
-</p>
+![image-interface](assets/interface.png)
 
 You might want to ensure that a specific type of classes are implementing a certain interface. ValueObjects, Entities, etc.
 

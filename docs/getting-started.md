@@ -38,7 +38,7 @@ services:
         tags:
             - phpat.test
 ```
-⚠️ Your architecture tests folder should be included in the PHPStan analysed paths. See [PHPat's own PHPat configuration](ci/phpstan-phpat.neon) as an example.
+⚠️ Your architecture tests folder should be included in the PHPStan analysed paths.
 
 You can configure some PHPat options as follows:
 ```neon

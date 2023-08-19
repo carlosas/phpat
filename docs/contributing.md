@@ -1,8 +1,8 @@
-<p align="center">
-    <img width="500px" src="assets/contributing.png" alt="Contributing">
-</p>
-
 # Contributing
+
+![image-contributing](assets/contributing.png)
+
+<br />
 
 There are several ways to help out:
 
@@ -34,8 +34,8 @@ To build the documentation locally, run:
 ```bash
 docker run -p 8000:8000 --rm -v$(pwd):/docs squidfunk/mkdocs-material:9
 ```
-When the container is running, you can access the documentation at http://localhost:8000.
-When the pull request is merged, the documentation will be automatically deployed to https://phpat.carlosas.me.
+When the container is running, you can access the documentation at `http://localhost:8000`.
+When the pull request is merged, the documentation will be automatically deployed to https://phpat.dev.
 
 ## Slack channel
 
@@ -45,4 +45,5 @@ if you want to discuss something or need some help.
 ---
 
 ## Code of conduct
-This project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
+This project is released with a [Contributor Code of Conduct](https://github.com/carlosas/phpat/blob/master/.github/CODE_OF_CONDUCT.md).
+By participating in this project you agree to abide by its terms.

@@ -64,7 +64,7 @@ Selectors
 
 * Arguments do not accept the `*` wildcard anymore. Instead, you can now use a regular expression setting the second parameter to true.
 * Composer selectors are not available anymore, at least not for now.
-* Selector methods have changed slightly and some new have been added. Check the [Selectors docs](SELECTORS.md) for more information.
+* Selector methods have changed slightly and some new have been added. Check the [Selectors docs](../doc/SELECTORS.md) for more information.
 
 Assertions
 ----------
@@ -77,4 +77,4 @@ Assertions
   * should not implement
   * should not depend on
   * should not construct
-* See the [Assertions docs](ASSERTIONS.md) for more information.
+* See the [Assertions docs](../doc/ASSERTIONS.md) for more information.
