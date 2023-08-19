@@ -1,0 +1,45 @@
+# yaml-language-server: $schema=https://squidfunk.github.io/mkdocs-material/schema.json
+
+site_name: PHP Architecture Tester
+site_description: Easy to use architecture testing tool for PHP
+#site_url: https://example.com/
+repo_url: https://github.com/carlosas/phpat/
+
+docs_dir: ./docs
+
+theme:
+  name: material
+  logo: assets/icon.png
+  favicon: assets/icon.png
+  font:
+    text: Noto Sans
+    code: Noto Mono
+  features:
+    - toc.integrate
+    - footer
+extra_css:
+  - assets/extra.css
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+
+nav:
+  - Introduction: 'index.md'
+  - Getting started: 'getting-started.md'
+  - Examples: 'examples.md'
+  - Documentation: [
+    Rules: 'documentation/rules.md',
+    Selectors: 'documentation/selectors.md',
+    Assertions: 'documentation/assertions.md',
+    Configuration: 'documentation/configuration.md',
+    Other features: 'documentation/other.md'
+  ]
+  - Contributing: 'contributing.md'
+  - Changelog: 'CHANGELOG.md'
+  - About: 'about.md'
