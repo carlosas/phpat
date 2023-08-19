@@ -6,12 +6,11 @@ site_description: Easy to use architecture testing tool for PHP
 repo_url: https://github.com/carlosas/phpat/
 
 docs_dir: ./docs
-exclude_docs: .assets
 
 theme:
   name: material
-  logo: .assets/icon.png
-  favicon: .assets/icon.png
+  logo: assets/icon.png
+  favicon: assets/icon.png
   font:
     text: Noto Sans
     code: Noto Mono
@@ -19,7 +18,7 @@ theme:
     - toc.integrate
     - footer
 extra_css:
-  - .assets/extra.css
+  - assets/extra.css
 
 markdown_extensions:
   - pymdownx.highlight:

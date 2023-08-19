@@ -7,7 +7,7 @@ The following sections illustrate some typical checks you could perform.
 #### Layered Architecture
 
 <p align="center">
-    <img width="500px" src=".assets/layered.png" alt="Layered">
+    <img width="500px" src="assets/layered.png" alt="Layered">
 </p>
 
 If you are organizing your code in layers (e.g. with an onion structure), you might want to ensure that
@@ -22,7 +22,7 @@ the inner layers do not depend on the outer ones:
 #### Model-View-Controller
 
 <p align="center">
-    <img width="500px" src=".assets/mvc.png" alt="MVC">
+    <img width="500px" src="assets/mvc.png" alt="MVC">
 </p>
 
 If you are using a MVC approach, you could ensure that both model and view are not coupled to controllers. You also might want to check that they are not coupled to each other:
@@ -42,7 +42,7 @@ If you are using a MVC approach, you could ensure that both model and view are n
 #### Aggregates
 
 <p align="center">
-    <img width="500px" src=".assets/aggregates.png" alt="Aggregates">
+    <img width="500px" src="assets/aggregates.png" alt="Aggregates">
 </p>
 
 You won't want your classes to have direct access to the members of an aggregate, except for the aggregate root.
@@ -59,7 +59,7 @@ If you have, for instance, an AggregateRootInterface you can create a rule like 
 #### Enforcing or forbidding an abstract extension
 
 <p align="center">
-    <img width="500px" src=".assets/abstract.png" alt="Abstract">
+    <img width="500px" src="assets/abstract.png" alt="Abstract">
 </p>
 
 You might want to ensure that a specific type of classes are extending a certain abstract class. Services, Controllers, CommandHandlers, etc.
@@ -75,7 +75,7 @@ You might want to ensure that a specific type of classes are extending a certain
 #### Enforcing or forbidding an interface implementation
 
 <p align="center">
-    <img width="500px" src=".assets/interface.png" alt="Interface">
+    <img width="500px" src="assets/interface.png" alt="Interface">
 </p>
 
 You might want to ensure that a specific type of classes are implementing a certain interface. ValueObjects, Entities, etc.

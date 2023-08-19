@@ -1,5 +1,5 @@
 <p align="center">
-    <img width="500px" src=".assets/contributing.png" alt="Contributing">
+    <img width="500px" src="assets/contributing.png" alt="Contributing">
 </p>
 
 # Contributing
