@@ -6,10 +6,10 @@ You can always use a regular expression, setting the `regex` parameter to *true*
 
 ---
 
-## `Selector::all()`
+## Selector::all()
 Selects all classes.
 
-## `Selector::classname()`
+## Selector::classname()
 Selects classes with the given fully qualified name or regex.
 
 ```php
@@ -22,7 +22,7 @@ The first two selectors will select the `App\User\Domain\UserEntity` class.
 
 The third one will select all classes whose name ends in `Handler`.
 
-## `Selector::namespace()`
+## Selector::namespace()
 Selects classes in the given namespace.
 
 ```php
@@ -34,33 +34,35 @@ The first selector will select all classes in the `App\User\Domain` namespace.
 
 The second one will select all classes in a namespace matching the regular expression.
 
-## `Selector::implements()`
+## Selector::implements()
 Select classes that implement a given interface.
 
-## `Selector::extends()`
+## Selector::extends()
 Select classes that extend a given class.
 
-## `Selector::interface()`
+## Selector::interface()
 Select all interfaces.
 
-## `Selector::enum()`
+## Selector::enum()
 Select all enums.
 
-## `Selector::abstract()`
+## Selector::abstract()
 Select all abstract classes.
 
-## `Selector::final()`
+## Selector::final()
 Select all final classes.
 
-## `Selector::readonly()`
+## Selector::readonly()
 Select all readonly classes.
 
-## `Selector::attribute()`
+## Selector::attribute()
 Select all attribute classes.
+
+<br />
 
 ---
 
-## `Selector::AND()`
+## Selector::AND()
 Selects classes that match all the inner Selectors.
 
 Example:
@@ -74,7 +76,7 @@ Selector::AND(
 
 This will select all abstract classes in the `App\User` namespace.
 
-## `Selector::NOT()`
+## Selector::NOT()
 Selects classes that do not match the inner Selector.
 
 ```php
