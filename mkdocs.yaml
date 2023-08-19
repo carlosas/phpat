@@ -2,7 +2,7 @@
 
 site_name: PHP Architecture Tester
 site_description: Easy to use architecture testing tool for PHP
-#site_url: https://example.com/
+site_url: https://www.phpat.dev/
 repo_url: https://github.com/carlosas/phpat/
 
 docs_dir: ./docs
