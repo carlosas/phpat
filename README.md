@@ -17,9 +17,7 @@
 	</a>
 </p>
 
-<hr />
-
-<h2></h2>
+<br />
 
 ### Introduction 📜
 
@@ -28,15 +26,18 @@
 It provides a natural language abstraction that enables you to define your own architectural rules and and assess their compliance in your code.
 
 <p align="center">
-    <img width="500px" src="https://raw.githubusercontent.com/carlosas/phpat/master/doc/img/example.gif" alt="Example">
+    <img width="700px" src="https://raw.githubusercontent.com/carlosas/phpat/master/docs/assets/example.gif" alt="Example">
 </p>
 
 ### Getting started 🚀
 
 For further information, check out the documentation at **[phpat.dev](https://phpat.dev)**
-or just the [Examples](docs/examples.md) section to get some ideas and see some typical use cases.
+
+You can visit the [Examples](docs/examples.md) section to get some ideas of typical use cases.
 
 <h2></h2>
+
+<br />
 
 **PHP Architecture Tester** is open source, contributions are welcome!
 
