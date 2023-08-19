@@ -29,7 +29,7 @@ vendor/bin/phpunit tests/unit/
 
 The documentation is written in Markdown and is located in the `docs` folder.
 
-The documentation is built with [MkDocs](https://www.mkdocs.org/).
+The docs page is built with [MkDocs](https://www.mkdocs.org/).
 To build the documentation locally, run:
 ```bash
 docker run -p 8000:8000 --rm -v$(pwd):/docs squidfunk/mkdocs-material:9
