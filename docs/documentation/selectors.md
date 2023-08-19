@@ -7,7 +7,7 @@ You can always use a regular expression, setting the `regex` parameter to *true*
 ---
 
 ## Selector::all()
-Selects all classes.
+Selects all classes being parsed.
 
 ## Selector::classname()
 Selects classes with the given fully qualified name or regex.
