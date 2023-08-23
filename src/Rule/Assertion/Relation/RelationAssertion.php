@@ -4,6 +4,8 @@ namespace PHPat\Rule\Assertion\Relation;
 
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\Assertion;
+use PHPat\Rule\Assertion\Relation\ShouldExtend\ShouldExtend;
+use PHPat\Rule\Assertion\Relation\ShouldImplement\ShouldImplement;
 use PHPat\Selector\Classname;
 use PHPat\Selector\SelectorInterface;
 use PHPat\ShouldNotHappenException;
@@ -93,6 +95,11 @@ abstract class RelationAssertion implements Assertion
     {
         if (!$scope->isInClass()) {
             return false;
+        }
+
+        // Can not skip if the rule is a ShouldExtend or ShouldImplement rule
+        if (is_a($this, ShouldExtend::class) || is_a($this, ShouldImplement::class)) {
+            return true;
         }
 
         if (empty($nodes)) {
