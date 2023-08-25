@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.10.8
+* Fix `Should-` rules ignoring classes with empty findings.
+
 ## 0.10.7
 * Add tips to rule building using `because()`.
 * Add `readonly()` selector and `shouldBeReadonly()` assertion. 
