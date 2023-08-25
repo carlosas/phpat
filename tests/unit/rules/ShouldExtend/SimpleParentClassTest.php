@@ -10,9 +10,7 @@ use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\FixtureClass;
 use Tests\PHPat\fixtures\Simple\SimpleAbstractClass;
-use Tests\PHPat\fixtures\Simple\SimpleAbstractClassTwo;
 use Tests\PHPat\fixtures\Simple\SimpleClass;
 use Tests\PHPat\unit\FakeTestParser;
 
