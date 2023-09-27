@@ -86,4 +86,12 @@ class SelectorPrimitive
     {
         return new ClassExtends($fqcn, $regex);
     }
+
+    /**
+     * @param class-string|non-empty-string $fqcn
+     */
+    public static function hasAttribute(string $fqcn, bool $regex = false): HasAttribute
+    {
+        return new HasAttribute($fqcn, $regex);
+    }
 }

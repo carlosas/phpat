@@ -8,6 +8,4 @@ use PHPStan\Rules\Rule as PHPStanRule;
 /**
  * @extends PHPStanRule<Node>
  */
-interface Assertion extends PHPStanRule
-{
-}
+interface Assertion extends PHPStanRule {}

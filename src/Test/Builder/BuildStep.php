@@ -2,6 +2,4 @@
 
 namespace PHPat\Test\Builder;
 
-class BuildStep extends AbstractStep
-{
-}
+class BuildStep extends AbstractStep {}

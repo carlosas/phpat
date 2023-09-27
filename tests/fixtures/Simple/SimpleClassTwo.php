@@ -2,6 +2,4 @@
 
 namespace Tests\PHPat\fixtures\Simple;
 
-class SimpleClassTwo
-{
-}
+class SimpleClassTwo {}

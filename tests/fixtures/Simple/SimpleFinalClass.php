@@ -2,6 +2,4 @@
 
 namespace Tests\PHPat\fixtures\Simple;
 
-final class SimpleFinalClass
-{
-}
+final class SimpleFinalClass {}
