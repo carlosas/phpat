@@ -35,13 +35,16 @@ The first selector will select all classes in the `App\User\Domain` namespace.
 The second one will select all classes in a namespace matching the regular expression.
 
 ## Selector::implements()
-Select classes that implement a given interface.
+Select classes that implement the given interface.
 
 ## Selector::extends()
-Select classes that extend a given class.
+Select classes that extend the given class.
 
 ## Selector::interface()
 Select all interfaces.
+
+## Selector::hasAttribute()
+Select classes that has the given attribute.
 
 ## Selector::enum()
 Select all enums.
