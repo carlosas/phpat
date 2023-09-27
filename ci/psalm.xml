@@ -55,5 +55,9 @@
         <ArgumentTypeCoercion>
             <errorLevel type="suppress"><directory name="../src/Selector/" /></errorLevel>
         </ArgumentTypeCoercion>
+
+        <UndefinedDocblockClass>
+            <errorLevel type="suppress"><file name="../src/Selector/HasAttribute.php" /></errorLevel>
+        </UndefinedDocblockClass>
     </issueHandlers>
 </psalm>
