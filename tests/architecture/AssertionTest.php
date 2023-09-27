@@ -33,14 +33,14 @@ final class AssertionTest
     {
         return PHPat::rule()
             ->classes(Selector::implements(Assertion::class))
-            ->excluding(Selector::abstract())
+            ->excluding(Selector::isAbstract())
             ->canOnlyDependOn()
             ->classes(
                 Selector::classname(TypeNodeParser::class),
                 Selector::extends(RelationAssertion::class),
                 Selector::extends(DeclarationAssertion::class),
-                Selector::namespace('PhpParser'),
-                Selector::namespace('PHPStan'),
+                Selector::inNamespace('PhpParser'),
+                Selector::inNamespace('PHPStan'),
             )
         ;
     }
