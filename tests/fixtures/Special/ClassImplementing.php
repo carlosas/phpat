@@ -4,6 +4,4 @@ namespace Tests\PHPat\fixtures\Special;
 
 use Tests\PHPat\fixtures\Simple\SimpleInterface;
 
-class ClassImplementing implements SimpleInterface
-{
-}
+class ClassImplementing implements SimpleInterface {}

@@ -2,6 +2,4 @@
 
 namespace Tests\PHPat\fixtures\Simple;
 
-class SimpleClassFive
-{
-}
+class SimpleClassFive {}

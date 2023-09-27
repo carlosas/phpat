@@ -4,7 +4,5 @@ namespace Tests\PHPat\fixtures\Special;
 
 class ClassWithStaticMethodTwo
 {
-    public static function staticMethod(): void
-    {
-    }
+    public static function staticMethod(): void {}
 }

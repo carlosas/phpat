@@ -2,6 +2,4 @@
 
 namespace Tests\PHPat\fixtures\Simple;
 
-class SimpleExceptionTwo extends \Exception
-{
-}
+class SimpleExceptionTwo extends \Exception {}
