@@ -1,6 +1,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.10.9
+* Add `hasAttribute()` selector.
+* Deprecate `namespace()` selector in favor of `inNamespace()`.
+* Deprecate `interface()` selector in favor of `isInterface()`.
+* Deprecate `abstract()` selector in favor of `isAbstract()`.
+* Deprecate `final()` selector in favor of `isFinal()`.
+* Deprecate `readonly()` selector in favor of `isReadonly()`.
+* Deprecate `enum()` selector in favor of `isEnum()`.
+* Deprecate `attribute()` selector in favor of `isAttribute()`.
+
 ## 0.10.8
 * Fix `Should-` rules ignoring classes with empty findings.
 

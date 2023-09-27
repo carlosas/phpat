@@ -15,12 +15,12 @@ final class CleanClassesTest
     {
         return PHPat::rule()
             ->classes(
-                Selector::namespace('PHPat'),
-                Selector::namespace('Tests\PHPat\architecture')
+                Selector::inNamespace('PHPat'),
+                Selector::inNamespace('Tests\PHPat\architecture')
             )
             ->excluding(
-                Selector::abstract(),
-                Selector::interface(),
+                Selector::isAbstract(),
+                Selector::isInterface(),
                 Selector::extends(AbstractStep::class),
                 Selector::classname(SelectorPrimitive::class),
                 Selector::classname(TestParser::class)

@@ -22,12 +22,12 @@ The first two selectors will select the `App\User\Domain\UserEntity` class.
 
 The third one will select all classes whose name ends in `Handler`.
 
-## Selector::namespace()
+## Selector::inNamespace()
 Selects classes in the given namespace.
 
 ```php
-Selector::namespace('App\User\Domain')
-Selector::namespace('/^App\\\\.+\\\\Domain/', true)
+Selector::inNamespace('App\User\Domain')
+Selector::inNamespace('/^App\\\\.+\\\\Domain/', true)
 ```
 
 The first selector will select all classes in the `App\User\Domain` namespace.
@@ -40,25 +40,25 @@ Select classes that implement the given interface.
 ## Selector::extends()
 Select classes that extend the given class.
 
-## Selector::interface()
+## Selector::isInterface()
 Select all interfaces.
 
 ## Selector::hasAttribute()
 Select classes that has the given attribute.
 
-## Selector::enum()
+## Selector::isEnum()
 Select all enums.
 
-## Selector::abstract()
+## Selector::isAbstract()
 Select all abstract classes.
 
-## Selector::final()
+## Selector::isFinal()
 Select all final classes.
 
-## Selector::readonly()
+## Selector::isReadonly()
 Select all readonly classes.
 
-## Selector::attribute()
+## Selector::isAttribute()
 Select all attribute classes.
 
 <br />
