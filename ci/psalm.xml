@@ -58,6 +58,7 @@
 
         <UndefinedDocblockClass>
             <errorLevel type="suppress"><file name="../src/Selector/HasAttribute.php" /></errorLevel>
+            <errorLevel type="suppress"><file name="../src/Rule/Extractor/Relation/ClassAttributeExtractor.php" /></errorLevel>
         </UndefinedDocblockClass>
     </issueHandlers>
 </psalm>
