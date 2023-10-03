@@ -19,11 +19,11 @@ trait OnePublicMethodExtractor
     protected function meetsDeclaration(Node $node, Scope $scope): bool
     {
         $reflectionClass = $node->getClassReflection()->getNativeReflection();
-        $methods = $reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC);
+        $methods = $reflectionClass->getMethods(1);
 
         $methodsWithoutConstructor = array_filter(
             $methods,
-            fn (\ReflectionMethod $method) => $method->getName() !== '__construct'
+            fn ($method) => $method->getName() !== '__construct'
         );
 
         return count($methodsWithoutConstructor) === 1;
