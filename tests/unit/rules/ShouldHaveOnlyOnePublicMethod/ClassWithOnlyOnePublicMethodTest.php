@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Tests\PHPat\unit\rules\ShouldHaveOnlyOnePublicMethod;
 
@@ -45,5 +45,4 @@ class ClassWithOnlyOnePublicMethodTest extends RuleTestCase
             self::getContainer()->getByType(FileTypeMapper::class)
         );
     }
-
 }

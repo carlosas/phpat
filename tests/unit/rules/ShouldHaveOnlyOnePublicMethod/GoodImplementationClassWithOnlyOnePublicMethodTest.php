@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Tests\PHPat\unit\rules\ShouldHaveOnlyOnePublicMethod;
 
@@ -10,7 +10,6 @@ use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\FixtureClass;
 use Tests\PHPat\fixtures\Special\ClassWithOnePublicMethod;
 use Tests\PHPat\unit\FakeTestParser;
 
@@ -44,5 +43,4 @@ class GoodImplementationClassWithOnlyOnePublicMethodTest extends RuleTestCase
             self::getContainer()->getByType(FileTypeMapper::class)
         );
     }
-
 }

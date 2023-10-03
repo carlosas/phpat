@@ -5,9 +5,6 @@ namespace PHPat\Rule\Extractor\Declaration;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassNode;
-use PHPStan\Reflection\MethodReflection;
-use ReflectionClass;
-use ReflectionMethod;
 
 trait OnePublicMethodExtractor
 {
@@ -21,9 +18,14 @@ trait OnePublicMethodExtractor
      */
     protected function meetsDeclaration(Node $node, Scope $scope): bool
     {
-        $reflectionClass = new ReflectionClass($node->getClassReflection()->getName());
-        $methods = $reflectionClass->getMethods(ReflectionMethod::IS_PUBLIC);
+        $reflectionClass = $node->getClassReflection()->getNativeReflection();
+        $methods = $reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC);
 
-        return count($methods) === 1;
+        $methodsWithoutConstructor = array_filter(
+            $methods,
+            fn (\ReflectionMethod $method) => $method->getName() !== '__construct'
+        );
+
+        return count($methodsWithoutConstructor) === 1;
     }
 }
