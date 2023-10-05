@@ -6,7 +6,7 @@ use PHPat\Selector\SelectorInterface;
 
 class TargetExcludeOrBuildStep extends TipOrBuildStep
 {
-    public function excluding(SelectorInterface ...$selectors): BuildStep
+    public function excluding(SelectorInterface ...$selectors): TipOrBuildStep
     {
         $this->rule->targetExcludes = array_values($selectors);
 

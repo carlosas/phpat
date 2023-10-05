@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.10.10
+* Add `shouldOnlyHaveOnePublicMethod()` assertion.
+* Fix return type of target excludes builder step.
+
 ## 0.10.9
 * Add `hasAttribute()` selector.
 * Deprecate `namespace()` selector in favor of `inNamespace()`.

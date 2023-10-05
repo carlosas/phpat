@@ -15,6 +15,9 @@ Also available: `shouldNotBeAbstract()`
 ## shouldBeReadonly()
 It asserts that the selected classes are declared as **readonly**.
 
+## shouldHaveOnlyOnePublicMethod()
+It asserts that the selected classes only have **one public method** (besides constructor).
+
 ## shouldExtend()
 It asserts that the selected classes **extend** the target class.
 
@@ -32,9 +35,6 @@ It asserts that the selected classes **do not depend** on the target classes.
 It asserts that the selected classes **do not use the constructor** of the target classes.
 
 ## canOnlyDependOn()
-It asserts that the selected classes **does not depend** on anything else than the target classes.
+It asserts that the selected classes **do not depend** on anything else than the target classes.
 
 This would be equivalent to `shouldNotDependOn()` with the negation of the target classes.
-
-## shouldHaveOnlyOnePublicMethod()
-It asserts that the selected classes **only have one public method**.
