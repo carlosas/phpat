@@ -35,3 +35,6 @@ It asserts that the selected classes **do not use the constructor** of the targe
 It asserts that the selected classes **does not depend** on anything else than the target classes.
 
 This would be equivalent to `shouldNotDependOn()` with the negation of the target classes.
+
+## shouldHaveOnlyOnePublicMethod()
+It asserts that the selected classes **only have one public method**.

@@ -48,6 +48,12 @@ services:
 		tags:
 			- phpstan.rules.rule
 
+	# ShouldHaveOnlyOnePublicMethod rules
+	-
+		class: PHPat\Rule\Assertion\Declaration\ShouldHaveOnlyOnePublicMethod\HasOnlyOnePublicMethodRule
+		tags:
+			- phpstan.rules.rule
+
     # # # # # RELATION RULES # # # # #
 
 	# ShouldImplement rules
