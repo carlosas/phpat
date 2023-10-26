@@ -4,12 +4,14 @@ namespace Tests\PHPat\architecture;
 
 use PHPat\Configuration;
 use PHPat\Selector\Selector;
+use PHPat\Test\Attributes\Test;
 use PHPat\Test\Builder\Rule;
 use PHPat\Test\PHPat;
 
 final class ConfigurationTest
 {
-    public function test_configuration_does_not_have_dependencies(): Rule
+    #[Test]
+    public function configuration_does_not_have_dependencies(): Rule
     {
         return PHPat::rule()
             ->classes(Selector::classname(Configuration::class))
@@ -18,7 +20,8 @@ final class ConfigurationTest
         ;
     }
 
-    public function test_configuration_is_final(): Rule
+    #[Test]
+    public function configuration_is_final(): Rule
     {
         return PHPat::rule()
             ->classes(Selector::classname(Configuration::class))
