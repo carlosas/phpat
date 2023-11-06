@@ -5,6 +5,7 @@ namespace PHPat\Rule\Assertion\Relation;
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\Assertion;
 use PHPat\Rule\Assertion\Relation\ShouldExtend\ShouldExtend;
+use PHPat\Rule\Assertion\Relation\ShouldHaveAttribute\ShouldHaveAttribute;
 use PHPat\Rule\Assertion\Relation\ShouldImplement\ShouldImplement;
 use PHPat\Selector\Classname;
 use PHPat\Selector\SelectorInterface;
@@ -97,8 +98,8 @@ abstract class RelationAssertion implements Assertion
             return false;
         }
 
-        // Can not skip if the rule is a ShouldExtend or ShouldImplement rule
-        if (is_a($this, ShouldExtend::class) || is_a($this, ShouldImplement::class)) {
+        // Can not skip if the rule is a ShouldExtend, ShouldImplement or ShouldHaveAttribute rule
+        if (is_a($this, ShouldExtend::class) || is_a($this, ShouldImplement::class) || is_a($this, ShouldHaveAttribute::class)) {
             return true;
         }
 
