@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PHPat\Rule\Assertion\Relation\ShouldHaveAttribute;
+namespace PHPat\Rule\Assertion\Relation\ShouldApplyAttribute;
 
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\Relation\RelationAssertion;
@@ -10,7 +10,7 @@ use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\FileTypeMapper;
 
-abstract class ShouldHaveAttribute extends RelationAssertion
+abstract class ShouldApplyAttribute extends RelationAssertion
 {
     use ValidationTrait;
 
@@ -44,7 +44,7 @@ abstract class ShouldHaveAttribute extends RelationAssertion
     {
         return $this->prepareMessage(
             $ruleName,
-            sprintf('%s should have attribute %s', $subject, $target),
+            sprintf('%s should apply the attribute %s', $subject, $target),
         );
     }
 }

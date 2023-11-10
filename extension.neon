@@ -218,9 +218,9 @@ services:
 		tags:
 			- phpstan.rules.rule
 
-	# ShouldHaveAttribute rules
+	# ShouldApplyAttribute rules
 	-
-		class: PHPat\Rule\Assertion\Relation\ShouldHaveAttribute\ClassAttributeRule
+		class: PHPat\Rule\Assertion\Relation\ShouldApplyAttribute\ClassAttributeRule
 		tags:
 			- phpstan.rules.rule
 

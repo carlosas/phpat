@@ -9,8 +9,8 @@ use PHPat\Rule\Assertion\Declaration\ShouldHaveOnlyOnePublicMethod\ShouldHaveOnl
 use PHPat\Rule\Assertion\Declaration\ShouldNotBeAbstract\ShouldNotBeAbstract;
 use PHPat\Rule\Assertion\Declaration\ShouldNotBeFinal\ShouldNotBeFinal;
 use PHPat\Rule\Assertion\Relation\CanOnlyDepend\CanOnlyDepend;
+use PHPat\Rule\Assertion\Relation\ShouldApplyAttribute\ShouldApplyAttribute;
 use PHPat\Rule\Assertion\Relation\ShouldExtend\ShouldExtend;
-use PHPat\Rule\Assertion\Relation\ShouldHaveAttribute\ShouldHaveAttribute;
 use PHPat\Rule\Assertion\Relation\ShouldImplement\ShouldImplement;
 use PHPat\Rule\Assertion\Relation\ShouldNotConstruct\ShouldNotConstruct;
 use PHPat\Rule\Assertion\Relation\ShouldNotDepend\ShouldNotDepend;
@@ -110,9 +110,9 @@ class AssertionStep extends AbstractStep
         return new BuildStep($this->rule);
     }
 
-    public function shouldHaveAttribute(): TargetStep
+    public function shouldApplyAttribute(): TargetStep
     {
-        $this->rule->assertion = ShouldHaveAttribute::class;
+        $this->rule->assertion = ShouldApplyAttribute::class;
 
         return new TargetStep($this->rule);
     }

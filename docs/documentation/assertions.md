@@ -34,7 +34,7 @@ It asserts that the selected classes **do not depend** on the target classes.
 ## shouldNotConstruct()
 It asserts that the selected classes **do not use the constructor** of the target classes.
 
-## shouldHaveAttribute()
+## shouldApplyAttribute()
 It asserts that the selected classes **apply** the target attributes.
 
 ## canOnlyDependOn()

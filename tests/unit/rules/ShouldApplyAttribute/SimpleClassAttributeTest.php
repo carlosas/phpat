@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Tests\PHPat\unit\rules\ShouldHaveAttribute;
+namespace Tests\PHPat\unit\rules\ShouldApplyAttribute;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\Relation\ShouldHaveAttribute\ClassAttributeRule;
-use PHPat\Rule\Assertion\Relation\ShouldHaveAttribute\ShouldHaveAttribute;
+use PHPat\Rule\Assertion\Relation\ShouldApplyAttribute\ClassAttributeRule;
+use PHPat\Rule\Assertion\Relation\ShouldApplyAttribute\ShouldApplyAttribute;
 use PHPat\Selector\Classname;
 use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;
@@ -21,12 +21,12 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class SimpleClassAttributeTest extends RuleTestCase
 {
-    public const RULE_NAME = 'test_SimpleClassShouldHaveSimpleAttribute';
+    public const RULE_NAME = 'test_SimpleClassShouldApplySimpleAttribute';
 
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/Simple/SimpleClass.php'], [
-            [sprintf('%s should have attribute %s', SimpleClass::class, SimpleAttribute::class), 5],
+            [sprintf('%s should apply the attribute %s', SimpleClass::class, SimpleAttribute::class), 5],
         ]);
     }
 
@@ -34,7 +34,7 @@ class SimpleClassAttributeTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            ShouldHaveAttribute::class,
+            ShouldApplyAttribute::class,
             [new Classname(SimpleClass::class, false)],
             [new Classname(SimpleAttribute::class, false)]
         );
