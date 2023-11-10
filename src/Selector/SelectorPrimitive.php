@@ -147,9 +147,19 @@ class SelectorPrimitive
 
     /**
      * @param class-string|non-empty-string $fqcn
+     *
+     * @deprecated use Selector::appliesAttribute()
      */
-    public static function hasAttribute(string $fqcn, bool $regex = false): HasAttribute
+    public static function hasAttribute(string $fqcn, bool $regex = false): AppliesAttribute
     {
-        return new HasAttribute($fqcn, $regex);
+        return self::appliesAttribute($fqcn, $regex);
+    }
+
+    /**
+     * @param class-string|non-empty-string $fqcn
+     */
+    public static function appliesAttribute(string $fqcn, bool $regex = false): AppliesAttribute
+    {
+        return new AppliesAttribute($fqcn, $regex);
     }
 }

@@ -43,8 +43,8 @@ Select classes that extend the given class.
 ## Selector::isInterface()
 Select all interfaces.
 
-## Selector::hasAttribute()
-Select classes that has the given attribute.
+## Selector::appliesAttribute()
+Select classes that applies the given attribute.
 
 ## Selector::isEnum()
 Select all enums.
