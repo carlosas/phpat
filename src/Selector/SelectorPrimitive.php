@@ -148,7 +148,8 @@ class SelectorPrimitive
     /**
      * @param class-string|non-empty-string $fqcn
      *
-     * @deprecated use Selector::appliesAttribute()
+     * @deprecated
+     * @see Selector::appliesAttribute()
      */
     public static function hasAttribute(string $fqcn, bool $regex = false): AppliesAttribute
     {
