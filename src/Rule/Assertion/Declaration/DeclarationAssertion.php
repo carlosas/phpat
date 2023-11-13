@@ -55,7 +55,7 @@ abstract class DeclarationAssertion implements Assertion
     public function prepareMessage(string $ruleName, string $message): string
     {
         return $this->configuration->showRuleNames()
-            ? sprintf('%s: %s', $ruleName, $message)
+            ? sprintf('%s: %s', substr($ruleName, strpos($ruleName, ':') + 1), $message)
             : $message;
     }
 

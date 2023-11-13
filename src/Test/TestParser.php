@@ -41,19 +41,16 @@ class TestParser
         foreach ($tests as $test) {
             $methods = [];
             $reflected = $test->getNativeReflection();
+            $classname = $reflected->getName();
+            $object = $reflected->newInstanceWithoutConstructor();
             foreach ($reflected->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
                 if (
                     !empty($method->getAttributes(Test::class))
                     || preg_match('/^(test)[A-Za-z0-9_\x80-\xff]*/', $method->getName())
                 ) {
-                    $methods[] = $method->getName();
+                    $ruleBuilder = $object->{$method->getName()}();
+                    $rules[$classname . ':' . $method->getName()] = $ruleBuilder;
                 }
-            }
-
-            $object = $reflected->newInstanceWithoutConstructor();
-            foreach ($methods as $method) {
-                $ruleBuilder = $object->{$method}();
-                $rules[$method] = $ruleBuilder;
             }
         }
 
