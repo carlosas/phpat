@@ -77,7 +77,7 @@ final class RelationStatementBuilder implements StatementBuilder
                         $rule->getSubjectExcludes(),
                         $rule->getTargets(),
                         $rule->getTargetExcludes(),
-                        $rule->getTips()
+                        $rule->getTips(),
                     ];
                 }
             }
