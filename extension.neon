@@ -218,6 +218,12 @@ services:
 		tags:
 			- phpstan.rules.rule
 
+	# ShouldApplyAttribute rules
+	-
+		class: PHPat\Rule\Assertion\Relation\ShouldApplyAttribute\ClassAttributeRule
+		tags:
+			- phpstan.rules.rule
+
 parametersSchema:
 	phpat: structure([
 		ignore_doc_comments: bool(),
