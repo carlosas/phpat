@@ -69,8 +69,16 @@ final class RelationStatementBuilder implements StatementBuilder
         $result = [];
         foreach ($rules as $rule) {
             if ($rule->getAssertion() === $this->assertion) {
+                $ruleName = substr($rule->getRuleName(), strpos($rule->getRuleName(), ':') + 1);
                 foreach ($rule->getSubjects() as $selector) {
-                    $result[] = [$rule->getRuleName(), $selector, $rule->getSubjectExcludes(), $rule->getTargets(), $rule->getTargetExcludes(), $rule->getTips()];
+                    $result[] = [
+                        $ruleName,
+                        $selector,
+                        $rule->getSubjectExcludes(),
+                        $rule->getTargets(),
+                        $rule->getTargetExcludes(),
+                        $rule->getTips()
+                    ];
                 }
             }
         }

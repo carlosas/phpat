@@ -58,7 +58,7 @@ abstract class RelationAssertion implements Assertion
     public function prepareMessage(string $ruleName, string $message): string
     {
         return $this->configuration->showRuleNames()
-            ? sprintf('%s: %s', substr($ruleName, strpos($ruleName, ':') + 1), $message)
+            ? sprintf('%s: %s', $ruleName, $message)
             : $message;
     }
 
