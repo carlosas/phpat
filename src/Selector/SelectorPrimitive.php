@@ -10,7 +10,8 @@ class SelectorPrimitive
     }
 
     /**
-     * @deprecated use Selector::isInterface()
+     * @deprecated
+     * @see Selector::isInterface()
      */
     public static function interface(): IsInterface
     {
@@ -23,7 +24,8 @@ class SelectorPrimitive
     }
 
     /**
-     * @deprecated use Selector::isAbstract()
+     * @deprecated
+     * @see Selector::isAbstract()
      */
     public static function abstract(): IsAbstract
     {
@@ -37,6 +39,7 @@ class SelectorPrimitive
 
     /**
      * @deprecated use Selector::NOT(Selector::isAbstract())
+     * @see Selector::isAbstract()
      */
     public static function notAbstract(): IsNotAbstract
     {
@@ -44,7 +47,8 @@ class SelectorPrimitive
     }
 
     /**
-     * @deprecated use Selector::isFinal()
+     * @deprecated
+     * @see Selector::isFinal()
      */
     public static function final(): IsFinal
     {
@@ -57,7 +61,8 @@ class SelectorPrimitive
     }
 
     /**
-     * @deprecated use Selector::isReadonly()
+     * @deprecated
+     * @see Selector::isReadonly()
      */
     public static function readonly(): IsReadonly
     {
@@ -71,6 +76,7 @@ class SelectorPrimitive
 
     /**
      * @deprecated use Selector::NOT(Selector::isFinal())
+     * @see Selector::isFinal()
      */
     public static function notFinal(): IsNotFinal
     {
@@ -78,7 +84,8 @@ class SelectorPrimitive
     }
 
     /**
-     * @deprecated use Selector::isEnum()
+     * @deprecated
+     * @see Selector::isEnum()
      */
     public static function enum(): IsEnum
     {
@@ -91,7 +98,8 @@ class SelectorPrimitive
     }
 
     /**
-     * @deprecated use Selector::isAttribute()
+     * @deprecated
+     * @see Selector::isAttribute()
      */
     public static function attribute(): IsAttribute
     {
@@ -106,7 +114,8 @@ class SelectorPrimitive
     /**
      * @param class-string|non-empty-string $namespace
      *
-     * @deprecated use Selector::inNamespace()
+     * @deprecated
+     * @see Selector::inNamespace()
      */
     public static function namespace(string $namespace, bool $regex = false): ClassNamespace
     {
