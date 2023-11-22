@@ -69,7 +69,7 @@ final class RelationStatementBuilder implements StatementBuilder
         $result = [];
         foreach ($rules as $rule) {
             if ($rule->getAssertion() === $this->assertion) {
-                $ruleName = substr($rule->getRuleName(), strpos($rule->getRuleName(), ':') + 1);
+                $ruleName = $this->extractRuleName($rule->getRuleName());
                 foreach ($rule->getSubjects() as $selector) {
                     $result[] = [
                         $ruleName,
@@ -84,5 +84,12 @@ final class RelationStatementBuilder implements StatementBuilder
         }
 
         return $result;
+    }
+
+    private function extractRuleName(string $fullName): string
+    {
+        $pos = mb_strpos($fullName, ':');
+
+        return mb_substr($fullName, $pos !== false ? $pos + 1 : 0);
     }
 }
