@@ -50,7 +50,7 @@ jobs:
         with:
           dependencies: "${{ matrix.dependencies }}"
       - name: "Run friendsofphp/php-cs-fixer"
-        run: "${{ github.action_path }}/php-cs-fixer.sh"
+        run: "${GITHUB_WORKSPACE}/workflows/php-cs-fixer.sh"
 
   architecture-analysis:
     name: "Architecture analysis"
