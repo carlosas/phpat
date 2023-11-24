@@ -69,12 +69,27 @@ final class RelationStatementBuilder implements StatementBuilder
         $result = [];
         foreach ($rules as $rule) {
             if ($rule->getAssertion() === $this->assertion) {
+                $ruleName = $this->extractRuleName($rule->getRuleName());
                 foreach ($rule->getSubjects() as $selector) {
-                    $result[] = [$rule->getRuleName(), $selector, $rule->getSubjectExcludes(), $rule->getTargets(), $rule->getTargetExcludes(), $rule->getTips()];
+                    $result[] = [
+                        $ruleName,
+                        $selector,
+                        $rule->getSubjectExcludes(),
+                        $rule->getTargets(),
+                        $rule->getTargetExcludes(),
+                        $rule->getTips(),
+                    ];
                 }
             }
         }
 
         return $result;
+    }
+
+    private function extractRuleName(string $fullName): string
+    {
+        $pos = mb_strpos($fullName, ':');
+
+        return mb_substr($fullName, $pos !== false ? $pos + 1 : 0);
     }
 }
