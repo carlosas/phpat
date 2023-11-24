@@ -23,7 +23,7 @@ jobs:
           - "8.0"
           - "8.1"
           - "8.2"
-          - "8.3"
+          #- "8.3" disabled until php-cs-fixer supports it
         dependencies:
           - "highest"
     steps:
@@ -50,7 +50,7 @@ jobs:
         with:
           dependencies: "${{ matrix.dependencies }}"
       - name: "Run friendsofphp/php-cs-fixer"
-        run: "./workflows/php-cs-fixer.sh"
+        run: "vendor/bin/php-cs-fixer check --config ./ci/php-cs-fixer.php"
 
   architecture-analysis:
     name: "Architecture analysis"
