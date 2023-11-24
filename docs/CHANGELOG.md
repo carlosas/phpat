@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.10.11
+* Add `#[TestRule]` attribute to mark test's methods as rules
+* Add `shouldApplyAttribute()` assertion
+* Deprecate `hasAttribute()` selector in favor of `appliesAttribute()`
+* Allow extending test files
+
 ## 0.10.10
 * Add `shouldOnlyHaveOnePublicMethod()` assertion.
 * Fix return type of target excludes builder step.

@@ -1,16 +1,18 @@
 # Rules
 
-A rule is a statement, consisting in Selector and Assertions, that must be true for the test to pass. Each test class can contain one or more rules.
+A rule is a statement, consisting in Selectors and Assertions, that must be true for the test to pass.
+
+Each test class can contain one or more rules.
 
 ![image-layered](../assets/rules.png)
 
-Your rules must be public methods that start with `test_` or apply the `Test` attribute. You can build rules using the `\PHPat\Test\PHPat::rule()` method:
+Your rules must be public methods that start with `test_` or apply the `#[TestRule]` attribute. You can build rules using the `\PHPat\Test\PHPat::rule()` method:
 
 ```php
 namespace App\Tests\Architecture;
 
 use PHPat\Selector\Selector;
-use PHPat\Test\Attributes\Test;
+use PHPat\Test\Attributes\TestRule;
 use PHPat\Test\Builder\Rule;
 use PHPat\Test\PHPat;
 
@@ -25,7 +27,7 @@ final class ConfigurationTest
         ;
     }
 
-    #[Test]
+    #[TestRule]
     public function entities_are_final(): Rule
     {
         return PHPat::rule()
@@ -83,4 +85,4 @@ final class UserDomainTest extends AbstractDomainTest
 }
 ```
 
-Note that you only would need to register the `UserDomainTest` class in the PHPStan config file.
+Note that you would only need to register the `UserDomainTest` class as a PHPat test in the PHPStan config file.

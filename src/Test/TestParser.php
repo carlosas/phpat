@@ -2,7 +2,7 @@
 
 namespace PHPat\Test;
 
-use PHPat\Test\Attributes\Test;
+use PHPat\Test\Attributes\TestRule;
 use PHPat\Test\Builder\Rule as RuleBuilder;
 
 class TestParser
@@ -45,7 +45,7 @@ class TestParser
             $object = $reflected->newInstanceWithoutConstructor();
             foreach ($reflected->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
                 if (
-                    !empty($method->getAttributes(Test::class))
+                    !empty($method->getAttributes(TestRule::class))
                     || preg_match('/^(test)[A-Za-z0-9_\x80-\xff]*/', $method->getName())
                 ) {
                     $ruleBuilder = $object->{$method->getName()}();

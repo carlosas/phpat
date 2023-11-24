@@ -3,4 +3,4 @@
 namespace PHPat\Test\Attributes;
 
 #[\Attribute(\Attribute::TARGET_METHOD)]
-final class Test {}
+final class TestRule {}
