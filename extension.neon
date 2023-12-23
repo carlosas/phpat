@@ -60,6 +60,12 @@ services:
 		tags:
 			- phpstan.rules.rule
 
+	# ShouldBeInterface rules
+	-
+		class: PHPat\Rule\Assertion\Declaration\ShouldBeInterface\IsInterfaceRule
+		tags:
+			- phpstan.rules.rule
+
     # # # # # RELATION RULES # # # # #
 
 	# ShouldImplement rules
