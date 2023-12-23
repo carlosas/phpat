@@ -41,3 +41,6 @@ It asserts that the selected classes **apply** the target attributes.
 It asserts that the selected classes **do not depend** on anything else than the target classes.
 
 This would be equivalent to `shouldNotDependOn()` with the negation of the target classes.
+
+## shouldBeInterface()
+It asserts that the selected classes are **interfaces**.
