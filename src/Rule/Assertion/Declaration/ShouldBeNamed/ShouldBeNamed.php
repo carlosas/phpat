@@ -5,6 +5,7 @@ namespace PHPat\Rule\Assertion\Declaration\ShouldBeNamed;
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\Declaration\DeclarationAssertion;
 use PHPat\Rule\Assertion\Declaration\ValidationTrait;
+use PHPat\ShouldNotHappenException;
 use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
@@ -29,16 +30,16 @@ abstract class ShouldBeNamed extends DeclarationAssertion
         );
     }
 
-    protected function applyValidation(string $ruleName, ClassReflection $subject, bool $meetsDeclaration, array $tips): array
+    protected function applyValidation(string $ruleName, ClassReflection $subject, bool $meetsDeclaration, array $tips, array $params = []): array
     {
-        return $this->applyShould($ruleName, $subject, $meetsDeclaration, $tips);
+        return $this->applyShould($ruleName, $subject, $meetsDeclaration, $tips, $params);
     }
 
     protected function getMessage(string $ruleName, string $subject, array $params = []): string
     {
         $message = $params['isRegex'] === true
-            ? sprintf('%s should be named matching the regex "%s', $subject, $params['classname'])
-            : sprintf('%s should be named "%s"', $subject, $params['classname']);
+            ? sprintf('%s should be named matching the regex %s', $subject, $params['classname'])
+            : sprintf('%s should be named %s', $subject, $params['classname']);
 
         return $this->prepareMessage($ruleName, $message);
     }

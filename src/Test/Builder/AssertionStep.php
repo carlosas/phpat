@@ -20,7 +20,7 @@ use PHPat\Rule\Assertion\Relation\ShouldNotImplement\ShouldNotImplement;
 
 class AssertionStep extends AbstractStep
 {
-    public function shouldBeNamed(string $classname, bool $regex): Rule
+    public function shouldBeNamed(string $classname, bool $regex = false): Rule
     {
         $this->rule->assertion = ShouldBeNamed::class;
         $this->rule->params = ['isRegex' => $regex, 'classname' => $classname];

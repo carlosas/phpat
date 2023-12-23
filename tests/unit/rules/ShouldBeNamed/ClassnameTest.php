@@ -5,6 +5,8 @@ namespace Tests\PHPat\unit\rules\ShouldBeNamed;
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\Declaration\ShouldBeAbstract\AbstractRule;
 use PHPat\Rule\Assertion\Declaration\ShouldBeAbstract\ShouldBeAbstract;
+use PHPat\Rule\Assertion\Declaration\ShouldBeNamed\ClassnameRule;
+use PHPat\Rule\Assertion\Declaration\ShouldBeNamed\ShouldBeNamed;
 use PHPat\Selector\Classname;
 use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;
@@ -14,7 +16,7 @@ use Tests\PHPat\fixtures\FixtureClass;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
- * @extends RuleTestCase<AbstractRule>
+ * @extends RuleTestCase<ClassnameRule>
  * @internal
  * @coversNothing
  */
@@ -25,7 +27,7 @@ class ClassnameTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should be named NotTheFixtureClassClassname', FixtureClass::class), 29],
+            [sprintf('%s should be named SuperCoolClass', FixtureClass::class), 29],
         ]);
     }
 
@@ -33,13 +35,14 @@ class ClassnameTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            ShouldBeAbstract::class,
+            ShouldBeNamed::class,
             [new Classname(FixtureClass::class, false)],
             [],
-            ['isRegex' => false, 'classname' => 'NotTheFixtureClassClassname']
+            [],
+            ['isRegex' => false, 'classname' => 'SuperCoolClass']
         );
 
-        return new AbstractRule(
+        return new ClassnameRule(
             new StatementBuilderFactory($testParser),
             new Configuration(false, true, false),
             $this->createReflectionProvider(),

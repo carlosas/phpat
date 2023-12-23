@@ -28,4 +28,13 @@ final class ConfigurationTest
             ->shouldBeFinal()
         ;
     }
+
+    #[TestRule]
+    public function configuration_is_called_configuration(): Rule
+    {
+        return PHPat::rule()
+            ->classes(Selector::classname(Configuration::class))
+            ->shouldBeNamed('/tio$/', true)
+        ;
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace PHPat\Rule\Extractor\Declaration;
 
+use PHPat\ShouldNotHappenException;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassNode;
@@ -18,10 +19,15 @@ trait ClassnameExtractor
      */
     protected function meetsDeclaration(Node $node, Scope $scope, array $params = []): bool
     {
+        $pos = strrpos($node->getClassReflection()->getName(), '\\');
+        $classname = $pos === false
+            ? $node->getClassReflection()->getName()
+            : substr($node->getClassReflection()->getName(), $pos + 1);
+
         if ($params['isRegex'] === true) {
-            return preg_match($params['classname'], $node->getClassReflection()->getName()) === 1;
+            return preg_match($params['classname'], $classname) === 1;
         }
 
-        return $node->getClassReflection()->getName() === $params['classname'];
+        return $classname === $params['classname'];
     }
 }

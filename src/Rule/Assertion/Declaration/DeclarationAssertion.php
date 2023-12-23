@@ -47,9 +47,15 @@ abstract class DeclarationAssertion implements Assertion
             return [];
         }
 
-        $meetsDeclaration = $this->meetsDeclaration($node, $scope);
+        $meetsDeclaration = $this->meetsDeclaration($node, $scope, $this->getParams());
 
         return $this->validateGetErrors($scope, $meetsDeclaration);
+    }
+
+    // TODO: This is a temporary hack, the 'statement' concept needs to be reworked
+    public function getParams(): array
+    {
+        return $this->statements[0][4] ?? [];
     }
 
     public function prepareMessage(string $ruleName, string $message): string
@@ -70,7 +76,7 @@ abstract class DeclarationAssertion implements Assertion
      * @param  array<string>    $tips
      * @return array<RuleError>
      */
-    abstract protected function applyValidation(string $ruleName, ClassReflection $subject, bool $meetsDeclaration, array $tips): array;
+    abstract protected function applyValidation(string $ruleName, ClassReflection $subject, bool $meetsDeclaration, array $tips, array $params = []): array;
 
     protected function ruleApplies(Scope $scope): bool
     {
@@ -93,7 +99,7 @@ abstract class DeclarationAssertion implements Assertion
             throw new ShouldNotHappenException();
         }
 
-        foreach ($this->statements as [$ruleName, $selector, $subjectExcludes, $tips]) {
+        foreach ($this->statements as [$ruleName, $selector, $subjectExcludes, $tips, $params]) {
             if ($subject->isBuiltin() || !$selector->matches($subject)) {
                 continue;
             }
@@ -103,7 +109,7 @@ abstract class DeclarationAssertion implements Assertion
                 }
             }
 
-            array_push($errors, ...$this->applyValidation($ruleName, $subject, $meetsDeclaration, $tips));
+            array_push($errors, ...$this->applyValidation($ruleName, $subject, $meetsDeclaration, $tips, $params));
         }
 
         return $errors;
