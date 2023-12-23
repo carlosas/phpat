@@ -18,6 +18,10 @@ trait ClassnameExtractor
      */
     protected function meetsDeclaration(Node $node, Scope $scope, array $params = []): bool
     {
+        if (!isset($params['isRegex'], $params['classname'])) {
+            return false;
+        }
+
         $pos = mb_strrpos($node->getClassReflection()->getName(), '\\');
         $classname = $pos === false
             ? $node->getClassReflection()->getName()
