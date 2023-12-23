@@ -11,7 +11,7 @@ use PHPStan\Rules\Rule;
 /**
  * @implements Rule<InClassNode>
  */
-final class NameRule extends ShouldBeAbstract implements Rule
+final class ClassnameRule extends ShouldBeAbstract implements Rule
 {
     use ClassnameExtractor;
 }

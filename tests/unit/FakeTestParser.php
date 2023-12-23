@@ -23,6 +23,9 @@ class FakeTestParser extends TestParser
     /** @var array<string> */
     public array $tips = [];
 
+    /** @var array<string, mixed> */
+    public array $params = [];
+
     public function __invoke(): array
     {
         $rule = new RelationRule();
@@ -31,6 +34,7 @@ class FakeTestParser extends TestParser
         $rule->subjects = $this->subjects;
         $rule->targets = $this->targets;
         $rule->tips = $this->tips;
+        $rule->params = $this->params;
 
         return [$rule];
     }
@@ -40,8 +44,9 @@ class FakeTestParser extends TestParser
      * @param array<SelectorInterface> $subjects
      * @param array<SelectorInterface> $targets
      * @param array<string>            $tips
+     * @param array<string, mixed>     $params
      */
-    public static function create(string $ruleName, string $assertion, array $subjects, array $targets, array $tips = []): self
+    public static function create(string $ruleName, string $assertion, array $subjects, array $targets, array $tips = [], array $params = []): self
     {
         /** @var self $self */
         $self = (new \ReflectionClass(self::class))->newInstanceWithoutConstructor();
@@ -50,6 +55,7 @@ class FakeTestParser extends TestParser
         $self->subjects = $subjects;
         $self->targets = $targets;
         $self->tips = $tips;
+        $self->params = $params;
 
         return $self;
     }
