@@ -6,7 +6,7 @@ use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassNode;
 
-trait ReadonlyExtractor
+trait ClassnameExtractor
 {
     public function getNodeType(): string
     {
@@ -18,6 +18,10 @@ trait ReadonlyExtractor
      */
     protected function meetsDeclaration(Node $node, Scope $scope, array $params = []): bool
     {
-        return $node->getClassReflection()->isReadOnly();
+        if ($params['isRegex'] === true) {
+            return preg_match($params['classname'], $node->getClassReflection()->getName()) === 1;
+        }
+
+        return $node->getClassReflection()->getName() === $params['classname'];
     }
 }

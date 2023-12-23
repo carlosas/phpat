@@ -39,7 +39,7 @@ abstract class ShouldBeReadonly extends DeclarationAssertion
         return $this->applyShould($ruleName, $subject, $meetsDeclaration, $tips);
     }
 
-    protected function getMessage(string $ruleName, string $subject): string
+    protected function getMessage(string $ruleName, string $subject, array $params = []): string
     {
         return $this->prepareMessage(
             $ruleName,

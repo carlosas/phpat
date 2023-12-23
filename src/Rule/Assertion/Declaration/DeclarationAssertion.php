@@ -16,7 +16,7 @@ use PHPStan\Type\FileTypeMapper;
 
 abstract class DeclarationAssertion implements Assertion
 {
-    /** @var array<array{string, SelectorInterface, array<SelectorInterface>, array<string>}> */
+    /** @var array<array{string, SelectorInterface, array<SelectorInterface>, array<string>, array<string, mixed>}> */
     protected array $statements;
     protected Configuration $configuration;
     protected ReflectionProvider $reflectionProvider;
@@ -59,12 +59,12 @@ abstract class DeclarationAssertion implements Assertion
             : $message;
     }
 
-    abstract protected function meetsDeclaration(Node $node, Scope $scope): bool;
+    abstract protected function meetsDeclaration(Node $node, Scope $scope, array $params = []): bool;
 
     /**
      * @param class-string $subject
      */
-    abstract protected function getMessage(string $ruleName, string $subject): string;
+    abstract protected function getMessage(string $ruleName, string $subject, array $params = []): string;
 
     /**
      * @param  array<string>    $tips

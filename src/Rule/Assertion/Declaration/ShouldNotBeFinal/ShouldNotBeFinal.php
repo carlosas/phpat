@@ -34,7 +34,7 @@ abstract class ShouldNotBeFinal extends DeclarationAssertion
         return $this->applyShouldNot($ruleName, $subject, $meetsDeclaration, $tips);
     }
 
-    protected function getMessage(string $ruleName, string $subject): string
+    protected function getMessage(string $ruleName, string $subject, array $params = []): string
     {
         return $this->prepareMessage(
             $ruleName,

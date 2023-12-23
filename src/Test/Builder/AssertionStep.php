@@ -4,6 +4,7 @@ namespace PHPat\Test\Builder;
 
 use PHPat\Rule\Assertion\Declaration\ShouldBeAbstract\ShouldBeAbstract;
 use PHPat\Rule\Assertion\Declaration\ShouldBeFinal\ShouldBeFinal;
+use PHPat\Rule\Assertion\Declaration\ShouldBeNamed\ShouldBeNamed;
 use PHPat\Rule\Assertion\Declaration\ShouldBeReadonly\ShouldBeReadonly;
 use PHPat\Rule\Assertion\Declaration\ShouldHaveOnlyOnePublicMethod\ShouldHaveOnlyOnePublicMethod;
 use PHPat\Rule\Assertion\Declaration\ShouldNotBeAbstract\ShouldNotBeAbstract;
@@ -19,6 +20,14 @@ use PHPat\Rule\Assertion\Relation\ShouldNotImplement\ShouldNotImplement;
 
 class AssertionStep extends AbstractStep
 {
+    public function shouldBeNamed(string $classname, bool $regex): Rule
+    {
+        $this->rule->assertion = ShouldBeNamed::class;
+        $this->rule->params = ['isRegex' => $regex, 'classname' => $classname];
+
+        return new BuildStep($this->rule);
+    }
+
     public function shouldBeAbstract(): Rule
     {
         $this->rule->assertion = ShouldBeAbstract::class;

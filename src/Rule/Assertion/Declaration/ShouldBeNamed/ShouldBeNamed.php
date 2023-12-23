@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PHPat\Rule\Assertion\Declaration\ShouldNotBeAbstract;
+namespace PHPat\Rule\Assertion\Declaration\ShouldBeNamed;
 
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\Declaration\DeclarationAssertion;
@@ -10,7 +10,7 @@ use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\FileTypeMapper;
 
-abstract class ShouldNotBeAbstract extends DeclarationAssertion
+abstract class ShouldBeNamed extends DeclarationAssertion
 {
     use ValidationTrait;
 
@@ -31,14 +31,15 @@ abstract class ShouldNotBeAbstract extends DeclarationAssertion
 
     protected function applyValidation(string $ruleName, ClassReflection $subject, bool $meetsDeclaration, array $tips): array
     {
-        return $this->applyShouldNot($ruleName, $subject, $meetsDeclaration, $tips);
+        return $this->applyShould($ruleName, $subject, $meetsDeclaration, $tips);
     }
 
     protected function getMessage(string $ruleName, string $subject, array $params = []): string
     {
-        return $this->prepareMessage(
-            $ruleName,
-            sprintf('%s should not be abstract', $subject)
-        );
+        $message = $params['isRegex'] === true
+            ? sprintf('%s should be named matching the regex "%s', $subject, $params['classname'])
+            : sprintf('%s should be named "%s"', $subject, $params['classname']);
+
+        return $this->prepareMessage($ruleName, $message);
     }
 }
