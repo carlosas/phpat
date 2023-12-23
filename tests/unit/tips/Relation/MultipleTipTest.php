@@ -30,8 +30,8 @@ class MultipleTipTest extends RuleTestCase
                 \sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class),
                 29,
                 <<<'TIPS'
-                    • #tip 1
-                    • #tip 2
+                    • tip #1
+                    • tip #2
                     TIPS,
             ],
         ]);
@@ -44,7 +44,7 @@ class MultipleTipTest extends RuleTestCase
             CanOnlyDepend::class,
             [new Classname(FixtureClass::class, false)],
             [new Classname(\Attribute::class, false)],
-            ['#tip 1', '#tip 2']
+            ['tip #1', 'tip #2']
         );
 
         return new ClassAttributeRule(
