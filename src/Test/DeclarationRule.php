@@ -55,4 +55,9 @@ final class DeclarationRule implements Rule
     {
         return [];
     }
+
+    public function getParams(): array
+    {
+        return [];
+    }
 }

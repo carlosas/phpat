@@ -16,7 +16,7 @@ trait InterfaceExtractor
     /**
      * @param InClassNode $node
      */
-    protected function meetsDeclaration(Node $node, Scope $scope): bool
+    protected function meetsDeclaration(Node $node, Scope $scope, array $params = []): bool
     {
         return $node->getClassReflection()->isInterface();
     }

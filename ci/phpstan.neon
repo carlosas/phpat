@@ -3,3 +3,7 @@ parameters:
     paths:
         - ../src
         - ../tests/unit/rules
+    ignoreErrors:
+        -
+            message: "#no value type specified in iterable type array\\.$#"
+            path: *

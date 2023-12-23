@@ -16,7 +16,7 @@ use PHPStan\Type\FileTypeMapper;
 
 abstract class DeclarationAssertion implements Assertion
 {
-    /** @var array<array{string, SelectorInterface, array<SelectorInterface>, array<string>}> */
+    /** @var array<array{string, SelectorInterface, array<SelectorInterface>, array<string>, array<string, mixed>}> */
     protected array $statements;
     protected Configuration $configuration;
     protected ReflectionProvider $reflectionProvider;
@@ -47,9 +47,15 @@ abstract class DeclarationAssertion implements Assertion
             return [];
         }
 
-        $meetsDeclaration = $this->meetsDeclaration($node, $scope);
+        $meetsDeclaration = $this->meetsDeclaration($node, $scope, $this->getParams());
 
         return $this->validateGetErrors($scope, $meetsDeclaration);
+    }
+
+    // TODO: This is a temporary hack, the 'statement' concept needs to be reworked
+    public function getParams(): array
+    {
+        return $this->statements[0][4] ?? [];
     }
 
     public function prepareMessage(string $ruleName, string $message): string
@@ -59,18 +65,18 @@ abstract class DeclarationAssertion implements Assertion
             : $message;
     }
 
-    abstract protected function meetsDeclaration(Node $node, Scope $scope): bool;
+    abstract protected function meetsDeclaration(Node $node, Scope $scope, array $params = []): bool;
 
     /**
      * @param class-string $subject
      */
-    abstract protected function getMessage(string $ruleName, string $subject): string;
+    abstract protected function getMessage(string $ruleName, string $subject, array $params = []): string;
 
     /**
      * @param  array<string>    $tips
      * @return array<RuleError>
      */
-    abstract protected function applyValidation(string $ruleName, ClassReflection $subject, bool $meetsDeclaration, array $tips): array;
+    abstract protected function applyValidation(string $ruleName, ClassReflection $subject, bool $meetsDeclaration, array $tips, array $params = []): array;
 
     protected function ruleApplies(Scope $scope): bool
     {
@@ -93,7 +99,7 @@ abstract class DeclarationAssertion implements Assertion
             throw new ShouldNotHappenException();
         }
 
-        foreach ($this->statements as [$ruleName, $selector, $subjectExcludes, $tips]) {
+        foreach ($this->statements as [$ruleName, $selector, $subjectExcludes, $tips, $params]) {
             if ($subject->isBuiltin() || !$selector->matches($subject)) {
                 continue;
             }
@@ -103,7 +109,7 @@ abstract class DeclarationAssertion implements Assertion
                 }
             }
 
-            array_push($errors, ...$this->applyValidation($ruleName, $subject, $meetsDeclaration, $tips));
+            array_push($errors, ...$this->applyValidation($ruleName, $subject, $meetsDeclaration, $tips, $params));
         }
 
         return $errors;

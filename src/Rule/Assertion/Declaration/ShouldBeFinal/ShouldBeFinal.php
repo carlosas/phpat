@@ -34,12 +34,12 @@ abstract class ShouldBeFinal extends DeclarationAssertion
      * @param  array<string>    $tips
      * @return array<RuleError>
      */
-    protected function applyValidation(string $ruleName, ClassReflection $subject, bool $meetsDeclaration, array $tips): array
+    protected function applyValidation(string $ruleName, ClassReflection $subject, bool $meetsDeclaration, array $tips, array $params = []): array
     {
-        return $this->applyShould($ruleName, $subject, $meetsDeclaration, $tips);
+        return $this->applyShould($ruleName, $subject, $meetsDeclaration, $tips, $params);
     }
 
-    protected function getMessage(string $ruleName, string $subject): string
+    protected function getMessage(string $ruleName, string $subject, array $params = []): string
     {
         return $this->prepareMessage(
             $ruleName,
