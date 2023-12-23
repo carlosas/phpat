@@ -5,7 +5,6 @@ namespace PHPat\Rule\Assertion\Declaration\ShouldBeNamed;
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\Declaration\DeclarationAssertion;
 use PHPat\Rule\Assertion\Declaration\ValidationTrait;
-use PHPat\ShouldNotHappenException;
 use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;

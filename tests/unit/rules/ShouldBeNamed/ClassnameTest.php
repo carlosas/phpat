@@ -3,8 +3,6 @@
 namespace Tests\PHPat\unit\rules\ShouldBeNamed;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\Declaration\ShouldBeAbstract\AbstractRule;
-use PHPat\Rule\Assertion\Declaration\ShouldBeAbstract\ShouldBeAbstract;
 use PHPat\Rule\Assertion\Declaration\ShouldBeNamed\ClassnameRule;
 use PHPat\Rule\Assertion\Declaration\ShouldBeNamed\ShouldBeNamed;
 use PHPat\Selector\Classname;

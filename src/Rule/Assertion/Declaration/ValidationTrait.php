@@ -36,7 +36,7 @@ trait ValidationTrait
 
     /**
      * @param  array<string>            $tips
-     * @param array<string, mixed>      $params
+     * @param  array<string, mixed>     $params
      * @return array<RuleError>
      * @throws ShouldNotHappenException
      */
