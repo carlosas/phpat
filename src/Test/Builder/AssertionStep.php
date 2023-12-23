@@ -4,6 +4,7 @@ namespace PHPat\Test\Builder;
 
 use PHPat\Rule\Assertion\Declaration\ShouldBeAbstract\ShouldBeAbstract;
 use PHPat\Rule\Assertion\Declaration\ShouldBeFinal\ShouldBeFinal;
+use PHPat\Rule\Assertion\Declaration\ShouldBeInterface\ShouldBeInterface;
 use PHPat\Rule\Assertion\Declaration\ShouldBeReadonly\ShouldBeReadonly;
 use PHPat\Rule\Assertion\Declaration\ShouldHaveOnlyOnePublicMethod\ShouldHaveOnlyOnePublicMethod;
 use PHPat\Rule\Assertion\Declaration\ShouldNotBeAbstract\ShouldNotBeAbstract;
@@ -115,5 +116,12 @@ class AssertionStep extends AbstractStep
         $this->rule->assertion = ShouldApplyAttribute::class;
 
         return new TargetStep($this->rule);
+    }
+
+    public function shouldBeInterface(): Rule
+    {
+        $this->rule->assertion = ShouldBeInterface::class;
+
+        return new BuildStep($this->rule);
     }
 }
