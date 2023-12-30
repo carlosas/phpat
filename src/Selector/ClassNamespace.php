@@ -28,7 +28,7 @@ final class ClassNamespace implements SelectorInterface
             return $this->matchesRegex($namespace);
         }
 
-        return str_starts_with(\trimSeparators($namespace), \trimSeparators($this->namespace));
+        return str_starts_with(\trimSeparators($namespace) . '\\', \trimSeparators($this->namespace) . '\\');
     }
 
     private function matchesRegex(string $namespace): bool
