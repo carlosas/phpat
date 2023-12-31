@@ -5,15 +5,12 @@ namespace Tests\PHPat\unit\rules\ShouldBeNamed;
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\Declaration\ShouldBeNamed\ClassnameRule;
 use PHPat\Rule\Assertion\Declaration\ShouldBeNamed\ShouldBeNamed;
-use PHPat\Selector\Classname;
 use PHPat\Selector\ClassNamespace;
 use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\FixtureClass;
 use Tests\PHPat\fixtures\Namespace\Foo\ClassUnderFooNamespace;
-use Tests\PHPat\fixtures\Namespace\FooBar\ClassUnderFooBarNamespace;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
