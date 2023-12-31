@@ -10,7 +10,7 @@ use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\Namespace\Foo\ClassUnderFooNamespace;
+use Tests\PHPat\fixtures\Ns\Foo\ClassUnderFooNamespace;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -25,7 +25,7 @@ class ClassnamespaceTest extends RuleTestCase
     public function testRule(): void
     {
         // Class under FooBar should not subject to the rule
-        $this->analyse(['tests/fixtures/Namespace/FooBar/ClassUnderFooBarNamespace.php'], []);
+        $this->analyse(['tests/fixtures/Ns/FooBar/ClassUnderFooBarNamespace.php'], []);
     }
 
     protected function getRule(): Rule
