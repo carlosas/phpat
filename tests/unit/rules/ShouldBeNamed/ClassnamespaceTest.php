@@ -33,7 +33,7 @@ class ClassnamespaceTest extends RuleTestCase
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
             ShouldBeNamed::class,
-            [new ClassNamespace('Tests\PHPat\fixtures\Namespace\Foo', false)],
+            [new ClassNamespace('Tests\PHPat\fixtures\Ns\Foo', false)],
             [],
             [],
             ['isRegex' => false, 'classname' => ClassUnderFooNamespace::class]
