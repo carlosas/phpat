@@ -5,6 +5,7 @@ namespace PHPat\Rule\Extractor\Relation\DocComment\MethodScope;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\PhpDoc\Tag\ThrowsTag;
+use PHPStan\ShouldNotHappenException;
 
 trait ThrowsTagExtractor
 {
@@ -15,7 +16,7 @@ trait ThrowsTagExtractor
 
     /**
      * @return array<int, mixed>
-     * @throws \PHPStan\ShouldNotHappenException
+     * @throws ShouldNotHappenException
      */
     protected function extractNodeClassNames(Node $node, Scope $scope): array
     {

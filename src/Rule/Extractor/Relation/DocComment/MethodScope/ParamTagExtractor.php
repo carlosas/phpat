@@ -5,6 +5,7 @@ namespace PHPat\Rule\Extractor\Relation\DocComment\MethodScope;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassMethodNode;
+use PHPStan\ShouldNotHappenException;
 
 trait ParamTagExtractor
 {
@@ -14,9 +15,9 @@ trait ParamTagExtractor
     }
 
     /**
-     * @param  InClassMethodNode                 $node
+     * @param  InClassMethodNode        $node
      * @return array<int, mixed>
-     * @throws \PHPStan\ShouldNotHappenException
+     * @throws ShouldNotHappenException
      */
     protected function extractNodeClassNames(Node $node, Scope $scope): array
     {
