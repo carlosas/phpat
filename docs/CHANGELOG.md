@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.10.13
+* Fix namespace selector matching similar namespaces
+
 ## 0.10.12
 * Add `shouldBeNamed()` assertion.
 * Add `shouldBeInterface()` assertion.
