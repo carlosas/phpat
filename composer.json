@@ -11,13 +11,13 @@
   ],
   "require": {
     "php": "^8.0",
-    "phpstan/phpstan": "1.10.*"
+    "phpstan/phpstan": "^1.10"
   },
   "require-dev": {
-    "friendsofphp/php-cs-fixer": "3.46",
-    "kubawerlos/php-cs-fixer-custom-fixers": "3.18",
+    "friendsofphp/php-cs-fixer": "3.46.*",
+    "kubawerlos/php-cs-fixer-custom-fixers": "3.18.*",
     "phpunit/phpunit": "^9.0 || ^10.0",
-    "vimeo/psalm": "^5.0"
+    "vimeo/psalm": "5.0.*"
   },
   "autoload": {
     "psr-4": {
