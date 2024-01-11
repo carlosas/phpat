@@ -3,8 +3,8 @@
 namespace Tests\PHPat\unit\tips\Relation;
 
 use PHPat\Configuration;
+use PHPat\Rule\Assertion\Relation\CanOnlyDepend\AllAttributesRule;
 use PHPat\Rule\Assertion\Relation\CanOnlyDepend\CanOnlyDepend;
-use PHPat\Rule\Assertion\Relation\CanOnlyDepend\ClassAttributeRule;
 use PHPat\Selector\Classname;
 use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;
@@ -15,7 +15,7 @@ use Tests\PHPat\fixtures\Simple\SimpleAttribute;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
- * @extends RuleTestCase<ClassAttributeRule>
+ * @extends RuleTestCase<AllAttributesRule>
  * @internal
  * @coversNothing
  */
@@ -27,6 +27,10 @@ class OneTipTest extends RuleTestCase
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
             [sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class), 29, 'tip #1'],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class), 33, 'tip #1'],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class), 34, 'tip #1'],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class), 94, 'tip #1'],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class), 95, 'tip #1'],
         ]);
     }
 
@@ -40,7 +44,7 @@ class OneTipTest extends RuleTestCase
             ['tip #1']
         );
 
-        return new ClassAttributeRule(
+        return new AllAttributesRule(
             new StatementBuilderFactory($testParser),
             new Configuration(false, true, false),
             $this->createReflectionProvider(),

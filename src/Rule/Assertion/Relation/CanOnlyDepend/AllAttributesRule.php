@@ -2,14 +2,14 @@
 
 namespace PHPat\Rule\Assertion\Relation\CanOnlyDepend;
 
-use PHPat\Rule\Extractor\Relation\ClassAttributeExtractor;
+use PHPat\Rule\Extractor\Relation\AllAttributesExtractor;
 use PHPStan\Node\InClassNode;
 use PHPStan\Rules\Rule;
 
 /**
  * @implements Rule<InClassNode>
  */
-final class ClassAttributeRule extends CanOnlyDepend implements Rule
+final class AllAttributesRule extends CanOnlyDepend implements Rule
 {
-    use ClassAttributeExtractor;
+    use AllAttributesExtractor;
 }
