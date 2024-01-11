@@ -107,8 +107,12 @@ services:
 		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\ParentClassRule
 		tags:
 			- phpstan.rules.rule
+	#-
+	#	class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\ClassAttributeRule
+	#	tags:
+	#		- phpstan.rules.rule
 	-
-		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\ClassAttributeRule
+		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\AllAttributesRule
 		tags:
 			- phpstan.rules.rule
 	-

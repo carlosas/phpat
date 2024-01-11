@@ -30,8 +30,8 @@ use Tests\PHPat\fixtures\Special\InterfaceWithTemplate;
 class FixtureClass extends SimpleAbstractClass implements SimpleInterface
 {
     use SimpleTrait;
-
-    private SimpleInterface $simple;
+    #[SimpleAttribute] private const CONSTANT = 'constant';
+    #[SimpleAttribute] private SimpleInterface $simple;
     private SimpleInterfaceTwo $simple2;
 
     public function __construct(SimpleInterface $simple)
@@ -89,6 +89,17 @@ class FixtureClass extends SimpleAbstractClass implements SimpleInterface
     public function doSomething(string $modelClass)
     {
         return new $modelClass();
+    }
+
+    #[SimpleAttribute]
+    public function methodWithAllAttributes(#[SimpleAttribute] int $number): int
+    {
+        $fn1 = #[SimpleAttribute] fn (int $a) => $a + 1;
+        $fn2 = #[SimpleAttribute] fn (int $a) => $a + 1;
+        $fn3 = #[SimpleAttribute] static fn (int $a) => $a + 1;
+        $fn4 = #[SimpleAttribute] static fn (int $a) => $a + 1;
+
+        return $fn1($number) + $fn2($number) + $fn3($number) + $fn4($number);
     }
 
     public function catchException(): void

@@ -2,5 +2,5 @@
 
 namespace Tests\PHPat\fixtures\Simple;
 
-#[\Attribute(\Attribute::TARGET_CLASS)]
+#[\Attribute(\Attribute::TARGET_ALL)]
 class SimpleAttribute {}
