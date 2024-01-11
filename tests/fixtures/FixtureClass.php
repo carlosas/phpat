@@ -60,13 +60,13 @@ class FixtureClass extends SimpleAbstractClass implements SimpleInterface
     }
 
     /**
-     * @param  SimpleClass                              $p
-     * @param  SimpleClassTwo                           $p2   Parameter with description
-     * @param  SimpleClassThree                         $p3
-     * @param  array<SimpleClassFour>                   $p4
-     * @param  SimpleClassFive|SimpleClassSix           $p5_6
-     * @param  InterfaceWithTemplate<ClassImplementing> $t
-     * @return SimpleInterface                          Some nice description here
+     * @param  SimpleClass                                   $p
+     * @param  SimpleClassTwo                                $p2 Parameter with description
+     * @param  \Tests\PHPat\fixtures\Simple\SimpleClassThree $p3
+     * @param  array<SimpleClassFour>                        $p4
+     * @param  SimpleClassFive|SimpleClassSix                $p5_6
+     * @param  InterfaceWithTemplate<ClassImplementing>      $t
+     * @return SimpleInterface                               Some nice description here
      * @throws SimpleException
      */
     public function methodWithDocBlocks($p, $p2, $p3, $p4, $p5_6, $t)
