@@ -30,7 +30,7 @@ final class TestExtractor
                 throw new ShouldNotHappenException();
             }
 
-            $reflectedTest = $this->reflectTest(get_class($test));
+            $reflectedTest = $this->reflectTest($test::class);
             if ($reflectedTest !== null) {
                 yield $reflectedTest;
             }
