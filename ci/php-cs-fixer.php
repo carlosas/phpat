@@ -9,8 +9,8 @@ $finder = PhpCsFixer\Finder::create()
 
 $rules = [
     '@PER'                        => true,
+    '@PHP80Migration'             => true,
     '@PHP80Migration:risky'       => true,
-    '@PHP82Migration'             => true,
     '@PhpCsFixer'                 => true,
     PhpCsFixerCustomFixers\Fixer\DeclareAfterOpeningTagFixer::name() => true,
     PhpCsFixerCustomFixers\Fixer\PhpdocArrayStyleFixer::name() => true,
