@@ -30,8 +30,8 @@ use Tests\PHPat\fixtures\Special\InterfaceWithTemplate;
 class FixtureClass extends SimpleAbstractClass implements SimpleInterface
 {
     use SimpleTrait;
-
-    private SimpleInterface $simple;
+    #[SimpleAttribute] private const CONSTANT = 'constant';
+    #[SimpleAttribute] private SimpleInterface $simple;
     private SimpleInterfaceTwo $simple2;
 
     public function __construct(SimpleInterface $simple)
@@ -60,13 +60,13 @@ class FixtureClass extends SimpleAbstractClass implements SimpleInterface
     }
 
     /**
-     * @param  SimpleClass                              $p
-     * @param  SimpleClassTwo                           $p2   Parameter with description
-     * @param  SimpleClassThree                         $p3
-     * @param  array<SimpleClassFour>                   $p4
-     * @param  SimpleClassFive|SimpleClassSix           $p5_6
-     * @param  InterfaceWithTemplate<ClassImplementing> $t
-     * @return SimpleInterface                          Some nice description here
+     * @param  SimpleClass                                   $p
+     * @param  SimpleClassTwo                                $p2 Parameter with description
+     * @param  \Tests\PHPat\fixtures\Simple\SimpleClassThree $p3
+     * @param  array<SimpleClassFour>                        $p4
+     * @param  SimpleClassFive|SimpleClassSix                $p5_6
+     * @param  InterfaceWithTemplate<ClassImplementing>      $t
+     * @return SimpleInterface                               Some nice description here
      * @throws SimpleException
      */
     public function methodWithDocBlocks($p, $p2, $p3, $p4, $p5_6, $t)
@@ -89,5 +89,23 @@ class FixtureClass extends SimpleAbstractClass implements SimpleInterface
     public function doSomething(string $modelClass)
     {
         return new $modelClass();
+    }
+
+    #[SimpleAttribute]
+    public function methodWithAllAttributes(#[SimpleAttribute] int $number): int
+    {
+        $fn1 = #[SimpleAttribute] function (int $a) {
+            return $a + 1;
+        };
+
+        $fn2 = #[SimpleAttribute] fn (int $a) => $a + 1;
+
+        $fn3 = #[SimpleAttribute] static function (int $a) {
+            return $a + 1;
+        };
+
+        $fn4 = #[SimpleAttribute] static fn (int $a) => $a + 1;
+
+        return $fn1($number) + $fn2($number) + $fn3($number) + $fn4($number);
     }
 }

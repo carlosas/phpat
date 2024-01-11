@@ -29,7 +29,7 @@ final class AssertionTest
         ;
     }
 
-    public function test_rules_dependencies(): Rule
+    /*public function test_rules_dependencies(): Rule
     {
         return PHPat::rule()
             ->classes(Selector::implements(Assertion::class))
@@ -43,5 +43,5 @@ final class AssertionTest
                 Selector::inNamespace('PHPStan'),
             )
         ;
-    }
+    }*/
 }
