@@ -3,8 +3,8 @@
 namespace Tests\PHPat\unit\tips\Relation;
 
 use PHPat\Configuration;
+use PHPat\Rule\Assertion\Relation\CanOnlyDepend\AllAttributesRule;
 use PHPat\Rule\Assertion\Relation\CanOnlyDepend\CanOnlyDepend;
-use PHPat\Rule\Assertion\Relation\CanOnlyDepend\ClassAttributeRule;
 use PHPat\Selector\Classname;
 use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;
@@ -15,7 +15,7 @@ use Tests\PHPat\fixtures\Simple\SimpleAttribute;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
- * @extends RuleTestCase<ClassAttributeRule>
+ * @extends RuleTestCase<AllAttributesRule>
  * @internal
  * @coversNothing
  */
@@ -34,6 +34,38 @@ class MultipleTipTest extends RuleTestCase
                     • tip #2
                     TIPS,
             ],
+            [
+                \sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class),
+                33,
+                <<<'TIPS'
+                    • tip #1
+                    • tip #2
+                    TIPS,
+            ],
+            [
+                \sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class),
+                34,
+                <<<'TIPS'
+                    • tip #1
+                    • tip #2
+                    TIPS,
+            ],
+            [
+                \sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class),
+                94,
+                <<<'TIPS'
+                    • tip #1
+                    • tip #2
+                    TIPS,
+            ],
+            [
+                \sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class),
+                95,
+                <<<'TIPS'
+                    • tip #1
+                    • tip #2
+                    TIPS,
+            ],
         ]);
     }
 
@@ -47,7 +79,7 @@ class MultipleTipTest extends RuleTestCase
             ['tip #1', 'tip #2']
         );
 
-        return new ClassAttributeRule(
+        return new AllAttributesRule(
             new StatementBuilderFactory($testParser),
             new Configuration(false, true, false),
             $this->createReflectionProvider(),
