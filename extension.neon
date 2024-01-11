@@ -18,6 +18,12 @@ services:
 
 	# # # # # DECLARATION RULES # # # # #
 
+	# ShouldBeNamed rules
+	-
+		class: PHPat\Rule\Assertion\Declaration\ShouldBeNamed\ClassnameRule
+		tags:
+			- phpstan.rules.rule
+
 	# ShouldBeReadonly rules
 	-
 		class: PHPat\Rule\Assertion\Declaration\ShouldBeReadonly\IsReadonlyRule
@@ -51,6 +57,12 @@ services:
 	# ShouldHaveOnlyOnePublicMethod rules
 	-
 		class: PHPat\Rule\Assertion\Declaration\ShouldHaveOnlyOnePublicMethod\HasOnlyOnePublicMethodRule
+		tags:
+			- phpstan.rules.rule
+
+	# ShouldBeInterface rules
+	-
+		class: PHPat\Rule\Assertion\Declaration\ShouldBeInterface\IsInterfaceRule
 		tags:
 			- phpstan.rules.rule
 

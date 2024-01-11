@@ -1,39 +1,31 @@
 <?php declare(strict_types=1);
 
-namespace Tests\PHPat\unit\tips\Relation;
+namespace Tests\PHPat\unit\rules\ShouldBeNamed;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\Relation\CanOnlyDepend\CanOnlyDepend;
-use PHPat\Rule\Assertion\Relation\CanOnlyDepend\ClassAttributeRule;
+use PHPat\Rule\Assertion\Declaration\ShouldBeNamed\ClassnameRule;
+use PHPat\Rule\Assertion\Declaration\ShouldBeNamed\ShouldBeNamed;
 use PHPat\Selector\Classname;
 use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
 use Tests\PHPat\fixtures\FixtureClass;
-use Tests\PHPat\fixtures\Simple\SimpleAttribute;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
- * @extends RuleTestCase<ClassAttributeRule>
+ * @extends RuleTestCase<ClassnameRule>
  * @internal
  * @coversNothing
  */
-class MultipleTipTest extends RuleTestCase
+class ClassnameTest extends RuleTestCase
 {
-    public const RULE_NAME = 'test_FixtureClassCanOnlyDependSimpleAndSpecial';
+    public const RULE_NAME = 'test_FixtureClassShouldBeNamed';
 
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [
-                \sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class),
-                29,
-                <<<'TIPS'
-                    • tip #1
-                    • tip #2
-                    TIPS,
-            ],
+            [sprintf('%s should be named SuperCoolClass', FixtureClass::class), 29],
         ]);
     }
 
@@ -41,13 +33,14 @@ class MultipleTipTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            CanOnlyDepend::class,
+            ShouldBeNamed::class,
             [new Classname(FixtureClass::class, false)],
-            [new Classname(\Attribute::class, false)],
-            ['tip #1', 'tip #2']
+            [],
+            [],
+            ['isRegex' => false, 'classname' => 'SuperCoolClass']
         );
 
-        return new ClassAttributeRule(
+        return new ClassnameRule(
             new StatementBuilderFactory($testParser),
             new Configuration(false, true, false),
             $this->createReflectionProvider(),

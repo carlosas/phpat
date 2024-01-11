@@ -4,6 +4,7 @@ namespace PHPat\Rule\Extractor\Relation\DocComment\MethodScope;
 
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
+use PHPStan\ShouldNotHappenException;
 
 trait VarTagExtractor
 {
@@ -14,7 +15,7 @@ trait VarTagExtractor
 
     /**
      * @return array<int, mixed>
-     * @throws \PHPStan\ShouldNotHappenException
+     * @throws ShouldNotHappenException
      */
     protected function extractNodeClassNames(Node $node, Scope $scope): array
     {

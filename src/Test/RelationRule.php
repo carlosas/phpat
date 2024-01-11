@@ -28,6 +28,9 @@ final class RelationRule implements Rule
     /** @var array<string> */
     public array $tips = [];
 
+    /** @var array<string, mixed> */
+    public array $params = [];
+
     /**
      * @return null|class-string<DeclarationAssertion>|class-string<RelationAssertion>
      */
@@ -64,5 +67,10 @@ final class RelationRule implements Rule
     public function getTips(): array
     {
         return $this->tips;
+    }
+
+    public function getParams(): array
+    {
+        return $this->params;
     }
 }

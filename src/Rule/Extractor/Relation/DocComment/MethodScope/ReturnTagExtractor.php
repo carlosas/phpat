@@ -6,6 +6,7 @@ use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassMethodNode;
 use PHPStan\PhpDoc\Tag\ReturnTag;
+use PHPStan\ShouldNotHappenException;
 
 trait ReturnTagExtractor
 {
@@ -15,9 +16,9 @@ trait ReturnTagExtractor
     }
 
     /**
-     * @param  InClassMethodNode                 $node
+     * @param  InClassMethodNode        $node
      * @return array<int, mixed>
-     * @throws \PHPStan\ShouldNotHappenException
+     * @throws ShouldNotHappenException
      */
     protected function extractNodeClassNames(Node $node, Scope $scope): array
     {

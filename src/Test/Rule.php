@@ -38,4 +38,9 @@ interface Rule
      * @return array<string>
      */
     public function getTips(): array;
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function getParams(): array;
 }

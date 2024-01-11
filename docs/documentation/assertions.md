@@ -2,6 +2,9 @@
 
 Assertion is the type of verification that can be done in the selected classes.
 
+## shouldBeNamed()
+It asserts that the selected classes are **named** as specified.
+
 ## shouldBeFinal()
 It asserts that the selected classes are declared as **final**.
 
@@ -11,6 +14,9 @@ Also available: `shouldNotBeFinal()`
 It asserts that the selected classes are declared as **abstract**.
 
 Also available: `shouldNotBeAbstract()`
+
+## shouldBeInterface()
+It asserts that the selected classes are **interfaces**.
 
 ## shouldBeReadonly()
 It asserts that the selected classes are declared as **readonly**.
