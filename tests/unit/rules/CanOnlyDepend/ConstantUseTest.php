@@ -11,6 +11,7 @@ use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
 use Tests\PHPat\fixtures\FixtureClass;
+use Tests\PHPat\fixtures\Simple\SimpleClass;
 use Tests\PHPat\fixtures\Special\ClassWithConstant;
 use Tests\PHPat\fixtures\Special\ClassWithConstantTwo;
 use Tests\PHPat\unit\FakeTestParser;
@@ -28,6 +29,7 @@ class ConstantUseTest extends RuleTestCase
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
             [sprintf('%s should not depend on %s', FixtureClass::class, ClassWithConstant::class), 54],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClass::class), 94],
         ]);
     }
 
