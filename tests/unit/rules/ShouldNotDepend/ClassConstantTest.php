@@ -2,7 +2,9 @@
 
 namespace Tests\PHPat\unit\rules\ShouldNotDepend;
 
-require __DIR__ . '/../../../fixtures/Special/ClassWithTypedConstant.php';
+if (PHP_VERSION_ID >= 80300) {
+    require __DIR__ . '/../../../fixtures/Special/ClassWithTypedConstant.php';
+}
 
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\Relation\ShouldNotDepend\ClassPropertyRule;
