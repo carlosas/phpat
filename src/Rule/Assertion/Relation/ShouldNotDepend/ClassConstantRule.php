@@ -3,11 +3,11 @@
 namespace PHPat\Rule\Assertion\Relation\ShouldNotDepend;
 
 use PHPat\Rule\Extractor\Relation\ClassConstantExtractor;
-use PhpParser\Node;
+use PhpParser\Node\Stmt\ClassConst;
 use PHPStan\Rules\Rule;
 
 /**
- * @implements Rule<Node\Stmt\ClassConst>
+ * @implements Rule<ClassConst>
  */
 final class ClassConstantRule extends ShouldNotDepend implements Rule
 {

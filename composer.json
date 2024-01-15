@@ -30,7 +30,10 @@
   "autoload-dev": {
     "psr-4": {
       "Tests\\PHPat\\": "tests/"
-    }
+    },
+    "exclude-from-files": [
+      "tests/fixtures/Special/ClassWithTypedConstant.php"
+    ]
   },
   "config": {
     "sort-packages": true

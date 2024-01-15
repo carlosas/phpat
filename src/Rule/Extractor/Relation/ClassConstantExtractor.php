@@ -4,17 +4,18 @@ namespace PHPat\Rule\Extractor\Relation;
 
 use PHPat\Parser\TypeNodeParser;
 use PhpParser\Node;
+use PhpParser\Node\Stmt\ClassConst;
 use PHPStan\Analyser\Scope;
 
 trait ClassConstantExtractor
 {
     public function getNodeType(): string
     {
-        return Node\Stmt\ClassConst::class;
+        return ClassConst::class;
     }
 
     /**
-     * @param  Node\Stmt\ClassConst  $node
+     * @param  ClassConst  $node
      * @return array<class-string>
      */
     protected function extractNodeClassNames(Node $node, Scope $scope): array

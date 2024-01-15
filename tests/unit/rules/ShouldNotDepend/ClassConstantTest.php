@@ -2,6 +2,8 @@
 
 namespace Tests\PHPat\unit\rules\ShouldNotDepend;
 
+require __DIR__ . '/../../../fixtures/Special/ClassWithTypedConstant.php';
+
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\Relation\ShouldNotDepend\ClassPropertyRule;
 use PHPat\Rule\Assertion\Relation\ShouldNotDepend\ShouldNotDepend;
@@ -10,10 +12,8 @@ use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\FixtureClass;
-use Tests\PHPat\fixtures\Php83FixtureClass;
+use Tests\PHPat\fixtures\Special\ClassWithTypedConstant;
 use Tests\PHPat\fixtures\Simple\SimpleClass;
-use Tests\PHPat\fixtures\Simple\SimpleInterface;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -32,7 +32,7 @@ class ClassConstantTest extends RuleTestCase
         }
 
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', Php83FixtureClass::class, SimpleClass::class), 8],
+            [sprintf('%s should not depend on %s', ClassWithTypedConstant::class, SimpleClass::class), 10],
         ]);
     }
 
@@ -41,7 +41,7 @@ class ClassConstantTest extends RuleTestCase
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
             ShouldNotDepend::class,
-            [new Classname(Php83FixtureClass::class, false)],
+            [new Classname(ClassWithTypedConstant::class, false)],
             [new Classname(SimpleClass::class, false)]
         );
 
