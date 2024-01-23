@@ -34,6 +34,11 @@ It asserts that the selected classes **implement** the target interfaces.
 
 Also available: `shouldNotImplement()`
 
+## shouldInclude()
+It asserts that the selected classes **include** the target traits.
+
+Also available: `shouldNotInclude()`
+
 ## shouldNotDependOn()
 It asserts that the selected classes **do not depend** on the target classes.
 

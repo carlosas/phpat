@@ -7,6 +7,7 @@ use PHPat\Rule\Assertion\Assertion;
 use PHPat\Rule\Assertion\Relation\ShouldApplyAttribute\ShouldApplyAttribute;
 use PHPat\Rule\Assertion\Relation\ShouldExtend\ShouldExtend;
 use PHPat\Rule\Assertion\Relation\ShouldImplement\ShouldImplement;
+use PHPat\Rule\Assertion\Relation\ShouldInclude\ShouldInclude;
 use PHPat\Selector\Classname;
 use PHPat\Selector\SelectorInterface;
 use PHPat\ShouldNotHappenException;
@@ -98,8 +99,8 @@ abstract class RelationAssertion implements Assertion
             return false;
         }
 
-        // Can not skip if the rule is a ShouldExtend, ShouldImplement or ShouldApplyAttribute rule
-        if (is_a($this, ShouldExtend::class) || is_a($this, ShouldImplement::class) || is_a($this, ShouldApplyAttribute::class)) {
+        // Can not skip if the rule is a ShouldExtend, ShouldImplement, ShouldInclude or ShouldApplyAttribute rule
+        if (is_a($this, ShouldExtend::class) || is_a($this, ShouldImplement::class) || is_a($this, ShouldInclude::class) || is_a($this, ShouldApplyAttribute::class)) {
             return true;
         }
 
