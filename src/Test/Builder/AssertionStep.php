@@ -14,10 +14,12 @@ use PHPat\Rule\Assertion\Relation\CanOnlyDepend\CanOnlyDepend;
 use PHPat\Rule\Assertion\Relation\ShouldApplyAttribute\ShouldApplyAttribute;
 use PHPat\Rule\Assertion\Relation\ShouldExtend\ShouldExtend;
 use PHPat\Rule\Assertion\Relation\ShouldImplement\ShouldImplement;
+use PHPat\Rule\Assertion\Relation\ShouldInclude\ShouldInclude;
 use PHPat\Rule\Assertion\Relation\ShouldNotConstruct\ShouldNotConstruct;
 use PHPat\Rule\Assertion\Relation\ShouldNotDepend\ShouldNotDepend;
 use PHPat\Rule\Assertion\Relation\ShouldNotExtend\ShouldNotExtend;
 use PHPat\Rule\Assertion\Relation\ShouldNotImplement\ShouldNotImplement;
+use PHPat\Rule\Assertion\Relation\ShouldNotInclude\ShouldNotInclude;
 
 class AssertionStep extends AbstractStep
 {
@@ -102,6 +104,20 @@ class AssertionStep extends AbstractStep
     public function shouldImplement(): TargetStep
     {
         $this->rule->assertion = ShouldImplement::class;
+
+        return new TargetStep($this->rule);
+    }
+
+    public function shouldNotInclude(): TargetStep
+    {
+        $this->rule->assertion = ShouldNotInclude::class;
+
+        return new TargetStep($this->rule);
+    }
+
+    public function shouldInclude(): TargetStep
+    {
+        $this->rule->assertion = ShouldInclude::class;
 
         return new TargetStep($this->rule);
     }

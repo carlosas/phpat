@@ -80,6 +80,12 @@ services:
 		tags:
 			- phpstan.rules.rule
 
+	# ShouldInclude rules
+	-
+		class: PHPat\Rule\Assertion\Relation\ShouldInclude\IncludedTraitsRule
+		tags:
+			- phpstan.rules.rule
+
 	# ShouldNotDepend rules
 	-
 		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\DirectInterfacesRule
@@ -227,6 +233,12 @@ services:
 	# ShouldNotImplement rules
 	-
 		class: PHPat\Rule\Assertion\Relation\ShouldNotImplement\ImplementedInterfacesRule
+		tags:
+			- phpstan.rules.rule
+
+	# ShouldNotInclude rules
+	-
+		class: PHPat\Rule\Assertion\Relation\ShouldNotInclude\IncludedTraitsRule
 		tags:
 			- phpstan.rules.rule
 
