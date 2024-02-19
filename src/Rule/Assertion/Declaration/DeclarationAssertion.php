@@ -43,19 +43,26 @@ abstract class DeclarationAssertion implements Assertion
      */
     public function processNode(Node $node, Scope $scope): array
     {
-        if (!$this->ruleApplies($scope)) {
+        if (!is_string($ruleName = $this->ruleApplies($scope))) {
             return [];
         }
 
-        $meetsDeclaration = $this->meetsDeclaration($node, $scope, $this->getParams());
+        $meetsDeclaration = $this->meetsDeclaration($node, $scope, $this->getParams($ruleName));
 
-        return $this->validateGetErrors($scope, $meetsDeclaration);
+        return $this->validateGetErrors($scope, $meetsDeclaration, $ruleName);
     }
 
-    // TODO: This is a temporary hack, the 'statement' concept needs to be reworked
-    public function getParams(): array
+    public function getParams(string $ruleName): array
     {
-        return $this->statements[0][4] ?? [];
+        foreach ($this->statements as $statement) {
+            if ($statement[0] !== $ruleName) {
+                continue;
+            }
+
+            return $statement[4];
+        }
+
+        return [];
     }
 
     public function prepareMessage(string $ruleName, string $message): string
@@ -78,25 +85,18 @@ abstract class DeclarationAssertion implements Assertion
      */
     abstract protected function applyValidation(string $ruleName, ClassReflection $subject, bool $meetsDeclaration, array $tips, array $params = []): array;
 
-    protected function ruleApplies(Scope $scope): bool
+    /**
+     * @return bool|string false on failure, ruleName otherwise
+     */
+    protected function ruleApplies(Scope $scope)
     {
         if (!$scope->isInClass()) {
             return false;
         }
 
-        return $scope->getClassReflection() !== null;
-    }
-
-    /**
-     * @return array<RuleError>
-     * @throws ShouldNotHappenException
-     */
-    protected function validateGetErrors(Scope $scope, bool $meetsDeclaration): array
-    {
-        $errors = [];
         $subject = $scope->getClassReflection();
         if ($subject === null) {
-            throw new ShouldNotHappenException();
+            return false;
         }
 
         foreach ($this->statements as [$ruleName, $selector, $subjectExcludes, $tips, $params]) {
@@ -107,6 +107,29 @@ abstract class DeclarationAssertion implements Assertion
                 if ($exclude->matches($subject)) {
                     continue 2;
                 }
+            }
+
+            return $ruleName;
+        }
+
+        return false;
+    }
+
+    /**
+     * @return array<RuleError>
+     * @throws ShouldNotHappenException
+     */
+    protected function validateGetErrors(Scope $scope, bool $meetsDeclaration, string $matchedRuleName): array
+    {
+        $errors = [];
+        $subject = $scope->getClassReflection();
+        if ($subject === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        foreach ($this->statements as [$ruleName, $selector, $subjectExcludes, $tips, $params]) {
+            if ($ruleName !== $matchedRuleName) {
+                continue;
             }
 
             array_push($errors, ...$this->applyValidation($ruleName, $subject, $meetsDeclaration, $tips, $params));
