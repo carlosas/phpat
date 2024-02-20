@@ -43,26 +43,41 @@ abstract class DeclarationAssertion implements Assertion
      */
     public function processNode(Node $node, Scope $scope): array
     {
-        if (!is_string($ruleName = $this->ruleApplies($scope))) {
+        $subject = $scope->getClassReflection();
+        if ($subject === null) {
             return [];
         }
 
-        $meetsDeclaration = $this->meetsDeclaration($node, $scope, $this->getParams($ruleName));
+        $applicableStatements = array_filter(
+            $this->statements,
+            static function (array $statement) use ($subject): bool {
+                [$ruleName, $selector, $subjectExcludes, $tips, $params] = $statement;
 
-        return $this->validateGetErrors($scope, $meetsDeclaration, $ruleName);
-    }
+                if ($subject->isBuiltin() || !$selector->matches($subject)) {
+                    return false;
+                }
+                foreach ($subjectExcludes as $exclude) {
+                    if ($exclude->matches($subject)) {
+                        return false;
+                    }
+                }
 
-    public function getParams(string $ruleName): array
-    {
-        foreach ($this->statements as $statement) {
-            if ($statement[0] !== $ruleName) {
-                continue;
+                return true;
             }
+        );
 
-            return $statement[4];
-        }
+        return array_reduce(
+            $applicableStatements,
+            function (array $errors, array $statement) use ($node, $scope, $subject): array {
+                [$ruleName, $selector, $subjectExcludes, $tips, $params] = $statement;
 
-        return [];
+                $meetsDeclaration = $this->meetsDeclaration($node, $scope, $statement[4]);
+                array_push($errors, ...$this->applyValidation($ruleName, $subject, $meetsDeclaration, $tips, $params));
+
+                return $errors;
+            },
+            []
+        );
     }
 
     public function prepareMessage(string $ruleName, string $message): string
@@ -84,57 +99,4 @@ abstract class DeclarationAssertion implements Assertion
      * @return array<RuleError>
      */
     abstract protected function applyValidation(string $ruleName, ClassReflection $subject, bool $meetsDeclaration, array $tips, array $params = []): array;
-
-    /**
-     * @return bool|string false on failure, ruleName otherwise
-     */
-    protected function ruleApplies(Scope $scope)
-    {
-        if (!$scope->isInClass()) {
-            return false;
-        }
-
-        $subject = $scope->getClassReflection();
-        if ($subject === null) {
-            return false;
-        }
-
-        foreach ($this->statements as [$ruleName, $selector, $subjectExcludes, $tips, $params]) {
-            if ($subject->isBuiltin() || !$selector->matches($subject)) {
-                continue;
-            }
-            foreach ($subjectExcludes as $exclude) {
-                if ($exclude->matches($subject)) {
-                    continue 2;
-                }
-            }
-
-            return $ruleName;
-        }
-
-        return false;
-    }
-
-    /**
-     * @return array<RuleError>
-     * @throws ShouldNotHappenException
-     */
-    protected function validateGetErrors(Scope $scope, bool $meetsDeclaration, string $matchedRuleName): array
-    {
-        $errors = [];
-        $subject = $scope->getClassReflection();
-        if ($subject === null) {
-            throw new ShouldNotHappenException();
-        }
-
-        foreach ($this->statements as [$ruleName, $selector, $subjectExcludes, $tips, $params]) {
-            if ($ruleName !== $matchedRuleName) {
-                continue;
-            }
-
-            array_push($errors, ...$this->applyValidation($ruleName, $subject, $meetsDeclaration, $tips, $params));
-        }
-
-        return $errors;
-    }
 }
