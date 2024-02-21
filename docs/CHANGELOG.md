@@ -2,10 +2,12 @@
 All notable changes to this project will be documented in this file.
 
 ## 0.10.14
-* Add dependency detection for catch blocks.
+* Add `shouldInclude()` and `shouldNotInclude` assertions.
+* Detect catch blocks in dependency assertions.
+* Fix shouldBeNamed assertion not functioning on second run.
 
 ## 0.10.13
-* Fix namespace selector matching similar namespaces
+* Fix namespace selector matching similar namespaces.
 
 ## 0.10.12
 * Add `shouldBeNamed()` assertion.
