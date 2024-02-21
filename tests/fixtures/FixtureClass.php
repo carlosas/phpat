@@ -90,4 +90,11 @@ class FixtureClass extends SimpleAbstractClass implements SimpleInterface
     {
         return new $modelClass();
     }
+
+    public function catchException(): void
+    {
+        try {
+        } catch (SimpleException $e) {
+        }
+    }
 }

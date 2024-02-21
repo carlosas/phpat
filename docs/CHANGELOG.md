@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.10.14
+* Add dependency detection for catch blocks.
+
 ## 0.10.13
 * Fix namespace selector matching similar namespaces
 
