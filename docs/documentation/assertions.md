@@ -21,6 +21,8 @@ It asserts that the selected classes are **interfaces**.
 ## shouldBeReadonly()
 It asserts that the selected classes are declared as **readonly**.
 
+Also available: `shouldNotBeReadonly()`
+
 ## shouldHaveOnlyOnePublicMethod()
 It asserts that the selected classes only have **one public method** (besides constructor).
 
