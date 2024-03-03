@@ -106,6 +106,10 @@ services:
 		tags:
 			- phpstan.rules.rule
 	-
+		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\ClassConstantRule
+		tags:
+			- phpstan.rules.rule
+	-
 		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\ClassPropertyRule
 		tags:
 			- phpstan.rules.rule
@@ -175,6 +179,10 @@ services:
 		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\AllAttributesRule
 		tags:
 			- phpstan.rules.rule
+	#-
+	#	class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\ClassConstantRule
+	#	tags:
+	#		- phpstan.rules.rule
 	-
 		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\ClassPropertyRule
 		tags:
