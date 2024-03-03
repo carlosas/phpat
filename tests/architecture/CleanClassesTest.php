@@ -8,6 +8,8 @@ use PHPat\Test\Builder\AbstractStep;
 use PHPat\Test\Builder\Rule;
 use PHPat\Test\PHPat;
 use PHPat\Test\TestParser;
+use Tests\PHPat\fixtures\Simple\SimpleClass;
+use Tests\PHPat\fixtures\Special\ClassWithTypedConstant;
 
 final class CleanClassesTest
 {
@@ -26,6 +28,15 @@ final class CleanClassesTest
                 Selector::classname(TestParser::class)
             )
             ->shouldBeFinal()
+        ;
+    }
+
+    public function test_non_final_classes_are_abstract(): Rule
+    {
+        return PHPat::rule()
+            ->classes(Selector::classname(ClassWithTypedConstant::class))
+            ->shouldNotDependOn()
+            ->classes(Selector::classname(SimpleClass::class))
         ;
     }
 }

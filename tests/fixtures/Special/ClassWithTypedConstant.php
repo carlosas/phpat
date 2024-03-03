@@ -2,6 +2,8 @@
 
 namespace Tests\PHPat\fixtures\Special;
 
+use Tests\PHPat\fixtures\Simple\SimpleClass;
+
 if (PHP_VERSION_ID < 80300) {
     return;
 }
@@ -11,5 +13,5 @@ if (PHP_VERSION_ID < 80300) {
  */
 class ClassWithTypedConstant
 {
-    public const ?\Tests\PHPat\fixtures\Simple\SimpleClass CONSTANT = null;
+    public const ?SimpleClass CONSTANT = null;
 }
