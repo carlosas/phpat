@@ -3,6 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## 0.10.15
 * Add `shouldNotBeReadonly` assertion.
+* Fix return types when building declaration rules with tips.
 
 ## 0.10.14
 * Add `shouldInclude()` and `shouldNotInclude` assertions.
