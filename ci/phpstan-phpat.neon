@@ -5,7 +5,6 @@ parameters:
     level: 8
     paths:
         - ../src
-        - ../tests/unit/rules
         - ../tests/architecture
     ignoreErrors:
         -
