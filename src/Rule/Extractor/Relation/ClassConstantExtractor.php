@@ -15,7 +15,7 @@ trait ClassConstantExtractor
     }
 
     /**
-     * @param  ClassConst  $node
+     * @param  ClassConst          $node
      * @return array<class-string>
      */
     protected function extractNodeClassNames(Node $node, Scope $scope): array

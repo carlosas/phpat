@@ -3,7 +3,7 @@
 namespace Tests\PHPat\unit\rules\ShouldNotDepend;
 
 if (PHP_VERSION_ID >= 80300) {
-    require __DIR__ . '/../../../fixtures/Special/ClassWithTypedConstant.php';
+    require __DIR__.'/../../../fixtures/Special/ClassWithTypedConstant.php';
 }
 
 use PHPat\Configuration;
@@ -14,8 +14,8 @@ use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\Special\ClassWithTypedConstant;
 use Tests\PHPat\fixtures\Simple\SimpleClass;
+use Tests\PHPat\fixtures\Special\ClassWithTypedConstant;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
