@@ -10,6 +10,7 @@ use PHPat\Rule\Assertion\Declaration\ShouldBeReadonly\ShouldBeReadonly;
 use PHPat\Rule\Assertion\Declaration\ShouldHaveOnlyOnePublicMethod\ShouldHaveOnlyOnePublicMethod;
 use PHPat\Rule\Assertion\Declaration\ShouldNotBeAbstract\ShouldNotBeAbstract;
 use PHPat\Rule\Assertion\Declaration\ShouldNotBeFinal\ShouldNotBeFinal;
+use PHPat\Rule\Assertion\Declaration\ShouldNotBeReadonly\ShouldNotBeReadonly;
 use PHPat\Rule\Assertion\Relation\CanOnlyDepend\CanOnlyDepend;
 use PHPat\Rule\Assertion\Relation\ShouldApplyAttribute\ShouldApplyAttribute;
 use PHPat\Rule\Assertion\Relation\ShouldExtend\ShouldExtend;
@@ -48,6 +49,13 @@ class AssertionStep extends AbstractStep
     public function shouldBeReadonly(): TipOrBuildStep
     {
         $this->rule->assertion = ShouldBeReadonly::class;
+
+        return new TipOrBuildStep($this->rule);
+    }
+
+    public function shouldNotBeReadonly(): TipOrBuildStep
+    {
+        $this->rule->assertion = ShouldNotBeReadonly::class;
 
         return new TipOrBuildStep($this->rule);
     }
