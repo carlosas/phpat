@@ -19,7 +19,6 @@ There are several ways to help out:
 ```bash
 composer validate --strict
 vendor/bin/php-cs-fixer fix --config ./ci/php-cs-fixer.php
-vendor/bin/phpstan analyse -c ci/phpstan.neon
 vendor/bin/phpstan analyse -c ci/phpstan-phpat.neon
 vendor/bin/psalm -c ci/psalm.xml
 vendor/bin/phpunit tests/unit/

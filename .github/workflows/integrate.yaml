@@ -87,7 +87,7 @@ jobs:
         run: "vendor/bin/phpstan analyse -c ci/phpstan-phpat.neon"
 
   static-code-analysis:
-    name: "Static Code Analysis"
+    name: "Static Code and Architecture analysis"
     runs-on: "ubuntu-latest"
     strategy:
       matrix:
