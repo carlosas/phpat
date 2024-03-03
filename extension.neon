@@ -30,6 +30,12 @@ services:
 		tags:
 			- phpstan.rules.rule
 
+	# ShouldNotBeReadonly rules
+	-
+		class: PHPat\Rule\Assertion\Declaration\ShouldNotBeReadonly\IsReadonlyRule
+		tags:
+			- phpstan.rules.rule
+
 	# ShouldBeAbstract rules
 	-
 		class: PHPat\Rule\Assertion\Declaration\ShouldBeAbstract\AbstractRule
@@ -77,6 +83,12 @@ services:
 	# ShouldExtend rules
 	-
 		class: PHPat\Rule\Assertion\Relation\ShouldExtend\ParentClassRule
+		tags:
+			- phpstan.rules.rule
+
+	# ShouldInclude rules
+	-
+		class: PHPat\Rule\Assertion\Relation\ShouldInclude\IncludedTraitsRule
 		tags:
 			- phpstan.rules.rule
 
@@ -149,6 +161,10 @@ services:
 		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\StaticMethodRule
 		tags:
 			- phpstan.rules.rule
+	-
+		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\CatchBlockRule
+		tags:
+			- phpstan.rules.rule
 
 	# CanOnlyDepend rules
 	-
@@ -219,6 +235,10 @@ services:
 		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\StaticMethodRule
 		tags:
 			- phpstan.rules.rule
+	-
+		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\CatchBlockRule
+		tags:
+			- phpstan.rules.rule
 
 	# ShouldNotConstruct rules
 	-
@@ -235,6 +255,12 @@ services:
 	# ShouldNotImplement rules
 	-
 		class: PHPat\Rule\Assertion\Relation\ShouldNotImplement\ImplementedInterfacesRule
+		tags:
+			- phpstan.rules.rule
+
+	# ShouldNotInclude rules
+	-
+		class: PHPat\Rule\Assertion\Relation\ShouldNotInclude\IncludedTraitsRule
 		tags:
 			- phpstan.rules.rule
 

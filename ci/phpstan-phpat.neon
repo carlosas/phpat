@@ -2,10 +2,15 @@ includes:
 	- ../extension.neon
 
 parameters:
-    level: 0
+    level: 8
     paths:
         - ../src
+        - ../tests/unit/rules
         - ../tests/architecture
+    ignoreErrors:
+        -
+            message: "#no value type specified in iterable type array\\.$#"
+            path: *
     phpat:
         ignore_built_in_classes: false
         show_rule_names: true
