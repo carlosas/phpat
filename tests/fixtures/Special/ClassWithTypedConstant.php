@@ -2,6 +2,10 @@
 
 namespace Tests\PHPat\fixtures\Special;
 
+if (PHP_VERSION_ID < 80300) {
+    return;
+}
+
 /*
  * WARNING: This file is excluded from the composer autoload.
  */

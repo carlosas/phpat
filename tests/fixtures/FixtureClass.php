@@ -91,13 +91,6 @@ class FixtureClass extends SimpleAbstractClass implements SimpleInterface
         return new $modelClass();
     }
 
-    public function catchException(): void
-    {
-        try {
-        } catch (SimpleException $e) {
-        }
-    }
-
     #[SimpleAttribute(SimpleClass::class)]
     public function methodWithAllAttributes(#[SimpleAttribute] int $number): int
     {
@@ -114,5 +107,12 @@ class FixtureClass extends SimpleAbstractClass implements SimpleInterface
         $fn4 = #[SimpleAttribute] static fn (int $a) => $a + 1;
 
         return $fn1($number) + $fn2($number) + $fn3($number) + $fn4($number);
+    }
+
+    public function catchException(): void
+    {
+        try {
+        } catch (SimpleException $e) {
+        }
     }
 }
