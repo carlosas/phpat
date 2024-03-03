@@ -20,10 +20,7 @@ jobs:
     strategy:
       matrix:
         php-version:
-          - "8.0"
-          - "8.1"
-          - "8.2"
-          #- "8.3" disabled until php-cs-fixer supports it
+          - "8.3"
         dependencies:
           - "highest"
     steps:
@@ -52,48 +49,13 @@ jobs:
       - name: "Run friendsofphp/php-cs-fixer"
         run: "vendor/bin/php-cs-fixer check --config ./ci/php-cs-fixer.php"
 
-  architecture-analysis:
-    name: "Architecture analysis"
-    runs-on: "ubuntu-latest"
-    strategy:
-      matrix:
-        php-version:
-          - "8.0"
-          - "8.1"
-          - "8.2"
-          - "8.3"
-        dependencies:
-          - "highest"
-    steps:
-      - name: "Checkout"
-        uses: "actions/checkout@v2"
-      - name: "Install PHP with extensions"
-        uses: "shivammathur/setup-php@v2"
-        with:
-          coverage: "none"
-          extensions: "${{ env.PHP_EXTENSIONS }}"
-          php-version: "${{ matrix.php-version }}"
-      - name: "Determine composer cache directory"
-        uses: "./.github/actions/composer/composer/determine-cache-directory"
-      - name: "Cache dependencies installed with composer"
-        uses: "actions/cache@v2"
-        with:
-          path: "${{ env.COMPOSER_CACHE_DIR }}"
-          key: "php-${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-${{ hashFiles('composer.lock') }}"
-          restore-keys: "php-${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-"
-      - name: "Install ${{ matrix.dependencies }} dependencies with composer"
-        uses: "./.github/actions/composer/composer/install"
-        with:
-          dependencies: "${{ matrix.dependencies }}"
-      - name: "Run phpstan+phpat for architecture tests"
-        run: "vendor/bin/phpstan analyse -c ci/phpstan-phpat.neon"
-
   static-code-analysis:
-    name: "Static Code Analysis"
+    name: "Static Code and Architecture analysis"
     runs-on: "ubuntu-latest"
     strategy:
       matrix:
         php-version:
+          - "7.4"
           - "8.0"
           - "8.1"
           - "8.2"
@@ -121,9 +83,9 @@ jobs:
         uses: "./.github/actions/composer/composer/install"
         with:
           dependencies: "${{ matrix.dependencies }}"
-      - name: "Run phpstan/phpstan"
-        run: "vendor/bin/phpstan analyse -c ci/phpstan.neon"
-      - name: "Run vimeo/psalm"
+      - name: "Run phpstan+phpat"
+        run: "vendor/bin/phpstan analyse -c ci/phpstan-phpat.neon"
+      - name: "Run psalm"
         run: "vendor/bin/psalm -c ci/psalm.xml"
 
   tests:
@@ -132,6 +94,7 @@ jobs:
     strategy:
       matrix:
         php-version:
+          - "7.4"
           - "8.0"
           - "8.1"
           - "8.2"

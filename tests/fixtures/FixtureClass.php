@@ -108,4 +108,11 @@ class FixtureClass extends SimpleAbstractClass implements SimpleInterface
 
         return $fn1($number) + $fn2($number) + $fn3($number) + $fn4($number);
     }
+
+    public function catchException(): void
+    {
+        try {
+        } catch (SimpleException $e) {
+        }
+    }
 }

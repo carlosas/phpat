@@ -78,4 +78,12 @@ class SelectorPrimitive
     {
         return new AppliesAttribute($fqcn, $regex);
     }
+
+    /**
+     * @param class-string|non-empty-string $fqcn
+     */
+    public static function includes(string $fqcn, bool $regex = false): ClassIncludes
+    {
+        return new ClassIncludes($fqcn, $regex);
+    }
 }

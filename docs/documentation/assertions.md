@@ -21,6 +21,8 @@ It asserts that the selected classes are **interfaces**.
 ## shouldBeReadonly()
 It asserts that the selected classes are declared as **readonly**.
 
+Also available: `shouldNotBeReadonly()`
+
 ## shouldHaveOnlyOnePublicMethod()
 It asserts that the selected classes only have **one public method** (besides constructor).
 
@@ -33,6 +35,11 @@ Also available: `shouldNotExtend()`
 It asserts that the selected classes **implement** the target interfaces.
 
 Also available: `shouldNotImplement()`
+
+## shouldInclude()
+It asserts that the selected classes **include** the target traits.
+
+Also available: `shouldNotInclude()`
 
 ## shouldNotDependOn()
 It asserts that the selected classes **do not depend** on the target classes.

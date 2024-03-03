@@ -10,58 +10,68 @@ use PHPat\Rule\Assertion\Declaration\ShouldBeReadonly\ShouldBeReadonly;
 use PHPat\Rule\Assertion\Declaration\ShouldHaveOnlyOnePublicMethod\ShouldHaveOnlyOnePublicMethod;
 use PHPat\Rule\Assertion\Declaration\ShouldNotBeAbstract\ShouldNotBeAbstract;
 use PHPat\Rule\Assertion\Declaration\ShouldNotBeFinal\ShouldNotBeFinal;
+use PHPat\Rule\Assertion\Declaration\ShouldNotBeReadonly\ShouldNotBeReadonly;
 use PHPat\Rule\Assertion\Relation\CanOnlyDepend\CanOnlyDepend;
 use PHPat\Rule\Assertion\Relation\ShouldApplyAttribute\ShouldApplyAttribute;
 use PHPat\Rule\Assertion\Relation\ShouldExtend\ShouldExtend;
 use PHPat\Rule\Assertion\Relation\ShouldImplement\ShouldImplement;
+use PHPat\Rule\Assertion\Relation\ShouldInclude\ShouldInclude;
 use PHPat\Rule\Assertion\Relation\ShouldNotConstruct\ShouldNotConstruct;
 use PHPat\Rule\Assertion\Relation\ShouldNotDepend\ShouldNotDepend;
 use PHPat\Rule\Assertion\Relation\ShouldNotExtend\ShouldNotExtend;
 use PHPat\Rule\Assertion\Relation\ShouldNotImplement\ShouldNotImplement;
+use PHPat\Rule\Assertion\Relation\ShouldNotInclude\ShouldNotInclude;
 
 class AssertionStep extends AbstractStep
 {
-    public function shouldBeNamed(string $classname, bool $regex = false): Rule
+    public function shouldBeNamed(string $classname, bool $regex = false): TipOrBuildStep
     {
         $this->rule->assertion = ShouldBeNamed::class;
         $this->rule->params = ['isRegex' => $regex, 'classname' => $classname];
 
-        return new BuildStep($this->rule);
+        return new TipOrBuildStep($this->rule);
     }
 
-    public function shouldBeAbstract(): Rule
+    public function shouldBeAbstract(): TipOrBuildStep
     {
         $this->rule->assertion = ShouldBeAbstract::class;
 
-        return new BuildStep($this->rule);
+        return new TipOrBuildStep($this->rule);
     }
 
-    public function shouldNotBeAbstract(): Rule
+    public function shouldNotBeAbstract(): TipOrBuildStep
     {
         $this->rule->assertion = ShouldNotBeAbstract::class;
 
-        return new BuildStep($this->rule);
+        return new TipOrBuildStep($this->rule);
     }
 
-    public function shouldBeReadonly(): Rule
+    public function shouldBeReadonly(): TipOrBuildStep
     {
         $this->rule->assertion = ShouldBeReadonly::class;
 
-        return new BuildStep($this->rule);
+        return new TipOrBuildStep($this->rule);
     }
 
-    public function shouldBeFinal(): Rule
+    public function shouldNotBeReadonly(): TipOrBuildStep
+    {
+        $this->rule->assertion = ShouldNotBeReadonly::class;
+
+        return new TipOrBuildStep($this->rule);
+    }
+
+    public function shouldBeFinal(): TipOrBuildStep
     {
         $this->rule->assertion = ShouldBeFinal::class;
 
-        return new BuildStep($this->rule);
+        return new TipOrBuildStep($this->rule);
     }
 
-    public function shouldNotBeFinal(): Rule
+    public function shouldNotBeFinal(): TipOrBuildStep
     {
         $this->rule->assertion = ShouldNotBeFinal::class;
 
-        return new BuildStep($this->rule);
+        return new TipOrBuildStep($this->rule);
     }
 
     public function shouldNotDependOn(): TargetStep
@@ -106,6 +116,20 @@ class AssertionStep extends AbstractStep
         return new TargetStep($this->rule);
     }
 
+    public function shouldNotInclude(): TargetStep
+    {
+        $this->rule->assertion = ShouldNotInclude::class;
+
+        return new TargetStep($this->rule);
+    }
+
+    public function shouldInclude(): TargetStep
+    {
+        $this->rule->assertion = ShouldInclude::class;
+
+        return new TargetStep($this->rule);
+    }
+
     public function shouldExtend(): TargetStep
     {
         $this->rule->assertion = ShouldExtend::class;
@@ -113,11 +137,11 @@ class AssertionStep extends AbstractStep
         return new TargetStep($this->rule);
     }
 
-    public function shouldHaveOnlyOnePublicMethod(): Rule
+    public function shouldHaveOnlyOnePublicMethod(): TipOrBuildStep
     {
         $this->rule->assertion = ShouldHaveOnlyOnePublicMethod::class;
 
-        return new BuildStep($this->rule);
+        return new TipOrBuildStep($this->rule);
     }
 
     public function shouldApplyAttribute(): TargetStep
@@ -127,10 +151,10 @@ class AssertionStep extends AbstractStep
         return new TargetStep($this->rule);
     }
 
-    public function shouldBeInterface(): Rule
+    public function shouldBeInterface(): TipOrBuildStep
     {
         $this->rule->assertion = ShouldBeInterface::class;
 
-        return new BuildStep($this->rule);
+        return new TipOrBuildStep($this->rule);
     }
 }
