@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.10.16
+* Fix template names getting resolved as FQCNs in throws docs.
+
 ## 0.10.15
 * Add `shouldNotBeReadonly` assertion.
 * Fix return types when building declaration rules with tips.
