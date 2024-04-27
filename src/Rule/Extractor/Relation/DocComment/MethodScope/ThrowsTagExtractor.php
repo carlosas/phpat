@@ -4,6 +4,7 @@ namespace PHPat\Rule\Extractor\Relation\DocComment\MethodScope;
 
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
+use PHPStan\Node\InClassMethodNode;
 use PHPStan\PhpDoc\Tag\ThrowsTag;
 use PHPStan\ShouldNotHappenException;
 
@@ -11,7 +12,7 @@ trait ThrowsTagExtractor
 {
     public function getNodeType(): string
     {
-        return Node\Stmt\ClassMethod::class;
+        return InClassMethodNode::class;
     }
 
     /**
