@@ -55,7 +55,7 @@ See the complete list of options in the [Configuration](documentation/configurat
 
 ### Test definition
 
-There are different [Selectors](doc/SELECTORS.md) available to select the classes involved in a rule, and a wide set of [Assertions](doc/ASSERTIONS.md).
+There are different [Selectors](documentation/selectors.md) available to select the classes involved in a rule, and a wide set of [Assertions](documentation/assertions.md).
 
 Here's an example test with a rule:
 
