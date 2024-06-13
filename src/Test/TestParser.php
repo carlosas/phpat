@@ -39,7 +39,6 @@ class TestParser
 
         $rules = [];
         foreach ($tests as $test) {
-            $methods = [];
             $reflected = $test->getNativeReflection();
             $classname = $reflected->getName();
             $object = $reflected->newInstanceWithoutConstructor();
@@ -49,7 +48,13 @@ class TestParser
                     || preg_match('/^(test)[A-Za-z0-9_\x80-\xff]*/', $method->getName())
                 ) {
                     $ruleBuilder = $object->{$method->getName()}();
-                    $rules[$classname.':'.$method->getName()] = $ruleBuilder;
+                    if (is_iterable($ruleBuilder)) {
+                        foreach ($ruleBuilder as $name => $rule) {
+                            $rules[$classname.':'.$method->getName().':'.$name] = $rule;
+                        }
+                    } else {
+                        $rules[$classname.':'.$method->getName()] = $ruleBuilder;
+                    }
                 }
             }
         }
