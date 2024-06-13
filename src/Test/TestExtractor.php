@@ -37,7 +37,7 @@ final class TestExtractor implements TestExtractorInterface
     }
 
     /**
-     * @param class-string $test
+     * @param class-string<object> $test
      */
     private function reflectTest(string $test): ?\ReflectionClass
     {
