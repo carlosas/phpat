@@ -45,6 +45,12 @@
         <UndefinedClass>
             <errorLevel type="suppress"><file name="../src/Test/TestParser.php" /></errorLevel>
         </UndefinedClass>
+        <InvalidReturnType>
+            <errorLevel type="suppress"><file name="../src/Test/TestExtractor.php" /></errorLevel>
+        </InvalidReturnType>
+        <InvalidReturnStatement>
+            <errorLevel type="suppress"><file name="../src/Test/TestExtractor.php" /></errorLevel>
+        </InvalidReturnStatement>
 
         <PropertyNotSetInConstructor>
             <errorLevel type="suppress"><directory name="../tests/unit/rules/" /></errorLevel>
