@@ -6,9 +6,6 @@ use PHPat\Rule\Assertion\Relation\RelationAssertion;
 
 final class RuleValidator implements RuleValidatorInterface
 {
-    /**
-     * @inheritDoc
-     */
     public function validate(Rule $rule): void
     {
         if ($rule->getSubjects() === []) {

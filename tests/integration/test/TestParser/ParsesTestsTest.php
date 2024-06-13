@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Tests\PHPat\integration\test\TestParser;
 
@@ -12,6 +10,10 @@ use PHPat\Test\TestExtractorInterface;
 use PHPat\Test\TestParser;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 final class ParsesTestsTest extends TestCase
 {
     public function testClassCollectsMultipleRulesFromFunction(): void
@@ -23,24 +25,22 @@ final class ParsesTestsTest extends TestCase
                     yield new \ReflectionClass(TestClass::class);
                 }
             },
-            new class implements RuleValidatorInterface {
-                public function validate(Rule $rule): void
-                {
-                }
+            new class() implements RuleValidatorInterface {
+                public function validate(Rule $rule): void {}
             },
         );
 
         $rule1 = PHPat::rule()->classes(Selector::classname('1'))();
-        $rule1->ruleName = TestClass::class . ':test_rules_from_iterator' . ':one';
+        $rule1->ruleName = TestClass::class.':test_rules_from_iterator:one';
 
         $rule2 = PHPat::rule()->classes(Selector::classname('2'))();
-        $rule2->ruleName = TestClass::class . ':test_rules_from_iterator' . ':two';
+        $rule2->ruleName = TestClass::class.':test_rules_from_iterator:two';
 
         $rule3 = PHPat::rule()->classes(Selector::classname('3'))();
-        $rule3->ruleName = TestClass::class . ':test_rule';
+        $rule3->ruleName = TestClass::class.':test_rule';
 
         $rule4 = PHPat::rule()->classes(Selector::classname('4'))();
-        $rule4->ruleName = TestClass::class . ':test_rule_from_attribute';
+        $rule4->ruleName = TestClass::class.':test_rule_from_attribute';
 
         self::assertEquals([
             $rule1,

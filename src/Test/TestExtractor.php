@@ -19,9 +19,6 @@ final class TestExtractor implements TestExtractorInterface
         $this->reflectionProvider = $reflectionProvider;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function __invoke(): iterable
     {
         foreach ($this->container->getServicesByTag(self::TEST_TAG) as $test) {
@@ -37,7 +34,7 @@ final class TestExtractor implements TestExtractorInterface
     }
 
     /**
-     * @param class-string<object> $test
+     * @param  class-string<object>     $test
      * @return \ReflectionClass<object>
      */
     private function reflectTest(string $test): ?\ReflectionClass
