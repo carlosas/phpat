@@ -34,8 +34,8 @@ final class TestExtractor implements TestExtractorInterface
     }
 
     /**
-     * @param  class-string<object>     $test
-     * @return \ReflectionClass<object>
+     * @param  class-string                                  $test
+     * @return null|\ReflectionClass<object>|\ReflectionEnum
      */
     private function reflectTest(string $test): ?\ReflectionClass
     {
