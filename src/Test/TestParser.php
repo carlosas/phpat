@@ -9,10 +9,10 @@ class TestParser
 {
     /** @var array<Rule> */
     private static array $result = [];
-    private TestExtractor $extractor;
-    private RuleValidator $ruleValidator;
+    private TestExtractorInterface $extractor;
+    private RuleValidatorInterface $ruleValidator;
 
-    public function __construct(TestExtractor $extractor, RuleValidator $ruleValidator)
+    public function __construct(TestExtractorInterface $extractor, RuleValidatorInterface $ruleValidator)
     {
         $this->extractor = $extractor;
         $this->ruleValidator = $ruleValidator;
@@ -38,8 +38,7 @@ class TestParser
         $tests = ($this->extractor)();
 
         $rules = [];
-        foreach ($tests as $test) {
-            $reflected = $test->getNativeReflection();
+        foreach ($tests as $reflected) {
             $classname = $reflected->getName();
             $object = $reflected->newInstanceWithoutConstructor();
             foreach ($reflected->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {

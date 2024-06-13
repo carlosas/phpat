@@ -4,10 +4,10 @@ namespace PHPat\Test;
 
 use PHPat\Rule\Assertion\Relation\RelationAssertion;
 
-final class RuleValidator
+final class RuleValidator implements RuleValidatorInterface
 {
     /**
-     * @throws \Exception
+     * @inheritDoc
      */
     public function validate(Rule $rule): void
     {
