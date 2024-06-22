@@ -9,10 +9,10 @@ class TestParser
 {
     /** @var array<Rule> */
     private static array $result = [];
-    private TestExtractor $extractor;
-    private RuleValidator $ruleValidator;
+    private TestExtractorInterface $extractor;
+    private RuleValidatorInterface $ruleValidator;
 
-    public function __construct(TestExtractor $extractor, RuleValidator $ruleValidator)
+    public function __construct(TestExtractorInterface $extractor, RuleValidatorInterface $ruleValidator)
     {
         $this->extractor = $extractor;
         $this->ruleValidator = $ruleValidator;
@@ -38,18 +38,22 @@ class TestParser
         $tests = ($this->extractor)();
 
         $rules = [];
-        foreach ($tests as $test) {
-            $methods = [];
-            $reflected = $test->getNativeReflection();
+        foreach ($tests as $reflected) {
             $classname = $reflected->getName();
             $object = $reflected->newInstanceWithoutConstructor();
             foreach ($reflected->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
                 if (
-                    !empty($method->getAttributes(TestRule::class))
+                    method_exists($method, 'getAttributes') && !empty($method->getAttributes(TestRule::class))
                     || preg_match('/^(test)[A-Za-z0-9_\x80-\xff]*/', $method->getName())
                 ) {
                     $ruleBuilder = $object->{$method->getName()}();
-                    $rules[$classname.':'.$method->getName()] = $ruleBuilder;
+                    if (is_iterable($ruleBuilder)) {
+                        foreach ($ruleBuilder as $name => $rule) {
+                            $rules[$classname.':'.$method->getName().':'.$name] = $rule;
+                        }
+                    } else {
+                        $rules[$classname.':'.$method->getName()] = $ruleBuilder;
+                    }
                 }
             }
         }

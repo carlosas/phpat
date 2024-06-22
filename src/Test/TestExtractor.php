@@ -4,10 +4,9 @@ namespace PHPat\Test;
 
 use PHPat\ShouldNotHappenException;
 use PHPStan\DependencyInjection\Container;
-use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 
-final class TestExtractor
+final class TestExtractor implements TestExtractorInterface
 {
     private const TEST_TAG = 'phpat.test';
 
@@ -20,9 +19,6 @@ final class TestExtractor
         $this->reflectionProvider = $reflectionProvider;
     }
 
-    /**
-     * @return iterable<ClassReflection>
-     */
     public function __invoke(): iterable
     {
         foreach ($this->container->getServicesByTag(self::TEST_TAG) as $test) {
@@ -38,14 +34,15 @@ final class TestExtractor
     }
 
     /**
-     * @param class-string $test
+     * @param  class-string                  $test
+     * @return null|\ReflectionClass<object>
      */
-    private function reflectTest(string $test): ?ClassReflection
+    private function reflectTest(string $test): ?\ReflectionClass
     {
         if (!$this->reflectionProvider->hasClass($test)) {
             return null;
         }
 
-        return $this->reflectionProvider->getClass($test);
+        return $this->reflectionProvider->getClass($test)->getNativeReflection();
     }
 }

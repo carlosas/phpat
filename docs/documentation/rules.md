@@ -86,3 +86,35 @@ final class UserDomainTest extends AbstractDomainTest
 ```
 
 Note that you would only need to register the `UserDomainTest` class as a PHPat test in the PHPStan config file.
+
+## Dynamic Rule Sets
+It is possible to dynamically create rules by returning an iterable of Rules from your method:
+    
+```php
+namespace App\Tests\Architecture;
+
+use PHPat\Selector\Selector;
+use PHPat\Test\Builder\Rule;
+use PHPat\Test\PHPat;
+
+final class ConfigurationTest
+{
+    private const DOMAINS = [
+        'App\Domain1',
+        'App\Domain2',
+    ];
+
+    /**
+     * @return iterable<string, Rule>
+     */
+    public function test_domain_independence(): iterable
+    {
+        foreach(self::DOMAINS as $domain) {
+            yield $domain => PHPat::rule()
+                ->classes(Selector::inNamespace($domain))
+                ->canOnlyDependOn()
+                ->classes(Selector::inNamespace($domain));
+        }
+    }
+}
+```
