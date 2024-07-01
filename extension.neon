@@ -72,7 +72,13 @@ services:
 		tags:
 			- phpstan.rules.rule
 
-    # # # # # RELATION RULES # # # # #
+	# ShouldNotExist rules
+	-
+		class: PHPat\Rule\Assertion\Declaration\ShouldNotExist\ExistsRule
+		tags:
+			- phpstan.rules.rule
+
+	# # # # # RELATION RULES # # # # #
 
 	# ShouldImplement rules
 	-

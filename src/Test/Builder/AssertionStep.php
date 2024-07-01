@@ -11,6 +11,7 @@ use PHPat\Rule\Assertion\Declaration\ShouldHaveOnlyOnePublicMethod\ShouldHaveOnl
 use PHPat\Rule\Assertion\Declaration\ShouldNotBeAbstract\ShouldNotBeAbstract;
 use PHPat\Rule\Assertion\Declaration\ShouldNotBeFinal\ShouldNotBeFinal;
 use PHPat\Rule\Assertion\Declaration\ShouldNotBeReadonly\ShouldNotBeReadonly;
+use PHPat\Rule\Assertion\Declaration\ShouldNotExist\ShouldNotExist;
 use PHPat\Rule\Assertion\Relation\CanOnlyDepend\CanOnlyDepend;
 use PHPat\Rule\Assertion\Relation\ShouldApplyAttribute\ShouldApplyAttribute;
 use PHPat\Rule\Assertion\Relation\ShouldExtend\ShouldExtend;
@@ -154,6 +155,13 @@ class AssertionStep extends AbstractStep
     public function shouldBeInterface(): TipOrBuildStep
     {
         $this->rule->assertion = ShouldBeInterface::class;
+
+        return new TipOrBuildStep($this->rule);
+    }
+
+    public function shouldNotExist(): TipOrBuildStep
+    {
+        $this->rule->assertion = ShouldNotExist::class;
 
         return new TipOrBuildStep($this->rule);
     }
