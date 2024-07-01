@@ -74,7 +74,7 @@ services:
 
 	# ShouldNotExist rules
 	-
-		class: PHPat\Rule\Assertion\Declaration\ShouldNotExist\ShouldNotExistRule
+		class: PHPat\Rule\Assertion\Declaration\ShouldNotExist\ExistsRule
 		tags:
 			- phpstan.rules.rule
 

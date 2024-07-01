@@ -3,8 +3,8 @@
 namespace Tests\PHPat\unit\rules\ShouldNotExist;
 
 use PHPat\Configuration;
+use PHPat\Rule\Assertion\Declaration\ShouldNotExist\ExistsRule;
 use PHPat\Rule\Assertion\Declaration\ShouldNotExist\ShouldNotExist;
-use PHPat\Rule\Assertion\Declaration\ShouldNotExist\ShouldNotExistRule;
 use PHPat\Selector\Classname;
 use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;
@@ -38,7 +38,7 @@ class ShouldNotExistTest extends RuleTestCase
             []
         );
 
-        return new ShouldNotExistRule(
+        return new ExistsRule(
             new StatementBuilderFactory($testParser),
             new Configuration(false, true, false),
             $this->createReflectionProvider(),

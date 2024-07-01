@@ -6,7 +6,6 @@ use PHPat\Configuration;
 use PHPat\Rule\Assertion\Declaration\DeclarationAssertion;
 use PHPat\Rule\Assertion\Declaration\ValidationTrait;
 use PHPat\Statement\Builder\StatementBuilderFactory;
-use PHPStan\Node\InClassNode;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\FileTypeMapper;
@@ -30,13 +29,16 @@ abstract class ShouldNotExist extends DeclarationAssertion
         );
     }
 
-    public function getNodeType(): string
-    {
-        return InClassNode::class;
-    }
-
     protected function applyValidation(string $ruleName, ClassReflection $subject, bool $meetsDeclaration, array $tips, array $params = []): array
     {
         return $this->applyShouldNot($ruleName, $subject, $meetsDeclaration, $tips, $params);
+    }
+
+    protected function getMessage(string $ruleName, string $subject, array $params = []): string
+    {
+        return $this->prepareMessage(
+            $ruleName,
+            sprintf('%s should not exist', $subject)
+        );
     }
 }
