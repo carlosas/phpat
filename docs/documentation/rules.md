@@ -38,7 +38,40 @@ final class ConfigurationTest
 }
 ```
 
-## Reusing rules
+## Dynamic Rule Sets
+
+It is possible to dynamically create rules by returning an iterable of Rules from your method:
+
+```php
+namespace App\Tests\Architecture;
+
+use PHPat\Selector\Selector;
+use PHPat\Test\Builder\Rule;
+use PHPat\Test\PHPat;
+
+final class ConfigurationTest
+{
+    private const DOMAINS = [
+        'App\Domain1',
+        'App\Domain2',
+    ];
+
+    /**
+     * @return iterable<Rule>
+     */
+    public function test_domain_independence(): iterable
+    {
+        foreach(self::DOMAINS as $domain) {
+            yield PHPat::rule()
+                ->classes(Selector::inNamespace($domain))
+                ->canOnlyDependOn()
+                ->classes(Selector::inNamespace($domain));
+        }
+    }
+}
+```
+
+## Extending test classes
 
 You might want to reuse rules in different tests or parametrize them for a modular scenario.
 
@@ -46,7 +79,7 @@ You might want to reuse rules in different tests or parametrize them for a modul
 
 Let's see an example:
 
-You are splitting bounded contexts, and you want the domain of each context to be independent from the others.
+You are splitting bounded contexts, and you want the domain of each context to be independent of the others.
 Your rule should check that classes in the domain of a context do not depend on classes in the domain of another context.
 
 This is what you can do:
@@ -86,35 +119,3 @@ final class UserDomainTest extends AbstractDomainTest
 ```
 
 Note that you would only need to register the `UserDomainTest` class as a PHPat test in the PHPStan config file.
-
-## Dynamic Rule Sets
-It is possible to dynamically create rules by returning an iterable of Rules from your method:
-    
-```php
-namespace App\Tests\Architecture;
-
-use PHPat\Selector\Selector;
-use PHPat\Test\Builder\Rule;
-use PHPat\Test\PHPat;
-
-final class ConfigurationTest
-{
-    private const DOMAINS = [
-        'App\Domain1',
-        'App\Domain2',
-    ];
-
-    /**
-     * @return iterable<string, Rule>
-     */
-    public function test_domain_independence(): iterable
-    {
-        foreach(self::DOMAINS as $domain) {
-            yield $domain => PHPat::rule()
-                ->classes(Selector::inNamespace($domain))
-                ->canOnlyDependOn()
-                ->classes(Selector::inNamespace($domain));
-        }
-    }
-}
-```
