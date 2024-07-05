@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.10.18
+* Add `shouldNotExist()` assertion.
+
+## 0.10.17
+* Add the ability to define multiple Rules in the same test function.
+
 ## 0.10.16
 * Fix template names getting resolved as FQCNs in throws docs.
 
