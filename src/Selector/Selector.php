@@ -4,6 +4,7 @@ namespace PHPat\Selector;
 
 use PHPat\Selector\Modifier\AndModifier;
 use PHPat\Selector\Modifier\NotModifier;
+use PHPat\Selector\Modifier\XorModifier;
 
 final class Selector extends SelectorPrimitive
 {
@@ -15,5 +16,10 @@ final class Selector extends SelectorPrimitive
     public static function NOT(SelectorInterface $selector): NotModifier
     {
         return new NotModifier($selector);
+    }
+
+    public static function XOR(SelectorInterface ...$selector): XorModifier
+    {
+        return new XorModifier($selector);
     }
 }
