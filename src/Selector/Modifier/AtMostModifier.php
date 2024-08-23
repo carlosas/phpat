@@ -22,7 +22,7 @@ final class AtMostModifier implements SelectorInterface
 
         foreach ($this->selectors as $selector) {
             if ($selector->matches($classReflection)) {
-                $matches++;
+                ++$matches;
             }
         }
 
@@ -31,7 +31,7 @@ final class AtMostModifier implements SelectorInterface
 
     public function getName(): string
     {
-        return 'at-most-' . $this->max . '-of: ' . implode(
+        return 'at-most-'.$this->max.'-of: '.implode(
             ', ',
             array_map(static fn (SelectorInterface $selector) => $selector->getName(), $this->selectors),
         );
