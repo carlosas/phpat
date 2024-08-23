@@ -22,7 +22,7 @@ final class AtLeastModifier implements SelectorInterface
 
         foreach ($this->selectors as $selector) {
             if ($selector->matches($classReflection)) {
-                $matches++;
+                ++$matches;
             }
         }
 
@@ -31,10 +31,9 @@ final class AtLeastModifier implements SelectorInterface
 
     public function getName(): string
     {
-        return 'at-least-' . $this->min . '-of: ' .  implode(
+        return 'at-least-'.$this->min.'-of: '.implode(
             ', ',
             array_map(static fn (SelectorInterface $selector) => $selector->getName(), $this->selectors),
         );
     }
 }
-
