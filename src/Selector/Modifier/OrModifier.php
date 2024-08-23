@@ -1,0 +1,36 @@
+<?php declare(strict_types=1);
+
+namespace PHPat\Selector\Modifier;
+
+use PHPat\Selector\SelectorInterface;
+use PHPStan\Reflection\ClassReflection;
+
+final class OrModifier implements SelectorInterface
+{
+    /** @var array<SelectorInterface> */
+    private array $selectors;
+
+    public function __construct(SelectorInterface ...$selector)
+    {
+        $this->selectors = array_values($selector);
+    }
+
+    public function matches(ClassReflection $classReflection): bool
+    {
+        foreach ($this->selectors as $selector) {
+            if ($selector->matches($classReflection)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function getName(): string
+    {
+        return implode(
+            ':or:',
+            array_map(fn (SelectorInterface $selector) => $selector->getName(), $this->selectors),
+        );
+    }
+}
