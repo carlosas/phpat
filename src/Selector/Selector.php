@@ -20,6 +20,6 @@ final class Selector extends SelectorPrimitive
 
     public static function XOR(SelectorInterface ...$selector): XorModifier
     {
-        return new XorModifier($selector);
+        return new XorModifier(...$selector);
     }
 }
