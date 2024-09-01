@@ -9,6 +9,21 @@ class SelectorPrimitive
         return new All();
     }
 
+    public static function isException(): IsException
+    {
+        return new IsException();
+    }
+
+    public static function isThrowable(): IsThrowable
+    {
+        return new IsThrowable();
+    }
+
+    public static function isError(): IsError
+    {
+        return new IsError();
+    }
+
     /**
      * @deprecated
      * @see Selector::isInterface()
