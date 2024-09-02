@@ -144,7 +144,7 @@ Selector::OneOf(
 This will select all classes that are in the `App\User` namespace or are abstract or are traits, but not more than one of them.
 
 
-## Selector::AtLeastXOf(int $min, ...$selectors)
+## Selector::AtLeastCountOf(int $min, ...$selectors)
 
 Selects classes that match at least X of the inner Selectors. (at least x of operator)
 
@@ -157,7 +157,7 @@ Selector::AtLeastCountOf(2,
 
 This will select all classes that are in the `App\User` namespace and are abstract.
 
-## Selector::AtMostXOf(int $max, ...$selectors)
+## Selector::AtMostCountOf(int $max, ...$selectors)
 
 Selects classes that match at most X of the inner Selectors. (at most x of operator)
 
