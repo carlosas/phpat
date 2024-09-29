@@ -34,6 +34,15 @@ The first selector will select all classes in the `App\User\Domain` namespace.
 
 The second one will select all classes in a namespace matching the regular expression.
 
+## Selector::isError()
+Select classes that extend the `\Error` class.
+
+## Selector::isException()
+Select classes that extend the `\Exception` class.
+
+## Selector::isThrowable()
+Select classes that implement the `\Throwable` interface.
+
 ## Selector::implements()
 Select classes that implement the given interface.
 
