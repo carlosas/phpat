@@ -65,11 +65,6 @@ class SelectorPrimitive
         return new IsTrait();
     }
 
-    public static function isNotTrait(): IsNotTrait
-    {
-        return new IsNotTrait();
-    }
-
     /**
      * @deprecated
      * @see Selector::isReadonly()

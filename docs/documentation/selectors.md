@@ -64,10 +64,6 @@ Select all readonly classes.
 ## Selector::isTrait()
 Select all traits.
 
-## Selector::isNotTrait()
-Select all classes that are not traits.
-
-
 <br />
 
 ---
