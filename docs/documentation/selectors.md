@@ -101,3 +101,83 @@ Selector::NOT(
 ```
 
 This will select all classes that are not in the `App\User` namespace.
+
+## Selector::AllOf(...$selectors)
+
+Selects classes that match all the inner Selectors. (and operator)
+
+```php
+Selector::AllOf(
+    Selector::namespace('App\User'),
+    Selector::isAbstract()
+)
+```
+
+This will select all abstract classes in the `App\User` namespace.
+
+## Selector::AnyOf(...$selectors)
+
+Selects classes that match any of the inner Selectors. (or operator)
+
+```php
+Selector::AnyOf(
+    Selector::namespace('App\User'),
+    Selector::isAbstract()
+)
+```
+
+This will select all classes in the `App\User` namespace and all abstract classes.
+
+## Selector::NoneOf(...$selectors)
+
+Selects classes that do not match any of the inner Selectors. (not of operator)
+
+```php
+Selector::NoneOf(
+    Selector::namespace('App\User'),
+    Selector::isAbstract()
+)
+```
+
+This will select all classes that are not in the `App\User` namespace and are not abstract.
+
+## Selector::OneOf(...$selectors)
+
+Selects classes that match exactly one of the inner Selectors. (xor operator)
+
+```php
+Selector::OneOf(
+    Selector::namespace('App\User'),
+    Selector::isAbstract(),
+    Selector::isTrait()
+)
+```
+
+This will select all classes that are in the `App\User` namespace or are abstract or are traits, but not more than one of them.
+
+
+## Selector::AtLeastCountOf(int $min, ...$selectors)
+
+Selects classes that match at least X of the inner Selectors. (at least x of operator)
+
+```php
+Selector::AtLeastCountOf(2,
+    Selector::namespace('App\User'),
+    Selector::isAbstract()
+)
+```
+
+This will select all classes that are in the `App\User` namespace and are abstract.
+
+## Selector::AtMostCountOf(int $max, ...$selectors)
+
+Selects classes that match at most X of the inner Selectors. (at most x of operator)
+
+```php
+Selector::AtMostCountOf(1,
+    Selector::namespace('App\User'),
+    Selector::isAbstract()
+)
+```
+
+This will select all classes that are in the `App\User` namespace or are abstract, but not both.
