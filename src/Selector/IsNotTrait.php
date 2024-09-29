@@ -4,15 +4,15 @@ namespace PHPat\Selector;
 
 use PHPStan\Reflection\ClassReflection;
 
-final class IsNotFinal implements SelectorInterface
+final class IsNotTrait implements SelectorInterface
 {
     public function getName(): string
     {
-        return '-non final classes-';
+        return '-non trait classes-';
     }
 
     public function matches(ClassReflection $classReflection): bool
     {
-        return !$classReflection->isFinal();
+        return !$classReflection->isTrait();
     }
 }

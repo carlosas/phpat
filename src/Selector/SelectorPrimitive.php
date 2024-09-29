@@ -60,6 +60,16 @@ class SelectorPrimitive
         return new IsFinal();
     }
 
+    public static function isTrait(): IsTrait
+    {
+        return new IsTrait();
+    }
+
+    public static function isNotTrait(): IsNotTrait
+    {
+        return new IsNotTrait();
+    }
+
     /**
      * @deprecated
      * @see Selector::isReadonly()

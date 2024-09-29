@@ -46,11 +46,14 @@ Select all interfaces.
 ## Selector::appliesAttribute()
 Select classes that applies the given attribute.
 
-## Selector::isEnum()
-Select all enums.
-
 ## Selector::isAbstract()
 Select all abstract classes.
+
+## Selector::isAttribute()
+Select all attribute classes.
+
+## Selector::isEnum()
+Select all enums.
 
 ## Selector::isFinal()
 Select all final classes.
@@ -58,8 +61,12 @@ Select all final classes.
 ## Selector::isReadonly()
 Select all readonly classes.
 
-## Selector::isAttribute()
-Select all attribute classes.
+## Selector::isTrait()
+Select all traits.
+
+## Selector::isNotTrait()
+Select all classes that are not traits.
+
 
 <br />
 
