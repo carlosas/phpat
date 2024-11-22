@@ -59,10 +59,6 @@
             <errorLevel type="suppress"><directory name="../tests/unit/rules/" /></errorLevel>
         </PropertyNotSetInConstructor>
 
-        <MissingClassConstType>
-            <errorLevel type="suppress"><directory name="../src/" /></errorLevel>
-        </MissingClassConstType>
-
         <DeprecatedMethod>
             <errorLevel type="suppress"><file name="../src/Rule/Extractor/Relation/DocComment/ClassScope/PropertyTagExtractor.php" /></errorLevel>
         </DeprecatedMethod>
