@@ -7,6 +7,7 @@ use PHPat\Test\RelationRule;
 use PHPat\Test\Rule;
 use PhpParser\Node;
 use PHPStan\Rules\Rule as PHPStanRule;
+use function Amp\Iterator\concat;
 
 final class DeclarationStatementBuilder implements StatementBuilder
 {
@@ -66,11 +67,13 @@ final class DeclarationStatementBuilder implements StatementBuilder
     {
         $result = [];
         foreach ($rules as $rule) {
-            if ($rule->getAssertion() === $this->assertion) {
-                $ruleName = $this->extractRuleName($rule->getRuleName());
-                foreach ($rule->getSubjects() as $selector) {
-                    $result[] = [$ruleName, $selector, $rule->getSubjectExcludes(), $rule->getTips(), $rule->getParams()];
-                }
+            if ($rule->getAssertion() !== $this->assertion) {
+                continue;
+            }
+
+            $ruleName = $this->extractRuleName($rule->getRuleName());
+            foreach ($rule->getSubjects() as $selector) {
+                $result[] = [$ruleName, $selector, $rule->getSubjectExcludes(), $rule->getTips(), $rule->getParams()];
             }
         }
 
@@ -80,7 +83,11 @@ final class DeclarationStatementBuilder implements StatementBuilder
     private function extractRuleName(string $fullName): string
     {
         $pos = mb_strpos($fullName, ':');
+        $name = mb_substr($fullName, $pos !== false ? $pos + 1 : 0);
+        $sanitized = preg_replace_callback('/_([a-zA-Z])/', fn($matches) => strtoupper($matches[1]), $name);
+        $sanitized = preg_replace('/[^a-zA-Z0-9.]/', '', $sanitized);
+        $sanitized = preg_replace('/\.+/', '.', $sanitized);
 
-        return mb_substr($fullName, $pos !== false ? $pos + 1 : 0);
+        return trim($sanitized, '.');
     }
 }
