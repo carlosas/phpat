@@ -22,15 +22,18 @@ trait ClassnameExtractor
             return false;
         }
 
-        $pos = mb_strrpos($node->getClassReflection()->getName(), '\\');
-        $classname = $pos === false
-            ? $node->getClassReflection()->getName()
-            : mb_substr($node->getClassReflection()->getName(), $pos + 1);
+        $namespacedName = $node->getOriginalNode()->namespacedName;
 
-        if ($params['isRegex'] === true) {
-            return preg_match($params['classname'], $classname) === 1;
+        if (!$namespacedName instanceof Node\Name) {
+            return false;
         }
 
-        return $classname === $params['classname'];
+        $namespacedName = $namespacedName->toString();
+
+        if ($params['isRegex'] === true) {
+            return preg_match($params['classname'], $namespacedName) === 1;
+        }
+
+        return $namespacedName === $params['classname'];
     }
 }
