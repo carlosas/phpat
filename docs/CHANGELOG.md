@@ -1,7 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## 0.10.11
+## 0.10.20
+* Fix parent interfaces not recognized as extended.
+
+## 0.10.19
 * Add `IsTrait`  and `IsNotTrait` selectors.
 * Add `IsException`, `IsError`, and `IsThrowable` selectors.
 
