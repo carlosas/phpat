@@ -17,7 +17,6 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\IdentifierRuleError;
-use PHPStan\Rules\RuleError;
 use PHPStan\Type\FileTypeMapper;
 
 abstract class RelationAssertion implements Assertion
@@ -76,10 +75,10 @@ abstract class RelationAssertion implements Assertion
     abstract protected function getMessage(string $ruleName, string $subject, string $target): string;
 
     /**
-     * @param  array<SelectorInterface> $targets
-     * @param  array<SelectorInterface> $targetExcludes
-     * @param  array<class-string>      $nodes
-     * @param  array<string>            $tips
+     * @param  array<SelectorInterface>  $targets
+     * @param  array<SelectorInterface>  $targetExcludes
+     * @param  array<class-string>       $nodes
+     * @param  array<string>             $tips
      * @return list<IdentifierRuleError>
      */
     abstract protected function applyValidation(
@@ -101,7 +100,7 @@ abstract class RelationAssertion implements Assertion
         }
 
         // Can not skip if the rule is a ShouldExtend, ShouldImplement, ShouldInclude or ShouldApplyAttribute rule
-        if (in_array(self::class, [ShouldExtend::class, ShouldImplement::class, ShouldInclude::class, ShouldApplyAttribute::class])) {
+        if (in_array(self::class, [ShouldExtend::class, ShouldImplement::class, ShouldInclude::class, ShouldApplyAttribute::class], true)) {
             return true;
         }
 
@@ -120,7 +119,7 @@ abstract class RelationAssertion implements Assertion
     }
 
     /**
-     * @param  array<class-string>      $nodes
+     * @param  array<class-string>       $nodes
      * @return list<IdentifierRuleError>
      * @throws ShouldNotHappenException
      */

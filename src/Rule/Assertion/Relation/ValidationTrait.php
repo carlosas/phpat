@@ -6,16 +6,15 @@ use PHPat\Selector\SelectorInterface;
 use PHPat\ShouldNotHappenException;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Rules\IdentifierRuleError;
-use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
 
 trait ValidationTrait
 {
     /**
-     * @param  array<SelectorInterface> $targets
-     * @param  array<SelectorInterface> $targetExcludes
-     * @param  array<class-string>      $nodes
-     * @param  array<string>            $tips
+     * @param  array<SelectorInterface>  $targets
+     * @param  array<SelectorInterface>  $targetExcludes
+     * @param  array<class-string>       $nodes
+     * @param  array<string>             $tips
      * @return list<IdentifierRuleError>
      * @throws ShouldNotHappenException
      */
@@ -44,10 +43,10 @@ trait ValidationTrait
     }
 
     /**
-     * @param  array<SelectorInterface> $targets
-     * @param  array<SelectorInterface> $targetExcludes
-     * @param  array<class-string>      $nodes
-     * @param  array<string>            $tips
+     * @param  array<SelectorInterface>  $targets
+     * @param  array<SelectorInterface>  $targetExcludes
+     * @param  array<class-string>       $nodes
+     * @param  array<string>             $tips
      * @return list<IdentifierRuleError>
      * @throws ShouldNotHappenException
      */
@@ -70,10 +69,10 @@ trait ValidationTrait
     }
 
     /**
-     * @param  array<SelectorInterface> $targets
-     * @param  array<SelectorInterface> $targetExcludes
-     * @param  array<class-string>      $nodes
-     * @param  array<string>            $tips
+     * @param  array<SelectorInterface>  $targets
+     * @param  array<SelectorInterface>  $targetExcludes
+     * @param  array<class-string>       $nodes
+     * @param  array<string>             $tips
      * @return list<IdentifierRuleError>
      * @throws ShouldNotHappenException
      */
