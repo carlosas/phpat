@@ -47,7 +47,12 @@ trait PropertyTagExtractor
 
         $names = [];
         foreach ($resolvedPhpDoc->getPropertyTags() as $tag) {
-            array_push($names, ...$tag->getType()->getReferencedClasses());
+            if ($tag->getReadableType() !== null) {
+                array_push($names, ...$tag->getReadableType()->getReferencedClasses());
+            }
+            if ($tag->getWritableType() !== null) {
+                array_push($names, ...$tag->getWritableType()->getReferencedClasses());
+            }
         }
 
         return $names;

@@ -43,7 +43,7 @@ class TestParser
             $object = $reflected->newInstanceWithoutConstructor();
             foreach ($reflected->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
                 if (
-                    method_exists($method, 'getAttributes') && !empty($method->getAttributes(TestRule::class))
+                    !empty($method->getAttributes(TestRule::class))
                     || preg_match('/^(test)[A-Za-z0-9_\x80-\xff]*/', $method->getName())
                 ) {
                     $ruleBuilder = $object->{$method->getName()}();

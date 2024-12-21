@@ -24,6 +24,6 @@ trait AllAttributesExtractor
 
         $fn = static fn ($a) => $a->name->toString();
 
-        return array_map($fn, $node->attrs);
+        return array_values(array_map($fn, $node->attrs));
     }
 }
