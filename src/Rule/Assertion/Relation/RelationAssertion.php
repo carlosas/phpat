@@ -100,7 +100,7 @@ abstract class RelationAssertion implements Assertion
         }
 
         // Can not skip if the rule is a ShouldExtend, ShouldImplement, ShouldInclude or ShouldApplyAttribute rule
-        if (in_array(self::class, [ShouldExtend::class, ShouldImplement::class, ShouldInclude::class, ShouldApplyAttribute::class], true)) {
+        if (in_array(self::class, [ShouldExtend::class, ShouldImplement::class, ShouldInclude::class, ShouldApplyAttribute::class], false)) {
             return true;
         }
 
