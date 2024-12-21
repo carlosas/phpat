@@ -66,11 +66,13 @@ final class DeclarationStatementBuilder implements StatementBuilder
     {
         $result = [];
         foreach ($rules as $rule) {
-            if ($rule->getAssertion() === $this->assertion) {
-                $ruleName = $this->extractRuleName($rule->getRuleName());
-                foreach ($rule->getSubjects() as $selector) {
-                    $result[] = [$ruleName, $selector, $rule->getSubjectExcludes(), $rule->getTips(), $rule->getParams()];
-                }
+            if ($rule->getAssertion() !== $this->assertion) {
+                continue;
+            }
+
+            $ruleName = $this->extractRuleName($rule->getRuleName());
+            foreach ($rule->getSubjects() as $selector) {
+                $result[] = [$ruleName, $selector, $rule->getSubjectExcludes(), $rule->getTips(), $rule->getParams()];
             }
         }
 
@@ -79,8 +81,13 @@ final class DeclarationStatementBuilder implements StatementBuilder
 
     private function extractRuleName(string $fullName): string
     {
+        $randomName = mb_substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, 8);
         $pos = mb_strpos($fullName, ':');
+        $name = mb_substr($fullName, $pos !== false ? $pos + 1 : 0);
+        $sanitized = is_string($sanitized = preg_replace_callback('/_([a-zA-Z])/', fn ($matches) => mb_strtoupper($matches[1]), $name)) ? $sanitized : $randomName;
+        $sanitized = is_string($sanitized = preg_replace('/[^a-zA-Z0-9.]/', '', $sanitized)) ? $sanitized : $randomName;
+        $sanitized = is_string($sanitized = preg_replace('/\.+/', '.', $sanitized)) ? $sanitized : $randomName;
 
-        return mb_substr($fullName, $pos !== false ? $pos + 1 : 0);
+        return trim($sanitized, '.');
     }
 }

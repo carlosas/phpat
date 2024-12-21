@@ -20,9 +20,17 @@ trait AllParentsExtractor
      */
     protected function extractNodeClassNames(Node $node, Scope $scope): array
     {
+        $classReflection = $node->getClassReflection();
+        if ($node->getClassReflection()->isInterface()) {
+            return array_map(
+                static fn (ClassReflection $c) => $c->getName(),
+                $classReflection->getInterfaces()
+            );
+        }
+
         return array_map(
             static fn (ClassReflection $c) => $c->getName(),
-            $node->getClassReflection()->getParents()
+            $classReflection->getParents()
         );
     }
 }
