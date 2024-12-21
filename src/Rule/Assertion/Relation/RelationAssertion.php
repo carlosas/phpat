@@ -16,6 +16,7 @@ use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\RuleError;
 use PHPStan\Type\FileTypeMapper;
 
@@ -79,7 +80,7 @@ abstract class RelationAssertion implements Assertion
      * @param  array<SelectorInterface> $targetExcludes
      * @param  array<class-string>      $nodes
      * @param  array<string>            $tips
-     * @return array<RuleError>
+     * @return list<IdentifierRuleError>
      */
     abstract protected function applyValidation(
         string $ruleName,
@@ -100,7 +101,7 @@ abstract class RelationAssertion implements Assertion
         }
 
         // Can not skip if the rule is a ShouldExtend, ShouldImplement, ShouldInclude or ShouldApplyAttribute rule
-        if (is_a($this, ShouldExtend::class) || is_a($this, ShouldImplement::class) || is_a($this, ShouldInclude::class) || is_a($this, ShouldApplyAttribute::class)) {
+        if (in_array(self::class, [ShouldExtend::class, ShouldImplement::class, ShouldInclude::class, ShouldApplyAttribute::class])) {
             return true;
         }
 
@@ -110,7 +111,7 @@ abstract class RelationAssertion implements Assertion
 
         foreach ($nodes as $node) {
             $class = $scope->getClassReflection();
-            if ($class !== null && !(new Classname($node, false))->matches($class)) {
+            if (!(new Classname($node, false))->matches($class)) {
                 return true;
             }
         }
@@ -120,7 +121,7 @@ abstract class RelationAssertion implements Assertion
 
     /**
      * @param  array<class-string>      $nodes
-     * @return array<RuleError>
+     * @return list<IdentifierRuleError>
      * @throws ShouldNotHappenException
      */
     protected function validateGetErrors(Scope $scope, array $nodes): array
