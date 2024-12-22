@@ -100,7 +100,14 @@ abstract class RelationAssertion implements Assertion
         }
 
         // Can not skip if the rule is a ShouldExtend, ShouldImplement, ShouldInclude or ShouldApplyAttribute rule
-        if (is_a($this, ShouldExtend::class) || is_a($this, ShouldImplement::class) || is_a($this, ShouldInclude::class) || is_a($this, ShouldApplyAttribute::class)) {
+        $classReflection = $this->reflectionProvider->getClass(get_class($this));
+
+        if (
+            $classReflection->isSubclassOf(ShouldExtend::class) ||
+            $classReflection->isSubclassOf(ShouldImplement::class) ||
+            $classReflection->isSubclassOf(ShouldInclude::class) ||
+            $classReflection->isSubclassOf(ShouldApplyAttribute::class)
+        ) {
             return true;
         }
 
