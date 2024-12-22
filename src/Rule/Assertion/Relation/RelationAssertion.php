@@ -103,10 +103,10 @@ abstract class RelationAssertion implements Assertion
         $classReflection = $this->reflectionProvider->getClass(get_class($this));
 
         if (
-            $classReflection->isSubclassOf(ShouldExtend::class) ||
-            $classReflection->isSubclassOf(ShouldImplement::class) ||
-            $classReflection->isSubclassOf(ShouldInclude::class) ||
-            $classReflection->isSubclassOf(ShouldApplyAttribute::class)
+            $classReflection->isSubclassOf(ShouldExtend::class)
+            || $classReflection->isSubclassOf(ShouldImplement::class)
+            || $classReflection->isSubclassOf(ShouldInclude::class)
+            || $classReflection->isSubclassOf(ShouldApplyAttribute::class)
         ) {
             return true;
         }
