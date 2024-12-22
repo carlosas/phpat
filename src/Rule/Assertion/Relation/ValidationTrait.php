@@ -87,7 +87,7 @@ trait ValidationTrait
             }
             $ruleError = RuleErrorBuilder::message($this->getMessage($ruleName, $subject->getName(), $node));
             foreach ($tips as $tip) {
-                $ruleError->addTip($tip)->identifier($ruleName);
+                $ruleError->addTip($tip);
             }
             $errors[] = $ruleError->identifier($ruleName)->build();
         }
