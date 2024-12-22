@@ -20,7 +20,7 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class ShouldNotExistTest extends RuleTestCase
 {
-    public const RULE_NAME = 'test_FixtureClassShouldNotExist';
+    public const RULE_NAME = 'testFixtureClassShouldNotExist';
 
     public function testRule(): void
     {

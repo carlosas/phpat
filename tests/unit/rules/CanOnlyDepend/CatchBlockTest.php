@@ -21,7 +21,7 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class CatchBlockTest extends RuleTestCase
 {
-    public const RULE_NAME = 'test_FixtureClassCanOnlyDependSimpleException';
+    public const RULE_NAME = 'testFixtureClassCanOnlyDependSimpleException';
 
     public function testRule(): void
     {

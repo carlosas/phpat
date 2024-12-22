@@ -21,7 +21,7 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class IncludedTraitsTest extends RuleTestCase
 {
-    public const RULE_NAME = 'test_FixtureClassShouldIncludeSimpleTraitTwo';
+    public const RULE_NAME = 'testFixtureClassShouldIncludeSimpleTraitTwo';
 
     public function testRule(): void
     {
