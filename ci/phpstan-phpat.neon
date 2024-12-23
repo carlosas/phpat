@@ -6,6 +6,7 @@ parameters:
     paths:
         - ../src
         - ../tests/architecture
+	reportUnmatchedIgnoredErrors: false
     ignoreErrors:
         -
             message: "#no value type specified in iterable type array\\.$#"
