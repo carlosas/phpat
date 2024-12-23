@@ -23,7 +23,7 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class WithBuiltInNewTest extends RuleTestCase
 {
-    public const RULE_NAME = 'test_FixtureClassCanOnlyDependSimpleAndSpecial';
+    public const RULE_NAME = 'testFixtureClassCanOnlyDependSimpleAndSpecial';
 
     public function testRule(): void
     {

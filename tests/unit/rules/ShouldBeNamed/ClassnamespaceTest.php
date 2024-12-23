@@ -20,7 +20,7 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class ClassnamespaceTest extends RuleTestCase
 {
-    public const RULE_NAME = 'test_FixtureClassUnderNamespaceShouldBeNamed';
+    public const RULE_NAME = 'testFixtureClassUnderNamespaceShouldBeNamed';
 
     public function testRule(): void
     {

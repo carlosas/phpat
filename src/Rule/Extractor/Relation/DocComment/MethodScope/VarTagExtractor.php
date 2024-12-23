@@ -10,7 +10,7 @@ trait VarTagExtractor
 {
     public function getNodeType(): string
     {
-        return Node\Expr\Variable::class;
+        return Node\Stmt\Expression::class;
     }
 
     /**
@@ -45,7 +45,7 @@ trait VarTagExtractor
         );
 
         $names = [];
-        foreach (array_filter($resolvedPhpDoc->getVarTags()) as $tag) {
+        foreach ($resolvedPhpDoc->getVarTags() as $tag) {
             array_push($names, ...$tag->getType()->getReferencedClasses());
         }
 

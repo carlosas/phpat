@@ -8,7 +8,7 @@ class SubjectStep extends AbstractStep
 {
     public function classes(SelectorInterface ...$selectors): SubjectExcludeOrAssertionStep
     {
-        $this->rule->subjects = array_values($selectors);
+        $this->rule->subjects = $selectors;
 
         return new SubjectExcludeOrAssertionStep($this->rule);
     }

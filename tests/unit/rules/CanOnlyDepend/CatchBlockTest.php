@@ -21,12 +21,12 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class CatchBlockTest extends RuleTestCase
 {
-    public const RULE_NAME = 'test_FixtureClassCanOnlyDependSimpleException';
+    public const RULE_NAME = 'testFixtureClassCanOnlyDependSimpleException';
 
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleException::class), 97],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleException::class), 108],
         ]);
     }
 

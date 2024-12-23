@@ -21,7 +21,7 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class ShowRuleNameImplementedInterfacesTest extends RuleTestCase
 {
-    public const RULE_NAME = 'test_FixtureClassShouldImplementSimpleInterfaceTwo';
+    public const RULE_NAME = 'testFixtureClassShouldImplementSimpleInterfaceTwo';
 
     public function testRule(): void
     {

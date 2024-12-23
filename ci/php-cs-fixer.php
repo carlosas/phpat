@@ -1,12 +1,14 @@
 <?php declare(strict_types=1);
 
 $finder = PhpCsFixer\Finder::create()
-    ->in([dirname(__DIR__) . '/src', dirname(__DIR__) . '/tests']);
+    ->in([
+        dirname(__DIR__) . '/src',
+        dirname(__DIR__) . '/tests/architecture',
+        dirname(__DIR__) . '/tests/unit',
+    ]);
 
 $rules = [
     '@PER'                        => true,
-    '@PHP80Migration:risky'       => true,
-    '@PHP82Migration'             => true,
     '@PhpCsFixer'                 => true,
     PhpCsFixerCustomFixers\Fixer\DeclareAfterOpeningTagFixer::name() => true,
     PhpCsFixerCustomFixers\Fixer\PhpdocArrayStyleFixer::name() => true,

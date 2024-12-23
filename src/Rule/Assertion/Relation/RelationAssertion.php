@@ -16,7 +16,7 @@ use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Rules\RuleError;
+use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Type\FileTypeMapper;
 
 abstract class RelationAssertion implements Assertion
@@ -75,11 +75,11 @@ abstract class RelationAssertion implements Assertion
     abstract protected function getMessage(string $ruleName, string $subject, string $target): string;
 
     /**
-     * @param  array<SelectorInterface> $targets
-     * @param  array<SelectorInterface> $targetExcludes
-     * @param  array<class-string>      $nodes
-     * @param  array<string>            $tips
-     * @return array<RuleError>
+     * @param  array<SelectorInterface>  $targets
+     * @param  array<SelectorInterface>  $targetExcludes
+     * @param  array<class-string>       $nodes
+     * @param  array<string>             $tips
+     * @return list<IdentifierRuleError>
      */
     abstract protected function applyValidation(
         string $ruleName,
@@ -100,7 +100,14 @@ abstract class RelationAssertion implements Assertion
         }
 
         // Can not skip if the rule is a ShouldExtend, ShouldImplement, ShouldInclude or ShouldApplyAttribute rule
-        if (is_a($this, ShouldExtend::class) || is_a($this, ShouldImplement::class) || is_a($this, ShouldInclude::class) || is_a($this, ShouldApplyAttribute::class)) {
+        $classReflection = $this->reflectionProvider->getClass(get_class($this));
+
+        if (
+            $classReflection->isSubclassOf(ShouldExtend::class)
+            || $classReflection->isSubclassOf(ShouldImplement::class)
+            || $classReflection->isSubclassOf(ShouldInclude::class)
+            || $classReflection->isSubclassOf(ShouldApplyAttribute::class)
+        ) {
             return true;
         }
 
@@ -110,7 +117,7 @@ abstract class RelationAssertion implements Assertion
 
         foreach ($nodes as $node) {
             $class = $scope->getClassReflection();
-            if ($class !== null && !(new Classname($node, false))->matches($class)) {
+            if (!(new Classname($node, false))->matches($class)) {
                 return true;
             }
         }
@@ -119,8 +126,8 @@ abstract class RelationAssertion implements Assertion
     }
 
     /**
-     * @param  array<class-string>      $nodes
-     * @return array<RuleError>
+     * @param  array<class-string>       $nodes
+     * @return list<IdentifierRuleError>
      * @throws ShouldNotHappenException
      */
     protected function validateGetErrors(Scope $scope, array $nodes): array

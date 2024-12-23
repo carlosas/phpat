@@ -3,7 +3,7 @@
 Assertion is the type of verification that can be done in the selected classes.
 
 ## shouldBeNamed()
-It asserts that the selected classes are **named** as specified.
+It asserts that the selected classes are **named** as the namespaced name specified.
 
 ## shouldBeFinal()
 It asserts that the selected classes are declared as **final**.

@@ -84,8 +84,8 @@ Example:
 
 ```php
 Selector::AND(
-    Selector::namespace('App\User'),
-    Selector::abstract()
+    Selector::inNamespace('App\User'),
+    Selector::isAbstract()
 )
 ```
 
@@ -96,7 +96,7 @@ Selects classes that do not match the inner Selector.
 
 ```php
 Selector::NOT(
-    Selector::namespace('App\User')
+    Selector::inNamespace('App\User')
 )
 ```
 

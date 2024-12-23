@@ -22,7 +22,7 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class MethodReturnTest extends RuleTestCase
 {
-    public const RULE_NAME = 'test_FixtureClassShouldNotDependSimpleAndSpecial';
+    public const RULE_NAME = 'testFixtureClassShouldNotDependSimpleAndSpecial';
 
     public function testRule(): void
     {

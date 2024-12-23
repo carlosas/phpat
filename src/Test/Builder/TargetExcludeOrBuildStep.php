@@ -8,7 +8,7 @@ class TargetExcludeOrBuildStep extends TipOrBuildStep
 {
     public function excluding(SelectorInterface ...$selectors): TipOrBuildStep
     {
-        $this->rule->targetExcludes = array_values($selectors);
+        $this->rule->targetExcludes = $selectors;
 
         return new TipOrBuildStep($this->rule);
     }

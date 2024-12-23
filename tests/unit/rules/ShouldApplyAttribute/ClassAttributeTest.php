@@ -21,7 +21,7 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class ClassAttributeTest extends RuleTestCase
 {
-    public const RULE_NAME = 'test_FixtureClassShouldApplySimpleAttributeTwo';
+    public const RULE_NAME = 'testFixtureClassShouldApplySimpleAttributeTwo';
 
     public function testRule(): void
     {

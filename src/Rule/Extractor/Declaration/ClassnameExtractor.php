@@ -18,19 +18,16 @@ trait ClassnameExtractor
      */
     protected function meetsDeclaration(Node $node, Scope $scope, array $params = []): bool
     {
-        if (!isset($params['isRegex'], $params['classname'])) {
+        if (!isset($params['isRegex'], $params['fqcn'])) {
             return false;
         }
 
-        $pos = mb_strrpos($node->getClassReflection()->getName(), '\\');
-        $classname = $pos === false
-            ? $node->getClassReflection()->getName()
-            : mb_substr($node->getClassReflection()->getName(), $pos + 1);
+        $namespacedName = $node->getClassReflection()->getName();
 
         if ($params['isRegex'] === true) {
-            return preg_match($params['classname'], $classname) === 1;
+            return preg_match($params['fqcn'], $namespacedName) === 1;
         }
 
-        return $classname === $params['classname'];
+        return $namespacedName === trimSeparators($params['fqcn']);
     }
 }

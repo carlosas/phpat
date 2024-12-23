@@ -20,7 +20,7 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class InterfaceClassTest extends RuleTestCase
 {
-    public const RULE_NAME = 'test_FixtureClassShouldBeInterface';
+    public const RULE_NAME = 'testFixtureClassShouldBeInterface';
 
     public function testRule(): void
     {

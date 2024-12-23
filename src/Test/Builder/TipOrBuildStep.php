@@ -6,7 +6,7 @@ class TipOrBuildStep extends BuildStep
 {
     public function because(string ...$tips): BuildStep
     {
-        $this->rule->tips = array_values($tips);
+        $this->rule->tips = $tips;
 
         return new BuildStep($this->rule);
     }

@@ -72,11 +72,11 @@ final class MyFirstTest
     public function test_domain_does_not_depend_on_other_layers(): Rule
     {
         return PHPat::rule()
-            ->classes(Selector::namespace('App\Domain'))
+            ->classes(Selector::inNamespace('App\Domain'))
             ->shouldNotDependOn()
             ->classes(
-                Selector::namespace('App\Application'),
-                Selector::namespace('App\Infrastructure'),
+                Selector::inNamespace('App\Application'),
+                Selector::inNamespace('App\Infrastructure'),
                 Selector::classname(SuperForbiddenClass::class),
                 Selector::classname('/^SomeVendor\\\.*\\\ForbiddenSubfolder\\\.*/', true)
             )

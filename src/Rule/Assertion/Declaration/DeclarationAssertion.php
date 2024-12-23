@@ -66,7 +66,7 @@ abstract class DeclarationAssertion implements Assertion
             }
         );
 
-        return array_reduce(
+        return array_values(array_reduce(
             $applicableStatements,
             function (array $errors, array $statement) use ($node, $scope, $subject): array {
                 [$ruleName, $selector, $subjectExcludes, $tips, $params] = $statement;
@@ -77,7 +77,7 @@ abstract class DeclarationAssertion implements Assertion
                 return $errors;
             },
             []
-        );
+        ));
     }
 
     public function prepareMessage(string $ruleName, string $message): string

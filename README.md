@@ -10,7 +10,7 @@
 		<img src="https://img.shields.io/packagist/php-v/phpat/phpat?style=for-the-badge" alt="PHP Version">
 	</a>
 	<a>
-		<img src="https://img.shields.io/badge/phpstan-%5E1.3-blue?style=for-the-badge" alt="PHPStan Version">
+		<img src="https://img.shields.io/badge/phpstan-%5E2.0-blue?style=for-the-badge" alt="PHPStan Version">
 	</a>
 	<a>
 		<img src="https://img.shields.io/badge/contributions-welcome-green.svg?style=for-the-badge" alt="Contributions welcome">

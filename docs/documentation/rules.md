@@ -38,6 +38,12 @@ final class ConfigurationTest
 }
 ```
 
+## Rule identifiers
+
+When a rule is violated, the error message will contain an identifier that you can use to ignore the error.
+
+Currently, the error identifier is based on the rule method name.
+
 ## Dynamic Rule Sets
 
 It is possible to dynamically create rules by returning an iterable of Rules from your method:

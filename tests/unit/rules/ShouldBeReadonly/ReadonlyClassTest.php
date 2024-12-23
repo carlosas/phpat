@@ -20,7 +20,7 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class ReadonlyClassTest extends RuleTestCase
 {
-    public const RULE_NAME = 'test_FixtureClassShouldBeReadonly';
+    public const RULE_NAME = 'testFixtureClassShouldBeReadonly';
 
     public function testRule(): void
     {
