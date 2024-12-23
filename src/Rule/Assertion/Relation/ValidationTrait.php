@@ -5,17 +5,17 @@ namespace PHPat\Rule\Assertion\Relation;
 use PHPat\Selector\SelectorInterface;
 use PHPat\ShouldNotHappenException;
 use PHPStan\Reflection\ClassReflection;
-use PHPStan\Rules\RuleError;
+use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\RuleErrorBuilder;
 
 trait ValidationTrait
 {
     /**
-     * @param  array<SelectorInterface> $targets
-     * @param  array<SelectorInterface> $targetExcludes
-     * @param  array<class-string>      $nodes
-     * @param  array<string>            $tips
-     * @return array<RuleError>
+     * @param  array<SelectorInterface>  $targets
+     * @param  array<SelectorInterface>  $targetExcludes
+     * @param  array<class-string>       $nodes
+     * @param  array<string>             $tips
+     * @return list<IdentifierRuleError>
      * @throws ShouldNotHappenException
      */
     protected function applyShould(string $ruleName, ClassReflection $subject, array $targets, array $targetExcludes, array $nodes, array $tips): array
@@ -35,7 +35,7 @@ trait ValidationTrait
                 foreach ($tips as $tip) {
                     $ruleError->addTip($tip);
                 }
-                $errors[] = $ruleError->build();
+                $errors[] = $ruleError->identifier($ruleName)->build();
             }
         }
 
@@ -43,11 +43,11 @@ trait ValidationTrait
     }
 
     /**
-     * @param  array<SelectorInterface> $targets
-     * @param  array<SelectorInterface> $targetExcludes
-     * @param  array<class-string>      $nodes
-     * @param  array<string>            $tips
-     * @return array<RuleError>
+     * @param  array<SelectorInterface>  $targets
+     * @param  array<SelectorInterface>  $targetExcludes
+     * @param  array<class-string>       $nodes
+     * @param  array<string>             $tips
+     * @return list<IdentifierRuleError>
      * @throws ShouldNotHappenException
      */
     protected function applyShouldNot(string $ruleName, ClassReflection $subject, array $targets, array $targetExcludes, array $nodes, array $tips): array
@@ -60,7 +60,7 @@ trait ValidationTrait
                     foreach ($tips as $tip) {
                         $ruleError->addTip($tip);
                     }
-                    $errors[] = $ruleError->build();
+                    $errors[] = $ruleError->identifier($ruleName)->build();
                 }
             }
         }
@@ -69,11 +69,11 @@ trait ValidationTrait
     }
 
     /**
-     * @param  array<SelectorInterface> $targets
-     * @param  array<SelectorInterface> $targetExcludes
-     * @param  array<class-string>      $nodes
-     * @param  array<string>            $tips
-     * @return array<RuleError>
+     * @param  array<SelectorInterface>  $targets
+     * @param  array<SelectorInterface>  $targetExcludes
+     * @param  array<class-string>       $nodes
+     * @param  array<string>             $tips
+     * @return list<IdentifierRuleError>
      * @throws ShouldNotHappenException
      */
     protected function applyCanOnly(string $ruleName, ClassReflection $subject, array $targets, array $targetExcludes, array $nodes, array $tips): array
@@ -89,7 +89,7 @@ trait ValidationTrait
             foreach ($tips as $tip) {
                 $ruleError->addTip($tip);
             }
-            $errors[] = $ruleError->build();
+            $errors[] = $ruleError->identifier($ruleName)->build();
         }
 
         return $errors;

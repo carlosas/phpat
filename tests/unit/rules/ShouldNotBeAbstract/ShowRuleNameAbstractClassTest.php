@@ -20,7 +20,7 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class ShowRuleNameAbstractClassTest extends RuleTestCase
 {
-    public const RULE_NAME = 'test_SimpleAbstractClassShouldNotBeAbstract';
+    public const RULE_NAME = 'testSimpleAbstractClassShouldNotBeAbstract';
 
     public function testRule(): void
     {

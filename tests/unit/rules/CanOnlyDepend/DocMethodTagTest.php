@@ -30,7 +30,7 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class DocMethodTagTest extends RuleTestCase
 {
-    public const RULE_NAME = 'test_FixtureClassCanOnlyDependSimpleAndSpecial';
+    public const RULE_NAME = 'testFixtureClassCanOnlyDependSimpleAndSpecial';
 
     public function testRule(): void
     {

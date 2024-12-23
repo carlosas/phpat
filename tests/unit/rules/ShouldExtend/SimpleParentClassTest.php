@@ -21,7 +21,7 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class SimpleParentClassTest extends RuleTestCase
 {
-    public const RULE_NAME = 'test_SimpleClassShouldExtendSimpleAbstractClass';
+    public const RULE_NAME = 'testSimpleClassShouldExtendSimpleAbstractClass';
 
     public function testRule(): void
     {
