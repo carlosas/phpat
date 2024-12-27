@@ -2,12 +2,13 @@
 All notable changes to this project will be documented in this file.
 
 ## 0.11.0
-* Use namespaced names on shouldBeNamed assertion
+* Add support for PHPStan 2.x
+* Drop support for PHPStan 1.x (breaks BC)
+* Use namespaced names on shouldBeNamed assertion (breaks BC)
 * Catch all attributes in dependency assertions
-* Sanitize rule names to match PHPStan identifier pattern
+* Sanitize rule names to match PHPStan identifier pattern (breaks BC)
+* Remove deprecated selectors (breaks BC)
 * Add PHPStan identifiers from rule names
-* Add support for PHPStan 2.0
-* Drop support for PHPStan 1.*
 
 ## 0.10.20
 * Fix parent interfaces not recognized as extended.
