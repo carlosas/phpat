@@ -21,9 +21,9 @@ jobs:
       matrix:
         php-version:
           - "7.4"
-          - "8.3" # 8.3 until php-cs-fixer is fully compatible with PHP 8.4
+          - "8.3"
         dependencies:
-          - "highest-ignore-php" # ignore-php until psalm package is compatible with PHP 8.4
+          - "highest"
     steps:
       - name: "Checkout"
         uses: "actions/checkout@v2"
@@ -63,7 +63,7 @@ jobs:
           - "8.3"
           - "8.4"
         dependencies:
-          - "highest-ignore-php" # ignore-php until psalm package is compatible with PHP 8.4
+          - "highest"
     steps:
       - name: "Checkout"
         uses: "actions/checkout@v2"
@@ -88,39 +88,6 @@ jobs:
       - name: "Run phpstan+phpat"
         run: "vendor/bin/phpstan analyse -c ci/phpstan-phpat.neon"
 
-  static-code-analysis-psalm:
-    name: "Psalm (separated until its compatible with PHP 8.4)"
-    runs-on: "ubuntu-latest"
-    strategy:
-      matrix:
-        php-version:
-          - "8.3"
-        dependencies:
-          - "highest-ignore-php" # ignore-php until psalm package is compatible with PHP 8.4
-    steps:
-      - name: "Checkout"
-        uses: "actions/checkout@v2"
-      - name: "Install PHP with extensions"
-        uses: "shivammathur/setup-php@v2"
-        with:
-          coverage: "none"
-          extensions: "${{ env.PHP_EXTENSIONS }}"
-          php-version: "${{ matrix.php-version }}"
-      - name: "Determine composer cache directory"
-        uses: "./.github/actions/composer/composer/determine-cache-directory"
-      - name: "Cache dependencies installed with composer"
-        uses: "actions/cache@v2"
-        with:
-          path: "${{ env.COMPOSER_CACHE_DIR }}"
-          key: "php-${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-${{ hashFiles('composer.lock') }}"
-          restore-keys: "php-${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-"
-      - name: "Install ${{ matrix.dependencies }} dependencies with composer"
-        uses: "./.github/actions/composer/composer/install"
-        with:
-          dependencies: "${{ matrix.dependencies }}"
-      - name: "Run psalm"
-        run: "vendor/bin/psalm -c ci/psalm.xml"
-
   tests:
     name: "Tests"
     runs-on: "ubuntu-latest"
@@ -134,7 +101,7 @@ jobs:
           - "8.3"
           - "8.4"
         dependencies:
-          - "highest-ignore-php" # ignore-php until psalm package is compatible with PHP 8.4
+          - "highest"
     steps:
       - name: "Checkout"
         uses: "actions/checkout@v2"

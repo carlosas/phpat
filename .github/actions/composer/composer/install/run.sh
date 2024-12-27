@@ -20,12 +20,6 @@ if [[ ${dependencies} == "highest" ]]; then
   exit $?
 fi
 
-if [[ ${dependencies} == "highest-ignore-php" ]]; then
-  COMPOSER_IGNORE_PLATFORM_REQ=php composer update --no-interaction --no-progress
-
-  exit $?
-fi
-
 echo "::error::The value for the \"dependencies\" input needs to be one of \"lowest\", \"locked\"', \"highest\"' - got \"${dependencies}\" instead."
 
 exit 1
