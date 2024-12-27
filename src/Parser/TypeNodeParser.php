@@ -3,7 +3,6 @@
 namespace PHPat\Parser;
 
 use PHPat\ShouldNotHappenException;
-use PhpParser\Node;
 use PhpParser\Node\ComplexType;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\IntersectionType;
@@ -16,15 +15,15 @@ use PHPStan\Analyser\Scope;
 final class TypeNodeParser
 {
     /**
-     * @return array<Node\Name>
+     * @return array<Name>
      */
     public static function parse(?NodeAbstract $type, Scope $scope): array
     {
-        if ($type instanceof Node\Name) {
+        if ($type instanceof Name) {
             return [self::parseName($type, $scope)];
         }
 
-        if ($type instanceof Node\ComplexType) {
+        if ($type instanceof ComplexType) {
             return self::parseComplex($type, $scope);
         }
 
