@@ -8,7 +8,7 @@ class TargetStep extends AbstractStep
 {
     public function classes(SelectorInterface ...$selectors): TargetExcludeOrBuildStep
     {
-        $this->rule->targets = array_values($selectors);
+        $this->rule->targets = $selectors;
 
         return new TargetExcludeOrBuildStep($this->rule);
     }

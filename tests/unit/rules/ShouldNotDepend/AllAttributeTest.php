@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Tests\PHPat\unit\rules\CanOnlyDepend;
+namespace Tests\PHPat\unit\rules\ShouldNotDepend;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\Relation\CanOnlyDepend\CanOnlyDepend;
-use PHPat\Rule\Assertion\Relation\CanOnlyDepend\ClassAttributeRule;
+use PHPat\Rule\Assertion\Relation\ShouldNotDepend\AllAttributesRule;
+use PHPat\Rule\Assertion\Relation\ShouldNotDepend\ShouldNotDepend;
 use PHPat\Selector\Classname;
 use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;
@@ -15,18 +15,22 @@ use Tests\PHPat\fixtures\Simple\SimpleAttribute;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
- * @extends RuleTestCase<ClassAttributeRule>
+ * @extends RuleTestCase<AllAttributesRule>
  * @internal
  * @coversNothing
  */
-class ClassAttributeTest extends RuleTestCase
+class AllAttributeTest extends RuleTestCase
 {
-    public const RULE_NAME = 'test_FixtureClassCanOnlyDependSimpleAndSpecial';
+    public const RULE_NAME = 'testFixtureClassShouldNotDependSimpleAndSpecial';
 
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
             [sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class), 29],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class), 33],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class), 34],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class), 94],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class), 95],
         ]);
     }
 
@@ -34,12 +38,12 @@ class ClassAttributeTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            CanOnlyDepend::class,
+            ShouldNotDepend::class,
             [new Classname(FixtureClass::class, false)],
-            [new Classname(\Attribute::class, false)]
+            [new Classname(SimpleAttribute::class, false)]
         );
 
-        return new ClassAttributeRule(
+        return new AllAttributesRule(
             new StatementBuilderFactory($testParser),
             new Configuration(false, true, false),
             $this->createReflectionProvider(),

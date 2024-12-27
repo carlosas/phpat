@@ -20,7 +20,7 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class FinalClassTest extends RuleTestCase
 {
-    public const RULE_NAME = 'test_SimpleFinalClassShouldNotBeFinal';
+    public const RULE_NAME = 'testSimpleFinalClassShouldNotBeFinal';
 
     public function testRule(): void
     {

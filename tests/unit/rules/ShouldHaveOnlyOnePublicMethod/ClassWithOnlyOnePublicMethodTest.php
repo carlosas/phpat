@@ -20,7 +20,7 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class ClassWithOnlyOnePublicMethodTest extends RuleTestCase
 {
-    public const RULE_NAME = 'test_FixtureClassShouldHaveOnlyOnePublicMethod';
+    public const RULE_NAME = 'testFixtureClassShouldHaveOnlyOnePublicMethod';
 
     public function testRule(): void
     {

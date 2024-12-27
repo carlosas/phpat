@@ -10,9 +10,9 @@ final class AndModifier implements SelectorInterface
     /** @var array<SelectorInterface> */
     private array $selectors;
 
-    public function __construct(SelectorInterface ...$selector)
+    public function __construct(SelectorInterface ...$selectors)
     {
-        $this->selectors = array_values($selector);
+        $this->selectors = $selectors;
     }
 
     public function matches(ClassReflection $classReflection): bool

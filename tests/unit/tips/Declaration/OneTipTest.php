@@ -5,7 +5,7 @@ namespace Tests\PHPat\unit\tips\Declaration;
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\Declaration\ShouldBeFinal\IsFinalRule;
 use PHPat\Rule\Assertion\Declaration\ShouldBeFinal\ShouldBeFinal;
-use PHPat\Rule\Assertion\Relation\CanOnlyDepend\ClassAttributeRule;
+use PHPat\Rule\Assertion\Relation\CanOnlyDepend\AllAttributesRule;
 use PHPat\Selector\Classname;
 use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;
@@ -15,13 +15,13 @@ use Tests\PHPat\fixtures\FixtureClass;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
- * @extends RuleTestCase<ClassAttributeRule>
+ * @extends RuleTestCase<AllAttributesRule>
  * @internal
  * @coversNothing
  */
 class OneTipTest extends RuleTestCase
 {
-    public const RULE_NAME = 'test_FixtureClassShouldBeFinal';
+    public const RULE_NAME = 'testFixtureClassShouldBeFinal';
 
     public function testRule(): void
     {

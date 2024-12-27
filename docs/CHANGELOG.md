@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.11.0
+* Use namespaced names on shouldBeNamed assertion
+* Catch all attributes in dependency assertions
+* Sanitize rule names to match PHPStan identifier pattern
+* Add PHPStan identifiers from rule names
+* Add support for PHPStan 2.0
+* Drop support for PHPStan 1.*
+
 ## 0.10.20
 * Fix parent interfaces not recognized as extended.
 
