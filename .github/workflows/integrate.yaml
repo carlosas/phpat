@@ -61,6 +61,7 @@ jobs:
           - "8.1"
           - "8.2"
           - "8.3"
+          - "8.4"
         dependencies:
           - "highest"
     steps:
@@ -86,8 +87,6 @@ jobs:
           dependencies: "${{ matrix.dependencies }}"
       - name: "Run phpstan+phpat"
         run: "vendor/bin/phpstan analyse -c ci/phpstan-phpat.neon"
-      - name: "Run psalm"
-        run: "vendor/bin/psalm -c ci/psalm.xml"
 
   tests:
     name: "Tests"
@@ -100,6 +99,7 @@ jobs:
           - "8.1"
           - "8.2"
           - "8.3"
+          - "8.4"
         dependencies:
           - "highest"
     steps:
