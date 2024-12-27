@@ -16,7 +16,8 @@
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^3.60",
     "kubawerlos/php-cs-fixer-custom-fixers": "3.18.*",
-    "phpunit/phpunit": "^9.0 || 10.5.*"
+    "phpunit/phpunit": "^9.0 || 10.5.*",
+    "vimeo/psalm": "^5.26"
   },
   "autoload": {
     "psr-4": {
