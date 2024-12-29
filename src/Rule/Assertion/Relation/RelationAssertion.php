@@ -3,6 +3,7 @@
 namespace PHPat\Rule\Assertion\Relation;
 
 use PHPat\Configuration;
+use PHPat\Parser\BuiltInClasses;
 use PHPat\Rule\Assertion\Assertion;
 use PHPat\Rule\Assertion\Relation\ShouldApplyAttribute\ShouldApplyAttribute;
 use PHPat\Rule\Assertion\Relation\ShouldExtend\ShouldExtend;
@@ -175,7 +176,7 @@ abstract class RelationAssertion implements Assertion
 
     private function isBuiltInClass(string $node): bool
     {
-        return $node === 'Stringable'
+        return in_array($node, BuiltInClasses::PHP_8_BUILT_IN_CLASSES, true)
             || ($this->reflectionProvider->hasClass($node) && $this->reflectionProvider->getClass($node)->isBuiltin());
     }
 }
