@@ -1,6 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.11.1
+* Add `AllOf()` selector modifier
+* Add `AnyOf()` selector modifier
+* Add `AtLeastCountOf()` selector modifier
+* Add `AtMostCountOf()` selector modifier
+* Add `NoneOf()` selector modifier
+* Add `OneOf()` selector modifier
+* Deprecate `AND()` selector modifier
+
 ## 0.11.0
 * Add support for PHPStan 2.x
 * Drop support for PHPStan 1.x (breaks BC)

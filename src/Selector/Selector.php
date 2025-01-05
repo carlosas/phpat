@@ -8,19 +8,21 @@ use PHPat\Selector\Modifier\AnyOfSelectorModifier;
 use PHPat\Selector\Modifier\AtLeastCountOfSelectorModifier;
 use PHPat\Selector\Modifier\AtMostCountOfSelectorModifier;
 use PHPat\Selector\Modifier\NoneOfSelectorModifier;
-use PHPat\Selector\Modifier\NotModifier;
 use PHPat\Selector\Modifier\OneOfSelectorModifier;
 
 final class Selector extends SelectorPrimitive
 {
+    /**
+     * @deprecated Use AllOf() instead
+     */
     public static function AND(SelectorInterface ...$selector): AndModifier
     {
         return new AndModifier(...$selector);
     }
 
-    public static function NOT(SelectorInterface $selector): NotModifier
+    public static function NOT(SelectorInterface $selector): NoneOfSelectorModifier
     {
-        return new NotModifier($selector);
+        return new NoneOfSelectorModifier($selector);
     }
 
     public static function AllOf(SelectorInterface ...$selectors): AllOfSelectorModifier
