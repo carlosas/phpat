@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## 0.11.1
+## 0.11.2
 * Add `AllOf()` selector modifier
 * Add `AnyOf()` selector modifier
 * Add `AtLeastCountOf()` selector modifier
@@ -9,6 +9,10 @@ All notable changes to this project will be documented in this file.
 * Add `NoneOf()` selector modifier
 * Add `OneOf()` selector modifier
 * Deprecate `AND()` selector modifier
+
+## 0.11.1
+* Add support for PHP 8.4
+* Manually check built-in classes to ignore them
 
 ## 0.11.0
 * Add support for PHPStan 2.x
