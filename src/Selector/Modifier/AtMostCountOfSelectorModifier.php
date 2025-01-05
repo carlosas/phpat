@@ -18,7 +18,6 @@ final class AtMostCountOfSelectorModifier implements SelectorInterface
         $this->selectors = $selectors;
     }
 
-    #[\Override]
     public function getName(): string
     {
         return \sprintf(
@@ -28,7 +27,6 @@ final class AtMostCountOfSelectorModifier implements SelectorInterface
         );
     }
 
-    #[\Override]
     public function matches(ClassReflection $classReflection): bool
     {
         $matches = 0;

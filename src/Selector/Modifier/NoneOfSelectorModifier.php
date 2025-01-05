@@ -15,7 +15,6 @@ final class NoneOfSelectorModifier implements SelectorInterface
         $this->selectors = $selectors;
     }
 
-    #[\Override]
     public function getName(): string
     {
         return \sprintf(
@@ -24,7 +23,6 @@ final class NoneOfSelectorModifier implements SelectorInterface
         );
     }
 
-    #[\Override]
     public function matches(ClassReflection $classReflection): bool
     {
         foreach ($this->selectors as $selector) {
