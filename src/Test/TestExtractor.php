@@ -44,11 +44,10 @@ final class TestExtractor implements TestExtractorInterface
         }
 
         $classReflection = $this->reflectionProvider->getClass($test)->getNativeReflection();
-        if (class_exists('ReflectionEnum') && $classReflection instanceof \ReflectionEnum) {
+        if (!($classReflection instanceof \ReflectionClass)) {
             return null;
         }
 
-        /** @var \ReflectionClass<object> $classReflection */
         return $classReflection;
     }
 }
