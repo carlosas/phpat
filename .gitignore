@@ -1,4 +1,5 @@
 /.idea/
+/**/.DS_Store
 /vendor/
 /composer.phar
 /composer.lock
