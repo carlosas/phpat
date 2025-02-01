@@ -1,6 +1,12 @@
+<<<<<<< Updated upstream
 <img src="https://raw.githubusercontent.com/carlosas/phpat/logo-test/.github/logo-small.png" alt="PHP Architecture Tester" align="right">
 
 <h1 align="center">PHP Architecture Tester</h1>
+=======
+<p align="center">
+    <img width="200px" src="https://raw.githubusercontent.com/carlosas/phpat/master/.github/logo.png" alt="PHP Architecture Tester">
+</p>
+>>>>>>> Stashed changes
 <h2 align="center">Easy to use architecture testing tool for PHP</h2>
 <p align="center">
 	<a>
