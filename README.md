@@ -1,10 +1,10 @@
-<img width="185px" src="https://raw.githubusercontent.com/carlosas/phpat/logo-test/.github/logo-small.png" alt="PHP Architecture Tester" align="right">
+<img width="185px" src="https://raw.githubusercontent.com/carlosas/phpat/master/.github/logo-small.png" alt="PHP Architecture Tester" align="right">
 <h1 align="center">✔️ PHP Architecture Tester</h1>
 <h2 align="center">Easy to use architecture testing tool for PHP</h2>
 <p align="center">
 	<a><img src="https://img.shields.io/packagist/v/phpat/phpat?label=last%20version&style=for-the-badge" alt="Version"></a>
 	<a><img src="https://img.shields.io/packagist/php-v/phpat/phpat?style=for-the-badge" alt="PHP Version"></a>
-	<a><img src="https://img.shields.io/badge/phpstan-%5E2.0-blue?style=for-the-badge" alt="PHPStan Version"></a>
+	<a><img src="https://img.shields.io/badge/phpstan-%5E2.1-blue?style=for-the-badge" alt="PHPStan Version"></a>
 </p>
 
 <br />
