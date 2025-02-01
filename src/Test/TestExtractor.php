@@ -45,7 +45,7 @@ final class TestExtractor implements TestExtractorInterface
         }
 
         $classReflection = $this->reflectionProvider->getClass($test)->getNativeReflection();
-        if (!$classReflection instanceof ReflectionClass) {
+        if (get_class($classReflection) !== ReflectionClass::class) {
             return null;
         }
 
