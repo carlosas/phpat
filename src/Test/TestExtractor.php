@@ -3,6 +3,7 @@
 namespace PHPat\Test;
 
 use PHPat\ShouldNotHappenException;
+use PHPStan\BetterReflection\Reflection\Adapter\ReflectionClass;
 use PHPStan\DependencyInjection\Container;
 use PHPStan\Reflection\ReflectionProvider;
 
@@ -44,7 +45,7 @@ final class TestExtractor implements TestExtractorInterface
         }
 
         $classReflection = $this->reflectionProvider->getClass($test)->getNativeReflection();
-        if (!$classReflection instanceof \ReflectionClass) {
+        if (!$classReflection instanceof ReflectionClass) {
             return null;
         }
 
