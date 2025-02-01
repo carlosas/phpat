@@ -1,27 +1,17 @@
-<p align="center">
-    <img width="500px" src="https://raw.githubusercontent.com/carlosas/phpat/master/.github/logo.png" alt="PHP Architecture Tester">
-</p>
+<img width="185px" src="https://raw.githubusercontent.com/carlosas/phpat/logo-test/.github/logo-small.png" alt="PHP Architecture Tester" align="right">
+<h1 align="center">✔️ PHP Architecture Tester</h1>
 <h2 align="center">Easy to use architecture testing tool for PHP</h2>
 <p align="center">
-	<a>
-		<img src="https://img.shields.io/packagist/v/phpat/phpat?label=last%20version&style=for-the-badge" alt="Version">
-    </a>
-	<a>
-		<img src="https://img.shields.io/packagist/php-v/phpat/phpat?style=for-the-badge" alt="PHP Version">
-	</a>
-	<a>
-		<img src="https://img.shields.io/badge/phpstan-%5E2.0-blue?style=for-the-badge" alt="PHPStan Version">
-	</a>
-	<a>
-		<img src="https://img.shields.io/badge/contributions-welcome-green.svg?style=for-the-badge" alt="Contributions welcome">
-	</a>
+	<a><img src="https://img.shields.io/packagist/v/phpat/phpat?label=last%20version&style=for-the-badge" alt="Version"></a>
+	<a><img src="https://img.shields.io/packagist/php-v/phpat/phpat?style=for-the-badge" alt="PHP Version"></a>
+	<a><img src="https://img.shields.io/badge/phpstan-%5E2.0-blue?style=for-the-badge" alt="PHPStan Version"></a>
 </p>
 
 <br />
 
 ### Introduction 📜
 
-**PHP Architecture Tester** is a static analysis tool designed to verify architectural requirements.
+**PHP Architecture Tester** is a PHPStan extension (Static Analysis tool) designed to verify architectural requirements.
 
 It provides a natural language abstraction that enables you to define your own architectural rules and and assess their compliance in your code.
 
@@ -47,8 +37,6 @@ You can visit the [Examples](docs/examples.md) section to get some ideas of typi
 
 <br />
 
-**Sponsors**
+### Sponsors 💙
 
-<a href="https://jb.gg/OpenSourceSupport">
-    <img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png" alt="JetBrains Logo" width="100"/>
-</a>
+[![JetBrains](https://resources.jetbrains.com/storage/products/company/brand/logos/jetbrains.svg)](https://jb.gg/OpenSourceSupport)

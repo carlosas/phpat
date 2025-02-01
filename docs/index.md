@@ -1,4 +1,3 @@
-#
 <p align="center">
     <img width="500px" src="assets/logo.png" alt="PHP Architecture Tester">
 </p>
@@ -6,7 +5,7 @@
 
 <hr />
 
-**PHP Architecture Tester** is a [PHPStan](https://phpstan.org/) extension designed to verify architectural requirements.
+**PHP Architecture Tester** is a PHPStan extension (Static Analysis tool) designed to verify architectural requirements.
 
 It provides a natural language abstraction that enables you to define your own architectural rules and assess their compliance.
 
