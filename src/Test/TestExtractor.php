@@ -34,7 +34,7 @@ final class TestExtractor implements TestExtractorInterface
     }
 
     /**
-     * @param  class-string $test
+     * @param  class-string                  $test
      * @return null|\ReflectionClass<object>
      */
     private function reflectTest(string $test): ?\ReflectionClass
@@ -48,7 +48,7 @@ final class TestExtractor implements TestExtractorInterface
             return null;
         }
 
-        /** @var \ReflectionClass<object> $classReflection */
+        // @var \ReflectionClass<object> $classReflection
         return $classReflection;
     }
 }
