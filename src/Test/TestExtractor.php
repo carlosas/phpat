@@ -44,7 +44,7 @@ final class TestExtractor implements TestExtractorInterface
         }
 
         $classReflection = $this->reflectionProvider->getClass($test)->getNativeReflection();
-        if (!($classReflection instanceof \ReflectionClass)) {
+        if (!$classReflection instanceof \ReflectionClass) {
             return null;
         }
 
