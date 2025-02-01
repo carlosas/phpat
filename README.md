@@ -37,6 +37,6 @@ You can visit the [Examples](docs/examples.md) section to get some ideas of typi
 
 <br />
 
-### Sponsors
+### Sponsors 💙
 
 [![JetBrains](https://resources.jetbrains.com/storage/products/company/brand/logos/jetbrains.svg)](https://jb.gg/OpenSourceSupport)
