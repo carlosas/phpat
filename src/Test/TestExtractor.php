@@ -34,7 +34,7 @@ final class TestExtractor implements TestExtractorInterface
     }
 
     /**
-     * @param  class-string                  $test
+     * @param  class-string $test
      * @return null|\ReflectionClass<object>
      */
     private function reflectTest(string $test): ?\ReflectionClass
@@ -43,6 +43,12 @@ final class TestExtractor implements TestExtractorInterface
             return null;
         }
 
-        return $this->reflectionProvider->getClass($test)->getNativeReflection();
+        $classReflection = $this->reflectionProvider->getClass($test)->getNativeReflection();
+        if (class_exists('ReflectionEnum') && $classReflection instanceof \ReflectionEnum) {
+            return null;
+        }
+
+        /** @var \ReflectionClass<object> $classReflection */
+        return $classReflection;
     }
 }
