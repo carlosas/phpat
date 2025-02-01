@@ -1,6 +1,6 @@
-<p align="center">
-    <img width="500px" src="https://raw.githubusercontent.com/carlosas/phpat/master/.github/logo.png" alt="PHP Architecture Tester">
-</p>
+<img src="https://raw.githubusercontent.com/carlosas/phpat/logo-test/.github/logo_small.png" alt="PHP Architecture Tester" align="right">
+
+<h1 align="center">PHP Architecture Tester</h1>
 <h2 align="center">Easy to use architecture testing tool for PHP</h2>
 <p align="center">
 	<a>
@@ -47,8 +47,6 @@ You can visit the [Examples](docs/examples.md) section to get some ideas of typi
 
 <br />
 
-**Sponsors**
+### Sponsors
 
-<a href="https://jb.gg/OpenSourceSupport">
-    <img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png" alt="JetBrains Logo" width="100"/>
-</a>
+[![JetBrains logo.](https://resources.jetbrains.com/storage/products/company/brand/logos/jetbrains.svg)](https://jb.gg/OpenSourceSupport)
