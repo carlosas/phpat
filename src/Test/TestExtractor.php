@@ -27,7 +27,7 @@ final class TestExtractor implements TestExtractorInterface
                 throw new ShouldNotHappenException();
             }
 
-            $reflectedTest = $this->reflectTest(get_class($test));
+            $reflectedTest = $this->reflectTest($test::class);
             if ($reflectedTest !== null) {
                 yield $reflectedTest;
             }
@@ -45,7 +45,7 @@ final class TestExtractor implements TestExtractorInterface
         }
 
         $classReflection = $this->reflectionProvider->getClass($test)->getNativeReflection();
-        if (get_class($classReflection) !== ReflectionClass::class) {
+        if ($classReflection::class !== ReflectionClass::class) {
             return null;
         }
 

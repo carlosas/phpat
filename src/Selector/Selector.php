@@ -3,7 +3,6 @@
 namespace PHPat\Selector;
 
 use PHPat\Selector\Modifier\AllOfSelectorModifier;
-use PHPat\Selector\Modifier\AndModifier;
 use PHPat\Selector\Modifier\AnyOfSelectorModifier;
 use PHPat\Selector\Modifier\AtLeastCountOfSelectorModifier;
 use PHPat\Selector\Modifier\AtMostCountOfSelectorModifier;
