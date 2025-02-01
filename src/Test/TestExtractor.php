@@ -48,7 +48,7 @@ final class TestExtractor implements TestExtractorInterface
             return null;
         }
 
-        // @var \ReflectionClass<object> $classReflection
+        /** @var \ReflectionClass<object> $classReflection */
         return $classReflection;
     }
 }
