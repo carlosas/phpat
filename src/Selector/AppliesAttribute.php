@@ -79,6 +79,10 @@ final class AppliesAttribute implements SelectorInterface
      */
     private function matchesArguments(array $arguments): bool
     {
+        if (PHP_VERSION_ID < 80000) {
+            return true;
+        }
+
         $keys = array_intersect($arguments, $this->arguments);
 
         if (count($keys) === 0) {

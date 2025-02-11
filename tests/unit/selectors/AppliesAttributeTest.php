@@ -31,6 +31,10 @@ class AppliesAttributeTest extends TestCase
     #[TestWith(['name' => SimpleAttribute::class, ['something' => 'somethingElse'], false, false])]
     public function testMatches(string $name, array $arguments, bool $isRegex, bool $expected)
     {
+        if (PHP_VERSION_ID < 80000) {
+            self::markTestSkipped();
+        }
+
         $selector = new AppliesAttribute($name, $arguments, $isRegex);
 
         self::assertSame($expected, $selector->matches($this->getClassReflection()));
