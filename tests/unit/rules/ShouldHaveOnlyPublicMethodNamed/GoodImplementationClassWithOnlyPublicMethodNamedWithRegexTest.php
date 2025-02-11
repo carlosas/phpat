@@ -3,8 +3,6 @@
 namespace Tests\PHPat\unit\rules\ShouldHaveOnlyPublicMethodNamed;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\Declaration\ShouldHaveOnlyOnePublicMethod\HasOnlyOnePublicMethodRule;
-use PHPat\Rule\Assertion\Declaration\ShouldHaveOnlyOnePublicMethod\ShouldHaveOnlyOnePublicMethod;
 use PHPat\Rule\Assertion\Declaration\ShouldHaveOnlyPublicMethodNamed\HasOnlyPublicMethodNamedRule;
 use PHPat\Rule\Assertion\Declaration\ShouldHaveOnlyPublicMethodNamed\HasOnlyPublicPublicMethodNamedRule;
 use PHPat\Rule\Assertion\Declaration\ShouldHaveOnlyPublicMethodNamed\ShouldHaveOnlyPublicMethodNamed;
@@ -13,7 +11,6 @@ use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\Special\ClassWithOnePublicMethod;
 use Tests\PHPat\fixtures\Special\ClassWithOnlyPublicMethodNamed;
 use Tests\PHPat\unit\FakeTestParser;
 

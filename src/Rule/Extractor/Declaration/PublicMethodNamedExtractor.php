@@ -27,12 +27,12 @@ trait PublicMethodNamedExtractor
 
         $methodsWithoutConstructor = array_filter(
             $methods,
-            fn($method) => $method->getName() !== '__construct'
+            fn ($method) => $method->getName() !== '__construct'
         );
 
         foreach ($methodsWithoutConstructor as $method) {
             if ($params['isRegex'] === true) {
-                if(1 !== preg_match($params['name'], $method->getName())) {
+                if (preg_match($params['name'], $method->getName()) !== 1) {
                     return false;
                 }
 
