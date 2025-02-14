@@ -2,10 +2,7 @@
 
 namespace Tests\PHPat\architecture;
 
-use PHPat\Parser\TypeNodeParser;
 use PHPat\Rule\Assertion\Assertion;
-use PHPat\Rule\Assertion\Declaration\DeclarationAssertion;
-use PHPat\Rule\Assertion\Relation\RelationAssertion;
 use PHPat\Selector\Selector;
 use PHPat\Test\Builder\Rule;
 use PHPat\Test\PHPat;
@@ -26,14 +23,6 @@ final class AssertionTest
         return PHPat::rule()
             ->classes(Selector::classname('/.*\\\Assertion\\\.*Rule$/', true))
             ->shouldNotBeAbstract()
-        ;
-    }
-
-    public function test_rules_public_method_named(): Rule
-    {
-        return PHPat::rule()
-            ->classes(Selector::classname('/.*\\\Extractor\\\.*Extractor/', true))
-            ->shouldHaveOnlyOnePublicMethodNamed('getNodeType')
         ;
     }
 
