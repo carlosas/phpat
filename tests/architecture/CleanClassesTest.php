@@ -35,6 +35,6 @@ final class CleanClassesTest
         return PHPat::rule()
             ->classes(Selector::implements(StatementBuilder::class))
             ->shouldHaveOnlyOnePublicMethodNamed('build')
-            ;
+        ;
     }
 }
