@@ -6,6 +6,7 @@ on:
     branches:
       - master
       - main
+      - fix-pages
     types: 
       - completed
 
@@ -31,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: gh-pages
       - name: Setup Pages
