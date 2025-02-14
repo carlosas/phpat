@@ -4,7 +4,6 @@ on:
     branches:
       - master
       - main
-      - fixpages
 permissions:
   contents: write
 jobs:

@@ -1,17 +1,13 @@
 name: Deploy docs
 
 on:
-  push:
+  workflow_run:
+    workflows: ["Build docs"]
     branches:
-      - "fixdocs"
-#  workflow_run:
-#    workflows: ["Build docs"]
-#    branches:
-#      - master
-#      - main
-#      - fixpages
-#    types:
-#      - completed
+      - master
+      - main
+    types:
+      - completed
 
   # Allows to run this workflow manually from the Actions tab
   workflow_dispatch:
