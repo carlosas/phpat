@@ -35,7 +35,7 @@ class AppliesAttributeTest extends TestCase
             self::markTestSkipped();
         }
 
-        $selector = new AppliesAttribute($name, $arguments, $isRegex);
+        $selector = new AppliesAttribute($name, $isRegex, $arguments);
 
         self::assertSame($expected, $selector->matches($this->getClassReflection()));
     }
