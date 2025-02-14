@@ -108,6 +108,10 @@ services:
 		tags:
 			- phpstan.rules.rule
 	-
+		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\IncludedTraitsRule
+		tags:
+			- phpstan.rules.rule
+	-
 		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\AllAttributesRule
 		tags:
 			- phpstan.rules.rule
@@ -175,6 +179,10 @@ services:
 			- phpstan.rules.rule
 	-
 		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\ParentClassRule
+		tags:
+			- phpstan.rules.rule
+	-
+		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\IncludedTraitsRule
 		tags:
 			- phpstan.rules.rule
 	-
