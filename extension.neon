@@ -66,6 +66,12 @@ services:
 		tags:
 			- phpstan.rules.rule
 
+	# ShouldHaveOnlyOnePublicMethodNamed rules
+	-
+		class: PHPat\Rule\Assertion\Declaration\ShouldHaveOnlyOnePublicMethodNamed\HasOnlyOnePublicMethodNamedRule
+		tags:
+			- phpstan.rules.rule
+
 	# ShouldBeInterface rules
 	-
 		class: PHPat\Rule\Assertion\Declaration\ShouldBeInterface\IsInterfaceRule

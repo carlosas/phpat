@@ -26,6 +26,9 @@ Also available: `shouldNotBeReadonly()`
 ## shouldHaveOnlyOnePublicMethod()
 It asserts that the selected classes only have **one public method** (besides constructor).
 
+## shouldHaveOnlyOnePublicMethodNamed
+It asserts that the selected classes only have **one public method** with specified name (besides constructor).
+
 ## shouldExtend()
 It asserts that the selected classes **extend** the target class.
 

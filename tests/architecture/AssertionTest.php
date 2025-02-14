@@ -29,6 +29,14 @@ final class AssertionTest
         ;
     }
 
+    public function test_rules_public_method_named(): Rule
+    {
+        return PHPat::rule()
+            ->classes(Selector::classname('/.*\\\Extractor\\\.*Extractor/', true))
+            ->shouldHaveOnlyOnePublicMethodNamed('getNodeType')
+        ;
+    }
+
     /*public function test_rules_dependencies(): Rule
     {
         return PHPat::rule()
