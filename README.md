@@ -4,7 +4,7 @@
 <p align="center">
 	<a><img src="https://img.shields.io/packagist/v/phpat/phpat?label=last%20version&style=for-the-badge" alt="Version"></a>
 	<a><img src="https://img.shields.io/packagist/php-v/phpat/phpat?style=for-the-badge" alt="PHP Version"></a>
-	<a><img src="https://img.shields.io/badge/phpstan-%5E2.0-blue?style=for-the-badge" alt="PHPStan Version"></a>
+	<a><img src="https://img.shields.io/badge/phpstan-%5E2.1-blue?style=for-the-badge" alt="PHPStan Version"></a>
 </p>
 
 <br />

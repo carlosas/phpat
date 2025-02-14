@@ -60,6 +60,18 @@ services:
 		tags:
 			- phpstan.rules.rule
 
+	# ShouldBeEnum rules
+	-
+		class: PHPat\Rule\Assertion\Declaration\ShouldBeEnum\IsEnumRule
+		tags:
+			- phpstan.rules.rule
+
+	# ShouldNotBeEnum rules
+	-
+		class: PHPat\Rule\Assertion\Declaration\ShouldNotBeEnum\IsEnumRule
+		tags:
+			- phpstan.rules.rule
+
 	# ShouldHaveOnlyOnePublicMethod rules
 	-
 		class: PHPat\Rule\Assertion\Declaration\ShouldHaveOnlyOnePublicMethod\HasOnlyOnePublicMethodRule
