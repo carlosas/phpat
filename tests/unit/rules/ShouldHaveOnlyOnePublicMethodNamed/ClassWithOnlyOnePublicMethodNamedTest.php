@@ -14,7 +14,7 @@ use Tests\PHPat\fixtures\FixtureClass;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
- * @extends RuleTestCase<HasOnlyPublicPublicMethodNamedRule>
+ * @extends RuleTestCase<HasOnlyOnePublicMethodNamedRule>
  * @internal
  * @coversNothing
  */

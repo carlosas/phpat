@@ -14,7 +14,7 @@ use Tests\PHPat\fixtures\Special\ClassWithOnlyOnePublicMethodNamed;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
- * @extends RuleTestCase<HasOnlyPublicPublicMethodNamedRule>
+ * @extends RuleTestCase<HasOnlyOnePublicMethodNamedRule>
  * @internal
  * @coversNothing
  */

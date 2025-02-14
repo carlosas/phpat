@@ -8,6 +8,7 @@ use PHPat\Rule\Assertion\Declaration\ShouldBeInterface\ShouldBeInterface;
 use PHPat\Rule\Assertion\Declaration\ShouldBeNamed\ShouldBeNamed;
 use PHPat\Rule\Assertion\Declaration\ShouldBeReadonly\ShouldBeReadonly;
 use PHPat\Rule\Assertion\Declaration\ShouldHaveOnlyOnePublicMethod\ShouldHaveOnlyOnePublicMethod;
+use PHPat\Rule\Assertion\Declaration\ShouldHaveOnlyOnePublicMethodNamed\ShouldHaveOnlyOnePublicMethodNamed;
 use PHPat\Rule\Assertion\Declaration\ShouldNotBeAbstract\ShouldNotBeAbstract;
 use PHPat\Rule\Assertion\Declaration\ShouldNotBeFinal\ShouldNotBeFinal;
 use PHPat\Rule\Assertion\Declaration\ShouldNotBeReadonly\ShouldNotBeReadonly;
@@ -141,6 +142,14 @@ class AssertionStep extends AbstractStep
     public function shouldHaveOnlyOnePublicMethod(): TipOrBuildStep
     {
         $this->rule->assertion = ShouldHaveOnlyOnePublicMethod::class;
+
+        return new TipOrBuildStep($this->rule);
+    }
+
+    public function shouldHaveOnlyOnePublicMethodNamed(string $name, bool $isRegex = false): TipOrBuildStep
+    {
+        $this->rule->assertion = ShouldHaveOnlyOnePublicMethodNamed::class;
+        $this->rule->params = ['name' => $name, 'isRegex' => $isRegex];
 
         return new TipOrBuildStep($this->rule);
     }
