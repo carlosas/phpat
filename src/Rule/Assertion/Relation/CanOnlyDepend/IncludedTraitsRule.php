@@ -2,7 +2,6 @@
 
 namespace PHPat\Rule\Assertion\Relation\CanOnlyDepend;
 
-use PHPat\Rule\Assertion\Relation\ShouldInclude\ShouldInclude;
 use PHPat\Rule\Extractor\Relation\AllTraitsExtractor;
 use PHPStan\Node\InClassNode;
 use PHPStan\Rules\Rule;
