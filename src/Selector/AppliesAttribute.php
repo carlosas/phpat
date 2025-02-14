@@ -7,26 +7,26 @@ use PHPStan\Reflection\ClassReflection;
 
 final class AppliesAttribute implements SelectorInterface
 {
-    private string $attributeName;
+    private string $classname;
     private bool $isRegex;
 
     /** @var array<string, mixed> */
     private array $arguments;
 
     /**
-     * @param class-string|string  $attributeName
+     * @param class-string|string  $classname
      * @param array<string, mixed> $arguments
      */
-    public function __construct(string $attributeName, array $arguments = [], bool $isRegex = false)
+    public function __construct(string $classname, bool $isRegex = false, array $arguments = [])
     {
-        $this->attributeName = $attributeName;
+        $this->classname = $classname;
         $this->isRegex = $isRegex;
         $this->arguments = $arguments;
     }
 
     public function getName(): string
     {
-        return $this->attributeName;
+        return $this->classname;
     }
 
     public function matches(ClassReflection $classReflection): bool
@@ -39,7 +39,7 @@ final class AppliesAttribute implements SelectorInterface
         }
 
         foreach ($attributes as $attribute) {
-            if ($attribute->getName() === $this->attributeName) {
+            if ($attribute->getName() === $this->classname) {
                 $arguments = $attribute->getArguments();
 
                 if (count($this->arguments) > 0) {
@@ -60,7 +60,7 @@ final class AppliesAttribute implements SelectorInterface
     {
         /** @var ReflectionAttribute $attribute */
         foreach ($attributes as $attribute) {
-            if (preg_match($this->attributeName, $attribute->getName()) === 1) {
+            if (preg_match($this->classname, $attribute->getName()) === 1) {
                 $arguments = $attribute->getArguments();
 
                 if (count($this->arguments) > 0) {
@@ -83,7 +83,7 @@ final class AppliesAttribute implements SelectorInterface
             return true;
         }
 
-        $keys = array_intersect($arguments, $this->arguments);
+        $keys = array_intersect_key($arguments, $this->arguments);
 
         if (count($keys) === 0) {
             return false;

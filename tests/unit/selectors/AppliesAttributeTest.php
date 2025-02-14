@@ -46,9 +46,6 @@ class AppliesAttributeTest extends TestCase
         $instance = $ref->newInstanceWithoutConstructor();
         $ref->getProperty('reflection')->setValue($instance, new \ReflectionClass(FixtureClass::class));
 
-        $ref = new \ReflectionClass(FixtureClass::class);
-
-        //        var_dump($ref->getAttributes());
         return $instance;
     }
 }
