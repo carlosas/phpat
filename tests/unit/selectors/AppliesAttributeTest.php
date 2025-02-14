@@ -12,6 +12,8 @@ use Tests\PHPat\fixtures\Simple\SimpleAttribute;
 
 /**
  * @internal
+ *
+ * @covers \PHPat\Selector\AppliesAttribute
  */
 #[CoversClass(AppliesAttribute::class)]
 class AppliesAttributeTest extends TestCase
