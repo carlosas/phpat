@@ -36,6 +36,6 @@ abstract class ShouldHaveOnlyOnePublicMethodNamed extends DeclarationAssertion
 
     protected function getMessage(string $ruleName, string $subject, array $params = []): string
     {
-        return $this->prepareMessage($ruleName, sprintf('%s should have only one public methods named', $subject));
+        return $this->prepareMessage($ruleName, sprintf('%s should have only one public method named %s', $subject, $params['name']));
     }
 }

@@ -25,7 +25,7 @@ class ClassWithOnlyOnePublicMethodNamedTest extends RuleTestCase
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should have only one public methods named', FixtureClass::class), 29],
+            [sprintf('%s should have only one public method named %s', FixtureClass::class, ''), 29],
         ]);
     }
 
