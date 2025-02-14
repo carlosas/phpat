@@ -5,9 +5,7 @@
 
 <hr />
 
-**PHP Architecture Tester** is a PHPStan extension (Static Analysis tool) designed to verify architectural requirements.
-
-It provides a natural language abstraction that enables you to define your own architectural rules and assess their compliance.
+**PHP Architecture Tester** is a PHPStan extension (Static Analysis tool) designed to verify architectural requirements. It provides a natural language abstraction that enables you to define your own architectural rules and assess their compliance.
 
 <p align="center">
     <img width="700" src="assets/example.gif" alt="Example">
