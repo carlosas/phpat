@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace PHPat\Rule\Assertion\Declaration\ShouldHaveOnlyPublicMethodNamed;
+namespace PHPat\Rule\Assertion\Declaration\ShouldHaveOnlyOnePublicMethodNamed;
 
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\Declaration\DeclarationAssertion;
@@ -10,7 +10,7 @@ use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\FileTypeMapper;
 
-abstract class ShouldHaveOnlyPublicMethodNamed extends DeclarationAssertion
+abstract class ShouldHaveOnlyOnePublicMethodNamed extends DeclarationAssertion
 {
     use ValidationTrait;
 
@@ -36,6 +36,6 @@ abstract class ShouldHaveOnlyPublicMethodNamed extends DeclarationAssertion
 
     protected function getMessage(string $ruleName, string $subject, array $params = []): string
     {
-        return $this->prepareMessage($ruleName, sprintf('%s should have only public methods named', $subject));
+        return $this->prepareMessage($ruleName, sprintf('%s should have only one public methods named', $subject));
     }
 }

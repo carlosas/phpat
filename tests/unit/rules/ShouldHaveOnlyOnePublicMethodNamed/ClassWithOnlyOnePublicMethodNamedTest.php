@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Tests\PHPat\unit\rules\ShouldHaveOnlyPublicMethodNamed;
+namespace Tests\PHPat\unit\rules\ShouldHaveOnlyOnePublicMethodNamed;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\Declaration\ShouldHaveOnlyPublicMethodNamed\HasOnlyPublicMethodNamedRule;
-use PHPat\Rule\Assertion\Declaration\ShouldHaveOnlyPublicMethodNamed\ShouldHaveOnlyPublicMethodNamed;
+use PHPat\Rule\Assertion\Declaration\ShouldHaveOnlyOnePublicMethodNamed\HasOnlyOnePublicMethodNamedRule;
+use PHPat\Rule\Assertion\Declaration\ShouldHaveOnlyOnePublicMethodNamed\ShouldHaveOnlyOnePublicMethodNamed;
 use PHPat\Selector\Classname;
 use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;
@@ -18,14 +18,14 @@ use Tests\PHPat\unit\FakeTestParser;
  * @internal
  * @coversNothing
  */
-class ClassWithOnlyPublicMethodNamedTest extends RuleTestCase
+class ClassWithOnlyOnePublicMethodNamedTest extends RuleTestCase
 {
-    public const RULE_NAME = 'testFixtureClassShouldHaveOnlyPublicMethodNamed';
+    public const RULE_NAME = 'testFixtureClassShouldHaveOnlyOnePublicMethodNamed';
 
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should have only public methods named', FixtureClass::class), 29],
+            [sprintf('%s should have only one public methods named', FixtureClass::class), 29],
         ]);
     }
 
@@ -33,12 +33,12 @@ class ClassWithOnlyPublicMethodNamedTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            ShouldHaveOnlyPublicMethodNamed::class,
+            ShouldHaveOnlyOnePublicMethodNamed::class,
             [new Classname(FixtureClass::class, false)],
             []
         );
 
-        return new HasOnlyPublicMethodNamedRule(
+        return new HasOnlyOnePublicMethodNamedRule(
             new StatementBuilderFactory($testParser),
             new Configuration(false, true, false),
             self::createReflectionProvider(),

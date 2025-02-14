@@ -2,7 +2,7 @@
 
 namespace Tests\PHPat\fixtures\Special;
 
-class ClassWithOnlyPublicMethodNamed
+class ClassWithOnlyOnePublicMethodNamed
 {
     public const CONSTANT = 'constant';
     public string $property = 'property';
