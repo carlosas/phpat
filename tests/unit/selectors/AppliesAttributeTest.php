@@ -16,6 +16,15 @@ use Tests\PHPat\fixtures\Simple\SimpleAttribute;
 #[CoversClass(AppliesAttribute::class)]
 class AppliesAttributeTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        if (PHP_VERSION_ID < 80000) {
+            self::markTestSkipped();
+        }
+    }
+
     public function testGetName()
     {
         $selector = new AppliesAttribute('test');
@@ -23,18 +32,14 @@ class AppliesAttributeTest extends TestCase
         $this->assertEquals('test', $selector->getName());
     }
 
-    #[TestWith(['name' => SimpleAttribute::class, [], false, true])]
-    #[TestWith(['name' => 'Fake\Attribute', [], false, false])]
-    #[TestWith(['name' => '/\bSimple[A-Z][a-zA-Z0-9_]*\b/', [], true, true])]
-    #[TestWith(['name' => '/\bFake[A-Z][a-zA-Z0-9_]*\b/', [], true, false])]
-    #[TestWith(['name' => SimpleAttribute::class, ['something' => 'something'], false, true])]
-    #[TestWith(['name' => SimpleAttribute::class, ['something' => 'somethingElse'], false, false])]
+    #[TestWith([SimpleAttribute::class, [], false, true])]
+    #[TestWith(['Fake\Attribute', [], false, false])]
+    #[TestWith(['/\bSimple[A-Z][a-zA-Z0-9_]*\b/', [], true, true])]
+    #[TestWith(['/\bFake[A-Z][a-zA-Z0-9_]*\b/', [], true, false])]
+    #[TestWith([SimpleAttribute::class, ['something' => 'something'], false, true])]
+    #[TestWith([SimpleAttribute::class, ['something' => 'somethingElse'], false, false])]
     public function testMatches(string $name, array $arguments, bool $isRegex, bool $expected)
     {
-        if (PHP_VERSION_ID < 80000) {
-            self::markTestSkipped();
-        }
-
         $selector = new AppliesAttribute($name, $isRegex, $arguments);
 
         self::assertSame($expected, $selector->matches($this->getClassReflection()));
