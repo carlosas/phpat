@@ -81,7 +81,7 @@ final class DeclarationStatementBuilder implements StatementBuilder
 
     private function extractRuleName(string $fullName): string
     {
-        $randomName = msubstr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, 8);
+        $randomName = substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, 8);
         $pos = strpos($fullName, ':');
         $name = substr($fullName, $pos !== false ? $pos + 1 : 0);
         $sanitized = is_string($sanitized = preg_replace_callback('/_([a-zA-Z])/', fn ($matches) => strtoupper($matches[1]), $name)) ? $sanitized : $randomName;
