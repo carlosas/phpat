@@ -15,7 +15,7 @@ $rules = [
     PhpCsFixerCustomFixers\Fixer\ConstructorEmptyBracesFixer::name() => true,
     'phpdoc_line_span' => ['property' => 'single', 'const' => 'single'],
     'phpdoc_separation' => ['groups' => [['deprecated', 'link', 'see', 'since'], ['template', 'template-covariant'], ['param', 'return', 'throws']], 'skip_unlisted_annotations' => true],
-    'mb_str_functions' => true,
+    'mb_str_functions' => false,
     'compact_nullable_type_declaration' => true,
     'single_line_after_imports' => true,
     'strict_comparison' => true,
