@@ -28,7 +28,7 @@ If you are using a MVC approach, you could ensure that both model and view are n
 
 >Classes in namespace App\Model should not depend on classes in namespace App\View
 
->Classesin namespace App\View should not depend on classes in namespace App\Model
+>Classes in namespace App\View should not depend on classes in namespace App\Model
 
 #### Vendors coupling
 
