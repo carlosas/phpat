@@ -37,8 +37,8 @@ abstract class ShouldBeNamed extends DeclarationAssertion
     protected function getMessage(string $ruleName, string $subject, array $params = []): string
     {
         $message = $params['isRegex'] === true
-            ? sprintf('%s should be named matching the regex %s', $subject, $params['classname'])
-            : sprintf('%s should be named %s', $subject, $params['classname']);
+            ? sprintf('%s should be named matching the regex %s', $subject, $params['fqcn'])
+            : sprintf('%s should be named %s', $subject, $params['fqcn']);
 
         return $this->prepareMessage($ruleName, $message);
     }

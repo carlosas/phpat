@@ -37,7 +37,7 @@ class ClassnameTest extends RuleTestCase
             [new Classname(FixtureClass::class, false)],
             [],
             [],
-            ['isRegex' => false, 'classname' => 'SuperCoolClass']
+            ['isRegex' => false, 'fqcn' => 'SuperCoolClass']
         );
 
         return new ClassnameRule(
