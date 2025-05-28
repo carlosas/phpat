@@ -13,6 +13,10 @@ final class IsEnum implements SelectorInterface
 
     public function matches(ClassReflection $classReflection): bool
     {
+        if (PHP_VERSION_ID < 80100) {
+            return false;
+        }
+
         return $classReflection->isEnum();
     }
 }
