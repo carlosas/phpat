@@ -26,7 +26,7 @@ use Tests\PHPat\fixtures\Special\InterfaceWithTemplate;
  * @method   SimpleClassFour  someMethod(SimpleClassFive $m)
  * @mixin SimpleClassSix
  */
-#[SimpleAttribute]
+#[SimpleAttribute(something: 'something')]
 class FixtureClass extends SimpleAbstractClass implements SimpleInterface
 {
     use SimpleTrait;
