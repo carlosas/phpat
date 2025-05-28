@@ -25,7 +25,7 @@ jobs:
           - "highest"
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v2"
+        uses: "actions/checkout@v4"
       - name: "Install PHP with extensions"
         uses: "shivammathur/setup-php@v2"
         with:
@@ -37,7 +37,7 @@ jobs:
       - name: "Determine composer cache directory"
         uses: "./.github/actions/composer/composer/determine-cache-directory"
       - name: "Cache dependencies installed with composer"
-        uses: "actions/cache@v2"
+        uses: "actions/cache@v4"
         with:
           path: "${{ env.COMPOSER_CACHE_DIR }}"
           key: "php-${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-${{ hashFiles('composer.lock') }}"
@@ -47,7 +47,7 @@ jobs:
         with:
           dependencies: "${{ matrix.dependencies }}"
       - name: "Run friendsofphp/php-cs-fixer"
-        run: "vendor/bin/php-cs-fixer check --config ./ci/php-cs-fixer.php"
+        run: "vendor/bin/php-cs-fixer check -v --config ./ci/php-cs-fixer.php"
 
   static-code-analysis:
     name: "Static Code and Architecture analysis"
@@ -63,7 +63,7 @@ jobs:
           - "highest"
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v2"
+        uses: "actions/checkout@v4"
       - name: "Install PHP with extensions"
         uses: "shivammathur/setup-php@v2"
         with:
@@ -73,7 +73,7 @@ jobs:
       - name: "Determine composer cache directory"
         uses: "./.github/actions/composer/composer/determine-cache-directory"
       - name: "Cache dependencies installed with composer"
-        uses: "actions/cache@v2"
+        uses: "actions/cache@v4"
         with:
           path: "${{ env.COMPOSER_CACHE_DIR }}"
           key: "php-${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-${{ hashFiles('composer.lock') }}"
@@ -99,7 +99,7 @@ jobs:
           - "highest"
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v2"
+        uses: "actions/checkout@v4"
       - name: "Install PHP with extensions"
         uses: "shivammathur/setup-php@v2"
         with:
@@ -111,7 +111,7 @@ jobs:
       - name: "Determine composer cache directory"
         uses: "./.github/actions/composer/composer/determine-cache-directory"
       - name: "Cache dependencies installed with composer"
-        uses: "actions/cache@v2"
+        uses: "actions/cache@v4"
         with:
           path: "${{ env.COMPOSER_CACHE_DIR }}"
           key: "php-${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-${{ hashFiles('composer.lock') }}"
@@ -121,4 +121,4 @@ jobs:
         with:
           dependencies: "${{ matrix.dependencies }}"
       - name: "Run tests with phpunit/phpunit"
-        run: "vendor/bin/phpunit tests/unit/rules/"
+        run: "vendor/bin/phpunit tests/unit/"

@@ -2,10 +2,7 @@
 
 namespace Tests\PHPat\architecture;
 
-use PHPat\Parser\TypeNodeParser;
 use PHPat\Rule\Assertion\Assertion;
-use PHPat\Rule\Assertion\Declaration\DeclarationAssertion;
-use PHPat\Rule\Assertion\Relation\RelationAssertion;
 use PHPat\Selector\Selector;
 use PHPat\Test\Builder\Rule;
 use PHPat\Test\PHPat;

@@ -1,6 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.11.4
+* Update deprecated CS-Fixer rules
+* Add `ShouldHaveOnlyPublicMethodNamed` assertion
+* Fix run on previous PHP versions
+
+## 0.11.3
+* Fix error with getNativeReflection in latest PHPStan versions
+* Catch included traits in dependency assertions
+
 ## 0.11.2
 * Add `AllOf()` selector modifier
 * Add `AnyOf()` selector modifier

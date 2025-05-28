@@ -60,9 +60,27 @@ services:
 		tags:
 			- phpstan.rules.rule
 
+	# ShouldBeInvokable rules
+	-
+		class: PHPat\Rule\Assertion\Declaration\ShouldBeInvokable\IsInvokableRule
+		tags:
+			- phpstan.rules.rule
+
+	# ShouldNotBeInvokable rules
+	-
+		class: PHPat\Rule\Assertion\Declaration\ShouldNotBeInvokable\IsInvokableRule
+		tags:
+			- phpstan.rules.rule
+
 	# ShouldHaveOnlyOnePublicMethod rules
 	-
 		class: PHPat\Rule\Assertion\Declaration\ShouldHaveOnlyOnePublicMethod\HasOnlyOnePublicMethodRule
+		tags:
+			- phpstan.rules.rule
+
+	# ShouldHaveOnlyOnePublicMethodNamed rules
+	-
+		class: PHPat\Rule\Assertion\Declaration\ShouldHaveOnlyOnePublicMethodNamed\HasOnlyOnePublicMethodNamedRule
 		tags:
 			- phpstan.rules.rule
 
@@ -105,6 +123,10 @@ services:
 			- phpstan.rules.rule
 	-
 		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\ParentClassRule
+		tags:
+			- phpstan.rules.rule
+	-
+		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\IncludedTraitsRule
 		tags:
 			- phpstan.rules.rule
 	-
@@ -175,6 +197,10 @@ services:
 			- phpstan.rules.rule
 	-
 		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\ParentClassRule
+		tags:
+			- phpstan.rules.rule
+	-
+		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\IncludedTraitsRule
 		tags:
 			- phpstan.rules.rule
 	-
