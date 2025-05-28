@@ -2,7 +2,10 @@
 All notable changes to this project will be documented in this file.
 
 ## 0.11.4
-* Update deprecated CS-Fixer rules
+* Add `ShouldBeInvokable` assertion
+* Fix incorrect param name for `ShouldBeNamed` assertion
+
+## 0.11.4
 * Add `ShouldHaveOnlyPublicMethodNamed` assertion
 * Fix run on previous PHP versions
 
