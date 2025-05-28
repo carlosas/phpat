@@ -17,6 +17,7 @@ final class IsEnum implements SelectorInterface
             return false;
         }
 
+        // @phpstan-ignore-next-line
         return $classReflection->isEnum();
     }
 }
