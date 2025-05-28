@@ -60,6 +60,18 @@ services:
 		tags:
 			- phpstan.rules.rule
 
+	# ShouldBeInvokable rules
+	-
+		class: PHPat\Rule\Assertion\Declaration\ShouldBeInvokable\IsInvokableRule
+		tags:
+			- phpstan.rules.rule
+
+	# ShouldNotBeInvokable rules
+	-
+		class: PHPat\Rule\Assertion\Declaration\ShouldNotBeInvokable\IsInvokableRule
+		tags:
+			- phpstan.rules.rule
+
 	# ShouldHaveOnlyOnePublicMethod rules
 	-
 		class: PHPat\Rule\Assertion\Declaration\ShouldHaveOnlyOnePublicMethod\HasOnlyOnePublicMethodRule
