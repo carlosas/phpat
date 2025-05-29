@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## 0.11.4
+## 0.11.5
 * Add `ShouldBeInvokable` assertion
 * Fix incorrect param name for `ShouldBeNamed` assertion
 
