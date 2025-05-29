@@ -34,6 +34,18 @@ The first selector will select all classes in the `App\User\Domain` namespace.
 
 The second one will select all classes in a namespace matching the regular expression.
 
+## Selector::filepath()
+Selects classes matching the given filepath.
+
+```php
+Selector::filepath('src/App/User/Domain/UserEntity.php')
+Selector::filepath('/.+Domain.*\.php/', true)
+```
+
+The first selector will select all classes defined in the `src/App/User/Domain/UserEntity.php` file.
+
+The second one will select all classes who have a filepath matching the regular expression.
+
 ## Selector::isError()
 Select classes that extend the `\Error` class.
 
