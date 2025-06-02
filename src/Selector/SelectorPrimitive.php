@@ -93,10 +93,11 @@ class SelectorPrimitive
 
     /**
      * @param class-string|non-empty-string $fqcn
+     * @param array<string, mixed>          $arguments
      */
-    public static function appliesAttribute(string $fqcn, bool $regex = false): AppliesAttribute
+    public static function appliesAttribute(string $fqcn, bool $regex = false, array $arguments = []): AppliesAttribute
     {
-        return new AppliesAttribute($fqcn, $regex);
+        return new AppliesAttribute($fqcn, $regex, $arguments);
     }
 
     /**

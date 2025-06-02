@@ -54,6 +54,7 @@ Select all interfaces.
 
 ## Selector::appliesAttribute(string)
 Select classes that applies the given attribute.
+You can pass one or more arguments with their values that the attribute should apply to.
 
 ## Selector::isAbstract()
 Select all abstract classes.
