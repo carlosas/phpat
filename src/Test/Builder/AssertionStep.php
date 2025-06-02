@@ -3,6 +3,7 @@
 namespace PHPat\Test\Builder;
 
 use PHPat\Rule\Assertion\Declaration\ShouldBeAbstract\ShouldBeAbstract;
+use PHPat\Rule\Assertion\Declaration\ShouldBeEnum\ShouldBeEnum;
 use PHPat\Rule\Assertion\Declaration\ShouldBeFinal\ShouldBeFinal;
 use PHPat\Rule\Assertion\Declaration\ShouldBeInterface\ShouldBeInterface;
 use PHPat\Rule\Assertion\Declaration\ShouldBeInvokable\ShouldBeInvokable;
@@ -11,6 +12,7 @@ use PHPat\Rule\Assertion\Declaration\ShouldBeReadonly\ShouldBeReadonly;
 use PHPat\Rule\Assertion\Declaration\ShouldHaveOnlyOnePublicMethod\ShouldHaveOnlyOnePublicMethod;
 use PHPat\Rule\Assertion\Declaration\ShouldHaveOnlyOnePublicMethodNamed\ShouldHaveOnlyOnePublicMethodNamed;
 use PHPat\Rule\Assertion\Declaration\ShouldNotBeAbstract\ShouldNotBeAbstract;
+use PHPat\Rule\Assertion\Declaration\ShouldNotBeEnum\ShouldNotBeEnum;
 use PHPat\Rule\Assertion\Declaration\ShouldNotBeFinal\ShouldNotBeFinal;
 use PHPat\Rule\Assertion\Declaration\ShouldNotBeInvokable\ShouldNotBeInvokable;
 use PHPat\Rule\Assertion\Declaration\ShouldNotBeReadonly\ShouldNotBeReadonly;
@@ -74,6 +76,20 @@ class AssertionStep extends AbstractStep
     public function shouldNotBeFinal(): TipOrBuildStep
     {
         $this->rule->assertion = ShouldNotBeFinal::class;
+
+        return new TipOrBuildStep($this->rule);
+    }
+
+    public function shouldBeEnum(): TipOrBuildStep
+    {
+        $this->rule->assertion = ShouldBeEnum::class;
+
+        return new TipOrBuildStep($this->rule);
+    }
+
+    public function shouldNotBeEnum(): TipOrBuildStep
+    {
+        $this->rule->assertion = ShouldNotBeEnum::class;
 
         return new TipOrBuildStep($this->rule);
     }
