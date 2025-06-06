@@ -25,25 +25,19 @@ trait PublicMethodNamedExtractor
         $reflectionClass = $node->getClassReflection()->getNativeReflection();
         $methods = $reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC);
 
-        $methodsWithoutConstructor = array_filter(
+        $methodsMeetingDeclaration = array_filter(
             $methods,
-            fn ($method) => $method->getName() !== '__construct'
-        );
-
-        foreach ($methodsWithoutConstructor as $method) {
-            if ($params['isRegex'] === true) {
-                if (preg_match($params['name'], $method->getName()) !== 1) {
+            function ($method) use ($params) {
+                if ($method->getName() === '__construct') {
                     return false;
                 }
 
-                continue;
+                return $params['isRegex'] === true
+                    ? preg_match($params['name'], $method->getName()) === 1
+                    : $method->getName() === $params['name'];
             }
+        );
 
-            if ($method->getName() !== $params['name']) {
-                return false;
-            }
-        }
-
-        return true;
+        return count($methodsMeetingDeclaration) === 1;
     }
 }
