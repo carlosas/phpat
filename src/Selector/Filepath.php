@@ -22,7 +22,7 @@ final class Filepath implements SelectorInterface
 
     public function matches(ClassReflection $classReflection): bool
     {
-        $filepath = $classReflection->getfilepath();
+        $filepath = $classReflection->getFileName();
 
         if ($filepath === null) {
             return false;
