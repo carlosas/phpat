@@ -34,12 +34,12 @@ The first selector will select all classes in the `App\User\Domain` namespace.
 
 The second one will select all classes in a namespace matching the regular expression.
 
-## Selector::filepath()
+## Selector::withFilepath()
 Selects classes matching the given filepath.
 
 ```php
-Selector::filepath('src/App/User/Domain/UserEntity.php')
-Selector::filepath('/.+Domain.*\.php/', true)
+Selector::withFilepath('src/App/User/Domain/UserEntity.php')
+Selector::withFilepath('/.+Domain.*\.php/', true)
 ```
 
 The first selector will select all classes defined in the `src/App/User/Domain/UserEntity.php` file.

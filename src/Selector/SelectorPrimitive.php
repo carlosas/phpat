@@ -75,7 +75,7 @@ class SelectorPrimitive
         return new Classname($fqcn, $regex);
     }
 
-    public static function filepath(string $filename, bool $regex = false): Filepath
+    public static function withFilepath(string $filename, bool $regex = false): Filepath
     {
         return new Filepath($filename, $regex);
     }
