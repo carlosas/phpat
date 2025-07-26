@@ -42,7 +42,7 @@ class InstanceofTest extends RuleTestCase
             [new Classname(ClassWithInstanceof::class, false)],
             [
                 new Classname(SimpleException::class, false),
-                new Classname(SimpleInterface::class, false)
+                new Classname(SimpleInterface::class, false),
             ]
         );
 

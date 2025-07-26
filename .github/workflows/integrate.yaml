@@ -126,4 +126,4 @@ jobs:
         with:
           dependencies: "${{ matrix.dependencies }}"
       - name: "Run tests with phpunit/phpunit"
-        run: "vendor/bin/phpunit tests/unit/ --display-phpunit-deprecations"
+        run: "vendor/bin/phpunit tests/unit/"
