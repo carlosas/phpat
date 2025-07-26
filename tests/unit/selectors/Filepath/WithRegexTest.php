@@ -1,32 +1,37 @@
 <?php declare(strict_types=1);
 
-namespace Tests\PHPat\unit\rules\ShouldBeNamed;
+namespace Tests\PHPat\unit\selectors\Filepath;
 
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\Declaration\ShouldBeNamed\ClassnameRule;
 use PHPat\Rule\Assertion\Declaration\ShouldBeNamed\ShouldBeNamed;
-use PHPat\Selector\Classname;
+use PHPat\Selector\Filepath;
 use PHPat\Statement\Builder\StatementBuilderFactory;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\FixtureClass;
+use Tests\PHPat\fixtures\Simple\SimpleClass;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
  * @extends RuleTestCase<ClassnameRule>
  * @internal
- * @coversNothing
+ * @covers \PHPat\Selector\Filepath
  */
-class ClassnameTest extends RuleTestCase
+final class WithRegexTest extends RuleTestCase
 {
-    public const RULE_NAME = 'testFixtureClassShouldBeNamed';
+    public const RULE_NAME = 'testSimpleClassShouldBeNamed';
 
-    public function testRule(): void
+    public function testRegexFilename(): void
     {
-        $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should be named SuperCoolClass', FixtureClass::class), 29],
+        $this->analyse(['tests/fixtures/Simple/SimpleClass.php'], [
+            [sprintf('%s should be named matching the regex /^Super[a-zA-Z0-9]+/', SimpleClass::class), 5],
         ]);
+    }
+
+    public function testRegexFilenameNoMatch(): void
+    {
+        $this->analyse(['tests/fixtures/Simple/SimpleClassTwo.php'], []);
     }
 
     protected function getRule(): Rule
@@ -34,10 +39,10 @@ class ClassnameTest extends RuleTestCase
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
             ShouldBeNamed::class,
-            [new Classname(FixtureClass::class, false)],
+            [new Filepath('/^.*SimpleClass\.php/', true)],
             [],
             [],
-            ['isRegex' => false, 'classname' => 'SuperCoolClass']
+            ['isRegex' => true, 'classname' => '/^Super[a-zA-Z0-9]+/']
         );
 
         return new ClassnameRule(

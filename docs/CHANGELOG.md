@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.11.7
+* Add `withFilepath` selector
+* Rollback param name for `ShouldBeNamed` assertion
+
 ## 0.11.6
 * Add missing rule identifier to Declaration assertions
 * Fix support for regex in `ShouldHaveOnlyOnePublicMethodNamed`

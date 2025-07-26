@@ -75,6 +75,11 @@ class SelectorPrimitive
         return new Classname($fqcn, $regex);
     }
 
+    public static function withFilepath(string $filename, bool $regex = false): Filepath
+    {
+        return new Filepath($filename, $regex);
+    }
+
     /**
      * @param class-string|non-empty-string $fqcn
      */

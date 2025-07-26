@@ -28,10 +28,10 @@ use PHPat\Rule\Assertion\Relation\ShouldNotInclude\ShouldNotInclude;
 
 class AssertionStep extends AbstractStep
 {
-    public function shouldBeNamed(string $fqcn, bool $regex = false): TipOrBuildStep
+    public function shouldBeNamed(string $classname, bool $regex = false): TipOrBuildStep
     {
         $this->rule->assertion = ShouldBeNamed::class;
-        $this->rule->params = ['isRegex' => $regex, 'fqcn' => $fqcn];
+        $this->rule->params = ['isRegex' => $regex, 'classname' => $classname];
 
         return new TipOrBuildStep($this->rule);
     }
