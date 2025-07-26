@@ -176,7 +176,7 @@ abstract class RelationAssertion implements Assertion
 
     private function isBuiltInClass(string $node): bool
     {
-        return in_array($node, BuiltInClasses::PHP_8_BUILT_IN_CLASSES, true)
+        return in_array($node, BuiltInClasses::PHP_BUILT_IN_CLASSES, true)
             || ($this->reflectionProvider->hasClass($node) && $this->reflectionProvider->getClass($node)->isBuiltin());
     }
 }
