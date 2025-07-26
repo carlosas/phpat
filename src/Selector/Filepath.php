@@ -6,32 +6,32 @@ use PHPStan\Reflection\ClassReflection;
 
 final class Filepath implements SelectorInterface
 {
-    private string $filename;
+    private string $filepath;
     private bool $isRegex;
 
-    public function __construct(string $filename, bool $isRegex)
+    public function __construct(string $filepath, bool $isRegex)
     {
-        $this->filename = $filename;
+        $this->filepath = $filepath;
         $this->isRegex = $isRegex;
     }
 
     public function getName(): string
     {
-        return $this->filename;
+        return $this->filepath;
     }
 
     public function matches(ClassReflection $classReflection): bool
     {
-        $filename = $classReflection->getFileName();
+        $filepath = $classReflection->getfilepath();
 
-        if ($filename === null) {
+        if ($filepath === null) {
             return false;
         }
 
         if ($this->isRegex) {
-            return preg_match($this->filename, $filename) === 1;
+            return preg_match($this->filepath, $filepath) === 1;
         }
 
-        return $filename === \trimSeparators($this->filename);
+        return $filepath === \trimSeparators($this->filepath);
     }
 }
