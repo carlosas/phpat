@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.11.6
+* Add missing rule identifier to Declaration assertions
+* Fix support for regex in `ShouldHaveOnlyOnePublicMethodNamed`
+* Add support for attribute arguments in `AppliesAttribute` assertion
+
 ## 0.11.5
 * Add `ShouldBeInvokable` assertion
 * Fix incorrect param name for `ShouldBeNamed` assertion
