@@ -41,7 +41,7 @@ class AppliesAttributeTest extends TestCase
         self::assertSame($expected, $selector->matches($this->getClassReflection()));
     }
 
-    public function getCases(): array
+    public static function getCases(): array
     {
         return [
             [SimpleAttribute::class, [], false, true],
