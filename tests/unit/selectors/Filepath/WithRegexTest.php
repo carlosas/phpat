@@ -25,7 +25,7 @@ final class WithRegexTest extends RuleTestCase
     public function testRegexFilename(): void
     {
         $this->analyse(['tests/fixtures/Simple/SimpleClass.php'], [
-            [sprintf('%s should be named SuperCoolClass', SimpleClass::class), 5],
+            [sprintf('%s should be named matching the regex /^Super[a-zA-Z0-9]+/', SimpleClass::class), 5],
         ]);
     }
 
@@ -42,7 +42,7 @@ final class WithRegexTest extends RuleTestCase
             [new Filepath('/^.*SimpleClass\.php/', true)],
             [],
             [],
-            ['isRegex' => false, 'classname' => 'SuperCoolClass']
+            ['isRegex' => true, 'classname' => '/^Super[a-zA-Z0-9]+/']
         );
 
         return new ClassnameRule(
