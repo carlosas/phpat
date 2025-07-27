@@ -38,7 +38,7 @@ When the pull request is merged, the documentation will be automatically deploye
 
 ## Slack channel
 
-Feel free to join the channel [#phpat](https://symfony-devs.slack.com/archives/CQFKA2R0D) on SymfonyDevs' workspace
+Feel free to join the channel [#static-analysis](https://symfony-devs.slack.com/archives/C8SFXTD2M) on SymfonyDevs' workspace
 if you want to discuss something or need some help.
 
 ---
