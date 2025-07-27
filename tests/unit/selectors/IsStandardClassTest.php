@@ -64,10 +64,10 @@ class IsStandardClassTest extends TestCase
     {
         return [
             [SimpleClass::class],
-            ['App\\User'],
+            ['App\User'],
             ['MyCustomClass'],
-            ['Vendor\\Package\\SomeClass'],
-            ['Tests\\PHPat\\fixtures\\Simple\\SimpleClass'],
+            ['Vendor\Package\SomeClass'],
+            ['Tests\PHPat\fixtures\Simple\SimpleClass'],
         ];
     }
 
@@ -90,15 +90,15 @@ class IsStandardClassTest extends TestCase
     public function testCaseSensitiveMatching(): void
     {
         $selector = new IsStandardClass();
-        
+
         // Correct case should match
         $correctCaseReflection = $this->createClassReflection('stdClass');
         self::assertTrue($selector->matches($correctCaseReflection));
-        
+
         // Incorrect case should not match
         $incorrectCaseReflection = $this->createClassReflection('stdclass');
         self::assertFalse($selector->matches($incorrectCaseReflection));
-        
+
         $upperCaseReflection = $this->createClassReflection('STDCLASS');
         self::assertFalse($selector->matches($upperCaseReflection));
     }
