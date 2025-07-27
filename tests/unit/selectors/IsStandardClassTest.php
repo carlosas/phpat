@@ -4,6 +4,7 @@ namespace Tests\PHPat\unit\selectors;
 
 use PHPat\Selector\IsStandardClass;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ReflectionProvider\ReflectionProviderFactory;
 use PHPUnit\Framework\TestCase;
 use Tests\PHPat\fixtures\Simple\SimpleClass;
 
@@ -105,20 +106,16 @@ class IsStandardClassTest extends TestCase
 
     private function createClassReflection(string $className): ClassReflection
     {
-        return new class($className) implements ClassReflection {
-            private string $className;
+        $ref = new \ReflectionClass(ClassReflection::class);
+        $instance = $ref->newInstanceWithoutConstructor();
 
-            public function __construct(string $className)
-            {
-                $this->className = $className;
-            }
+        $mockReflection = $this->createMock(\ReflectionClass::class);
+        $mockReflection->method('getName')->willReturn($className);
 
-            public function getName(): string
-            {
-                return $this->className;
-            }
+        $reflectionProperty = $ref->getProperty('reflection');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($instance, $mockReflection);
 
-            // Implement other methods of ClassReflection as needed for the test
-        };
+        return $instance;
     }
 }
