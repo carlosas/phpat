@@ -28,7 +28,7 @@ class IsStandardClassTest extends RuleTestCase
         // This test verifies that the IsStandardClass selector works with relation assertions
         // ClassWithStandardClassInstanceof uses new with standard PHP classes
         // With ignore_built_in_classes = false, these should be detected as violations
-        $this->analyse([__DIR__ . '/../../../fixtures/Special/ClassWithStandardClasses.php'], [
+        $this->analyse([__DIR__.'/../../../fixtures/Special/ClassWithStandardClasses.php'], [
             [sprintf('%s should not depend on %s', ClassWithStandardClasses::class, 'Exception'), 9],
             [sprintf('%s should not depend on %s', ClassWithStandardClasses::class, 'stdClass'), 14],
             [sprintf('%s should not depend on %s', ClassWithStandardClasses::class, 'Error'), 19],

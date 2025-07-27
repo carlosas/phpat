@@ -4,7 +4,6 @@ namespace Tests\PHPat\unit\selectors;
 
 use PHPat\Selector\IsStandardClass;
 use PHPStan\Reflection\ClassReflection;
-use PHPStan\Reflection\ReflectionProvider\ReflectionProviderFactory;
 use PHPUnit\Framework\TestCase;
 use Tests\PHPat\fixtures\Simple\SimpleClass;
 
