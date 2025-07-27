@@ -105,17 +105,20 @@ class IsStandardClassTest extends TestCase
 
     private function createClassReflection(string $className): ClassReflection
     {
-        $ref = new \ReflectionClass(ClassReflection::class);
-        $instance = $ref->newInstanceWithoutConstructor();
+        return new class($className) implements ClassReflection {
+            private string $className;
 
-        // Create a mock reflection class that returns the specified name
-        $mockReflection = $this->createMock(\ReflectionClass::class);
-        $mockReflection->method('getName')->willReturn($className);
+            public function __construct(string $className)
+            {
+                $this->className = $className;
+            }
 
-        $reflectionProperty = $ref->getProperty('reflection');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($instance, $mockReflection);
+            public function getName(): string
+            {
+                return $this->className;
+            }
 
-        return $instance;
+            // Implement other methods of ClassReflection as needed for the test
+        };
     }
 }
