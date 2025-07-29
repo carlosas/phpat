@@ -1,0 +1,12 @@
+:root {
+    --md-primary-fg-color:        #5865a3;
+    --md-primary-fg-color--light: #8892bf;
+    --md-primary-fg-color--dark:  #3d4671;
+}
+
+img[alt=image-contributing] { width: 700px; display: block; margin-left: auto; margin-right: auto; }
+img[alt=image-layered] { width: 500px; display: block; margin-left: auto; margin-right: auto; }
+img[alt=image-mvc] { width: 500px; display: block; margin-left: auto; margin-right: auto; }
+img[alt=image-aggregates] { width: 500px; display: block; margin-left: auto; margin-right: auto; }
+img[alt=image-abstract] { width: 500px; display: block; margin-left: auto; margin-right: auto; }
+img[alt=image-interface] { width: 500px; display: block; margin-left: auto; margin-right: auto; }
