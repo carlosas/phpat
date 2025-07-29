@@ -59,6 +59,11 @@ class SelectorPrimitive
         return new IsAttribute();
     }
 
+    public static function isStandardClass(): IsStandardClass
+    {
+        return new IsStandardClass();
+    }
+
     /**
      * @param class-string|non-empty-string $namespace
      */
