@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.11.9
+* Fix `ShouldBeNamed` assertion
+* Add `isStandardClass` selector
+
 ## 0.11.8
 * Add PHP 8.3 missing built-in classes
 * Catch instanceof in dependency rules
