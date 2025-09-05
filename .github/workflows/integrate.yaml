@@ -82,7 +82,9 @@ jobs:
         uses: "./.github/actions/composer/composer/install"
         with:
           dependencies: "${{ matrix.dependencies }}"
-      - name: "Run phpstan+phpat"
+      - name: "Run Psalm"
+        run: "vendor/bin/psalm -c ci/psalm.xml"
+      - name: "Run PHPStan+PHPat"
         run: "vendor/bin/phpstan analyse -c ci/phpstan-phpat.neon"
 
   tests:
