@@ -1,8 +1,28 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.11.9
+* Fix `ShouldBeNamed` assertion
+* Add `isStandardClass` selector
+
+## 0.11.8
+* Add PHP 8.3 missing built-in classes
+* Catch instanceof in dependency rules
+
+## 0.11.7
+* Add `withFilepath` selector
+* Rollback param name for `ShouldBeNamed` assertion
+
+## 0.11.6
+* Add missing rule identifier to Declaration assertions
+* Fix support for regex in `ShouldHaveOnlyOnePublicMethodNamed`
+* Add support for attribute arguments in `AppliesAttribute` assertion
+
+## 0.11.5
+* Add `ShouldBeInvokable` assertion
+* Fix incorrect param name for `ShouldBeNamed` assertion
+
 ## 0.11.4
-* Update deprecated CS-Fixer rules
 * Add `ShouldHaveOnlyPublicMethodNamed` assertion
 * Fix run on previous PHP versions
 

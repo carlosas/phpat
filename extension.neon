@@ -201,6 +201,10 @@ services:
 		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\CatchBlockRule
 		tags:
 			- phpstan.rules.rule
+	-
+		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\InstanceofRule
+		tags:
+			- phpstan.rules.rule
 
 	# CanOnlyDepend rules
 	-
@@ -273,6 +277,10 @@ services:
 			- phpstan.rules.rule
 	-
 		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\CatchBlockRule
+		tags:
+			- phpstan.rules.rule
+	-
+		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\InstanceofRule
 		tags:
 			- phpstan.rules.rule
 
