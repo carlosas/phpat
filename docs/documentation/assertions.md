@@ -10,6 +10,11 @@ It asserts that the selected classes are declared as **final**.
 
 Also available: `shouldNotBeFinal()`
 
+## shouldBeEnum()
+It asserts that the selected classes are **enums**.
+
+Also available: `shouldNotBeEnum()`
+
 ## shouldBeAbstract()
 It asserts that the selected classes are declared as **abstract**.
 

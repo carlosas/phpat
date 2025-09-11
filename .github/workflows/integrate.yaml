@@ -20,8 +20,7 @@ jobs:
     strategy:
       matrix:
         php-version:
-          - "7.4"
-          - "8.3"
+          - "8.1"
         dependencies:
           - "highest"
     steps:
@@ -56,8 +55,6 @@ jobs:
     strategy:
       matrix:
         php-version:
-          - "7.4"
-          - "8.0"
           - "8.1"
           - "8.2"
           - "8.3"
@@ -85,7 +82,9 @@ jobs:
         uses: "./.github/actions/composer/composer/install"
         with:
           dependencies: "${{ matrix.dependencies }}"
-      - name: "Run phpstan+phpat"
+      - name: "Run Psalm"
+        run: "vendor/bin/psalm -c ci/psalm.xml"
+      - name: "Run PHPStan+PHPat"
         run: "vendor/bin/phpstan analyse -c ci/phpstan-phpat.neon"
 
   tests:
@@ -94,8 +93,6 @@ jobs:
     strategy:
       matrix:
         php-version:
-          - "7.4"
-          - "8.0"
           - "8.1"
           - "8.2"
           - "8.3"

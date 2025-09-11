@@ -3,7 +3,6 @@
 namespace PHPat\Selector;
 
 use PHPat\Selector\Modifier\AllOfSelectorModifier;
-use PHPat\Selector\Modifier\AndModifier;
 use PHPat\Selector\Modifier\AnyOfSelectorModifier;
 use PHPat\Selector\Modifier\AtLeastCountOfSelectorModifier;
 use PHPat\Selector\Modifier\AtMostCountOfSelectorModifier;
@@ -12,15 +11,7 @@ use PHPat\Selector\Modifier\OneOfSelectorModifier;
 
 final class Selector extends SelectorPrimitive
 {
-    /**
-     * @deprecated Use AllOf() instead
-     */
-    public static function AND(SelectorInterface ...$selector): AndModifier
-    {
-        return new AndModifier(...$selector);
-    }
-
-    public static function NOT(SelectorInterface $selector): NoneOfSelectorModifier
+    public static function Not(SelectorInterface $selector): NoneOfSelectorModifier
     {
         return new NoneOfSelectorModifier($selector);
     }
