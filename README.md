@@ -21,7 +21,34 @@ It provides a natural language abstraction that enables you to define your own a
 
 ### Getting started 🚀
 
-For further information, check out the documentation at **[phpat.dev](https://phpat.dev)**
+Require **PHPat** with [Composer](https://getcomposer.org/):
+```bash
+composer require --dev phpat/phpat
+```
+
+Activate the extension using one of the following methods:
+
+<details>
+  <summary>Automatic activation</summary>
+
+```bash
+composer require --dev phpstan/extension-installer
+```
+</details>
+
+<details>
+  <summary>Manual activation</summary>
+
+```neon
+# phpstan.neon
+includes:
+    - vendor/phpat/phpat/extension.neon
+```
+</details>
+
+<br />
+
+For further information, check out the documentation at **[phpat.dev](https://www.phpat.dev/getting-started/)**
 
 You can visit the [Examples](docs/examples.md) section to get some ideas of typical use cases.
 
