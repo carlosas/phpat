@@ -1,4 +1,4 @@
-<img width="185px" src="https://raw.githubusercontent.com/carlosas/phpat/master/.github/logo-small.png" alt="PHP Architecture Tester" align="right">
+<img width="185px" src="https://raw.githubusercontent.com/carlosas/phpat/main/.github/logo-small.png" alt="PHP Architecture Tester" align="right">
 <h1 align="center">✔️ PHP Architecture Tester</h1>
 <h2 align="center">Easy to use architecture testing tool for PHP</h2>
 <p align="center">
@@ -16,7 +16,7 @@
 It provides a natural language abstraction that enables you to define your own architectural rules and and assess their compliance in your code.
 
 <p align="center">
-    <img width="700px" src="https://raw.githubusercontent.com/carlosas/phpat/master/docs/assets/example.gif" alt="Example">
+    <img width="700px" src="https://raw.githubusercontent.com/carlosas/phpat/main/docs/assets/example.gif" alt="Example">
 </p>
 
 ### Getting started 🚀

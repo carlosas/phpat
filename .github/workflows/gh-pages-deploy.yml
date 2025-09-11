@@ -4,7 +4,6 @@ on:
   workflow_run:
     workflows: ["Build docs"]
     branches:
-      - master
       - main
     types:
       - completed
