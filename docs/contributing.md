@@ -1,6 +1,6 @@
 # Contributing
 
-![image-contributing](assets/contributing.png)
+![image-contributing](https://raw.githubusercontent.com/carlosas/phpat/refs/heads/main/docs/assets/contributing.png)
 
 <br />
 
