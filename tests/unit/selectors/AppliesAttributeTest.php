@@ -4,6 +4,7 @@ namespace Tests\PHPat\unit\selectors;
 
 use PHPat\Selector\AppliesAttribute;
 use PHPStan\Reflection\ClassReflection;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Tests\PHPat\fixtures\FixtureClass;
 use Tests\PHPat\fixtures\Simple\SimpleAttribute;
@@ -31,9 +32,7 @@ class AppliesAttributeTest extends TestCase
         $this->assertEquals('test', $selector->getName());
     }
 
-    /**
-     * @dataProvider getCases
-     */
+    #[DataProvider('getCases')]
     public function testMatches(string $name, array $arguments, bool $isRegex, bool $expected): void
     {
         $selector = new AppliesAttribute($name, $isRegex, $arguments);
