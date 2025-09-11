@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.12.0
+* Remove deprecated selector modifiers
+* Bump minimum PHP version to 8.1
+* Bump minimum PHPStan version to 2.1
+* Add `ShouldBeEnum` and `ShouldNotBeEnum` assertions
+
 ## 0.11.10
 * Fix `ShouldHaveOnlyOnePublicMethodNamed` assertion
 
