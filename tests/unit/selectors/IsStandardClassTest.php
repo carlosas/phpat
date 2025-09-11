@@ -1,12 +1,9 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Tests\PHPat\unit\selectors;
 
 use PHPat\Selector\IsStandardClass;
 use PHPStan\Reflection\ClassReflection;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Tests\PHPat\fixtures\Simple\SimpleClass;
 
@@ -24,7 +21,9 @@ class IsStandardClassTest extends TestCase
         $this->assertEquals('-standard classes-', $selector->getName());
     }
 
-    #[DataProvider('getBuiltInClassCases')]
+    /**
+     * @dataProvider getBuiltInClassCases
+     */
     public function testMatchesBuiltInClasses(string $className): void
     {
         $selector = new IsStandardClass();
@@ -50,7 +49,9 @@ class IsStandardClassTest extends TestCase
         ];
     }
 
-    #[DataProvider('getUserDefinedClassCases')]
+    /**
+     * @dataProvider getUserDefinedClassCases
+     */
     public function testDoesNotMatchUserDefinedClasses(string $className): void
     {
         $selector = new IsStandardClass();
