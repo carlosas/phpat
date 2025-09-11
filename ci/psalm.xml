@@ -12,6 +12,9 @@
     </projectFiles>
 
     <issueHandlers>
+        <ClassMustBeFinal>
+            <errorLevel type="suppress"><directory name="../src" /></errorLevel>
+        </ClassMustBeFinal>
         <MoreSpecificImplementedParamType>
             <errorLevel type="suppress"><directory name="../src/Rule/Extractor" /></errorLevel>
         </MoreSpecificImplementedParamType>
@@ -47,5 +50,10 @@
         <PossiblyNullArgument>
             <errorLevel type="suppress"><file name="../src/Rule/Assertion/Relation/RelationAssertion.php" /></errorLevel>
         </PossiblyNullArgument>
+        <DeprecatedMethod>
+            <errorLevel type="suppress">
+                <referencedMethod name="PHPStan\Reflection\ClassReflection::isSubclassOf" />
+            </errorLevel>
+        </DeprecatedMethod>
     </issueHandlers>
 </psalm>
