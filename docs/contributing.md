@@ -44,5 +44,5 @@ if you want to discuss something or need some help.
 ---
 
 ## Code of conduct
-This project is released with a [Contributor Code of Conduct](https://github.com/carlosas/phpat/blob/master/.github/CODE_OF_CONDUCT.md).
+This project is released with a [Contributor Code of Conduct](https://github.com/carlosas/phpat/blob/main/.github/CODE_OF_CONDUCT.md).
 By participating in this project you agree to abide by its terms.
