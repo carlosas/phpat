@@ -23,21 +23,21 @@ trait PublicMethodNamedExtractor
         }
 
         $reflectionClass = $node->getClassReflection()->getNativeReflection();
-        $methods = $reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC);
+        $publicMethods = $reflectionClass->getMethods(\ReflectionMethod::IS_PUBLIC);
 
-        $methodsMeetingDeclaration = array_filter(
-            $methods,
-            function ($method) use ($params) {
-                if ($method->getName() === '__construct') {
-                    return false;
-                }
-
-                return $params['isRegex'] === true
-                    ? preg_match($params['name'], $method->getName()) === 1
-                    : $method->getName() === $params['name'];
-            }
+        $publicMethodsWithoutConstructor = array_filter(
+            $publicMethods,
+            fn ($method) => $method->getName() !== '__construct'
         );
 
-        return count($methodsMeetingDeclaration) === 1;
+        if (count($publicMethodsWithoutConstructor) !== 1) {
+            return false;
+        }
+
+        $singleMethod = reset($publicMethodsWithoutConstructor);
+
+        return $params['isRegex'] === true
+            ? preg_match($params['name'], $singleMethod->getName()) === 1
+            : $singleMethod->getName() === $params['name'];
     }
 }

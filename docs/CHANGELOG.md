@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.11.10
+* Fix `ShouldHaveOnlyOnePublicMethodNamed` assertion
+
 ## 0.11.9
 * Fix `ShouldBeNamed` assertion
 * Add `isStandardClass` selector
