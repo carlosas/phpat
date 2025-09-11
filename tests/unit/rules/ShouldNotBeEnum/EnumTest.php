@@ -20,7 +20,7 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class EnumTest extends RuleTestCase
 {
-    public const RULE_NAME = 'textFixtureClassShouldNotBeEnum';
+    public const RULE_NAME = 'testFixtureClassShouldNotBeEnum';
 
     public function testRule(): void
     {
