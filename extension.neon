@@ -22,7 +22,7 @@ services:
 		container: @PHPat\Parser\PHPStanContainerWrapper
 	)
 	- PHPat\Test\ContainerAwarePHPat(
-        container: %phpat.container%
+		container: %phpat.container%
 	)
 
 	# # # # # DECLARATION RULES # # # # #
