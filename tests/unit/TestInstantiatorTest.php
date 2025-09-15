@@ -17,6 +17,7 @@ final class TestInstantiatorTest extends TestCase
 {
     private TestInstantiator $instantiator;
     private ContainerInterface $container;
+    private DependencyResolver $dependencyResolver;
 
     protected function setUp(): void
     {
@@ -24,7 +25,8 @@ final class TestInstantiatorTest extends TestCase
         $container = $this->createMock(ContainerInterface::class);
         $this->container = $container;
         $configuration = new Configuration(false, false, false, $this->container);
-        $this->instantiator = new TestInstantiator($configuration);
+        $this->dependencyResolver = new DependencyResolver($configuration);
+        $this->instantiator = new TestInstantiator($this->dependencyResolver);
     }
 
     public function testInstantiateClassWithoutConstructor(): void
@@ -96,7 +98,8 @@ final class TestInstantiatorTest extends TestCase
     public function testInstantiateClassWithNoContainer(): void
     {
         $configuration = new Configuration(false, false, false, null);
-        $instantiator = new TestInstantiator($configuration);
+        $dependencyResolver = new DependencyResolver($configuration);
+        $instantiator = new TestInstantiator($dependencyResolver);
 
         $class = new \ReflectionClass(TestClassWithDependency::class);
 

@@ -28,6 +28,12 @@ final class ParsesTestsTest extends TestCase
             new class() implements RuleValidatorInterface {
                 public function validate(Rule $rule): void {}
             },
+            new \PHPat\Test\ContainerAwarePHPat(
+                new class() implements \Psr\Container\ContainerInterface {
+                    public function get(string $id) { return new \stdClass(); }
+                    public function has(string $id): bool { return false; }
+                }
+            )
         );
 
         $rule1 = PHPat::rule()->classes(Selector::classname('1'))();
