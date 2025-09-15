@@ -6,7 +6,6 @@ use PHPat\Parser\PHPStanContainerWrapper;
 use PHPat\ShouldNotHappenException;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionClass;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionEnum;
-use PHPStan\DependencyInjection\Container;
 use PHPStan\Reflection\ReflectionProvider;
 
 final class TestExtractor implements TestExtractorInterface
