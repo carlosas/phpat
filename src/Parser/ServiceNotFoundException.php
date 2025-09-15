@@ -98,7 +98,7 @@ final class ServiceNotFoundException extends \Exception implements NotFoundExcep
 
         foreach ($availableServices as $availableService) {
             $similarity = similar_text(strtolower($serviceId), strtolower($availableService));
-            if ($similarity > $bestSimilarity && $similarity > strlen($serviceId) * 0.5) {
+            if ($similarity > $bestSimilarity && $similarity > (int) (strlen($serviceId) * 0.5)) {
                 $bestMatch = $availableService;
                 $bestSimilarity = $similarity;
             }

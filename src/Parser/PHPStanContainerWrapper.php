@@ -24,7 +24,7 @@ final class PHPStanContainerWrapper
         return false; // No services available in fallback container
     }
 
-    public function getByType(string $className, bool $throw = true): null
+    public function getByType(string $className, bool $throw = true): ?object
     {
         if ($throw) {
             throw ContainerException::operationNotSupported($className, 'getByType');

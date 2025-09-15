@@ -46,9 +46,7 @@ final class TestInstantiator implements TestInstantiatorInterface
                         'Cannot instantiate test class "%s": %s',
                         $class->getName(),
                         $e->getMessage()
-                    ),
-                    0,
-                    $e
+                    )
                 );
             }
         }
