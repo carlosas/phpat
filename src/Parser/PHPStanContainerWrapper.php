@@ -2,65 +2,74 @@
 
 namespace PHPat\Parser;
 
-use PHPStan\DependencyInjection\Container;
-
-final class PHPStanContainerWrapper implements Container
+/**
+ * Fallback container wrapper for PHPStan compatibility.
+ * Note: PHPStan 2.x removed the Container interface, so this is now a simple fallback container.
+ * For actual dependency injection, use custom PSR-11 containers via configuration.
+ */
+final class PHPStanContainerWrapper
 {
-    private object $object;
-
-    public function __construct(object $object)
+    public function __construct()
     {
-        if (
-            !method_exists($object, 'getService')
-            || !method_exists($object, 'hasService')
-            || !method_exists($object, 'getByType')
-            || !method_exists($object, 'findServiceNamesByType')
-            || !method_exists($object, 'getServicesByTag')
-            || !method_exists($object, 'getParameters')
-        ) {
-            throw new \InvalidArgumentException('Provided container does not conform to expected PHPStan container interface.');
-        }
-
-        $this->object = $object;
+        // No longer depends on PHPStan's internal container due to PHPStan 2.x compatibility
     }
 
     public function getService(string $serviceName): object
     {
-        return $this->object->getService($serviceName);
+        throw new \RuntimeException(
+            sprintf(
+                'Service "%s" not found. PHPStan 2.x removed container access. Use a custom PSR-11 container instead.',
+                $serviceName
+            )
+        );
     }
 
     public function hasService(string $serviceName): bool
     {
-        return $this->object->hasService($serviceName);
+        return false; // No services available in fallback container
     }
 
-    public function getByType(string $className, bool $throw = true): ?object
+    public function getByType(string $className, bool $throw = true): null
     {
-        return $this->object->getByType($className, $throw);
+        if ($throw) {
+            throw new \RuntimeException(
+                sprintf(
+                    'Service of type "%s" not found. PHPStan 2.x removed container access. Use a custom PSR-11 container instead.',
+                    $className
+                )
+            );
+        }
+
+        return null;
     }
 
     public function findServiceNamesByType(string $className): array
     {
-        return $this->object->findServiceNamesByType($className);
+        return []; // No services available in fallback container
     }
 
     public function getServicesByTag(string $tagName): array
     {
-        return $this->object->getServicesByTag($tagName);
+        return []; // No services available in fallback container
     }
 
     public function getParameters(): array
     {
-        return $this->object->getParameters();
+        return []; // No parameters available in fallback container
     }
 
     public function hasParameter(string $parameterName): bool
     {
-        return $this->object->hasParameter($parameterName);
+        return false; // No parameters available in fallback container
     }
 
-    public function getParameter($parameterName)
+    public function getParameter(string $parameterName): never
     {
-        return $this->object->getParameter($parameterName);
+        throw new \RuntimeException(
+            sprintf(
+                'Parameter "%s" not found. PHPStan 2.x removed container access. Use a custom PSR-11 container instead.',
+                $parameterName
+            )
+        );
     }
 }

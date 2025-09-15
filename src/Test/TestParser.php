@@ -55,6 +55,7 @@ class TestParser
                     foreach ($dependencies as $dependency) {
                         if ($dependency->hasType() && $dependency->getType() instanceof \ReflectionNamedType) {
                             $type = $dependency->getType()->getName();
+
                             try {
                                 $object->{$dependency->getName()} = $this->container->get($type);
                             } catch (ContainerExceptionInterface $e) {
@@ -62,6 +63,7 @@ class TestParser
                             }
                         }
                     }
+
                     continue;
                 }
                 if (

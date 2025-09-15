@@ -23,6 +23,7 @@ final class AssertionTest
     public function test_assertions_are_abstract(): Rule
     {
         var_dump($this->containerAwarePHPat->getContainer()->has('foo'));
+
         return PHPat::rule()
             ->classes(Selector::implements(Assertion::class))
             ->excluding(Selector::classname('/.*Rule$/', true))

@@ -15,10 +15,9 @@ services:
 		ignore_doc_comments: %phpat.ignore_doc_comments%,
 		ignore_built_in_classes: %phpat.ignore_built_in_classes%,
 		show_rule_names: %phpat.show_rule_names%,
+		container: %phpat.container%,
 	)
-	- PHPat\Parser\PHPStanContainerWrapper(
-		object: @container
-	)
+	- PHPat\Parser\PHPStanContainerWrapper
 	- PHPat\Parser\PsrContainerWrapper(
 		container: @PHPat\Parser\PHPStanContainerWrapper
 	)

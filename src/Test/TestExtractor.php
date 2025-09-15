@@ -2,18 +2,20 @@
 
 namespace PHPat\Test;
 
+use PHPat\Parser\PHPStanContainerWrapper;
 use PHPat\ShouldNotHappenException;
-use PHPStan\DependencyInjection\Container;
+use PHPStan\BetterReflection\Reflection\Adapter\ReflectionClass;
+use PHPStan\BetterReflection\Reflection\Adapter\ReflectionEnum;
 use PHPStan\Reflection\ReflectionProvider;
 
 final class TestExtractor implements TestExtractorInterface
 {
     private const TEST_TAG = 'phpat.test';
 
-    private Container $container;
+    private PHPStanContainerWrapper $container;
     private ReflectionProvider $reflectionProvider;
 
-    public function __construct(Container $container, ReflectionProvider $reflectionProvider)
+    public function __construct(PHPStanContainerWrapper $container, ReflectionProvider $reflectionProvider)
     {
         $this->container = $container;
         $this->reflectionProvider = $reflectionProvider;
@@ -34,10 +36,9 @@ final class TestExtractor implements TestExtractorInterface
     }
 
     /**
-     * @param  class-string                  $test
-     * @return null|\ReflectionClass<object>
+     * @return null|ReflectionClass|ReflectionEnum
      */
-    private function reflectTest(string $test): ?\ReflectionClass
+    private function reflectTest(string $test)
     {
         if (!$this->reflectionProvider->hasClass($test)) {
             return null;

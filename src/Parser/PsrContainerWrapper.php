@@ -2,15 +2,14 @@
 
 namespace PHPat\Parser;
 
-use PHPStan\DependencyInjection\Container;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
 final class PsrContainerWrapper implements ContainerInterface
 {
-    private Container $container;
+    private PHPStanContainerWrapper $container;
 
-    public function __construct(Container $container)
+    public function __construct(PHPStanContainerWrapper $container)
     {
         $this->container = $container;
     }
