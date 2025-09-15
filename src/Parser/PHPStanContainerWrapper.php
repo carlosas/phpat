@@ -16,12 +16,7 @@ final class PHPStanContainerWrapper
 
     public function getService(string $serviceName): object
     {
-        throw new \RuntimeException(
-            sprintf(
-                'Service "%s" not found. PHPStan 2.x removed container access. Use a custom PSR-11 container instead.',
-                $serviceName
-            )
-        );
+        throw ContainerException::operationNotSupported($serviceName, 'getService');
     }
 
     public function hasService(string $serviceName): bool
@@ -32,12 +27,7 @@ final class PHPStanContainerWrapper
     public function getByType(string $className, bool $throw = true): null
     {
         if ($throw) {
-            throw new \RuntimeException(
-                sprintf(
-                    'Service of type "%s" not found. PHPStan 2.x removed container access. Use a custom PSR-11 container instead.',
-                    $className
-                )
-            );
+            throw ContainerException::operationNotSupported($className, 'getByType');
         }
 
         return null;
@@ -65,11 +55,6 @@ final class PHPStanContainerWrapper
 
     public function getParameter(string $parameterName): never
     {
-        throw new \RuntimeException(
-            sprintf(
-                'Parameter "%s" not found. PHPStan 2.x removed container access. Use a custom PSR-11 container instead.',
-                $parameterName
-            )
-        );
+        throw ContainerException::operationNotSupported($parameterName, 'getParameter');
     }
 }

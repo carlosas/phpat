@@ -2,11 +2,8 @@
 
 namespace PHPat\Test;
 
-use PHPat\ShouldNotHappenException;
 use PHPat\Test\Attributes\TestRule;
 use PHPat\Test\Builder\Rule as RuleBuilder;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\ContainerInterface;
 
 class TestParser
 {
@@ -14,16 +11,16 @@ class TestParser
     private static array $result = [];
     private TestExtractorInterface $extractor;
     private RuleValidatorInterface $ruleValidator;
-    private ContainerInterface $container;
+    private TestInstantiatorInterface $testInstantiator;
 
     public function __construct(
         TestExtractorInterface $extractor,
         RuleValidatorInterface $ruleValidator,
-        ContainerAwarePHPat $containerAwarePHPat
+        TestInstantiatorInterface $testInstantiator
     ) {
         $this->extractor = $extractor;
         $this->ruleValidator = $ruleValidator;
-        $this->container = $containerAwarePHPat->getContainer();
+        $this->testInstantiator = $testInstantiator;
     }
 
     /**
@@ -48,22 +45,10 @@ class TestParser
         $rules = [];
         foreach ($tests as $reflected) {
             $classname = $reflected->getName();
-            $object = $reflected->newInstanceWithoutConstructor();
+            $object = $this->testInstantiator->instantiate($reflected);
+
             foreach ($reflected->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
                 if ($method->isConstructor()) {
-                    $dependencies = $method->getParameters();
-                    foreach ($dependencies as $dependency) {
-                        if ($dependency->hasType() && $dependency->getType() instanceof \ReflectionNamedType) {
-                            $type = $dependency->getType()->getName();
-
-                            try {
-                                $object->{$dependency->getName()} = $this->container->get($type);
-                            } catch (ContainerExceptionInterface $e) {
-                                throw new ShouldNotHappenException(sprintf('Error retrieving "%s" from container: %s', $type, $e->getMessage()));
-                            }
-                        }
-                    }
-
                     continue;
                 }
                 if (

@@ -3,6 +3,8 @@
 namespace PHPat\Test;
 
 use PHPat\ShouldNotHappenException;
+use PHPStan\BetterReflection\Reflection\Adapter\ReflectionClass;
+use PHPStan\BetterReflection\Reflection\Adapter\ReflectionEnum;
 
 final class TestInstantiator implements TestInstantiatorInterface
 {
@@ -14,9 +16,9 @@ final class TestInstantiator implements TestInstantiatorInterface
     }
 
     /**
-     * @param \ReflectionClass<object> $class
+     * @param ReflectionClass|\ReflectionClass<object>|ReflectionEnum $class
      */
-    public function instantiate(\ReflectionClass $class): object
+    public function instantiate(ReflectionClass|\ReflectionClass|ReflectionEnum $class): object
     {
         $constructor = $class->getConstructor();
 

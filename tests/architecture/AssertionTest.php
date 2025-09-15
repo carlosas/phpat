@@ -2,24 +2,27 @@
 
 namespace Tests\PHPat\architecture;
 
+use PHPat\Configuration;
+use PHPat\Parser\TypeNodeParser;
 use PHPat\Rule\Assertion\Assertion;
+use PHPat\Rule\Assertion\Declaration\DeclarationAssertion;
+use PHPat\Rule\Assertion\Relation\RelationAssertion;
 use PHPat\Selector\Selector;
 use PHPat\Test\Builder\Rule;
-use PHPat\Test\ContainerAwarePHPat;
 use PHPat\Test\PHPat;
 
 final class AssertionTest
 {
-    private ContainerAwarePHPat $containerAwarePHPat;
+    private Configuration $configuration;
 
-    public function __construct(ContainerAwarePHPat $containerAwarePHPat)
+    public function __construct(Configuration $configuration)
     {
-        $this->containerAwarePHPat = $containerAwarePHPat;
+        $this->configuration = $configuration;
     }
 
     public function test_assertions_are_abstract(): Rule
     {
-        var_dump($this->containerAwarePHPat->getContainer()->has('foo'));
+        var_dump($this->configuration->getContainer()?->has('foo'));
 
         return PHPat::rule()
             ->classes(Selector::implements(Assertion::class))

@@ -8,7 +8,6 @@ parameters:
 
 services:
 	- PHPat\Test\TestExtractor
-	- PHPat\Test\TestParser
 	- PHPat\Test\RuleValidator
 	- PHPat\Statement\Builder\StatementBuilderFactory
 	- PHPat\Configuration(
@@ -21,8 +20,16 @@ services:
 	- PHPat\Parser\PsrContainerWrapper(
 		container: @PHPat\Parser\PHPStanContainerWrapper
 	)
-	- PHPat\Test\ContainerAwarePHPat(
-		container: %phpat.container%
+	- PHPat\Test\DependencyResolver(
+		configuration: @PHPat\Configuration
+	)
+	- PHPat\Test\TestInstantiator(
+		dependencyResolver: @PHPat\Test\DependencyResolver
+	)
+	- PHPat\Test\TestParser(
+		extractor: @PHPat\Test\TestExtractor,
+		ruleValidator: @PHPat\Test\RuleValidator,
+		testInstantiator: @PHPat\Test\TestInstantiator
 	)
 
 	# # # # # DECLARATION RULES # # # # #
