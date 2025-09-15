@@ -3,13 +3,18 @@
 namespace PHPat\Test\Builder;
 
 use PHPat\Rule\Assertion\Declaration\ShouldBeAbstract\ShouldBeAbstract;
+use PHPat\Rule\Assertion\Declaration\ShouldBeEnum\ShouldBeEnum;
 use PHPat\Rule\Assertion\Declaration\ShouldBeFinal\ShouldBeFinal;
 use PHPat\Rule\Assertion\Declaration\ShouldBeInterface\ShouldBeInterface;
+use PHPat\Rule\Assertion\Declaration\ShouldBeInvokable\ShouldBeInvokable;
 use PHPat\Rule\Assertion\Declaration\ShouldBeNamed\ShouldBeNamed;
 use PHPat\Rule\Assertion\Declaration\ShouldBeReadonly\ShouldBeReadonly;
 use PHPat\Rule\Assertion\Declaration\ShouldHaveOnlyOnePublicMethod\ShouldHaveOnlyOnePublicMethod;
+use PHPat\Rule\Assertion\Declaration\ShouldHaveOnlyOnePublicMethodNamed\ShouldHaveOnlyOnePublicMethodNamed;
 use PHPat\Rule\Assertion\Declaration\ShouldNotBeAbstract\ShouldNotBeAbstract;
+use PHPat\Rule\Assertion\Declaration\ShouldNotBeEnum\ShouldNotBeEnum;
 use PHPat\Rule\Assertion\Declaration\ShouldNotBeFinal\ShouldNotBeFinal;
+use PHPat\Rule\Assertion\Declaration\ShouldNotBeInvokable\ShouldNotBeInvokable;
 use PHPat\Rule\Assertion\Declaration\ShouldNotBeReadonly\ShouldNotBeReadonly;
 use PHPat\Rule\Assertion\Declaration\ShouldNotExist\ShouldNotExist;
 use PHPat\Rule\Assertion\Relation\CanOnlyDepend\CanOnlyDepend;
@@ -25,10 +30,10 @@ use PHPat\Rule\Assertion\Relation\ShouldNotInclude\ShouldNotInclude;
 
 class AssertionStep extends AbstractStep
 {
-    public function shouldBeNamed(string $fqcn, bool $regex = false): TipOrBuildStep
+    public function shouldBeNamed(string $classname, bool $regex = false): TipOrBuildStep
     {
         $this->rule->assertion = ShouldBeNamed::class;
-        $this->rule->params = ['isRegex' => $regex, 'fqcn' => $fqcn];
+        $this->rule->params = ['isRegex' => $regex, 'classname' => $classname];
 
         return new TipOrBuildStep($this->rule);
     }
@@ -71,6 +76,34 @@ class AssertionStep extends AbstractStep
     public function shouldNotBeFinal(): TipOrBuildStep
     {
         $this->rule->assertion = ShouldNotBeFinal::class;
+
+        return new TipOrBuildStep($this->rule);
+    }
+
+    public function shouldBeEnum(): TipOrBuildStep
+    {
+        $this->rule->assertion = ShouldBeEnum::class;
+
+        return new TipOrBuildStep($this->rule);
+    }
+
+    public function shouldNotBeEnum(): TipOrBuildStep
+    {
+        $this->rule->assertion = ShouldNotBeEnum::class;
+
+        return new TipOrBuildStep($this->rule);
+    }
+
+    public function shouldBeInvokable(): TipOrBuildStep
+    {
+        $this->rule->assertion = ShouldBeInvokable::class;
+
+        return new TipOrBuildStep($this->rule);
+    }
+
+    public function shouldNotBeInvokable(): TipOrBuildStep
+    {
+        $this->rule->assertion = ShouldNotBeInvokable::class;
 
         return new TipOrBuildStep($this->rule);
     }
@@ -141,6 +174,14 @@ class AssertionStep extends AbstractStep
     public function shouldHaveOnlyOnePublicMethod(): TipOrBuildStep
     {
         $this->rule->assertion = ShouldHaveOnlyOnePublicMethod::class;
+
+        return new TipOrBuildStep($this->rule);
+    }
+
+    public function shouldHaveOnlyOnePublicMethodNamed(string $name, bool $isRegex = false): TipOrBuildStep
+    {
+        $this->rule->assertion = ShouldHaveOnlyOnePublicMethodNamed::class;
+        $this->rule->params = ['name' => $name, 'isRegex' => $isRegex];
 
         return new TipOrBuildStep($this->rule);
     }

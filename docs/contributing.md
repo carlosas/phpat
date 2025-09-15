@@ -1,6 +1,6 @@
 # Contributing
 
-![image-contributing](assets/contributing.png)
+![image-contributing](https://raw.githubusercontent.com/carlosas/phpat/refs/heads/main/docs/assets/contributing.png)
 
 <br />
 
@@ -38,11 +38,11 @@ When the pull request is merged, the documentation will be automatically deploye
 
 ## Slack channel
 
-Feel free to join the channel [#phpat](https://symfony-devs.slack.com/archives/CQFKA2R0D) on SymfonyDevs' workspace
+Feel free to join the channel [#static-analysis](https://symfony-devs.slack.com/archives/C8SFXTD2M) on SymfonyDevs' workspace
 if you want to discuss something or need some help.
 
 ---
 
 ## Code of conduct
-This project is released with a [Contributor Code of Conduct](https://github.com/carlosas/phpat/blob/master/.github/CODE_OF_CONDUCT.md).
+This project is released with a [Contributor Code of Conduct](https://github.com/carlosas/phpat/blob/main/.github/CODE_OF_CONDUCT.md).
 By participating in this project you agree to abide by its terms.

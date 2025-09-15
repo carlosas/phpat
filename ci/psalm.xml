@@ -1,9 +1,8 @@
 <?xml version="1.0"?>
 <psalm
     errorLevel="2"
-    resolveFromConfigFile="true"
-    findUnusedBaselineEntry="true"
     findUnusedCode="false"
+    ensureOverrideAttribute="false"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config ../vendor/vimeo/psalm/config.xsd"
@@ -13,6 +12,9 @@
     </projectFiles>
 
     <issueHandlers>
+        <ClassMustBeFinal>
+            <errorLevel type="suppress"><directory name="../src" /></errorLevel>
+        </ClassMustBeFinal>
         <MoreSpecificImplementedParamType>
             <errorLevel type="suppress"><directory name="../src/Rule/Extractor" /></errorLevel>
         </MoreSpecificImplementedParamType>
@@ -23,8 +25,6 @@
             <errorLevel type="suppress"><directory name="../src/Rule/Extractor/Relation/DocComment" /></errorLevel>
         </PossiblyNullReference>
         <MoreSpecificReturnType>
-            <errorLevel type="suppress"><file name="../src/Rule/Extractor/Relation/ClassAttributeExtractor.php" /></errorLevel>
-            <errorLevel type="suppress"><file name="../src/Rule/Extractor/Relation/AllAttributesExtractor.php" /></errorLevel>
             <errorLevel type="suppress"><file name="../src/Statement/Builder/StatementBuilderFactory.php" /></errorLevel>
         </MoreSpecificReturnType>
         <LessSpecificReturnStatement>
@@ -41,39 +41,19 @@
         <InvalidStringClass>
             <errorLevel type="suppress"><file name="../src/Statement/Builder/StatementBuilderFactory.php" /></errorLevel>
         </InvalidStringClass>
-        <UndefinedDocblockClass>
-            <errorLevel type="suppress"><file name="../src/Rule/Extractor/Relation/ClassAttributeExtractor.php" /></errorLevel>
-            <errorLevel type="suppress"><file name="../src/Test/TestParser.php" /></errorLevel>
-        </UndefinedDocblockClass>
-        <UndefinedClass>
-            <errorLevel type="suppress"><file name="../src/Test/TestParser.php" /></errorLevel>
-        </UndefinedClass>
         <InvalidReturnType>
             <errorLevel type="suppress"><file name="../src/Test/TestExtractor.php" /></errorLevel>
         </InvalidReturnType>
-        <InvalidReturnStatement>
-            <errorLevel type="suppress"><file name="../src/Test/TestExtractor.php" /></errorLevel>
-        </InvalidReturnStatement>
-
-        <PropertyNotSetInConstructor>
-            <errorLevel type="suppress"><directory name="../tests/unit/rules/" /></errorLevel>
-        </PropertyNotSetInConstructor>
-
-        <DeprecatedMethod>
-            <errorLevel type="suppress"><file name="../src/Rule/Extractor/Relation/DocComment/ClassScope/PropertyTagExtractor.php" /></errorLevel>
-        </DeprecatedMethod>
-
         <ArgumentTypeCoercion>
             <errorLevel type="suppress"><directory name="../src/Selector/" /></errorLevel>
         </ArgumentTypeCoercion>
-
-        <UndefinedDocblockClass>
-            <errorLevel type="suppress"><directory name="../src/Selector/" /></errorLevel>
-            <errorLevel type="suppress"><directory name="../src/Rule/" /></errorLevel>
-        </UndefinedDocblockClass>
-
         <PossiblyNullArgument>
             <errorLevel type="suppress"><file name="../src/Rule/Assertion/Relation/RelationAssertion.php" /></errorLevel>
         </PossiblyNullArgument>
+        <DeprecatedMethod>
+            <errorLevel type="suppress">
+                <referencedMethod name="PHPStan\Reflection\ClassReflection::isSubclassOf" />
+            </errorLevel>
+        </DeprecatedMethod>
     </issueHandlers>
 </psalm>

@@ -6,3 +6,4 @@
 .gitignore export-ignore
 mkdocs.yaml export-ignore
 README.md export-ignore
+/.kiro export-ignore

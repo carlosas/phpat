@@ -28,7 +28,7 @@ trait ValidationTrait
             foreach ($tips as $tip) {
                 $ruleError->addTip($tip);
             }
-            $errors[] = $ruleError->build();
+            $errors[] = $ruleError->identifier('phpat.'.$ruleName)->build();
         }
 
         return $errors;
@@ -52,7 +52,7 @@ trait ValidationTrait
             foreach ($tips as $tip) {
                 $ruleError->addTip($tip);
             }
-            $errors[] = $ruleError->build();
+            $errors[] = $ruleError->identifier('phpat.'.$ruleName)->build();
         }
 
         return $errors;

@@ -4,7 +4,7 @@ namespace PHPat\Parser;
 
 final class BuiltInClasses
 {
-    public const PHP_8_BUILT_IN_CLASSES = [
+    public const PHP_BUILT_IN_CLASSES = [
         'iterable',
         'Generator',
         'stdClass',
@@ -58,7 +58,6 @@ final class BuiltInClasses
         'Random\Engine\Mt19937',
         'Random\Engine\Xoshiro256StarStar',
         'Random\Engine\Secure',
-        'Random\Randomizer',
         'RequestParseBodyException',
         'BcMath\Number',
         'Dba\Connection',
@@ -104,5 +103,15 @@ final class BuiltInClasses
         'Soap\Sdl',
         'RoundingMode',
         'StreamBucket',
+        'DateError',
+        'DateObjectError',
+        'DateRangeError',
+        'DateException',
+        'DateInvalidOperationException',
+        'DateInvalidTimeZoneException',
+        'DateMalformedIntervalStringException',
+        'DateMalformedPeriodStringException',
+        'DateMalformedStringException',
+        'Random\IntervalBoundary',
     ];
 }

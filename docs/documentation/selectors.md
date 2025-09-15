@@ -34,44 +34,60 @@ The first selector will select all classes in the `App\User\Domain` namespace.
 
 The second one will select all classes in a namespace matching the regular expression.
 
+## Selector::withFilepath()
+Selects classes matching the given filepath.
+
+```php
+Selector::withFilepath('src/App/User/Domain/UserEntity.php')
+Selector::withFilepath('/.+Domain.*\.php/', true)
+```
+
+The first selector will select all classes defined in the `src/App/User/Domain/UserEntity.php` file.
+
+The second one will select all classes who have a filepath matching the regular expression.
+
+## Selector::isStandardClass()
+Selects Predefined PHP classes (stdClass, ArrayAccess, Exception, Enum...)
+
 ## Selector::isError()
-Select classes that extend the `\Error` class.
+Selects classes that extend the `\Error` class.
 
 ## Selector::isException()
-Select classes that extend the `\Exception` class.
+Selects classes that extend the `\Exception` class.
 
 ## Selector::isThrowable()
-Select classes that implement the `\Throwable` interface.
+Selects classes that implement the `\Throwable` interface.
 
 ## Selector::implements(string)
-Select classes that implement the given interface.
+Selects classes that implement the given interface.
 
 ## Selector::extends(string)
-Select classes that extend the given class.
+Selects classes that extend the given class.
 
 ## Selector::isInterface()
-Select all interfaces.
+Selects all interfaces.
 
 ## Selector::appliesAttribute(string)
-Select classes that applies the given attribute.
+Selects classes that applies the given attribute.
+You can pass one or more arguments with their values that the attribute should apply to.
 
 ## Selector::isAbstract()
-Select all abstract classes.
+Selects all abstract classes.
 
 ## Selector::isAttribute()
-Select all attribute classes.
+Selects all attribute classes.
 
 ## Selector::isEnum()
-Select all enums.
+Selects all enums.
 
 ## Selector::isFinal()
-Select all final classes.
+Selects all final classes.
 
 ## Selector::isReadonly()
-Select all readonly classes.
+Selects all readonly classes.
 
 ## Selector::isTrait()
-Select all traits.
+Selects all traits.
 
 <br />
 

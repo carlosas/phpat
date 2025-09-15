@@ -10,6 +10,11 @@ It asserts that the selected classes are declared as **final**.
 
 Also available: `shouldNotBeFinal()`
 
+## shouldBeEnum()
+It asserts that the selected classes are **enums**.
+
+Also available: `shouldNotBeEnum()`
+
 ## shouldBeAbstract()
 It asserts that the selected classes are declared as **abstract**.
 
@@ -23,8 +28,16 @@ It asserts that the selected classes are declared as **readonly**.
 
 Also available: `shouldNotBeReadonly()`
 
+## shouldBeInvokable()
+It asserts that the selected classes are **invokable** by implementing `__invoke` method.
+
+Also available: `shouldNotBeInvokable()`
+
 ## shouldHaveOnlyOnePublicMethod()
 It asserts that the selected classes only have **one public method** (besides constructor).
+
+## shouldHaveOnlyOnePublicMethodNamed
+It asserts that the selected classes only have **one public method** with specified name (besides constructor).
 
 ## shouldExtend()
 It asserts that the selected classes **extend** the target class.

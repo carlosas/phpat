@@ -59,6 +59,11 @@ class SelectorPrimitive
         return new IsAttribute();
     }
 
+    public static function isStandardClass(): IsStandardClass
+    {
+        return new IsStandardClass();
+    }
+
     /**
      * @param class-string|non-empty-string $namespace
      */
@@ -73,6 +78,11 @@ class SelectorPrimitive
     public static function classname(string $fqcn, bool $regex = false): Classname
     {
         return new Classname($fqcn, $regex);
+    }
+
+    public static function withFilepath(string $filename, bool $regex = false): Filepath
+    {
+        return new Filepath($filename, $regex);
     }
 
     /**
@@ -93,10 +103,11 @@ class SelectorPrimitive
 
     /**
      * @param class-string|non-empty-string $fqcn
+     * @param array<string, mixed>          $arguments
      */
-    public static function appliesAttribute(string $fqcn, bool $regex = false): AppliesAttribute
+    public static function appliesAttribute(string $fqcn, bool $regex = false, array $arguments = []): AppliesAttribute
     {
-        return new AppliesAttribute($fqcn, $regex);
+        return new AppliesAttribute($fqcn, $regex, $arguments);
     }
 
     /**

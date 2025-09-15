@@ -6,6 +6,7 @@ use PHPat\Parser\PHPStanContainerWrapper;
 use PHPat\ShouldNotHappenException;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionClass;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionEnum;
+use PHPStan\DependencyInjection\Container;
 use PHPStan\Reflection\ReflectionProvider;
 
 final class TestExtractor implements TestExtractorInterface
@@ -28,7 +29,7 @@ final class TestExtractor implements TestExtractorInterface
                 throw new ShouldNotHappenException();
             }
 
-            $reflectedTest = $this->reflectTest(get_class($test));
+            $reflectedTest = $this->reflectTest($test::class);
             if ($reflectedTest !== null) {
                 yield $reflectedTest;
             }
@@ -44,6 +45,11 @@ final class TestExtractor implements TestExtractorInterface
             return null;
         }
 
-        return $this->reflectionProvider->getClass($test)->getNativeReflection();
+        $classReflection = $this->reflectionProvider->getClass($test)->getNativeReflection();
+        if ($classReflection::class !== ReflectionClass::class) {
+            return null;
+        }
+
+        return $classReflection;
     }
 }
