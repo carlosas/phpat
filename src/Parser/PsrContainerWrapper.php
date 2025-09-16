@@ -22,7 +22,7 @@ final class PsrContainerWrapper implements ContainerInterface
         if (!$this->validateServiceExists($id)) {
             $availableServices = $this->getAvailableServices();
 
-            throw ServiceNotFoundException::withSuggestion($id, $availableServices);
+            throw new ServiceNotFoundException($id);
         }
 
         try {
