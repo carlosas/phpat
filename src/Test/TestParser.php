@@ -11,11 +11,16 @@ class TestParser
     private static array $result = [];
     private TestExtractorInterface $extractor;
     private RuleValidatorInterface $ruleValidator;
+    private TestInstantiatorInterface $testInstantiator;
 
-    public function __construct(TestExtractorInterface $extractor, RuleValidatorInterface $ruleValidator)
-    {
+    public function __construct(
+        TestExtractorInterface $extractor,
+        RuleValidatorInterface $ruleValidator,
+        TestInstantiatorInterface $testInstantiator
+    ) {
         $this->extractor = $extractor;
         $this->ruleValidator = $ruleValidator;
+        $this->testInstantiator = $testInstantiator;
     }
 
     /**
@@ -40,8 +45,12 @@ class TestParser
         $rules = [];
         foreach ($tests as $reflected) {
             $classname = $reflected->getName();
-            $object = $reflected->newInstanceWithoutConstructor();
+            $object = $this->testInstantiator->instantiate($reflected);
+
             foreach ($reflected->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
+                if ($method->isConstructor()) {
+                    continue;
+                }
                 if (
                     // @phpstan-ignore function.alreadyNarrowedType
                     (method_exists($method, 'getAttributes') && !empty($method->getAttributes(TestRule::class)))

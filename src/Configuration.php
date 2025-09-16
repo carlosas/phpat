@@ -2,20 +2,25 @@
 
 namespace PHPat;
 
+use Psr\Container\ContainerInterface;
+
 final class Configuration
 {
     private bool $ignore_doc_comments;
     private bool $ignore_built_in_classes;
     private bool $show_rule_names;
+    private ?ContainerInterface $container;
 
     public function __construct(
         bool $ignore_doc_comments,
         bool $ignore_built_in_classes,
-        bool $show_rule_names
+        bool $show_rule_names,
+        ?ContainerInterface $container = null
     ) {
         $this->ignore_doc_comments = $ignore_doc_comments;
         $this->ignore_built_in_classes = $ignore_built_in_classes;
         $this->show_rule_names = $show_rule_names;
+        $this->container = $container;
     }
 
     public function ignoreDocComments(): bool
@@ -31,5 +36,10 @@ final class Configuration
     public function showRuleNames(): bool
     {
         return $this->show_rule_names;
+    }
+
+    public function getContainer(): ?ContainerInterface
+    {
+        return $this->container;
     }
 }

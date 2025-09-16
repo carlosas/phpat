@@ -2,15 +2,28 @@
 
 namespace Tests\PHPat\architecture;
 
+use PHPat\Configuration;
+use PHPat\Parser\TypeNodeParser;
 use PHPat\Rule\Assertion\Assertion;
+use PHPat\Rule\Assertion\Declaration\DeclarationAssertion;
+use PHPat\Rule\Assertion\Relation\RelationAssertion;
 use PHPat\Selector\Selector;
 use PHPat\Test\Builder\Rule;
 use PHPat\Test\PHPat;
 
 final class AssertionTest
 {
+    private Configuration $configuration;
+
+    public function __construct(Configuration $configuration)
+    {
+        $this->configuration = $configuration;
+    }
+
     public function test_assertions_are_abstract(): Rule
     {
+        var_dump($this->configuration->getContainer()?->has('foo'));
+
         return PHPat::rule()
             ->classes(Selector::implements(Assertion::class))
             ->excluding(Selector::classname('/.*Rule$/', true))
@@ -26,7 +39,7 @@ final class AssertionTest
         ;
     }
 
-    /*public function test_rules_dependencies(): Rule
+    public function test_rules_dependencies(): Rule
     {
         return PHPat::rule()
             ->classes(Selector::implements(Assertion::class))
@@ -40,5 +53,5 @@ final class AssertionTest
                 Selector::inNamespace('PHPStan'),
             )
         ;
-    }*/
+    }
 }

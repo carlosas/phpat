@@ -4,16 +4,32 @@ parameters:
 		ignore_doc_comments: false
 		ignore_built_in_classes: false
 		show_rule_names: false
+		container: @PHPat\Parser\PsrContainerWrapper
 
 services:
 	- PHPat\Test\TestExtractor
-	- PHPat\Test\TestParser
 	- PHPat\Test\RuleValidator
 	- PHPat\Statement\Builder\StatementBuilderFactory
 	- PHPat\Configuration(
 		ignore_doc_comments: %phpat.ignore_doc_comments%,
 		ignore_built_in_classes: %phpat.ignore_built_in_classes%,
 		show_rule_names: %phpat.show_rule_names%,
+		container: %phpat.container%,
+	)
+	- PHPat\Parser\PHPStanContainerWrapper
+	- PHPat\Parser\PsrContainerWrapper(
+		container: @PHPat\Parser\PHPStanContainerWrapper
+	)
+	- PHPat\Test\DependencyResolver(
+		configuration: @PHPat\Configuration
+	)
+	- PHPat\Test\TestInstantiator(
+		dependencyResolver: @PHPat\Test\DependencyResolver
+	)
+	- PHPat\Test\TestParser(
+		extractor: @PHPat\Test\TestExtractor,
+		ruleValidator: @PHPat\Test\RuleValidator,
+		testInstantiator: @PHPat\Test\TestInstantiator
 	)
 
 	# # # # # DECLARATION RULES # # # # #
@@ -319,4 +335,5 @@ parametersSchema:
 		ignore_doc_comments: bool(),
 		ignore_built_in_classes: bool(),
 		show_rule_names: bool(),
+		container: string(),
 	])
