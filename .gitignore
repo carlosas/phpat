@@ -1,4 +1,9 @@
 /.idea/
+/.windsurf/
+/.cursor/
+/.kiro/
+/.vscode/
+/.fleet/
 /**/.DS_Store
 /vendor/
 /composer.phar
