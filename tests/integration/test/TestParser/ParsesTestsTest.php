@@ -7,6 +7,7 @@ use PHPat\Test\PHPat;
 use PHPat\Test\Rule;
 use PHPat\Test\RuleValidatorInterface;
 use PHPat\Test\TestExtractorInterface;
+use PHPat\Test\TestInstantiatorInterface;
 use PHPat\Test\TestParser;
 use PHPUnit\Framework\TestCase;
 
@@ -28,6 +29,12 @@ final class ParsesTestsTest extends TestCase
             new class() implements RuleValidatorInterface {
                 public function validate(Rule $rule): void {}
             },
+            new class() implements \PHPat\Test\TestInstantiatorInterface {
+                public function instantiate(\ReflectionClass $class): object
+                {
+                    return $class->newInstance();
+                }
+            }
         );
 
         $rule1 = PHPat::rule()->classes(Selector::classname('1'))();

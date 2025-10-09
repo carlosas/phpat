@@ -88,6 +88,6 @@ final class DeclarationStatementBuilder implements StatementBuilder
         $sanitized = is_string($sanitized = preg_replace('/[^a-zA-Z0-9.]/', '', $sanitized)) ? $sanitized : $randomName;
         $sanitized = is_string($sanitized = preg_replace('/\.+/', '.', $sanitized)) ? $sanitized : $randomName;
 
-        return trim($sanitized, '.');
+        return mb_trim($sanitized, '.');
     }
 }
