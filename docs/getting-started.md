@@ -57,6 +57,8 @@ See the complete list of options in the [Configuration](documentation/configurat
 
 There are different [Selectors](documentation/selectors.md) available to select the classes involved in a rule, and a wide set of [Assertions](documentation/assertions.md).
 
+⚠️ Tests must start with `test_` or have the `#[\PHPat\Test\Attributes\TestRule]` attribute.
+
 Here's an example test with a rule:
 
 ```php
