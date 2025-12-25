@@ -4,6 +4,7 @@
 /.kiro/
 /.vscode/
 /.fleet/
+/.agent/
 /**/.DS_Store
 /vendor/
 /composer.phar
