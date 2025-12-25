@@ -62,6 +62,6 @@ trait AttributeParamExtractor
             }
         }
 
-        return $names;
+        return array_values($names);
     }
 }
