@@ -27,6 +27,7 @@ class ShowRuleNameNewTest extends RuleTestCase
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
             [sprintf('%s: %s should not construct %s', self::RULE_NAME, FixtureClass::class, SimpleClass::class), 49],
+            [sprintf('%s: %s should not construct %s', self::RULE_NAME, FixtureClass::class, SimpleClass::class), 105],
         ]);
     }
 

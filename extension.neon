@@ -146,6 +146,10 @@ services:
 		tags:
 			- phpstan.rules.rule
 	-
+		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\AttributeParamRule
+		tags:
+			- phpstan.rules.rule
+	-
 		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\ClassPropertyRule
 		tags:
 			- phpstan.rules.rule
@@ -221,6 +225,10 @@ services:
 			- phpstan.rules.rule
 	-
 		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\AllAttributesRule
+		tags:
+			- phpstan.rules.rule
+	-
+		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\AttributeParamRule
 		tags:
 			- phpstan.rules.rule
 	-

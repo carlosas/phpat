@@ -94,12 +94,17 @@ class FixtureClass extends SimpleAbstractClass implements SimpleInterface
     #[SimpleAttribute(SimpleClass::class)]
     public function methodWithAllAttributes(#[SimpleAttribute] int $number): int
     {
-        $fn1 = #[SimpleAttribute] fn (int $a) => $a + 1;
-        $fn2 = #[SimpleAttribute] fn (int $a) => $a + 1;
-        $fn3 = #[SimpleAttribute] static fn (int $a) => $a + 1;
-        $fn4 = #[SimpleAttribute] static fn (int $a) => $a + 1;
+        $fn1 = #[SimpleAttribute(new SimpleClass())] fn(int $a) => $a + 1;
+        $fn2 = #[SimpleAttribute] fn(int $a) => $a + 1;
+        $fn3 = #[SimpleAttribute] static fn(int $a) => $a + 1;
+        $fn4 = #[SimpleAttribute] static fn(int $a) => $a + 1;
 
         return $fn1($number) + $fn2($number) + $fn3($number) + $fn4($number);
+    }
+
+    #[SimpleAttribute(new SimpleClass())]
+    public function methodWithNewInAttribute(): void
+    {
     }
 
     public function catchException(): void
