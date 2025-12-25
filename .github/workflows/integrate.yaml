@@ -48,6 +48,26 @@ jobs:
       - name: "Run friendsofphp/php-cs-fixer"
         run: "vendor/bin/php-cs-fixer check -v --config ./ci/php-cs-fixer.php"
 
+  stubs-check:
+    name: "Check PHP stubs"
+    runs-on: "ubuntu-latest"
+    strategy:
+      matrix:
+        php-version:
+          - "8.1"
+          - "8.5"
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v4"
+      - name: "Checkout phpstorm-stubs"
+        uses: "actions/checkout@v4"
+        with:
+          repository: "JetBrains/phpstorm-stubs"
+          path: "stubs"
+          fetch-depth: 1
+      - name: "Run check"
+        run: "php ci/check-stubs.php stubs"
+
   static-code-analysis:
     name: "Static Code and Architecture analysis"
     runs-on: "ubuntu-latest"
