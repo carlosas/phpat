@@ -30,6 +30,9 @@
         <LessSpecificReturnStatement>
             <errorLevel type="suppress"><file name="../src/Statement/Builder/StatementBuilderFactory.php" /></errorLevel>
         </LessSpecificReturnStatement>
+        <MoreSpecificReturnType>
+            <errorLevel type="suppress"><file name="../src/Rule/Extractor/Relation/AttributeParamExtractor.php" /></errorLevel>
+        </MoreSpecificReturnType>
         <MissingClosureParamType>
             <errorLevel type="suppress"><file name="../src/Rule/Extractor/Relation/ClassAttributeExtractor.php" /></errorLevel>
             <errorLevel type="suppress"><file name="../src/Rule/Extractor/Relation/AllAttributesExtractor.php" /></errorLevel>
