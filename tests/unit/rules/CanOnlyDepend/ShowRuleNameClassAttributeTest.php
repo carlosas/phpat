@@ -31,6 +31,7 @@ class ShowRuleNameClassAttributeTest extends RuleTestCase
             [sprintf('%s: %s should not depend on %s', self::RULE_NAME, FixtureClass::class, SimpleAttribute::class), 34],
             [sprintf('%s: %s should not depend on %s', self::RULE_NAME, FixtureClass::class, SimpleAttribute::class), 94],
             [sprintf('%s: %s should not depend on %s', self::RULE_NAME, FixtureClass::class, SimpleAttribute::class), 95],
+            [sprintf('%s: %s should not depend on %s', self::RULE_NAME, FixtureClass::class, SimpleAttribute::class), 105],
         ]);
     }
 

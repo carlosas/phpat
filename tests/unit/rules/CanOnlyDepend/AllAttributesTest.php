@@ -31,6 +31,7 @@ class AllAttributesTest extends RuleTestCase
             [sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class), 34],
             [sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class), 94],
             [sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class), 95],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class), 105],
         ]);
     }
 
