@@ -103,8 +103,19 @@ $missingClasses = array_diff($stubClasses, $builtInClasses);
 sort($missingClasses);
 $missingClasses = array_unique($missingClasses);
 
-// Filter out weird parsing artifacts if any
-$missingClasses = array_filter($missingClasses, fn($c) => !empty($c) && !str_contains($c, "class@anonymous"));
+// Filter out parsing artifacts and internal stubs namespaces
+$missingClasses = array_filter($missingClasses, function ($c) {
+    if (
+        empty($c)
+        || str_contains($c, "class@anonymous")
+        || str_starts_with($c, 'JetBrains\\')
+        || str_starts_with($c, 'StubTests\\')
+        || str_starts_with($c, 'PHPSTORM_META\\')
+        || str_starts_with($c, '___PHPSTORM_HELPERS\\')) {
+        return false;
+    }
+    return true;
+});
 
 if (count($missingClasses) > 0) {
     echo "The following classes from phpstorm-stubs are missing in PHPat\Parser\BuiltInClasses:\n";
