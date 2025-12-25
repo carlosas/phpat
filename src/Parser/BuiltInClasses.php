@@ -103,6 +103,7 @@ final class BuiltInClasses
         'Soap\Sdl',
         'RoundingMode',
         'StreamBucket',
+        'DateTime',
         'DateError',
         'DateObjectError',
         'DateRangeError',
@@ -113,5 +114,8 @@ final class BuiltInClasses
         'DateMalformedPeriodStringException',
         'DateMalformedStringException',
         'Random\IntervalBoundary',
+        'NoDiscard',
+        'DelayedTargetValidation',
+        'CurlSharePersistentHandle',
     ];
 }
