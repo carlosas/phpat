@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.12.1
+* Fix and update built-in classes up to PHP 8.5
+
 ## 0.12.0
 * Remove deprecated selector modifiers
 * Bump minimum PHP version to 8.1
