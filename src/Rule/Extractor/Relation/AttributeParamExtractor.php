@@ -23,6 +23,7 @@ trait AttributeParamExtractor
             return [];
         }
 
+        /** @var list<class-string> $names */
         $names = [];
 
         if ($node instanceof Node\Attribute) {
