@@ -25,21 +25,19 @@
             <errorLevel type="suppress"><directory name="../src/Rule/Extractor/Relation/DocComment" /></errorLevel>
         </PossiblyNullReference>
         <MoreSpecificReturnType>
-            <errorLevel type="suppress"><file name="../src/Statement/Builder/StatementBuilderFactory.php" /></errorLevel>
+            <errorLevel type="suppress">
+                <file name="../src/Statement/Builder/StatementBuilderFactory.php" />
+                <file name="../src/Rule/Extractor/Relation/AttributeParamExtractor.php" />
+            </errorLevel>
         </MoreSpecificReturnType>
         <LessSpecificReturnStatement>
             <errorLevel type="suppress"><file name="../src/Statement/Builder/StatementBuilderFactory.php" /></errorLevel>
         </LessSpecificReturnStatement>
-        <MoreSpecificReturnType>
-            <errorLevel type="suppress"><file name="../src/Rule/Extractor/Relation/AttributeParamExtractor.php" /></errorLevel>
-        </MoreSpecificReturnType>
         <MissingClosureParamType>
             <errorLevel type="suppress"><file name="../src/Rule/Extractor/Relation/ClassAttributeExtractor.php" /></errorLevel>
-            <errorLevel type="suppress"><file name="../src/Rule/Extractor/Relation/AllAttributesExtractor.php" /></errorLevel>
         </MissingClosureParamType>
         <MissingClosureReturnType>
             <errorLevel type="suppress"><file name="../src/Rule/Extractor/Relation/ClassAttributeExtractor.php" /></errorLevel>
-            <errorLevel type="suppress"><file name="../src/Rule/Extractor/Relation/AllAttributesExtractor.php" /></errorLevel>
         </MissingClosureReturnType>
         <InvalidStringClass>
             <errorLevel type="suppress"><file name="../src/Statement/Builder/StatementBuilderFactory.php" /></errorLevel>
