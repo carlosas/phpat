@@ -93,11 +93,11 @@ Selects all traits.
 
 ---
 
-## Selector::NOT(Selector)
+## Selector::Not(Selector)
 Selects classes that do not match the inner Selector.
 
 ```php
-Selector::NOT(
+Selector::Not(
     Selector::inNamespace('App\User')
 )
 ```
