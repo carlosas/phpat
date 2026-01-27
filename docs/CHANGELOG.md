@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.12.2
+* Update stubs for built-in classes (Jan 2026)
+
 ## 0.12.1
 * Fix and update built-in classes up to PHP 8.5
 
