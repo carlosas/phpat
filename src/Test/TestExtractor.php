@@ -29,7 +29,7 @@ final class TestExtractor implements TestExtractorInterface
 
             $reflectedTest = $this->reflectTest($test::class);
             if ($reflectedTest !== null) {
-                yield $reflectedTest;
+                yield [$reflectedTest, $test];
             }
         }
     }

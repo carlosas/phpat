@@ -9,6 +9,8 @@ use PHPat\Test\PHPat;
 
 final class TestClass
 {
+    public function __construct(private int $param) {}
+
     /**
      * @return iterable<Rule>
      */
@@ -28,5 +30,10 @@ final class TestClass
     public function test_rule_from_attribute(): Rule
     {
         return PHPat::rule()->classes(Selector::classname('4'));
+    }
+
+    public function test_configurable_rule(): Rule
+    {
+        return PHPat::rule()->classes(Selector::classname((string) $this->param));
     }
 }

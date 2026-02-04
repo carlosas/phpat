@@ -5,7 +5,7 @@ namespace PHPat\Test;
 interface TestExtractorInterface
 {
     /**
-     * @return iterable<\ReflectionClass<object>>
+     * @return iterable<array{0: \ReflectionClass<object>, 1: object}>
      */
     public function __invoke(): iterable;
 }
