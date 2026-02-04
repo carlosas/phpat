@@ -66,6 +66,46 @@ class MultipleTipTest extends RuleTestCase
                     • tip #2
                     TIPS,
             ],
+            [
+                \sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class),
+                97,
+                <<<'TIPS'
+                    • tip #1
+                    • tip #2
+                    TIPS,
+            ],
+            [
+                \sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class),
+                98,
+                <<<'TIPS'
+                    • tip #1
+                    • tip #2
+                    TIPS,
+            ],
+            [
+                \sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class),
+                99,
+                <<<'TIPS'
+                    • tip #1
+                    • tip #2
+                    TIPS,
+            ],
+            [
+                \sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class),
+                100,
+                <<<'TIPS'
+                    • tip #1
+                    • tip #2
+                    TIPS,
+            ],
+            [
+                \sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class),
+                105,
+                <<<'TIPS'
+                    • tip #1
+                    • tip #2
+                    TIPS,
+            ],
         ]);
     }
 

@@ -9,11 +9,10 @@ trait AllAttributesExtractor
 {
     public function getNodeType(): string
     {
-        return Node\AttributeGroup::class;
+        return Node::class;
     }
 
     /**
-     * @param  Node\AttributeGroup $node
      * @return list<class-string>
      */
     protected function extractNodeClassNames(Node $node, Scope $scope): array
@@ -22,8 +21,33 @@ trait AllAttributesExtractor
             return [];
         }
 
-        $fn = static fn ($a) => $a->name->toString();
+        $names = [];
 
-        return array_values(array_map($fn, $node->attrs));
+        if ($node instanceof Node\AttributeGroup) {
+            return $this->getFromAttributeGroup($node);
+        }
+
+        if ($node instanceof Node\Expr\ArrowFunction || $node instanceof Node\Expr\Closure) {
+            foreach ($node->attrGroups as $group) {
+                $names = array_merge($names, $this->getFromAttributeGroup($group));
+            }
+        }
+
+        return $names;
+    }
+
+    /**
+     * @return list<class-string>
+     */
+    private function getFromAttributeGroup(Node\AttributeGroup $group): array
+    {
+        $names = [];
+        foreach ($group->attrs as $attr) {
+            /** @var class-string $name */
+            $name = $attr->name->toString();
+            $names[] = $name;
+        }
+
+        return $names;
     }
 }

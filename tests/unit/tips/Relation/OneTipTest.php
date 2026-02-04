@@ -31,6 +31,11 @@ class OneTipTest extends RuleTestCase
             [sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class), 34, 'tip #1'],
             [sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class), 94, 'tip #1'],
             [sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class), 95, 'tip #1'],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class), 97, 'tip #1'],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class), 98, 'tip #1'],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class), 99, 'tip #1'],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class), 100, 'tip #1'],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class), 105, 'tip #1'],
         ]);
     }
 

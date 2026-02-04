@@ -3,7 +3,7 @@
 namespace Tests\PHPat\unit\rules\ShouldNotDepend;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\Relation\ShouldNotDepend\CatchBlockRule;
+use PHPat\Rule\Assertion\Relation\ShouldNotDepend\AttributeParamRule;
 use PHPat\Rule\Assertion\Relation\ShouldNotDepend\ShouldNotDepend;
 use PHPat\Selector\Classname;
 use PHPat\Statement\Builder\StatementBuilderFactory;
@@ -11,22 +11,24 @@ use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
 use Tests\PHPat\fixtures\FixtureClass;
-use Tests\PHPat\fixtures\Simple\SimpleException;
+use Tests\PHPat\fixtures\Simple\SimpleClass;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
- * @extends RuleTestCase<CatchBlockRule>
+ * @extends RuleTestCase<AttributeParamRule>
  * @internal
  * @coversNothing
  */
-class CatchBlockTest extends RuleTestCase
+class AttributeParamTest extends RuleTestCase
 {
-    public const RULE_NAME = 'testFixtureClassShouldNotDependSimpleException';
+    public const RULE_NAME = 'testAttributeParam';
 
     public function testRule(): void
     {
         $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleException::class), 113],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClass::class), 94],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClass::class), 97],
+            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClass::class), 105],
         ]);
     }
 
@@ -36,10 +38,10 @@ class CatchBlockTest extends RuleTestCase
             self::RULE_NAME,
             ShouldNotDepend::class,
             [new Classname(FixtureClass::class, false)],
-            [new Classname(SimpleException::class, false)]
+            [new Classname(SimpleClass::class, false)]
         );
 
-        return new CatchBlockRule(
+        return new AttributeParamRule(
             new StatementBuilderFactory($testParser),
             new Configuration(false, true, false),
             $this->createReflectionProvider(),
