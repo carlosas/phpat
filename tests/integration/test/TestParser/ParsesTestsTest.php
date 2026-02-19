@@ -18,11 +18,15 @@ final class ParsesTestsTest extends TestCase
 {
     public function testClassCollectsMultipleRulesFromFunction(): void
     {
+        $param = random_int(1, 100);
+
         $testParser = new TestParser(
-            new class() implements TestExtractorInterface {
+            new class($param) implements TestExtractorInterface {
+                public function __construct(private int $param) {}
+
                 public function __invoke(): iterable
                 {
-                    yield new \ReflectionClass(TestClass::class);
+                    yield [new \ReflectionClass(TestClass::class), new TestClass($this->param)];
                 }
             },
             new class() implements RuleValidatorInterface {
@@ -42,11 +46,15 @@ final class ParsesTestsTest extends TestCase
         $rule4 = PHPat::rule()->classes(Selector::classname('4'))();
         $rule4->ruleName = TestClass::class.':test_rule_from_attribute';
 
+        $rule5 = PHPat::rule()->classes(Selector::classname((string) $param))();
+        $rule5->ruleName = TestClass::class.':test_configurable_rule';
+
         self::assertEquals([
             $rule1,
             $rule2,
             $rule3,
             $rule4,
+            $rule5,
         ], ($testParser)());
     }
 }

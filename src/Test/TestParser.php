@@ -38,16 +38,15 @@ class TestParser
         $tests = ($this->extractor)();
 
         $rules = [];
-        foreach ($tests as $reflected) {
+        foreach ($tests as [$reflected, $test]) {
             $classname = $reflected->getName();
-            $object = $reflected->newInstanceWithoutConstructor();
             foreach ($reflected->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
                 if (
                     // @phpstan-ignore function.alreadyNarrowedType
                     (method_exists($method, 'getAttributes') && !empty($method->getAttributes(TestRule::class)))
                     || preg_match('/^(test)[A-Za-z0-9_\x80-\xff]*/', $method->getName())
                 ) {
-                    $ruleBuilder = $object->{$method->getName()}();
+                    $ruleBuilder = $test->{$method->getName()}();
                     if (is_iterable($ruleBuilder)) {
                         foreach ($ruleBuilder as $name => $rule) {
                             $rules[$classname.':'.$method->getName().':'.$name] = $rule;

@@ -38,6 +38,16 @@ services:
         tags:
             - phpat.test
 ```
+You can also pass constructor arguments when registering a test class to make the test configurable and reusable across
+different namespaces or applications.
+```neon
+# phpstan.neon
+services:
+    -
+        class: Tests\Architecture\MyFirstTest('App\\Domain', regex: true)
+        tags:
+            - phpat.test
+```
 ⚠️ Your architecture tests folder should be included in the PHPStan analysed paths.
 
 You can configure some PHPat options as follows:
