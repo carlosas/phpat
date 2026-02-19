@@ -780,6 +780,7 @@ final class BuiltInClasses
         'MongoDB\BSON\UTCDateTimeInterface',
         'MongoDB\BSON\Undefined',
         'MongoDB\BSON\Unserializable',
+        'MongoDB\BSON\VectorType',
         'MongoDB\Driver\BulkWrite',
         'MongoDB\Driver\BulkWriteCommand',
         'MongoDB\Driver\BulkWriteCommandResult',
