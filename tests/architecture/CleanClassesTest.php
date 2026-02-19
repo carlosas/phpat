@@ -4,7 +4,7 @@ namespace Tests\PHPat\architecture;
 
 use PHPat\Selector\Selector;
 use PHPat\Selector\SelectorPrimitive;
-use PHPat\Statement\Builder\StatementBuilder;
+use PHPat\Statement\Builder\StatementBuilderInterface;
 use PHPat\Test\Builder\AbstractStep;
 use PHPat\Test\Builder\Rule;
 use PHPat\Test\PHPat;
@@ -33,7 +33,7 @@ final class CleanClassesTest
     public function test_builders_only_public_method_build(): Rule
     {
         return PHPat::rule()
-            ->classes(Selector::implements(StatementBuilder::class))
+            ->classes(Selector::implements(StatementBuilderInterface::class))
             ->shouldHaveOnlyOnePublicMethodNamed('build')
         ;
     }

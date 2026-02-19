@@ -10,9 +10,9 @@ use PHPat\Rule\Assertion\Relation\ShouldExtend\ShouldExtend;
 use PHPat\Rule\Assertion\Relation\ShouldImplement\ShouldImplement;
 use PHPat\Rule\Assertion\Relation\ShouldInclude\ShouldInclude;
 use PHPat\Selector\Classname;
-use PHPat\Selector\SelectorInterface;
 use PHPat\ShouldNotHappenException;
 use PHPat\Statement\Builder\StatementBuilderFactory;
+use PHPat\Statement\Statement;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
@@ -22,7 +22,7 @@ use PHPStan\Type\FileTypeMapper;
 
 abstract class RelationAssertion implements Assertion
 {
-    /** @var array<array{string, SelectorInterface, array<SelectorInterface>, array<SelectorInterface>, array<SelectorInterface>, array<string>}> */
+    /** @var array<Statement> */
     protected array $statements;
     protected Configuration $configuration;
     protected ReflectionProvider $reflectionProvider;
@@ -76,10 +76,10 @@ abstract class RelationAssertion implements Assertion
     abstract protected function getMessage(string $ruleName, string $subject, string $target): string;
 
     /**
-     * @param  array<SelectorInterface>  $targets
-     * @param  array<SelectorInterface>  $targetExcludes
-     * @param  array<class-string>       $nodes
-     * @param  array<string>             $tips
+     * @param  array<\PHPat\Selector\SelectorInterface>  $targets
+     * @param  array<\PHPat\Selector\SelectorInterface>  $targetExcludes
+     * @param  array<class-string>                       $nodes
+     * @param  array<string>                             $tips
      * @return list<IdentifierRuleError>
      */
     abstract protected function applyValidation(
@@ -139,11 +139,11 @@ abstract class RelationAssertion implements Assertion
             throw new ShouldNotHappenException();
         }
 
-        foreach ($this->statements as [$ruleName, $selector, $subjectExcludes, $targets, $targetExcludes, $tips]) {
-            if ($subject->isBuiltin() || !$selector->matches($subject)) {
+        foreach ($this->statements as $statement) {
+            if ($subject->isBuiltin() || !$statement->subject->matches($subject)) {
                 continue;
             }
-            foreach ($subjectExcludes as $exclude) {
+            foreach ($statement->subjectExcludes as $exclude) {
                 if ($exclude->matches($subject)) {
                     continue 2;
                 }
@@ -155,7 +155,7 @@ abstract class RelationAssertion implements Assertion
 
             array_push(
                 $errors,
-                ...$this->applyValidation($ruleName, $subject, $targets, $targetExcludes, $nodes, $tips)
+                ...$this->applyValidation($statement->ruleName, $subject, $statement->targets, $statement->targetExcludes, $nodes, $statement->tips)
             );
         }
 

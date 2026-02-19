@@ -4,19 +4,18 @@ namespace PHPat\Rule\Assertion\Declaration;
 
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\Assertion;
-use PHPat\Selector\SelectorInterface;
-use PHPat\ShouldNotHappenException;
 use PHPat\Statement\Builder\StatementBuilderFactory;
-use PhpParser\Node;
+use PHPat\Statement\Statement;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\RuleError;
 use PHPStan\Type\FileTypeMapper;
+use PhpParser\Node;
 
 abstract class DeclarationAssertion implements Assertion
 {
-    /** @var array<array{string, SelectorInterface, array<SelectorInterface>, array<string>, array<string, mixed>}> */
+    /** @var array<Statement> */
     protected array $statements;
     protected Configuration $configuration;
     protected ReflectionProvider $reflectionProvider;
@@ -38,9 +37,6 @@ abstract class DeclarationAssertion implements Assertion
         $this->fileTypeMapper = $fileTypeMapper;
     }
 
-    /**
-     * @throws ShouldNotHappenException
-     */
     public function processNode(Node $node, Scope $scope): array
     {
         $subject = $scope->getClassReflection();
@@ -50,13 +46,11 @@ abstract class DeclarationAssertion implements Assertion
 
         $applicableStatements = array_filter(
             $this->statements,
-            static function (array $statement) use ($subject): bool {
-                [$ruleName, $selector, $subjectExcludes, $tips, $params] = $statement;
-
-                if ($subject->isBuiltin() || !$selector->matches($subject)) {
+            static function (Statement $statement) use ($subject): bool {
+                if ($subject->isBuiltin() || !$statement->subject->matches($subject)) {
                     return false;
                 }
-                foreach ($subjectExcludes as $exclude) {
+                foreach ($statement->subjectExcludes as $exclude) {
                     if ($exclude->matches($subject)) {
                         return false;
                     }
@@ -68,11 +62,9 @@ abstract class DeclarationAssertion implements Assertion
 
         return array_values(array_reduce(
             $applicableStatements,
-            function (array $errors, array $statement) use ($node, $scope, $subject): array {
-                [$ruleName, $selector, $subjectExcludes, $tips, $params] = $statement;
-
-                $meetsDeclaration = $this->meetsDeclaration($node, $scope, $statement[4]);
-                array_push($errors, ...$this->applyValidation($ruleName, $subject, $meetsDeclaration, $tips, $params));
+            function (array $errors, Statement $statement) use ($node, $scope, $subject): array {
+                $meetsDeclaration = $this->meetsDeclaration($node, $scope, $statement->params);
+                array_push($errors, ...$this->applyValidation($statement->ruleName, $subject, $meetsDeclaration, $statement->tips, $statement->params));
 
                 return $errors;
             },
