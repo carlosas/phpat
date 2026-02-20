@@ -29,7 +29,9 @@ includes:
 
 ### Configuration
 
-You will need to register your test classes in your PHPStan configuration:
+You will need to register your test classes in your PHPStan configuration. 
+You can also pass constructor arguments when registering a test class.
+
 ```neon
 # phpstan.neon
 services:
@@ -37,14 +39,8 @@ services:
         class: Tests\Architecture\MyFirstTest
         tags:
             - phpat.test
-```
-You can also pass constructor arguments when registering a test class to make the test configurable and reusable across
-different namespaces or applications.
-```neon
-# phpstan.neon
-services:
     -
-        class: Tests\Architecture\MyFirstTest('App\\Domain', regex: true)
+        class: Tests\Architecture\MySecondTest('App\\Domain', regex: false)
         tags:
             - phpat.test
 ```

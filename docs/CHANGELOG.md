@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.12.3
+* Allow constructor parameters in rules
+* Update stubs for built-in classes (Feb 2026)
+
 ## 0.12.2
 * Update stubs for built-in classes (Jan 2026)
 
