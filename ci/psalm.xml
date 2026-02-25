@@ -24,12 +24,6 @@
         <PossiblyNullReference>
             <errorLevel type="suppress"><directory name="../src/Rule/Extractor/Relation/DocComment" /></errorLevel>
         </PossiblyNullReference>
-        <MoreSpecificReturnType>
-            <errorLevel type="suppress"><file name="../src/Statement/Builder/StatementBuilderFactory.php" /></errorLevel>
-        </MoreSpecificReturnType>
-        <LessSpecificReturnStatement>
-            <errorLevel type="suppress"><file name="../src/Statement/Builder/StatementBuilderFactory.php" /></errorLevel>
-        </LessSpecificReturnStatement>
         <MissingClosureParamType>
             <errorLevel type="suppress"><file name="../src/Rule/Extractor/Relation/ClassAttributeExtractor.php" /></errorLevel>
             <errorLevel type="suppress"><file name="../src/Rule/Extractor/Relation/AllAttributesExtractor.php" /></errorLevel>
@@ -38,9 +32,6 @@
             <errorLevel type="suppress"><file name="../src/Rule/Extractor/Relation/ClassAttributeExtractor.php" /></errorLevel>
             <errorLevel type="suppress"><file name="../src/Rule/Extractor/Relation/AllAttributesExtractor.php" /></errorLevel>
         </MissingClosureReturnType>
-        <InvalidStringClass>
-            <errorLevel type="suppress"><file name="../src/Statement/Builder/StatementBuilderFactory.php" /></errorLevel>
-        </InvalidStringClass>
         <InvalidReturnType>
             <errorLevel type="suppress"><file name="../src/Test/TestExtractor.php" /></errorLevel>
         </InvalidReturnType>

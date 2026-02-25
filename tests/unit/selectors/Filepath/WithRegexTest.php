@@ -6,7 +6,7 @@ use PHPat\Configuration;
 use PHPat\Rule\Assertion\Declaration\ShouldBeNamed\ClassnameRule;
 use PHPat\Rule\Assertion\Declaration\ShouldBeNamed\ShouldBeNamed;
 use PHPat\Selector\Filepath;
-use PHPat\Statement\Builder\StatementBuilderFactory;
+use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
@@ -46,7 +46,7 @@ final class WithRegexTest extends RuleTestCase
         );
 
         return new ClassnameRule(
-            new StatementBuilderFactory($testParser),
+            new StatementBuilder($testParser),
             new Configuration(false, true, false),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)

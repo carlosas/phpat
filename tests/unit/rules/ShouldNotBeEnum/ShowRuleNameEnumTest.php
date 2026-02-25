@@ -6,7 +6,7 @@ use PHPat\Configuration;
 use PHPat\Rule\Assertion\Declaration\ShouldNotBeEnum\IsEnumRule;
 use PHPat\Rule\Assertion\Declaration\ShouldNotBeEnum\ShouldNotBeEnum;
 use PHPat\Selector\Classname;
-use PHPat\Statement\Builder\StatementBuilderFactory;
+use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
@@ -39,7 +39,7 @@ class ShowRuleNameEnumTest extends RuleTestCase
         );
 
         return new IsEnumRule(
-            new StatementBuilderFactory($testParser),
+            new StatementBuilder($testParser),
             new Configuration(false, true, true),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)

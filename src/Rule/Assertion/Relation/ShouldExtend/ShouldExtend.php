@@ -5,7 +5,7 @@ namespace PHPat\Rule\Assertion\Relation\ShouldExtend;
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\Relation\RelationAssertion;
 use PHPat\Rule\Assertion\Relation\ValidationTrait;
-use PHPat\Statement\Builder\StatementBuilderFactory;
+use PHPat\Statement\StatementBuilder;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\FileTypeMapper;
@@ -15,14 +15,14 @@ abstract class ShouldExtend extends RelationAssertion
     use ValidationTrait;
 
     public function __construct(
-        StatementBuilderFactory $statementBuilderFactory,
+        StatementBuilder $statementBuilder,
         Configuration $configuration,
         ReflectionProvider $reflectionProvider,
         FileTypeMapper $fileTypeMapper
     ) {
         parent::__construct(
             __CLASS__,
-            $statementBuilderFactory,
+            $statementBuilder,
             $configuration,
             $reflectionProvider,
             $fileTypeMapper

@@ -12,7 +12,8 @@ use PHPat\Rule\Assertion\Relation\ShouldInclude\ShouldInclude;
 use PHPat\Selector\Classname;
 use PHPat\Selector\SelectorInterface;
 use PHPat\ShouldNotHappenException;
-use PHPat\Statement\Builder\StatementBuilderFactory;
+use PHPat\Statement\Statement;
+use PHPat\Statement\StatementBuilder;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
@@ -22,7 +23,7 @@ use PHPStan\Type\FileTypeMapper;
 
 abstract class RelationAssertion implements Assertion
 {
-    /** @var array<array{string, SelectorInterface, array<SelectorInterface>, array<SelectorInterface>, array<SelectorInterface>, array<string>}> */
+    /** @var array<Statement> */
     protected array $statements;
     protected Configuration $configuration;
     protected ReflectionProvider $reflectionProvider;
@@ -33,12 +34,12 @@ abstract class RelationAssertion implements Assertion
      */
     public function __construct(
         string $assertion,
-        StatementBuilderFactory $statementBuilderFactory,
+        StatementBuilder $statementBuilder,
         Configuration $configuration,
         ReflectionProvider $reflectionProvider,
         FileTypeMapper $fileTypeMapper
     ) {
-        $this->statements = $statementBuilderFactory->create($assertion)->build();
+        $this->statements = $statementBuilder->build($assertion);
         $this->configuration = $configuration;
         $this->reflectionProvider = $reflectionProvider;
         $this->fileTypeMapper = $fileTypeMapper;
@@ -139,11 +140,11 @@ abstract class RelationAssertion implements Assertion
             throw new ShouldNotHappenException();
         }
 
-        foreach ($this->statements as [$ruleName, $selector, $subjectExcludes, $targets, $targetExcludes, $tips]) {
-            if ($subject->isBuiltin() || !$selector->matches($subject)) {
+        foreach ($this->statements as $statement) {
+            if ($subject->isBuiltin() || !$statement->subject->matches($subject)) {
                 continue;
             }
-            foreach ($subjectExcludes as $exclude) {
+            foreach ($statement->subjectExcludes as $exclude) {
                 if ($exclude->matches($subject)) {
                     continue 2;
                 }
@@ -155,7 +156,7 @@ abstract class RelationAssertion implements Assertion
 
             array_push(
                 $errors,
-                ...$this->applyValidation($ruleName, $subject, $targets, $targetExcludes, $nodes, $tips)
+                ...$this->applyValidation($statement->ruleName, $subject, $statement->targets, $statement->targetExcludes, $nodes, $statement->tips)
             );
         }
 

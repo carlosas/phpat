@@ -7,7 +7,7 @@ use PHPat\Rule\Assertion\Relation\ShouldNotDepend\NewRule;
 use PHPat\Rule\Assertion\Relation\ShouldNotDepend\ShouldNotDepend;
 use PHPat\Selector\Classname;
 use PHPat\Selector\IsStandardClass;
-use PHPat\Statement\Builder\StatementBuilderFactory;
+use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
@@ -45,7 +45,7 @@ class IsStandardClassTest extends RuleTestCase
         );
 
         return new NewRule(
-            new StatementBuilderFactory($testParser),
+            new StatementBuilder($testParser),
             new Configuration(false, false, false), // ignore_built_in_classes = false
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)

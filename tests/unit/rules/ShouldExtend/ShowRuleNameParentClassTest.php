@@ -6,7 +6,7 @@ use PHPat\Configuration;
 use PHPat\Rule\Assertion\Relation\ShouldExtend\ParentClassRule;
 use PHPat\Rule\Assertion\Relation\ShouldExtend\ShouldExtend;
 use PHPat\Selector\Classname;
-use PHPat\Statement\Builder\StatementBuilderFactory;
+use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
@@ -40,7 +40,7 @@ class ShowRuleNameParentClassTest extends RuleTestCase
         );
 
         return new ParentClassRule(
-            new StatementBuilderFactory($testParser),
+            new StatementBuilder($testParser),
             new Configuration(false, true, true),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)

@@ -6,7 +6,7 @@ use PHPat\Configuration;
 use PHPat\Rule\Assertion\Declaration\ShouldBeInvokable\IsInvokableRule;
 use PHPat\Rule\Assertion\Declaration\ShouldBeInvokable\ShouldBeInvokable;
 use PHPat\Selector\Classname;
-use PHPat\Statement\Builder\StatementBuilderFactory;
+use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
@@ -37,7 +37,7 @@ class GoodImplementationInvokableClassTest extends RuleTestCase
         );
 
         return new IsInvokableRule(
-            new StatementBuilderFactory($testParser),
+            new StatementBuilder($testParser),
             new Configuration(false, true, true),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)

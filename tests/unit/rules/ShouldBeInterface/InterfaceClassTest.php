@@ -6,7 +6,7 @@ use PHPat\Configuration;
 use PHPat\Rule\Assertion\Declaration\ShouldBeInterface\IsInterfaceRule;
 use PHPat\Rule\Assertion\Declaration\ShouldBeInterface\ShouldBeInterface;
 use PHPat\Selector\Classname;
-use PHPat\Statement\Builder\StatementBuilderFactory;
+use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
@@ -39,7 +39,7 @@ class InterfaceClassTest extends RuleTestCase
         );
 
         return new IsInterfaceRule(
-            new StatementBuilderFactory($testParser),
+            new StatementBuilder($testParser),
             new Configuration(false, true, false),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
