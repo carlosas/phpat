@@ -23,7 +23,7 @@ phpat/
 │   │       └── Relation/        # Traits that extract class names from AST nodes (including DocComment sub-scopes)
 │   ├── Selector/                # Selector classes for targeting PHP classes in rules
 │   │   └── Modifier/            # Selector combinators
-│   ├── Statement/               # Representation of assertions with selected classes found in the codebase
+│   ├── Statement/               # Representation of selected classes and parameters to validate an assertion
 │   └── Test/
 │       ├── Attributes/          # PHP attributes used to annotate test rule methods (e.g. #[TestRule])
 │       └── Builder/             # Fluent builder step classes (SubjectStep, AssertionStep, TargetStep, etc.)
