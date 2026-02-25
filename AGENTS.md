@@ -23,8 +23,7 @@ phpat/
 │   │       └── Relation/        # Traits that extract class names from AST nodes (including DocComment sub-scopes)
 │   ├── Selector/                # Selector classes for targeting PHP classes in rules
 │   │   └── Modifier/            # Selector combinators
-│   ├── Statement/
-│   │   └── Builder/             # Builds typed Statement objects (Relation/Declaration) from parsed rules
+│   ├── Statement/               # Representation of assertions with selected classes found in the codebase
 │   └── Test/
 │       ├── Attributes/          # PHP attributes used to annotate test rule methods (e.g. #[TestRule])
 │       └── Builder/             # Fluent builder step classes (SubjectStep, AssertionStep, TargetStep, etc.)
@@ -50,13 +49,10 @@ vendor/bin/phpstan analyse -c ci/phpstan-phpat.neon
 # Run Psalm static analysis
 vendor/bin/psalm -c ci/psalm.xml
 
-# Run integration tests
-vendor/bin/phpunit tests/integration/
+# Run tests
+vendor/bin/phpunit tests/unit/ tests/integration/
 
-# Run unit tests
-vendor/bin/phpunit tests/unit/
-
-# Run a single unit test file
+# Run a single test file
 vendor/bin/phpunit tests/unit/rules/SomeTest.php
 ```
 
@@ -70,7 +66,7 @@ PHPat hooks into PHPStan as a set of registered rules. When PHPStan analyses a f
 
 2. **Test Parsing**: `TestParser` (`src/Test/TestParser.php`) reflects on each test class and collects all public methods prefixed with `test` or annotated with `#[TestRule]`. Each method returns a `Rule` builder which is invoked to build the rule.
 
-3. **Statement Building**: `StatementBuilderFactory` (`src/Statement/Builder/StatementBuilderFactory.php`) wraps parsed rules and creates the appropriate `StatementBuilder` (Relation or Declaration) for each PHPStan rule class.
+3. **Statement Building**: `StatementBuilder` (`src/Statement//StatementBuilder.php`) wraps parsed rules and creates the appropriate `Statement` (DTO with Subject, Target, Excludes, Tip, etc.) for each PHPStan rule class.
 
 4. **Assertion Execution**: Each assertion class (e.g., `ShouldNotDepend\MethodParamRule`) is a PHPStan rule that fires on a specific AST node type. It extracts class names from the node, then validates against the statements built from test rules.
 
