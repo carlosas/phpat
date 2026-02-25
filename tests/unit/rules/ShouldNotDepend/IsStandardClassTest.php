@@ -7,7 +7,7 @@ use PHPat\Rule\Assertion\Relation\ShouldNotDepend\NewRule;
 use PHPat\Rule\Assertion\Relation\ShouldNotDepend\ShouldNotDepend;
 use PHPat\Selector\Classname;
 use PHPat\Selector\IsStandardClass;
-use PHPat\Statement\Builder\StatementBuilder;
+use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;

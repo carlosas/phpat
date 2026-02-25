@@ -9,7 +9,7 @@ services:
 	- PHPat\Test\TestExtractor
 	- PHPat\Test\TestParser
 	- PHPat\Test\RuleValidator
-	- PHPat\Statement\Builder\StatementBuilder
+	- PHPat\Statement\StatementBuilder
 	- PHPat\Configuration(
 		ignore_doc_comments: %phpat.ignore_doc_comments%,
 		ignore_built_in_classes: %phpat.ignore_built_in_classes%,

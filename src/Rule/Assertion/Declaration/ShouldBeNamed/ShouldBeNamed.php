@@ -5,7 +5,7 @@ namespace PHPat\Rule\Assertion\Declaration\ShouldBeNamed;
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\Declaration\DeclarationAssertion;
 use PHPat\Rule\Assertion\Declaration\ValidationTrait;
-use PHPat\Statement\Builder\StatementBuilder;
+use PHPat\Statement\StatementBuilder;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\FileTypeMapper;

@@ -4,8 +4,8 @@ namespace PHPat\Rule\Assertion\Declaration;
 
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\Assertion;
-use PHPat\Statement\Builder\StatementBuilder;
 use PHPat\Statement\Statement;
+use PHPat\Statement\StatementBuilder;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;

@@ -5,7 +5,7 @@ namespace Tests\PHPat\unit\rules\ShouldHaveOnlyOnePublicMethodNamed;
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\Declaration\ShouldHaveOnlyOnePublicMethodNamed\HasOnlyOnePublicMethodNamedRule;
 use PHPat\Selector\Classname;
-use PHPat\Statement\Builder\StatementBuilder;
+use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;

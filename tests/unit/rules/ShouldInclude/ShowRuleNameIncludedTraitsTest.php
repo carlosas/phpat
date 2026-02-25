@@ -6,7 +6,7 @@ use PHPat\Configuration;
 use PHPat\Rule\Assertion\Relation\ShouldInclude\IncludedTraitsRule;
 use PHPat\Rule\Assertion\Relation\ShouldInclude\ShouldInclude;
 use PHPat\Selector\Classname;
-use PHPat\Statement\Builder\StatementBuilder;
+use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;

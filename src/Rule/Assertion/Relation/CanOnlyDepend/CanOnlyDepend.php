@@ -5,7 +5,7 @@ namespace PHPat\Rule\Assertion\Relation\CanOnlyDepend;
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\Relation\RelationAssertion;
 use PHPat\Rule\Assertion\Relation\ValidationTrait;
-use PHPat\Statement\Builder\StatementBuilder;
+use PHPat\Statement\StatementBuilder;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\FileTypeMapper;

@@ -6,7 +6,7 @@ use PHPat\Configuration;
 use PHPat\Rule\Assertion\Declaration\ShouldBeFinal\IsFinalRule;
 use PHPat\Rule\Assertion\Declaration\ShouldBeFinal\ShouldBeFinal;
 use PHPat\Selector\Classname;
-use PHPat\Statement\Builder\StatementBuilder;
+use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;

@@ -1,8 +1,7 @@
 <?php declare(strict_types=1);
 
-namespace PHPat\Statement\Builder;
+namespace PHPat\Statement;
 
-use PHPat\Statement\Statement;
 use PHPat\Test\Rule;
 use PHPat\Test\TestParser;
 use PhpParser\Node;
