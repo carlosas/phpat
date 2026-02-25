@@ -8,14 +8,19 @@ final class Statement
 {
     public string $ruleName;
     public SelectorInterface $subject;
+
     /** @var array<SelectorInterface> */
     public array $subjectExcludes;
+
     /** @var array<SelectorInterface> */
     public array $targets;
+
     /** @var array<SelectorInterface> */
     public array $targetExcludes;
+
     /** @var array<string> */
     public array $tips;
+
     /** @var array<string, mixed> */
     public array $params;
 

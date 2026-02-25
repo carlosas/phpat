@@ -10,8 +10,9 @@ use PHPat\Rule\Assertion\Relation\ShouldExtend\ShouldExtend;
 use PHPat\Rule\Assertion\Relation\ShouldImplement\ShouldImplement;
 use PHPat\Rule\Assertion\Relation\ShouldInclude\ShouldInclude;
 use PHPat\Selector\Classname;
+use PHPat\Selector\SelectorInterface;
 use PHPat\ShouldNotHappenException;
-use PHPat\Statement\Builder\StatementBuilderFactory;
+use PHPat\Statement\Builder\StatementBuilder;
 use PHPat\Statement\Statement;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
@@ -33,12 +34,12 @@ abstract class RelationAssertion implements Assertion
      */
     public function __construct(
         string $assertion,
-        StatementBuilderFactory $statementBuilderFactory,
+        StatementBuilder $statementBuilder,
         Configuration $configuration,
         ReflectionProvider $reflectionProvider,
         FileTypeMapper $fileTypeMapper
     ) {
-        $this->statements = $statementBuilderFactory->create($assertion)->build();
+        $this->statements = $statementBuilder->build($assertion);
         $this->configuration = $configuration;
         $this->reflectionProvider = $reflectionProvider;
         $this->fileTypeMapper = $fileTypeMapper;
@@ -76,10 +77,10 @@ abstract class RelationAssertion implements Assertion
     abstract protected function getMessage(string $ruleName, string $subject, string $target): string;
 
     /**
-     * @param  array<\PHPat\Selector\SelectorInterface>  $targets
-     * @param  array<\PHPat\Selector\SelectorInterface>  $targetExcludes
-     * @param  array<class-string>                       $nodes
-     * @param  array<string>                             $tips
+     * @param  array<SelectorInterface>  $targets
+     * @param  array<SelectorInterface>  $targetExcludes
+     * @param  array<class-string>       $nodes
+     * @param  array<string>             $tips
      * @return list<IdentifierRuleError>
      */
     abstract protected function applyValidation(

@@ -6,7 +6,7 @@ use PHPat\Configuration;
 use PHPat\Rule\Assertion\Relation\CanOnlyDepend\AllAttributesRule;
 use PHPat\Rule\Assertion\Relation\CanOnlyDepend\CanOnlyDepend;
 use PHPat\Selector\Classname;
-use PHPat\Statement\Builder\StatementBuilderFactory;
+use PHPat\Statement\Builder\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
@@ -44,7 +44,7 @@ class ShowRuleNameClassAttributeTest extends RuleTestCase
         );
 
         return new AllAttributesRule(
-            new StatementBuilderFactory($testParser),
+            new StatementBuilder($testParser),
             new Configuration(false, true, true),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)

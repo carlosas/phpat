@@ -6,7 +6,7 @@ use PHPat\Configuration;
 use PHPat\Rule\Assertion\Relation\CanOnlyDepend\CanOnlyDepend;
 use PHPat\Rule\Assertion\Relation\CanOnlyDepend\DocVarTagRule;
 use PHPat\Selector\Classname;
-use PHPat\Statement\Builder\StatementBuilderFactory;
+use PHPat\Statement\Builder\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
@@ -58,7 +58,7 @@ class IgnoredDocVarTagTest extends RuleTestCase
         );
 
         return new DocVarTagRule(
-            new StatementBuilderFactory($testParser),
+            new StatementBuilder($testParser),
             new Configuration(true, true, false),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)

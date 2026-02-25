@@ -5,7 +5,7 @@ namespace PHPat\Rule\Assertion\Declaration\ShouldNotExist;
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\Declaration\DeclarationAssertion;
 use PHPat\Rule\Assertion\Declaration\ValidationTrait;
-use PHPat\Statement\Builder\StatementBuilderFactory;
+use PHPat\Statement\Builder\StatementBuilder;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\FileTypeMapper;
@@ -15,14 +15,14 @@ abstract class ShouldNotExist extends DeclarationAssertion
     use ValidationTrait;
 
     public function __construct(
-        StatementBuilderFactory $statementBuilderFactory,
+        StatementBuilder $statementBuilder,
         Configuration $configuration,
         ReflectionProvider $reflectionProvider,
         FileTypeMapper $fileTypeMapper
     ) {
         parent::__construct(
             __CLASS__,
-            $statementBuilderFactory,
+            $statementBuilder,
             $configuration,
             $reflectionProvider,
             $fileTypeMapper

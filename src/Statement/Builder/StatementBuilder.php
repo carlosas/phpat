@@ -4,35 +4,29 @@ namespace PHPat\Statement\Builder;
 
 use PHPat\Statement\Statement;
 use PHPat\Test\Rule;
+use PHPat\Test\TestParser;
 use PhpParser\Node;
 use PHPStan\Rules\Rule as PHPStanRule;
 
-final class StatementBuilder implements StatementBuilderInterface
+final class StatementBuilder
 {
     /** @var array<Rule> */
     private array $rules;
 
-    /** @var class-string<PHPStanRule<Node>> */
-    private string $assertion;
-
-    /**
-     * @param class-string<PHPStanRule<Node>> $assertion
-     * @param array<Rule>                     $rules
-     */
-    public function __construct(string $assertion, array $rules)
+    public function __construct(TestParser $testParser)
     {
-        $this->assertion = $assertion;
-        $this->rules = $rules;
+        $this->rules = $testParser();
     }
 
     /**
+     * @param  class-string<PHPStanRule<Node>> $assertion
      * @return array<Statement>
      */
-    public function build(): array
+    public function build(string $assertion): array
     {
         $statements = [];
         foreach ($this->rules as $rule) {
-            if ($rule->getAssertion() !== $this->assertion) {
+            if ($rule->getAssertion() !== $assertion) {
                 continue;
             }
 

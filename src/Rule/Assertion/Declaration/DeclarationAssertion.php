@@ -4,14 +4,14 @@ namespace PHPat\Rule\Assertion\Declaration;
 
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\Assertion;
-use PHPat\Statement\Builder\StatementBuilderFactory;
+use PHPat\Statement\Builder\StatementBuilder;
 use PHPat\Statement\Statement;
+use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\RuleError;
 use PHPStan\Type\FileTypeMapper;
-use PhpParser\Node;
 
 abstract class DeclarationAssertion implements Assertion
 {
@@ -26,12 +26,12 @@ abstract class DeclarationAssertion implements Assertion
      */
     public function __construct(
         string $assertion,
-        StatementBuilderFactory $statementBuilderFactory,
+        StatementBuilder $statementBuilder,
         Configuration $configuration,
         ReflectionProvider $reflectionProvider,
         FileTypeMapper $fileTypeMapper
     ) {
-        $this->statements = $statementBuilderFactory->create($assertion)->build();
+        $this->statements = $statementBuilder->build($assertion);
         $this->configuration = $configuration;
         $this->reflectionProvider = $reflectionProvider;
         $this->fileTypeMapper = $fileTypeMapper;
