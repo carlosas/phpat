@@ -3,8 +3,8 @@
 namespace Tests\PHPat\unit\rules\ShouldBeAbstract;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\Declaration\ShouldBeAbstract\AbstractRule;
-use PHPat\Rule\Assertion\Declaration\ShouldBeAbstract\ShouldBeAbstract;
+use PHPat\Rule\Assertion\Constraint;
+use PHPat\Rule\Assertion\Declaration\IsAbstract\AbstractRule;
 use PHPat\Selector\Classname;
 use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
@@ -33,7 +33,7 @@ class AbstractClassTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            ShouldBeAbstract::class,
+            Constraint::Should, 'beAbstract',
             [new Classname(FixtureClass::class, false)],
             []
         );

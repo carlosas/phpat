@@ -3,8 +3,8 @@
 namespace Tests\PHPat\unit\rules\ShouldNotImplement;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\Relation\ShouldNotImplement\ImplementedInterfacesRule;
-use PHPat\Rule\Assertion\Relation\ShouldNotImplement\ShouldNotImplement;
+use PHPat\Rule\Assertion\Constraint;
+use PHPat\Rule\Assertion\Relation\Implement\ImplementedInterfacesRule;
 use PHPat\Selector\Classname;
 use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
@@ -34,7 +34,7 @@ class ImplementedInterfacesTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            ShouldNotImplement::class,
+            Constraint::ShouldNot, 'implement',
             [new Classname(FixtureClass::class, false)],
             [new Classname(SimpleInterface::class, false)]
         );

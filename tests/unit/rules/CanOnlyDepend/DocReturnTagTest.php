@@ -3,8 +3,8 @@
 namespace Tests\PHPat\unit\rules\CanOnlyDepend;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\Relation\CanOnlyDepend\CanOnlyDepend;
-use PHPat\Rule\Assertion\Relation\CanOnlyDepend\DocReturnTagRule;
+use PHPat\Rule\Assertion\Constraint;
+use PHPat\Rule\Assertion\Relation\Depend\DocReturnTagRule;
 use PHPat\Selector\Classname;
 use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
@@ -35,7 +35,7 @@ class DocReturnTagTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            CanOnlyDepend::class,
+            Constraint::CanOnly, 'depend',
             [new Classname(FixtureClass::class, false)],
             [
                 new Classname(SimpleClass::class, false),

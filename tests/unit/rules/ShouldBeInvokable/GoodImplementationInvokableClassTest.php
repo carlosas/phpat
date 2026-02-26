@@ -3,8 +3,8 @@
 namespace Tests\PHPat\unit\rules\ShouldBeInvokable;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\Declaration\ShouldBeInvokable\IsInvokableRule;
-use PHPat\Rule\Assertion\Declaration\ShouldBeInvokable\ShouldBeInvokable;
+use PHPat\Rule\Assertion\Constraint;
+use PHPat\Rule\Assertion\Declaration\IsInvokable\IsInvokableRule;
 use PHPat\Selector\Classname;
 use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
@@ -31,7 +31,7 @@ class GoodImplementationInvokableClassTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            ShouldBeInvokable::class,
+            Constraint::Should, 'beInvokable',
             [new Classname(ClassInvokable::class, false)],
             []
         );

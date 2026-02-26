@@ -3,8 +3,8 @@
 namespace Tests\PHPat\unit\rules\ShouldHaveOnlyOnePublicMethod;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\Declaration\ShouldHaveOnlyOnePublicMethod\HasOnlyOnePublicMethodRule;
-use PHPat\Rule\Assertion\Declaration\ShouldHaveOnlyOnePublicMethod\ShouldHaveOnlyOnePublicMethod;
+use PHPat\Rule\Assertion\Constraint;
+use PHPat\Rule\Assertion\Declaration\OnePublicMethod\HasOnlyOnePublicMethodRule;
 use PHPat\Selector\Classname;
 use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
@@ -33,7 +33,7 @@ class ClassWithOnlyOnePublicMethodTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            ShouldHaveOnlyOnePublicMethod::class,
+            Constraint::Should, 'haveOnlyOnePublicMethod',
             [new Classname(FixtureClass::class, false)],
             []
         );

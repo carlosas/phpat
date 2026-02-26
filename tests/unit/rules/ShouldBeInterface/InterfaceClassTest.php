@@ -3,8 +3,8 @@
 namespace Tests\PHPat\unit\rules\ShouldBeInterface;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\Declaration\ShouldBeInterface\IsInterfaceRule;
-use PHPat\Rule\Assertion\Declaration\ShouldBeInterface\ShouldBeInterface;
+use PHPat\Rule\Assertion\Constraint;
+use PHPat\Rule\Assertion\Declaration\IsInterface\IsInterfaceRule;
 use PHPat\Selector\Classname;
 use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
@@ -33,7 +33,7 @@ class InterfaceClassTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            ShouldBeInterface::class,
+            Constraint::Should, 'beInterface',
             [new Classname(SimpleClass::class, false)],
             []
         );

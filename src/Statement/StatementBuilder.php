@@ -4,8 +4,6 @@ namespace PHPat\Statement;
 
 use PHPat\Test\Rule;
 use PHPat\Test\TestParser;
-use PhpParser\Node;
-use PHPStan\Rules\Rule as PHPStanRule;
 
 final class StatementBuilder
 {
@@ -18,14 +16,18 @@ final class StatementBuilder
     }
 
     /**
-     * @param  class-string<PHPStanRule<Node>> $assertion
      * @return array<Statement>
      */
-    public function build(string $assertion): array
+    public function build(string $assertionType): array
     {
         $statements = [];
         foreach ($this->rules as $rule) {
-            if ($rule->getAssertion() !== $assertion) {
+            if ($rule->getAssertionType() !== $assertionType) {
+                continue;
+            }
+
+            $constraint = $rule->getConstraint();
+            if ($constraint === null) {
                 continue;
             }
 
@@ -33,6 +35,7 @@ final class StatementBuilder
             foreach ($rule->getSubjects() as $subject) {
                 $statements[] = new Statement(
                     $ruleName,
+                    $constraint,
                     $subject,
                     $rule->getSubjectExcludes(),
                     $rule->getTargets(),

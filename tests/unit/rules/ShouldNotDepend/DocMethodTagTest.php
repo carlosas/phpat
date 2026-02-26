@@ -3,8 +3,8 @@
 namespace Tests\PHPat\unit\rules\ShouldNotDepend;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\Relation\ShouldNotDepend\DocMethodTagRule;
-use PHPat\Rule\Assertion\Relation\ShouldNotDepend\ShouldNotDepend;
+use PHPat\Rule\Assertion\Constraint;
+use PHPat\Rule\Assertion\Relation\Depend\DocMethodTagRule;
 use PHPat\Selector\Classname;
 use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
@@ -44,7 +44,7 @@ class DocMethodTagTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            ShouldNotDepend::class,
+            Constraint::ShouldNot, 'depend',
             [new Classname(FixtureClass::class, false)],
             [
                 new Classname(SimpleClass::class, false),

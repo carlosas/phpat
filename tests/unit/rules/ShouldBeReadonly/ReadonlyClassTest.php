@@ -3,8 +3,8 @@
 namespace Tests\PHPat\unit\rules\ShouldBeReadonly;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\Declaration\ShouldBeReadonly\IsReadonlyRule;
-use PHPat\Rule\Assertion\Declaration\ShouldBeReadonly\ShouldBeReadonly;
+use PHPat\Rule\Assertion\Constraint;
+use PHPat\Rule\Assertion\Declaration\IsReadonly\IsReadonlyRule;
 use PHPat\Selector\Classname;
 use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
@@ -33,7 +33,7 @@ class ReadonlyClassTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            ShouldBeReadonly::class,
+            Constraint::Should, 'beReadonly',
             [new Classname(FixtureClass::class, false)],
             []
         );

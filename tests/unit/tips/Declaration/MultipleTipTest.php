@@ -3,9 +3,8 @@
 namespace Tests\PHPat\unit\tips\Declaration;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\Declaration\ShouldBeFinal\IsFinalRule;
-use PHPat\Rule\Assertion\Declaration\ShouldBeFinal\ShouldBeFinal;
-use PHPat\Rule\Assertion\Relation\CanOnlyDepend\AllAttributesRule;
+use PHPat\Rule\Assertion\Constraint;
+use PHPat\Rule\Assertion\Declaration\IsFinal\IsFinalRule;
 use PHPat\Selector\Classname;
 use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
@@ -15,7 +14,7 @@ use Tests\PHPat\fixtures\FixtureClass;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
- * @extends RuleTestCase<AllAttributesRule>
+ * @extends RuleTestCase<IsFinalRule>
  * @internal
  * @coversNothing
  */
@@ -41,7 +40,7 @@ class MultipleTipTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            ShouldBeFinal::class,
+            Constraint::Should, 'beFinal',
             [new Classname(FixtureClass::class, false)],
             [],
             ['tip #1', 'tip #2']

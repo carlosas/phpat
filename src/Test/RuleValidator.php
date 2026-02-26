@@ -2,23 +2,27 @@
 
 namespace PHPat\Test;
 
-use PHPat\Rule\Assertion\Relation\RelationAssertion;
-
 final class RuleValidator implements RuleValidatorInterface
 {
+    private const RELATION_TYPES = ['depend', 'extend', 'implement', 'include', 'construct', 'applyAttribute'];
+
     public function validate(Rule $rule): void
     {
         if ($rule->getSubjects() === []) {
             throw new \Exception(sprintf('The PHPat rule %s has no subjects', $rule->getRuleName()));
         }
 
-        $assertion = $rule->getAssertion();
+        $assertionType = $rule->getAssertionType();
 
-        if ($assertion === null) {
+        if ($assertionType === null) {
             throw new \Exception(sprintf('The PHPat rule %s has no assertion', $rule->getRuleName()));
         }
 
-        if (is_subclass_of($assertion, RelationAssertion::class) && $rule->getTargets() === []) {
+        if ($rule->getConstraint() === null) {
+            throw new \Exception(sprintf('The PHPat rule %s has no constraint', $rule->getRuleName()));
+        }
+
+        if (in_array($assertionType, self::RELATION_TYPES, true) && $rule->getTargets() === []) {
             throw new \Exception(sprintf('The PHPat rule %s has no targets', $rule->getRuleName()));
         }
     }

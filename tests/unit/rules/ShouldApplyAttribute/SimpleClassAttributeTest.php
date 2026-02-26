@@ -3,8 +3,8 @@
 namespace Tests\PHPat\unit\rules\ShouldApplyAttribute;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\Relation\ShouldApplyAttribute\ClassAttributeRule;
-use PHPat\Rule\Assertion\Relation\ShouldApplyAttribute\ShouldApplyAttribute;
+use PHPat\Rule\Assertion\Constraint;
+use PHPat\Rule\Assertion\Relation\ApplyAttribute\ClassAttributeRule;
 use PHPat\Selector\Classname;
 use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
@@ -34,7 +34,7 @@ class SimpleClassAttributeTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            ShouldApplyAttribute::class,
+            Constraint::Should, 'applyAttribute',
             [new Classname(SimpleClass::class, false)],
             [new Classname(SimpleAttribute::class, false)]
         );

@@ -3,8 +3,8 @@
 namespace Tests\PHPat\unit\rules\ShouldNotConstruct;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\Relation\ShouldNotConstruct\NewRule;
-use PHPat\Rule\Assertion\Relation\ShouldNotConstruct\ShouldNotConstruct;
+use PHPat\Rule\Assertion\Constraint;
+use PHPat\Rule\Assertion\Relation\Construct\NewRule;
 use PHPat\Selector\Classname;
 use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
@@ -34,7 +34,7 @@ class ShowRuleNameNewTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            ShouldNotConstruct::class,
+            Constraint::ShouldNot, 'construct',
             [new Classname(FixtureClass::class, false)],
             [new Classname(SimpleClass::class, false)]
         );

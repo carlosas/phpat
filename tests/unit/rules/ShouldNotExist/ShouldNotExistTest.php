@@ -3,8 +3,8 @@
 namespace Tests\PHPat\unit\rules\ShouldNotExist;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\Declaration\ShouldNotExist\ExistsRule;
-use PHPat\Rule\Assertion\Declaration\ShouldNotExist\ShouldNotExist;
+use PHPat\Rule\Assertion\Constraint;
+use PHPat\Rule\Assertion\Declaration\Exists\ExistsRule;
 use PHPat\Selector\Classname;
 use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
@@ -33,7 +33,7 @@ class ShouldNotExistTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            ShouldNotExist::class,
+            Constraint::ShouldNot, 'exist',
             [new Classname(FixtureClass::class, false)],
             []
         );

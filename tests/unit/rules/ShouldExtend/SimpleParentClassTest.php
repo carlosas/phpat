@@ -3,8 +3,8 @@
 namespace Tests\PHPat\unit\rules\ShouldExtend;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\Relation\ShouldExtend\ParentClassRule;
-use PHPat\Rule\Assertion\Relation\ShouldExtend\ShouldExtend;
+use PHPat\Rule\Assertion\Constraint;
+use PHPat\Rule\Assertion\Relation\Extend\ParentClassRule;
 use PHPat\Selector\Classname;
 use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
@@ -34,7 +34,7 @@ class SimpleParentClassTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            ShouldExtend::class,
+            Constraint::Should, 'extend',
             [new Classname(SimpleClass::class, false)],
             [new Classname(SimpleAbstractClass::class, false)]
         );

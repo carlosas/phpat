@@ -3,8 +3,8 @@
 namespace Tests\PHPat\unit\rules\ShouldBeNamed;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\Declaration\ShouldBeNamed\ClassnameRule;
-use PHPat\Rule\Assertion\Declaration\ShouldBeNamed\ShouldBeNamed;
+use PHPat\Rule\Assertion\Constraint;
+use PHPat\Rule\Assertion\Declaration\Named\ClassnameRule;
 use PHPat\Selector\Classname;
 use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
@@ -31,7 +31,7 @@ class ClassnameRegexTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            ShouldBeNamed::class,
+            Constraint::Should, 'beNamed',
             [new Classname(FixtureClass::class, false)],
             [],
             [],

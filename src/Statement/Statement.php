@@ -2,11 +2,13 @@
 
 namespace PHPat\Statement;
 
+use PHPat\Rule\Assertion\Constraint;
 use PHPat\Selector\SelectorInterface;
 
 final class Statement
 {
     public string $ruleName;
+    public Constraint $constraint;
     public SelectorInterface $subject;
 
     /** @var array<SelectorInterface> */
@@ -33,6 +35,7 @@ final class Statement
      */
     public function __construct(
         string $ruleName,
+        Constraint $constraint,
         SelectorInterface $subject,
         array $subjectExcludes,
         array $targets,
@@ -41,6 +44,7 @@ final class Statement
         array $params
     ) {
         $this->ruleName = $ruleName;
+        $this->constraint = $constraint;
         $this->subject = $subject;
         $this->subjectExcludes = $subjectExcludes;
         $this->targets = $targets;

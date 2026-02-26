@@ -3,8 +3,8 @@
 namespace Tests\PHPat\unit\rules\ShouldBeEnum;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\Declaration\ShouldBeEnum\IsEnumRule;
-use PHPat\Rule\Assertion\Declaration\ShouldBeEnum\ShouldBeEnum;
+use PHPat\Rule\Assertion\Constraint;
+use PHPat\Rule\Assertion\Declaration\IsEnum\IsEnumRule;
 use PHPat\Selector\Classname;
 use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
@@ -33,7 +33,7 @@ class EnumTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            ShouldBeEnum::class,
+            Constraint::Should, 'beEnum',
             [new Classname(FixtureClass::class, false)],
             []
         );

@@ -3,8 +3,8 @@
 namespace Tests\PHPat\unit\rules\ShouldNotDepend;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\Relation\ShouldNotDepend\InstanceofRule;
-use PHPat\Rule\Assertion\Relation\ShouldNotDepend\ShouldNotDepend;
+use PHPat\Rule\Assertion\Constraint;
+use PHPat\Rule\Assertion\Relation\Depend\InstanceofRule;
 use PHPat\Selector\Classname;
 use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
@@ -38,7 +38,7 @@ class InstanceofTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            ShouldNotDepend::class,
+            Constraint::ShouldNot, 'depend',
             [new Classname(ClassWithInstanceof::class, false)],
             [
                 new Classname(SimpleException::class, false),

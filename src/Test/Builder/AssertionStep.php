@@ -2,208 +2,180 @@
 
 namespace PHPat\Test\Builder;
 
-use PHPat\Rule\Assertion\Declaration\ShouldBeAbstract\ShouldBeAbstract;
-use PHPat\Rule\Assertion\Declaration\ShouldBeEnum\ShouldBeEnum;
-use PHPat\Rule\Assertion\Declaration\ShouldBeFinal\ShouldBeFinal;
-use PHPat\Rule\Assertion\Declaration\ShouldBeInterface\ShouldBeInterface;
-use PHPat\Rule\Assertion\Declaration\ShouldBeInvokable\ShouldBeInvokable;
-use PHPat\Rule\Assertion\Declaration\ShouldBeNamed\ShouldBeNamed;
-use PHPat\Rule\Assertion\Declaration\ShouldBeReadonly\ShouldBeReadonly;
-use PHPat\Rule\Assertion\Declaration\ShouldHaveOnlyOnePublicMethod\ShouldHaveOnlyOnePublicMethod;
-use PHPat\Rule\Assertion\Declaration\ShouldHaveOnlyOnePublicMethodNamed\ShouldHaveOnlyOnePublicMethodNamed;
-use PHPat\Rule\Assertion\Declaration\ShouldNotBeAbstract\ShouldNotBeAbstract;
-use PHPat\Rule\Assertion\Declaration\ShouldNotBeEnum\ShouldNotBeEnum;
-use PHPat\Rule\Assertion\Declaration\ShouldNotBeFinal\ShouldNotBeFinal;
-use PHPat\Rule\Assertion\Declaration\ShouldNotBeInvokable\ShouldNotBeInvokable;
-use PHPat\Rule\Assertion\Declaration\ShouldNotBeReadonly\ShouldNotBeReadonly;
-use PHPat\Rule\Assertion\Declaration\ShouldNotExist\ShouldNotExist;
-use PHPat\Rule\Assertion\Relation\CanOnlyDepend\CanOnlyDepend;
-use PHPat\Rule\Assertion\Relation\ShouldApplyAttribute\ShouldApplyAttribute;
-use PHPat\Rule\Assertion\Relation\ShouldExtend\ShouldExtend;
-use PHPat\Rule\Assertion\Relation\ShouldImplement\ShouldImplement;
-use PHPat\Rule\Assertion\Relation\ShouldInclude\ShouldInclude;
-use PHPat\Rule\Assertion\Relation\ShouldNotConstruct\ShouldNotConstruct;
-use PHPat\Rule\Assertion\Relation\ShouldNotDepend\ShouldNotDepend;
-use PHPat\Rule\Assertion\Relation\ShouldNotExtend\ShouldNotExtend;
-use PHPat\Rule\Assertion\Relation\ShouldNotImplement\ShouldNotImplement;
-use PHPat\Rule\Assertion\Relation\ShouldNotInclude\ShouldNotInclude;
+use PHPat\Rule\Assertion\Constraint;
 
 class AssertionStep extends AbstractStep
 {
+    public function should(): ShouldStep
+    {
+        $this->rule->constraint = Constraint::Should;
+
+        return new ShouldStep($this->rule);
+    }
+
+    public function shouldNot(): ShouldNotStep
+    {
+        $this->rule->constraint = Constraint::ShouldNot;
+
+        return new ShouldNotStep($this->rule);
+    }
+
+    public function canOnly(): CanOnlyStep
+    {
+        $this->rule->constraint = Constraint::CanOnly;
+
+        return new CanOnlyStep($this->rule);
+    }
+
+    // Deprecated aliases for backward compatibility
+
+    /** @deprecated Use ->should()->beNamed() */
     public function shouldBeNamed(string $classname, bool $regex = false): TipOrBuildStep
     {
-        $this->rule->assertion = ShouldBeNamed::class;
-        $this->rule->params = ['isRegex' => $regex, 'classname' => $classname];
-
-        return new TipOrBuildStep($this->rule);
+        return $this->should()->beNamed($classname, $regex);
     }
 
+    /** @deprecated Use ->should()->beAbstract() */
     public function shouldBeAbstract(): TipOrBuildStep
     {
-        $this->rule->assertion = ShouldBeAbstract::class;
-
-        return new TipOrBuildStep($this->rule);
+        return $this->should()->beAbstract();
     }
 
+    /** @deprecated Use ->shouldNot()->beAbstract() */
     public function shouldNotBeAbstract(): TipOrBuildStep
     {
-        $this->rule->assertion = ShouldNotBeAbstract::class;
-
-        return new TipOrBuildStep($this->rule);
+        return $this->shouldNot()->beAbstract();
     }
 
+    /** @deprecated Use ->should()->beReadonly() */
     public function shouldBeReadonly(): TipOrBuildStep
     {
-        $this->rule->assertion = ShouldBeReadonly::class;
-
-        return new TipOrBuildStep($this->rule);
+        return $this->should()->beReadonly();
     }
 
+    /** @deprecated Use ->shouldNot()->beReadonly() */
     public function shouldNotBeReadonly(): TipOrBuildStep
     {
-        $this->rule->assertion = ShouldNotBeReadonly::class;
-
-        return new TipOrBuildStep($this->rule);
+        return $this->shouldNot()->beReadonly();
     }
 
+    /** @deprecated Use ->should()->beFinal() */
     public function shouldBeFinal(): TipOrBuildStep
     {
-        $this->rule->assertion = ShouldBeFinal::class;
-
-        return new TipOrBuildStep($this->rule);
+        return $this->should()->beFinal();
     }
 
+    /** @deprecated Use ->shouldNot()->beFinal() */
     public function shouldNotBeFinal(): TipOrBuildStep
     {
-        $this->rule->assertion = ShouldNotBeFinal::class;
-
-        return new TipOrBuildStep($this->rule);
+        return $this->shouldNot()->beFinal();
     }
 
+    /** @deprecated Use ->should()->beEnum() */
     public function shouldBeEnum(): TipOrBuildStep
     {
-        $this->rule->assertion = ShouldBeEnum::class;
-
-        return new TipOrBuildStep($this->rule);
+        return $this->should()->beEnum();
     }
 
+    /** @deprecated Use ->shouldNot()->beEnum() */
     public function shouldNotBeEnum(): TipOrBuildStep
     {
-        $this->rule->assertion = ShouldNotBeEnum::class;
-
-        return new TipOrBuildStep($this->rule);
+        return $this->shouldNot()->beEnum();
     }
 
+    /** @deprecated Use ->should()->beInvokable() */
     public function shouldBeInvokable(): TipOrBuildStep
     {
-        $this->rule->assertion = ShouldBeInvokable::class;
-
-        return new TipOrBuildStep($this->rule);
+        return $this->should()->beInvokable();
     }
 
+    /** @deprecated Use ->shouldNot()->beInvokable() */
     public function shouldNotBeInvokable(): TipOrBuildStep
     {
-        $this->rule->assertion = ShouldNotBeInvokable::class;
-
-        return new TipOrBuildStep($this->rule);
+        return $this->shouldNot()->beInvokable();
     }
 
+    /** @deprecated Use ->shouldNot()->dependOn() */
     public function shouldNotDependOn(): TargetStep
     {
-        $this->rule->assertion = ShouldNotDepend::class;
-
-        return new TargetStep($this->rule);
+        return $this->shouldNot()->dependOn();
     }
 
+    /** @deprecated Use ->canOnly()->dependOn() */
     public function canOnlyDependOn(): TargetStep
     {
-        $this->rule->assertion = CanOnlyDepend::class;
-
-        return new TargetStep($this->rule);
+        return $this->canOnly()->dependOn();
     }
 
+    /** @deprecated Use ->shouldNot()->construct() */
     public function shouldNotConstruct(): TargetStep
     {
-        $this->rule->assertion = ShouldNotConstruct::class;
-
-        return new TargetStep($this->rule);
+        return $this->shouldNot()->construct();
     }
 
+    /** @deprecated Use ->shouldNot()->extend() */
     public function shouldNotExtend(): TargetStep
     {
-        $this->rule->assertion = ShouldNotExtend::class;
-
-        return new TargetStep($this->rule);
+        return $this->shouldNot()->extend();
     }
 
+    /** @deprecated Use ->shouldNot()->implement() */
     public function shouldNotImplement(): TargetStep
     {
-        $this->rule->assertion = ShouldNotImplement::class;
-
-        return new TargetStep($this->rule);
+        return $this->shouldNot()->implement();
     }
 
+    /** @deprecated Use ->should()->implement() */
     public function shouldImplement(): TargetStep
     {
-        $this->rule->assertion = ShouldImplement::class;
-
-        return new TargetStep($this->rule);
+        return $this->should()->implement();
     }
 
+    /** @deprecated Use ->shouldNot()->include() */
     public function shouldNotInclude(): TargetStep
     {
-        $this->rule->assertion = ShouldNotInclude::class;
-
-        return new TargetStep($this->rule);
+        return $this->shouldNot()->include();
     }
 
+    /** @deprecated Use ->should()->include() */
     public function shouldInclude(): TargetStep
     {
-        $this->rule->assertion = ShouldInclude::class;
-
-        return new TargetStep($this->rule);
+        return $this->should()->include();
     }
 
+    /** @deprecated Use ->should()->extend() */
     public function shouldExtend(): TargetStep
     {
-        $this->rule->assertion = ShouldExtend::class;
-
-        return new TargetStep($this->rule);
+        return $this->should()->extend();
     }
 
+    /** @deprecated Use ->should()->haveOnlyOnePublicMethod() */
     public function shouldHaveOnlyOnePublicMethod(): TipOrBuildStep
     {
-        $this->rule->assertion = ShouldHaveOnlyOnePublicMethod::class;
-
-        return new TipOrBuildStep($this->rule);
+        return $this->should()->haveOnlyOnePublicMethod();
     }
 
+    /** @deprecated Use ->should()->haveOnlyOnePublicMethodNamed() */
     public function shouldHaveOnlyOnePublicMethodNamed(string $name, bool $isRegex = false): TipOrBuildStep
     {
-        $this->rule->assertion = ShouldHaveOnlyOnePublicMethodNamed::class;
-        $this->rule->params = ['name' => $name, 'isRegex' => $isRegex];
-
-        return new TipOrBuildStep($this->rule);
+        return $this->should()->haveOnlyOnePublicMethodNamed($name, $isRegex);
     }
 
+    /** @deprecated Use ->should()->applyAttribute() */
     public function shouldApplyAttribute(): TargetStep
     {
-        $this->rule->assertion = ShouldApplyAttribute::class;
-
-        return new TargetStep($this->rule);
+        return $this->should()->applyAttribute();
     }
 
+    /** @deprecated Use ->should()->beInterface() */
     public function shouldBeInterface(): TipOrBuildStep
     {
-        $this->rule->assertion = ShouldBeInterface::class;
-
-        return new TipOrBuildStep($this->rule);
+        return $this->should()->beInterface();
     }
 
+    /** @deprecated Use ->shouldNot()->exist() */
     public function shouldNotExist(): TipOrBuildStep
     {
-        $this->rule->assertion = ShouldNotExist::class;
-
-        return new TipOrBuildStep($this->rule);
+        return $this->shouldNot()->exist();
     }
 }

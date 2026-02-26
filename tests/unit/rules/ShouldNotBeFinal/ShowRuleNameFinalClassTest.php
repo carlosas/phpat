@@ -3,8 +3,8 @@
 namespace Tests\PHPat\unit\rules\ShouldNotBeFinal;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\Declaration\ShouldNotBeFinal\IsFinalRule;
-use PHPat\Rule\Assertion\Declaration\ShouldNotBeFinal\ShouldNotBeFinal;
+use PHPat\Rule\Assertion\Constraint;
+use PHPat\Rule\Assertion\Declaration\IsFinal\IsFinalRule;
 use PHPat\Selector\Classname;
 use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
@@ -33,7 +33,7 @@ class ShowRuleNameFinalClassTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            ShouldNotBeFinal::class,
+            Constraint::ShouldNot, 'beFinal',
             [new Classname(SimpleFinalClass::class, false)],
             []
         );

@@ -3,8 +3,8 @@
 namespace Tests\PHPat\unit\rules\ShouldInclude;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\Relation\ShouldInclude\IncludedTraitsRule;
-use PHPat\Rule\Assertion\Relation\ShouldInclude\ShouldInclude;
+use PHPat\Rule\Assertion\Constraint;
+use PHPat\Rule\Assertion\Relation\IncludeTrait\IncludedTraitsRule;
 use PHPat\Selector\Classname;
 use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
@@ -34,7 +34,7 @@ class ShowRuleNameIncludedTraitsTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            ShouldInclude::class,
+            Constraint::Should, 'include',
             [new Classname(FixtureClass::class, false)],
             [new Classname(SimpleTraitTwo::class, false)]
         );

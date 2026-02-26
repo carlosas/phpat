@@ -3,8 +3,8 @@
 namespace Tests\PHPat\unit\rules\ShouldNotDepend;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\Relation\ShouldNotDepend\NewRule;
-use PHPat\Rule\Assertion\Relation\ShouldNotDepend\ShouldNotDepend;
+use PHPat\Rule\Assertion\Constraint;
+use PHPat\Rule\Assertion\Relation\Depend\NewRule;
 use PHPat\Selector\Classname;
 use PHPat\Selector\IsStandardClass;
 use PHPat\Statement\StatementBuilder;
@@ -39,7 +39,7 @@ class IsStandardClassTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            ShouldNotDepend::class,
+            Constraint::ShouldNot, 'depend',
             [new Classname(ClassWithStandardClasses::class, false)],
             [new IsStandardClass()]
         );

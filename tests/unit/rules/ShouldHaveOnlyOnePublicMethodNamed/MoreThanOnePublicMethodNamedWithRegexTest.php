@@ -3,14 +3,14 @@
 namespace Tests\PHPat\unit\rules\ShouldHaveOnlyOnePublicMethodNamed;
 
 use PHPat\Configuration;
-use PHPat\Rule\Assertion\Declaration\ShouldHaveOnlyOnePublicMethodNamed\HasOnlyOnePublicMethodNamedRule;
+use PHPat\Rule\Assertion\Constraint;
+use PHPat\Rule\Assertion\Declaration\OnePublicMethodNamed\HasOnlyOnePublicMethodNamedRule;
 use PHPat\Selector\Classname;
 use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
 use Tests\PHPat\fixtures\FixtureClass;
-use Tests\PHPat\fixtures\Special\ClassWithTwoUnrelatedNamedMethods;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -32,7 +32,7 @@ class MoreThanOnePublicMethodNamedWithRegexTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            ClassWithTwoUnrelatedNamedMethods::class,
+            Constraint::Should, 'haveOnlyOnePublicMethodNamed',
             [new Classname(FixtureClass::class, false)],
             [],
             [],
