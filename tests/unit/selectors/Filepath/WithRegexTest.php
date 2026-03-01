@@ -38,7 +38,8 @@ final class WithRegexTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            Constraint::Should, 'beNamed',
+            Constraint::Should,
+            'beNamed',
             [new Filepath('/^.*SimpleClass\.php/', true)],
             [],
             [],

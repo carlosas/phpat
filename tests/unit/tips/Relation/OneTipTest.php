@@ -38,7 +38,8 @@ class OneTipTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            Constraint::CanOnly, 'depend',
+            Constraint::CanOnly,
+            'depend',
             [new Classname(FixtureClass::class, false)],
             [new Classname(\Attribute::class, false)],
             ['tip #1']

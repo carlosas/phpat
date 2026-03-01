@@ -34,7 +34,8 @@ class SimpleClassAttributeTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            Constraint::Should, 'applyAttribute',
+            Constraint::Should,
+            'applyAttribute',
             [new Classname(SimpleClass::class, false)],
             [new Classname(SimpleAttribute::class, false)]
         );

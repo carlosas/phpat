@@ -36,7 +36,8 @@ class MethodReturnTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            Constraint::ShouldNot, 'depend',
+            Constraint::ShouldNot,
+            'depend',
             [new Classname(FixtureClass::class, false)],
             [
                 new Classname(SimpleClass::class, false),

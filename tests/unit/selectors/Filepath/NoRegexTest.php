@@ -38,7 +38,8 @@ final class NoRegexTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            Constraint::Should, 'beNamed',
+            Constraint::Should,
+            'beNamed',
             [new Filepath('tests/fixtures/Simple/SimpleClass.php', false)],
             [],
             [],

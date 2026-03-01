@@ -33,7 +33,8 @@ class ShouldNotExistTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            Constraint::ShouldNot, 'exist',
+            Constraint::ShouldNot,
+            'exist',
             [new Classname(FixtureClass::class, false)],
             []
         );

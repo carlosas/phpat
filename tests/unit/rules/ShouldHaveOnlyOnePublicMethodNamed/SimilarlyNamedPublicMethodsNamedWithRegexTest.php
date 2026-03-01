@@ -33,7 +33,8 @@ class SimilarlyNamedPublicMethodsNamedWithRegexTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            Constraint::Should, 'haveOnlyOnePublicMethodNamed',
+            Constraint::Should,
+            'haveOnlyOnePublicMethodNamed',
             [new Classname(ClassWithTwoSimilarlyNamedMethods::class, false)],
             [],
             [],

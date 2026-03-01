@@ -32,7 +32,8 @@ class ClassnamespaceTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            Constraint::Should, 'beNamed',
+            Constraint::Should,
+            'beNamed',
             [new ClassNamespace('Tests\PHPat\fixtures\Ns\Foo', false)],
             [],
             [],

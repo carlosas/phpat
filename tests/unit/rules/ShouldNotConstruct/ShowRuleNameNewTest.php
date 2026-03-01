@@ -34,7 +34,8 @@ class ShowRuleNameNewTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            Constraint::ShouldNot, 'construct',
+            Constraint::ShouldNot,
+            'construct',
             [new Classname(FixtureClass::class, false)],
             [new Classname(SimpleClass::class, false)]
         );

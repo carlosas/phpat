@@ -126,13 +126,31 @@ abstract class RelationAssertion implements Assertion
 
             $validationErrors = match ($statement->constraint) {
                 Constraint::Should => $this->applyShould(
-                    $statement->ruleName, $subject, $statement->targets, $statement->targetExcludes, $nodes, $statement->tips, $statement->constraint
+                    $statement->ruleName,
+                    $subject,
+                    $statement->targets,
+                    $statement->targetExcludes,
+                    $nodes,
+                    $statement->tips,
+                    $statement->constraint
                 ),
                 Constraint::ShouldNot => $this->applyShouldNot(
-                    $statement->ruleName, $subject, $statement->targets, $statement->targetExcludes, $nodes, $statement->tips, $statement->constraint
+                    $statement->ruleName,
+                    $subject,
+                    $statement->targets,
+                    $statement->targetExcludes,
+                    $nodes,
+                    $statement->tips,
+                    $statement->constraint
                 ),
                 Constraint::CanOnly => $this->applyCanOnly(
-                    $statement->ruleName, $subject, $statement->targets, $statement->targetExcludes, $nodes, $statement->tips, $statement->constraint
+                    $statement->ruleName,
+                    $subject,
+                    $statement->targets,
+                    $statement->targetExcludes,
+                    $nodes,
+                    $statement->tips,
+                    $statement->constraint
                 ),
             };
 
@@ -140,6 +158,16 @@ abstract class RelationAssertion implements Assertion
         }
 
         return $errors;
+    }
+
+    protected function getMessage(string $ruleName, string $subject, string $target, Constraint $constraint): string
+    {
+        $negation = ($constraint === Constraint::Should) ? '' : ' not';
+
+        return $this->prepareMessage(
+            $ruleName,
+            sprintf('%s should%s %s %s', $subject, $negation, $this->getRelationVerb(), $target)
+        );
     }
 
     /**
@@ -250,16 +278,6 @@ abstract class RelationAssertion implements Assertion
         }
 
         return true;
-    }
-
-    protected function getMessage(string $ruleName, string $subject, string $target, Constraint $constraint): string
-    {
-        $negation = ($constraint === Constraint::Should) ? '' : ' not';
-
-        return $this->prepareMessage(
-            $ruleName,
-            sprintf('%s should%s %s %s', $subject, $negation, $this->getRelationVerb(), $target)
-        );
     }
 
     /**

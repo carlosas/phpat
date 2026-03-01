@@ -33,7 +33,8 @@ class ReadonlyClassTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            Constraint::Should, 'beReadonly',
+            Constraint::Should,
+            'beReadonly',
             [new Classname(FixtureClass::class, false)],
             []
         );

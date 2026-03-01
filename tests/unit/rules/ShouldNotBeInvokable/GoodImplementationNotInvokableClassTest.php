@@ -31,7 +31,8 @@ class GoodImplementationNotInvokableClassTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            Constraint::ShouldNot, 'beInvokable',
+            Constraint::ShouldNot,
+            'beInvokable',
             [new Classname(FixtureClass::class, false)],
             []
         );

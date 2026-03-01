@@ -31,7 +31,8 @@ class GoodImplementationClassWithOnlyOnePublicMethodTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            Constraint::Should, 'haveOnlyOnePublicMethod',
+            Constraint::Should,
+            'haveOnlyOnePublicMethod',
             [new Classname(ClassWithOnePublicMethod::class, false)],
             []
         );

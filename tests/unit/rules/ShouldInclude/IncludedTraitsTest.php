@@ -34,7 +34,8 @@ class IncludedTraitsTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            Constraint::Should, 'include',
+            Constraint::Should,
+            'include',
             [new Classname(FixtureClass::class, false)],
             [new Classname(SimpleTraitTwo::class, false)]
         );

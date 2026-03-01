@@ -33,7 +33,8 @@ class ClassWithNoPublicMethodsTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            Constraint::Should, 'haveOnlyOnePublicMethodNamed',
+            Constraint::Should,
+            'haveOnlyOnePublicMethodNamed',
             [new Classname(ClassWithNoPublicMethods::class, false)],
             [],
             [],

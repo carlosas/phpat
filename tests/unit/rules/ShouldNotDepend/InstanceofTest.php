@@ -38,7 +38,8 @@ class InstanceofTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            Constraint::ShouldNot, 'depend',
+            Constraint::ShouldNot,
+            'depend',
             [new Classname(ClassWithInstanceof::class, false)],
             [
                 new Classname(SimpleException::class, false),

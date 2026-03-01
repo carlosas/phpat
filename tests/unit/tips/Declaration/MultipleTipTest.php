@@ -40,7 +40,8 @@ class MultipleTipTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            Constraint::Should, 'beFinal',
+            Constraint::Should,
+            'beFinal',
             [new Classname(FixtureClass::class, false)],
             [],
             ['tip #1', 'tip #2']

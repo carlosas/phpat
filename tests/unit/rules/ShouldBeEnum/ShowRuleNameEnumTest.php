@@ -33,7 +33,8 @@ class ShowRuleNameEnumTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            Constraint::Should, 'beEnum',
+            Constraint::Should,
+            'beEnum',
             [new Classname(FixtureClass::class, false)],
             []
         );

@@ -39,7 +39,8 @@ class IsStandardClassTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            Constraint::ShouldNot, 'depend',
+            Constraint::ShouldNot,
+            'depend',
             [new Classname(ClassWithStandardClasses::class, false)],
             [new IsStandardClass()]
         );

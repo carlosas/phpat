@@ -33,7 +33,8 @@ class FinalClassTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            Constraint::ShouldNot, 'beFinal',
+            Constraint::ShouldNot,
+            'beFinal',
             [new Classname(SimpleFinalClass::class, false)],
             []
         );

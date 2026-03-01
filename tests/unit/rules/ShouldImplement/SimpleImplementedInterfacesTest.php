@@ -34,7 +34,8 @@ class SimpleImplementedInterfacesTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            Constraint::Should, 'implement',
+            Constraint::Should,
+            'implement',
             [new Classname(SimpleClass::class, false)],
             [new Classname(SimpleInterface::class, false)]
         );

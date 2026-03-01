@@ -31,7 +31,8 @@ class GoodImplementationClassWithOnlyOnePublicMethodNamedWithRegexTest extends R
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            Constraint::Should, 'haveOnlyOnePublicMethodNamed',
+            Constraint::Should,
+            'haveOnlyOnePublicMethodNamed',
             [new Classname(ClassWithOnlyOnePublicMethodNamed::class, false)],
             [],
             [],

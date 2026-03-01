@@ -33,7 +33,8 @@ class InterfaceClassTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            Constraint::Should, 'beInterface',
+            Constraint::Should,
+            'beInterface',
             [new Classname(SimpleClass::class, false)],
             []
         );

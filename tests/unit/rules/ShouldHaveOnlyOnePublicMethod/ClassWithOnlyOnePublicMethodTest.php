@@ -33,7 +33,8 @@ class ClassWithOnlyOnePublicMethodTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            Constraint::Should, 'haveOnlyOnePublicMethod',
+            Constraint::Should,
+            'haveOnlyOnePublicMethod',
             [new Classname(FixtureClass::class, false)],
             []
         );

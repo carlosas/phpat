@@ -34,7 +34,8 @@ class SimpleParentClassTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            Constraint::Should, 'extend',
+            Constraint::Should,
+            'extend',
             [new Classname(SimpleClass::class, false)],
             [new Classname(SimpleAbstractClass::class, false)]
         );

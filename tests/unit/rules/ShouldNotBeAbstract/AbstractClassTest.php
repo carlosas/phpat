@@ -33,7 +33,8 @@ class AbstractClassTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            Constraint::ShouldNot, 'beAbstract',
+            Constraint::ShouldNot,
+            'beAbstract',
             [new Classname(SimpleAbstractClass::class, false)],
             []
         );

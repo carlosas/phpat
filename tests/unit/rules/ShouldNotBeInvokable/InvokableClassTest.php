@@ -33,7 +33,8 @@ class InvokableClassTest extends RuleTestCase
     {
         $testParser = FakeTestParser::create(
             self::RULE_NAME,
-            Constraint::ShouldNot, 'beInvokable',
+            Constraint::ShouldNot,
+            'beInvokable',
             [new Classname(ClassInvokable::class, false)],
             []
         );
