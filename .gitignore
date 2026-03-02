@@ -5,6 +5,8 @@
 /.vscode/
 /.fleet/
 /.agent/
+/.claude/
+/.gemini/
 /**/.DS_Store
 /vendor/
 /composer.phar

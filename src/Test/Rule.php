@@ -2,15 +2,14 @@
 
 namespace PHPat\Test;
 
-use PHPat\Rule\Assertion\Assertion;
+use PHPat\Rule\Assertion\Constraint;
 use PHPat\Selector\SelectorInterface;
 
 interface Rule
 {
-    /**
-     * @return null|class-string<Assertion>
-     */
-    public function getAssertion(): ?string;
+    public function getConstraint(): ?Constraint;
+
+    public function getAssertionType(): ?string;
 
     /**
      * @return array<SelectorInterface>
