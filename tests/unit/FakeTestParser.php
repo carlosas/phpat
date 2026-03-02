@@ -2,7 +2,7 @@
 
 namespace Tests\PHPat\unit;
 
-use PHPat\Rule\Assertion\Assertion;
+use PHPat\Rule\Assertion\Constraint;
 use PHPat\Selector\SelectorInterface;
 use PHPat\Test\RelationRule;
 use PHPat\Test\TestParser;
@@ -11,8 +11,9 @@ class FakeTestParser extends TestParser
 {
     public string $ruleName;
 
-    /** @var class-string<Assertion> */
-    public string $assertion;
+    public Constraint $constraint;
+
+    public string $assertionType;
 
     /** @var array<SelectorInterface> */
     public array $subjects;
@@ -30,7 +31,8 @@ class FakeTestParser extends TestParser
     {
         $rule = new RelationRule();
         $rule->ruleName = $this->ruleName;
-        $rule->assertion = $this->assertion;
+        $rule->constraint = $this->constraint;
+        $rule->assertionType = $this->assertionType;
         $rule->subjects = $this->subjects;
         $rule->targets = $this->targets;
         $rule->tips = $this->tips;
@@ -40,18 +42,18 @@ class FakeTestParser extends TestParser
     }
 
     /**
-     * @param class-string<Assertion>  $assertion
      * @param array<SelectorInterface> $subjects
      * @param array<SelectorInterface> $targets
      * @param array<string>            $tips
      * @param array<string, mixed>     $params
      */
-    public static function create(string $ruleName, string $assertion, array $subjects, array $targets, array $tips = [], array $params = []): self
+    public static function create(string $ruleName, Constraint $constraint, string $assertionType, array $subjects, array $targets, array $tips = [], array $params = []): self
     {
         /** @var self $self */
         $self = (new \ReflectionClass(self::class))->newInstanceWithoutConstructor();
         $self->ruleName = $ruleName;
-        $self->assertion = $assertion;
+        $self->constraint = $constraint;
+        $self->assertionType = $assertionType;
         $self->subjects = $subjects;
         $self->targets = $targets;
         $self->tips = $tips;

@@ -25,7 +25,8 @@ final class CleanClassesTest
                 Selector::classname(SelectorPrimitive::class),
                 Selector::classname(TestParser::class)
             )
-            ->shouldBeFinal()
+            ->should()
+            ->beFinal()
         ;
     }
 }

@@ -18,299 +18,173 @@ services:
 
 	# # # # # DECLARATION RULES # # # # #
 
-	# ShouldBeNamed rules
+	# Named rules
 	-
-		class: PHPat\Rule\Assertion\Declaration\ShouldBeNamed\ClassnameRule
+		class: PHPat\Rule\Assertion\Declaration\Named\ClassnameRule
 		tags:
 			- phpstan.rules.rule
 
-	# ShouldBeReadonly rules
+	# Readonly rules
 	-
-		class: PHPat\Rule\Assertion\Declaration\ShouldBeReadonly\IsReadonlyRule
+		class: PHPat\Rule\Assertion\Declaration\IsReadonly\IsReadonlyRule
 		tags:
 			- phpstan.rules.rule
 
-	# ShouldNotBeReadonly rules
+	# Abstract rules
 	-
-		class: PHPat\Rule\Assertion\Declaration\ShouldNotBeReadonly\IsReadonlyRule
+		class: PHPat\Rule\Assertion\Declaration\IsAbstract\AbstractRule
 		tags:
 			- phpstan.rules.rule
 
-	# ShouldBeAbstract rules
+	# Final rules
 	-
-		class: PHPat\Rule\Assertion\Declaration\ShouldBeAbstract\AbstractRule
+		class: PHPat\Rule\Assertion\Declaration\IsFinal\IsFinalRule
 		tags:
 			- phpstan.rules.rule
 
-	# ShouldNotBeAbstract rules
+	# Enum rules
 	-
-		class: PHPat\Rule\Assertion\Declaration\ShouldNotBeAbstract\AbstractRule
+		class: PHPat\Rule\Assertion\Declaration\IsEnum\IsEnumRule
 		tags:
 			- phpstan.rules.rule
 
-	# ShouldBeFinal rules
+	# Invokable rules
 	-
-		class: PHPat\Rule\Assertion\Declaration\ShouldBeFinal\IsFinalRule
+		class: PHPat\Rule\Assertion\Declaration\IsInvokable\IsInvokableRule
 		tags:
 			- phpstan.rules.rule
 
-	# ShouldNotBeFinal rules
+	# OnePublicMethod rules
 	-
-		class: PHPat\Rule\Assertion\Declaration\ShouldNotBeFinal\IsFinalRule
+		class: PHPat\Rule\Assertion\Declaration\OnePublicMethod\HasOnlyOnePublicMethodRule
 		tags:
 			- phpstan.rules.rule
 
-	# ShouldBeEnum rules
+	# OnePublicMethodNamed rules
 	-
-		class: PHPat\Rule\Assertion\Declaration\ShouldBeEnum\IsEnumRule
+		class: PHPat\Rule\Assertion\Declaration\OnePublicMethodNamed\HasOnlyOnePublicMethodNamedRule
 		tags:
 			- phpstan.rules.rule
 
-	# ShouldNotBeEnum rules
+	# Interface rules
 	-
-		class: PHPat\Rule\Assertion\Declaration\ShouldNotBeEnum\IsEnumRule
+		class: PHPat\Rule\Assertion\Declaration\IsInterface\IsInterfaceRule
 		tags:
 			- phpstan.rules.rule
 
-	# ShouldBeInvokable rules
+	# Exists rules
 	-
-		class: PHPat\Rule\Assertion\Declaration\ShouldBeInvokable\IsInvokableRule
-		tags:
-			- phpstan.rules.rule
-
-	# ShouldNotBeInvokable rules
-	-
-		class: PHPat\Rule\Assertion\Declaration\ShouldNotBeInvokable\IsInvokableRule
-		tags:
-			- phpstan.rules.rule
-
-	# ShouldHaveOnlyOnePublicMethod rules
-	-
-		class: PHPat\Rule\Assertion\Declaration\ShouldHaveOnlyOnePublicMethod\HasOnlyOnePublicMethodRule
-		tags:
-			- phpstan.rules.rule
-
-	# ShouldHaveOnlyOnePublicMethodNamed rules
-	-
-		class: PHPat\Rule\Assertion\Declaration\ShouldHaveOnlyOnePublicMethodNamed\HasOnlyOnePublicMethodNamedRule
-		tags:
-			- phpstan.rules.rule
-
-	# ShouldBeInterface rules
-	-
-		class: PHPat\Rule\Assertion\Declaration\ShouldBeInterface\IsInterfaceRule
-		tags:
-			- phpstan.rules.rule
-
-	# ShouldNotExist rules
-	-
-		class: PHPat\Rule\Assertion\Declaration\ShouldNotExist\ExistsRule
+		class: PHPat\Rule\Assertion\Declaration\Exists\ExistsRule
 		tags:
 			- phpstan.rules.rule
 
 	# # # # # RELATION RULES # # # # #
 
-	# ShouldImplement rules
+	# Implement rules
 	-
-		class: PHPat\Rule\Assertion\Relation\ShouldImplement\ImplementedInterfacesRule
+		class: PHPat\Rule\Assertion\Relation\Implement\ImplementedInterfacesRule
 		tags:
 			- phpstan.rules.rule
 
-	# ShouldExtend rules
+	# Extend rules
 	-
-		class: PHPat\Rule\Assertion\Relation\ShouldExtend\ParentClassRule
+		class: PHPat\Rule\Assertion\Relation\Extend\ParentClassRule
 		tags:
 			- phpstan.rules.rule
 
-	# ShouldInclude rules
+	# Include rules
 	-
-		class: PHPat\Rule\Assertion\Relation\ShouldInclude\IncludedTraitsRule
+		class: PHPat\Rule\Assertion\Relation\IncludeTrait\IncludedTraitsRule
 		tags:
 			- phpstan.rules.rule
 
-	# ShouldNotDepend rules
+	# Depend rules
 	-
-		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\DirectInterfacesRule
+		class: PHPat\Rule\Assertion\Relation\Depend\DirectInterfacesRule
 		tags:
 			- phpstan.rules.rule
 	-
-		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\ParentClassRule
+		class: PHPat\Rule\Assertion\Relation\Depend\ParentClassRule
 		tags:
 			- phpstan.rules.rule
 	-
-		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\IncludedTraitsRule
+		class: PHPat\Rule\Assertion\Relation\Depend\IncludedTraitsRule
 		tags:
 			- phpstan.rules.rule
 	-
-		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\AllAttributesRule
+		class: PHPat\Rule\Assertion\Relation\Depend\AllAttributesRule
 		tags:
 			- phpstan.rules.rule
 	-
-		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\ClassPropertyRule
+		class: PHPat\Rule\Assertion\Relation\Depend\ClassPropertyRule
 		tags:
 			- phpstan.rules.rule
 	-
-		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\ConstantUseRule
+		class: PHPat\Rule\Assertion\Relation\Depend\ConstantUseRule
 		tags:
 			- phpstan.rules.rule
 	-
-		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\DocMethodTagRule
+		class: PHPat\Rule\Assertion\Relation\Depend\DocMethodTagRule
 		tags:
 			- phpstan.rules.rule
 	-
-		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\DocMixinTagRule
+		class: PHPat\Rule\Assertion\Relation\Depend\DocMixinTagRule
 		tags:
 			- phpstan.rules.rule
 	-
-		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\DocParamTagRule
+		class: PHPat\Rule\Assertion\Relation\Depend\DocParamTagRule
 		tags:
 			- phpstan.rules.rule
 	-
-		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\DocPropertyTagRule
+		class: PHPat\Rule\Assertion\Relation\Depend\DocPropertyTagRule
 		tags:
 			- phpstan.rules.rule
 	-
-		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\DocReturnTagRule
+		class: PHPat\Rule\Assertion\Relation\Depend\DocReturnTagRule
 		tags:
 			- phpstan.rules.rule
 	-
-		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\DocThrowsTagRule
+		class: PHPat\Rule\Assertion\Relation\Depend\DocThrowsTagRule
 		tags:
 			- phpstan.rules.rule
 	-
-		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\DocVarTagRule
+		class: PHPat\Rule\Assertion\Relation\Depend\DocVarTagRule
 		tags:
 			- phpstan.rules.rule
 	-
-		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\MethodParamRule
+		class: PHPat\Rule\Assertion\Relation\Depend\MethodParamRule
 		tags:
 			- phpstan.rules.rule
 	-
-		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\MethodReturnRule
+		class: PHPat\Rule\Assertion\Relation\Depend\MethodReturnRule
 		tags:
 			- phpstan.rules.rule
 	-
-		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\NewRule
+		class: PHPat\Rule\Assertion\Relation\Depend\NewRule
 		tags:
 			- phpstan.rules.rule
 	-
-		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\StaticMethodRule
+		class: PHPat\Rule\Assertion\Relation\Depend\StaticMethodRule
 		tags:
 			- phpstan.rules.rule
 	-
-		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\CatchBlockRule
+		class: PHPat\Rule\Assertion\Relation\Depend\CatchBlockRule
 		tags:
 			- phpstan.rules.rule
 	-
-		class: PHPat\Rule\Assertion\Relation\ShouldNotDepend\InstanceofRule
-		tags:
-			- phpstan.rules.rule
-
-	# CanOnlyDepend rules
-	-
-		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\DirectInterfacesRule
-		tags:
-			- phpstan.rules.rule
-	-
-		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\ParentClassRule
-		tags:
-			- phpstan.rules.rule
-	-
-		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\IncludedTraitsRule
-		tags:
-			- phpstan.rules.rule
-	-
-		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\AllAttributesRule
-		tags:
-			- phpstan.rules.rule
-	-
-		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\ClassPropertyRule
-		tags:
-			- phpstan.rules.rule
-	-
-		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\ConstantUseRule
-		tags:
-			- phpstan.rules.rule
-	-
-		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\DocMethodTagRule
-		tags:
-			- phpstan.rules.rule
-	-
-		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\DocMixinTagRule
-		tags:
-			- phpstan.rules.rule
-	-
-		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\DocParamTagRule
-		tags:
-			- phpstan.rules.rule
-	-
-		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\DocPropertyTagRule
-		tags:
-			- phpstan.rules.rule
-	-
-		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\DocReturnTagRule
-		tags:
-			- phpstan.rules.rule
-	-
-		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\DocThrowsTagRule
-		tags:
-			- phpstan.rules.rule
-	-
-		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\DocVarTagRule
-		tags:
-			- phpstan.rules.rule
-	-
-		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\MethodParamRule
-		tags:
-			- phpstan.rules.rule
-	-
-		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\MethodReturnRule
-		tags:
-			- phpstan.rules.rule
-	-
-		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\NewRule
-		tags:
-			- phpstan.rules.rule
-	-
-		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\StaticMethodRule
-		tags:
-			- phpstan.rules.rule
-	-
-		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\CatchBlockRule
-		tags:
-			- phpstan.rules.rule
-	-
-		class: PHPat\Rule\Assertion\Relation\CanOnlyDepend\InstanceofRule
+		class: PHPat\Rule\Assertion\Relation\Depend\InstanceofRule
 		tags:
 			- phpstan.rules.rule
 
-	# ShouldNotConstruct rules
+	# Construct rules
 	-
-		class: PHPat\Rule\Assertion\Relation\ShouldNotConstruct\NewRule
+		class: PHPat\Rule\Assertion\Relation\Construct\NewRule
 		tags:
 			- phpstan.rules.rule
 
-	# ShouldNotExtend rules
+	# ApplyAttribute rules
 	-
-		class: PHPat\Rule\Assertion\Relation\ShouldNotExtend\ParentClassRule
-		tags:
-			- phpstan.rules.rule
-
-	# ShouldNotImplement rules
-	-
-		class: PHPat\Rule\Assertion\Relation\ShouldNotImplement\ImplementedInterfacesRule
-		tags:
-			- phpstan.rules.rule
-
-	# ShouldNotInclude rules
-	-
-		class: PHPat\Rule\Assertion\Relation\ShouldNotInclude\IncludedTraitsRule
-		tags:
-			- phpstan.rules.rule
-
-	# ShouldApplyAttribute rules
-	-
-		class: PHPat\Rule\Assertion\Relation\ShouldApplyAttribute\ClassAttributeRule
+		class: PHPat\Rule\Assertion\Relation\ApplyAttribute\ClassAttributeRule
 		tags:
 			- phpstan.rules.rule
 
