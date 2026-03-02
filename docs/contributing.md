@@ -2,17 +2,9 @@
 
 ![image-contributing](https://raw.githubusercontent.com/carlosas/phpat/refs/heads/main/docs/assets/contributing.png)
 
-### How PHPat Works (End-to-End)
+### Project Guidelines
 
-PHPat hooks into PHPStan as a set of registered rules. When PHPStan analyses a file, each PHPat rule (registered in `extension.neon`) fires on matching nodes.
-
-1. **Test Discovery**: `TestExtractor` (`src/Test/TestExtractor.php`) reads all services tagged `phpat.test` from PHPStan's DI container. Users register their test classes with this tag in their `phpstan.neon`.
-
-2. **Test Parsing**: `TestParser` (`src/Test/TestParser.php`) reflects on each test class and collects all public methods prefixed with `test` or annotated with `#[TestRule]`. Each method returns a `Rule` builder which is invoked to build the rule.
-
-3. **Statement Building**: `StatementBuilderFactory` (`src/Statement/Builder/StatementBuilderFactory.php`) wraps parsed rules and creates the appropriate `StatementBuilder` (Relation or Declaration) for each PHPStan rule class.
-
-4. **Assertion Execution**: Each assertion class (e.g., `ShouldNotDepend\MethodParamRule`) is a PHPStan rule that fires on a specific AST node type. It extracts class names from the node, then validates against the statements built from test rules.
+See [Project Guidelines](project-guidelines.md).
 
 <br />
 
