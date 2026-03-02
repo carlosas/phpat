@@ -2,8 +2,6 @@
 
 namespace PHPat\Selector;
 
-use PHPStan\Reflection\ClassReflection;
-
 final class IsNotAbstract implements SelectorInterface
 {
     public function getName(): string
@@ -11,7 +9,10 @@ final class IsNotAbstract implements SelectorInterface
         return '-non abstract classes-';
     }
 
-    public function matches(ClassReflection $classReflection): bool
+    /**
+     * @param \ReflectionClass<object> $classReflection
+     */
+    public function matches(\ReflectionClass $classReflection): bool
     {
         return !$classReflection->isAbstract();
     }

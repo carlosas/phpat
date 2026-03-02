@@ -2,8 +2,6 @@
 
 namespace PHPat\Selector;
 
-use PHPStan\Reflection\ClassReflection;
-
 final class ClassIncludes implements SelectorInterface
 {
     private string $traitname;
@@ -23,17 +21,28 @@ final class ClassIncludes implements SelectorInterface
         return $this->traitname;
     }
 
-    public function matches(ClassReflection $classReflection): bool
+    /**
+     * @param \ReflectionClass<object> $classReflection
+     */
+    public function matches(\ReflectionClass $classReflection): bool
     {
+        $traits = $this->getAllTraits($classReflection);
+
         if ($this->isRegex) {
-            return $this->matchesRegex($classReflection->getTraits());
+            return $this->matchesRegex($traits);
         }
 
-        return $classReflection->hasTraitUse($this->traitname);
+        foreach ($traits as $trait) {
+            if ($trait->getName() === trimSeparators($this->traitname)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
-     * @param array<ClassReflection> $traits
+     * @param array<string, \ReflectionClass<object>> $traits
      */
     private function matchesRegex(array $traits): bool
     {
@@ -44,5 +53,26 @@ final class ClassIncludes implements SelectorInterface
         }
 
         return false;
+    }
+
+    /**
+     * @param  \ReflectionClass<object>                $classReflection
+     * @return array<string, \ReflectionClass<object>>
+     */
+    private function getAllTraits(\ReflectionClass $classReflection): array
+    {
+        $traits = [];
+
+        foreach ($classReflection->getTraits() as $trait) {
+            $traits[$trait->getName()] = $trait;
+            $traits = array_merge($traits, $this->getAllTraits($trait));
+        }
+
+        $parent = $classReflection->getParentClass();
+        if ($parent !== false) {
+            $traits = array_merge($traits, $this->getAllTraits($parent));
+        }
+
+        return $traits;
     }
 }

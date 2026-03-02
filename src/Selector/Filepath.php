@@ -2,8 +2,6 @@
 
 namespace PHPat\Selector;
 
-use PHPStan\Reflection\ClassReflection;
-
 final class Filepath implements SelectorInterface
 {
     private string $filepath;
@@ -20,11 +18,14 @@ final class Filepath implements SelectorInterface
         return $this->filepath;
     }
 
-    public function matches(ClassReflection $classReflection): bool
+    /**
+     * @param \ReflectionClass<object> $classReflection
+     */
+    public function matches(\ReflectionClass $classReflection): bool
     {
         $filepath = $classReflection->getFileName();
 
-        if ($filepath === null) {
+        if ($filepath === false) {
             return false;
         }
 

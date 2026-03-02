@@ -2,11 +2,15 @@
 
 namespace PHPat\Selector;
 
-use PHPStan\Reflection\ClassReflection;
-
 interface SelectorInterface
 {
-    public function matches(ClassReflection $classReflection): bool;
+    /**
+     * @param \ReflectionClass<object> $classReflection
+     */
+    /**
+     * @param \ReflectionClass<object> $classReflection
+     */
+    public function matches(\ReflectionClass $classReflection): bool;
 
     public function getName(): string;
 }

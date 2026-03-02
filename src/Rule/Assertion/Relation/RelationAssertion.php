@@ -89,7 +89,10 @@ abstract class RelationAssertion implements Assertion
 
         foreach ($nodes as $node) {
             $class = $scope->getClassReflection();
-            if (!(new Classname($node, false))->matches($class)) {
+
+            /** @var \ReflectionClass<object> $nativeReflection */
+            $nativeReflection = $class->getNativeReflection();
+            if (!(new Classname($node, false))->matches($nativeReflection)) {
                 return true;
             }
         }
@@ -111,11 +114,15 @@ abstract class RelationAssertion implements Assertion
         }
 
         foreach ($this->statements as $statement) {
-            if ($subject->isBuiltin() || !$statement->subject->matches($subject)) {
+            /** @var \ReflectionClass<object> $nativeReflection */
+            $nativeReflection = $subject->getNativeReflection();
+            if ($subject->isBuiltin() || !$statement->subject->matches($nativeReflection)) {
                 continue;
             }
             foreach ($statement->subjectExcludes as $exclude) {
-                if ($exclude->matches($subject)) {
+                /** @var \ReflectionClass<object> $nativeReflection */
+                $nativeReflection = $subject->getNativeReflection();
+                if ($exclude->matches($nativeReflection)) {
                     continue 2;
                 }
             }
@@ -267,12 +274,16 @@ abstract class RelationAssertion implements Assertion
 
         $class = $this->reflectionProvider->getClass($classname);
 
-        if (!$target->matches($class)) {
+        /** @var \ReflectionClass<object> $nativeReflection */
+        $nativeReflection = $class->getNativeReflection();
+        if (!$target->matches($nativeReflection)) {
             return false;
         }
 
         foreach ($targetExcludes as $exclude) {
-            if ($exclude->matches($class)) {
+            /** @var \ReflectionClass<object> $nativeReflection */
+            $nativeReflection = $class->getNativeReflection();
+            if ($exclude->matches($nativeReflection)) {
                 return false;
             }
         }

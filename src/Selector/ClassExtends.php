@@ -2,8 +2,6 @@
 
 namespace PHPat\Selector;
 
-use PHPStan\Reflection\ClassReflection;
-
 final class ClassExtends implements SelectorInterface
 {
     private string $classname;
@@ -23,9 +21,18 @@ final class ClassExtends implements SelectorInterface
         return $this->classname;
     }
 
-    public function matches(ClassReflection $classReflection): bool
+    /**
+     * @param \ReflectionClass<object> $classReflection
+     */
+    public function matches(\ReflectionClass $classReflection): bool
     {
-        $parents = $classReflection->getParents();
+        $parents = [];
+        $parent = $classReflection->getParentClass();
+        while ($parent !== false) {
+            $parents[] = $parent;
+            $parent = $parent->getParentClass();
+        }
+
         if (empty($parents)) {
             return false;
         }
@@ -45,7 +52,7 @@ final class ClassExtends implements SelectorInterface
     }
 
     /**
-     * @param array<ClassReflection> $parents
+     * @param array<\ReflectionClass<object>> $parents
      */
     private function matchesRegex(array $parents): bool
     {

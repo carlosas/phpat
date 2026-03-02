@@ -2,8 +2,6 @@
 
 namespace PHPat\Selector;
 
-use PHPStan\Reflection\ClassReflection;
-
 final class Classname implements SelectorInterface
 {
     private string $classname;
@@ -23,7 +21,10 @@ final class Classname implements SelectorInterface
         return $this->classname;
     }
 
-    public function matches(ClassReflection $classReflection): bool
+    /**
+     * @param \ReflectionClass<object> $classReflection
+     */
+    public function matches(\ReflectionClass $classReflection): bool
     {
         if ($this->isRegex) {
             return preg_match($this->classname, $classReflection->getName()) === 1;

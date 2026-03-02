@@ -2,8 +2,6 @@
 
 namespace PHPat\Selector;
 
-use PHPStan\Reflection\ClassReflection;
-
 final class IsAttribute implements SelectorInterface
 {
     public function getName(): string
@@ -11,8 +9,11 @@ final class IsAttribute implements SelectorInterface
         return '-attribute classes-';
     }
 
-    public function matches(ClassReflection $classReflection): bool
+    /**
+     * @param \ReflectionClass<object> $classReflection
+     */
+    public function matches(\ReflectionClass $classReflection): bool
     {
-        return $classReflection->isAttributeClass();
+        return count($classReflection->getAttributes(\Attribute::class)) > 0;
     }
 }

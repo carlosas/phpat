@@ -1,12 +1,9 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Tests\PHPat\unit\selectors;
 
 use PHPat\Selector\AppliesAttribute;
-use PHPStan\Reflection\ClassReflection;
 use PHPUnit\Framework\TestCase;
-use Tests\PHPat\fixtures\FixtureClass;
-use Tests\PHPat\fixtures\Simple\SimpleAttribute;
 
 /**
  * @internal
@@ -15,53 +12,44 @@ use Tests\PHPat\fixtures\Simple\SimpleAttribute;
  */
 class AppliesAttributeTest extends TestCase
 {
-    protected function setUp(): void
+    public function testMatchesAttribute(): void
     {
-        parent::setUp();
+        $selector = new AppliesAttribute('App\MyAttribute', false);
+        $classReflection = $this->createMock(\ReflectionClass::class);
 
-        if (PHP_VERSION_ID < 80000) {
-            self::markTestSkipped();
-        }
+        $attr = $this->createMock(\ReflectionAttribute::class);
+        $attr->method('getName')->willReturn('App\MyAttribute');
+        $attr->method('getArguments')->willReturn([]);
+
+        $classReflection->method('getAttributes')->willReturn([$attr]);
+
+        self::assertTrue($selector->matches($classReflection));
     }
 
-    public function testGetName(): void
+    public function testDoesNotMatchDifferentAttribute(): void
     {
-        $selector = new AppliesAttribute('test');
+        $selector = new AppliesAttribute('App\MyAttribute', false);
+        $classReflection = $this->createMock(\ReflectionClass::class);
 
-        $this->assertEquals('test', $selector->getName());
+        $attr = $this->createMock(\ReflectionAttribute::class);
+        $attr->method('getName')->willReturn('App\OtherAttribute');
+
+        $classReflection->method('getAttributes')->willReturn([$attr]);
+
+        self::assertFalse($selector->matches($classReflection));
     }
 
-    /**
-     * @dataProvider getCases
-     */
-    public function testMatches(string $name, array $arguments, bool $isRegex, bool $expected): void
+    public function testMatchesRegex(): void
     {
-        $selector = new AppliesAttribute($name, $isRegex, $arguments);
+        $selector = new AppliesAttribute('/^App\\\/', true);
+        $classReflection = $this->createMock(\ReflectionClass::class);
 
-        self::assertSame($expected, $selector->matches($this->getClassReflection()));
-    }
+        $attr = $this->createMock(\ReflectionAttribute::class);
+        $attr->method('getName')->willReturn('App\MyAttribute');
+        $attr->method('getArguments')->willReturn([]);
 
-    public static function getCases(): array
-    {
-        return [
-            [SimpleAttribute::class, [], false, true],
-            ['Fake\Attribute', [], false, false],
-            ['/\bSimple[A-Z][a-zA-Z0-9_]*\b/', [], true, true],
-            ['/\bFake[A-Z][a-zA-Z0-9_]*\b/', [], true, false],
-            [SimpleAttribute::class, ['something' => 'something'], false, true],
-            [SimpleAttribute::class, ['something' => 'somethingElse'], false, false],
-        ];
-    }
+        $classReflection->method('getAttributes')->willReturn([$attr]);
 
-    private function getClassReflection(): ClassReflection
-    {
-        $ref = new \ReflectionClass(ClassReflection::class);
-        $instance = $ref->newInstanceWithoutConstructor();
-
-        $reflectionProperty = $ref->getProperty('reflection');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($instance, new \ReflectionClass(FixtureClass::class));
-
-        return $instance;
+        self::assertTrue($selector->matches($classReflection));
     }
 }

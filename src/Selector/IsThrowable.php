@@ -2,8 +2,6 @@
 
 namespace PHPat\Selector;
 
-use PHPStan\Reflection\ClassReflection;
-
 final class IsThrowable implements SelectorInterface
 {
     public function getName(): string
@@ -11,7 +9,10 @@ final class IsThrowable implements SelectorInterface
         return '-all throwables-';
     }
 
-    public function matches(ClassReflection $classReflection): bool
+    /**
+     * @param \ReflectionClass<object> $classReflection
+     */
+    public function matches(\ReflectionClass $classReflection): bool
     {
         return $classReflection->implementsInterface(\Throwable::class);
     }
