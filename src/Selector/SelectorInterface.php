@@ -7,12 +7,6 @@ use PHPStan\Reflection\ClassReflection;
 interface SelectorInterface
 {
     /**
-     * @param \ReflectionClass<object> $classReflection
-     */
-    /**
-     * @param \ReflectionClass<object> $classReflection
-     */
-    /**
      * @param ClassReflection $classReflection
      */
     public function matches($classReflection): bool;

@@ -24,9 +24,6 @@ final class ClassImplements implements SelectorInterface
     }
 
     /**
-     * @param \ReflectionClass<object> $classReflection
-     */
-    /**
      * @param ClassReflection $classReflection
      */
     public function matches($classReflection): bool

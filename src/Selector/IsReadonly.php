@@ -12,9 +12,6 @@ final class IsReadonly implements SelectorInterface
     }
 
     /**
-     * @param \ReflectionClass<object> $classReflection
-     */
-    /**
      * @param ClassReflection $classReflection
      */
     public function matches($classReflection): bool
