@@ -10,7 +10,7 @@ use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\Special\ClassWithOnlyOnePublicMethodNamed;
+use Tests\PHPat\unit\CreatesPhpFile;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -20,11 +20,24 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class GoodImplementationClassWithOnlyOnePublicMethodNamedTest extends RuleTestCase
 {
-    public const RULE_NAME = 'testFixtureClassShouldHaveOnlyOnePublicMethodNamed';
+    use CreatesPhpFile;
+
+    public const RULE_NAME = 'testShouldHaveOnlyOnePublicMethodNamed';
+    private const SUBJECT = 'Fixture\ShouldHaveOnlyOnePublicMethodNamed\GoodImplementationClassWithOnlyOnePublicMethodNamedTest\Subject';
 
     public function testRule(): void
     {
-        $this->analyse(['tests/fixtures/Special/ClassWithOnlyOnePublicMethodNamed.php'], []);
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldHaveOnlyOnePublicMethodNamed\GoodImplementationClassWithOnlyOnePublicMethodNamedTest;
+            class Subject
+            {
+                public function __construct() {}
+                public function methodWithName(): void {}
+            }
+            PHP);
+
+        $this->analyse([$file], []);
     }
 
     protected function getRule(): Rule
@@ -33,7 +46,7 @@ class GoodImplementationClassWithOnlyOnePublicMethodNamedTest extends RuleTestCa
             self::RULE_NAME,
             Constraint::Should,
             'haveOnlyOnePublicMethodNamed',
-            [new Classname(ClassWithOnlyOnePublicMethodNamed::class, false)],
+            [new Classname(self::SUBJECT, false)],
             [],
             [],
             ['name' => 'methodWithName', 'isRegex' => false]

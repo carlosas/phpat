@@ -10,8 +10,7 @@ use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\FixtureClass;
-use Tests\PHPat\fixtures\Simple\SimpleException;
+use Tests\PHPat\unit\CreatesPhpFile;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -21,12 +20,29 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class CatchBlockTest extends RuleTestCase
 {
-    public const RULE_NAME = 'testFixtureClassShouldNotDependSimpleException';
+    use CreatesPhpFile;
+
+    public const RULE_NAME = 'testShouldNotDependCatchBlock';
+    private const SUBJECT = 'Fixture\ShouldNotDepend\CatchBlockTest\Subject';
+    private const TARGET = 'Fixture\ShouldNotDepend\CatchBlockTest\Target';
 
     public function testRule(): void
     {
-        $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleException::class), 108],
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldNotDepend\CatchBlockTest;
+            class Target extends \Exception {}
+            class Subject
+            {
+                public function method(): void
+                {
+                    try {} catch (Target $e) {}
+                }
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should not depend on %s', self::SUBJECT, self::TARGET), 8],
         ]);
     }
 
@@ -36,8 +52,8 @@ class CatchBlockTest extends RuleTestCase
             self::RULE_NAME,
             Constraint::ShouldNot,
             'depend',
-            [new Classname(FixtureClass::class, false)],
-            [new Classname(SimpleException::class, false)]
+            [new Classname(self::SUBJECT, false)],
+            [new Classname(self::TARGET, false)]
         );
 
         return new CatchBlockRule(

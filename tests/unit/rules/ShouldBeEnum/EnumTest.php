@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Tests\PHPat\unit\rules\ShouldBeEnum;
 
@@ -10,7 +10,7 @@ use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\FixtureClass;
+use Tests\PHPat\unit\CreatesPhpFile;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -20,12 +20,37 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class EnumTest extends RuleTestCase
 {
-    public const RULE_NAME = 'testFixtureClassShouldBeEnum';
+    use CreatesPhpFile;
+
+    public const RULE_NAME = 'testShouldBeEnum';
+    private const SUBJECT = 'Fixture\ShouldBeEnum\EnumTest\Subject';
+
+    private bool $showRuleName = false;
 
     public function testRule(): void
     {
-        $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should be enum', FixtureClass::class), 29],
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldBeEnum\EnumTest;
+            class Subject {}
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should be enum', self::SUBJECT), 3],
+        ]);
+    }
+
+    public function testRuleWithRuleName(): void
+    {
+        $this->showRuleName = true;
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldBeEnum\EnumTest;
+            class Subject {}
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s: %s should be enum', self::RULE_NAME, self::SUBJECT), 3],
         ]);
     }
 
@@ -35,13 +60,13 @@ class EnumTest extends RuleTestCase
             self::RULE_NAME,
             Constraint::Should,
             'beEnum',
-            [new Classname(FixtureClass::class, false)],
+            [new Classname(self::SUBJECT, false)],
             []
         );
 
         return new IsEnumRule(
             new StatementBuilder($testParser),
-            new Configuration(false, true, false),
+            new Configuration(false, true, $this->showRuleName),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

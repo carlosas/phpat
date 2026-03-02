@@ -10,7 +10,7 @@ use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\FixtureClass;
+use Tests\PHPat\unit\CreatesPhpFile;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -20,12 +20,25 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class ClassWithOnlyOnePublicMethodTest extends RuleTestCase
 {
-    public const RULE_NAME = 'testFixtureClassShouldHaveOnlyOnePublicMethod';
+    use CreatesPhpFile;
+
+    public const RULE_NAME = 'testShouldHaveOnlyOnePublicMethod';
+    private const SUBJECT = 'Fixture\ShouldHaveOnlyOnePublicMethod\ClassWithOnlyOnePublicMethodTest\Subject';
 
     public function testRule(): void
     {
-        $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should have only one public method', FixtureClass::class), 29],
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldHaveOnlyOnePublicMethod\ClassWithOnlyOnePublicMethodTest;
+            class Subject
+            {
+                public function methodOne(): void {}
+                public function methodTwo(): void {}
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should have only one public method', self::SUBJECT), 3],
         ]);
     }
 
@@ -35,7 +48,7 @@ class ClassWithOnlyOnePublicMethodTest extends RuleTestCase
             self::RULE_NAME,
             Constraint::Should,
             'haveOnlyOnePublicMethod',
-            [new Classname(FixtureClass::class, false)],
+            [new Classname(self::SUBJECT, false)],
             []
         );
 

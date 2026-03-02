@@ -10,9 +10,7 @@ use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\FixtureClass;
-use Tests\PHPat\fixtures\Simple\SimpleInterface;
-use Tests\PHPat\fixtures\Simple\SimpleInterfaceTwo;
+use Tests\PHPat\unit\CreatesPhpFile;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -22,12 +20,25 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class DirectInterfacesTest extends RuleTestCase
 {
-    public const RULE_NAME = 'testFixtureClassShouldNotDependSimpleAndSpecial';
+    use CreatesPhpFile;
+
+    public const RULE_NAME = 'testCanOnlyDependDirectInterfaces';
+    private const SUBJECT = 'Fixture\CanOnlyDepend\DirectInterfacesTest\Subject';
+    private const ALLOWED = 'Fixture\CanOnlyDepend\DirectInterfacesTest\Allowed';
+    private const TARGET = 'Fixture\CanOnlyDepend\DirectInterfacesTest\Target';
 
     public function testRule(): void
     {
-        $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleInterface::class), 29],
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\CanOnlyDepend\DirectInterfacesTest;
+            interface Allowed {}
+            interface Target {}
+            class Subject implements Target {}
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should not depend on %s', self::SUBJECT, self::TARGET), 5],
         ]);
     }
 
@@ -37,8 +48,8 @@ class DirectInterfacesTest extends RuleTestCase
             self::RULE_NAME,
             Constraint::CanOnly,
             'depend',
-            [new Classname(FixtureClass::class, false)],
-            [new Classname(SimpleInterfaceTwo::class, false)]
+            [new Classname(self::SUBJECT, false)],
+            [new Classname(self::ALLOWED, false)]
         );
 
         return new DirectInterfacesRule(

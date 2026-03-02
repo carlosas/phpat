@@ -10,8 +10,7 @@ use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\FixtureClass;
-use Tests\PHPat\fixtures\Simple\SimpleInterface;
+use Tests\PHPat\unit\CreatesPhpFile;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -21,12 +20,26 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class ClassPropertyTest extends RuleTestCase
 {
-    public const RULE_NAME = 'testFixtureClassShouldNotDependSimpleAndSpecial';
+    use CreatesPhpFile;
+
+    public const RULE_NAME = 'testShouldNotDependClassProperty';
+    private const SUBJECT = 'Fixture\ShouldNotDepend\ClassPropertyTest\Subject';
+    private const TARGET = 'Fixture\ShouldNotDepend\ClassPropertyTest\Target';
 
     public function testRule(): void
     {
-        $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleInterface::class), 34],
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldNotDepend\ClassPropertyTest;
+            class Target {}
+            class Subject
+            {
+                private Target $prop;
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should not depend on %s', self::SUBJECT, self::TARGET), 6],
         ]);
     }
 
@@ -36,8 +49,8 @@ class ClassPropertyTest extends RuleTestCase
             self::RULE_NAME,
             Constraint::ShouldNot,
             'depend',
-            [new Classname(FixtureClass::class, false)],
-            [new Classname(SimpleInterface::class, false)]
+            [new Classname(self::SUBJECT, false)],
+            [new Classname(self::TARGET, false)]
         );
 
         return new ClassPropertyRule(

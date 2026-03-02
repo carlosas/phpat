@@ -10,7 +10,7 @@ use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\FixtureClass;
+use Tests\PHPat\unit\CreatesPhpFile;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -20,12 +20,37 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class AbstractClassTest extends RuleTestCase
 {
-    public const RULE_NAME = 'testFixtureClassShouldBeAbstract';
+    use CreatesPhpFile;
+
+    public const RULE_NAME = 'testShouldBeAbstract';
+    private const SUBJECT = 'Fixture\ShouldBeAbstract\AbstractClassTest\Subject';
+
+    private bool $showRuleName = false;
 
     public function testRule(): void
     {
-        $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should be abstract', FixtureClass::class), 29],
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldBeAbstract\AbstractClassTest;
+            class Subject {}
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should be abstract', self::SUBJECT), 3],
+        ]);
+    }
+
+    public function testRuleWithRuleName(): void
+    {
+        $this->showRuleName = true;
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldBeAbstract\AbstractClassTest;
+            class Subject {}
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s: %s should be abstract', self::RULE_NAME, self::SUBJECT), 3],
         ]);
     }
 
@@ -35,13 +60,13 @@ class AbstractClassTest extends RuleTestCase
             self::RULE_NAME,
             Constraint::Should,
             'beAbstract',
-            [new Classname(FixtureClass::class, false)],
+            [new Classname(self::SUBJECT, false)],
             []
         );
 
         return new AbstractRule(
             new StatementBuilder($testParser),
-            new Configuration(false, true, false),
+            new Configuration(false, true, $this->showRuleName),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

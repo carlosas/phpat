@@ -10,7 +10,7 @@ use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\FixtureClass;
+use Tests\PHPat\unit\CreatesPhpFile;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -20,12 +20,21 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class ClassnameTest extends RuleTestCase
 {
-    public const RULE_NAME = 'testFixtureClassShouldBeNamed';
+    use CreatesPhpFile;
+
+    public const RULE_NAME = 'testShouldBeNamed';
+    private const SUBJECT = 'Fixture\ShouldBeNamed\ClassnameTest\Subject';
 
     public function testRule(): void
     {
-        $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should be named SuperCoolClass', FixtureClass::class), 29],
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldBeNamed\ClassnameTest;
+            class Subject {}
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should be named SuperCoolClass', self::SUBJECT), 3],
         ]);
     }
 
@@ -35,7 +44,7 @@ class ClassnameTest extends RuleTestCase
             self::RULE_NAME,
             Constraint::Should,
             'beNamed',
-            [new Classname(FixtureClass::class, false)],
+            [new Classname(self::SUBJECT, false)],
             [],
             [],
             ['isRegex' => false, 'classname' => 'SuperCoolClass']

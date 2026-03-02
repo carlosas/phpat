@@ -10,9 +10,7 @@ use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\FixtureClass;
-use Tests\PHPat\fixtures\Simple\SimpleClass;
-use Tests\PHPat\fixtures\Simple\SimpleInterface;
+use Tests\PHPat\unit\CreatesPhpFile;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -22,12 +20,28 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class MethodParamTest extends RuleTestCase
 {
-    public const RULE_NAME = 'testFixtureClassCanOnlyDependSimpleAndSpecial';
+    use CreatesPhpFile;
+
+    public const RULE_NAME = 'testCanOnlyDependMethodParam';
+    private const SUBJECT = 'Fixture\CanOnlyDepend\MethodParamTest\Subject';
+    private const ALLOWED = 'Fixture\CanOnlyDepend\MethodParamTest\Allowed';
+    private const TARGET = 'Fixture\CanOnlyDepend\MethodParamTest\Target';
 
     public function testRule(): void
     {
-        $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleInterface::class), 37],
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\CanOnlyDepend\MethodParamTest;
+            class Allowed {}
+            class Target {}
+            class Subject
+            {
+                public function method(Target $p) {}
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should not depend on %s', self::SUBJECT, self::TARGET), 7],
         ]);
     }
 
@@ -37,8 +51,8 @@ class MethodParamTest extends RuleTestCase
             self::RULE_NAME,
             Constraint::CanOnly,
             'depend',
-            [new Classname(FixtureClass::class, false)],
-            [new Classname(SimpleClass::class, false)]
+            [new Classname(self::SUBJECT, false)],
+            [new Classname(self::ALLOWED, false)]
         );
 
         return new MethodParamRule(

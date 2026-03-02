@@ -10,7 +10,7 @@ use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\FixtureClass;
+use Tests\PHPat\unit\CreatesPhpFile;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -20,11 +20,20 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class GoodImplementationNotInvokableClassTest extends RuleTestCase
 {
-    public const RULE_NAME = 'testFixtureClassShouldNotBeInvokable';
+    use CreatesPhpFile;
+
+    public const RULE_NAME = 'testShouldNotBeInvokable';
+    private const SUBJECT = 'Fixture\ShouldNotBeInvokable\GoodImplementationNotInvokableClassTest\Subject';
 
     public function testRule(): void
     {
-        $this->analyse(['tests/fixtures/FixtureClass.php'], []);
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldNotBeInvokable\GoodImplementationNotInvokableClassTest;
+            class Subject {}
+            PHP);
+
+        $this->analyse([$file], []);
     }
 
     protected function getRule(): Rule
@@ -33,7 +42,7 @@ class GoodImplementationNotInvokableClassTest extends RuleTestCase
             self::RULE_NAME,
             Constraint::ShouldNot,
             'beInvokable',
-            [new Classname(FixtureClass::class, false)],
+            [new Classname(self::SUBJECT, false)],
             []
         );
 

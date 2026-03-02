@@ -10,8 +10,7 @@ use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\Simple\SimpleClass;
-use Tests\PHPat\fixtures\Simple\SimpleInterface;
+use Tests\PHPat\unit\CreatesPhpFile;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -21,13 +20,22 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class SimpleImplementedInterfacesTest extends RuleTestCase
 {
-    public const RULE_NAME = 'testSimpleClassShouldImplementSimpleInterface';
+    use CreatesPhpFile;
+
+    public const RULE_NAME = 'testShouldImplementSimple';
+    private const SUBJECT = 'Fixture\ShouldImplement\SimpleImplementedInterfacesTest\Subject';
+    private const TARGET = 'Fixture\ShouldImplement\SimpleImplementedInterfacesTest\Target';
 
     public function testRule(): void
     {
-        $this->analyse(['tests/fixtures/Simple/SimpleClass.php'], [
-            [sprintf('%s should implement %s', SimpleClass::class, SimpleInterface::class), 5],
-        ]);
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldImplement\SimpleImplementedInterfacesTest;
+            interface Target {}
+            class Subject implements Target {}
+            PHP);
+
+        $this->analyse([$file], []);
     }
 
     protected function getRule(): Rule
@@ -36,8 +44,8 @@ class SimpleImplementedInterfacesTest extends RuleTestCase
             self::RULE_NAME,
             Constraint::Should,
             'implement',
-            [new Classname(SimpleClass::class, false)],
-            [new Classname(SimpleInterface::class, false)]
+            [new Classname(self::SUBJECT, false)],
+            [new Classname(self::TARGET, false)]
         );
 
         return new ImplementedInterfacesRule(

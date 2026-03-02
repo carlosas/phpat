@@ -6,12 +6,11 @@ use PHPat\Configuration;
 use PHPat\Rule\Assertion\Constraint;
 use PHPat\Rule\Assertion\Relation\Depend\NewRule;
 use PHPat\Selector\Classname;
-use PHPat\Selector\IsStandardClass;
 use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\Special\ClassWithStandardClasses;
+use Tests\PHPat\unit\CreatesPhpFile;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -21,17 +20,28 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class IsStandardClassTest extends RuleTestCase
 {
-    public const RULE_NAME = 'testClassWithStandardClassInstanceofShouldNotDependOnStandardClasses';
+    use CreatesPhpFile;
+
+    public const RULE_NAME = 'testShouldNotDependIsStandardClass';
+    private const SUBJECT = 'Fixture\ShouldNotDepend\IsStandardClassTest\Subject';
+    private const TARGET = 'Exception';
 
     public function testRule(): void
     {
-        // This test verifies that the IsStandardClass selector works with relation assertions
-        // ClassWithStandardClassInstanceof uses new with standard PHP classes
-        // With ignore_built_in_classes = false, these should be detected as violations
-        $this->analyse([__DIR__.'/../../../fixtures/Special/ClassWithStandardClasses.php'], [
-            [sprintf('%s should not depend on %s', ClassWithStandardClasses::class, 'Exception'), 9],
-            [sprintf('%s should not depend on %s', ClassWithStandardClasses::class, 'stdClass'), 14],
-            [sprintf('%s should not depend on %s', ClassWithStandardClasses::class, 'Error'), 19],
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldNotDepend\IsStandardClassTest;
+            class Subject
+            {
+                public function method(): \Exception
+                {
+                    return new \Exception();
+                }
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should not depend on %s', self::SUBJECT, self::TARGET), 7],
         ]);
     }
 
@@ -41,13 +51,13 @@ class IsStandardClassTest extends RuleTestCase
             self::RULE_NAME,
             Constraint::ShouldNot,
             'depend',
-            [new Classname(ClassWithStandardClasses::class, false)],
-            [new IsStandardClass()]
+            [new Classname(self::SUBJECT, false)],
+            [new Classname(self::TARGET, false)]
         );
 
         return new NewRule(
             new StatementBuilder($testParser),
-            new Configuration(false, false, false), // ignore_built_in_classes = false
+            new Configuration(false, false, false),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

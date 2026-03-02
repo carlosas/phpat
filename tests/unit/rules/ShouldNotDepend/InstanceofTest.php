@@ -10,9 +10,7 @@ use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\Simple\SimpleException;
-use Tests\PHPat\fixtures\Simple\SimpleInterface;
-use Tests\PHPat\fixtures\Special\ClassWithInstanceof;
+use Tests\PHPat\unit\CreatesPhpFile;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -22,15 +20,29 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class InstanceofTest extends RuleTestCase
 {
-    public const RULE_NAME = 'testClassWithInstanceofShouldNotDependSimpleExceptionAndInterface';
+    use CreatesPhpFile;
+
+    public const RULE_NAME = 'testShouldNotDependInstanceof';
+    private const SUBJECT = 'Fixture\ShouldNotDepend\InstanceofTest\Subject';
+    private const TARGET = 'Fixture\ShouldNotDepend\InstanceofTest\Target';
 
     public function testRule(): void
     {
-        $this->analyse(['tests/fixtures/Special/ClassWithInstanceof.php'], [
-            [sprintf('%s should not depend on %s', ClassWithInstanceof::class, SimpleException::class), 18],
-            [sprintf('%s should not depend on %s', ClassWithInstanceof::class, SimpleException::class), 23],
-            [sprintf('%s should not depend on %s', ClassWithInstanceof::class, SimpleException::class), 37],
-            [sprintf('%s should not depend on %s', ClassWithInstanceof::class, SimpleInterface::class), 45],
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldNotDepend\InstanceofTest;
+            class Target {}
+            class Subject
+            {
+                public function method(object $o): bool
+                {
+                    return $o instanceof Target;
+                }
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should not depend on %s', self::SUBJECT, self::TARGET), 8],
         ]);
     }
 
@@ -40,11 +52,8 @@ class InstanceofTest extends RuleTestCase
             self::RULE_NAME,
             Constraint::ShouldNot,
             'depend',
-            [new Classname(ClassWithInstanceof::class, false)],
-            [
-                new Classname(SimpleException::class, false),
-                new Classname(SimpleInterface::class, false),
-            ]
+            [new Classname(self::SUBJECT, false)],
+            [new Classname(self::TARGET, false)]
         );
 
         return new InstanceofRule(

@@ -10,8 +10,7 @@ use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\FixtureClass;
-use Tests\PHPat\fixtures\Simple\SimpleTraitTwo;
+use Tests\PHPat\unit\CreatesPhpFile;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -21,12 +20,41 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class IncludedTraitsTest extends RuleTestCase
 {
-    public const RULE_NAME = 'testFixtureClassShouldIncludeSimpleTraitTwo';
+    use CreatesPhpFile;
+
+    public const RULE_NAME = 'testShouldInclude';
+    private const SUBJECT = 'Fixture\ShouldInclude\IncludedTraitsTest\Subject';
+    private const TARGET = 'Fixture\ShouldInclude\IncludedTraitsTest\Target';
+
+    private bool $showRuleName = false;
 
     public function testRule(): void
     {
-        $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should include %s', FixtureClass::class, SimpleTraitTwo::class), 29],
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldInclude\IncludedTraitsTest;
+            trait Target {}
+            class Subject {}
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should include %s', self::SUBJECT, self::TARGET), 4],
+        ]);
+    }
+
+    public function testRuleWithRuleName(): void
+    {
+        $this->showRuleName = true;
+
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldInclude\IncludedTraitsTest;
+            trait Target {}
+            class Subject {}
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s: %s should include %s', self::RULE_NAME, self::SUBJECT, self::TARGET), 4],
         ]);
     }
 
@@ -36,13 +64,13 @@ class IncludedTraitsTest extends RuleTestCase
             self::RULE_NAME,
             Constraint::Should,
             'include',
-            [new Classname(FixtureClass::class, false)],
-            [new Classname(SimpleTraitTwo::class, false)]
+            [new Classname(self::SUBJECT, false)],
+            [new Classname(self::TARGET, false)]
         );
 
         return new IncludedTraitsRule(
             new StatementBuilder($testParser),
-            new Configuration(false, true, false),
+            new Configuration(false, true, $this->showRuleName),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

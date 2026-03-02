@@ -10,7 +10,7 @@ use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\Special\ClassInvokable;
+use Tests\PHPat\unit\CreatesPhpFile;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -20,12 +20,24 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class InvokableClassTest extends RuleTestCase
 {
-    public const RULE_NAME = 'testFixtureClassShouldNotBeInvokable';
+    use CreatesPhpFile;
+
+    public const RULE_NAME = 'testShouldNotBeInvokable';
+    private const SUBJECT = 'Fixture\ShouldNotBeInvokable\InvokableClassTest\Subject';
 
     public function testRule(): void
     {
-        $this->analyse(['tests/fixtures/Special/ClassInvokable.php'], [
-            [sprintf('%s should not be invokable', ClassInvokable::class), 6],
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldNotBeInvokable\InvokableClassTest;
+            class Subject
+            {
+                public function __invoke() {}
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should not be invokable', self::SUBJECT), 3],
         ]);
     }
 
@@ -35,7 +47,7 @@ class InvokableClassTest extends RuleTestCase
             self::RULE_NAME,
             Constraint::ShouldNot,
             'beInvokable',
-            [new Classname(ClassInvokable::class, false)],
+            [new Classname(self::SUBJECT, false)],
             []
         );
 

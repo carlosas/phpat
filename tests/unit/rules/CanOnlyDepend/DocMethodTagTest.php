@@ -10,17 +10,7 @@ use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\FixtureClass;
-use Tests\PHPat\fixtures\Simple\SimpleClass;
-use Tests\PHPat\fixtures\Simple\SimpleClassFive;
-use Tests\PHPat\fixtures\Simple\SimpleClassFour;
-use Tests\PHPat\fixtures\Simple\SimpleClassSix;
-use Tests\PHPat\fixtures\Simple\SimpleClassThree;
-use Tests\PHPat\fixtures\Simple\SimpleClassTwo;
-use Tests\PHPat\fixtures\Simple\SimpleException;
-use Tests\PHPat\fixtures\Simple\SimpleInterface;
-use Tests\PHPat\fixtures\Special\ClassImplementing;
-use Tests\PHPat\fixtures\Special\InterfaceWithTemplate;
+use Tests\PHPat\unit\CreatesPhpFile;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -30,12 +20,26 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class DocMethodTagTest extends RuleTestCase
 {
-    public const RULE_NAME = 'testFixtureClassCanOnlyDependSimpleAndSpecial';
+    use CreatesPhpFile;
+
+    public const RULE_NAME = 'testCanOnlyDependDocMethodTag';
+    private const SUBJECT = 'Fixture\CanOnlyDepend\DocMethodTagTest\Subject';
+    private const ALLOWED = 'Fixture\CanOnlyDepend\DocMethodTagTest\Allowed';
+    private const TARGET = 'Fixture\CanOnlyDepend\DocMethodTagTest\Target';
 
     public function testRule(): void
     {
-        $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleClassFive::class), 29],
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\CanOnlyDepend\DocMethodTagTest;
+            class Allowed {}
+            class Target {}
+            /** @method Target myMethod() */
+            class Subject {}
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should not depend on %s', self::SUBJECT, self::TARGET), 6],
         ]);
     }
 
@@ -45,18 +49,8 @@ class DocMethodTagTest extends RuleTestCase
             self::RULE_NAME,
             Constraint::CanOnly,
             'depend',
-            [new Classname(FixtureClass::class, false)],
-            [
-                new Classname(SimpleClass::class, false),
-                new Classname(SimpleClassTwo::class, false),
-                new Classname(SimpleClassThree::class, false),
-                new Classname(SimpleClassFour::class, false),
-                new Classname(SimpleClassSix::class, false),
-                new Classname(InterfaceWithTemplate::class, false),
-                new Classname(ClassImplementing::class, false),
-                new Classname(SimpleException::class, false),
-                new Classname(SimpleInterface::class, false),
-            ]
+            [new Classname(self::SUBJECT, false)],
+            [new Classname(self::ALLOWED, false)]
         );
 
         return new DocMethodTagRule(

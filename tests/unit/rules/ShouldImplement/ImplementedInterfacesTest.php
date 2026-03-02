@@ -10,8 +10,7 @@ use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\FixtureClass;
-use Tests\PHPat\fixtures\Simple\SimpleInterfaceTwo;
+use Tests\PHPat\unit\CreatesPhpFile;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -21,12 +20,41 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class ImplementedInterfacesTest extends RuleTestCase
 {
-    public const RULE_NAME = 'testFixtureClassShouldImplementSimpleInterfaceTwo';
+    use CreatesPhpFile;
+
+    public const RULE_NAME = 'testShouldImplement';
+    private const SUBJECT = 'Fixture\ShouldImplement\ImplementedInterfacesTest\Subject';
+    private const TARGET = 'Fixture\ShouldImplement\ImplementedInterfacesTest\Target';
+
+    private bool $showRuleName = false;
 
     public function testRule(): void
     {
-        $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should implement %s', FixtureClass::class, SimpleInterfaceTwo::class), 29],
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldImplement\ImplementedInterfacesTest;
+            interface Target {}
+            class Subject {}
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should implement %s', self::SUBJECT, self::TARGET), 4],
+        ]);
+    }
+
+    public function testRuleWithRuleName(): void
+    {
+        $this->showRuleName = true;
+
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldImplement\ImplementedInterfacesTest;
+            interface Target {}
+            class Subject {}
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s: %s should implement %s', self::RULE_NAME, self::SUBJECT, self::TARGET), 4],
         ]);
     }
 
@@ -36,13 +64,13 @@ class ImplementedInterfacesTest extends RuleTestCase
             self::RULE_NAME,
             Constraint::Should,
             'implement',
-            [new Classname(FixtureClass::class, false)],
-            [new Classname(SimpleInterfaceTwo::class, false)]
+            [new Classname(self::SUBJECT, false)],
+            [new Classname(self::TARGET, false)]
         );
 
         return new ImplementedInterfacesRule(
             new StatementBuilder($testParser),
-            new Configuration(false, true, false),
+            new Configuration(false, true, $this->showRuleName),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

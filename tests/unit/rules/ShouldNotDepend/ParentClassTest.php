@@ -10,8 +10,7 @@ use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\FixtureClass;
-use Tests\PHPat\fixtures\Simple\SimpleAbstractClass;
+use Tests\PHPat\unit\CreatesPhpFile;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -21,12 +20,23 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class ParentClassTest extends RuleTestCase
 {
-    public const RULE_NAME = 'testFixtureClassShouldNotDependSimpleAndSpecial';
+    use CreatesPhpFile;
+
+    public const RULE_NAME = 'testShouldNotDependParentClass';
+    private const SUBJECT = 'Fixture\ShouldNotDepend\ParentClassTest\Subject';
+    private const TARGET = 'Fixture\ShouldNotDepend\ParentClassTest\Target';
 
     public function testRule(): void
     {
-        $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleAbstractClass::class), 29],
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldNotDepend\ParentClassTest;
+            class Target {}
+            class Subject extends Target {}
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should not depend on %s', self::SUBJECT, self::TARGET), 4],
         ]);
     }
 
@@ -36,8 +46,8 @@ class ParentClassTest extends RuleTestCase
             self::RULE_NAME,
             Constraint::ShouldNot,
             'depend',
-            [new Classname(FixtureClass::class, false)],
-            [new Classname(SimpleAbstractClass::class, false)]
+            [new Classname(self::SUBJECT, false)],
+            [new Classname(self::TARGET, false)]
         );
 
         return new ParentClassRule(

@@ -10,8 +10,7 @@ use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\FixtureClass;
-use Tests\PHPat\fixtures\Simple\SimpleAbstractClassTwo;
+use Tests\PHPat\unit\CreatesPhpFile;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -21,12 +20,41 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class ParentClassTest extends RuleTestCase
 {
-    public const RULE_NAME = 'testFixtureClassShouldExtendSimpleAbstractClassTwo';
+    use CreatesPhpFile;
+
+    public const RULE_NAME = 'testShouldExtend';
+    private const SUBJECT = 'Fixture\ShouldExtend\ParentClassTest\Subject';
+    private const TARGET = 'Fixture\ShouldExtend\ParentClassTest\Target';
+
+    private bool $showRuleName = false;
 
     public function testRule(): void
     {
-        $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should extend %s', FixtureClass::class, SimpleAbstractClassTwo::class), 29],
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldExtend\ParentClassTest;
+            class Target {}
+            class Subject {}
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should extend %s', self::SUBJECT, self::TARGET), 4],
+        ]);
+    }
+
+    public function testRuleWithRuleName(): void
+    {
+        $this->showRuleName = true;
+
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldExtend\ParentClassTest;
+            class Target {}
+            class Subject {}
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s: %s should extend %s', self::RULE_NAME, self::SUBJECT, self::TARGET), 4],
         ]);
     }
 
@@ -36,13 +64,13 @@ class ParentClassTest extends RuleTestCase
             self::RULE_NAME,
             Constraint::Should,
             'extend',
-            [new Classname(FixtureClass::class, false)],
-            [new Classname(SimpleAbstractClassTwo::class, false)]
+            [new Classname(self::SUBJECT, false)],
+            [new Classname(self::TARGET, false)]
         );
 
         return new ParentClassRule(
             new StatementBuilder($testParser),
-            new Configuration(false, true, false),
+            new Configuration(false, true, $this->showRuleName),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

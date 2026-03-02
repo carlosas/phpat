@@ -10,8 +10,7 @@ use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\Simple\SimpleAttribute;
-use Tests\PHPat\fixtures\Simple\SimpleClass;
+use Tests\PHPat\unit\CreatesPhpFile;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -21,13 +20,24 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class SimpleClassAttributeTest extends RuleTestCase
 {
-    public const RULE_NAME = 'testSimpleClassShouldApplySimpleAttribute';
+    use CreatesPhpFile;
+
+    public const RULE_NAME = 'testShouldApplyAttributeSimple';
+    private const SUBJECT = 'Fixture\ShouldApplyAttribute\SimpleClassAttributeTest\Subject';
+    private const TARGET = 'Fixture\ShouldApplyAttribute\SimpleClassAttributeTest\Target';
 
     public function testRule(): void
     {
-        $this->analyse(['tests/fixtures/Simple/SimpleClass.php'], [
-            [sprintf('%s should apply the attribute %s', SimpleClass::class, SimpleAttribute::class), 5],
-        ]);
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldApplyAttribute\SimpleClassAttributeTest;
+            #[\Attribute(\Attribute::TARGET_CLASS)]
+            class Target {}
+            #[Target]
+            class Subject {}
+            PHP);
+
+        $this->analyse([$file], []);
     }
 
     protected function getRule(): Rule
@@ -36,8 +46,8 @@ class SimpleClassAttributeTest extends RuleTestCase
             self::RULE_NAME,
             Constraint::Should,
             'applyAttribute',
-            [new Classname(SimpleClass::class, false)],
-            [new Classname(SimpleAttribute::class, false)]
+            [new Classname(self::SUBJECT, false)],
+            [new Classname(self::TARGET, false)]
         );
 
         return new ClassAttributeRule(

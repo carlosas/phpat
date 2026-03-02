@@ -10,7 +10,7 @@ use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\Special\ClassWithMultiplePublicMethodsNoneMatching;
+use Tests\PHPat\unit\CreatesPhpFile;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -20,12 +20,26 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class ClassWithMultiplePublicMethodsNoneMatchingTest extends RuleTestCase
 {
-    public const RULE_NAME = 'testFixtureClassShouldHaveOnlyOnePublicMethodNamed';
+    use CreatesPhpFile;
+
+    public const RULE_NAME = 'testShouldHaveOnlyOnePublicMethodNamed';
+    private const SUBJECT = 'Fixture\ShouldHaveOnlyOnePublicMethodNamed\ClassWithMultiplePublicMethodsNoneMatchingTest\Subject';
 
     public function testRule(): void
     {
-        $this->analyse(['tests/fixtures/Special/ClassWithMultiplePublicMethodsNoneMatching.php'], [
-            [sprintf('%s should have only one public method named %s', ClassWithMultiplePublicMethodsNoneMatching::class, 'targetMethod'), 5],
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldHaveOnlyOnePublicMethodNamed\ClassWithMultiplePublicMethodsNoneMatchingTest;
+            class Subject
+            {
+                public function __construct() {}
+                public function firstMethod(): void {}
+                public function secondMethod(): void {}
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should have only one public method named %s', self::SUBJECT, 'targetMethod'), 3],
         ]);
     }
 
@@ -35,7 +49,7 @@ class ClassWithMultiplePublicMethodsNoneMatchingTest extends RuleTestCase
             self::RULE_NAME,
             Constraint::Should,
             'haveOnlyOnePublicMethodNamed',
-            [new Classname(ClassWithMultiplePublicMethodsNoneMatching::class, false)],
+            [new Classname(self::SUBJECT, false)],
             [],
             [],
             ['name' => 'targetMethod', 'isRegex' => false]

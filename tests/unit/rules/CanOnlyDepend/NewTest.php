@@ -10,10 +10,7 @@ use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\FixtureClass;
-use Tests\PHPat\fixtures\Simple\SimpleClass;
-use Tests\PHPat\fixtures\Simple\SimpleException;
-use Tests\PHPat\fixtures\Special\ClassImplementing;
+use Tests\PHPat\unit\CreatesPhpFile;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -23,13 +20,31 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class NewTest extends RuleTestCase
 {
-    public const RULE_NAME = 'testFixtureClassCanOnlyDependSimpleAndSpecial';
+    use CreatesPhpFile;
+
+    public const RULE_NAME = 'testCanOnlyDependNew';
+    private const SUBJECT = 'Fixture\CanOnlyDepend\NewTest\Subject';
+    private const ALLOWED = 'Fixture\CanOnlyDepend\NewTest\Allowed';
+    private const TARGET = 'Fixture\CanOnlyDepend\NewTest\Target';
 
     public function testRule(): void
     {
-        $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleException::class), 77],
-            [sprintf('%s should not depend on %s', FixtureClass::class, ClassImplementing::class), 80],
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\CanOnlyDepend\NewTest;
+            class Allowed {}
+            class Target {}
+            class Subject
+            {
+                public function create(): Target
+                {
+                    return new Target();
+                }
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should not depend on %s', self::SUBJECT, self::TARGET), 9],
         ]);
     }
 
@@ -39,8 +54,8 @@ class NewTest extends RuleTestCase
             self::RULE_NAME,
             Constraint::CanOnly,
             'depend',
-            [new Classname(FixtureClass::class, false)],
-            [new Classname(SimpleClass::class, false)]
+            [new Classname(self::SUBJECT, false)],
+            [new Classname(self::ALLOWED, false)]
         );
 
         return new NewRule(

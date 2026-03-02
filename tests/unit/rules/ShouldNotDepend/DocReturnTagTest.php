@@ -10,17 +10,7 @@ use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\FixtureClass;
-use Tests\PHPat\fixtures\Simple\SimpleClass;
-use Tests\PHPat\fixtures\Simple\SimpleClassFive;
-use Tests\PHPat\fixtures\Simple\SimpleClassFour;
-use Tests\PHPat\fixtures\Simple\SimpleClassSix;
-use Tests\PHPat\fixtures\Simple\SimpleClassThree;
-use Tests\PHPat\fixtures\Simple\SimpleClassTwo;
-use Tests\PHPat\fixtures\Simple\SimpleException;
-use Tests\PHPat\fixtures\Simple\SimpleInterface;
-use Tests\PHPat\fixtures\Special\ClassImplementing;
-use Tests\PHPat\fixtures\Special\InterfaceWithTemplate;
+use Tests\PHPat\unit\CreatesPhpFile;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -30,12 +20,27 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class DocReturnTagTest extends RuleTestCase
 {
-    public const RULE_NAME = 'testFixtureClassShouldNotDependSimpleAndSpecial';
+    use CreatesPhpFile;
+
+    public const RULE_NAME = 'testShouldNotDependDocReturnTag';
+    private const SUBJECT = 'Fixture\ShouldNotDepend\DocReturnTagTest\Subject';
+    private const TARGET = 'Fixture\ShouldNotDepend\DocReturnTagTest\Target';
 
     public function testRule(): void
     {
-        $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleInterface::class), 72],
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldNotDepend\DocReturnTagTest;
+            class Target {}
+            class Subject
+            {
+                /** @return Target */
+                public function method() {}
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should not depend on %s', self::SUBJECT, self::TARGET), 7],
         ]);
     }
 
@@ -45,19 +50,8 @@ class DocReturnTagTest extends RuleTestCase
             self::RULE_NAME,
             Constraint::ShouldNot,
             'depend',
-            [new Classname(FixtureClass::class, false)],
-            [
-                new Classname(SimpleClass::class, false),
-                new Classname(SimpleClassTwo::class, false),
-                new Classname(SimpleClassThree::class, false),
-                new Classname(SimpleClassFour::class, false),
-                new Classname(SimpleClassFive::class, false),
-                new Classname(SimpleClassSix::class, false),
-                new Classname(InterfaceWithTemplate::class, false),
-                new Classname(ClassImplementing::class, false),
-                new Classname(SimpleException::class, false),
-                new Classname(SimpleInterface::class, false),
-            ]
+            [new Classname(self::SUBJECT, false)],
+            [new Classname(self::TARGET, false)]
         );
 
         return new DocReturnTagRule(

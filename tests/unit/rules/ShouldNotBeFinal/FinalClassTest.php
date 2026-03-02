@@ -10,7 +10,7 @@ use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\Simple\SimpleFinalClass;
+use Tests\PHPat\unit\CreatesPhpFile;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -20,12 +20,37 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class FinalClassTest extends RuleTestCase
 {
-    public const RULE_NAME = 'testSimpleFinalClassShouldNotBeFinal';
+    use CreatesPhpFile;
+
+    public const RULE_NAME = 'testShouldNotBeFinal';
+    private const SUBJECT = 'Fixture\ShouldNotBeFinal\FinalClassTest\Subject';
+
+    private bool $showRuleName = false;
 
     public function testRule(): void
     {
-        $this->analyse(['tests/fixtures/Simple/SimpleFinalClass.php'], [
-            [sprintf('%s should not be final', SimpleFinalClass::class), 5],
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldNotBeFinal\FinalClassTest;
+            final class Subject {}
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should not be final', self::SUBJECT), 3],
+        ]);
+    }
+
+    public function testRuleWithRuleName(): void
+    {
+        $this->showRuleName = true;
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldNotBeFinal\FinalClassTest;
+            final class Subject {}
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s: %s should not be final', self::RULE_NAME, self::SUBJECT), 3],
         ]);
     }
 
@@ -35,13 +60,13 @@ class FinalClassTest extends RuleTestCase
             self::RULE_NAME,
             Constraint::ShouldNot,
             'beFinal',
-            [new Classname(SimpleFinalClass::class, false)],
+            [new Classname(self::SUBJECT, false)],
             []
         );
 
         return new IsFinalRule(
             new StatementBuilder($testParser),
-            new Configuration(false, true, false),
+            new Configuration(false, true, $this->showRuleName),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

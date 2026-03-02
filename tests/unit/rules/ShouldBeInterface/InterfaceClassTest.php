@@ -10,7 +10,7 @@ use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\Simple\SimpleClass;
+use Tests\PHPat\unit\CreatesPhpFile;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -20,12 +20,37 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class InterfaceClassTest extends RuleTestCase
 {
-    public const RULE_NAME = 'testFixtureClassShouldBeInterface';
+    use CreatesPhpFile;
+
+    public const RULE_NAME = 'testShouldBeInterface';
+    private const SUBJECT = 'Fixture\ShouldBeInterface\InterfaceClassTest\Subject';
+
+    private bool $showRuleName = false;
 
     public function testRule(): void
     {
-        $this->analyse(['tests/fixtures/Simple/SimpleClass.php'], [
-            [sprintf('%s should be an interface', SimpleClass::class), 5],
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldBeInterface\InterfaceClassTest;
+            class Subject {}
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should be an interface', self::SUBJECT), 3],
+        ]);
+    }
+
+    public function testRuleWithRuleName(): void
+    {
+        $this->showRuleName = true;
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldBeInterface\InterfaceClassTest;
+            class Subject {}
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s: %s should be an interface', self::RULE_NAME, self::SUBJECT), 3],
         ]);
     }
 
@@ -35,13 +60,13 @@ class InterfaceClassTest extends RuleTestCase
             self::RULE_NAME,
             Constraint::Should,
             'beInterface',
-            [new Classname(SimpleClass::class, false)],
+            [new Classname(self::SUBJECT, false)],
             []
         );
 
         return new IsInterfaceRule(
             new StatementBuilder($testParser),
-            new Configuration(false, true, false),
+            new Configuration(false, true, $this->showRuleName),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

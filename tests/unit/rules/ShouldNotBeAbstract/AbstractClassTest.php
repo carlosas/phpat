@@ -10,7 +10,7 @@ use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\Simple\SimpleAbstractClass;
+use Tests\PHPat\unit\CreatesPhpFile;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -20,12 +20,37 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class AbstractClassTest extends RuleTestCase
 {
-    public const RULE_NAME = 'testSimpleAbstractClassShouldNotBeAbstract';
+    use CreatesPhpFile;
+
+    public const RULE_NAME = 'testShouldNotBeAbstract';
+    private const SUBJECT = 'Fixture\ShouldNotBeAbstract\AbstractClassTest\Subject';
+
+    private bool $showRuleName = false;
 
     public function testRule(): void
     {
-        $this->analyse(['tests/fixtures/Simple/SimpleAbstractClass.php'], [
-            [sprintf('%s should not be abstract', SimpleAbstractClass::class), 5],
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldNotBeAbstract\AbstractClassTest;
+            abstract class Subject {}
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should not be abstract', self::SUBJECT), 3],
+        ]);
+    }
+
+    public function testRuleWithRuleName(): void
+    {
+        $this->showRuleName = true;
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldNotBeAbstract\AbstractClassTest;
+            abstract class Subject {}
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s: %s should not be abstract', self::RULE_NAME, self::SUBJECT), 3],
         ]);
     }
 
@@ -35,13 +60,13 @@ class AbstractClassTest extends RuleTestCase
             self::RULE_NAME,
             Constraint::ShouldNot,
             'beAbstract',
-            [new Classname(SimpleAbstractClass::class, false)],
+            [new Classname(self::SUBJECT, false)],
             []
         );
 
         return new AbstractRule(
             new StatementBuilder($testParser),
-            new Configuration(false, true, false),
+            new Configuration(false, true, $this->showRuleName),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

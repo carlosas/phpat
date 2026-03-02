@@ -10,7 +10,7 @@ use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\FixtureClass;
+use Tests\PHPat\unit\CreatesPhpFile;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -20,12 +20,21 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class ReadonlyClassTest extends RuleTestCase
 {
-    public const RULE_NAME = 'testFixtureClassShouldBeReadonly';
+    use CreatesPhpFile;
+
+    public const RULE_NAME = 'testShouldBeReadonly';
+    private const SUBJECT = 'Fixture\ShouldBeReadonly\ReadonlyClassTest\Subject';
 
     public function testRule(): void
     {
-        $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should be readonly', FixtureClass::class), 29],
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldBeReadonly\ReadonlyClassTest;
+            class Subject {}
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should be readonly', self::SUBJECT), 3],
         ]);
     }
 
@@ -35,7 +44,7 @@ class ReadonlyClassTest extends RuleTestCase
             self::RULE_NAME,
             Constraint::Should,
             'beReadonly',
-            [new Classname(FixtureClass::class, false)],
+            [new Classname(self::SUBJECT, false)],
             []
         );
 

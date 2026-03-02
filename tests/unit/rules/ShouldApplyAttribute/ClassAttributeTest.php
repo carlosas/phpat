@@ -10,8 +10,7 @@ use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\FixtureClass;
-use Tests\PHPat\fixtures\Simple\SimpleAttributeTwo;
+use Tests\PHPat\unit\CreatesPhpFile;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -21,12 +20,24 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class ClassAttributeTest extends RuleTestCase
 {
-    public const RULE_NAME = 'testFixtureClassShouldApplySimpleAttributeTwo';
+    use CreatesPhpFile;
+
+    public const RULE_NAME = 'testShouldApplyAttribute';
+    private const SUBJECT = 'Fixture\ShouldApplyAttribute\ClassAttributeTest\Subject';
+    private const TARGET = 'Fixture\ShouldApplyAttribute\ClassAttributeTest\Target';
 
     public function testRule(): void
     {
-        $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should apply the attribute %s', FixtureClass::class, SimpleAttributeTwo::class), 29],
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldApplyAttribute\ClassAttributeTest;
+            #[\Attribute(\Attribute::TARGET_CLASS)]
+            class Target {}
+            class Subject {}
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should apply the attribute %s', self::SUBJECT, self::TARGET), 5],
         ]);
     }
 
@@ -36,8 +47,8 @@ class ClassAttributeTest extends RuleTestCase
             self::RULE_NAME,
             Constraint::Should,
             'applyAttribute',
-            [new Classname(FixtureClass::class, false)],
-            [new Classname(SimpleAttributeTwo::class, false)]
+            [new Classname(self::SUBJECT, false)],
+            [new Classname(self::TARGET, false)]
         );
 
         return new ClassAttributeRule(

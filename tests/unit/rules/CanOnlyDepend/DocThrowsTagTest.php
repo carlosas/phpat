@@ -10,9 +10,7 @@ use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\FixtureClass;
-use Tests\PHPat\fixtures\Simple\SimpleException;
-use Tests\PHPat\fixtures\Simple\SimpleExceptionTwo;
+use Tests\PHPat\unit\CreatesPhpFile;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -22,12 +20,29 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class DocThrowsTagTest extends RuleTestCase
 {
-    public const RULE_NAME = 'testFixtureClassCanOnlyDependSimpleAndSpecial';
+    use CreatesPhpFile;
+
+    public const RULE_NAME = 'testCanOnlyDependDocThrowsTag';
+    private const SUBJECT = 'Fixture\CanOnlyDepend\DocThrowsTagTest\Subject';
+    private const ALLOWED = 'Fixture\CanOnlyDepend\DocThrowsTagTest\Allowed';
+    private const TARGET = 'Fixture\CanOnlyDepend\DocThrowsTagTest\Target';
 
     public function testRule(): void
     {
-        $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleException::class), 72],
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\CanOnlyDepend\DocThrowsTagTest;
+            class Allowed extends \Exception {}
+            class Target extends \Exception {}
+            class Subject
+            {
+                /** @throws Target */
+                public function method() {}
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should not depend on %s', self::SUBJECT, self::TARGET), 8],
         ]);
     }
 
@@ -37,10 +52,8 @@ class DocThrowsTagTest extends RuleTestCase
             self::RULE_NAME,
             Constraint::CanOnly,
             'depend',
-            [new Classname(FixtureClass::class, false)],
-            [
-                new Classname(SimpleExceptionTwo::class, false),
-            ]
+            [new Classname(self::SUBJECT, false)],
+            [new Classname(self::ALLOWED, false)]
         );
 
         return new DocThrowsTagRule(

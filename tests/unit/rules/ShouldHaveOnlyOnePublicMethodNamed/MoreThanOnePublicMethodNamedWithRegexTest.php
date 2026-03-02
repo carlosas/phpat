@@ -10,7 +10,7 @@ use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\FixtureClass;
+use Tests\PHPat\unit\CreatesPhpFile;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -20,12 +20,26 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class MoreThanOnePublicMethodNamedWithRegexTest extends RuleTestCase
 {
-    public const RULE_NAME = 'testFixtureClassShouldHaveOnlyOnePublicMethodNamed';
+    use CreatesPhpFile;
+
+    public const RULE_NAME = 'testShouldHaveOnlyOnePublicMethodNamed';
+    private const SUBJECT = 'Fixture\ShouldHaveOnlyOnePublicMethodNamed\MoreThanOnePublicMethodNamedWithRegexTest\Subject';
 
     public function testRule(): void
     {
-        // Should succeed as 'foo' is not named like 'ba*'
-        $this->analyse(['tests/fixtures/Special/ClassWithTwoUnrelatedNamedMethods.php'], []);
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldHaveOnlyOnePublicMethodNamed\MoreThanOnePublicMethodNamedWithRegexTest;
+            class Subject
+            {
+                public function bar(): void {}
+                public function foo(): void {}
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should have only one public method named %s', self::SUBJECT, '/^ba[a-zA-Z0-9]+/'), 3],
+        ]);
     }
 
     protected function getRule(): Rule
@@ -34,7 +48,7 @@ class MoreThanOnePublicMethodNamedWithRegexTest extends RuleTestCase
             self::RULE_NAME,
             Constraint::Should,
             'haveOnlyOnePublicMethodNamed',
-            [new Classname(FixtureClass::class, false)],
+            [new Classname(self::SUBJECT, false)],
             [],
             [],
             ['name' => '/^ba[a-zA-Z0-9]+/', 'isRegex' => true]

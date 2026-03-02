@@ -10,8 +10,7 @@ use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\FixtureClass;
-use Tests\PHPat\fixtures\Simple\SimpleAttribute;
+use Tests\PHPat\unit\CreatesPhpFile;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -21,16 +20,50 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class AllAttributesTest extends RuleTestCase
 {
-    public const RULE_NAME = 'testFixtureClassCanOnlyDependSimpleAndSpecial';
+    use CreatesPhpFile;
+
+    public const RULE_NAME = 'testCanOnlyDependAllAttributes';
+    private const SUBJECT = 'Fixture\CanOnlyDepend\AllAttributesTest\Subject';
+    private const ALLOWED = 'Fixture\CanOnlyDepend\AllAttributesTest\Allowed';
+    private const TARGET = 'Fixture\CanOnlyDepend\AllAttributesTest\Target';
+
+    private bool $showRuleName = false;
 
     public function testRule(): void
     {
-        $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class), 29],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class), 33],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class), 34],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class), 94],
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleAttribute::class), 95],
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\CanOnlyDepend\AllAttributesTest;
+            #[\Attribute(\Attribute::TARGET_ALL)]
+            class Allowed {}
+            #[\Attribute(\Attribute::TARGET_ALL)]
+            class Target {}
+            #[Target]
+            class Subject {}
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should not depend on %s', self::SUBJECT, self::TARGET), 7],
+        ]);
+    }
+
+    public function testRuleWithRuleName(): void
+    {
+        $this->showRuleName = true;
+
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\CanOnlyDepend\AllAttributesTest;
+            #[\Attribute(\Attribute::TARGET_ALL)]
+            class Allowed {}
+            #[\Attribute(\Attribute::TARGET_ALL)]
+            class Target {}
+            #[Target]
+            class Subject {}
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s: %s should not depend on %s', self::RULE_NAME, self::SUBJECT, self::TARGET), 7],
         ]);
     }
 
@@ -40,13 +73,13 @@ class AllAttributesTest extends RuleTestCase
             self::RULE_NAME,
             Constraint::CanOnly,
             'depend',
-            [new Classname(FixtureClass::class, false)],
-            [new Classname(\Attribute::class, false)]
+            [new Classname(self::SUBJECT, false)],
+            [new Classname(self::ALLOWED, false)]
         );
 
         return new AllAttributesRule(
             new StatementBuilder($testParser),
-            new Configuration(false, true, false),
+            new Configuration(false, true, $this->showRuleName),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

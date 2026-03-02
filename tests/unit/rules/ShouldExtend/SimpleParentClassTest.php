@@ -10,8 +10,7 @@ use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\Simple\SimpleAbstractClass;
-use Tests\PHPat\fixtures\Simple\SimpleClass;
+use Tests\PHPat\unit\CreatesPhpFile;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -21,13 +20,22 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class SimpleParentClassTest extends RuleTestCase
 {
-    public const RULE_NAME = 'testSimpleClassShouldExtendSimpleAbstractClass';
+    use CreatesPhpFile;
+
+    public const RULE_NAME = 'testShouldExtendSimple';
+    private const SUBJECT = 'Fixture\ShouldExtend\SimpleParentClassTest\Subject';
+    private const TARGET = 'Fixture\ShouldExtend\SimpleParentClassTest\Target';
 
     public function testRule(): void
     {
-        $this->analyse(['tests/fixtures/Simple/SimpleClass.php'], [
-            [sprintf('%s should extend %s', SimpleClass::class, SimpleAbstractClass::class), 5],
-        ]);
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldExtend\SimpleParentClassTest;
+            class Target {}
+            class Subject extends Target {}
+            PHP);
+
+        $this->analyse([$file], []);
     }
 
     protected function getRule(): Rule
@@ -36,8 +44,8 @@ class SimpleParentClassTest extends RuleTestCase
             self::RULE_NAME,
             Constraint::Should,
             'extend',
-            [new Classname(SimpleClass::class, false)],
-            [new Classname(SimpleAbstractClass::class, false)]
+            [new Classname(self::SUBJECT, false)],
+            [new Classname(self::TARGET, false)]
         );
 
         return new ParentClassRule(

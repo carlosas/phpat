@@ -10,8 +10,7 @@ use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\FixtureClass;
-use Tests\PHPat\fixtures\Special\ClassWithStaticMethod;
+use Tests\PHPat\unit\CreatesPhpFile;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -21,12 +20,32 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class StaticCallTest extends RuleTestCase
 {
-    public const RULE_NAME = 'testFixtureClassShouldNotDependSimpleAndSpecial';
+    use CreatesPhpFile;
+
+    public const RULE_NAME = 'testShouldNotDependStaticCall';
+    private const SUBJECT = 'Fixture\ShouldNotDepend\StaticCallTest\Subject';
+    private const TARGET = 'Fixture\ShouldNotDepend\StaticCallTest\Target';
 
     public function testRule(): void
     {
-        $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, ClassWithStaticMethod::class), 59],
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldNotDepend\StaticCallTest;
+            class Target
+            {
+                public static function staticMethod(): void {}
+            }
+            class Subject
+            {
+                public function method(): void
+                {
+                    Target::staticMethod();
+                }
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should not depend on %s', self::SUBJECT, self::TARGET), 11],
         ]);
     }
 
@@ -36,8 +55,8 @@ class StaticCallTest extends RuleTestCase
             self::RULE_NAME,
             Constraint::ShouldNot,
             'depend',
-            [new Classname(FixtureClass::class, false)],
-            [new Classname(ClassWithStaticMethod::class, false)]
+            [new Classname(self::SUBJECT, false)],
+            [new Classname(self::TARGET, false)]
         );
 
         return new StaticMethodRule(

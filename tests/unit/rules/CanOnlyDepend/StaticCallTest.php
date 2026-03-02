@@ -10,9 +10,7 @@ use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\FixtureClass;
-use Tests\PHPat\fixtures\Special\ClassWithStaticMethod;
-use Tests\PHPat\fixtures\Special\ClassWithStaticMethodTwo;
+use Tests\PHPat\unit\CreatesPhpFile;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -22,12 +20,34 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class StaticCallTest extends RuleTestCase
 {
-    public const RULE_NAME = 'testFixtureClassCanOnlyDependSimpleAndSpecial';
+    use CreatesPhpFile;
+
+    public const RULE_NAME = 'testCanOnlyDependStaticCall';
+    private const SUBJECT = 'Fixture\CanOnlyDepend\StaticCallTest\Subject';
+    private const ALLOWED = 'Fixture\CanOnlyDepend\StaticCallTest\Allowed';
+    private const TARGET = 'Fixture\CanOnlyDepend\StaticCallTest\Target';
 
     public function testRule(): void
     {
-        $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, ClassWithStaticMethod::class), 59],
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\CanOnlyDepend\StaticCallTest;
+            class Allowed {}
+            class Target
+            {
+                public static function staticMethod(): void {}
+            }
+            class Subject
+            {
+                public function method(): void
+                {
+                    Target::staticMethod();
+                }
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should not depend on %s', self::SUBJECT, self::TARGET), 12],
         ]);
     }
 
@@ -37,8 +57,8 @@ class StaticCallTest extends RuleTestCase
             self::RULE_NAME,
             Constraint::CanOnly,
             'depend',
-            [new Classname(FixtureClass::class, false)],
-            [new Classname(ClassWithStaticMethodTwo::class, false)]
+            [new Classname(self::SUBJECT, false)],
+            [new Classname(self::ALLOWED, false)]
         );
 
         return new StaticMethodRule(

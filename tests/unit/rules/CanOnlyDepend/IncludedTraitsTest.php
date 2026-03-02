@@ -10,9 +10,7 @@ use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\FixtureClass;
-use Tests\PHPat\fixtures\Simple\SimpleClass;
-use Tests\PHPat\fixtures\Simple\SimpleTrait;
+use Tests\PHPat\unit\CreatesPhpFile;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -22,12 +20,28 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class IncludedTraitsTest extends RuleTestCase
 {
-    public const RULE_NAME = 'testFixtureClassCanOnlyDependSimpleException';
+    use CreatesPhpFile;
+
+    public const RULE_NAME = 'testCanOnlyDependIncludedTraits';
+    private const SUBJECT = 'Fixture\CanOnlyDepend\IncludedTraitsTest\Subject';
+    private const ALLOWED = 'Fixture\CanOnlyDepend\IncludedTraitsTest\Allowed';
+    private const TARGET = 'Fixture\CanOnlyDepend\IncludedTraitsTest\Target';
 
     public function testRule(): void
     {
-        $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, SimpleTrait::class), 29],
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\CanOnlyDepend\IncludedTraitsTest;
+            trait Allowed {}
+            trait Target {}
+            class Subject
+            {
+                use Target;
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should not depend on %s', self::SUBJECT, self::TARGET), 5],
         ]);
     }
 
@@ -37,8 +51,8 @@ class IncludedTraitsTest extends RuleTestCase
             self::RULE_NAME,
             Constraint::CanOnly,
             'depend',
-            [new Classname(FixtureClass::class, false)],
-            [new Classname(SimpleClass::class, false)]
+            [new Classname(self::SUBJECT, false)],
+            [new Classname(self::ALLOWED, false)]
         );
 
         return new IncludedTraitsRule(

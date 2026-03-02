@@ -10,7 +10,7 @@ use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\Ns\Foo\ClassUnderFooNamespace;
+use Tests\PHPat\unit\CreatesPhpFile;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -20,12 +20,19 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class ClassnamespaceTest extends RuleTestCase
 {
-    public const RULE_NAME = 'testFixtureClassUnderNamespaceShouldBeNamed';
+    use CreatesPhpFile;
+
+    public const RULE_NAME = 'testShouldBeNamedNamespace';
 
     public function testRule(): void
     {
-        // Class under FooBar should not subject to the rule
-        $this->analyse(['tests/fixtures/Ns/FooBar/ClassUnderFooBarNamespace.php'], []);
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldBeNamed\ClassnamespaceTest\Other;
+            class OtherClass {}
+            PHP);
+
+        $this->analyse([$file], []);
     }
 
     protected function getRule(): Rule
@@ -34,10 +41,10 @@ class ClassnamespaceTest extends RuleTestCase
             self::RULE_NAME,
             Constraint::Should,
             'beNamed',
-            [new ClassNamespace('Tests\PHPat\fixtures\Ns\Foo', false)],
+            [new ClassNamespace('Fixture\ShouldBeNamed\ClassnamespaceTest\Target', false)],
             [],
             [],
-            ['isRegex' => false, 'classname' => ClassUnderFooNamespace::class]
+            ['isRegex' => false, 'classname' => 'SomeSpecificName']
         );
 
         return new ClassnameRule(

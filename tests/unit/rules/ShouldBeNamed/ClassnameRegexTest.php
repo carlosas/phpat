@@ -10,7 +10,7 @@ use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\FixtureClass;
+use Tests\PHPat\unit\CreatesPhpFile;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
@@ -20,11 +20,20 @@ use Tests\PHPat\unit\FakeTestParser;
  */
 class ClassnameRegexTest extends RuleTestCase
 {
-    public const RULE_NAME = 'testFixtureClassShouldEndWithClass';
+    use CreatesPhpFile;
+
+    public const RULE_NAME = 'testShouldBeNamedRegex';
+    private const SUBJECT = 'Fixture\ShouldBeNamed\ClassnameRegexTest\SubjectClass';
 
     public function testRule(): void
     {
-        $this->analyse(['tests/fixtures/FixtureClass.php'], []);
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldBeNamed\ClassnameRegexTest;
+            class SubjectClass {}
+            PHP);
+
+        $this->analyse([$file], []);
     }
 
     protected function getRule(): Rule
@@ -33,7 +42,7 @@ class ClassnameRegexTest extends RuleTestCase
             self::RULE_NAME,
             Constraint::Should,
             'beNamed',
-            [new Classname(FixtureClass::class, false)],
+            [new Classname(self::SUBJECT, false)],
             [],
             [],
             ['isRegex' => true, 'classname' => '/.*Class$/']

@@ -10,23 +10,42 @@ use PHPat\Statement\StatementBuilder;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use Tests\PHPat\fixtures\FixtureClass;
-use Tests\PHPat\fixtures\Special\ClassWithConstant;
+use Tests\PHPat\unit\CreatesPhpFile;
 use Tests\PHPat\unit\FakeTestParser;
 
 /**
- * @extends RuleTestCase<\PHPat\Rule\Assertion\Relation\ShouldNotDepend\ConstantUseRule>
+ * @extends RuleTestCase<ConstantUseRule>
  * @internal
  * @coversNothing
  */
 class ConstantUseTest extends RuleTestCase
 {
-    public const RULE_NAME = 'testFixtureClassShouldNotDependSimpleAndSpecial';
+    use CreatesPhpFile;
+
+    public const RULE_NAME = 'testShouldNotDependConstantUse';
+    private const SUBJECT = 'Fixture\ShouldNotDepend\ConstantUseTest\Subject';
+    private const TARGET = 'Fixture\ShouldNotDepend\ConstantUseTest\Target';
 
     public function testRule(): void
     {
-        $this->analyse(['tests/fixtures/FixtureClass.php'], [
-            [sprintf('%s should not depend on %s', FixtureClass::class, ClassWithConstant::class), 54],
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldNotDepend\ConstantUseTest;
+            class Target
+            {
+                public const CONSTANT = 'value';
+            }
+            class Subject
+            {
+                public function method(): string
+                {
+                    return Target::CONSTANT;
+                }
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should not depend on %s', self::SUBJECT, self::TARGET), 11],
         ]);
     }
 
@@ -36,8 +55,8 @@ class ConstantUseTest extends RuleTestCase
             self::RULE_NAME,
             Constraint::ShouldNot,
             'depend',
-            [new Classname(FixtureClass::class, false)],
-            [new Classname(ClassWithConstant::class, false)]
+            [new Classname(self::SUBJECT, false)],
+            [new Classname(self::TARGET, false)]
         );
 
         return new ConstantUseRule(
