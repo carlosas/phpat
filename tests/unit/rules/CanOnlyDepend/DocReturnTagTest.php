@@ -26,6 +26,8 @@ class DocReturnTagTest extends RuleTestCase
     private const ALLOWED = 'Fixture\CanOnlyDepend\DocReturnTagTest\Allowed';
     private const TARGET = 'Fixture\CanOnlyDepend\DocReturnTagTest\Target';
 
+    private bool $ignoreDocBlocks = false;
+
     public function testRule(): void
     {
         $file = $this->createPhpFile(<<<'PHP'
@@ -45,6 +47,25 @@ class DocReturnTagTest extends RuleTestCase
         ]);
     }
 
+    public function testRuleIgnoresDocBlocks(): void
+    {
+        $this->ignoreDocBlocks = true;
+
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\CanOnlyDepend\DocReturnTagTest;
+            class Allowed {}
+            class Target {}
+            class Subject
+            {
+                /** @return Target */
+                public function method() {}
+            }
+            PHP);
+
+        $this->analyse([$file], []);
+    }
+
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
@@ -57,7 +78,7 @@ class DocReturnTagTest extends RuleTestCase
 
         return new DocReturnTagRule(
             new StatementBuilder($testParser),
-            new Configuration(false, true, false),
+            new Configuration($this->ignoreDocBlocks, true, false),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

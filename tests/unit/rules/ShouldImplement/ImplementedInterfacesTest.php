@@ -27,6 +27,7 @@ class ImplementedInterfacesTest extends RuleTestCase
 
     public function testRule(): void
     {
+        // Class not implementing — error expected
         $file = $this->createPhpFile(<<<'PHP'
             <?php
             namespace Fixture\ShouldImplement\ImplementedInterfacesTest;
@@ -37,6 +38,34 @@ class ImplementedInterfacesTest extends RuleTestCase
         $this->analyse([$file], [
             [sprintf('%s should implement %s', self::SUBJECT, self::TARGET), 4],
         ]);
+
+        // Class correctly implementing — no errors
+        $subject2 = 'Fixture\ShouldImplement\SimpleImplementedInterfacesTest\Subject';
+        $target2 = 'Fixture\ShouldImplement\SimpleImplementedInterfacesTest\Target';
+
+        $file2 = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldImplement\SimpleImplementedInterfacesTest;
+            interface Target {}
+            class Subject implements Target {}
+            PHP);
+
+        $testParser2 = FakeTestParser::create(
+            'test',
+            Constraint::Should,
+            'implement',
+            [new Classname($subject2, false)],
+            [new Classname($target2, false)]
+        );
+
+        $rule2 = new ImplementedInterfacesRule(
+            new StatementBuilder($testParser2),
+            new Configuration(false, true, false),
+            $this->createReflectionProvider(),
+            self::getContainer()->getByType(FileTypeMapper::class)
+        );
+
+        $this->analyse([$file2], []);
     }
 
     protected function getRule(): Rule

@@ -25,6 +25,8 @@ class DocParamTagTest extends RuleTestCase
     private const SUBJECT = 'Fixture\ShouldNotDepend\DocParamTagTest\Subject';
     private const TARGET = 'Fixture\ShouldNotDepend\DocParamTagTest\Target';
 
+    private bool $ignoreDocBlocks = false;
+
     public function testRule(): void
     {
         $file = $this->createPhpFile(<<<'PHP'
@@ -43,6 +45,24 @@ class DocParamTagTest extends RuleTestCase
         ]);
     }
 
+    public function testRuleIgnoresDocBlocks(): void
+    {
+        $this->ignoreDocBlocks = true;
+
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldNotDepend\DocParamTagTest;
+            class Target {}
+            class Subject
+            {
+                /** @param Target $p */
+                public function method($p) {}
+            }
+            PHP);
+
+        $this->analyse([$file], []);
+    }
+
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
@@ -55,7 +75,7 @@ class DocParamTagTest extends RuleTestCase
 
         return new DocParamTagRule(
             new StatementBuilder($testParser),
-            new Configuration(false, true, false),
+            new Configuration($this->ignoreDocBlocks, true, false),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

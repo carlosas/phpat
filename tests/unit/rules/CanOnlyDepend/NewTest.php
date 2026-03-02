@@ -35,9 +35,9 @@ class NewTest extends RuleTestCase
             class Target {}
             class Subject
             {
-                public function create(): Target
+                public function method(): void
                 {
-                    return new Target();
+                    $a = new Target();
                 }
             }
             PHP);
@@ -45,6 +45,40 @@ class NewTest extends RuleTestCase
         $this->analyse([$file], [
             [sprintf('%s should not depend on %s', self::SUBJECT, self::TARGET), 9],
         ]);
+
+        // With built-in class (should not be reported when ignoreBuiltInClasses is true)
+        $builtInSubject = 'Fixture\CanOnlyDepend\BuiltInNewTest\Subject';
+        $builtInAllowed = 'Fixture\CanOnlyDepend\BuiltInNewTest\Allowed';
+
+        $file2 = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\CanOnlyDepend\BuiltInNewTest;
+            class Allowed {}
+            class Subject
+            {
+                public function method(): \Exception
+                {
+                    return new \Exception();
+                }
+            }
+            PHP);
+
+        $testParser2 = FakeTestParser::create(
+            'test',
+            Constraint::CanOnly,
+            'depend',
+            [new Classname($builtInSubject, false)],
+            [new Classname($builtInAllowed, false)]
+        );
+
+        $rule2 = new NewRule(
+            new StatementBuilder($testParser2),
+            new Configuration(false, false, false),
+            $this->createReflectionProvider(),
+            self::getContainer()->getByType(FileTypeMapper::class)
+        );
+
+        $this->analyse([$file2], []);
     }
 
     protected function getRule(): Rule

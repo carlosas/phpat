@@ -27,6 +27,7 @@ class ClassAttributeTest extends RuleTestCase
 
     public function testRule(): void
     {
+        // Class not applying the attribute — should produce an error
         $file = $this->createPhpFile(<<<'PHP'
             <?php
             namespace Fixture\ShouldApplyAttribute\ClassAttributeTest;
@@ -38,6 +39,36 @@ class ClassAttributeTest extends RuleTestCase
         $this->analyse([$file], [
             [sprintf('%s should apply the attribute %s', self::SUBJECT, self::TARGET), 5],
         ]);
+
+        // Class correctly applying the attribute — no errors
+        $subject2 = 'Fixture\ShouldApplyAttribute\SimpleClassAttributeTest\Subject';
+        $target2 = 'Fixture\ShouldApplyAttribute\SimpleClassAttributeTest\Target';
+
+        $file2 = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldApplyAttribute\SimpleClassAttributeTest;
+            #[\Attribute(\Attribute::TARGET_CLASS)]
+            class Target {}
+            #[Target]
+            class Subject {}
+            PHP);
+
+        $testParser2 = FakeTestParser::create(
+            'test',
+            Constraint::Should,
+            'applyAttribute',
+            [new Classname($subject2, false)],
+            [new Classname($target2, false)]
+        );
+
+        $rule2 = new ClassAttributeRule(
+            new StatementBuilder($testParser2),
+            new Configuration(false, true, false),
+            $this->createReflectionProvider(),
+            self::getContainer()->getByType(FileTypeMapper::class)
+        );
+
+        $this->analyse([$file2], []);
     }
 
     protected function getRule(): Rule

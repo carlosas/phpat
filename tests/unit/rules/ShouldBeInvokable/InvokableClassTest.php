@@ -26,6 +26,7 @@ class InvokableClassTest extends RuleTestCase
 
     public function testRule(): void
     {
+        // Class without __invoke — error expected
         $file = $this->createPhpFile(<<<'PHP'
             <?php
             namespace Fixture\ShouldBeInvokable\InvokableClassTest;
@@ -35,6 +36,35 @@ class InvokableClassTest extends RuleTestCase
         $this->analyse([$file], [
             [sprintf('%s should be invokable', self::SUBJECT), 3],
         ]);
+
+        // Class with __invoke — no errors
+        $subject2 = 'Fixture\ShouldBeInvokable\GoodImplementationInvokableClassTest\Subject';
+
+        $file2 = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldBeInvokable\GoodImplementationInvokableClassTest;
+            class Subject
+            {
+                public function __invoke() {}
+            }
+            PHP);
+
+        $testParser2 = FakeTestParser::create(
+            'test',
+            Constraint::Should,
+            'beInvokable',
+            [new Classname($subject2, false)],
+            []
+        );
+
+        $rule2 = new IsInvokableRule(
+            new StatementBuilder($testParser2),
+            new Configuration(false, true, true),
+            $this->createReflectionProvider(),
+            self::getContainer()->getByType(FileTypeMapper::class)
+        );
+
+        $this->analyse([$file2], []);
     }
 
     protected function getRule(): Rule

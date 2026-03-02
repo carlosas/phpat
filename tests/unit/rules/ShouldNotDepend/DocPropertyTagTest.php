@@ -25,6 +25,8 @@ class DocPropertyTagTest extends RuleTestCase
     private const SUBJECT = 'Fixture\ShouldNotDepend\DocPropertyTagTest\Subject';
     private const TARGET = 'Fixture\ShouldNotDepend\DocPropertyTagTest\Target';
 
+    private bool $ignoreDocBlocks = false;
+
     public function testRule(): void
     {
         $file = $this->createPhpFile(<<<'PHP'
@@ -40,6 +42,21 @@ class DocPropertyTagTest extends RuleTestCase
         ]);
     }
 
+    public function testRuleIgnoresDocBlocks(): void
+    {
+        $this->ignoreDocBlocks = true;
+
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldNotDepend\DocPropertyTagTest;
+            class Target {}
+            /** @property Target $prop */
+            class Subject {}
+            PHP);
+
+        $this->analyse([$file], []);
+    }
+
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
@@ -52,7 +69,7 @@ class DocPropertyTagTest extends RuleTestCase
 
         return new DocPropertyTagRule(
             new StatementBuilder($testParser),
-            new Configuration(false, true, false),
+            new Configuration($this->ignoreDocBlocks, true, false),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

@@ -26,6 +26,8 @@ class DocThrowsTagTest extends RuleTestCase
     private const ALLOWED = 'Fixture\CanOnlyDepend\DocThrowsTagTest\Allowed';
     private const TARGET = 'Fixture\CanOnlyDepend\DocThrowsTagTest\Target';
 
+    private bool $ignoreDocBlocks = false;
+
     public function testRule(): void
     {
         $file = $this->createPhpFile(<<<'PHP'
@@ -45,6 +47,25 @@ class DocThrowsTagTest extends RuleTestCase
         ]);
     }
 
+    public function testRuleIgnoresDocBlocks(): void
+    {
+        $this->ignoreDocBlocks = true;
+
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\CanOnlyDepend\DocThrowsTagTest;
+            class Allowed extends \Exception {}
+            class Target extends \Exception {}
+            class Subject
+            {
+                /** @throws Target */
+                public function method() {}
+            }
+            PHP);
+
+        $this->analyse([$file], []);
+    }
+
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
@@ -57,7 +78,7 @@ class DocThrowsTagTest extends RuleTestCase
 
         return new DocThrowsTagRule(
             new StatementBuilder($testParser),
-            new Configuration(false, true, false),
+            new Configuration($this->ignoreDocBlocks, true, false),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

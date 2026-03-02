@@ -26,6 +26,8 @@ class DocMixinTagTest extends RuleTestCase
     private const ALLOWED = 'Fixture\CanOnlyDepend\DocMixinTagTest\Allowed';
     private const TARGET = 'Fixture\CanOnlyDepend\DocMixinTagTest\Target';
 
+    private bool $ignoreDocBlocks = false;
+
     public function testRule(): void
     {
         $file = $this->createPhpFile(<<<'PHP'
@@ -42,6 +44,22 @@ class DocMixinTagTest extends RuleTestCase
         ]);
     }
 
+    public function testRuleIgnoresDocBlocks(): void
+    {
+        $this->ignoreDocBlocks = true;
+
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\CanOnlyDepend\DocMixinTagTest;
+            class Allowed {}
+            class Target {}
+            /** @mixin Target */
+            class Subject {}
+            PHP);
+
+        $this->analyse([$file], []);
+    }
+
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
@@ -54,7 +72,7 @@ class DocMixinTagTest extends RuleTestCase
 
         return new DocMixinTagRule(
             new StatementBuilder($testParser),
-            new Configuration(false, true, false),
+            new Configuration($this->ignoreDocBlocks, true, false),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

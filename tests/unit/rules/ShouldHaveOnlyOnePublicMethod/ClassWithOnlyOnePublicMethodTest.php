@@ -26,6 +26,7 @@ class ClassWithOnlyOnePublicMethodTest extends RuleTestCase
 
     public function testRule(): void
     {
+        // Class with two public methods — error expected
         $file = $this->createPhpFile(<<<'PHP'
             <?php
             namespace Fixture\ShouldHaveOnlyOnePublicMethod\ClassWithOnlyOnePublicMethodTest;
@@ -39,6 +40,36 @@ class ClassWithOnlyOnePublicMethodTest extends RuleTestCase
         $this->analyse([$file], [
             [sprintf('%s should have only one public method', self::SUBJECT), 3],
         ]);
+
+        // Class with one public and one private method — no errors
+        $subject2 = 'Fixture\ShouldHaveOnlyOnePublicMethod\GoodImplementationClassWithOnlyOnePublicMethodTest\Subject';
+
+        $file2 = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldHaveOnlyOnePublicMethod\GoodImplementationClassWithOnlyOnePublicMethodTest;
+            class Subject
+            {
+                public function doSomething(): void {}
+                private function helper(): void {}
+            }
+            PHP);
+
+        $testParser2 = FakeTestParser::create(
+            'test',
+            Constraint::Should,
+            'haveOnlyOnePublicMethod',
+            [new Classname($subject2, false)],
+            []
+        );
+
+        $rule2 = new HasOnlyOnePublicMethodRule(
+            new StatementBuilder($testParser2),
+            new Configuration(false, true, false),
+            $this->createReflectionProvider(),
+            self::getContainer()->getByType(FileTypeMapper::class)
+        );
+
+        $this->analyse([$file2], []);
     }
 
     protected function getRule(): Rule
