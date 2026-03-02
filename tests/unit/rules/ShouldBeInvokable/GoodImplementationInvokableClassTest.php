@@ -22,7 +22,6 @@ class GoodImplementationInvokableClassTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    public const RULE_NAME = 'testShouldBeInvokable';
     private const SUBJECT = 'Fixture\ShouldBeInvokable\GoodImplementationInvokableClassTest\Subject';
 
     public function testRule(): void
@@ -42,7 +41,7 @@ class GoodImplementationInvokableClassTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            self::RULE_NAME,
+            'test',
             Constraint::Should,
             'beInvokable',
             [new Classname(self::SUBJECT, false)],

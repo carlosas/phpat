@@ -22,7 +22,6 @@ class ClassWithMultiplePublicMethodsTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    public const RULE_NAME = 'testShouldHaveOnlyOnePublicMethodNamed';
     private const SUBJECT = 'Fixture\ShouldHaveOnlyOnePublicMethodNamed\ClassWithMultiplePublicMethodsTest\Subject';
 
     public function testRule(): void
@@ -47,7 +46,7 @@ class ClassWithMultiplePublicMethodsTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            self::RULE_NAME,
+            'test',
             Constraint::Should,
             'haveOnlyOnePublicMethodNamed',
             [new Classname(self::SUBJECT, false)],

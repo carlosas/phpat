@@ -22,7 +22,6 @@ class DocParamTagTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    public const RULE_NAME = 'testCanOnlyDependDocParamTag';
     private const SUBJECT = 'Fixture\CanOnlyDepend\DocParamTagTest\Subject';
     private const ALLOWED = 'Fixture\CanOnlyDepend\DocParamTagTest\Allowed';
     private const TARGET = 'Fixture\CanOnlyDepend\DocParamTagTest\Target';
@@ -49,7 +48,7 @@ class DocParamTagTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            self::RULE_NAME,
+            'test',
             Constraint::CanOnly,
             'depend',
             [new Classname(self::SUBJECT, false)],

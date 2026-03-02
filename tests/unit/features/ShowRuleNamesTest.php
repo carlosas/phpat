@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Tests\PHPat\unit\rules\ShouldInclude;
+namespace Tests\PHPat\unit\features;
 
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\Constraint;
@@ -18,15 +18,20 @@ use Tests\PHPat\unit\FakeTestParser;
  * @internal
  * @coversNothing
  */
-class IncludedTraitsTest extends RuleTestCase
+class ShowRuleNamesTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
+    public const RULE_NAME = 'testShouldInclude';
     private const SUBJECT = 'Fixture\ShouldInclude\IncludedTraitsTest\Subject';
     private const TARGET = 'Fixture\ShouldInclude\IncludedTraitsTest\Target';
 
-    public function testRule(): void
+    private bool $showRuleName = false;
+
+    public function testRuleWithoutRuleName(): void
     {
+        $this->showRuleName = false;
+
         $file = $this->createPhpFile(<<<'PHP'
             <?php
             namespace Fixture\ShouldInclude\IncludedTraitsTest;
@@ -39,10 +44,26 @@ class IncludedTraitsTest extends RuleTestCase
         ]);
     }
 
+    public function testRuleWithRuleName(): void
+    {
+        $this->showRuleName = true;
+
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\ShouldInclude\IncludedTraitsTest;
+            trait Target {}
+            class Subject {}
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s: %s should include %s', self::RULE_NAME, self::SUBJECT, self::TARGET), 4],
+        ]);
+    }
+
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            'test',
+            self::RULE_NAME,
             Constraint::Should,
             'include',
             [new Classname(self::SUBJECT, false)],
@@ -51,7 +72,7 @@ class IncludedTraitsTest extends RuleTestCase
 
         return new IncludedTraitsRule(
             new StatementBuilder($testParser),
-            new Configuration(false, true, false),
+            new Configuration(false, true, $this->showRuleName),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

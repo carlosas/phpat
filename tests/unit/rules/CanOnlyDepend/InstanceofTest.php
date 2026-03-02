@@ -22,7 +22,6 @@ class InstanceofTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    public const RULE_NAME = 'testCanOnlyDependInstanceof';
     private const SUBJECT = 'Fixture\CanOnlyDepend\InstanceofTest\Subject';
     private const ALLOWED = 'Fixture\CanOnlyDepend\InstanceofTest\Allowed';
     private const TARGET = 'Fixture\CanOnlyDepend\InstanceofTest\Target';
@@ -51,7 +50,7 @@ class InstanceofTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            self::RULE_NAME,
+            'test',
             Constraint::CanOnly,
             'depend',
             [new Classname(self::SUBJECT, false)],

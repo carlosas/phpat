@@ -22,7 +22,6 @@ class DocThrowsTagTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    public const RULE_NAME = 'testShouldNotDependDocThrowsTag';
     private const SUBJECT = 'Fixture\ShouldNotDepend\DocThrowsTagTest\Subject';
     private const TARGET = 'Fixture\ShouldNotDepend\DocThrowsTagTest\Target';
 
@@ -47,7 +46,7 @@ class DocThrowsTagTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            self::RULE_NAME,
+            'test',
             Constraint::ShouldNot,
             'depend',
             [new Classname(self::SUBJECT, false)],

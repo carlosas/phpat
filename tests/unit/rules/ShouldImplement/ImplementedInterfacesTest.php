@@ -22,11 +22,8 @@ class ImplementedInterfacesTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    public const RULE_NAME = 'testShouldImplement';
     private const SUBJECT = 'Fixture\ShouldImplement\ImplementedInterfacesTest\Subject';
     private const TARGET = 'Fixture\ShouldImplement\ImplementedInterfacesTest\Target';
-
-    private bool $showRuleName = false;
 
     public function testRule(): void
     {
@@ -42,26 +39,10 @@ class ImplementedInterfacesTest extends RuleTestCase
         ]);
     }
 
-    public function testRuleWithRuleName(): void
-    {
-        $this->showRuleName = true;
-
-        $file = $this->createPhpFile(<<<'PHP'
-            <?php
-            namespace Fixture\ShouldImplement\ImplementedInterfacesTest;
-            interface Target {}
-            class Subject {}
-            PHP);
-
-        $this->analyse([$file], [
-            [sprintf('%s: %s should implement %s', self::RULE_NAME, self::SUBJECT, self::TARGET), 4],
-        ]);
-    }
-
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            self::RULE_NAME,
+            'test',
             Constraint::Should,
             'implement',
             [new Classname(self::SUBJECT, false)],
@@ -70,7 +51,7 @@ class ImplementedInterfacesTest extends RuleTestCase
 
         return new ImplementedInterfacesRule(
             new StatementBuilder($testParser),
-            new Configuration(false, true, $this->showRuleName),
+            new Configuration(false, true, false),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

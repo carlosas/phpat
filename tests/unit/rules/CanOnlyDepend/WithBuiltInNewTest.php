@@ -22,7 +22,6 @@ class WithBuiltInNewTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    public const RULE_NAME = 'testCanOnlyDependWithBuiltInNew';
     private const SUBJECT = 'Fixture\CanOnlyDepend\WithBuiltInNewTest\Subject';
     private const ALLOWED = 'Fixture\CanOnlyDepend\WithBuiltInNewTest\Allowed';
     private const TARGET = 'Exception';
@@ -50,7 +49,7 @@ class WithBuiltInNewTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            self::RULE_NAME,
+            'test',
             Constraint::CanOnly,
             'depend',
             [new Classname(self::SUBJECT, false)],

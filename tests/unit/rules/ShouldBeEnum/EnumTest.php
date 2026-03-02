@@ -22,10 +22,7 @@ class EnumTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    public const RULE_NAME = 'testShouldBeEnum';
     private const SUBJECT = 'Fixture\ShouldBeEnum\EnumTest\Subject';
-
-    private bool $showRuleName = false;
 
     public function testRule(): void
     {
@@ -40,24 +37,10 @@ class EnumTest extends RuleTestCase
         ]);
     }
 
-    public function testRuleWithRuleName(): void
-    {
-        $this->showRuleName = true;
-        $file = $this->createPhpFile(<<<'PHP'
-            <?php
-            namespace Fixture\ShouldBeEnum\EnumTest;
-            class Subject {}
-            PHP);
-
-        $this->analyse([$file], [
-            [sprintf('%s: %s should be enum', self::RULE_NAME, self::SUBJECT), 3],
-        ]);
-    }
-
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            self::RULE_NAME,
+            'test',
             Constraint::Should,
             'beEnum',
             [new Classname(self::SUBJECT, false)],
@@ -66,7 +49,7 @@ class EnumTest extends RuleTestCase
 
         return new IsEnumRule(
             new StatementBuilder($testParser),
-            new Configuration(false, true, $this->showRuleName),
+            new Configuration(false, true, false),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

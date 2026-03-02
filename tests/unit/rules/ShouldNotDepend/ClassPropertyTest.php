@@ -22,7 +22,6 @@ class ClassPropertyTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    public const RULE_NAME = 'testShouldNotDependClassProperty';
     private const SUBJECT = 'Fixture\ShouldNotDepend\ClassPropertyTest\Subject';
     private const TARGET = 'Fixture\ShouldNotDepend\ClassPropertyTest\Target';
 
@@ -46,7 +45,7 @@ class ClassPropertyTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            self::RULE_NAME,
+            'test',
             Constraint::ShouldNot,
             'depend',
             [new Classname(self::SUBJECT, false)],

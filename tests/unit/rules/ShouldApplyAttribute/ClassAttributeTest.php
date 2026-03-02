@@ -22,7 +22,6 @@ class ClassAttributeTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    public const RULE_NAME = 'testShouldApplyAttribute';
     private const SUBJECT = 'Fixture\ShouldApplyAttribute\ClassAttributeTest\Subject';
     private const TARGET = 'Fixture\ShouldApplyAttribute\ClassAttributeTest\Target';
 
@@ -44,7 +43,7 @@ class ClassAttributeTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            self::RULE_NAME,
+            'test',
             Constraint::Should,
             'applyAttribute',
             [new Classname(self::SUBJECT, false)],

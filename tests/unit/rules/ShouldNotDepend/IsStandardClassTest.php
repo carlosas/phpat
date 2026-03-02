@@ -22,7 +22,6 @@ class IsStandardClassTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    public const RULE_NAME = 'testShouldNotDependIsStandardClass';
     private const SUBJECT = 'Fixture\ShouldNotDepend\IsStandardClassTest\Subject';
     private const TARGET = 'Exception';
 
@@ -48,7 +47,7 @@ class IsStandardClassTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            self::RULE_NAME,
+            'test',
             Constraint::ShouldNot,
             'depend',
             [new Classname(self::SUBJECT, false)],

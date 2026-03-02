@@ -22,11 +22,8 @@ class AllAttributeTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    public const RULE_NAME = 'testShouldNotDependAllAttribute';
     private const SUBJECT = 'Fixture\ShouldNotDepend\AllAttributeTest\Subject';
     private const TARGET = 'Fixture\ShouldNotDepend\AllAttributeTest\Target';
-
-    private bool $showRuleName = false;
 
     public function testRule(): void
     {
@@ -44,27 +41,10 @@ class AllAttributeTest extends RuleTestCase
         ]);
     }
 
-    public function testRuleWithRuleName(): void
-    {
-        $this->showRuleName = true;
-        $file = $this->createPhpFile(<<<'PHP'
-            <?php
-            namespace Fixture\ShouldNotDepend\AllAttributeTest;
-            #[\Attribute(\Attribute::TARGET_ALL)]
-            class Target {}
-            #[Target]
-            class Subject {}
-            PHP);
-
-        $this->analyse([$file], [
-            [sprintf('%s: %s should not depend on %s', self::RULE_NAME, self::SUBJECT, self::TARGET), 5],
-        ]);
-    }
-
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            self::RULE_NAME,
+            'test',
             Constraint::ShouldNot,
             'depend',
             [new Classname(self::SUBJECT, false)],
@@ -73,7 +53,7 @@ class AllAttributeTest extends RuleTestCase
 
         return new AllAttributesRule(
             new StatementBuilder($testParser),
-            new Configuration(false, true, $this->showRuleName),
+            new Configuration(false, true, false),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

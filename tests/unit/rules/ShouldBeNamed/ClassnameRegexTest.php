@@ -22,7 +22,6 @@ class ClassnameRegexTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    public const RULE_NAME = 'testShouldBeNamedRegex';
     private const SUBJECT = 'Fixture\ShouldBeNamed\ClassnameRegexTest\SubjectClass';
 
     public function testRule(): void
@@ -39,7 +38,7 @@ class ClassnameRegexTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            self::RULE_NAME,
+            'test',
             Constraint::Should,
             'beNamed',
             [new Classname(self::SUBJECT, false)],

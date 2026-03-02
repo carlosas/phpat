@@ -22,7 +22,6 @@ class ClassPropertyTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    public const RULE_NAME = 'testCanOnlyDependClassProperty';
     private const SUBJECT = 'Fixture\CanOnlyDepend\ClassPropertyTest\Subject';
     private const ALLOWED = 'Fixture\CanOnlyDepend\ClassPropertyTest\Allowed';
     private const TARGET = 'Fixture\CanOnlyDepend\ClassPropertyTest\Target';
@@ -48,7 +47,7 @@ class ClassPropertyTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            self::RULE_NAME,
+            'test',
             Constraint::CanOnly,
             'depend',
             [new Classname(self::SUBJECT, false)],

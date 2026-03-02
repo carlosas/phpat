@@ -22,7 +22,6 @@ class ReadonlyClassTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    public const RULE_NAME = 'testShouldBeReadonly';
     private const SUBJECT = 'Fixture\ShouldBeReadonly\ReadonlyClassTest\Subject';
 
     public function testRule(): void
@@ -41,7 +40,7 @@ class ReadonlyClassTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            self::RULE_NAME,
+            'test',
             Constraint::Should,
             'beReadonly',
             [new Classname(self::SUBJECT, false)],

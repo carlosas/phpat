@@ -22,7 +22,6 @@ class DocMixinTagTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    public const RULE_NAME = 'testShouldNotDependDocMixinTag';
     private const SUBJECT = 'Fixture\ShouldNotDepend\DocMixinTagTest\Subject';
     private const TARGET = 'Fixture\ShouldNotDepend\DocMixinTagTest\Target';
 
@@ -44,7 +43,7 @@ class DocMixinTagTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            self::RULE_NAME,
+            'test',
             Constraint::ShouldNot,
             'depend',
             [new Classname(self::SUBJECT, false)],

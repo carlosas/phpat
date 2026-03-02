@@ -22,7 +22,6 @@ class ShouldNotExistTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    public const RULE_NAME = 'testShouldNotExist';
     private const SUBJECT = 'Fixture\ShouldNotExist\ShouldNotExistTest\Subject';
 
     public function testRule(): void
@@ -41,7 +40,7 @@ class ShouldNotExistTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            self::RULE_NAME,
+            'test',
             Constraint::ShouldNot,
             'exist',
             [new Classname(self::SUBJECT, false)],

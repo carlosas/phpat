@@ -22,7 +22,6 @@ class StaticCallTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    public const RULE_NAME = 'testShouldNotDependStaticCall';
     private const SUBJECT = 'Fixture\ShouldNotDepend\StaticCallTest\Subject';
     private const TARGET = 'Fixture\ShouldNotDepend\StaticCallTest\Target';
 
@@ -52,7 +51,7 @@ class StaticCallTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            self::RULE_NAME,
+            'test',
             Constraint::ShouldNot,
             'depend',
             [new Classname(self::SUBJECT, false)],

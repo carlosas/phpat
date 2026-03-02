@@ -22,7 +22,6 @@ class ParentClassTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    public const RULE_NAME = 'testCanOnlyDependParentClass';
     private const SUBJECT = 'Fixture\CanOnlyDepend\ParentClassTest\Subject';
     private const ALLOWED = 'Fixture\CanOnlyDepend\ParentClassTest\Allowed';
     private const TARGET = 'Fixture\CanOnlyDepend\ParentClassTest\Target';
@@ -45,7 +44,7 @@ class ParentClassTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            self::RULE_NAME,
+            'test',
             Constraint::CanOnly,
             'depend',
             [new Classname(self::SUBJECT, false)],

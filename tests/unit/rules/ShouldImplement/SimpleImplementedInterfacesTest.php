@@ -22,7 +22,6 @@ class SimpleImplementedInterfacesTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    public const RULE_NAME = 'testShouldImplementSimple';
     private const SUBJECT = 'Fixture\ShouldImplement\SimpleImplementedInterfacesTest\Subject';
     private const TARGET = 'Fixture\ShouldImplement\SimpleImplementedInterfacesTest\Target';
 
@@ -41,7 +40,7 @@ class SimpleImplementedInterfacesTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            self::RULE_NAME,
+            'test',
             Constraint::Should,
             'implement',
             [new Classname(self::SUBJECT, false)],

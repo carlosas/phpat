@@ -22,7 +22,6 @@ class DocMethodTagTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    public const RULE_NAME = 'testShouldNotDependDocMethodTag';
     private const SUBJECT = 'Fixture\ShouldNotDepend\DocMethodTagTest\Subject';
     private const TARGET = 'Fixture\ShouldNotDepend\DocMethodTagTest\Target';
 
@@ -44,7 +43,7 @@ class DocMethodTagTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            self::RULE_NAME,
+            'test',
             Constraint::ShouldNot,
             'depend',
             [new Classname(self::SUBJECT, false)],

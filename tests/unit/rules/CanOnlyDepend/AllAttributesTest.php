@@ -22,12 +22,9 @@ class AllAttributesTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    public const RULE_NAME = 'testCanOnlyDependAllAttributes';
     private const SUBJECT = 'Fixture\CanOnlyDepend\AllAttributesTest\Subject';
     private const ALLOWED = 'Fixture\CanOnlyDepend\AllAttributesTest\Allowed';
     private const TARGET = 'Fixture\CanOnlyDepend\AllAttributesTest\Target';
-
-    private bool $showRuleName = false;
 
     public function testRule(): void
     {
@@ -47,30 +44,10 @@ class AllAttributesTest extends RuleTestCase
         ]);
     }
 
-    public function testRuleWithRuleName(): void
-    {
-        $this->showRuleName = true;
-
-        $file = $this->createPhpFile(<<<'PHP'
-            <?php
-            namespace Fixture\CanOnlyDepend\AllAttributesTest;
-            #[\Attribute(\Attribute::TARGET_ALL)]
-            class Allowed {}
-            #[\Attribute(\Attribute::TARGET_ALL)]
-            class Target {}
-            #[Target]
-            class Subject {}
-            PHP);
-
-        $this->analyse([$file], [
-            [sprintf('%s: %s should not depend on %s', self::RULE_NAME, self::SUBJECT, self::TARGET), 7],
-        ]);
-    }
-
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            self::RULE_NAME,
+            'test',
             Constraint::CanOnly,
             'depend',
             [new Classname(self::SUBJECT, false)],
@@ -79,7 +56,7 @@ class AllAttributesTest extends RuleTestCase
 
         return new AllAttributesRule(
             new StatementBuilder($testParser),
-            new Configuration(false, true, $this->showRuleName),
+            new Configuration(false, true, false),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

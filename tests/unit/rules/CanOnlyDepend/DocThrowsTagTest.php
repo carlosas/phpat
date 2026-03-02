@@ -22,7 +22,6 @@ class DocThrowsTagTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    public const RULE_NAME = 'testCanOnlyDependDocThrowsTag';
     private const SUBJECT = 'Fixture\CanOnlyDepend\DocThrowsTagTest\Subject';
     private const ALLOWED = 'Fixture\CanOnlyDepend\DocThrowsTagTest\Allowed';
     private const TARGET = 'Fixture\CanOnlyDepend\DocThrowsTagTest\Target';
@@ -49,7 +48,7 @@ class DocThrowsTagTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            self::RULE_NAME,
+            'test',
             Constraint::CanOnly,
             'depend',
             [new Classname(self::SUBJECT, false)],

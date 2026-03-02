@@ -22,7 +22,6 @@ class ConstantUseTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    public const RULE_NAME = 'testCanOnlyDependConstantUse';
     private const SUBJECT = 'Fixture\CanOnlyDepend\ConstantUseTest\Subject';
     private const ALLOWED = 'Fixture\CanOnlyDepend\ConstantUseTest\Allowed';
     private const TARGET = 'Fixture\CanOnlyDepend\ConstantUseTest\Target';
@@ -54,7 +53,7 @@ class ConstantUseTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            self::RULE_NAME,
+            'test',
             Constraint::CanOnly,
             'depend',
             [new Classname(self::SUBJECT, false)],

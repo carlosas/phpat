@@ -22,7 +22,6 @@ class MethodParamTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    public const RULE_NAME = 'testCanOnlyDependMethodParam';
     private const SUBJECT = 'Fixture\CanOnlyDepend\MethodParamTest\Subject';
     private const ALLOWED = 'Fixture\CanOnlyDepend\MethodParamTest\Allowed';
     private const TARGET = 'Fixture\CanOnlyDepend\MethodParamTest\Target';
@@ -48,7 +47,7 @@ class MethodParamTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            self::RULE_NAME,
+            'test',
             Constraint::CanOnly,
             'depend',
             [new Classname(self::SUBJECT, false)],

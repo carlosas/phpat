@@ -22,7 +22,6 @@ class DocReturnTagTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    public const RULE_NAME = 'testCanOnlyDependDocReturnTag';
     private const SUBJECT = 'Fixture\CanOnlyDepend\DocReturnTagTest\Subject';
     private const ALLOWED = 'Fixture\CanOnlyDepend\DocReturnTagTest\Allowed';
     private const TARGET = 'Fixture\CanOnlyDepend\DocReturnTagTest\Target';
@@ -49,7 +48,7 @@ class DocReturnTagTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            self::RULE_NAME,
+            'test',
             Constraint::CanOnly,
             'depend',
             [new Classname(self::SUBJECT, false)],

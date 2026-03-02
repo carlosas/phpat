@@ -22,7 +22,6 @@ class MoreThanOnePublicMethodNamedWithRegexTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    public const RULE_NAME = 'testShouldHaveOnlyOnePublicMethodNamed';
     private const SUBJECT = 'Fixture\ShouldHaveOnlyOnePublicMethodNamed\MoreThanOnePublicMethodNamedWithRegexTest\Subject';
 
     public function testRule(): void
@@ -45,7 +44,7 @@ class MoreThanOnePublicMethodNamedWithRegexTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            self::RULE_NAME,
+            'test',
             Constraint::Should,
             'haveOnlyOnePublicMethodNamed',
             [new Classname(self::SUBJECT, false)],

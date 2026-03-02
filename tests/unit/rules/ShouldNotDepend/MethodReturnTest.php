@@ -22,7 +22,6 @@ class MethodReturnTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    public const RULE_NAME = 'testShouldNotDependMethodReturn';
     private const SUBJECT = 'Fixture\ShouldNotDepend\MethodReturnTest\Subject';
     private const TARGET = 'Fixture\ShouldNotDepend\MethodReturnTest\Target';
 
@@ -46,7 +45,7 @@ class MethodReturnTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            self::RULE_NAME,
+            'test',
             Constraint::ShouldNot,
             'depend',
             [new Classname(self::SUBJECT, false)],

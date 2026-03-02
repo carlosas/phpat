@@ -22,7 +22,6 @@ class CatchBlockTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    public const RULE_NAME = 'testCanOnlyDependCatchBlock';
     private const SUBJECT = 'Fixture\CanOnlyDepend\CatchBlockTest\Subject';
     private const ALLOWED = 'Fixture\CanOnlyDepend\CatchBlockTest\Allowed';
     private const TARGET = 'Fixture\CanOnlyDepend\CatchBlockTest\Target';
@@ -51,7 +50,7 @@ class CatchBlockTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            self::RULE_NAME,
+            'test',
             Constraint::CanOnly,
             'depend',
             [new Classname(self::SUBJECT, false)],

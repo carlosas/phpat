@@ -22,7 +22,6 @@ class InvokableClassTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    public const RULE_NAME = 'testShouldNotBeInvokable';
     private const SUBJECT = 'Fixture\ShouldNotBeInvokable\InvokableClassTest\Subject';
 
     public function testRule(): void
@@ -44,7 +43,7 @@ class InvokableClassTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            self::RULE_NAME,
+            'test',
             Constraint::ShouldNot,
             'beInvokable',
             [new Classname(self::SUBJECT, false)],

@@ -22,7 +22,6 @@ class IncludedTraitsTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    public const RULE_NAME = 'testCanOnlyDependIncludedTraits';
     private const SUBJECT = 'Fixture\CanOnlyDepend\IncludedTraitsTest\Subject';
     private const ALLOWED = 'Fixture\CanOnlyDepend\IncludedTraitsTest\Allowed';
     private const TARGET = 'Fixture\CanOnlyDepend\IncludedTraitsTest\Target';
@@ -48,7 +47,7 @@ class IncludedTraitsTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            self::RULE_NAME,
+            'test',
             Constraint::CanOnly,
             'depend',
             [new Classname(self::SUBJECT, false)],

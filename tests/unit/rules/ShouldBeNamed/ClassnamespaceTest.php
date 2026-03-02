@@ -22,8 +22,6 @@ class ClassnamespaceTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    public const RULE_NAME = 'testShouldBeNamedNamespace';
-
     public function testRule(): void
     {
         $file = $this->createPhpFile(<<<'PHP'
@@ -38,7 +36,7 @@ class ClassnamespaceTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            self::RULE_NAME,
+            'test',
             Constraint::Should,
             'beNamed',
             [new ClassNamespace('Fixture\ShouldBeNamed\ClassnamespaceTest\Target', false)],

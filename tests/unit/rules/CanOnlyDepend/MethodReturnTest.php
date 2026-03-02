@@ -22,7 +22,6 @@ class MethodReturnTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    public const RULE_NAME = 'testCanOnlyDependMethodReturn';
     private const SUBJECT = 'Fixture\CanOnlyDepend\MethodReturnTest\Subject';
     private const ALLOWED = 'Fixture\CanOnlyDepend\MethodReturnTest\Allowed';
     private const TARGET = 'Fixture\CanOnlyDepend\MethodReturnTest\Target';
@@ -48,7 +47,7 @@ class MethodReturnTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            self::RULE_NAME,
+            'test',
             Constraint::CanOnly,
             'depend',
             [new Classname(self::SUBJECT, false)],

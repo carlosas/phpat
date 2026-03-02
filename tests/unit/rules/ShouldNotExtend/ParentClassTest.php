@@ -22,11 +22,8 @@ class ParentClassTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    public const RULE_NAME = 'testShouldNotExtend';
     private const SUBJECT = 'Fixture\ShouldNotExtend\ParentClassTest\Subject';
     private const TARGET = 'Fixture\ShouldNotExtend\ParentClassTest\Target';
-
-    private bool $showRuleName = false;
 
     public function testRule(): void
     {
@@ -42,26 +39,10 @@ class ParentClassTest extends RuleTestCase
         ]);
     }
 
-    public function testRuleWithRuleName(): void
-    {
-        $this->showRuleName = true;
-
-        $file = $this->createPhpFile(<<<'PHP'
-            <?php
-            namespace Fixture\ShouldNotExtend\ParentClassTest;
-            class Target {}
-            class Subject extends Target {}
-            PHP);
-
-        $this->analyse([$file], [
-            [sprintf('%s: %s should not extend %s', self::RULE_NAME, self::SUBJECT, self::TARGET), 4],
-        ]);
-    }
-
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            self::RULE_NAME,
+            'test',
             Constraint::ShouldNot,
             'extend',
             [new Classname(self::SUBJECT, false)],
@@ -70,7 +51,7 @@ class ParentClassTest extends RuleTestCase
 
         return new ParentClassRule(
             new StatementBuilder($testParser),
-            new Configuration(false, true, $this->showRuleName),
+            new Configuration(false, true, false),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

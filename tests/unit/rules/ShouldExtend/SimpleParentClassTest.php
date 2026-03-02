@@ -22,7 +22,6 @@ class SimpleParentClassTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    public const RULE_NAME = 'testShouldExtendSimple';
     private const SUBJECT = 'Fixture\ShouldExtend\SimpleParentClassTest\Subject';
     private const TARGET = 'Fixture\ShouldExtend\SimpleParentClassTest\Target';
 
@@ -41,7 +40,7 @@ class SimpleParentClassTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            self::RULE_NAME,
+            'test',
             Constraint::Should,
             'extend',
             [new Classname(self::SUBJECT, false)],

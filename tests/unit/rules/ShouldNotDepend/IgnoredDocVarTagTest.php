@@ -22,7 +22,6 @@ class IgnoredDocVarTagTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    public const RULE_NAME = 'testShouldNotDependIgnoredDocVarTag';
     private const SUBJECT = 'Fixture\ShouldNotDepend\IgnoredDocVarTagTest\Subject';
     private const TARGET = 'Fixture\ShouldNotDepend\IgnoredDocVarTagTest\Target';
 
@@ -45,7 +44,7 @@ class IgnoredDocVarTagTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            self::RULE_NAME,
+            'test',
             Constraint::ShouldNot,
             'depend',
             [new Classname(self::SUBJECT, false)],

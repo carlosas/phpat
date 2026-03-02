@@ -22,7 +22,6 @@ class DirectInterfacesTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    public const RULE_NAME = 'testCanOnlyDependDirectInterfaces';
     private const SUBJECT = 'Fixture\CanOnlyDepend\DirectInterfacesTest\Subject';
     private const ALLOWED = 'Fixture\CanOnlyDepend\DirectInterfacesTest\Allowed';
     private const TARGET = 'Fixture\CanOnlyDepend\DirectInterfacesTest\Target';
@@ -45,7 +44,7 @@ class DirectInterfacesTest extends RuleTestCase
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            self::RULE_NAME,
+            'test',
             Constraint::CanOnly,
             'depend',
             [new Classname(self::SUBJECT, false)],

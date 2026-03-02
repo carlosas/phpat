@@ -22,10 +22,7 @@ class AbstractClassTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    public const RULE_NAME = 'testShouldBeAbstract';
     private const SUBJECT = 'Fixture\ShouldBeAbstract\AbstractClassTest\Subject';
-
-    private bool $showRuleName = false;
 
     public function testRule(): void
     {
@@ -40,24 +37,10 @@ class AbstractClassTest extends RuleTestCase
         ]);
     }
 
-    public function testRuleWithRuleName(): void
-    {
-        $this->showRuleName = true;
-        $file = $this->createPhpFile(<<<'PHP'
-            <?php
-            namespace Fixture\ShouldBeAbstract\AbstractClassTest;
-            class Subject {}
-            PHP);
-
-        $this->analyse([$file], [
-            [sprintf('%s: %s should be abstract', self::RULE_NAME, self::SUBJECT), 3],
-        ]);
-    }
-
     protected function getRule(): Rule
     {
         $testParser = FakeTestParser::create(
-            self::RULE_NAME,
+            'test',
             Constraint::Should,
             'beAbstract',
             [new Classname(self::SUBJECT, false)],
@@ -66,7 +49,7 @@ class AbstractClassTest extends RuleTestCase
 
         return new AbstractRule(
             new StatementBuilder($testParser),
-            new Configuration(false, true, $this->showRuleName),
+            new Configuration(false, true, false),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );
