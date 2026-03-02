@@ -3,20 +3,24 @@
 namespace Tests\PHPat\unit\selectors;
 
 use PHPat\Selector\IsReadonly;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
  *
  * @covers \PHPat\Selector\IsReadonly
  */
-class IsReadonlyTest extends TestCase
+class IsReadonlyTest extends SelectorTestCase
 {
     public function testMatchesReadonly(): void
     {
+        if (PHP_VERSION_ID < 80200) {
+            $this->markTestSkipped('Readonly classes are only available in PHP 8.2+');
+        }
+
+        require_once __DIR__.'/ReadonlyFixture.php';
+
         $selector = new IsReadonly();
-        $classReflection = $this->createMock(\ReflectionClass::class);
-        $classReflection->method('isReadOnly')->willReturn(true);
+        $classReflection = $this->getReflectionClass(ReadonlyDummyClassValid::class);
 
         self::assertTrue($selector->matches($classReflection));
     }
@@ -24,8 +28,7 @@ class IsReadonlyTest extends TestCase
     public function testDoesNotMatchNonReadonly(): void
     {
         $selector = new IsReadonly();
-        $classReflection = $this->createMock(\ReflectionClass::class);
-        $classReflection->method('isReadOnly')->willReturn(false);
+        $classReflection = $this->getReflectionClass(DummyClassInvalid::class);
 
         self::assertFalse($selector->matches($classReflection));
     }

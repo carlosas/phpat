@@ -3,14 +3,13 @@
 namespace Tests\PHPat\unit\selectors;
 
 use PHPat\Selector\Filepath;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
  *
  * @covers \PHPat\Selector\Filepath
  */
-class FilepathTest extends TestCase
+class FilepathTest extends SelectorTestCase
 {
     public function testGetName(): void
     {
@@ -21,36 +20,34 @@ class FilepathTest extends TestCase
 
     public function testMatchesFilepath(): void
     {
-        $selector = new Filepath('src/User.php', false);
-        $classReflection = $this->createMock(\ReflectionClass::class);
-        $classReflection->method('getFileName')->willReturn('src/User.php');
+        $path = realpath(__DIR__.'/Fixtures.php');
+        $selector = new Filepath($path, false);
+        $classReflection = $this->getReflectionClass(DummyClassValid::class);
 
         self::assertTrue($selector->matches($classReflection));
     }
 
     public function testDoesNotMatchDifferentFilepath(): void
     {
-        $selector = new Filepath('src/User.php', false);
-        $classReflection = $this->createMock(\ReflectionClass::class);
-        $classReflection->method('getFileName')->willReturn('src/Admin.php');
+        $selector = new Filepath('src/Admin.php', false);
+        $classReflection = $this->getReflectionClass(DummyClassValid::class);
 
         self::assertFalse($selector->matches($classReflection));
     }
 
     public function testHandlesFalseFilepath(): void
     {
+        // Internal classes like stdClass don't have a filepath (getFileName returns null)
         $selector = new Filepath('src/User.php', false);
-        $classReflection = $this->createMock(\ReflectionClass::class);
-        $classReflection->method('getFileName')->willReturn(false);
+        $classReflection = $this->getReflectionClass(\stdClass::class);
 
         self::assertFalse($selector->matches($classReflection));
     }
 
     public function testMatchesRegex(): void
     {
-        $selector = new Filepath('/\.php$/', true);
-        $classReflection = $this->createMock(\ReflectionClass::class);
-        $classReflection->method('getFileName')->willReturn('src/User.php');
+        $selector = new Filepath('/Fixtures\.php$/', true);
+        $classReflection = $this->getReflectionClass(DummyClassValid::class);
 
         self::assertTrue($selector->matches($classReflection));
     }

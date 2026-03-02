@@ -2,6 +2,8 @@
 
 namespace PHPat\Selector;
 
+use PHPStan\Reflection\ClassReflection;
+
 final class IsError implements SelectorInterface
 {
     public function getName(): string
@@ -12,7 +14,10 @@ final class IsError implements SelectorInterface
     /**
      * @param \ReflectionClass<object> $classReflection
      */
-    public function matches(\ReflectionClass $classReflection): bool
+    /**
+     * @param ClassReflection $classReflection
+     */
+    public function matches($classReflection): bool
     {
         return $classReflection->isSubclassOf(\Error::class);
     }

@@ -90,9 +90,7 @@ abstract class RelationAssertion implements Assertion
         foreach ($nodes as $node) {
             $class = $scope->getClassReflection();
 
-            /** @var \ReflectionClass<object> $nativeReflection */
-            $nativeReflection = $class->getNativeReflection();
-            if (!(new Classname($node, false))->matches($nativeReflection)) {
+            if (!(new Classname($node, false))->matches($class)) {
                 return true;
             }
         }
@@ -114,15 +112,11 @@ abstract class RelationAssertion implements Assertion
         }
 
         foreach ($this->statements as $statement) {
-            /** @var \ReflectionClass<object> $nativeReflection */
-            $nativeReflection = $subject->getNativeReflection();
-            if ($subject->isBuiltin() || !$statement->subject->matches($nativeReflection)) {
+            if ($subject->isBuiltin() || !$statement->subject->matches($subject)) {
                 continue;
             }
             foreach ($statement->subjectExcludes as $exclude) {
-                /** @var \ReflectionClass<object> $nativeReflection */
-                $nativeReflection = $subject->getNativeReflection();
-                if ($exclude->matches($nativeReflection)) {
+                if ($exclude->matches($subject)) {
                     continue 2;
                 }
             }
@@ -274,16 +268,12 @@ abstract class RelationAssertion implements Assertion
 
         $class = $this->reflectionProvider->getClass($classname);
 
-        /** @var \ReflectionClass<object> $nativeReflection */
-        $nativeReflection = $class->getNativeReflection();
-        if (!$target->matches($nativeReflection)) {
+        if (!$target->matches($class)) {
             return false;
         }
 
         foreach ($targetExcludes as $exclude) {
-            /** @var \ReflectionClass<object> $nativeReflection */
-            $nativeReflection = $class->getNativeReflection();
-            if ($exclude->matches($nativeReflection)) {
+            if ($exclude->matches($class)) {
                 return false;
             }
         }

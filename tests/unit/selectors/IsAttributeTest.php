@@ -3,29 +3,26 @@
 namespace Tests\PHPat\unit\selectors;
 
 use PHPat\Selector\IsAttribute;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
  *
  * @covers \PHPat\Selector\IsAttribute
  */
-class IsAttributeTest extends TestCase
+class IsAttributeTest extends SelectorTestCase
 {
     public function testMatchesAttribute(): void
     {
         $selector = new IsAttribute();
-        $classReflection = $this->createMock(\ReflectionClass::class);
-        $classReflection->method('getAttributes')->with(\Attribute::class)->willReturn([$this->createMock(\ReflectionAttribute::class)]);
+        $classReflection = $this->getReflectionClass(MyAttribute::class);
 
         self::assertTrue($selector->matches($classReflection));
     }
 
-    public function testDoesNotMatchNonAttribute(): void
+    public function testDoesNotMatchClass(): void
     {
         $selector = new IsAttribute();
-        $classReflection = $this->createMock(\ReflectionClass::class);
-        $classReflection->method('getAttributes')->with(\Attribute::class)->willReturn([]);
+        $classReflection = $this->getReflectionClass(DummyClassInvalid::class);
 
         self::assertFalse($selector->matches($classReflection));
     }

@@ -3,29 +3,26 @@
 namespace Tests\PHPat\unit\selectors;
 
 use PHPat\Selector\IsAbstract;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
  *
  * @covers \PHPat\Selector\IsAbstract
  */
-class IsAbstractTest extends TestCase
+class IsAbstractTest extends SelectorTestCase
 {
-    public function testMatchesAbstract(): void
+    public function testMatchesAbstractClass(): void
     {
         $selector = new IsAbstract();
-        $classReflection = $this->createMock(\ReflectionClass::class);
-        $classReflection->method('isAbstract')->willReturn(true);
+        $classReflection = $this->getReflectionClass(AbstractDummyClassValid::class);
 
         self::assertTrue($selector->matches($classReflection));
     }
 
-    public function testDoesNotMatchConcrete(): void
+    public function testDoesNotMatchNonAbstractClass(): void
     {
         $selector = new IsAbstract();
-        $classReflection = $this->createMock(\ReflectionClass::class);
-        $classReflection->method('isAbstract')->willReturn(false);
+        $classReflection = $this->getReflectionClass(DummyClassInvalid::class);
 
         self::assertFalse($selector->matches($classReflection));
     }

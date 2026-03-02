@@ -3,29 +3,26 @@
 namespace Tests\PHPat\unit\selectors;
 
 use PHPat\Selector\IsFinal;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
  *
  * @covers \PHPat\Selector\IsFinal
  */
-class IsFinalTest extends TestCase
+class IsFinalTest extends SelectorTestCase
 {
-    public function testMatchesFinal(): void
+    public function testMatchesFinalClass(): void
     {
         $selector = new IsFinal();
-        $classReflection = $this->createMock(\ReflectionClass::class);
-        $classReflection->method('isFinal')->willReturn(true);
+        $classReflection = $this->getReflectionClass(FinalDummyClassValid::class);
 
         self::assertTrue($selector->matches($classReflection));
     }
 
-    public function testDoesNotMatchNonFinal(): void
+    public function testDoesNotMatchNonFinalClass(): void
     {
         $selector = new IsFinal();
-        $classReflection = $this->createMock(\ReflectionClass::class);
-        $classReflection->method('isFinal')->willReturn(false);
+        $classReflection = $this->getReflectionClass(DummyClassInvalid::class);
 
         self::assertFalse($selector->matches($classReflection));
     }

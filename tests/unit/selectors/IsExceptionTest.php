@@ -3,20 +3,18 @@
 namespace Tests\PHPat\unit\selectors;
 
 use PHPat\Selector\IsException;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
  *
  * @covers \PHPat\Selector\IsException
  */
-class IsExceptionTest extends TestCase
+class IsExceptionTest extends SelectorTestCase
 {
     public function testMatchesExceptionSubclass(): void
     {
         $selector = new IsException();
-        $classReflection = $this->createMock(\ReflectionClass::class);
-        $classReflection->method('isSubclassOf')->with(\Exception::class)->willReturn(true);
+        $classReflection = $this->getReflectionClass(ExceptionDummyClassValid::class);
 
         self::assertTrue($selector->matches($classReflection));
     }
@@ -24,8 +22,7 @@ class IsExceptionTest extends TestCase
     public function testDoesNotMatchDifferentClass(): void
     {
         $selector = new IsException();
-        $classReflection = $this->createMock(\ReflectionClass::class);
-        $classReflection->method('isSubclassOf')->with(\Exception::class)->willReturn(false);
+        $classReflection = $this->getReflectionClass(DummyClassInvalid::class);
 
         self::assertFalse($selector->matches($classReflection));
     }

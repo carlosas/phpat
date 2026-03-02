@@ -2,6 +2,8 @@
 
 namespace PHPat\Selector;
 
+use PHPStan\Reflection\ClassReflection;
+
 final class ClassImplements implements SelectorInterface
 {
     private string $classname;
@@ -24,7 +26,10 @@ final class ClassImplements implements SelectorInterface
     /**
      * @param \ReflectionClass<object> $classReflection
      */
-    public function matches(\ReflectionClass $classReflection): bool
+    /**
+     * @param ClassReflection $classReflection
+     */
+    public function matches($classReflection): bool
     {
         if ($this->isRegex) {
             return $this->matchesRegex($classReflection->getInterfaces());
@@ -34,7 +39,7 @@ final class ClassImplements implements SelectorInterface
     }
 
     /**
-     * @param array<string, \ReflectionClass<object>> $interfaces
+     * @param array<string, ClassReflection> $interfaces
      */
     private function matchesRegex(array $interfaces): bool
     {

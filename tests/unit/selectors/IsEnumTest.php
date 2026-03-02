@@ -3,20 +3,18 @@
 namespace Tests\PHPat\unit\selectors;
 
 use PHPat\Selector\IsEnum;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
  *
  * @covers \PHPat\Selector\IsEnum
  */
-class IsEnumTest extends TestCase
+class IsEnumTest extends SelectorTestCase
 {
     public function testMatchesEnum(): void
     {
         $selector = new IsEnum();
-        $classReflection = $this->createMock(\ReflectionClass::class);
-        $classReflection->method('isEnum')->willReturn(true);
+        $classReflection = $this->getReflectionClass(EnumDummyClassValid::class);
 
         self::assertTrue($selector->matches($classReflection));
     }
@@ -24,8 +22,7 @@ class IsEnumTest extends TestCase
     public function testDoesNotMatchNonEnum(): void
     {
         $selector = new IsEnum();
-        $classReflection = $this->createMock(\ReflectionClass::class);
-        $classReflection->method('isEnum')->willReturn(false);
+        $classReflection = $this->getReflectionClass(DummyClassInvalid::class);
 
         self::assertFalse($selector->matches($classReflection));
     }

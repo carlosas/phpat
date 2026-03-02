@@ -3,25 +3,18 @@
 namespace Tests\PHPat\unit\selectors;
 
 use PHPat\Selector\AppliesAttribute;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
  *
  * @covers \PHPat\Selector\AppliesAttribute
  */
-class AppliesAttributeTest extends TestCase
+class AppliesAttributeTest extends SelectorTestCase
 {
     public function testMatchesAttribute(): void
     {
-        $selector = new AppliesAttribute('App\MyAttribute', false);
-        $classReflection = $this->createMock(\ReflectionClass::class);
-
-        $attr = $this->createMock(\ReflectionAttribute::class);
-        $attr->method('getName')->willReturn('App\MyAttribute');
-        $attr->method('getArguments')->willReturn([]);
-
-        $classReflection->method('getAttributes')->willReturn([$attr]);
+        $selector = new AppliesAttribute(MyAttribute::class, false);
+        $classReflection = $this->getReflectionClass(AttributeDummyClassValid::class);
 
         self::assertTrue($selector->matches($classReflection));
     }
@@ -29,26 +22,15 @@ class AppliesAttributeTest extends TestCase
     public function testDoesNotMatchDifferentAttribute(): void
     {
         $selector = new AppliesAttribute('App\MyAttribute', false);
-        $classReflection = $this->createMock(\ReflectionClass::class);
-
-        $attr = $this->createMock(\ReflectionAttribute::class);
-        $attr->method('getName')->willReturn('App\OtherAttribute');
-
-        $classReflection->method('getAttributes')->willReturn([$attr]);
+        $classReflection = $this->getReflectionClass(AttributeDummyClassValid::class);
 
         self::assertFalse($selector->matches($classReflection));
     }
 
     public function testMatchesRegex(): void
     {
-        $selector = new AppliesAttribute('/^App\\\/', true);
-        $classReflection = $this->createMock(\ReflectionClass::class);
-
-        $attr = $this->createMock(\ReflectionAttribute::class);
-        $attr->method('getName')->willReturn('App\MyAttribute');
-        $attr->method('getArguments')->willReturn([]);
-
-        $classReflection->method('getAttributes')->willReturn([$attr]);
+        $selector = new AppliesAttribute('/^Tests\\\PHPat\\\unit\\\selectors\\\MyAttribute/', true);
+        $classReflection = $this->getReflectionClass(AttributeDummyClassValid::class);
 
         self::assertTrue($selector->matches($classReflection));
     }

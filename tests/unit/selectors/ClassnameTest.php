@@ -3,54 +3,49 @@
 namespace Tests\PHPat\unit\selectors;
 
 use PHPat\Selector\Classname;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
  *
  * @covers \PHPat\Selector\Classname
  */
-class ClassnameTest extends TestCase
+class ClassnameTest extends SelectorTestCase
 {
     public function testGetName(): void
     {
-        $selector = new Classname('App\User', false);
+        $selector = new Classname(DummyClassValid::class, false);
 
-        $this->assertEquals('App\User', $selector->getName());
+        $this->assertEquals(DummyClassValid::class, $selector->getName());
     }
 
     public function testMatchesExactName(): void
     {
-        $selector = new Classname('App\User', false);
-        $classReflection = $this->createMock(\ReflectionClass::class);
-        $classReflection->method('getName')->willReturn('App\User');
+        $selector = new Classname(DummyClassValid::class, false);
+        $classReflection = $this->getReflectionClass(DummyClassValid::class);
 
         self::assertTrue($selector->matches($classReflection));
     }
 
     public function testMatchesExactNameWithLeadingBackslash(): void
     {
-        $selector = new Classname('\App\User', false);
-        $classReflection = $this->createMock(\ReflectionClass::class);
-        $classReflection->method('getName')->willReturn('App\User');
+        $selector = new Classname('\\'.DummyClassValid::class, false);
+        $classReflection = $this->getReflectionClass(DummyClassValid::class);
 
         self::assertTrue($selector->matches($classReflection));
     }
 
     public function testDoesNotMatchDifferentName(): void
     {
-        $selector = new Classname('App\User', false);
-        $classReflection = $this->createMock(\ReflectionClass::class);
-        $classReflection->method('getName')->willReturn('App\Admin');
+        $selector = new Classname(DummyClassValid::class, false);
+        $classReflection = $this->getReflectionClass(DummyClassInvalid::class);
 
         self::assertFalse($selector->matches($classReflection));
     }
 
     public function testMatchesRegex(): void
     {
-        $selector = new Classname('/^App\\\/', true);
-        $classReflection = $this->createMock(\ReflectionClass::class);
-        $classReflection->method('getName')->willReturn('App\User');
+        $selector = new Classname('/^Tests\\\PHPat\\\unit\\\selectors\\\DummyClass/', true);
+        $classReflection = $this->getReflectionClass(DummyClassValid::class);
 
         self::assertTrue($selector->matches($classReflection));
     }
@@ -58,8 +53,7 @@ class ClassnameTest extends TestCase
     public function testDoesNotMatchRegex(): void
     {
         $selector = new Classname('/^Vendor\\\/', true);
-        $classReflection = $this->createMock(\ReflectionClass::class);
-        $classReflection->method('getName')->willReturn('App\User');
+        $classReflection = $this->getReflectionClass(DummyClassValid::class);
 
         self::assertFalse($selector->matches($classReflection));
     }

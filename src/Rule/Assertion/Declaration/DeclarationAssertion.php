@@ -44,15 +44,11 @@ abstract class DeclarationAssertion implements Assertion
         $applicableStatements = array_filter(
             $this->statements,
             static function (Statement $statement) use ($subject): bool {
-                /** @var \ReflectionClass<object> $nativeReflection */
-                $nativeReflection = $subject->getNativeReflection();
-                if ($subject->isBuiltin() || !$statement->subject->matches($nativeReflection)) {
+                if ($subject->isBuiltin() || !$statement->subject->matches($subject)) {
                     return false;
                 }
                 foreach ($statement->subjectExcludes as $exclude) {
-                    /** @var \ReflectionClass<object> $nativeReflection */
-                    $nativeReflection = $subject->getNativeReflection();
-                    if ($exclude->matches($nativeReflection)) {
+                    if ($exclude->matches($subject)) {
                         return false;
                     }
                 }

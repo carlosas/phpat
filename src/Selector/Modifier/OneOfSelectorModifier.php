@@ -3,6 +3,7 @@
 namespace PHPat\Selector\Modifier;
 
 use PHPat\Selector\SelectorInterface;
+use PHPStan\Reflection\ClassReflection;
 
 final class OneOfSelectorModifier implements SelectorInterface
 {
@@ -25,7 +26,10 @@ final class OneOfSelectorModifier implements SelectorInterface
     /**
      * @param \ReflectionClass<object> $classReflection
      */
-    public function matches(\ReflectionClass $classReflection): bool
+    /**
+     * @param ClassReflection $classReflection
+     */
+    public function matches($classReflection): bool
     {
         $matches = 0;
         foreach ($this->selectors as $selector) {

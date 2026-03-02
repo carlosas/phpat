@@ -2,6 +2,8 @@
 
 namespace PHPat\Selector;
 
+use PHPStan\Reflection\ClassReflection;
+
 interface SelectorInterface
 {
     /**
@@ -10,7 +12,10 @@ interface SelectorInterface
     /**
      * @param \ReflectionClass<object> $classReflection
      */
-    public function matches(\ReflectionClass $classReflection): bool;
+    /**
+     * @param ClassReflection $classReflection
+     */
+    public function matches($classReflection): bool;
 
     public function getName(): string;
 }

@@ -2,6 +2,8 @@
 
 namespace PHPat\Selector;
 
+use PHPStan\Reflection\ClassReflection;
+
 final class ClassIncludes implements SelectorInterface
 {
     private string $traitname;
@@ -24,7 +26,10 @@ final class ClassIncludes implements SelectorInterface
     /**
      * @param \ReflectionClass<object> $classReflection
      */
-    public function matches(\ReflectionClass $classReflection): bool
+    /**
+     * @param ClassReflection $classReflection
+     */
+    public function matches($classReflection): bool
     {
         $traits = $this->getAllTraits($classReflection);
 
@@ -42,7 +47,7 @@ final class ClassIncludes implements SelectorInterface
     }
 
     /**
-     * @param array<string, \ReflectionClass<object>> $traits
+     * @param array<string, ClassReflection> $traits
      */
     private function matchesRegex(array $traits): bool
     {
@@ -56,10 +61,10 @@ final class ClassIncludes implements SelectorInterface
     }
 
     /**
-     * @param  \ReflectionClass<object>                $classReflection
-     * @return array<string, \ReflectionClass<object>>
+     * @param  ClassReflection                $classReflection
+     * @return array<string, ClassReflection>
      */
-    private function getAllTraits(\ReflectionClass $classReflection): array
+    private function getAllTraits($classReflection): array
     {
         $traits = [];
 
@@ -69,7 +74,7 @@ final class ClassIncludes implements SelectorInterface
         }
 
         $parent = $classReflection->getParentClass();
-        if ($parent !== false) {
+        if ($parent !== null) {
             $traits = array_merge($traits, $this->getAllTraits($parent));
         }
 

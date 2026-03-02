@@ -3,14 +3,13 @@
 namespace Tests\PHPat\unit\selectors;
 
 use PHPat\Selector\All;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
  *
  * @covers \PHPat\Selector\All
  */
-class AllTest extends TestCase
+class AllTest extends SelectorTestCase
 {
     public function testGetName(): void
     {
@@ -25,8 +24,7 @@ class AllTest extends TestCase
     public function testMatches(string $className): void
     {
         $selector = new All();
-        $classReflection = $this->createMock(\ReflectionClass::class);
-        $classReflection->method('getName')->willReturn($className);
+        $classReflection = $this->getReflectionClass($className);
 
         self::assertTrue($selector->matches($classReflection));
     }
@@ -34,9 +32,8 @@ class AllTest extends TestCase
     public static function getClassNames(): array
     {
         return [
-            ['App\User'],
+            [DummyClassValid::class],
             ['stdClass'],
-            [''],
         ];
     }
 }

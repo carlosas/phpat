@@ -3,20 +3,18 @@
 namespace Tests\PHPat\unit\selectors;
 
 use PHPat\Selector\IsError;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
  *
  * @covers \PHPat\Selector\IsError
  */
-class IsErrorTest extends TestCase
+class IsErrorTest extends SelectorTestCase
 {
     public function testMatchesErrorSubclass(): void
     {
         $selector = new IsError();
-        $classReflection = $this->createMock(\ReflectionClass::class);
-        $classReflection->method('isSubclassOf')->with(\Error::class)->willReturn(true);
+        $classReflection = $this->getReflectionClass(ErrorDummyClassValid::class);
 
         self::assertTrue($selector->matches($classReflection));
     }
@@ -24,8 +22,7 @@ class IsErrorTest extends TestCase
     public function testDoesNotMatchDifferentClass(): void
     {
         $selector = new IsError();
-        $classReflection = $this->createMock(\ReflectionClass::class);
-        $classReflection->method('isSubclassOf')->with(\Error::class)->willReturn(false);
+        $classReflection = $this->getReflectionClass(DummyClassInvalid::class);
 
         self::assertFalse($selector->matches($classReflection));
     }

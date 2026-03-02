@@ -3,14 +3,13 @@
 namespace Tests\PHPat\unit\selectors;
 
 use PHPat\Selector\IsStandardClass;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
  *
  * @covers \PHPat\Selector\IsStandardClass
  */
-class IsStandardClassTest extends TestCase
+class IsStandardClassTest extends SelectorTestCase
 {
     public function testGetName(): void
     {
@@ -25,8 +24,7 @@ class IsStandardClassTest extends TestCase
     public function testMatchesBuiltInClasses(string $className): void
     {
         $selector = new IsStandardClass();
-        $classReflection = $this->createMock(\ReflectionClass::class);
-        $classReflection->method('getName')->willReturn($className);
+        $classReflection = $this->getReflectionClass($className);
 
         self::assertTrue($selector->matches($classReflection));
     }
@@ -53,9 +51,10 @@ class IsStandardClassTest extends TestCase
      */
     public function testDoesNotMatchUserDefinedClasses(string $className): void
     {
+        // For testing "doesn't match", the actual name here doesn't matter inside the dummy class,
+        // it just needs to be a valid ClassReflection object of a non-standard class.
         $selector = new IsStandardClass();
-        $classReflection = $this->createMock(\ReflectionClass::class);
-        $classReflection->method('getName')->willReturn($className);
+        $classReflection = $this->getReflectionClass(DummyClassInvalid::class);
 
         self::assertFalse($selector->matches($classReflection));
     }

@@ -2,6 +2,8 @@
 
 namespace PHPat\Selector;
 
+use PHPStan\Reflection\ClassReflection;
+
 final class ClassNamespace implements SelectorInterface
 {
     private string $namespace;
@@ -21,7 +23,10 @@ final class ClassNamespace implements SelectorInterface
     /**
      * @param \ReflectionClass<object> $classReflection
      */
-    public function matches(\ReflectionClass $classReflection): bool
+    /**
+     * @param ClassReflection $classReflection
+     */
+    public function matches($classReflection): bool
     {
         $namespace = \extractNamespaceFromFQCN($classReflection->getName());
 

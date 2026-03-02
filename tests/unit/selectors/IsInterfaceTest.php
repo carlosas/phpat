@@ -3,20 +3,18 @@
 namespace Tests\PHPat\unit\selectors;
 
 use PHPat\Selector\IsInterface;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
  *
  * @covers \PHPat\Selector\IsInterface
  */
-class IsInterfaceTest extends TestCase
+class IsInterfaceTest extends SelectorTestCase
 {
     public function testMatchesInterface(): void
     {
         $selector = new IsInterface();
-        $classReflection = $this->createMock(\ReflectionClass::class);
-        $classReflection->method('isInterface')->willReturn(true);
+        $classReflection = $this->getReflectionClass(InterfaceDummyClassValid::class);
 
         self::assertTrue($selector->matches($classReflection));
     }
@@ -24,8 +22,7 @@ class IsInterfaceTest extends TestCase
     public function testDoesNotMatchClass(): void
     {
         $selector = new IsInterface();
-        $classReflection = $this->createMock(\ReflectionClass::class);
-        $classReflection->method('isInterface')->willReturn(false);
+        $classReflection = $this->getReflectionClass(DummyClassInvalid::class);
 
         self::assertFalse($selector->matches($classReflection));
     }
