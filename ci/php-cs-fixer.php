@@ -6,9 +6,7 @@ $finder = PhpCsFixer\Finder::create()
         dirname(__DIR__) . '/tests/architecture',
         dirname(__DIR__) . '/tests/unit',
     ])
-    ->exclude([
-        'unit/selectors/ReadonlyFixture.php',
-    ]);
+    ->notPath('unit/selectors/ReadonlyFixture.php');
 
 $rules = [
     '@PER-CS' => true,
