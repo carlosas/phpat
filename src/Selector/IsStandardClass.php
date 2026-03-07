@@ -12,7 +12,10 @@ final class IsStandardClass implements SelectorInterface
         return '-standard classes-';
     }
 
-    public function matches(ClassReflection $classReflection): bool
+    /**
+     * @param ClassReflection $classReflection
+     */
+    public function matches($classReflection): bool
     {
         return in_array($classReflection->getName(), BuiltInClasses::PHP_BUILT_IN_CLASSES, true);
     }

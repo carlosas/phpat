@@ -23,7 +23,10 @@ final class ClassImplements implements SelectorInterface
         return $this->classname;
     }
 
-    public function matches(ClassReflection $classReflection): bool
+    /**
+     * @param ClassReflection $classReflection
+     */
+    public function matches($classReflection): bool
     {
         if ($this->isRegex) {
             return $this->matchesRegex($classReflection->getInterfaces());
@@ -33,7 +36,7 @@ final class ClassImplements implements SelectorInterface
     }
 
     /**
-     * @param array<ClassReflection> $interfaces
+     * @param array<string, ClassReflection> $interfaces
      */
     private function matchesRegex(array $interfaces): bool
     {

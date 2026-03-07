@@ -20,7 +20,10 @@ final class Filepath implements SelectorInterface
         return $this->filepath;
     }
 
-    public function matches(ClassReflection $classReflection): bool
+    /**
+     * @param ClassReflection $classReflection
+     */
+    public function matches($classReflection): bool
     {
         $filepath = $classReflection->getFileName();
 
@@ -32,6 +35,6 @@ final class Filepath implements SelectorInterface
             return preg_match($this->filepath, $filepath) === 1;
         }
 
-        return $filepath === \trimSeparators($this->filepath);
+        return $filepath === $this->filepath;
     }
 }

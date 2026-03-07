@@ -11,7 +11,10 @@ final class IsThrowable implements SelectorInterface
         return '-all throwables-';
     }
 
-    public function matches(ClassReflection $classReflection): bool
+    /**
+     * @param ClassReflection $classReflection
+     */
+    public function matches($classReflection): bool
     {
         return $classReflection->implementsInterface(\Throwable::class);
     }

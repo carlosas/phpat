@@ -27,7 +27,10 @@ final class AtMostCountOfSelectorModifier implements SelectorInterface
         );
     }
 
-    public function matches(ClassReflection $classReflection): bool
+    /**
+     * @param ClassReflection $classReflection
+     */
+    public function matches($classReflection): bool
     {
         $matches = 0;
         foreach ($this->selectors as $selector) {

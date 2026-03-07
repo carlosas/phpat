@@ -23,9 +23,18 @@ final class ClassExtends implements SelectorInterface
         return $this->classname;
     }
 
-    public function matches(ClassReflection $classReflection): bool
+    /**
+     * @param ClassReflection $classReflection
+     */
+    public function matches($classReflection): bool
     {
-        $parents = $classReflection->getParents();
+        $parents = [];
+        $parent = $classReflection->getParentClass();
+        while ($parent !== null) {
+            $parents[] = $parent;
+            $parent = $parent->getParentClass();
+        }
+
         if (empty($parents)) {
             return false;
         }

@@ -20,7 +20,10 @@ final class ClassNamespace implements SelectorInterface
         return $this->namespace;
     }
 
-    public function matches(ClassReflection $classReflection): bool
+    /**
+     * @param ClassReflection $classReflection
+     */
+    public function matches($classReflection): bool
     {
         $namespace = \extractNamespaceFromFQCN($classReflection->getName());
 

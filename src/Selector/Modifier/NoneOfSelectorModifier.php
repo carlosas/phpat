@@ -23,7 +23,10 @@ final class NoneOfSelectorModifier implements SelectorInterface
         );
     }
 
-    public function matches(ClassReflection $classReflection): bool
+    /**
+     * @param ClassReflection $classReflection
+     */
+    public function matches($classReflection): bool
     {
         foreach ($this->selectors as $selector) {
             if ($selector->matches($classReflection)) {

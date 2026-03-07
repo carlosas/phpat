@@ -11,7 +11,10 @@ final class IsFinal implements SelectorInterface
         return '-all final classes-';
     }
 
-    public function matches(ClassReflection $classReflection): bool
+    /**
+     * @param ClassReflection $classReflection
+     */
+    public function matches($classReflection): bool
     {
         return $classReflection->isFinal();
     }

@@ -11,7 +11,10 @@ final class IsNotAbstract implements SelectorInterface
         return '-non abstract classes-';
     }
 
-    public function matches(ClassReflection $classReflection): bool
+    /**
+     * @param ClassReflection $classReflection
+     */
+    public function matches($classReflection): bool
     {
         return !$classReflection->isAbstract();
     }

@@ -23,7 +23,10 @@ final class Classname implements SelectorInterface
         return $this->classname;
     }
 
-    public function matches(ClassReflection $classReflection): bool
+    /**
+     * @param ClassReflection $classReflection
+     */
+    public function matches($classReflection): bool
     {
         if ($this->isRegex) {
             return preg_match($this->classname, $classReflection->getName()) === 1;
