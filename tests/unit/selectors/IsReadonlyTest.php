@@ -20,7 +20,7 @@ class IsReadonlyTest extends SelectorTestCase
         require_once __DIR__.'/ReadonlyFixture.php';
 
         $selector = new IsReadonly();
-        $classReflection = $this->getReflectionClass(ReadonlyDummyClassValid::class);
+        $classReflection = $this->getReflectionClass(ReadonlyFixture::class);
 
         self::assertTrue($selector->matches($classReflection));
     }
