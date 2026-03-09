@@ -67,3 +67,5 @@ You can visit the [Examples](docs/examples.md) section to get some ideas of typi
 ### Sponsors 💙
 
 [![JetBrains](https://resources.jetbrains.com/storage/products/company/brand/logos/jetbrains.svg)](https://jb.gg/OpenSourceSupport)
+
+[![Claude](https://raw.githubusercontent.com/carlosas/phpat/main/docs/assets/claude.png)](https://claude.com/contact-sales/claude-for-oss)
