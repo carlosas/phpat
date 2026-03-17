@@ -13,6 +13,6 @@ final class IsAttribute implements SelectorInterface
 
     public function matches(ClassReflection $classReflection): bool
     {
-        return !empty($classReflection->getNativeReflection()->getAttributes(\Attribute::class));
+        return $classReflection->isAttributeClass();
     }
 }

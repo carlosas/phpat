@@ -25,23 +25,15 @@ final class ClassIncludes implements SelectorInterface
 
     public function matches(ClassReflection $classReflection): bool
     {
-        $traits = $this->getAllTraits($classReflection);
-
         if ($this->isRegex) {
-            return $this->matchesRegex($traits);
+            return $this->matchesRegex($classReflection->getTraits());
         }
 
-        foreach ($traits as $trait) {
-            if ($trait->getName() === trimSeparators($this->traitname)) {
-                return true;
-            }
-        }
-
-        return false;
+        return $classReflection->hasTraitUse($this->traitname);
     }
 
     /**
-     * @param array<string, ClassReflection> $traits
+     * @param array<ClassReflection> $traits
      */
     private function matchesRegex(array $traits): bool
     {
@@ -52,26 +44,5 @@ final class ClassIncludes implements SelectorInterface
         }
 
         return false;
-    }
-
-    /**
-     * @param  ClassReflection                $classReflection
-     * @return array<string, ClassReflection>
-     */
-    private function getAllTraits($classReflection): array
-    {
-        $traits = [];
-
-        foreach ($classReflection->getTraits() as $trait) {
-            $traits[$trait->getName()] = $trait;
-            $traits = array_merge($traits, $this->getAllTraits($trait));
-        }
-
-        $parent = $classReflection->getParentClass();
-        if ($parent !== null) {
-            $traits = array_merge($traits, $this->getAllTraits($parent));
-        }
-
-        return $traits;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace PHPat\Selector;
 
+use PHPStan\BetterReflection\Reflection\ReflectionAttribute;
 use PHPStan\Reflection\ClassReflection;
 
 final class AppliesAttribute implements SelectorInterface
@@ -30,7 +31,7 @@ final class AppliesAttribute implements SelectorInterface
 
     public function matches(ClassReflection $classReflection): bool
     {
-        /** @var list<\ReflectionAttribute<object>> $attributes */
+        /** @var list<ReflectionAttribute> $attributes */
         $attributes = $classReflection->getNativeReflection()->getAttributes();
 
         if ($this->isRegex) {
@@ -53,11 +54,11 @@ final class AppliesAttribute implements SelectorInterface
     }
 
     /**
-     * @param list<\ReflectionAttribute<object>> $attributes
+     * @param list<ReflectionAttribute> $attributes
      */
     private function matchesRegex(array $attributes): bool
     {
-        /** @var \ReflectionAttribute<object> $attribute */
+        /** @var ReflectionAttribute $attribute */
         foreach ($attributes as $attribute) {
             if (preg_match($this->classname, $attribute->getName()) === 1) {
                 $arguments = $attribute->getArguments();
@@ -78,8 +79,14 @@ final class AppliesAttribute implements SelectorInterface
      */
     private function matchesArguments(array $arguments): bool
     {
-        foreach ($this->arguments as $key => $value) {
-            if (!array_key_exists($key, $arguments) || $arguments[$key] !== $value) {
+        $keys = array_intersect_key($arguments, $this->arguments);
+
+        if (count($keys) === 0) {
+            return false;
+        }
+
+        foreach ($keys as $key) {
+            if ($arguments[$key] !== $this->arguments[$key]) {
                 return false;
             }
         }

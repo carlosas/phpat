@@ -32,6 +32,6 @@ final class Filepath implements SelectorInterface
             return preg_match($this->filepath, $filepath) === 1;
         }
 
-        return $filepath === $this->filepath;
+        return $filepath === \trimSeparators($this->filepath);
     }
 }

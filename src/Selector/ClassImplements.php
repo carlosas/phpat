@@ -33,7 +33,7 @@ final class ClassImplements implements SelectorInterface
     }
 
     /**
-     * @param array<string, ClassReflection> $interfaces
+     * @param array<ClassReflection> $interfaces
      */
     private function matchesRegex(array $interfaces): bool
     {
