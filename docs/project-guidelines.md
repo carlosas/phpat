@@ -68,27 +68,28 @@ PHPat hooks into PHPStan as a set of registered rules. When PHPStan analyses a f
 
 3. **Statement Building**: `StatementBuilder` (`src/Statement//StatementBuilder.php`) wraps parsed rules and creates the appropriate `Statement` (DTO with Subject, Target, Excludes, Tip, etc.) for each PHPStan rule class.
 
-4. **Assertion Execution**: Each assertion class (e.g., `ShouldNotDepend\MethodParamRule`) is a PHPStan rule that fires on a specific AST node type. It extracts class names from the node, then validates against the statements built from test rules.
+4. **Assertion Execution**: Each assertion class (e.g., `Depend\MethodParamRule`) is a PHPStan rule that fires on a specific AST node type. It extracts class names from the node, then validates against the statements built from test rules.
 
 ### Fluent Builder API
 
 Users build rules using a fluent API starting from `PHPat::rule()`:
 
 ```
-PHPat::rule()                    # SubjectStep
-  ->classes(Selector::...)       # SubjectExcludeOrAssertionStep
-  ->excluding(Selector::...)     # (optional) SubjectExcludeOrAssertionStep
-  ->shouldNotDependOn()          # TargetStep (relation rules) or TipOrBuildStep (declaration rules)
-  ->classes(Selector::...)       # TargetExcludeOrBuildStep (relation rules)
-  ->excluding(Selector::...)     # (optional) TargetExcludeOrBuildStep (relation rules)
-  ->because('reason')            # (optional) explanation/tip
+PHPat::rule()                    # returns SubjectStep
+  ->classes(Selector::...)       # returns SubjectExcludeOrConstraintStep
+  ->excluding(Selector::...)     # (optional) returns ConstraintStep
+  ->shouldNot()                  # returns ShouldStep/ShouldNotStep/CanOnlyStep
+  ->dependOn()                   # returns TargetStep (for relation assertions) or TipOrBuildStep (for declaration assertions)
+  ->classes(Selector::...)       # returns TargetExcludeOrTipOrBuildStep (for relation assertions)
+  ->excluding(Selector::...)     # (optional) returns TipOrBuildStep (for relation assertions)
+  ->because('reason')            # (optional) returns Rule
 ```
 
 Builder steps live in `src/Test/Builder/`. The methods set their rule option and return the next step's class.
 
 ### Assertions (Two Categories)
 
-**Relation assertions** (`src/Rule/Assertion/Relation/`) check relationships between classes. For each assertion type (e.g., `ShouldNotDepend`, `CanOnlyDepend`), there are many concrete `*Rule` classes — one per AST node type being checked (e.g., `MethodParamRule`, `CatchBlockRule`, `ClassPropertyRule`, `DocParamTagRule`, etc.). Each is registered separately in `extension.neon` as a PHPStan rule.
+**Relation assertions** (`src/Rule/Assertion/Relation/`) check relationships between classes. For each assertion type (e.g., `Depend`, `Extend`, `Implement`, `Include`), there are many concrete `*Rule` classes — one per AST node type being checked (e.g., `MethodParamRule`, `CatchBlockRule`, `ClassPropertyRule`, `DocParamTagRule`, etc.). Each is registered separately in `extension.neon` as a PHPStan rule.
 
 **Declaration assertions** (`src/Rule/Assertion/Declaration/`) check properties of classes themselves (abstract, final, readonly, interface, etc.). Each assertion type typically has one `*Rule` class.
 

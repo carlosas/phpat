@@ -6,10 +6,10 @@ use PHPat\Selector\SelectorInterface;
 
 class SubjectStep extends AbstractStep
 {
-    public function classes(SelectorInterface ...$selectors): SubjectExcludeOrAssertionStep
+    public function classes(SelectorInterface ...$selectors): SubjectExcludeOrConstraintStep
     {
         $this->rule->subjects = $selectors;
 
-        return new SubjectExcludeOrAssertionStep($this->rule);
+        return new SubjectExcludeOrConstraintStep($this->rule);
     }
 }

@@ -4,7 +4,7 @@ namespace PHPat\Test\Builder;
 
 use PHPat\Selector\SelectorInterface;
 
-class TargetExcludeOrBuildStep extends TipOrBuildStep
+class TargetExcludeOrTipOrBuildStep extends TipOrBuildStep
 {
     public function excluding(SelectorInterface ...$selectors): TipOrBuildStep
     {

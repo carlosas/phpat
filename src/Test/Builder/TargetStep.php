@@ -6,10 +6,10 @@ use PHPat\Selector\SelectorInterface;
 
 class TargetStep extends AbstractStep
 {
-    public function classes(SelectorInterface ...$selectors): TargetExcludeOrBuildStep
+    public function classes(SelectorInterface ...$selectors): TargetExcludeOrTipOrBuildStep
     {
         $this->rule->targets = $selectors;
 
-        return new TargetExcludeOrBuildStep($this->rule);
+        return new TargetExcludeOrTipOrBuildStep($this->rule);
     }
 }

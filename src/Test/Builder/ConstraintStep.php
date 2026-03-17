@@ -4,7 +4,7 @@ namespace PHPat\Test\Builder;
 
 use PHPat\Rule\Assertion\Constraint;
 
-class AssertionStep extends AbstractStep
+class ConstraintStep extends AbstractStep
 {
     public function should(): ShouldStep
     {
