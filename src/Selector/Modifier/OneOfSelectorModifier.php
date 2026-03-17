@@ -19,7 +19,7 @@ final class OneOfSelectorModifier implements SelectorInterface
     {
         return \sprintf(
             'one of: [ %s ]',
-            \implode(' and ', \array_map(static fn($selector) => $selector->getName(), $this->selectors)),
+            \implode(' and ', \array_map(static fn ($selector) => $selector->getName(), $this->selectors)),
         );
     }
 

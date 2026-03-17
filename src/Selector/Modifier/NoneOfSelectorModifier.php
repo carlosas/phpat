@@ -19,7 +19,7 @@ final class NoneOfSelectorModifier implements SelectorInterface
     {
         return \sprintf(
             'none of: %s',
-            \implode(' and ', \array_map(static fn($selector) => $selector->getName(), $this->selectors)),
+            \implode(' and ', \array_map(static fn ($selector) => $selector->getName(), $this->selectors)),
         );
     }
 

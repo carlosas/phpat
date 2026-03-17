@@ -30,7 +30,7 @@ final class AndModifier implements SelectorInterface
     {
         return implode(
             ':and:',
-            array_map(fn(SelectorInterface $selector) => $selector->getName(), $this->selectors),
+            array_map(fn (SelectorInterface $selector) => $selector->getName(), $this->selectors),
         );
     }
 }

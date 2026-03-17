@@ -23,7 +23,7 @@ final class AtMostCountOfSelectorModifier implements SelectorInterface
         return \sprintf(
             'at most %d of %s',
             $this->count,
-            \implode(' and ', \array_map(static fn($selector) => $selector->getName(), $this->selectors)),
+            \implode(' and ', \array_map(static fn ($selector) => $selector->getName(), $this->selectors)),
         );
     }
 

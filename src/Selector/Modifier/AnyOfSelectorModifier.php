@@ -17,7 +17,7 @@ final class AnyOfSelectorModifier implements SelectorInterface
 
     public function getName(): string
     {
-        return \implode(' or ', \array_map(static fn($selector) => $selector->getName(), $this->selectors));
+        return \implode(' or ', \array_map(static fn ($selector) => $selector->getName(), $this->selectors));
     }
 
     public function matches(ClassReflection $classReflection): bool
