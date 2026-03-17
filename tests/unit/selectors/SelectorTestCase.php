@@ -18,7 +18,7 @@ abstract class SelectorTestCase extends TestCase
             if (PHP_VERSION_ID >= 80200) {
                 require_once __DIR__.'/ReadonlyFixture.php';
             }
-            $factory = new ContainerFactory(getcwd());
+            $factory = new ContainerFactory(dirname(__DIR__, 3));
             $container = $factory->create(sys_get_temp_dir(), [__DIR__.'/../../../ci/phpstan-phpat.neon'], []);
             self::$reflectionProvider = $container->getByType(ReflectionProvider::class);
         }
