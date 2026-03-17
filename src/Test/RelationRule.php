@@ -2,8 +2,7 @@
 
 namespace PHPat\Test;
 
-use PHPat\Rule\Assertion\Declaration\DeclarationAssertion;
-use PHPat\Rule\Assertion\Relation\RelationAssertion;
+use PHPat\Rule\Assertion\Constraint;
 use PHPat\Selector\SelectorInterface;
 
 final class RelationRule implements Rule
@@ -20,8 +19,9 @@ final class RelationRule implements Rule
     /** @var array<SelectorInterface> */
     public array $targetExcludes = [];
 
-    /** @var null|class-string<DeclarationAssertion>|class-string<RelationAssertion> */
-    public ?string $assertion = null;
+    public ?Constraint $constraint = null;
+
+    public ?string $assertionType = null;
 
     public string $ruleName = '';
 
@@ -31,12 +31,14 @@ final class RelationRule implements Rule
     /** @var array<string, mixed> */
     public array $params = [];
 
-    /**
-     * @return null|class-string<DeclarationAssertion>|class-string<RelationAssertion>
-     */
-    public function getAssertion(): ?string
+    public function getConstraint(): ?Constraint
     {
-        return $this->assertion;
+        return $this->constraint;
+    }
+
+    public function getAssertionType(): ?string
+    {
+        return $this->assertionType;
     }
 
     public function getSubjects(): array

@@ -4,13 +4,13 @@ namespace PHPat\Rule\Assertion\Declaration;
 
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\Assertion;
+use PHPat\Rule\Assertion\Constraint;
 use PHPat\Statement\Statement;
 use PHPat\Statement\StatementBuilder;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Rules\RuleError;
+use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\FileTypeMapper;
 
 abstract class DeclarationAssertion implements Assertion
@@ -21,17 +21,14 @@ abstract class DeclarationAssertion implements Assertion
     protected ReflectionProvider $reflectionProvider;
     protected FileTypeMapper $fileTypeMapper;
 
-    /**
-     * @param class-string<DeclarationAssertion> $assertion
-     */
     public function __construct(
-        string $assertion,
+        string $assertionType,
         StatementBuilder $statementBuilder,
         Configuration $configuration,
         ReflectionProvider $reflectionProvider,
         FileTypeMapper $fileTypeMapper
     ) {
-        $this->statements = $statementBuilder->build($assertion);
+        $this->statements = $statementBuilder->build($assertionType);
         $this->configuration = $configuration;
         $this->reflectionProvider = $reflectionProvider;
         $this->fileTypeMapper = $fileTypeMapper;
@@ -64,7 +61,21 @@ abstract class DeclarationAssertion implements Assertion
             $applicableStatements,
             function (array $errors, Statement $statement) use ($node, $scope, $subject): array {
                 $meetsDeclaration = $this->meetsDeclaration($node, $scope, $statement->params);
-                array_push($errors, ...$this->applyValidation($statement->ruleName, $subject, $meetsDeclaration, $statement->tips, $statement->params));
+
+                $shouldError = match ($statement->constraint) {
+                    Constraint::Should => !$meetsDeclaration,
+                    Constraint::ShouldNot => $meetsDeclaration,
+                    default => false,
+                };
+
+                if ($shouldError) {
+                    $message = $this->getMessage($statement->ruleName, $subject->getName(), $statement->constraint, $statement->params);
+                    $ruleError = RuleErrorBuilder::message($message);
+                    foreach ($statement->tips as $tip) {
+                        $ruleError->addTip($tip);
+                    }
+                    $errors[] = $ruleError->identifier('phpat.'.$statement->ruleName)->build();
+                }
 
                 return $errors;
             },
@@ -79,16 +90,13 @@ abstract class DeclarationAssertion implements Assertion
             : $message;
     }
 
+    /**
+     * @param array<string, mixed> $params
+     */
     abstract protected function meetsDeclaration(Node $node, Scope $scope, array $params = []): bool;
 
     /**
-     * @param class-string $subject
+     * @param array<string, mixed> $params
      */
-    abstract protected function getMessage(string $ruleName, string $subject, array $params = []): string;
-
-    /**
-     * @param  array<string>    $tips
-     * @return array<RuleError>
-     */
-    abstract protected function applyValidation(string $ruleName, ClassReflection $subject, bool $meetsDeclaration, array $tips, array $params = []): array;
+    abstract protected function getMessage(string $ruleName, string $subject, Constraint $constraint, array $params = []): string;
 }

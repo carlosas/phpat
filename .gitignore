@@ -5,8 +5,11 @@
 /.vscode/
 /.fleet/
 /.agent/
+/.claude/
+/.gemini/
 /**/.DS_Store
 /vendor/
 /composer.phar
 /composer.lock
 *.php-cs-fixer.cache
+*.phpunit.cache

@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.12.4
+* Split assertions from constraints (`should`, `shouldNot`, `canOnly`) and update rule builder steps
+* Deprecate all previous `should*`, `shouldNot*`, and `canOnly*` assertions
+
 ## 0.12.3
 * Allow constructor parameters in rules
 * Update stubs for built-in classes (Feb 2026)

@@ -15,7 +15,8 @@ final class ConfigurationTest
     {
         return PHPat::rule()
             ->classes(Selector::classname(Configuration::class))
-            ->shouldNotDependOn()
+            ->shouldNot()
+            ->dependOn()
             ->classes(Selector::all())
         ;
     }
@@ -25,7 +26,8 @@ final class ConfigurationTest
     {
         return PHPat::rule()
             ->classes(Selector::classname(Configuration::class))
-            ->shouldBeFinal()
+            ->should()
+            ->beFinal()
         ;
     }
 }

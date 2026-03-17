@@ -14,7 +14,8 @@ final class AssertionTest
         return PHPat::rule()
             ->classes(Selector::implements(Assertion::class))
             ->excluding(Selector::classname('/.*Rule$/', true))
-            ->shouldBeAbstract()
+            ->should()
+            ->beAbstract()
         ;
     }
 
@@ -22,7 +23,8 @@ final class AssertionTest
     {
         return PHPat::rule()
             ->classes(Selector::classname('/.*\\\Assertion\\\.*Rule$/', true))
-            ->shouldNotBeAbstract()
+            ->shouldNot()
+            ->beAbstract()
         ;
     }
 

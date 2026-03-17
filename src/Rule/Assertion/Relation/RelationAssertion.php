@@ -5,10 +5,7 @@ namespace PHPat\Rule\Assertion\Relation;
 use PHPat\Configuration;
 use PHPat\Parser\BuiltInClasses;
 use PHPat\Rule\Assertion\Assertion;
-use PHPat\Rule\Assertion\Relation\ShouldApplyAttribute\ShouldApplyAttribute;
-use PHPat\Rule\Assertion\Relation\ShouldExtend\ShouldExtend;
-use PHPat\Rule\Assertion\Relation\ShouldImplement\ShouldImplement;
-use PHPat\Rule\Assertion\Relation\ShouldInclude\ShouldInclude;
+use PHPat\Rule\Assertion\Constraint;
 use PHPat\Selector\Classname;
 use PHPat\Selector\SelectorInterface;
 use PHPat\ShouldNotHappenException;
@@ -19,6 +16,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\IdentifierRuleError;
+use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\FileTypeMapper;
 
 abstract class RelationAssertion implements Assertion
@@ -29,17 +27,14 @@ abstract class RelationAssertion implements Assertion
     protected ReflectionProvider $reflectionProvider;
     protected FileTypeMapper $fileTypeMapper;
 
-    /**
-     * @param class-string<RelationAssertion> $assertion
-     */
     public function __construct(
-        string $assertion,
+        string $assertionType,
         StatementBuilder $statementBuilder,
         Configuration $configuration,
         ReflectionProvider $reflectionProvider,
         FileTypeMapper $fileTypeMapper
     ) {
-        $this->statements = $statementBuilder->build($assertion);
+        $this->statements = $statementBuilder->build($assertionType);
         $this->configuration = $configuration;
         $this->reflectionProvider = $reflectionProvider;
         $this->fileTypeMapper = $fileTypeMapper;
@@ -71,26 +66,7 @@ abstract class RelationAssertion implements Assertion
      */
     abstract protected function extractNodeClassNames(Node $node, Scope $scope): array;
 
-    /**
-     * @param class-string $subject
-     */
-    abstract protected function getMessage(string $ruleName, string $subject, string $target): string;
-
-    /**
-     * @param  array<SelectorInterface>  $targets
-     * @param  array<SelectorInterface>  $targetExcludes
-     * @param  array<class-string>       $nodes
-     * @param  array<string>             $tips
-     * @return list<IdentifierRuleError>
-     */
-    abstract protected function applyValidation(
-        string $ruleName,
-        ClassReflection $subject,
-        array $targets,
-        array $targetExcludes,
-        array $nodes,
-        array $tips
-    ): array;
+    abstract protected function getRelationVerb(): string;
 
     /**
      * @param array<class-string> $nodes
@@ -101,16 +77,10 @@ abstract class RelationAssertion implements Assertion
             return false;
         }
 
-        // Can not skip if the rule is a ShouldExtend, ShouldImplement, ShouldInclude or ShouldApplyAttribute rule
-        $classReflection = $this->reflectionProvider->getClass(get_class($this));
-
-        if (
-            $classReflection->isSubclassOf(ShouldExtend::class)
-            || $classReflection->isSubclassOf(ShouldImplement::class)
-            || $classReflection->isSubclassOf(ShouldInclude::class)
-            || $classReflection->isSubclassOf(ShouldApplyAttribute::class)
-        ) {
-            return true;
+        foreach ($this->statements as $statement) {
+            if ($statement->constraint === Constraint::Should) {
+                return true;
+            }
         }
 
         if (empty($nodes)) {
@@ -119,6 +89,7 @@ abstract class RelationAssertion implements Assertion
 
         foreach ($nodes as $node) {
             $class = $scope->getClassReflection();
+
             if (!(new Classname($node, false))->matches($class)) {
                 return true;
             }
@@ -154,13 +125,160 @@ abstract class RelationAssertion implements Assertion
                 $nodes = $this->removeBuiltInClasses($nodes);
             }
 
-            array_push(
-                $errors,
-                ...$this->applyValidation($statement->ruleName, $subject, $statement->targets, $statement->targetExcludes, $nodes, $statement->tips)
-            );
+            $validationErrors = match ($statement->constraint) {
+                Constraint::Should => $this->applyShould(
+                    $statement->ruleName,
+                    $subject,
+                    $statement->targets,
+                    $statement->targetExcludes,
+                    $nodes,
+                    $statement->tips,
+                    $statement->constraint
+                ),
+                Constraint::ShouldNot => $this->applyShouldNot(
+                    $statement->ruleName,
+                    $subject,
+                    $statement->targets,
+                    $statement->targetExcludes,
+                    $nodes,
+                    $statement->tips,
+                    $statement->constraint
+                ),
+                Constraint::CanOnly => $this->applyCanOnly(
+                    $statement->ruleName,
+                    $subject,
+                    $statement->targets,
+                    $statement->targetExcludes,
+                    $nodes,
+                    $statement->tips,
+                    $statement->constraint
+                ),
+            };
+
+            array_push($errors, ...$validationErrors);
         }
 
         return $errors;
+    }
+
+    protected function getMessage(string $ruleName, string $subject, string $target, Constraint $constraint): string
+    {
+        $negation = ($constraint === Constraint::Should) ? '' : ' not';
+
+        return $this->prepareMessage(
+            $ruleName,
+            sprintf('%s should%s %s %s', $subject, $negation, $this->getRelationVerb(), $target)
+        );
+    }
+
+    /**
+     * @param  array<SelectorInterface>  $targets
+     * @param  array<SelectorInterface>  $targetExcludes
+     * @param  array<class-string>       $nodes
+     * @param  array<string>             $tips
+     * @return list<IdentifierRuleError>
+     * @throws ShouldNotHappenException
+     */
+    private function applyShould(string $ruleName, ClassReflection $subject, array $targets, array $targetExcludes, array $nodes, array $tips, Constraint $constraint): array
+    {
+        $errors = [];
+        foreach ($targets as $target) {
+            $targetFound = false;
+            foreach ($nodes as $node) {
+                if ($this->nodeMatchesTarget($node, $target, $targetExcludes)) {
+                    $targetFound = true;
+
+                    break;
+                }
+            }
+            if (!$targetFound) {
+                $ruleError = RuleErrorBuilder::message($this->getMessage($ruleName, $subject->getName(), $target->getName(), $constraint));
+                foreach ($tips as $tip) {
+                    $ruleError->addTip($tip);
+                }
+                $errors[] = $ruleError->identifier('phpat.'.$ruleName)->build();
+            }
+        }
+
+        return $errors;
+    }
+
+    /**
+     * @param  array<SelectorInterface>  $targets
+     * @param  array<SelectorInterface>  $targetExcludes
+     * @param  array<class-string>       $nodes
+     * @param  array<string>             $tips
+     * @return list<IdentifierRuleError>
+     * @throws ShouldNotHappenException
+     */
+    private function applyShouldNot(string $ruleName, ClassReflection $subject, array $targets, array $targetExcludes, array $nodes, array $tips, Constraint $constraint): array
+    {
+        $errors = [];
+        foreach ($targets as $target) {
+            foreach ($nodes as $node) {
+                if ($this->nodeMatchesTarget($node, $target, $targetExcludes)) {
+                    $ruleError = RuleErrorBuilder::message($this->getMessage($ruleName, $subject->getName(), $node, $constraint));
+                    foreach ($tips as $tip) {
+                        $ruleError->addTip($tip);
+                    }
+                    $errors[] = $ruleError->identifier('phpat.'.$ruleName)->build();
+                }
+            }
+        }
+
+        return $errors;
+    }
+
+    /**
+     * @param  array<SelectorInterface>  $targets
+     * @param  array<SelectorInterface>  $targetExcludes
+     * @param  array<class-string>       $nodes
+     * @param  array<string>             $tips
+     * @return list<IdentifierRuleError>
+     * @throws ShouldNotHappenException
+     */
+    private function applyCanOnly(string $ruleName, ClassReflection $subject, array $targets, array $targetExcludes, array $nodes, array $tips, Constraint $constraint): array
+    {
+        $errors = [];
+        foreach ($nodes as $node) {
+            foreach ($targets as $target) {
+                if ($this->nodeMatchesTarget($node, $target, $targetExcludes)) {
+                    continue 2;
+                }
+            }
+            $ruleError = RuleErrorBuilder::message($this->getMessage($ruleName, $subject->getName(), $node, $constraint));
+            foreach ($tips as $tip) {
+                $ruleError->addTip($tip);
+            }
+            $errors[] = $ruleError->identifier('phpat.'.$ruleName)->build();
+        }
+
+        return $errors;
+    }
+
+    /**
+     * @param class-string             $classname
+     * @param array<SelectorInterface> $targetExcludes
+     */
+    private function nodeMatchesTarget(string $classname, SelectorInterface $target, array $targetExcludes): bool
+    {
+        if (!$this->reflectionProvider->hasClass($classname)) {
+            return false;
+        }
+
+        $class = $this->reflectionProvider->getClass($classname);
+
+        if (!$target->matches($class)) {
+            return false;
+        }
+
+        foreach ($targetExcludes as $exclude) {
+            if ($exclude->matches($class)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
