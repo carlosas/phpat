@@ -21,7 +21,7 @@ trait CreatesPhpFile
         if ($base === false) {
             throw new \RuntimeException('Failed to create temporary file via tempnam()');
         }
-        $file = $base . '.php';
+        $file = $base.'.php';
         if (file_put_contents($file, $code) === false) {
             throw new \RuntimeException(sprintf('Failed to write PHP code to temporary file "%s"', $file));
         }
