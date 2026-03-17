@@ -26,6 +26,7 @@ final class ClassExtends implements SelectorInterface
     public function matches(ClassReflection $classReflection): bool
     {
         $parents = $classReflection->getParents();
+
         if (empty($parents)) {
             return false;
         }

@@ -12,3 +12,4 @@
 /composer.phar
 /composer.lock
 *.php-cs-fixer.cache
+*.phpunit.cache

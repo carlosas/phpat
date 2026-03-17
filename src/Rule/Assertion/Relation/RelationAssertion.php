@@ -89,6 +89,7 @@ abstract class RelationAssertion implements Assertion
 
         foreach ($nodes as $node) {
             $class = $scope->getClassReflection();
+
             if (!(new Classname($node, false))->matches($class)) {
                 return true;
             }
