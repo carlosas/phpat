@@ -11,10 +11,7 @@ final class IsNotFinal implements SelectorInterface
         return '-non final classes-';
     }
 
-    /**
-     * @param ClassReflection $classReflection
-     */
-    public function matches($classReflection): bool
+    public function matches(ClassReflection $classReflection): bool
     {
         return !$classReflection->isFinal();
     }

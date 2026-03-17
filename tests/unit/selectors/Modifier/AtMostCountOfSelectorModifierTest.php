@@ -4,18 +4,18 @@ namespace Tests\PHPat\unit\selectors\Modifier;
 
 use PHPat\Selector\Modifier\AtMostCountOfSelectorModifier;
 use PHPat\Selector\SelectorInterface;
-use PHPUnit\Framework\TestCase;
+use Tests\PHPat\unit\selectors\SelectorTestCase;
 
 /**
  * @internal
  *
  * @covers \PHPat\Selector\Modifier\AtMostCountOfSelectorModifier
  */
-class AtMostCountOfSelectorModifierTest extends TestCase
+class AtMostCountOfSelectorModifierTest extends SelectorTestCase
 {
     public function testMatchesWhenCountBelowLimit(): void
     {
-        $classReflection = $this->createMock(\ReflectionClass::class);
+        $classReflection = $this->getReflectionClass(\stdClass::class);
         $s1 = $this->createMock(SelectorInterface::class);
         $s1->method('matches')->willReturn(true);
         $s2 = $this->createMock(SelectorInterface::class);
@@ -27,7 +27,7 @@ class AtMostCountOfSelectorModifierTest extends TestCase
 
     public function testDoesNotMatchWhenCountExceedsLimit(): void
     {
-        $classReflection = $this->createMock(\ReflectionClass::class);
+        $classReflection = $this->getReflectionClass(\stdClass::class);
         $s1 = $this->createMock(SelectorInterface::class);
         $s1->method('matches')->willReturn(true);
         $s2 = $this->createMock(SelectorInterface::class);

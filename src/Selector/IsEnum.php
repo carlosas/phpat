@@ -11,10 +11,7 @@ final class IsEnum implements SelectorInterface
         return '-all enums-';
     }
 
-    /**
-     * @param ClassReflection $classReflection
-     */
-    public function matches($classReflection): bool
+    public function matches(ClassReflection $classReflection): bool
     {
         return $classReflection->isEnum();
     }

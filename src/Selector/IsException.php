@@ -11,10 +11,7 @@ final class IsException implements SelectorInterface
         return '-all exceptions-';
     }
 
-    /**
-     * @param ClassReflection $classReflection
-     */
-    public function matches($classReflection): bool
+    public function matches(ClassReflection $classReflection): bool
     {
         return $classReflection->isSubclassOf(\Exception::class);
     }

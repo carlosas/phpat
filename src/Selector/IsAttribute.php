@@ -11,10 +11,7 @@ final class IsAttribute implements SelectorInterface
         return '-attribute classes-';
     }
 
-    /**
-     * @param ClassReflection $classReflection
-     */
-    public function matches($classReflection): bool
+    public function matches(ClassReflection $classReflection): bool
     {
         return !empty($classReflection->getNativeReflection()->getAttributes(\Attribute::class));
     }

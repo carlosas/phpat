@@ -11,10 +11,7 @@ final class IsReadonly implements SelectorInterface
         return '-all readonly classes-';
     }
 
-    /**
-     * @param ClassReflection $classReflection
-     */
-    public function matches($classReflection): bool
+    public function matches(ClassReflection $classReflection): bool
     {
         return $classReflection->isReadOnly();
     }

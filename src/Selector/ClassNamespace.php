@@ -20,10 +20,7 @@ final class ClassNamespace implements SelectorInterface
         return $this->namespace;
     }
 
-    /**
-     * @param ClassReflection $classReflection
-     */
-    public function matches($classReflection): bool
+    public function matches(ClassReflection $classReflection): bool
     {
         $namespace = \extractNamespaceFromFQCN($classReflection->getName());
 
@@ -31,7 +28,7 @@ final class ClassNamespace implements SelectorInterface
             return $this->matchesRegex($namespace);
         }
 
-        return str_starts_with(\trimSeparators($namespace).'\\', \trimSeparators($this->namespace).'\\');
+        return str_starts_with(\trimSeparators($namespace) . '\\', \trimSeparators($this->namespace) . '\\');
     }
 
     private function matchesRegex(string $namespace): bool

@@ -17,13 +17,10 @@ final class AnyOfSelectorModifier implements SelectorInterface
 
     public function getName(): string
     {
-        return \implode(' or ', \array_map(static fn ($selector) => $selector->getName(), $this->selectors));
+        return \implode(' or ', \array_map(static fn($selector) => $selector->getName(), $this->selectors));
     }
 
-    /**
-     * @param ClassReflection $classReflection
-     */
-    public function matches($classReflection): bool
+    public function matches(ClassReflection $classReflection): bool
     {
         foreach ($this->selectors as $selector) {
             if ($selector->matches($classReflection)) {

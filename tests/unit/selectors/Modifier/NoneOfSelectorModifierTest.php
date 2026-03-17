@@ -4,18 +4,18 @@ namespace Tests\PHPat\unit\selectors\Modifier;
 
 use PHPat\Selector\Modifier\NoneOfSelectorModifier;
 use PHPat\Selector\SelectorInterface;
-use PHPUnit\Framework\TestCase;
+use Tests\PHPat\unit\selectors\SelectorTestCase;
 
 /**
  * @internal
  *
  * @covers \PHPat\Selector\Modifier\NoneOfSelectorModifier
  */
-class NoneOfSelectorModifierTest extends TestCase
+class NoneOfSelectorModifierTest extends SelectorTestCase
 {
     public function testMatchesWhenNoneMatch(): void
     {
-        $classReflection = $this->createMock(\ReflectionClass::class);
+        $classReflection = $this->getReflectionClass(\stdClass::class);
         $s1 = $this->createMock(SelectorInterface::class);
         $s1->method('matches')->willReturn(false);
         $s2 = $this->createMock(SelectorInterface::class);
@@ -27,7 +27,7 @@ class NoneOfSelectorModifierTest extends TestCase
 
     public function testDoesNotMatchWhenOneMatches(): void
     {
-        $classReflection = $this->createMock(\ReflectionClass::class);
+        $classReflection = $this->getReflectionClass(\stdClass::class);
         $s1 = $this->createMock(SelectorInterface::class);
         $s1->method('matches')->willReturn(true);
         $s2 = $this->createMock(SelectorInterface::class);

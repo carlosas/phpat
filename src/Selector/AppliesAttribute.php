@@ -28,10 +28,7 @@ final class AppliesAttribute implements SelectorInterface
         return $this->classname;
     }
 
-    /**
-     * @param ClassReflection $classReflection
-     */
-    public function matches($classReflection): bool
+    public function matches(ClassReflection $classReflection): bool
     {
         /** @var list<\ReflectionAttribute<object>> $attributes */
         $attributes = $classReflection->getNativeReflection()->getAttributes();

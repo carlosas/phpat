@@ -20,10 +20,7 @@ final class Filepath implements SelectorInterface
         return $this->filepath;
     }
 
-    /**
-     * @param ClassReflection $classReflection
-     */
-    public function matches($classReflection): bool
+    public function matches(ClassReflection $classReflection): bool
     {
         $filepath = $classReflection->getFileName();
 

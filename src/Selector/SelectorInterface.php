@@ -6,10 +6,7 @@ use PHPStan\Reflection\ClassReflection;
 
 interface SelectorInterface
 {
-    /**
-     * @param ClassReflection $classReflection
-     */
-    public function matches($classReflection): bool;
+    public function matches(ClassReflection $classReflection): bool;
 
     public function getName(): string;
 }

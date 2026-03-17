@@ -11,10 +11,7 @@ final class IsAbstract implements SelectorInterface
         return '-abstract classes-';
     }
 
-    /**
-     * @param ClassReflection $classReflection
-     */
-    public function matches($classReflection): bool
+    public function matches(ClassReflection $classReflection): bool
     {
         return $classReflection->isAbstract();
     }

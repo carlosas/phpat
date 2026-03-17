@@ -11,10 +11,7 @@ final class All implements SelectorInterface
         return '-all classes-';
     }
 
-    /**
-     * @param ClassReflection $classReflection
-     */
-    public function matches($classReflection): bool
+    public function matches(ClassReflection $classReflection): bool
     {
         return true;
     }

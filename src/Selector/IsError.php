@@ -11,10 +11,7 @@ final class IsError implements SelectorInterface
         return '-all errors-';
     }
 
-    /**
-     * @param ClassReflection $classReflection
-     */
-    public function matches($classReflection): bool
+    public function matches(ClassReflection $classReflection): bool
     {
         return $classReflection->isSubclassOf(\Error::class);
     }

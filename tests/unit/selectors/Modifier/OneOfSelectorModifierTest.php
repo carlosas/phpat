@@ -4,18 +4,18 @@ namespace Tests\PHPat\unit\selectors\Modifier;
 
 use PHPat\Selector\Modifier\OneOfSelectorModifier;
 use PHPat\Selector\SelectorInterface;
-use PHPUnit\Framework\TestCase;
+use Tests\PHPat\unit\selectors\SelectorTestCase;
 
 /**
  * @internal
  *
  * @covers \PHPat\Selector\Modifier\OneOfSelectorModifier
  */
-class OneOfSelectorModifierTest extends TestCase
+class OneOfSelectorModifierTest extends SelectorTestCase
 {
     public function testMatchesWhenExactlyOneMatches(): void
     {
-        $classReflection = $this->createMock(\ReflectionClass::class);
+        $classReflection = $this->getReflectionClass(\stdClass::class);
         $s1 = $this->createMock(SelectorInterface::class);
         $s1->method('matches')->willReturn(true);
         $s2 = $this->createMock(SelectorInterface::class);
@@ -27,7 +27,7 @@ class OneOfSelectorModifierTest extends TestCase
 
     public function testDoesNotMatchWhenNoneMatch(): void
     {
-        $classReflection = $this->createMock(\ReflectionClass::class);
+        $classReflection = $this->getReflectionClass(\stdClass::class);
         $s1 = $this->createMock(SelectorInterface::class);
         $s1->method('matches')->willReturn(false);
         $s2 = $this->createMock(SelectorInterface::class);
@@ -39,7 +39,7 @@ class OneOfSelectorModifierTest extends TestCase
 
     public function testDoesNotMatchWhenMultipleMatch(): void
     {
-        $classReflection = $this->createMock(\ReflectionClass::class);
+        $classReflection = $this->getReflectionClass(\stdClass::class);
         $s1 = $this->createMock(SelectorInterface::class);
         $s1->method('matches')->willReturn(true);
         $s2 = $this->createMock(SelectorInterface::class);

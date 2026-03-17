@@ -23,10 +23,7 @@ final class ClassIncludes implements SelectorInterface
         return $this->traitname;
     }
 
-    /**
-     * @param ClassReflection $classReflection
-     */
-    public function matches($classReflection): bool
+    public function matches(ClassReflection $classReflection): bool
     {
         $traits = $this->getAllTraits($classReflection);
 

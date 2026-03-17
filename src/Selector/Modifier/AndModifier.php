@@ -15,10 +15,7 @@ final class AndModifier implements SelectorInterface
         $this->selectors = $selectors;
     }
 
-    /**
-     * @param ClassReflection $classReflection
-     */
-    public function matches($classReflection): bool
+    public function matches(ClassReflection $classReflection): bool
     {
         foreach ($this->selectors as $selector) {
             if (!$selector->matches($classReflection)) {
@@ -33,7 +30,7 @@ final class AndModifier implements SelectorInterface
     {
         return implode(
             ':and:',
-            array_map(fn (SelectorInterface $selector) => $selector->getName(), $this->selectors),
+            array_map(fn(SelectorInterface $selector) => $selector->getName(), $this->selectors),
         );
     }
 }

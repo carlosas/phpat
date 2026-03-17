@@ -11,10 +11,7 @@ final class IsTrait implements SelectorInterface
         return '-all traits-';
     }
 
-    /**
-     * @param ClassReflection $classReflection
-     */
-    public function matches($classReflection): bool
+    public function matches(ClassReflection $classReflection): bool
     {
         return $classReflection->isTrait();
     }
