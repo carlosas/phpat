@@ -2,71 +2,90 @@
 
 Assertion is the type of verification that can be done in the selected classes.
 
-## shouldBeNamed()
-It asserts that the selected classes are **named** as the namespaced name specified.
+## BeNamed
 
-## shouldBeFinal()
-It asserts that the selected classes are declared as **final**.
+`should->beNamed()`: asserts that the selected classes are **named** as the namespaced name specified.
 
-Also available: `shouldNotBeFinal()`
+## BeFinal
 
-## shouldBeEnum()
-It asserts that the selected classes are **enums**.
+`should->beFinal()`: asserts that the selected classes are declared as **final**.
 
-Also available: `shouldNotBeEnum()`
+`shouldNot->beFinal()`: asserts that the selected classes are **not declared as final**.
 
-## shouldBeAbstract()
-It asserts that the selected classes are declared as **abstract**.
+## BeEnum
 
-Also available: `shouldNotBeAbstract()`
+`should->beEnum()`: asserts that the selected classes are **enums**.
 
-## shouldBeInterface()
-It asserts that the selected classes are **interfaces**.
+`shouldNot->beEnum()`: asserts that the selected classes are **not enums**.
 
-## shouldBeReadonly()
-It asserts that the selected classes are declared as **readonly**.
+## BeAbstract
 
-Also available: `shouldNotBeReadonly()`
+`should->beAbstract()`: asserts that the selected classes are declared as **abstract**.
 
-## shouldBeInvokable()
-It asserts that the selected classes are **invokable** by implementing `__invoke` method.
+`shouldNot->beAbstract()`: asserts that the selected classes are **not declared as abstract**.
 
-Also available: `shouldNotBeInvokable()`
+## BeInterface
 
-## shouldHaveOnlyOnePublicMethod()
-It asserts that the selected classes only have **one public method** (besides constructor).
+`should->beInterface()`: asserts that the selected classes are **interfaces**.
 
-## shouldHaveOnlyOnePublicMethodNamed
-It asserts that the selected classes only have **one public method** with specified name (besides constructor).
+## BeReadonly
 
-## shouldExtend()
-It asserts that the selected classes **extend** the target class.
+`should->beReadonly()`: asserts that the selected classes are declared as **readonly**.
 
-Also available: `shouldNotExtend()`
+`shouldNot->beReadonly()`: asserts that the selected classes are **not declared as readonly**.
 
-## shouldImplement()
-It asserts that the selected classes **implement** the target interfaces.
+## BeInvokable
 
-Also available: `shouldNotImplement()`
+`should->beInvokable()`: asserts that the selected classes are **invokable** by implementing `__invoke` method.
 
-## shouldInclude()
-It asserts that the selected classes **include** the target traits.
+`shouldNot->beInvokable()`: asserts that the selected classes are **not invokable** by implementing `__invoke` method.
 
-Also available: `shouldNotInclude()`
+## HaveOnlyOnePublicMethod
 
-## shouldNotDependOn()
-It asserts that the selected classes **do not depend** on the target classes.
+`should->haveOnlyOnePublicMethod()`: asserts that the selected classes **only have **one public method\*\* (besides constructor).
 
-## shouldNotConstruct()
-It asserts that the selected classes **do not use the constructor** of the target classes.
+## HaveOnlyOnePublicMethodNamed
 
-## shouldNotExist()
-It asserts that the selected classes **do not exist**.
+`should->haveOnlyOnePublicMethodNamed()`: asserts that the selected classes **only have one public method with specified name** (besides constructor).
 
-## shouldApplyAttribute()
-It asserts that the selected classes **apply** the target attributes.
+## Extend
 
-## canOnlyDependOn()
-It asserts that the selected classes **do not depend** on anything else than the target classes.
+`should->extend()`: asserts that the selected classes **extend** the target class.
 
-This would be equivalent to `shouldNotDependOn()` with the negation of the target classes.
+`shouldNot->extend()`: asserts that the selected classes **do not extend** the target class.
+
+## Implement
+
+`should->implement()`: asserts that the selected classes **implement** the target interfaces.
+
+`shouldNot->implement()`: asserts that the selected classes **do not implement** the target interfaces.
+
+## Include
+
+`should->include()`: asserts that the selected classes **include** the target traits.
+
+`shouldNot->include()`: asserts that the selected classes **do not include** the target traits.
+
+## DependOn
+
+`should->dependOn()`: asserts that the selected classes **depend** on the target classes.
+
+`shouldNot->dependOn()`: asserts that the selected classes **do not depend** on the target classes.
+
+`canOnly->dependOn()`: asserts that the selected classes **do not depend** on anything else than the target classes.
+
+## Construct
+
+`should->construct()`: asserts that the selected classes **use the constructor** of the target classes.
+
+`shouldNot->construct()`: asserts that the selected classes **do not use the constructor** of the target classes.
+
+## Exist
+
+`should->exist()`: asserts that the selected classes **exist**.
+
+`shouldNot->exist()`: asserts that the selected classes **do not exist**.
+
+## ApplyAttribute
+
+`should->applyAttribute()`: asserts that the selected classes **apply** the target attributes.

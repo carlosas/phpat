@@ -79,7 +79,8 @@ final class MyFirstTest
     {
         return PHPat::rule()
             ->classes(Selector::inNamespace('App\Domain'))
-            ->shouldNotDependOn()
+            ->shouldNot()
+            ->dependOn()
             ->classes(
                 Selector::inNamespace('App\Application'),
                 Selector::inNamespace('App\Infrastructure'),
