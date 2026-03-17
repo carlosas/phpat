@@ -17,8 +17,15 @@ trait CreatesPhpFile
 
     protected function createPhpFile(string $code): string
     {
-        $file = tempnam(sys_get_temp_dir(), 'phpat_').'.php';
-        file_put_contents($file, $code);
+        $base = tempnam(sys_get_temp_dir(), 'phpat_');
+        if ($base === false) {
+            throw new \RuntimeException('Failed to create temporary file via tempnam()');
+        }
+        $file = $base.'.php';
+        if (file_put_contents($file, $code) === false) {
+            throw new \RuntimeException(sprintf('Failed to write PHP code to temporary file "%s"', $file));
+        }
+        @unlink($base);
         $this->tempFiles[] = $file;
 
         // Load classes so PHPStan's ReflectionProvider can resolve them
