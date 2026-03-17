@@ -22,37 +22,95 @@ class NewRuleTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    private const SUBJECT = 'Fixture\Relation\Construct\ShouldNotConstraint\Subject';
-    private const TARGET = 'Fixture\Relation\Construct\ShouldNotConstraint\Target';
+    private const SUBJECT = 'Fixture\Relation\Construct\NewRule\Subject';
+    private const TARGET_1 = 'Fixture\Relation\Construct\NewRule\Target1';
+    private const TARGET_2 = 'Fixture\Relation\Construct\NewRule\Target2';
 
-    public function testShouldNotConstraint(): void
+    private Constraint $constraint = Constraint::Should;
+
+    public function testShouldConstraint(): void
     {
+        $this->constraint = Constraint::Should;
         $file = $this->createPhpFile(<<<'PHP'
             <?php
-            namespace Fixture\Relation\Construct\ShouldNotConstraint;
-            class Target {}
+            namespace Fixture\Relation\Construct\NewRule;
+            class Target1 {}
+            class Target2 {}
             class Subject
             {
-                public function create(): Target
+                public function create(): Target2
                 {
-                    return new Target();
+                    return new Target2();
                 }
             }
             PHP);
 
         $this->analyse([$file], [
-            [sprintf('%s should not construct %s', self::SUBJECT, self::TARGET), 8],
+            [sprintf('%s should construct %s', self::SUBJECT, self::TARGET_1), 9],
+        ]);
+    }
+
+    public function testShouldNotConstraint(): void
+    {
+        $this->constraint = Constraint::ShouldNot;
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\Relation\Construct\NewRule;
+            class Target1 {}
+            class Target2 {}
+            class Subject
+            {
+                public function create(): Target1
+                {
+                    return new Target1();
+                }
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should not construct %s', self::SUBJECT, self::TARGET_1), 9],
+        ]);
+    }
+
+    public function testCanOnlyConstraint(): void
+    {
+        $this->constraint = Constraint::CanOnly;
+
+        // Subject constructs Forbidden (not in allowed list) — error expected
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+            namespace Fixture\Relation\Construct\NewRule;
+            class Target1 {}
+            class Target2 {}
+            class Subject
+            {
+                public function run(): Target1
+                {
+                    $a = new Target2();
+                    return new Target1();
+                }
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should not construct %s', self::SUBJECT, self::TARGET_2), 9],
         ]);
     }
 
     protected function getRule(): Rule
     {
+        $target = match ($this->constraint) {
+            Constraint::Should => self::TARGET_1,
+            Constraint::ShouldNot => self::TARGET_1,
+            Constraint::CanOnly => self::TARGET_1,
+        };
+
         $testParser = FakeTestParser::create(
             'test',
-            Constraint::ShouldNot,
+            $this->constraint,
             'construct',
             [new Classname(self::SUBJECT, false)],
-            [new Classname(self::TARGET, false)]
+            [new Classname($target, false)]
         );
 
         return new NewRule(
