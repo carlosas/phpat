@@ -8,8 +8,6 @@ abstract class AbstractStep implements Rule
 {
     protected RelationRule $rule;
 
-    protected const NON_IGNORABLE_PARAM = 'nonIgnorable';
-
     final public function __construct(RelationRule $rule)
     {
         $this->rule = $rule;
@@ -22,7 +20,7 @@ abstract class AbstractStep implements Rule
 
     public function nonIgnorable(): static
     {
-        $this->rule->params[self::NON_IGNORABLE_PARAM] = true;
+        $this->rule->params['nonIgnorable'] = true;
 
         return $this;
     }
