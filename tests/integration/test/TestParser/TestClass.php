@@ -43,7 +43,7 @@ final class TestClass
             ->classes(Selector::classname('subject'))
             ->shouldNot()
             ->dependOn()
-            ->nonIgnoreable()
+            ->nonIgnorable()
             ->classes(Selector::classname('target'));
     }
 }

@@ -20,15 +20,10 @@ abstract class AbstractStep implements Rule
         return $this->rule;
     }
 
-    public function nonIgnoreable(): static
+    public function nonIgnorable(): static
     {
         $this->rule->params[self::NON_IGNORABLE_PARAM] = true;
 
         return $this;
-    }
-
-    public function nonIgnorable(): static
-    {
-        return $this->nonIgnoreable();
     }
 }
