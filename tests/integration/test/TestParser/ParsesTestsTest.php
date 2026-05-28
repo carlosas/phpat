@@ -49,12 +49,21 @@ final class ParsesTestsTest extends TestCase
         $rule5 = PHPat::rule()->classes(Selector::classname((string) $param))();
         $rule5->ruleName = TestClass::class.':test_configurable_rule';
 
+        $rule6 = PHPat::rule()
+            ->classes(Selector::classname('subject'))
+            ->shouldNot()
+            ->dependOn()
+            ->nonIgnoreable()
+            ->classes(Selector::classname('target'))();
+        $rule6->ruleName = TestClass::class.':test_non_ignoreable_rule';
+
         self::assertEquals([
             $rule1,
             $rule2,
             $rule3,
             $rule4,
             $rule5,
+            $rule6,
         ], ($testParser)());
     }
 }
