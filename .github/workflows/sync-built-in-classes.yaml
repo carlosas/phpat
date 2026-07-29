@@ -1,0 +1,54 @@
+# https://docs.github.com/en/actions
+
+name: "Sync built-in classes"
+
+on: # yamllint disable-line rule:truthy
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch: null
+
+permissions:
+  contents: "write"
+  pull-requests: "write"
+
+jobs:
+  sync:
+    name: "Sync built-in classes with phpstorm-stubs"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v4"
+      - name: "Checkout phpstorm-stubs"
+        uses: "actions/checkout@v4"
+        with:
+          repository: "JetBrains/phpstorm-stubs"
+          path: "stubs"
+          fetch-depth: 1
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          coverage: "none"
+          php-version: "8.5"
+      - name: "Add missing classes"
+        id: "fix"
+        run: |
+          {
+            echo "missing<<MISSING_EOF"
+            php ci/check-stubs.php stubs --fix
+            echo "MISSING_EOF"
+          } >> "$GITHUB_OUTPUT"
+      - name: "Create Pull Request"
+        uses: "peter-evans/create-pull-request@v7"
+        with:
+          add-paths: "src/Parser/BuiltInClasses.php"
+          branch: "bot/sync-built-in-classes"
+          commit-message: "Add missing built-in classes from phpstorm-stubs"
+          title: "Add missing built-in classes from phpstorm-stubs"
+          body: |
+            The latest [JetBrains/phpstorm-stubs](https://github.com/JetBrains/phpstorm-stubs) contain classes that were missing from `PHPat\Parser\BuiltInClasses`:
+
+            ```
+            ${{ steps.fix.outputs.missing }}
+            ```
+
+            Generated automatically by the "Sync built-in classes" workflow.
