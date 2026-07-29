@@ -5,6 +5,7 @@ require __DIR__ . '/../src/Parser/BuiltInClasses.php';
 use PHPat\Parser\BuiltInClasses;
 
 $stubsDir = $argv[1] ?? __DIR__ . '/../vendor/jetbrains/phpstorm-stubs';
+$fixMode = in_array('--fix', $argv, true);
 
 if (!is_dir($stubsDir)) {
     echo "Stubs directory not found: $stubsDir\n";
@@ -118,6 +119,29 @@ $missingClasses = array_filter($missingClasses, function ($c) {
 });
 
 if (count($missingClasses) > 0) {
+    if ($fixMode) {
+        $sourceFile = __DIR__ . '/../src/Parser/BuiltInClasses.php';
+        $source = file_get_contents($sourceFile);
+        $closingBracketPos = strrpos($source, '    ];');
+
+        if ($closingBracketPos === false) {
+            echo "Could not locate the closing bracket of PHP_BUILT_IN_CLASSES in $sourceFile\n";
+            exit(1);
+        }
+
+        $newEntries = '';
+        foreach ($missingClasses as $class) {
+            $newEntries .= "        '$class',\n";
+        }
+
+        file_put_contents($sourceFile, substr_replace($source, $newEntries, $closingBracketPos, 0));
+
+        foreach ($missingClasses as $class) {
+            echo "$class\n";
+        }
+        exit(0);
+    }
+
     echo "The following classes from phpstorm-stubs are missing in PHPat\Parser\BuiltInClasses:\n";
     foreach ($missingClasses as $class) {
         echo "\"$class\",\n";
