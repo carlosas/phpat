@@ -40,6 +40,7 @@ jobs:
       - name: "Create Pull Request"
         uses: "peter-evans/create-pull-request@v7"
         with:
+          token: "${{ secrets.SYNC_STUBS_TOKEN || github.token }}"
           add-paths: "src/Parser/BuiltInClasses.php"
           branch: "bot/sync-built-in-classes"
           commit-message: "Add missing built-in classes from phpstorm-stubs"
