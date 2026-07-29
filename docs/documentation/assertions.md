@@ -82,8 +82,6 @@ Assertion is the type of verification that can be done in the selected classes.
 
 ## Exist
 
-`should->exist()`: asserts that the selected classes **exist**.
-
 `shouldNot->exist()`: asserts that the selected classes **do not exist**.
 
 ## ApplyAttribute
