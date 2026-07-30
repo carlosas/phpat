@@ -17,4 +17,11 @@ abstract class AbstractStep implements Rule
     {
         return $this->rule;
     }
+
+    public function nonIgnorable(): static
+    {
+        $this->rule->params['nonIgnorable'] = true;
+
+        return $this;
+    }
 }
