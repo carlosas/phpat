@@ -42,7 +42,7 @@ Assertion is the type of verification that can be done in the selected classes.
 
 ## HaveOnlyOnePublicMethod
 
-`should->haveOnlyOnePublicMethod()`: asserts that the selected classes **only have **one public method\*\* (besides constructor).
+`should->haveOnlyOnePublicMethod()`: asserts that the selected classes **only have one public method** (besides constructor).
 
 ## HaveOnlyOnePublicMethodNamed
 
