@@ -10,4 +10,11 @@ class CanOnlyStep extends AbstractStep
 
         return new TargetStep($this->rule);
     }
+
+    public function construct(): TargetStep
+    {
+        $this->rule->assertionType = 'construct';
+
+        return new TargetStep($this->rule);
+    }
 }
