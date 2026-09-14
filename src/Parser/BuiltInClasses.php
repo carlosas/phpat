@@ -1539,5 +1539,8 @@ final class BuiltInClasses
         'Uri\Rfc3986\UriHostType',
         'Uri\Rfc3986\UriType',
         'Uri\WhatWg\UrlHostType',
+        'MaxMind\Db\Reader\InvalidDatabaseException',
+        'MaxMind\Db\Reader\Metadata',
+        'Relay\TableMetricsSchemaException',
     ];
 }
