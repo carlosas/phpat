@@ -74,7 +74,7 @@ abstract class DeclarationAssertion implements Assertion
                     foreach ($statement->tips as $tip) {
                         $ruleError->addTip($tip);
                     }
-                    if ($this->isNonIgnorable($statement->params)) {
+                    if ($statement->nonIgnorable) {
                         $ruleError->nonIgnorable();
                     }
                     $errors[] = $ruleError->identifier('phpat.'.$statement->ruleName)->build();
@@ -102,12 +102,4 @@ abstract class DeclarationAssertion implements Assertion
      * @param array<string, mixed> $params
      */
     abstract protected function getMessage(string $ruleName, string $subject, Constraint $constraint, array $params = []): string;
-
-    /**
-     * @param array<string, mixed> $params
-     */
-    private function isNonIgnorable(array $params): bool
-    {
-        return ($params['nonIgnorable'] ?? false) === true;
-    }
 }

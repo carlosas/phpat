@@ -133,7 +133,7 @@ abstract class RelationAssertion implements Assertion
                     $statement->targetExcludes,
                     $nodes,
                     $statement->tips,
-                    $this->isNonIgnorable($statement->params),
+                    $statement->nonIgnorable,
                     $statement->constraint
                 ),
                 Constraint::ShouldNot => $this->applyShouldNot(
@@ -143,7 +143,7 @@ abstract class RelationAssertion implements Assertion
                     $statement->targetExcludes,
                     $nodes,
                     $statement->tips,
-                    $this->isNonIgnorable($statement->params),
+                    $statement->nonIgnorable,
                     $statement->constraint
                 ),
                 Constraint::CanOnly => $this->applyCanOnly(
@@ -153,7 +153,7 @@ abstract class RelationAssertion implements Assertion
                     $statement->targetExcludes,
                     $nodes,
                     $statement->tips,
-                    $this->isNonIgnorable($statement->params),
+                    $statement->nonIgnorable,
                     $statement->constraint
                 ),
             };
@@ -309,13 +309,5 @@ abstract class RelationAssertion implements Assertion
     {
         return in_array($node, BuiltInClasses::PHP_BUILT_IN_CLASSES, true)
             || ($this->reflectionProvider->hasClass($node) && $this->reflectionProvider->getClass($node)->isBuiltin());
-    }
-
-    /**
-     * @param array<string, mixed> $params
-     */
-    private function isNonIgnorable(array $params): bool
-    {
-        return ($params['nonIgnorable'] ?? false) === true;
     }
 }

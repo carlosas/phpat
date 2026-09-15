@@ -41,7 +41,8 @@ final class StatementBuilder
                     $rule->getTargets(),
                     $rule->getTargetExcludes(),
                     $rule->getTips(),
-                    $rule->getParams()
+                    $rule->getParams(),
+                    $rule->isNonIgnorable()
                 );
             }
         }

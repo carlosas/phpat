@@ -53,9 +53,9 @@ final class ParsesTestsTest extends TestCase
             ->classes(Selector::classname('subject'))
             ->shouldNot()
             ->dependOn()
-            ->nonIgnorable()
             ->classes(Selector::classname('target'))();
-        $rule6->ruleName = TestClass::class.':test_non_ignoreable_rule';
+        $rule6->nonIgnorable = true;
+        $rule6->ruleName = TestClass::class.':test_non_ignorable_rule';
 
         self::assertEquals([
             $rule1,
