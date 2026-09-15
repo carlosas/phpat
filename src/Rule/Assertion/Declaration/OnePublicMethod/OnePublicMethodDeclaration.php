@@ -28,9 +28,11 @@ abstract class OnePublicMethodDeclaration extends DeclarationAssertion
 
     protected function getMessage(string $ruleName, string $subject, Constraint $constraint, array $params = []): string
     {
+        $negation = ($constraint === Constraint::Should) ? '' : ' not';
+
         return $this->prepareMessage(
             $ruleName,
-            sprintf('%s should have only one public method', $subject)
+            sprintf('%s should%s have only one public method', $subject, $negation)
         );
     }
 }

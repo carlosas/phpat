@@ -32,6 +32,13 @@ class ShouldNotStep extends AbstractStep
         return new TargetStep($this->rule);
     }
 
+    public function applyAttribute(): TargetStep
+    {
+        $this->rule->assertionType = 'applyAttribute';
+
+        return new TargetStep($this->rule);
+    }
+
     public function construct(): TargetStep
     {
         $this->rule->assertionType = 'construct';
@@ -77,6 +84,29 @@ class ShouldNotStep extends AbstractStep
     public function beInterface(): TipOrBuildStep
     {
         $this->rule->assertionType = 'beInterface';
+
+        return new TipOrBuildStep($this->rule);
+    }
+
+    public function beNamed(string $classname, bool $regex = false): TipOrBuildStep
+    {
+        $this->rule->assertionType = 'beNamed';
+        $this->rule->params = ['isRegex' => $regex, 'classname' => $classname];
+
+        return new TipOrBuildStep($this->rule);
+    }
+
+    public function haveOnlyOnePublicMethod(): TipOrBuildStep
+    {
+        $this->rule->assertionType = 'haveOnlyOnePublicMethod';
+
+        return new TipOrBuildStep($this->rule);
+    }
+
+    public function haveOnlyOnePublicMethodNamed(string $name, bool $isRegex = false): TipOrBuildStep
+    {
+        $this->rule->assertionType = 'haveOnlyOnePublicMethodNamed';
+        $this->rule->params = ['name' => $name, 'isRegex' => $isRegex];
 
         return new TipOrBuildStep($this->rule);
     }
