@@ -36,4 +36,14 @@ final class TestClass
     {
         return PHPat::rule()->classes(Selector::classname((string) $this->param));
     }
+
+    public function test_non_ignorable_rule(): Rule
+    {
+        return PHPat::rule()
+            ->classes(Selector::classname('subject'))
+            ->shouldNot()
+            ->dependOn()
+            ->classes(Selector::classname('target'))
+            ->nonIgnorable();
+    }
 }

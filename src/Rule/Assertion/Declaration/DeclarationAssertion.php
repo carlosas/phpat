@@ -74,6 +74,9 @@ abstract class DeclarationAssertion implements Assertion
                     foreach ($statement->tips as $tip) {
                         $ruleError->addTip($tip);
                     }
+                    if ($statement->nonIgnorable) {
+                        $ruleError->nonIgnorable();
+                    }
                     $errors[] = $ruleError->identifier('phpat.'.$statement->ruleName)->build();
                 }
 

@@ -31,6 +31,8 @@ final class RelationRule implements Rule
     /** @var array<string, mixed> */
     public array $params = [];
 
+    public bool $nonIgnorable = false;
+
     public function getConstraint(): ?Constraint
     {
         return $this->constraint;
@@ -74,5 +76,10 @@ final class RelationRule implements Rule
     public function getParams(): array
     {
         return $this->params;
+    }
+
+    public function isNonIgnorable(): bool
+    {
+        return $this->nonIgnorable;
     }
 }

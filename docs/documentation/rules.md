@@ -40,9 +40,37 @@ final class ConfigurationTest
 
 ## Rule identifiers
 
-When a rule is violated, the error message will contain an identifier that you can use to ignore the error.
+When a rule is violated, the error message will contain an identifier that you can use to ignore the error, unless the rule uses `nonIgnorable()`.
 
 Currently, the error identifier is based on the rule method name.
+
+## Non-ignorable rules
+
+By default, rule errors can be ignored. You can use `nonIgnorable()` to prevent errors from a rule from being ignored using PHPStan comments, `ignoreErrors` or a baseline:
+
+```php
+namespace App\Tests\Architecture;
+
+use PHPat\Selector\Selector;
+use PHPat\Test\Builder\Rule;
+use PHPat\Test\PHPat;
+
+final class ConfigurationTest
+{
+    public function test_domain_independence(): Rule
+    {
+        return PHPat::rule()
+            ->classes(Selector::inNamespace('App\Domain'))
+            ->shouldNot()
+            ->dependOn()
+            ->classes(Selector::inNamespace('App\Infrastructure'))
+            ->nonIgnorable()
+            ->because('Domain should not depend on Infrastructure');
+    }
+}
+```
+
+It applies to all errors from that rule. Other rules remain ignorable unless they also call `nonIgnorable()`.
 
 ## Dynamic Rule Sets
 

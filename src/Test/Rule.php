@@ -42,4 +42,6 @@ interface Rule
      * @return array<string, mixed>
      */
     public function getParams(): array;
+
+    public function isNonIgnorable(): bool;
 }

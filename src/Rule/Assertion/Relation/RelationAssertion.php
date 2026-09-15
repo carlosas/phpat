@@ -133,6 +133,7 @@ abstract class RelationAssertion implements Assertion
                     $statement->targetExcludes,
                     $nodes,
                     $statement->tips,
+                    $statement->nonIgnorable,
                     $statement->constraint
                 ),
                 Constraint::ShouldNot => $this->applyShouldNot(
@@ -142,6 +143,7 @@ abstract class RelationAssertion implements Assertion
                     $statement->targetExcludes,
                     $nodes,
                     $statement->tips,
+                    $statement->nonIgnorable,
                     $statement->constraint
                 ),
                 Constraint::CanOnly => $this->applyCanOnly(
@@ -151,6 +153,7 @@ abstract class RelationAssertion implements Assertion
                     $statement->targetExcludes,
                     $nodes,
                     $statement->tips,
+                    $statement->nonIgnorable,
                     $statement->constraint
                 ),
             };
@@ -179,7 +182,7 @@ abstract class RelationAssertion implements Assertion
      * @return list<IdentifierRuleError>
      * @throws ShouldNotHappenException
      */
-    private function applyShould(string $ruleName, ClassReflection $subject, array $targets, array $targetExcludes, array $nodes, array $tips, Constraint $constraint): array
+    private function applyShould(string $ruleName, ClassReflection $subject, array $targets, array $targetExcludes, array $nodes, array $tips, bool $nonIgnorable, Constraint $constraint): array
     {
         $errors = [];
         foreach ($targets as $target) {
@@ -196,6 +199,9 @@ abstract class RelationAssertion implements Assertion
                 foreach ($tips as $tip) {
                     $ruleError->addTip($tip);
                 }
+                if ($nonIgnorable) {
+                    $ruleError->nonIgnorable();
+                }
                 $errors[] = $ruleError->identifier('phpat.'.$ruleName)->build();
             }
         }
@@ -211,7 +217,7 @@ abstract class RelationAssertion implements Assertion
      * @return list<IdentifierRuleError>
      * @throws ShouldNotHappenException
      */
-    private function applyShouldNot(string $ruleName, ClassReflection $subject, array $targets, array $targetExcludes, array $nodes, array $tips, Constraint $constraint): array
+    private function applyShouldNot(string $ruleName, ClassReflection $subject, array $targets, array $targetExcludes, array $nodes, array $tips, bool $nonIgnorable, Constraint $constraint): array
     {
         $errors = [];
         foreach ($targets as $target) {
@@ -220,6 +226,9 @@ abstract class RelationAssertion implements Assertion
                     $ruleError = RuleErrorBuilder::message($this->getMessage($ruleName, $subject->getName(), $node, $constraint));
                     foreach ($tips as $tip) {
                         $ruleError->addTip($tip);
+                    }
+                    if ($nonIgnorable) {
+                        $ruleError->nonIgnorable();
                     }
                     $errors[] = $ruleError->identifier('phpat.'.$ruleName)->build();
                 }
@@ -237,7 +246,7 @@ abstract class RelationAssertion implements Assertion
      * @return list<IdentifierRuleError>
      * @throws ShouldNotHappenException
      */
-    private function applyCanOnly(string $ruleName, ClassReflection $subject, array $targets, array $targetExcludes, array $nodes, array $tips, Constraint $constraint): array
+    private function applyCanOnly(string $ruleName, ClassReflection $subject, array $targets, array $targetExcludes, array $nodes, array $tips, bool $nonIgnorable, Constraint $constraint): array
     {
         $errors = [];
         foreach ($nodes as $node) {
@@ -249,6 +258,9 @@ abstract class RelationAssertion implements Assertion
             $ruleError = RuleErrorBuilder::message($this->getMessage($ruleName, $subject->getName(), $node, $constraint));
             foreach ($tips as $tip) {
                 $ruleError->addTip($tip);
+            }
+            if ($nonIgnorable) {
+                $ruleError->nonIgnorable();
             }
             $errors[] = $ruleError->identifier('phpat.'.$ruleName)->build();
         }

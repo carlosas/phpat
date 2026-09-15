@@ -26,6 +26,8 @@ final class Statement
     /** @var array<string, mixed> */
     public array $params;
 
+    public bool $nonIgnorable;
+
     /**
      * @param array<SelectorInterface> $subjectExcludes
      * @param array<SelectorInterface> $targets
@@ -41,7 +43,8 @@ final class Statement
         array $targets,
         array $targetExcludes,
         array $tips,
-        array $params
+        array $params,
+        bool $nonIgnorable = false
     ) {
         $this->ruleName = $ruleName;
         $this->constraint = $constraint;
@@ -51,5 +54,6 @@ final class Statement
         $this->targetExcludes = $targetExcludes;
         $this->tips = $tips;
         $this->params = $params;
+        $this->nonIgnorable = $nonIgnorable;
     }
 }
