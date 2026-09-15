@@ -74,6 +74,13 @@ class ShouldNotStep extends AbstractStep
         return new TipOrBuildStep($this->rule);
     }
 
+    public function beInterface(): TipOrBuildStep
+    {
+        $this->rule->assertionType = 'beInterface';
+
+        return new TipOrBuildStep($this->rule);
+    }
+
     public function exist(): TipOrBuildStep
     {
         $this->rule->assertionType = 'exist';
