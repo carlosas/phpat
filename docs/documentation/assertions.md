@@ -28,6 +28,8 @@ Assertion is the type of verification that can be done in the selected classes.
 
 `should->beInterface()`: asserts that the selected classes are **interfaces**.
 
+`shouldNot->beInterface()`: asserts that the selected classes are **not interfaces**.
+
 ## BeReadonly
 
 `should->beReadonly()`: asserts that the selected classes are declared as **readonly**.
