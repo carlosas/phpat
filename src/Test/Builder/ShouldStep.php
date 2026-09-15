@@ -84,7 +84,7 @@ class ShouldStep extends AbstractStep
     public function beNamed(string $classname, bool $regex = false): TipOrBuildStep
     {
         $this->rule->assertionType = 'beNamed';
-        $this->rule->params = ['isRegex' => $regex, 'classname' => $classname];
+        $this->rule->params = [...$this->rule->params, 'isRegex' => $regex, 'classname' => $classname];
 
         return new TipOrBuildStep($this->rule);
     }
@@ -99,7 +99,7 @@ class ShouldStep extends AbstractStep
     public function haveOnlyOnePublicMethodNamed(string $name, bool $isRegex = false): TipOrBuildStep
     {
         $this->rule->assertionType = 'haveOnlyOnePublicMethodNamed';
-        $this->rule->params = ['name' => $name, 'isRegex' => $isRegex];
+        $this->rule->params = [...$this->rule->params, 'name' => $name, 'isRegex' => $isRegex];
 
         return new TipOrBuildStep($this->rule);
     }
