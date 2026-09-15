@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 * Update stubs for built-in classes (Sept 2026)
-* 
+* Add `canOnly->construct()` assertion
 * Add `nonIgnorable()` to prevent rule errors from being ignored
 
 ## 0.12.4
