@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 246" role="img" aria-labelledby="title desc">
+  <title id="title">Layer dependency direction</title>
+  <desc id="desc">Infrastructure may depend on Application and Domain. Application may depend on Domain. Reverse dependencies are forbidden.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+      <path d="M0 0 L9 4.5 L0 9 Z" fill="#52647a"/>
+    </marker>
+  </defs>
+  <rect width="800" height="246" rx="12" fill="#f5f7fb"/>
+  <g font-family="Arial, sans-serif" text-anchor="middle">
+    <text x="400" y="34" font-size="18" fill="#243247">Permitted class dependencies</text>
+    <g stroke="#52647a" stroke-width="2" fill="none" marker-end="url(#arrow)">
+      <path d="M244 106 H292"/>
+      <path d="M508 106 H556"/>
+      <path d="M136 138 V182 H664 V138"/>
+    </g>
+    <rect x="28" y="74" width="216" height="64" rx="8" fill="#e1e9f8" stroke="#6381ae"/>
+    <rect x="292" y="74" width="216" height="64" rx="8" fill="#e3edf4" stroke="#638da5"/>
+    <rect x="556" y="74" width="216" height="64" rx="8" fill="#dcf0e8" stroke="#4c9478"/>
+    <g font-size="19" fill="#243247">
+      <text x="136" y="112">Infrastructure</text>
+      <text x="400" y="112">Application</text>
+      <text x="664" y="112">Domain</text>
+    </g>
+    <text x="400" y="220" font-size="15" fill="#52647a">Outer layers depend on inner layers</text>
+  </g>
+</svg>
