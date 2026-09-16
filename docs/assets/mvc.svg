@@ -1,40 +1,31 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="400" height="350" viewBox="0 0 400 350" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 414" role="img" aria-labelledby="title desc">
   <title id="title">Model-View-Controller dependency rules</title>
-  <desc id="desc">Model is at the upper left, View at the upper right, and Controller below. Red arrows mark forbidden dependencies between Model and View and from either to Controller. Green arrows allow Controller to depend on Model and View.</desc>
-  <g font-family="Arial, sans-serif" text-anchor="middle" fill="#383838">
-    <circle cx="77" cy="87" r="65" fill="#ff96be"/>
-    <circle cx="322" cy="87" r="65" fill="#ffaa97"/>
-    <circle cx="199" cy="262" r="65" fill="#c494cb"/>
-    <g font-size="14" font-weight="700">
-      <text x="77" y="92">Model</text>
-      <text x="322" y="92">View</text>
-      <text x="199" y="267">Controller</text>
+  <desc id="desc">Controller may depend on Model and View. Model and View must not depend on each other or on Controller. Arrows show permitted dependencies.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+      <path d="M0 0 L9 4.5 L0 9 Z" fill="#52647a"/>
+    </marker>
+  </defs>
+  <rect width="800" height="414" rx="12" fill="#f5f7fb"/>
+  <g font-family="Arial, sans-serif" text-anchor="middle">
+    <text x="400" y="34" font-size="18" fill="#243247">Model-View-Controller boundaries</text>
+    <g stroke="#52647a" stroke-width="2" fill="none" marker-end="url(#arrow)">
+      <path d="M350 258 V200 H180 V140"/>
+      <path d="M450 258 V200 H620 V140"/>
     </g>
-  </g>
-  <g font-family="Arial, sans-serif" font-size="8" text-anchor="middle" fill="#383838" stroke="#555555" stroke-width="1.5" stroke-linejoin="round">
-    <g transform="translate(151 62) rotate(0)">
-      <path d="M0 -10 H82 V-18 L98 0 L82 18 V10 H0 Z" fill="#d47085"/>
-      <text x="49" y="3" stroke="none">Dependency</text>
+    <rect x="72" y="74" width="216" height="64" rx="8" fill="#dcf0e8" stroke="#4c9478"/>
+    <rect x="512" y="74" width="216" height="64" rx="8" fill="#e3edf4" stroke="#638da5"/>
+    <rect x="292" y="258" width="216" height="64" rx="8" fill="#e1e9f8" stroke="#6381ae"/>
+    <g font-size="19" fill="#243247">
+      <text x="180" y="112">Model</text>
+      <text x="620" y="112">View</text>
+      <text x="400" y="296">Controller</text>
     </g>
-    <g transform="translate(248 101) rotate(180)">
-      <path d="M0 -10 H82 V-18 L98 0 L82 18 V10 H0 Z" fill="#d47085"/>
-      <text x="49" y="3" stroke="none" transform="rotate(180 49 0)">Dependency</text>
+    <g font-size="13" fill="#8f3945">
+      <text x="400" y="99">No direct</text>
+      <text x="400" y="118">dependencies</text>
     </g>
-    <g transform="translate(129 141) rotate(45)">
-      <path d="M0 -10 H68 V-18 L84 0 L68 18 V10 H0 Z" fill="#d47085"/>
-      <text x="42" y="3" stroke="none">Dependency</text>
-    </g>
-    <g transform="translate(151 211) rotate(-135)">
-      <path d="M0 -10 H64 V-18 L80 0 L64 18 V10 H0 Z" fill="#12bd9a"/>
-      <text x="40" y="3" stroke="none" transform="rotate(180 40 0)">Dependency</text>
-    </g>
-    <g transform="translate(267 141) rotate(135)">
-      <path d="M0 -10 H68 V-18 L84 0 L68 18 V10 H0 Z" fill="#d47085"/>
-      <text x="42" y="3" stroke="none" transform="rotate(180 42 0)">Dependency</text>
-    </g>
-    <g transform="translate(254 211) rotate(-45)">
-      <path d="M0 -10 H64 V-18 L80 0 L64 18 V10 H0 Z" fill="#12bd9a"/>
-      <text x="40" y="3" stroke="none">Dependency</text>
-    </g>
+    <text x="400" y="364" font-size="15" fill="#52647a">Arrows show permitted class dependencies</text>
+    <text x="400" y="388" font-size="15" fill="#52647a">Model and View must not depend on Controller</text>
   </g>
 </svg>

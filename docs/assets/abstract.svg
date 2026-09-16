@@ -1,18 +1,30 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400" role="img" aria-labelledby="title desc">
-  <title id="title">Classes extending an abstract class</title>
-  <desc id="desc">Two classes, shown in pink and coral, extend the purple abstract class above them. Blue arrows point from each class to the abstract class.</desc>
-  <g stroke="#555555" stroke-width="1" stroke-linejoin="round">
-    <rect x="68" y="31" width="260" height="120" rx="9" fill="#c494cb"/>
-    <rect x="28" y="249" width="160" height="121" rx="9" fill="#ff96be"/>
-    <rect x="213" y="249" width="160" height="121" rx="9" fill="#ffaa97"/>
-    <g fill="#55b4dd">
-      <path d="M108 233 V205 Q108 197 100 197 H94 Q89 197 94 192 L121 167 Q128 161 135 167 L162 192 Q167 197 162 197 H156 Q148 197 148 205 V233 Q148 241 140 241 H116 Q108 241 108 233 Z"/>
-      <path d="M248 233 V205 Q248 197 240 197 H234 Q229 197 234 192 L261 167 Q268 161 275 167 L302 192 Q307 197 302 197 H296 Q288 197 288 205 V233 Q288 241 280 241 H256 Q248 241 248 233 Z"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="title desc">
+  <title id="title">Required inheritance</title>
+  <desc id="desc">Two selected classes extend the abstract class above them. Arrows point from each class to its required abstract parent.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+      <path d="M0 0 L9 4.5 L0 9 Z" fill="#52647a"/>
+    </marker>
+  </defs>
+  <rect width="800" height="380" rx="12" fill="#f5f7fb"/>
+  <g font-family="Arial, sans-serif" text-anchor="middle">
+    <text x="400" y="34" font-size="18" fill="#243247">Required inheritance</text>
+    <g stroke="#52647a" stroke-width="2" fill="none" marker-end="url(#arrow)">
+      <path d="M180 242 V184 H350 V140"/>
+      <path d="M620 242 V184 H450 V140"/>
     </g>
-  </g>
-  <g font-family="Arial, sans-serif" font-size="32" font-weight="700" text-anchor="middle" fill="#383838">
-    <text><tspan x="198" y="79">Abstract</tspan><tspan x="198" y="117">Class</tspan></text>
-    <text x="108" y="322">Class</text>
-    <text x="293" y="322">Class</text>
+    <rect x="292" y="74" width="216" height="64" rx="8" fill="#dcf0e8" stroke="#4c9478"/>
+    <rect x="72" y="242" width="216" height="64" rx="8" fill="#e1e9f8" stroke="#6381ae"/>
+    <rect x="512" y="242" width="216" height="64" rx="8" fill="#e3edf4" stroke="#638da5"/>
+    <g font-size="19" fill="#243247">
+      <text x="400" y="112">Abstract class</text>
+      <text x="180" y="280">Class</text>
+      <text x="620" y="280">Class</text>
+    </g>
+    <g font-size="15" fill="#52647a">
+      <text x="262" y="173">extends</text>
+      <text x="538" y="173">extends</text>
+      <text x="400" y="354">Each selected class must extend the abstract class</text>
+    </g>
   </g>
 </svg>
