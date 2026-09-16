@@ -258,7 +258,7 @@ class HasOnlyOnePublicMethodNamedRuleTest extends RuleTestCase
         ]);
     }
 
-    public function testRejectsClassesWithMultipleMatchingMethodsWithExactNameWithShould(): void
+    public function testRejectsClassesWithMultiplePublicMethodsWithSimilarNamesWithShould(): void
     {
         $subject = 'Fixture\Declaration\OnePublicMethodNamed\ShouldExactMultipleMatching\Subject';
         $this->configuration = new Configuration(false, true, false);
@@ -786,7 +786,7 @@ class HasOnlyOnePublicMethodNamedRuleTest extends RuleTestCase
         $this->analyse([$file], []);
     }
 
-    public function testAcceptsClassesWithMultipleMatchingMethodsWithExactNameWithShouldNot(): void
+    public function testAcceptsClassesWithMultiplePublicMethodsWithSimilarNamesWithShouldNot(): void
     {
         $subject = 'Fixture\Declaration\OnePublicMethodNamed\ShouldNotExactMultipleMatching\Subject';
         $this->configuration = new Configuration(false, true, false);
