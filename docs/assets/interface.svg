@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380" role="img" aria-labelledby="title desc">
+  <title id="title">Required interface implementation</title>
+  <desc id="desc">Two selected classes implement the interface above them. Arrows point from each class to its required interface.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+      <path d="M0 0 L9 4.5 L0 9 Z" fill="#52647a"/>
+    </marker>
+  </defs>
+  <rect width="800" height="380" rx="12" fill="#f5f7fb"/>
+  <g font-family="Arial, sans-serif" text-anchor="middle">
+    <text x="400" y="34" font-size="18" fill="#243247">Required interface implementation</text>
+    <g stroke="#52647a" stroke-width="2" fill="none" marker-end="url(#arrow)">
+      <path d="M180 242 V184 H350 V140"/>
+      <path d="M620 242 V184 H450 V140"/>
+    </g>
+    <rect x="292" y="74" width="216" height="64" rx="8" fill="#dcf0e8" stroke="#4c9478"/>
+    <rect x="72" y="242" width="216" height="64" rx="8" fill="#e1e9f8" stroke="#6381ae"/>
+    <rect x="512" y="242" width="216" height="64" rx="8" fill="#e3edf4" stroke="#638da5"/>
+    <g font-size="19" fill="#243247">
+      <text x="400" y="112">Interface</text>
+      <text x="180" y="280">Class</text>
+      <text x="620" y="280">Class</text>
+    </g>
+    <g font-size="15" fill="#52647a">
+      <text x="262" y="173">implements</text>
+      <text x="538" y="173">implements</text>
+      <text x="400" y="354">Each selected class must implement the interface</text>
+    </g>
+  </g>
+</svg>

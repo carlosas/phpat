@@ -1,76 +1,402 @@
 # Examples
 
-The following sections illustrate some typical checks you could perform.
+The following examples show how to turn architectural decisions into PHPat rules. Choose the rules that fit your application and adapt the namespaces to your project; these examples are independent, not a single configuration to apply together.
 
-## Class dependencies
+Each PHP test class must be autoloadable, registered with the `phpat.test` tag, and included in PHPStan's analysed paths. See [Getting started](getting-started.md#configuration) for the configuration.
 
-#### Layered Architecture
+## Layered architecture
 
+Suppose your application has three layers: `App\Domain`, `App\Application`, and `App\Infrastructure`. To protect the inner layers, Domain must not depend on Application or Infrastructure, and Application must not depend on Infrastructure.
 
-![image-layered](assets/layered.png)
+![Allowed dependencies point from Infrastructure to Application and Domain, and from Application to Domain.](assets/example-layers.svg)
 
-If you are organizing your code in layers (e.g. with an onion structure), you might want to ensure that
-the inner layers do not depend on the outer ones:
+Arrows show permitted class dependencies, not execution order. Infrastructure can implement interfaces defined in an inner layer, allowing that layer to use an abstraction without depending on its infrastructure implementation.
 
->Classes in namespace App\Domain should not depend on classes in namespace App\Application and classes in namespace App\Infrastructure
+```php
+<?php
 
->Classes in namespace App\Application should not depend on classes in namespace App\Infrastructure
+namespace Tests\Architecture;
 
-<h2></h2>
+use PHPat\Selector\Selector;
+use PHPat\Test\Builder\Rule;
+use PHPat\Test\PHPat;
 
-#### Model-View-Controller
+final class LayeredArchitectureTest
+{
+    public function test_domain_does_not_depend_on_outer_layers(): Rule
+    {
+        return PHPat::rule()
+            ->classes(Selector::inNamespace('App\Domain'))
+            ->shouldNot()
+            ->dependOn()
+            ->classes(
+                Selector::inNamespace('App\Application'),
+                Selector::inNamespace('App\Infrastructure')
+            );
+    }
 
-![image-mvc](assets/mvc.png)
+    public function test_application_does_not_depend_on_infrastructure(): Rule
+    {
+        return PHPat::rule()
+            ->classes(Selector::inNamespace('App\Application'))
+            ->shouldNot()
+            ->dependOn()
+            ->classes(Selector::inNamespace('App\Infrastructure'));
+    }
+}
+```
 
-If you are using a MVC approach, you could ensure that both model and view are not coupled to controllers. You also might want to check that they are not coupled to each other:
+These rules protect the named layer boundaries. To also restrict dependencies on third-party code, see [Vendor coupling](#vendor-coupling).
 
->Classes in namespace App\Model and classes in namespace App\View should not depend on classes in namespace App\Controller
+## Bounded contexts
 
->Classes in namespace App\Model should not depend on classes in namespace App\View
+You can organize an application into contexts such as Orders and Inventory, with layers inside each context:
 
->Classes in namespace App\View should not depend on classes in namespace App\Model
+```text
+App\
+├── Orders\
+│   ├── Domain\
+│   ├── Application\
+│   └── Infrastructure\
+├── Inventory\
+│   ├── Domain\
+│   ├── Application\
+│   └── Infrastructure\
+├── SharedKernel\
+└── Integration\Contracts\
+```
 
-#### Vendors coupling
+In this example, a context must not depend directly on another context. Both can use a shared kernel of common domain types and shared integration contracts. The shared kernel and integration contracts have separate namespaces so that sharing domain types does not require sharing application implementations.
 
->Classes in namespace App\Domain can only depend on classes in namespace App\Domain
+![Orders and Inventory independently depend on SharedKernel and Integration Contracts. Neither context depends directly on the other.](assets/example-contexts.svg)
 
-<h2></h2>
+The following test generates three rules per context: one for context isolation and two for its layer boundaries. Returning `iterable<Rule>` lets you reuse these checks for every context in the list; see [Dynamic Rule Sets](documentation/rules.md#dynamic-rule-sets).
 
-#### Aggregates
+```php
+<?php
 
-![image-aggregates](assets/aggregates.png)
+namespace Tests\Architecture;
 
-You won't want your classes to have direct access to the members of an aggregate, except for the aggregate root.
-You can use a lot of different approaches to identify the root and its members: by namespace, filepath, an abstract or interface for the aggregate root, etc.
-If you have, for instance, an AggregateRootInterface you can create a rule like this
+use PHPat\Selector\Selector;
+use PHPat\Test\Builder\Rule;
+use PHPat\Test\PHPat;
 
->Classes in namespace App excluding classes that implement App\Domain\Entity\AggregateRootInterface should not depend on
->classes in namespace App\Domain\Entity excluding classes that implement App\Domain\Entity\AggregateRootInterface
+final class BoundedContextsTest
+{
+    private const CONTEXTS = ['App\Orders', 'App\Inventory'];
 
-<br />
+    /**
+     * @return iterable<Rule>
+     */
+    public function test_context_boundaries(): iterable
+    {
+        foreach (self::CONTEXTS as $context) {
+            yield PHPat::rule()
+                ->classes(Selector::inNamespace($context))
+                ->shouldNot()
+                ->dependOn()
+                ->classes(Selector::inNamespace('App'))
+                ->excluding(
+                    Selector::inNamespace($context),
+                    Selector::inNamespace('App\SharedKernel'),
+                    Selector::inNamespace('App\Integration\Contracts')
+                );
+
+            yield PHPat::rule()
+                ->classes(Selector::inNamespace($context.'\Domain'))
+                ->shouldNot()
+                ->dependOn()
+                ->classes(
+                    Selector::inNamespace($context.'\Application'),
+                    Selector::inNamespace($context.'\Infrastructure')
+                );
+
+            yield PHPat::rule()
+                ->classes(Selector::inNamespace($context.'\Application'))
+                ->shouldNot()
+                ->dependOn()
+                ->classes(Selector::inNamespace($context.'\Infrastructure'));
+        }
+    }
+}
+```
+
+For example, `App\Orders\Application\PlaceOrder` may depend on `App\Orders\Domain\Order` but not on `App\Inventory\Application\ReserveStock`. Dependencies outside `App` are not restricted by this test. Add every context to `CONTEXTS` so that its outgoing dependencies and layers are checked.
+
+### Shared kernel and integration contracts
+
+Shared code must not become a route back into a context's implementation. Here, SharedKernel can depend only on itself and PHP built-in classes. Integration contracts can additionally use SharedKernel types, but cannot depend on Orders or Inventory.
+
+```php
+<?php
+
+namespace Tests\Architecture;
+
+use PHPat\Selector\Selector;
+use PHPat\Test\Builder\Rule;
+use PHPat\Test\PHPat;
+
+final class SharedCodeTest
+{
+    public function test_shared_kernel_is_independent(): Rule
+    {
+        return PHPat::rule()
+            ->classes(Selector::inNamespace('App\SharedKernel'))
+            ->canOnly()
+            ->dependOn()
+            ->classes(
+                Selector::inNamespace('App\SharedKernel'),
+                Selector::isStandardClass()
+            );
+    }
+
+    public function test_integration_contracts_are_independent(): Rule
+    {
+        return PHPat::rule()
+            ->classes(Selector::inNamespace('App\Integration\Contracts'))
+            ->canOnly()
+            ->dependOn()
+            ->classes(
+                Selector::inNamespace('App\Integration\Contracts'),
+                Selector::inNamespace('App\SharedKernel'),
+                Selector::isStandardClass()
+            );
+    }
+}
+```
+
+For example, Orders can publish an `OrderPlaced` event through an `EventPublisher` interface, both defined in `App\Integration\Contracts`. Inventory can consume that event without referring to an Orders class:
+
+```php
+<?php
+
+namespace App\Integration\Contracts;
+
+final class OrderPlaced
+{
+    public function __construct(
+        public readonly string $orderId,
+        public readonly string $productId,
+        public readonly int $quantity
+    ) {
+    }
+}
+
+interface EventPublisher
+{
+    public function publish(OrderPlaced $event): void;
+}
+
+namespace App\Orders\Application;
+
+use App\Integration\Contracts\EventPublisher;
+use App\Integration\Contracts\OrderPlaced;
+
+final class PlaceOrder
+{
+    public function __construct(private EventPublisher $publisher)
+    {
+    }
+
+    public function place(string $orderId, string $productId, int $quantity): void
+    {
+        // Place the order, then publish the integration event.
+        $this->publisher->publish(new OrderPlaced($orderId, $productId, $quantity));
+    }
+}
+
+namespace App\Inventory\Application;
+
+use App\Integration\Contracts\OrderPlaced;
+
+final class WhenOrderPlaced
+{
+    public function __invoke(OrderPlaced $event): void
+    {
+        // Reserve stock using this context's own domain objects.
+    }
+}
+```
+
+`BoundedContextsTest` rejects direct dependencies between the contexts, while `SharedCodeTest` prevents the event and publisher interface from referencing their implementations. A concrete publisher and handler registration belong in your infrastructure setup. These rules check class dependencies; they do not verify event delivery or business behaviour.
+
+## Vendor coupling
+
+If your domain should be independent of frameworks and vendor libraries, use an allowlist. This example permits only classes in `App\Domain` and PHP built-in classes such as `DateTimeImmutable` and `Exception`:
+
+```php
+<?php
+
+namespace Tests\Architecture;
+
+use PHPat\Selector\Selector;
+use PHPat\Test\Builder\Rule;
+use PHPat\Test\PHPat;
+
+final class DomainDependenciesTest
+{
+    public function test_domain_dependencies_are_explicit(): Rule
+    {
+        return PHPat::rule()
+            ->classes(Selector::inNamespace('App\Domain'))
+            ->canOnly()
+            ->dependOn()
+            ->classes(
+                Selector::inNamespace('App\Domain'),
+                Selector::isStandardClass()
+            );
+    }
+}
+```
+
+Add a specific class or namespace to the targets if you intentionally allow a library. For a bounded context, replace `App\Domain` with its domain namespace and explicitly allow any shared types it needs.
+
+## Model-View-Controller
+
+![Model and View are separated from Controller.](assets/mvc.svg)
+
+In this example, Model and View must not depend on Controller. We also choose to keep Model and View independent of each other; adapt that policy if your MVC design allows views to use models.
+
+```php
+<?php
+
+namespace Tests\Architecture;
+
+use PHPat\Selector\Selector;
+use PHPat\Test\Builder\Rule;
+use PHPat\Test\PHPat;
+
+final class MvcTest
+{
+    public function test_model_and_view_do_not_depend_on_controllers(): Rule
+    {
+        return PHPat::rule()
+            ->classes(
+                Selector::inNamespace('App\Model'),
+                Selector::inNamespace('App\View')
+            )
+            ->shouldNot()
+            ->dependOn()
+            ->classes(Selector::inNamespace('App\Controller'));
+    }
+
+    public function test_model_does_not_depend_on_view(): Rule
+    {
+        return PHPat::rule()
+            ->classes(Selector::inNamespace('App\Model'))
+            ->shouldNot()
+            ->dependOn()
+            ->classes(Selector::inNamespace('App\View'));
+    }
+
+    public function test_view_does_not_depend_on_model(): Rule
+    {
+        return PHPat::rule()
+            ->classes(Selector::inNamespace('App\View'))
+            ->shouldNot()
+            ->dependOn()
+            ->classes(Selector::inNamespace('App\Model'));
+    }
+}
+```
+
+## Aggregates
+
+Suppose `App\Domain\Order\Order` is an aggregate root and `App\Domain\Order\OrderLine` is an internal member. Classes outside `App\Domain\Order` should interact with the root rather than accessing its members directly. Classes inside the aggregate can still depend on each other.
+
+```text
+App\Application\PlaceOrder → App\Domain\Order\Order       allowed
+App\Application\PlaceOrder → App\Domain\Order\OrderLine   forbidden
+App\Domain\Order\Order     → App\Domain\Order\OrderLine   allowed
+```
+
+```php
+<?php
+
+namespace Tests\Architecture;
+
+use App\Domain\Order\Order;
+use PHPat\Selector\Selector;
+use PHPat\Test\Builder\Rule;
+use PHPat\Test\PHPat;
+
+final class OrderAggregateTest
+{
+    public function test_order_internals_are_accessed_through_the_root(): Rule
+    {
+        return PHPat::rule()
+            ->classes(Selector::inNamespace('App'))
+            ->excluding(Selector::inNamespace('App\Domain\Order'))
+            ->shouldNot()
+            ->dependOn()
+            ->classes(Selector::inNamespace('App\Domain\Order'))
+            ->excluding(Selector::classname(Order::class));
+    }
+}
+```
+
+Keep only the root and its internal members in this namespace: this rule treats every class except `Order` as internal. Repeat the rule with a separate namespace and root for each aggregate you want to protect.
 
 ## Inheritance
 
-#### Enforcing or forbidding an abstract extension
+![Handlers extend a shared abstract class.](assets/abstract.svg)
 
-![image-abstract](assets/abstract.png)
+If your application requires handlers to extend `App\Application\AbstractHandler`, select classes whose fully qualified name starts with `App\Application\` and ends with `Handler`. Exclude the base class itself.
 
-You might want to ensure that a specific type of classes are extending a certain abstract class. Services, Controllers, CommandHandlers, etc.
+```php
+<?php
 
->Classes with name `/^App\\Application\\.+Handler$/` should extend class with name App\Application\AbstractHandler
+namespace Tests\Architecture;
 
-<h2></h2>
+use App\Application\AbstractHandler;
+use PHPat\Selector\Selector;
+use PHPat\Test\Builder\Rule;
+use PHPat\Test\PHPat;
 
-<br />
+final class HandlerInheritanceTest
+{
+    public function test_handlers_extend_the_base_class(): Rule
+    {
+        return PHPat::rule()
+            ->classes(Selector::classname('/^App\\\\Application\\\\.+Handler$/', true))
+            ->excluding(Selector::classname(AbstractHandler::class))
+            ->should()
+            ->extend()
+            ->classes(Selector::classname(AbstractHandler::class));
+    }
+}
+```
 
-## Composition
+Use `shouldNot()->extend()` with the same targets if you instead want to forbid that inheritance.
 
-#### Enforcing or forbidding an interface implementation
+## Interface implementation
 
-![image-interface](assets/interface.png)
+![Entities implement a common interface.](assets/interface.svg)
 
-You might want to ensure that a specific type of classes are implementing a certain interface. ValueObjects, Entities, etc.
+To require entities in `App\Domain\Entity` to implement `EntityInterface`, select the namespace and exclude interface declarations:
 
->Classes in namespace App\Domain\Entity should implement class with name App\Domain\Entity\EntityInterface
+```php
+<?php
 
-<h2></h2>
+namespace Tests\Architecture;
+
+use App\Domain\Entity\EntityInterface;
+use PHPat\Selector\Selector;
+use PHPat\Test\Builder\Rule;
+use PHPat\Test\PHPat;
+
+final class EntityInterfaceTest
+{
+    public function test_entities_implement_the_contract(): Rule
+    {
+        return PHPat::rule()
+            ->classes(Selector::inNamespace('App\Domain\Entity'))
+            ->excluding(Selector::isInterface())
+            ->should()
+            ->implement()
+            ->classes(Selector::classname(EntityInterface::class));
+    }
+}
+```
+
+This example assumes the namespace contains entity classes and their interfaces. Use `shouldNot()->implement()` to forbid a particular interface instead.
