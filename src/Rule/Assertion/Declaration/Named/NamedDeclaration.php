@@ -28,9 +28,11 @@ abstract class NamedDeclaration extends DeclarationAssertion
 
     protected function getMessage(string $ruleName, string $subject, Constraint $constraint, array $params = []): string
     {
+        $negation = ($constraint === Constraint::Should) ? '' : ' not';
+
         $message = $params['isRegex'] === true
-            ? sprintf('%s should be named matching the regex %s', $subject, $params['classname'])
-            : sprintf('%s should be named %s', $subject, $params['classname']);
+            ? sprintf('%s should%s be named matching the regex %s', $subject, $negation, $params['classname'])
+            : sprintf('%s should%s be named %s', $subject, $negation, $params['classname']);
 
         return $this->prepareMessage($ruleName, $message);
     }

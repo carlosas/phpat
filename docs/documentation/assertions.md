@@ -6,6 +6,8 @@ Assertion is the type of verification that can be done in the selected classes.
 
 `should->beNamed()`: asserts that the selected classes are **named** as the namespaced name specified.
 
+`shouldNot->beNamed()`: asserts that the selected classes do **not match** the specified namespaced name or regular expression.
+
 ## BeFinal
 
 `should->beFinal()`: asserts that the selected classes are declared as **final**.
@@ -46,9 +48,13 @@ Assertion is the type of verification that can be done in the selected classes.
 
 `should->haveOnlyOnePublicMethod()`: asserts that the selected classes **only have one public method** (besides constructor).
 
+`shouldNot->haveOnlyOnePublicMethod()`: asserts that the selected classes have **zero or more than one public method** (besides constructor).
+
 ## HaveOnlyOnePublicMethodNamed
 
 `should->haveOnlyOnePublicMethodNamed()`: asserts that the selected classes **only have one public method with specified name** (besides constructor).
+
+`shouldNot->haveOnlyOnePublicMethodNamed()`: rejects classes with **exactly one public method matching the specified name or regular expression** (besides constructor). Classes with zero or multiple public methods, or one public method with a different name, satisfy the assertion.
 
 ## Extend
 
@@ -89,3 +95,5 @@ Assertion is the type of verification that can be done in the selected classes.
 ## ApplyAttribute
 
 `should->applyAttribute()`: asserts that the selected classes **apply** the target attributes.
+
+`shouldNot->applyAttribute()`: asserts that the selected classes **do not apply** the target class attributes.

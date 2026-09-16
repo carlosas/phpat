@@ -5,14 +5,16 @@ namespace Tests\PHPat\unit\rules\Declaration\Named;
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\Constraint;
 use PHPat\Rule\Assertion\Declaration\Named\ClassnameRule;
-use PHPat\Selector\Classname;
-use PHPat\Selector\ClassNamespace;
+use PHPat\Selector\Selector;
 use PHPat\Statement\StatementBuilder;
+use PHPat\Test\PHPat;
+use PHPat\Test\RelationRule;
+use PHPat\Test\TestParser;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\PHPat\unit\CreatesPhpFile;
-use Tests\PHPat\unit\FakeTestParser;
 
 /**
  * @extends RuleTestCase<ClassnameRule>
@@ -23,92 +25,55 @@ class ClassnameRuleTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    private string $methodName = 'SuperCoolClass';
+    private RelationRule $definition;
 
-    private bool $isRegex = false;
-
-    public function testRule(): void
+    /**
+     * @param array<string, bool|string> $params
+     */
+    #[DataProvider('assertionCases')]
+    public function testAssertion(Constraint $constraint, string $code, array $params, ?string $message): void
     {
-        // Class not matching expected exact name — error expected
-        $file = $this->createPhpFile(<<<'PHP'
-            <?php
-            namespace Fixture\Declaration\Named\ExactMatchTest;
-            class Subject {}
-            PHP);
+        $namespace = 'Fixture\Declaration\Named\\'.$this->dataName();
+        $subject = $namespace.'\Subject';
+        $selected = PHPat::rule()->classes(Selector::classname(isset($params['unselected']) ? $subject.'Other' : $subject));
+        $step = $constraint === Constraint::Should ? $selected->should() : $selected->shouldNot();
+        $name = $params['regex'] ? $params['name'] : $namespace.'\\'.$params['name'];
+        $this->definition = ($params['regex'] ? $step->beNamed(classname: $name, regex: true) : $step->beNamed(classname: $name))();
+        self::assertSame(['isRegex' => $params['regex'], 'classname' => $name], $this->definition->getParams());
+        $this->definition->ruleName = 'test';
+        self::assertSame($constraint, $this->definition->getConstraint());
+        self::assertSame('beNamed', $this->definition->getAssertionType());
+        $file = $this->createPhpFile("<?php\nnamespace ".$namespace.";\n".$code);
 
-        $this->analyse([$file], [
-            [sprintf('%s should be named SuperCoolClass', 'Fixture\Declaration\Named\ExactMatchTest\Subject'), 3],
-        ]);
+        $this->analyse([$file], $message === null ? [] : [[sprintf($message, $subject, $namespace), 3]]);
+    }
 
-        // Class matching regex — no errors
-        $regexSubject = 'Fixture\Declaration\Named\RegexMatchTest\SubjectClass';
-
-        $file2 = $this->createPhpFile(<<<'PHP'
-            <?php
-            namespace Fixture\Declaration\Named\RegexMatchTest;
-            class SubjectClass {}
-            PHP);
-
-        $testParser2 = FakeTestParser::create(
-            'test',
-            Constraint::Should,
-            'beNamed',
-            [new Classname($regexSubject, false)],
-            [],
-            [],
-            ['isRegex' => true, 'classname' => '/.*Class$/']
-        );
-
-        $rule2 = new ClassnameRule(
-            new StatementBuilder($testParser2),
-            new Configuration(false, true, false),
-            $this->createReflectionProvider(),
-            self::getContainer()->getByType(FileTypeMapper::class)
-        );
-
-        $this->analyse([$file2], []);
-
-        // Class in a different namespace — subject selector does not match, no errors
-        $file3 = $this->createPhpFile(<<<'PHP'
-            <?php
-            namespace Fixture\Declaration\Named\NamespaceNoMatchTest\Other;
-            class OtherClass {}
-            PHP);
-
-        $testParser3 = FakeTestParser::create(
-            'test',
-            Constraint::Should,
-            'beNamed',
-            [new ClassNamespace('Fixture\Declaration\Named\NamespaceNoMatchTest\Target', false)],
-            [],
-            [],
-            ['isRegex' => false, 'classname' => 'SomeSpecificName']
-        );
-
-        $rule3 = new ClassnameRule(
-            new StatementBuilder($testParser3),
-            new Configuration(false, true, false),
-            $this->createReflectionProvider(),
-            self::getContainer()->getByType(FileTypeMapper::class)
-        );
-
-        $this->analyse([$file3], []);
+    /**
+     * @return array<string, array{Constraint, string, array<string, bool|string>, ?string}>
+     */
+    public static function assertionCases(): array
+    {
+        return [
+            'ShouldUnselected' => [Constraint::Should, 'class Subject {}', ['name' => 'Other', 'regex' => false, 'unselected' => true], null],
+            'ShouldNotUnselected' => [Constraint::ShouldNot, 'class Subject {}', ['name' => 'Subject', 'regex' => false, 'unselected' => true], null],
+            'ShouldExactMismatch' => [Constraint::Should, 'class Subject {}', ['name' => 'Other', 'regex' => false], '%1$s should be named %2$s\Other'],
+            'ShouldExactMatch' => [Constraint::Should, 'class Subject {}', ['name' => 'Subject', 'regex' => false], null],
+            'ShouldRegexMismatch' => [Constraint::Should, 'class Subject {}', ['name' => '/Other$/', 'regex' => true], '%1$s should be named matching the regex /Other$/'],
+            'ShouldRegexMatch' => [Constraint::Should, 'class Subject {}', ['name' => '/Subject$/', 'regex' => true], null],
+            'ShouldNotExactMismatch' => [Constraint::ShouldNot, 'class Subject {}', ['name' => 'Other', 'regex' => false], null],
+            'ShouldNotExactMatch' => [Constraint::ShouldNot, 'class Subject {}', ['name' => 'Subject', 'regex' => false], '%1$s should not be named %2$s\Subject'],
+            'ShouldNotRegexMismatch' => [Constraint::ShouldNot, 'class Subject {}', ['name' => '/Other$/', 'regex' => true], null],
+            'ShouldNotRegexMatch' => [Constraint::ShouldNot, 'class Subject {}', ['name' => '/Subject$/', 'regex' => true], '%1$s should not be named matching the regex /Subject$/'],
+        ];
     }
 
     protected function getRule(): Rule
     {
-        $testParser = FakeTestParser::create(
-            'test',
-            Constraint::Should,
-            'beNamed',
-            [new Classname('Fixture\Declaration\Named\ExactMatchTest\Subject', false)],
-            [],
-            [],
-            ['isRegex' => $this->isRegex, 'classname' => $this->methodName]
-        );
+        $parser = $this->createMock(TestParser::class);
+        $parser->method('__invoke')->willReturn([$this->definition]);
 
         return new ClassnameRule(
-            new StatementBuilder($testParser),
+            new StatementBuilder($parser),
             new Configuration(false, true, false),
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)

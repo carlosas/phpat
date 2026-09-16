@@ -5,13 +5,16 @@ namespace Tests\PHPat\unit\rules\Declaration\OnePublicMethodNamed;
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\Constraint;
 use PHPat\Rule\Assertion\Declaration\OnePublicMethodNamed\HasOnlyOnePublicMethodNamedRule;
-use PHPat\Selector\ClassNamespace;
+use PHPat\Selector\Selector;
 use PHPat\Statement\StatementBuilder;
+use PHPat\Test\PHPat;
+use PHPat\Test\RelationRule;
+use PHPat\Test\TestParser;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\PHPat\unit\CreatesPhpFile;
-use Tests\PHPat\unit\FakeTestParser;
 
 /**
  * @extends RuleTestCase<HasOnlyOnePublicMethodNamedRule>
@@ -22,155 +25,78 @@ class HasOnlyOnePublicMethodNamedRuleTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    // All subjects live under this namespace prefix so getRule()'s ClassNamespace selector covers them all
-    private const SUBJECT_NS = 'Fixture\Declaration\OnePublicMethodNamed';
+    private RelationRule $definition;
 
-    private string $methodName = 'methodWithName';
-
-    private bool $isRegex = false;
-
-    public function testRule(): void
+    /**
+     * @param array<string, bool|string> $params
+     */
+    #[DataProvider('assertionCases')]
+    public function testAssertion(Constraint $constraint, string $code, array $params, ?string $message): void
     {
-        // Class with multiple public methods matching the expected name — error expected
-        $subject1 = self::SUBJECT_NS.'\ClassWithMultiplePublicMethodsTest\Subject';
-        $file = $this->createPhpFile(<<<'PHP'
-            <?php
-            namespace Fixture\Declaration\OnePublicMethodNamed\ClassWithMultiplePublicMethodsTest;
-            class Subject
-            {
-                public function methodWithName(): void {}
-                public function anotherMethodWithName(): void {}
-            }
-            PHP);
+        $namespace = 'Fixture\Declaration\OnePublicMethodNamed\\'.$this->dataName();
+        $subject = $namespace.'\Subject';
+        $selected = PHPat::rule()->classes(Selector::classname($subject));
+        $step = $constraint === Constraint::Should ? $selected->should() : $selected->shouldNot();
+        $this->definition = ($params['regex'] ? $step->haveOnlyOnePublicMethodNamed(name: $params['name'], isRegex: true) : $step->haveOnlyOnePublicMethodNamed(name: $params['name']))();
+        self::assertSame(['name' => $params['name'], 'isRegex' => $params['regex']], $this->definition->getParams());
+        $this->definition->ruleName = 'test';
+        self::assertSame($constraint, $this->definition->getConstraint());
+        self::assertSame('haveOnlyOnePublicMethodNamed', $this->definition->getAssertionType());
+        $file = $this->createPhpFile("<?php\nnamespace ".$namespace.";\n".$code);
 
-        $this->analyse([$file], [
-            [sprintf('%s should have only one public method named %s', $subject1, 'methodWithName'), 3],
-        ]);
-
-        // Class with no matching public methods — error expected
-        $subject2 = self::SUBJECT_NS.'\ClassWithMultiplePublicMethodsNoneMatchingTest\Subject';
-        $file2 = $this->createPhpFile(<<<'PHP'
-            <?php
-            namespace Fixture\Declaration\OnePublicMethodNamed\ClassWithMultiplePublicMethodsNoneMatchingTest;
-            class Subject
-            {
-                public function unrelated(): void {}
-                public function alsoUnrelated(): void {}
-            }
-            PHP);
-
-        $this->analyse([$file2], [
-            [sprintf('%s should have only one public method named %s', $subject2, 'methodWithName'), 3],
-        ]);
-
-        // Class with no public methods — error expected
-        $subject3 = self::SUBJECT_NS.'\ClassWithNoPublicMethodsTest\Subject';
-        $file3 = $this->createPhpFile(<<<'PHP'
-            <?php
-            namespace Fixture\Declaration\OnePublicMethodNamed\ClassWithNoPublicMethodsTest;
-            class Subject
-            {
-                private function secret(): void {}
-            }
-            PHP);
-
-        $this->analyse([$file3], [
-            [sprintf('%s should have only one public method named %s', $subject3, 'methodWithName'), 3],
-        ]);
-
-        // Class with exactly one matching public method (and constructor) — no errors
-        $file4 = $this->createPhpFile(<<<'PHP'
-            <?php
-            namespace Fixture\Declaration\OnePublicMethodNamed\GoodImplementationTest;
-            class Subject
-            {
-                public function __construct() {}
-                public function methodWithName(): void {}
-            }
-            PHP);
-
-        $this->analyse([$file4], []);
+        $this->analyse([$file], $message === null ? [] : [[sprintf($message, $subject, $namespace), 3]]);
     }
 
-    public function testRuleWithRegexMethod(): void
+    /**
+     * @return array<string, array{Constraint, string, array<string, bool|string>, ?string}>
+     */
+    public static function assertionCases(): array
     {
-        $this->methodName = '/^method[a-zA-Z0-9]+/';
-        $this->isRegex = true;
-
-        // Class with one method matching regex — no errors
-        $file = $this->createPhpFile(<<<'PHP'
-            <?php
-            namespace Fixture\Declaration\OnePublicMethodNamed\GoodImplementationRegexTest;
-            class Subject
-            {
-                public function __construct() {}
-                public function methodWithName(): void {}
-            }
-            PHP);
-
-        $this->analyse([$file], []);
-    }
-
-    public function testRuleWithMoreThanOneRegexMatch(): void
-    {
-        $this->methodName = '/^ba[a-zA-Z0-9]+/';
-        $this->isRegex = true;
-
-        // Class with more than one method matching regex — error expected
-        $subject = self::SUBJECT_NS.'\MoreThanOnePublicMethodNamedWithRegexTest\Subject';
-        $file = $this->createPhpFile(<<<'PHP'
-            <?php
-            namespace Fixture\Declaration\OnePublicMethodNamed\MoreThanOnePublicMethodNamedWithRegexTest;
-            class Subject
-            {
-                public function bar(): void {}
-                public function foo(): void {}
-            }
-            PHP);
-
-        $this->analyse([$file], [
-            [sprintf('%s should have only one public method named %s', $subject, '/^ba[a-zA-Z0-9]+/'), 3],
-        ]);
-    }
-
-    public function testRuleWithSimilarlyNamedRegexMethods(): void
-    {
-        $this->methodName = '/^example[a-zA-Z0-9]+/';
-        $this->isRegex = true;
-
-        // Class with two similarly named methods all matching regex — error expected
-        $subject = self::SUBJECT_NS.'\SimilarlyNamedPublicMethodsNamedWithRegexTest\Subject';
-        $file = $this->createPhpFile(<<<'PHP'
-            <?php
-            namespace Fixture\Declaration\OnePublicMethodNamed\SimilarlyNamedPublicMethodsNamedWithRegexTest;
-            class Subject
-            {
-                public function exampleOne(): void {}
-                public function exampleTwo(): void {}
-            }
-            PHP);
-
-        $this->analyse([$file], [
-            [sprintf('%s should have only one public method named %s', $subject, '/^example[a-zA-Z0-9]+/'), 3],
-        ]);
+        return [
+            'ShouldExactZero' => [Constraint::Should, 'class Subject {}', ['name' => 'run', 'regex' => false], '%s should have only one public method named run'],
+            'ShouldExactConstructorOnly' => [Constraint::Should, 'class Subject { public function __construct() {} }', ['name' => 'run', 'regex' => false], '%s should have only one public method named run'],
+            'ShouldExactOne' => [Constraint::Should, 'class Subject { public function run(): void {} }', ['name' => 'run', 'regex' => false], null],
+            'ShouldExactConstructorAndOne' => [Constraint::Should, 'class Subject { public function __construct() {} public function run(): void {} private function helper(): void {} protected function support(): void {} }', ['name' => 'run', 'regex' => false], null],
+            'ShouldExactMultiple' => [Constraint::Should, 'class Subject { public function run(): void {} public function other(): void {} }', ['name' => 'run', 'regex' => false], '%s should have only one public method named run'],
+            'ShouldExactNonPublicOnly' => [Constraint::Should, 'class Subject { private function helper(): void {} protected function support(): void {} }', ['name' => 'run', 'regex' => false], '%s should have only one public method named run'],
+            'ShouldExactOneDifferentName' => [Constraint::Should, 'class Subject { public function other(): void {} }', ['name' => 'run', 'regex' => false], '%s should have only one public method named run'],
+            'ShouldExactMultipleMatching' => [Constraint::Should, 'class Subject { public function run(): void {} public function runAgain(): void {} }', ['name' => 'run', 'regex' => false], '%s should have only one public method named run'],
+            'ShouldRegexZero' => [Constraint::Should, 'class Subject {}', ['name' => '/^run/', 'regex' => true], '%s should have only one public method named /^run/'],
+            'ShouldRegexConstructorOnly' => [Constraint::Should, 'class Subject { public function __construct() {} }', ['name' => '/^run/', 'regex' => true], '%s should have only one public method named /^run/'],
+            'ShouldRegexOne' => [Constraint::Should, 'class Subject { public function run(): void {} }', ['name' => '/^run/', 'regex' => true], null],
+            'ShouldRegexConstructorAndOne' => [Constraint::Should, 'class Subject { public function __construct() {} public function run(): void {} private function helper(): void {} protected function support(): void {} }', ['name' => '/^run/', 'regex' => true], null],
+            'ShouldRegexMultiple' => [Constraint::Should, 'class Subject { public function run(): void {} public function other(): void {} }', ['name' => '/^run/', 'regex' => true], '%s should have only one public method named /^run/'],
+            'ShouldRegexNonPublicOnly' => [Constraint::Should, 'class Subject { private function helper(): void {} protected function support(): void {} }', ['name' => '/^run/', 'regex' => true], '%s should have only one public method named /^run/'],
+            'ShouldRegexOneDifferentName' => [Constraint::Should, 'class Subject { public function other(): void {} }', ['name' => '/^run/', 'regex' => true], '%s should have only one public method named /^run/'],
+            'ShouldRegexMultipleMatching' => [Constraint::Should, 'class Subject { public function run(): void {} public function runAgain(): void {} }', ['name' => '/^run/', 'regex' => true], '%s should have only one public method named /^run/'],
+            'ShouldNotExactZero' => [Constraint::ShouldNot, 'class Subject {}', ['name' => 'run', 'regex' => false], null],
+            'ShouldNotExactConstructorOnly' => [Constraint::ShouldNot, 'class Subject { public function __construct() {} }', ['name' => 'run', 'regex' => false], null],
+            'ShouldNotExactOne' => [Constraint::ShouldNot, 'class Subject { public function run(): void {} }', ['name' => 'run', 'regex' => false], '%s should not have only one public method named run'],
+            'ShouldNotExactConstructorAndOne' => [Constraint::ShouldNot, 'class Subject { public function __construct() {} public function run(): void {} private function helper(): void {} protected function support(): void {} }', ['name' => 'run', 'regex' => false], '%s should not have only one public method named run'],
+            'ShouldNotExactMultiple' => [Constraint::ShouldNot, 'class Subject { public function run(): void {} public function other(): void {} }', ['name' => 'run', 'regex' => false], null],
+            'ShouldNotExactNonPublicOnly' => [Constraint::ShouldNot, 'class Subject { private function helper(): void {} protected function support(): void {} }', ['name' => 'run', 'regex' => false], null],
+            'ShouldNotExactOneDifferentName' => [Constraint::ShouldNot, 'class Subject { public function other(): void {} }', ['name' => 'run', 'regex' => false], null],
+            'ShouldNotExactMultipleMatching' => [Constraint::ShouldNot, 'class Subject { public function run(): void {} public function runAgain(): void {} }', ['name' => 'run', 'regex' => false], null],
+            'ShouldNotRegexZero' => [Constraint::ShouldNot, 'class Subject {}', ['name' => '/^run/', 'regex' => true], null],
+            'ShouldNotRegexConstructorOnly' => [Constraint::ShouldNot, 'class Subject { public function __construct() {} }', ['name' => '/^run/', 'regex' => true], null],
+            'ShouldNotRegexOne' => [Constraint::ShouldNot, 'class Subject { public function run(): void {} }', ['name' => '/^run/', 'regex' => true], '%s should not have only one public method named /^run/'],
+            'ShouldNotRegexConstructorAndOne' => [Constraint::ShouldNot, 'class Subject { public function __construct() {} public function run(): void {} private function helper(): void {} protected function support(): void {} }', ['name' => '/^run/', 'regex' => true], '%s should not have only one public method named /^run/'],
+            'ShouldNotRegexMultiple' => [Constraint::ShouldNot, 'class Subject { public function run(): void {} public function other(): void {} }', ['name' => '/^run/', 'regex' => true], null],
+            'ShouldNotRegexNonPublicOnly' => [Constraint::ShouldNot, 'class Subject { private function helper(): void {} protected function support(): void {} }', ['name' => '/^run/', 'regex' => true], null],
+            'ShouldNotRegexOneDifferentName' => [Constraint::ShouldNot, 'class Subject { public function other(): void {} }', ['name' => '/^run/', 'regex' => true], null],
+            'ShouldNotRegexMultipleMatching' => [Constraint::ShouldNot, 'class Subject { public function run(): void {} public function runAgain(): void {} }', ['name' => '/^run/', 'regex' => true], null],
+        ];
     }
 
     protected function getRule(): Rule
     {
-        $testParser = FakeTestParser::create(
-            'test',
-            Constraint::Should,
-            'haveOnlyOnePublicMethodNamed',
-            [new ClassNamespace(self::SUBJECT_NS, false)],
-            [],
-            [],
-            ['name' => $this->methodName, 'isRegex' => $this->isRegex]
-        );
+        $parser = $this->createMock(TestParser::class);
+        $parser->method('__invoke')->willReturn([$this->definition]);
 
         return new HasOnlyOnePublicMethodNamedRule(
-            new StatementBuilder($testParser),
+            new StatementBuilder($parser),
             new Configuration(false, true, false),
-            self::createReflectionProvider(),
+            $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );
     }
