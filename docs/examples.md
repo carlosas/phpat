@@ -253,7 +253,7 @@ Add a specific class or namespace to the targets if you intentionally allow a li
 
 ## Model-View-Controller
 
-![Model and View are separated from Controller.](assets/mvc.png)
+![Model and View are separated from Controller.](assets/mvc.svg)
 
 In this example, Model and View must not depend on Controller. We also choose to keep Model and View independent of each other; adapt that policy if your MVC design allows views to use models.
 
@@ -339,7 +339,7 @@ Keep only the root and its internal members in this namespace: this rule treats 
 
 ## Inheritance
 
-![Handlers extend a shared abstract class.](assets/abstract.png)
+![Handlers extend a shared abstract class.](assets/abstract.svg)
 
 If your application requires handlers to extend `App\Application\AbstractHandler`, select classes whose fully qualified name starts with `App\Application\` and ends with `Handler`. Exclude the base class itself.
 
@@ -371,7 +371,7 @@ Use `shouldNot()->extend()` with the same targets if you instead want to forbid 
 
 ## Interface implementation
 
-![Entities implement a common interface.](assets/interface.png)
+![Entities implement a common interface.](assets/interface.svg)
 
 To require entities in `App\Domain\Entity` to implement `EntityInterface`, select the namespace and exclude interface declarations:
 
