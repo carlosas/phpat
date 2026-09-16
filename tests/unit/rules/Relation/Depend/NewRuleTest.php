@@ -22,20 +22,31 @@ class NewRuleTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    private Constraint $constraint = Constraint::ShouldNot;
+    private FakeTestParser $testParser;
 
-    private string $subject = 'Fixture\Relation\Depend\New\ShouldNotConstraint\Subject';
+    private Configuration $configuration;
 
-    private string $target = 'Fixture\Relation\Depend\New\ShouldNotConstraint\Target';
-
-    private bool $ignoreBuiltInClasses = true;
-
-    public function testShouldNotConstraint(): void
+    public function testRejectsMatchingDependenciesWithShouldNot(): void
     {
+        $subject = 'Fixture\Relation\Depend\New\ShouldNotConstraint\Subject';
+        $target = 'Fixture\Relation\Depend\New\ShouldNotConstraint\Target';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
+            'test',
+            Constraint::ShouldNot,
+            'depend',
+            [new Classname($subject, false)],
+            [new Classname($target, false)]
+        );
+
         $file = $this->createPhpFile(<<<'PHP'
             <?php
+
             namespace Fixture\Relation\Depend\New\ShouldNotConstraint;
-            class Target {}
+
+            class Target
+            {
+            }
             class Subject
             {
                 public function create(): Target
@@ -46,19 +57,28 @@ class NewRuleTest extends RuleTestCase
             PHP);
 
         $this->analyse([$file], [
-            [sprintf('%s should not depend on %s', $this->subject, $this->target), 8],
+            [sprintf('%s should not depend on %s', $subject, $target), 12],
         ]);
     }
 
-    public function testShouldNotConstraintDetectsBuiltInClasses(): void
+    public function testRejectsBuiltInDependenciesWithShouldNot(): void
     {
-        $this->subject = 'Fixture\Relation\Depend\New\BuiltInTest\Subject';
-        $this->target = 'Exception';
-        $this->ignoreBuiltInClasses = false;
+        $subject = 'Fixture\Relation\Depend\New\BuiltInTest\Subject';
+        $target = 'Exception';
+        $this->configuration = new Configuration(false, false, false);
+        $this->testParser = FakeTestParser::create(
+            'test',
+            Constraint::ShouldNot,
+            'depend',
+            [new Classname($subject, false)],
+            [new Classname($target, false)]
+        );
 
         $file = $this->createPhpFile(<<<'PHP'
             <?php
+
             namespace Fixture\Relation\Depend\New\BuiltInTest;
+
             class Subject
             {
                 public function method(): \Exception
@@ -69,21 +89,34 @@ class NewRuleTest extends RuleTestCase
             PHP);
 
         $this->analyse([$file], [
-            [sprintf('%s should not depend on %s', $this->subject, $this->target), 7],
+            [sprintf('%s should not depend on %s', $subject, $target), 9],
         ]);
     }
 
-    public function testCanOnlyConstraint(): void
+    public function testRejectsDisallowedDependenciesWithCanOnly(): void
     {
-        $this->constraint = Constraint::CanOnly;
-        $this->subject = 'Fixture\Relation\Depend\New\CanOnlyConstraint\Subject';
-        $this->target = 'Fixture\Relation\Depend\New\CanOnlyConstraint\Allowed';
+        $subject = 'Fixture\Relation\Depend\New\CanOnlyConstraint\Subject';
+        $target = 'Fixture\Relation\Depend\New\CanOnlyConstraint\Allowed';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
+            'test',
+            Constraint::CanOnly,
+            'depend',
+            [new Classname($subject, false)],
+            [new Classname($target, false)]
+        );
 
         $file = $this->createPhpFile(<<<'PHP'
             <?php
+
             namespace Fixture\Relation\Depend\New\CanOnlyConstraint;
-            class Allowed {}
-            class Target {}
+
+            class Allowed
+            {
+            }
+            class Target
+            {
+            }
             class Subject
             {
                 public function method(): void
@@ -94,17 +127,31 @@ class NewRuleTest extends RuleTestCase
             PHP);
 
         $this->analyse([$file], [
-            [sprintf('%s should not depend on %s', 'Fixture\Relation\Depend\New\CanOnlyConstraint\Subject', 'Fixture\Relation\Depend\New\CanOnlyConstraint\Target'), 9],
+            [sprintf('%s should not depend on Fixture\Relation\Depend\New\CanOnlyConstraint\Target', $subject), 15],
         ]);
+    }
 
-        // Built-in class should not be reported when ignoreBuiltInClasses is true
-        $builtInSubject = 'Fixture\Relation\Depend\New\CanOnlyBuiltInTest\Subject';
-        $builtInAllowed = 'Fixture\Relation\Depend\New\CanOnlyBuiltInTest\Allowed';
+    public function testIgnoresBuiltInDependenciesWhenConfiguredWithCanOnly(): void
+    {
+        $subject = 'Fixture\Relation\Depend\New\CanOnlyBuiltInTest\Subject';
+        $target = 'Fixture\Relation\Depend\New\CanOnlyBuiltInTest\Allowed';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
+            'test',
+            Constraint::CanOnly,
+            'depend',
+            [new Classname($subject, false)],
+            [new Classname($target, false)]
+        );
 
-        $file2 = $this->createPhpFile(<<<'PHP'
+        $file = $this->createPhpFile(<<<'PHP'
             <?php
+
             namespace Fixture\Relation\Depend\New\CanOnlyBuiltInTest;
-            class Allowed {}
+
+            class Allowed
+            {
+            }
             class Subject
             {
                 public function method(): \Exception
@@ -114,37 +161,14 @@ class NewRuleTest extends RuleTestCase
             }
             PHP);
 
-        $testParser2 = FakeTestParser::create(
-            'test',
-            Constraint::CanOnly,
-            'depend',
-            [new Classname($builtInSubject, false)],
-            [new Classname($builtInAllowed, false)]
-        );
-
-        $rule2 = new NewRule(
-            new StatementBuilder($testParser2),
-            new Configuration(false, false, false),
-            $this->createReflectionProvider(),
-            self::getContainer()->getByType(FileTypeMapper::class)
-        );
-
-        $this->analyse([$file2], []);
+        $this->analyse([$file], []);
     }
 
     protected function getRule(): Rule
     {
-        $testParser = FakeTestParser::create(
-            'test',
-            $this->constraint,
-            'depend',
-            [new Classname($this->subject, false)],
-            [new Classname($this->target, false)]
-        );
-
         return new NewRule(
-            new StatementBuilder($testParser),
-            new Configuration(false, $this->ignoreBuiltInClasses, false),
+            new StatementBuilder($this->testParser),
+            $this->configuration,
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

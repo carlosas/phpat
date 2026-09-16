@@ -22,92 +22,106 @@ class ParentClassRuleTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    private Constraint $constraint = Constraint::Should;
+    private FakeTestParser $testParser;
 
-    public function testShouldConstraint(): void
+    private Configuration $configuration;
+
+    public function testRejectsMissingParentClassesWithShould(): void
     {
-        // Class not extending — error expected
-        $file = $this->createPhpFile(<<<'PHP'
-            <?php
-            namespace Fixture\Relation\Extend\ShouldConstraint;
-            class Target {}
-            class Subject {}
-            PHP);
-
-        $this->analyse([$file], [
-            [sprintf('%s should extend %s', 'Fixture\Relation\Extend\ShouldConstraint\Subject', 'Fixture\Relation\Extend\ShouldConstraint\Target'), 4],
-        ]);
-
-        // Class correctly extending — no errors
-        $subject2 = 'Fixture\Relation\Extend\ShouldConstraintPass\Subject';
-        $target2 = 'Fixture\Relation\Extend\ShouldConstraintPass\Target';
-
-        $file2 = $this->createPhpFile(<<<'PHP'
-            <?php
-            namespace Fixture\Relation\Extend\ShouldConstraintPass;
-            class Target {}
-            class Subject extends Target {}
-            PHP);
-
-        $testParser2 = FakeTestParser::create(
+        $subject = 'Fixture\Relation\Extend\ShouldConstraint\Subject';
+        $target = 'Fixture\Relation\Extend\ShouldConstraint\Target';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
             'test',
             Constraint::Should,
-            'extend',
-            [new Classname($subject2, false)],
-            [new Classname($target2, false)]
-        );
-
-        $rule2 = new ParentClassRule(
-            new StatementBuilder($testParser2),
-            new Configuration(false, true, false),
-            $this->createReflectionProvider(),
-            self::getContainer()->getByType(FileTypeMapper::class)
-        );
-
-        $this->analyse([$file2], []);
-    }
-
-    public function testShouldNotConstraint(): void
-    {
-        $this->constraint = Constraint::ShouldNot;
-
-        // Class extending — error expected
-        $file = $this->createPhpFile(<<<'PHP'
-            <?php
-            namespace Fixture\Relation\Extend\ShouldNotConstraint;
-            class Target {}
-            class Subject extends Target {}
-            PHP);
-
-        $this->analyse([$file], [
-            [sprintf('%s should not extend %s', 'Fixture\Relation\Extend\ShouldNotConstraint\Subject', 'Fixture\Relation\Extend\ShouldNotConstraint\Target'), 4],
-        ]);
-    }
-
-    protected function getRule(): Rule
-    {
-        [$subject, $target] = match ($this->constraint) {
-            Constraint::Should => [
-                'Fixture\Relation\Extend\ShouldConstraint\Subject',
-                'Fixture\Relation\Extend\ShouldConstraint\Target',
-            ],
-            default => [
-                'Fixture\Relation\Extend\ShouldNotConstraint\Subject',
-                'Fixture\Relation\Extend\ShouldNotConstraint\Target',
-            ],
-        };
-
-        $testParser = FakeTestParser::create(
-            'test',
-            $this->constraint,
             'extend',
             [new Classname($subject, false)],
             [new Classname($target, false)]
         );
 
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+
+            namespace Fixture\Relation\Extend\ShouldConstraint;
+
+            class Target
+            {
+            }
+            class Subject
+            {
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should extend %s', $subject, $target), 8],
+        ]);
+    }
+
+    public function testAcceptsMatchingParentClassesWithShould(): void
+    {
+        $subject = 'Fixture\Relation\Extend\ShouldConstraintPass\Subject';
+        $target = 'Fixture\Relation\Extend\ShouldConstraintPass\Target';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
+            'test',
+            Constraint::Should,
+            'extend',
+            [new Classname($subject, false)],
+            [new Classname($target, false)]
+        );
+
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+
+            namespace Fixture\Relation\Extend\ShouldConstraintPass;
+
+            class Target
+            {
+            }
+            class Subject extends Target
+            {
+            }
+            PHP);
+
+        $this->analyse([$file], []);
+    }
+
+    public function testRejectsMatchingParentClassesWithShouldNot(): void
+    {
+        $subject = 'Fixture\Relation\Extend\ShouldNotConstraint\Subject';
+        $target = 'Fixture\Relation\Extend\ShouldNotConstraint\Target';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
+            'test',
+            Constraint::ShouldNot,
+            'extend',
+            [new Classname($subject, false)],
+            [new Classname($target, false)]
+        );
+
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+
+            namespace Fixture\Relation\Extend\ShouldNotConstraint;
+
+            class Target
+            {
+            }
+            class Subject extends Target
+            {
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should not extend %s', $subject, $target), 8],
+        ]);
+    }
+
+    protected function getRule(): Rule
+    {
         return new ParentClassRule(
-            new StatementBuilder($testParser),
-            new Configuration(false, true, false),
+            new StatementBuilder($this->testParser),
+            $this->configuration,
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

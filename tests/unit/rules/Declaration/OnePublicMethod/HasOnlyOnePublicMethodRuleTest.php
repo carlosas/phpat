@@ -5,16 +5,13 @@ namespace Tests\PHPat\unit\rules\Declaration\OnePublicMethod;
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\Constraint;
 use PHPat\Rule\Assertion\Declaration\OnePublicMethod\HasOnlyOnePublicMethodRule;
-use PHPat\Selector\Selector;
+use PHPat\Selector\Classname;
 use PHPat\Statement\StatementBuilder;
-use PHPat\Test\PHPat;
-use PHPat\Test\RelationRule;
-use PHPat\Test\TestParser;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
-use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\PHPat\unit\CreatesPhpFile;
+use Tests\PHPat\unit\FakeTestParser;
 
 /**
  * @extends RuleTestCase<HasOnlyOnePublicMethodRule>
@@ -25,53 +22,387 @@ class HasOnlyOnePublicMethodRuleTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    private RelationRule $definition;
+    private FakeTestParser $testParser;
 
-    #[DataProvider('assertionCases')]
-    public function testAssertion(Constraint $constraint, string $code, ?string $message): void
+    private Configuration $configuration;
+
+    public function testRejectsClassesWithoutMethodsWithShould(): void
     {
-        $namespace = 'Fixture\Declaration\OnePublicMethod\\'.$this->dataName();
-        $subject = $namespace.'\Subject';
-        $selected = PHPat::rule()->classes(Selector::classname($subject));
-        $step = $constraint === Constraint::Should ? $selected->should() : $selected->shouldNot();
-        $this->definition = $step->haveOnlyOnePublicMethod()();
-        $this->definition->ruleName = 'test';
-        self::assertSame($constraint, $this->definition->getConstraint());
-        self::assertSame('haveOnlyOnePublicMethod', $this->definition->getAssertionType());
-        $file = $this->createPhpFile("<?php\nnamespace ".$namespace.";\n".$code);
+        $subject = 'Fixture\Declaration\OnePublicMethod\ShouldZero\Subject';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
+            'test',
+            Constraint::Should,
+            'haveOnlyOnePublicMethod',
+            [new Classname($subject, false)],
+            []
+        );
 
-        $this->analyse([$file], $message === null ? [] : [[sprintf($message, $subject, $namespace), 3]]);
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+
+            namespace Fixture\Declaration\OnePublicMethod\ShouldZero;
+
+            class Subject
+            {
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should have only one public method', $subject), 5],
+        ]);
     }
 
-    /**
-     * @return array<string, array{Constraint, string, ?string}>
-     */
-    public static function assertionCases(): array
+    public function testRejectsClassesWithOnlyAConstructorWithShould(): void
     {
-        return [
-            'ShouldZero' => [Constraint::Should, 'class Subject {}', '%s should have only one public method'],
-            'ShouldConstructorOnly' => [Constraint::Should, 'class Subject { public function __construct() {} }', '%s should have only one public method'],
-            'ShouldOne' => [Constraint::Should, 'class Subject { public function run(): void {} }', null],
-            'ShouldConstructorAndOne' => [Constraint::Should, 'class Subject { public function __construct() {} public function run(): void {} private function helper(): void {} protected function support(): void {} }', null],
-            'ShouldMultiple' => [Constraint::Should, 'class Subject { public function run(): void {} public function other(): void {} }', '%s should have only one public method'],
-            'ShouldNonPublicOnly' => [Constraint::Should, 'class Subject { private function helper(): void {} protected function support(): void {} }', '%s should have only one public method'],
-            'ShouldNotZero' => [Constraint::ShouldNot, 'class Subject {}', null],
-            'ShouldNotConstructorOnly' => [Constraint::ShouldNot, 'class Subject { public function __construct() {} }', null],
-            'ShouldNotOne' => [Constraint::ShouldNot, 'class Subject { public function run(): void {} }', '%s should not have only one public method'],
-            'ShouldNotConstructorAndOne' => [Constraint::ShouldNot, 'class Subject { public function __construct() {} public function run(): void {} private function helper(): void {} protected function support(): void {} }', '%s should not have only one public method'],
-            'ShouldNotMultiple' => [Constraint::ShouldNot, 'class Subject { public function run(): void {} public function other(): void {} }', null],
-            'ShouldNotNonPublicOnly' => [Constraint::ShouldNot, 'class Subject { private function helper(): void {} protected function support(): void {} }', null],
-        ];
+        $subject = 'Fixture\Declaration\OnePublicMethod\ShouldConstructorOnly\Subject';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
+            'test',
+            Constraint::Should,
+            'haveOnlyOnePublicMethod',
+            [new Classname($subject, false)],
+            []
+        );
+
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+
+            namespace Fixture\Declaration\OnePublicMethod\ShouldConstructorOnly;
+
+            class Subject
+            {
+                public function __construct()
+                {
+                }
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should have only one public method', $subject), 5],
+        ]);
+    }
+
+    public function testAcceptsClassesWithOnePublicMethodWithShould(): void
+    {
+        $subject = 'Fixture\Declaration\OnePublicMethod\ShouldOne\Subject';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
+            'test',
+            Constraint::Should,
+            'haveOnlyOnePublicMethod',
+            [new Classname($subject, false)],
+            []
+        );
+
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+
+            namespace Fixture\Declaration\OnePublicMethod\ShouldOne;
+
+            class Subject
+            {
+                public function run(): void
+                {
+                }
+            }
+            PHP);
+
+        $this->analyse([$file], []);
+    }
+
+    public function testAcceptsClassesWithOnePublicMethodAndOtherMembersWithShould(): void
+    {
+        $subject = 'Fixture\Declaration\OnePublicMethod\ShouldConstructorAndOne\Subject';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
+            'test',
+            Constraint::Should,
+            'haveOnlyOnePublicMethod',
+            [new Classname($subject, false)],
+            []
+        );
+
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+
+            namespace Fixture\Declaration\OnePublicMethod\ShouldConstructorAndOne;
+
+            class Subject
+            {
+                public function __construct()
+                {
+                }
+                public function run(): void
+                {
+                }
+                private function helper(): void
+                {
+                }
+                protected function support(): void
+                {
+                }
+            }
+            PHP);
+
+        $this->analyse([$file], []);
+    }
+
+    public function testRejectsClassesWithMultiplePublicMethodsWithShould(): void
+    {
+        $subject = 'Fixture\Declaration\OnePublicMethod\ShouldMultiple\Subject';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
+            'test',
+            Constraint::Should,
+            'haveOnlyOnePublicMethod',
+            [new Classname($subject, false)],
+            []
+        );
+
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+
+            namespace Fixture\Declaration\OnePublicMethod\ShouldMultiple;
+
+            class Subject
+            {
+                public function run(): void
+                {
+                }
+                public function other(): void
+                {
+                }
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should have only one public method', $subject), 5],
+        ]);
+    }
+
+    public function testRejectsClassesWithOnlyNonPublicMethodsWithShould(): void
+    {
+        $subject = 'Fixture\Declaration\OnePublicMethod\ShouldNonPublicOnly\Subject';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
+            'test',
+            Constraint::Should,
+            'haveOnlyOnePublicMethod',
+            [new Classname($subject, false)],
+            []
+        );
+
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+
+            namespace Fixture\Declaration\OnePublicMethod\ShouldNonPublicOnly;
+
+            class Subject
+            {
+                private function helper(): void
+                {
+                }
+                protected function support(): void
+                {
+                }
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should have only one public method', $subject), 5],
+        ]);
+    }
+
+    public function testAcceptsClassesWithoutMethodsWithShouldNot(): void
+    {
+        $subject = 'Fixture\Declaration\OnePublicMethod\ShouldNotZero\Subject';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
+            'test',
+            Constraint::ShouldNot,
+            'haveOnlyOnePublicMethod',
+            [new Classname($subject, false)],
+            []
+        );
+
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+
+            namespace Fixture\Declaration\OnePublicMethod\ShouldNotZero;
+
+            class Subject
+            {
+            }
+            PHP);
+
+        $this->analyse([$file], []);
+    }
+
+    public function testAcceptsClassesWithOnlyAConstructorWithShouldNot(): void
+    {
+        $subject = 'Fixture\Declaration\OnePublicMethod\ShouldNotConstructorOnly\Subject';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
+            'test',
+            Constraint::ShouldNot,
+            'haveOnlyOnePublicMethod',
+            [new Classname($subject, false)],
+            []
+        );
+
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+
+            namespace Fixture\Declaration\OnePublicMethod\ShouldNotConstructorOnly;
+
+            class Subject
+            {
+                public function __construct()
+                {
+                }
+            }
+            PHP);
+
+        $this->analyse([$file], []);
+    }
+
+    public function testRejectsClassesWithOnePublicMethodWithShouldNot(): void
+    {
+        $subject = 'Fixture\Declaration\OnePublicMethod\ShouldNotOne\Subject';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
+            'test',
+            Constraint::ShouldNot,
+            'haveOnlyOnePublicMethod',
+            [new Classname($subject, false)],
+            []
+        );
+
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+
+            namespace Fixture\Declaration\OnePublicMethod\ShouldNotOne;
+
+            class Subject
+            {
+                public function run(): void
+                {
+                }
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should not have only one public method', $subject), 5],
+        ]);
+    }
+
+    public function testRejectsClassesWithOnePublicMethodAndOtherMembersWithShouldNot(): void
+    {
+        $subject = 'Fixture\Declaration\OnePublicMethod\ShouldNotConstructorAndOne\Subject';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
+            'test',
+            Constraint::ShouldNot,
+            'haveOnlyOnePublicMethod',
+            [new Classname($subject, false)],
+            []
+        );
+
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+
+            namespace Fixture\Declaration\OnePublicMethod\ShouldNotConstructorAndOne;
+
+            class Subject
+            {
+                public function __construct()
+                {
+                }
+                public function run(): void
+                {
+                }
+                private function helper(): void
+                {
+                }
+                protected function support(): void
+                {
+                }
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should not have only one public method', $subject), 5],
+        ]);
+    }
+
+    public function testAcceptsClassesWithMultiplePublicMethodsWithShouldNot(): void
+    {
+        $subject = 'Fixture\Declaration\OnePublicMethod\ShouldNotMultiple\Subject';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
+            'test',
+            Constraint::ShouldNot,
+            'haveOnlyOnePublicMethod',
+            [new Classname($subject, false)],
+            []
+        );
+
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+
+            namespace Fixture\Declaration\OnePublicMethod\ShouldNotMultiple;
+
+            class Subject
+            {
+                public function run(): void
+                {
+                }
+                public function other(): void
+                {
+                }
+            }
+            PHP);
+
+        $this->analyse([$file], []);
+    }
+
+    public function testAcceptsClassesWithOnlyNonPublicMethodsWithShouldNot(): void
+    {
+        $subject = 'Fixture\Declaration\OnePublicMethod\ShouldNotNonPublicOnly\Subject';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
+            'test',
+            Constraint::ShouldNot,
+            'haveOnlyOnePublicMethod',
+            [new Classname($subject, false)],
+            []
+        );
+
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+
+            namespace Fixture\Declaration\OnePublicMethod\ShouldNotNonPublicOnly;
+
+            class Subject
+            {
+                private function helper(): void
+                {
+                }
+                protected function support(): void
+                {
+                }
+            }
+            PHP);
+
+        $this->analyse([$file], []);
     }
 
     protected function getRule(): Rule
     {
-        $parser = $this->createMock(TestParser::class);
-        $parser->method('__invoke')->willReturn([$this->definition]);
-
         return new HasOnlyOnePublicMethodRule(
-            new StatementBuilder($parser),
-            new Configuration(false, true, false),
+            new StatementBuilder($this->testParser),
+            $this->configuration,
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

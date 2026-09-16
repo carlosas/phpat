@@ -22,81 +22,94 @@ class StaticMethodRuleTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    private Constraint $constraint = Constraint::ShouldNot;
+    private FakeTestParser $testParser;
 
-    public function testShouldNotConstraint(): void
+    private Configuration $configuration;
+
+    public function testRejectsMatchingDependenciesWithShouldNot(): void
     {
-        $file = $this->createPhpFile(<<<'PHP'
-            <?php
-            namespace Fixture\Relation\Depend\StaticMethod\ShouldNotConstraint;
-            class Target
-            {
-                public static function staticMethod(): void {}
-            }
-            class Subject
-            {
-                public function method(): void
-                {
-                    Target::staticMethod();
-                }
-            }
-            PHP);
-
-        $this->analyse([$file], [
-            [sprintf('%s should not depend on %s', 'Fixture\Relation\Depend\StaticMethod\ShouldNotConstraint\Subject', 'Fixture\Relation\Depend\StaticMethod\ShouldNotConstraint\Target'), 11],
-        ]);
-    }
-
-    public function testCanOnlyConstraint(): void
-    {
-        $this->constraint = Constraint::CanOnly;
-
-        $file = $this->createPhpFile(<<<'PHP'
-            <?php
-            namespace Fixture\Relation\Depend\StaticMethod\CanOnlyConstraint;
-            class Allowed {}
-            class Target
-            {
-                public static function staticMethod(): void {}
-            }
-            class Subject
-            {
-                public function method(): void
-                {
-                    Target::staticMethod();
-                }
-            }
-            PHP);
-
-        $this->analyse([$file], [
-            [sprintf('%s should not depend on %s', 'Fixture\Relation\Depend\StaticMethod\CanOnlyConstraint\Subject', 'Fixture\Relation\Depend\StaticMethod\CanOnlyConstraint\Target'), 12],
-        ]);
-    }
-
-    protected function getRule(): Rule
-    {
-        [$subject, $target] = match ($this->constraint) {
-            Constraint::ShouldNot => [
-                'Fixture\Relation\Depend\StaticMethod\ShouldNotConstraint\Subject',
-                'Fixture\Relation\Depend\StaticMethod\ShouldNotConstraint\Target',
-            ],
-            default => [
-                'Fixture\Relation\Depend\StaticMethod\CanOnlyConstraint\Subject',
-                'Fixture\Relation\Depend\StaticMethod\CanOnlyConstraint\Allowed',
-            ],
-        };
-
-        $testParser = FakeTestParser::create(
+        $subject = 'Fixture\Relation\Depend\StaticMethod\ShouldNotConstraint\Subject';
+        $target = 'Fixture\Relation\Depend\StaticMethod\ShouldNotConstraint\Target';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
             'test',
-            $this->constraint,
+            Constraint::ShouldNot,
             'depend',
             [new Classname($subject, false)],
             [new Classname($target, false)]
         );
 
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+
+            namespace Fixture\Relation\Depend\StaticMethod\ShouldNotConstraint;
+
+            class Target
+            {
+                public static function staticMethod(): void
+                {
+                }
+            }
+            class Subject
+            {
+                public function method(): void
+                {
+                    Target::staticMethod();
+                }
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should not depend on %s', $subject, $target), 15],
+        ]);
+    }
+
+    public function testRejectsDisallowedDependenciesWithCanOnly(): void
+    {
+        $subject = 'Fixture\Relation\Depend\StaticMethod\CanOnlyConstraint\Subject';
+        $target = 'Fixture\Relation\Depend\StaticMethod\CanOnlyConstraint\Allowed';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
+            'test',
+            Constraint::CanOnly,
+            'depend',
+            [new Classname($subject, false)],
+            [new Classname($target, false)]
+        );
+
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+
+            namespace Fixture\Relation\Depend\StaticMethod\CanOnlyConstraint;
+
+            class Allowed
+            {
+            }
+            class Target
+            {
+                public static function staticMethod(): void
+                {
+                }
+            }
+            class Subject
+            {
+                public function method(): void
+                {
+                    Target::staticMethod();
+                }
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should not depend on Fixture\Relation\Depend\StaticMethod\CanOnlyConstraint\Target', $subject), 18],
+        ]);
+    }
+
+    protected function getRule(): Rule
+    {
         return new StaticMethodRule(
-            new StatementBuilder($testParser),
-            new Configuration(false, true, false),
+            new StatementBuilder($this->testParser),
+            $this->configuration,
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

@@ -21,6 +21,9 @@ class FakeTestParser extends TestParser
     /** @var array<SelectorInterface> */
     public array $targets;
 
+    /** @var array<SelectorInterface> */
+    public array $targetExcludes = [];
+
     /** @var array<string> */
     public array $tips = [];
 
@@ -35,6 +38,7 @@ class FakeTestParser extends TestParser
         $rule->assertionType = $this->assertionType;
         $rule->subjects = $this->subjects;
         $rule->targets = $this->targets;
+        $rule->targetExcludes = $this->targetExcludes;
         $rule->tips = $this->tips;
         $rule->params = $this->params;
 

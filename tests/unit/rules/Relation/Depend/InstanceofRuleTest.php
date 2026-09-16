@@ -22,75 +22,88 @@ class InstanceofRuleTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    private Constraint $constraint = Constraint::ShouldNot;
+    private FakeTestParser $testParser;
 
-    public function testShouldNotConstraint(): void
+    private Configuration $configuration;
+
+    public function testRejectsMatchingDependenciesWithShouldNot(): void
     {
-        $file = $this->createPhpFile(<<<'PHP'
-            <?php
-            namespace Fixture\Relation\Depend\Instanceof\ShouldNotConstraint;
-            class Target {}
-            class Subject
-            {
-                public function method(object $o): bool
-                {
-                    return $o instanceof Target;
-                }
-            }
-            PHP);
-
-        $this->analyse([$file], [
-            [sprintf('%s should not depend on %s', 'Fixture\Relation\Depend\Instanceof\ShouldNotConstraint\Subject', 'Fixture\Relation\Depend\Instanceof\ShouldNotConstraint\Target'), 8],
-        ]);
-    }
-
-    public function testCanOnlyConstraint(): void
-    {
-        $this->constraint = Constraint::CanOnly;
-
-        $file = $this->createPhpFile(<<<'PHP'
-            <?php
-            namespace Fixture\Relation\Depend\Instanceof\CanOnlyConstraint;
-            class Allowed {}
-            class Target {}
-            class Subject
-            {
-                public function method(object $o): bool
-                {
-                    return $o instanceof Target;
-                }
-            }
-            PHP);
-
-        $this->analyse([$file], [
-            [sprintf('%s should not depend on %s', 'Fixture\Relation\Depend\Instanceof\CanOnlyConstraint\Subject', 'Fixture\Relation\Depend\Instanceof\CanOnlyConstraint\Target'), 9],
-        ]);
-    }
-
-    protected function getRule(): Rule
-    {
-        [$subject, $target] = match ($this->constraint) {
-            Constraint::ShouldNot => [
-                'Fixture\Relation\Depend\Instanceof\ShouldNotConstraint\Subject',
-                'Fixture\Relation\Depend\Instanceof\ShouldNotConstraint\Target',
-            ],
-            default => [
-                'Fixture\Relation\Depend\Instanceof\CanOnlyConstraint\Subject',
-                'Fixture\Relation\Depend\Instanceof\CanOnlyConstraint\Allowed',
-            ],
-        };
-
-        $testParser = FakeTestParser::create(
+        $subject = 'Fixture\Relation\Depend\Instanceof\ShouldNotConstraint\Subject';
+        $target = 'Fixture\Relation\Depend\Instanceof\ShouldNotConstraint\Target';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
             'test',
-            $this->constraint,
+            Constraint::ShouldNot,
             'depend',
             [new Classname($subject, false)],
             [new Classname($target, false)]
         );
 
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+
+            namespace Fixture\Relation\Depend\Instanceof\ShouldNotConstraint;
+
+            class Target
+            {
+            }
+            class Subject
+            {
+                public function method(object $o): bool
+                {
+                    return $o instanceof Target;
+                }
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should not depend on %s', $subject, $target), 12],
+        ]);
+    }
+
+    public function testRejectsDisallowedDependenciesWithCanOnly(): void
+    {
+        $subject = 'Fixture\Relation\Depend\Instanceof\CanOnlyConstraint\Subject';
+        $target = 'Fixture\Relation\Depend\Instanceof\CanOnlyConstraint\Allowed';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
+            'test',
+            Constraint::CanOnly,
+            'depend',
+            [new Classname($subject, false)],
+            [new Classname($target, false)]
+        );
+
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+
+            namespace Fixture\Relation\Depend\Instanceof\CanOnlyConstraint;
+
+            class Allowed
+            {
+            }
+            class Target
+            {
+            }
+            class Subject
+            {
+                public function method(object $o): bool
+                {
+                    return $o instanceof Target;
+                }
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should not depend on Fixture\Relation\Depend\Instanceof\CanOnlyConstraint\Target', $subject), 15],
+        ]);
+    }
+
+    protected function getRule(): Rule
+    {
         return new InstanceofRule(
-            new StatementBuilder($testParser),
-            new Configuration(false, true, false),
+            new StatementBuilder($this->testParser),
+            $this->configuration,
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );
