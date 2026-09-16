@@ -155,6 +155,10 @@ The user-facing documentation site lives at **https://phpat.dev** and is built f
 - Rules
   - Folder: `tests/unit/rules/`
   - One test class per Rule class, mirroring the source Assertion hierarchy (e.g., `Declaration/IsAbstract/AbstractRuleTest.php` or `Relation/Depend/NewRuleTest.php`)
+  - Use one explicit, descriptively named method and one `analyse()` call per scenario. Write PHP fixtures as multiline nowdoc strings rather than data providers.
+  - Configure `FakeTestParser` and `Configuration` in each test before analysis. `getRule()` must construct the tested rule using those instances; do not create unused alternative rules in test methods.
+  - Use distinct fixture namespaces for different class definitions, and assert diagnostic messages and line numbers.
+  - Keep builder API and parameter checks in `tests/unit/features/AssertionBuilderTest.php`, separate from rule analysis tests.
 - Features
   - Folder: `tests/unit/features/`
   - One test class per Feature (e.g., `ShowRuleNamesTest.php`)

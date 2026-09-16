@@ -22,75 +22,92 @@ class CatchBlockRuleTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    private Constraint $constraint = Constraint::ShouldNot;
+    private FakeTestParser $testParser;
 
-    public function testShouldNotConstraint(): void
+    private Configuration $configuration;
+
+    public function testRejectsMatchingDependenciesWithShouldNot(): void
     {
-        $file = $this->createPhpFile(<<<'PHP'
-            <?php
-            namespace Fixture\Relation\Depend\CatchBlock\ShouldNotConstraint;
-            class Target extends \Exception {}
-            class Subject
-            {
-                public function method(): void
-                {
-                    try {} catch (Target $e) {}
-                }
-            }
-            PHP);
-
-        $this->analyse([$file], [
-            [sprintf('%s should not depend on %s', 'Fixture\Relation\Depend\CatchBlock\ShouldNotConstraint\Subject', 'Fixture\Relation\Depend\CatchBlock\ShouldNotConstraint\Target'), 8],
-        ]);
-    }
-
-    public function testCanOnlyConstraint(): void
-    {
-        $this->constraint = Constraint::CanOnly;
-
-        $file = $this->createPhpFile(<<<'PHP'
-            <?php
-            namespace Fixture\Relation\Depend\CatchBlock\CanOnlyConstraint;
-            class Allowed extends \Exception {}
-            class Target extends \Exception {}
-            class Subject
-            {
-                public function method(): void
-                {
-                    try {} catch (Target $e) {}
-                }
-            }
-            PHP);
-
-        $this->analyse([$file], [
-            [sprintf('%s should not depend on %s', 'Fixture\Relation\Depend\CatchBlock\CanOnlyConstraint\Subject', 'Fixture\Relation\Depend\CatchBlock\CanOnlyConstraint\Target'), 9],
-        ]);
-    }
-
-    protected function getRule(): Rule
-    {
-        [$subject, $target] = match ($this->constraint) {
-            Constraint::ShouldNot => [
-                'Fixture\Relation\Depend\CatchBlock\ShouldNotConstraint\Subject',
-                'Fixture\Relation\Depend\CatchBlock\ShouldNotConstraint\Target',
-            ],
-            default => [
-                'Fixture\Relation\Depend\CatchBlock\CanOnlyConstraint\Subject',
-                'Fixture\Relation\Depend\CatchBlock\CanOnlyConstraint\Allowed',
-            ],
-        };
-
-        $testParser = FakeTestParser::create(
+        $subject = 'Fixture\Relation\Depend\CatchBlock\ShouldNotConstraint\Subject';
+        $target = 'Fixture\Relation\Depend\CatchBlock\ShouldNotConstraint\Target';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
             'test',
-            $this->constraint,
+            Constraint::ShouldNot,
             'depend',
             [new Classname($subject, false)],
             [new Classname($target, false)]
         );
 
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+
+            namespace Fixture\Relation\Depend\CatchBlock\ShouldNotConstraint;
+
+            class Target extends \Exception
+            {
+            }
+            class Subject
+            {
+                public function method(): void
+                {
+                    try {
+                    } catch (Target $e) {
+                    }
+                }
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should not depend on %s', $subject, $target), 13],
+        ]);
+    }
+
+    public function testRejectsDisallowedDependenciesWithCanOnly(): void
+    {
+        $subject = 'Fixture\Relation\Depend\CatchBlock\CanOnlyConstraint\Subject';
+        $target = 'Fixture\Relation\Depend\CatchBlock\CanOnlyConstraint\Allowed';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
+            'test',
+            Constraint::CanOnly,
+            'depend',
+            [new Classname($subject, false)],
+            [new Classname($target, false)]
+        );
+
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+
+            namespace Fixture\Relation\Depend\CatchBlock\CanOnlyConstraint;
+
+            class Allowed extends \Exception
+            {
+            }
+            class Target extends \Exception
+            {
+            }
+            class Subject
+            {
+                public function method(): void
+                {
+                    try {
+                    } catch (Target $e) {
+                    }
+                }
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should not depend on Fixture\Relation\Depend\CatchBlock\CanOnlyConstraint\Target', $subject), 16],
+        ]);
+    }
+
+    protected function getRule(): Rule
+    {
         return new CatchBlockRule(
-            new StatementBuilder($testParser),
-            new Configuration(false, true, false),
+            new StatementBuilder($this->testParser),
+            $this->configuration,
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

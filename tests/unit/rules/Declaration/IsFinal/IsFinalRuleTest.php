@@ -22,56 +22,69 @@ class IsFinalRuleTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    private Constraint $constraint = Constraint::Should;
+    private FakeTestParser $testParser;
 
-    public function testShouldConstraint(): void
+    private Configuration $configuration;
+
+    public function testRejectsNonFinalClassesWithShould(): void
     {
-        // Non-final class — error expected
-        $file = $this->createPhpFile(<<<'PHP'
-            <?php
-            namespace Fixture\Declaration\IsFinal\ShouldConstraint;
-            class Subject {}
-            PHP);
-
-        $this->analyse([$file], [
-            [sprintf('%s should be final', 'Fixture\Declaration\IsFinal\ShouldConstraint\Subject'), 3],
-        ]);
-    }
-
-    public function testShouldNotConstraint(): void
-    {
-        $this->constraint = Constraint::ShouldNot;
-
-        // Final class — error expected
-        $file = $this->createPhpFile(<<<'PHP'
-            <?php
-            namespace Fixture\Declaration\IsFinal\ShouldNotConstraint;
-            final class Subject {}
-            PHP);
-
-        $this->analyse([$file], [
-            [sprintf('%s should not be final', 'Fixture\Declaration\IsFinal\ShouldNotConstraint\Subject'), 3],
-        ]);
-    }
-
-    protected function getRule(): Rule
-    {
-        $subject = match ($this->constraint) {
-            Constraint::Should => 'Fixture\Declaration\IsFinal\ShouldConstraint\Subject',
-            default => 'Fixture\Declaration\IsFinal\ShouldNotConstraint\Subject',
-        };
-
-        $testParser = FakeTestParser::create(
+        $subject = 'Fixture\Declaration\IsFinal\ShouldConstraint\Subject';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
             'test',
-            $this->constraint,
+            Constraint::Should,
             'beFinal',
             [new Classname($subject, false)],
             []
         );
 
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+
+            namespace Fixture\Declaration\IsFinal\ShouldConstraint;
+
+            class Subject
+            {
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should be final', $subject), 5],
+        ]);
+    }
+
+    public function testRejectsFinalClassesWithShouldNot(): void
+    {
+        $subject = 'Fixture\Declaration\IsFinal\ShouldNotConstraint\Subject';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
+            'test',
+            Constraint::ShouldNot,
+            'beFinal',
+            [new Classname($subject, false)],
+            []
+        );
+
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+
+            namespace Fixture\Declaration\IsFinal\ShouldNotConstraint;
+
+            final class Subject
+            {
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should not be final', $subject), 5],
+        ]);
+    }
+
+    protected function getRule(): Rule
+    {
         return new IsFinalRule(
-            new StatementBuilder($testParser),
-            new Configuration(false, true, false),
+            new StatementBuilder($this->testParser),
+            $this->configuration,
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

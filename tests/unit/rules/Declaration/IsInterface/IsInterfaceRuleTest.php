@@ -5,9 +5,8 @@ namespace Tests\PHPat\unit\rules\Declaration\IsInterface;
 use PHPat\Configuration;
 use PHPat\Rule\Assertion\Constraint;
 use PHPat\Rule\Assertion\Declaration\IsInterface\IsInterfaceRule;
-use PHPat\Selector\Selector;
+use PHPat\Selector\ClassNamespace;
 use PHPat\Statement\StatementBuilder;
-use PHPat\Test\PHPat;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPStan\Type\FileTypeMapper;
@@ -23,71 +22,103 @@ class IsInterfaceRuleTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    private Constraint $constraint = Constraint::Should;
+    private FakeTestParser $testParser;
 
-    public function testShouldNotBuilder(): void
+    private Configuration $configuration;
+
+    public function testRejectsClassesWithShould(): void
     {
-        $rule = PHPat::rule()->classes(Selector::all())->shouldNot()->beInterface()();
+        $subjectNamespace = 'Fixture\Declaration\IsInterface';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
+            'test',
+            Constraint::Should,
+            'beInterface',
+            [new ClassNamespace($subjectNamespace, false)],
+            []
+        );
 
-        self::assertSame(Constraint::ShouldNot, $rule->getConstraint());
-        self::assertSame('beInterface', $rule->getAssertionType());
-    }
-
-    public function testShouldConstraint(): void
-    {
-        // Non-interface class — error expected
         $file = $this->createPhpFile(<<<'PHP'
             <?php
+
             namespace Fixture\Declaration\IsInterface\ShouldConstraint;
-            class Subject {}
+
+            class Subject
+            {
+            }
             PHP);
 
         $this->analyse([$file], [
-            [sprintf('%s should be an interface', 'Fixture\Declaration\IsInterface\ShouldConstraint\Subject'), 3],
+            [sprintf('%s\ShouldConstraint\Subject should be an interface', $subjectNamespace), 5],
         ]);
     }
 
-    public function testShouldAcceptsInterface(): void
+    public function testAcceptsInterfacesWithShould(): void
     {
+        $subjectNamespace = 'Fixture\Declaration\IsInterface';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
+            'test',
+            Constraint::Should,
+            'beInterface',
+            [new ClassNamespace($subjectNamespace, false)],
+            []
+        );
+
         $file = $this->createPhpFile(<<<'PHP'
             <?php
+
             namespace Fixture\Declaration\IsInterface\ShouldAcceptsInterface;
-            interface Subject {}
+
+            interface Subject
+            {
+            }
             PHP);
 
         $this->analyse([$file], []);
     }
 
-    public function testShouldNotConstraint(): void
+    public function testRejectsInterfacesWithShouldNot(): void
     {
-        $this->constraint = Constraint::ShouldNot;
+        $subjectNamespace = 'Fixture\Declaration\IsInterface';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
+            'test',
+            Constraint::ShouldNot,
+            'beInterface',
+            [new ClassNamespace($subjectNamespace, false)],
+            []
+        );
+
         $file = $this->createPhpFile(<<<'PHP'
             <?php
+
             namespace Fixture\Declaration\IsInterface\ShouldNotConstraint;
-            interface SubjectInterface {}
-            class SubjectClass {}
-            trait SubjectTrait {}
-            enum SubjectEnum {}
+
+            interface SubjectInterface
+            {
+            }
+            class SubjectClass
+            {
+            }
+            trait SubjectTrait
+            {
+            }
+            enum SubjectEnum
+            {
+            }
             PHP);
 
         $this->analyse([$file], [
-            [sprintf('%s should not be an interface', 'Fixture\Declaration\IsInterface\ShouldNotConstraint\SubjectInterface'), 3],
+            [sprintf('%s\ShouldNotConstraint\SubjectInterface should not be an interface', $subjectNamespace), 5],
         ]);
     }
 
     protected function getRule(): Rule
     {
-        $testParser = FakeTestParser::create(
-            'test',
-            $this->constraint,
-            'beInterface',
-            [Selector::inNamespace('Fixture\Declaration\IsInterface')],
-            []
-        );
-
         return new IsInterfaceRule(
-            new StatementBuilder($testParser),
-            new Configuration(false, true, false),
+            new StatementBuilder($this->testParser),
+            $this->configuration,
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

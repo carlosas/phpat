@@ -22,56 +22,69 @@ class AbstractRuleTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    private Constraint $constraint = Constraint::Should;
+    private FakeTestParser $testParser;
 
-    public function testShouldConstraint(): void
+    private Configuration $configuration;
+
+    public function testRejectsNonAbstractClassesWithShould(): void
     {
-        // Non-abstract class — error expected
-        $file = $this->createPhpFile(<<<'PHP'
-            <?php
-            namespace Fixture\Declaration\IsAbstract\ShouldConstraint;
-            class Subject {}
-            PHP);
-
-        $this->analyse([$file], [
-            [sprintf('%s should be abstract', 'Fixture\Declaration\IsAbstract\ShouldConstraint\Subject'), 3],
-        ]);
-    }
-
-    public function testShouldNotConstraint(): void
-    {
-        $this->constraint = Constraint::ShouldNot;
-
-        // Abstract class — error expected
-        $file = $this->createPhpFile(<<<'PHP'
-            <?php
-            namespace Fixture\Declaration\IsAbstract\ShouldNotConstraint;
-            abstract class Subject {}
-            PHP);
-
-        $this->analyse([$file], [
-            [sprintf('%s should not be abstract', 'Fixture\Declaration\IsAbstract\ShouldNotConstraint\Subject'), 3],
-        ]);
-    }
-
-    protected function getRule(): Rule
-    {
-        $subject = match ($this->constraint) {
-            Constraint::Should => 'Fixture\Declaration\IsAbstract\ShouldConstraint\Subject',
-            default => 'Fixture\Declaration\IsAbstract\ShouldNotConstraint\Subject',
-        };
-
-        $testParser = FakeTestParser::create(
+        $subject = 'Fixture\Declaration\IsAbstract\ShouldConstraint\Subject';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
             'test',
-            $this->constraint,
+            Constraint::Should,
             'beAbstract',
             [new Classname($subject, false)],
             []
         );
 
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+
+            namespace Fixture\Declaration\IsAbstract\ShouldConstraint;
+
+            class Subject
+            {
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should be abstract', $subject), 5],
+        ]);
+    }
+
+    public function testRejectsAbstractClassesWithShouldNot(): void
+    {
+        $subject = 'Fixture\Declaration\IsAbstract\ShouldNotConstraint\Subject';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
+            'test',
+            Constraint::ShouldNot,
+            'beAbstract',
+            [new Classname($subject, false)],
+            []
+        );
+
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+
+            namespace Fixture\Declaration\IsAbstract\ShouldNotConstraint;
+
+            abstract class Subject
+            {
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should not be abstract', $subject), 5],
+        ]);
+    }
+
+    protected function getRule(): Rule
+    {
         return new AbstractRule(
-            new StatementBuilder($testParser),
-            new Configuration(false, true, false),
+            new StatementBuilder($this->testParser),
+            $this->configuration,
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

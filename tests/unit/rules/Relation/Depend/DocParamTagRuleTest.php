@@ -22,41 +22,72 @@ class DocParamTagRuleTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    private const SUBJECT = 'Fixture\Relation\Depend\DocParamTag\ShouldNotConstraint\Subject';
-    private const TARGET = 'Fixture\Relation\Depend\DocParamTag\ShouldNotConstraint\Target';
+    private FakeTestParser $testParser;
 
-    private bool $ignoreDocBlocks = false;
+    private Configuration $configuration;
 
-    public function testShouldNotConstraint(): void
+    public function testRejectsMatchingDependenciesWithShouldNot(): void
     {
+        $subject = 'Fixture\Relation\Depend\DocParamTag\ShouldNotConstraint\ShouldNot\Subject';
+        $target = 'Fixture\Relation\Depend\DocParamTag\ShouldNotConstraint\ShouldNot\Target';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
+            'test',
+            Constraint::ShouldNot,
+            'depend',
+            [new Classname($subject, false)],
+            [new Classname($target, false)]
+        );
+
         $file = $this->createPhpFile(<<<'PHP'
             <?php
-            namespace Fixture\Relation\Depend\DocParamTag\ShouldNotConstraint;
-            class Target {}
+
+            namespace Fixture\Relation\Depend\DocParamTag\ShouldNotConstraint\ShouldNot;
+
+            class Target
+            {
+            }
             class Subject
             {
                 /** @param Target $p */
-                public function method($p) {}
+                public function method($p)
+                {
+                }
             }
             PHP);
 
         $this->analyse([$file], [
-            [sprintf('%s should not depend on %s', self::SUBJECT, self::TARGET), 7],
+            [sprintf('%s should not depend on %s', $subject, $target), 11],
         ]);
     }
 
-    public function testRuleIgnoresDocBlocks(): void
+    public function testIgnoresDocCommentsWhenConfigured(): void
     {
-        $this->ignoreDocBlocks = true;
+        $subject = 'Fixture\Relation\Depend\DocParamTag\ShouldNotConstraint\IgnoreDocComments\Subject';
+        $target = 'Fixture\Relation\Depend\DocParamTag\ShouldNotConstraint\IgnoreDocComments\Target';
+        $this->configuration = new Configuration(true, true, false);
+        $this->testParser = FakeTestParser::create(
+            'test',
+            Constraint::ShouldNot,
+            'depend',
+            [new Classname($subject, false)],
+            [new Classname($target, false)]
+        );
 
         $file = $this->createPhpFile(<<<'PHP'
             <?php
-            namespace Fixture\Relation\Depend\DocParamTag\ShouldNotConstraint;
-            class Target {}
+
+            namespace Fixture\Relation\Depend\DocParamTag\ShouldNotConstraint\IgnoreDocComments;
+
+            class Target
+            {
+            }
             class Subject
             {
                 /** @param Target $p */
-                public function method($p) {}
+                public function method($p)
+                {
+                }
             }
             PHP);
 
@@ -65,17 +96,9 @@ class DocParamTagRuleTest extends RuleTestCase
 
     protected function getRule(): Rule
     {
-        $testParser = FakeTestParser::create(
-            'test',
-            Constraint::ShouldNot,
-            'depend',
-            [new Classname(self::SUBJECT, false)],
-            [new Classname(self::TARGET, false)]
-        );
-
         return new DocParamTagRule(
-            new StatementBuilder($testParser),
-            new Configuration($this->ignoreDocBlocks, true, false),
+            new StatementBuilder($this->testParser),
+            $this->configuration,
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

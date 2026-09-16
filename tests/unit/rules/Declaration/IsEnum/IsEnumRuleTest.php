@@ -22,56 +22,69 @@ class IsEnumRuleTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    private Constraint $constraint = Constraint::Should;
+    private FakeTestParser $testParser;
 
-    public function testShouldConstraint(): void
+    private Configuration $configuration;
+
+    public function testRejectsClassesWithShould(): void
     {
-        // Non-enum class — error expected
-        $file = $this->createPhpFile(<<<'PHP'
-            <?php
-            namespace Fixture\Declaration\IsEnum\ShouldConstraint;
-            class Subject {}
-            PHP);
-
-        $this->analyse([$file], [
-            [sprintf('%s should be enum', 'Fixture\Declaration\IsEnum\ShouldConstraint\Subject'), 3],
-        ]);
-    }
-
-    public function testShouldNotConstraint(): void
-    {
-        $this->constraint = Constraint::ShouldNot;
-
-        // Enum — error expected
-        $file = $this->createPhpFile(<<<'PHP'
-            <?php
-            namespace Fixture\Declaration\IsEnum\ShouldNotConstraint;
-            enum Subject {}
-            PHP);
-
-        $this->analyse([$file], [
-            [sprintf('%s should not be enum', 'Fixture\Declaration\IsEnum\ShouldNotConstraint\Subject'), 3],
-        ]);
-    }
-
-    protected function getRule(): Rule
-    {
-        $subject = match ($this->constraint) {
-            Constraint::Should => 'Fixture\Declaration\IsEnum\ShouldConstraint\Subject',
-            default => 'Fixture\Declaration\IsEnum\ShouldNotConstraint\Subject',
-        };
-
-        $testParser = FakeTestParser::create(
+        $subject = 'Fixture\Declaration\IsEnum\ShouldConstraint\Subject';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
             'test',
-            $this->constraint,
+            Constraint::Should,
             'beEnum',
             [new Classname($subject, false)],
             []
         );
 
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+
+            namespace Fixture\Declaration\IsEnum\ShouldConstraint;
+
+            class Subject
+            {
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should be enum', $subject), 5],
+        ]);
+    }
+
+    public function testRejectsEnumsWithShouldNot(): void
+    {
+        $subject = 'Fixture\Declaration\IsEnum\ShouldNotConstraint\Subject';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
+            'test',
+            Constraint::ShouldNot,
+            'beEnum',
+            [new Classname($subject, false)],
+            []
+        );
+
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+
+            namespace Fixture\Declaration\IsEnum\ShouldNotConstraint;
+
+            enum Subject
+            {
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should not be enum', $subject), 5],
+        ]);
+    }
+
+    protected function getRule(): Rule
+    {
         return new IsEnumRule(
-            new StatementBuilder($testParser),
-            new Configuration(false, true, false),
+            new StatementBuilder($this->testParser),
+            $this->configuration,
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

@@ -22,63 +22,80 @@ class ParentClassRuleTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    private Constraint $constraint = Constraint::ShouldNot;
+    private FakeTestParser $testParser;
 
-    public function testShouldNotConstraint(): void
+    private Configuration $configuration;
+
+    public function testRejectsMatchingDependenciesWithShouldNot(): void
     {
-        $file = $this->createPhpFile(<<<'PHP'
-            <?php
-            namespace Fixture\Relation\Depend\ParentClass\ShouldNotConstraint;
-            class Target {}
-            class Subject extends Target {}
-            PHP);
-
-        $this->analyse([$file], [
-            [sprintf('%s should not depend on %s', 'Fixture\Relation\Depend\ParentClass\ShouldNotConstraint\Subject', 'Fixture\Relation\Depend\ParentClass\ShouldNotConstraint\Target'), 4],
-        ]);
-    }
-
-    public function testCanOnlyConstraint(): void
-    {
-        $this->constraint = Constraint::CanOnly;
-
-        $file = $this->createPhpFile(<<<'PHP'
-            <?php
-            namespace Fixture\Relation\Depend\ParentClass\CanOnlyConstraint;
-            class Allowed {}
-            class Target {}
-            class Subject extends Target {}
-            PHP);
-
-        $this->analyse([$file], [
-            [sprintf('%s should not depend on %s', 'Fixture\Relation\Depend\ParentClass\CanOnlyConstraint\Subject', 'Fixture\Relation\Depend\ParentClass\CanOnlyConstraint\Target'), 5],
-        ]);
-    }
-
-    protected function getRule(): Rule
-    {
-        [$subject, $target] = match ($this->constraint) {
-            Constraint::ShouldNot => [
-                'Fixture\Relation\Depend\ParentClass\ShouldNotConstraint\Subject',
-                'Fixture\Relation\Depend\ParentClass\ShouldNotConstraint\Target',
-            ],
-            default => [
-                'Fixture\Relation\Depend\ParentClass\CanOnlyConstraint\Subject',
-                'Fixture\Relation\Depend\ParentClass\CanOnlyConstraint\Allowed',
-            ],
-        };
-
-        $testParser = FakeTestParser::create(
+        $subject = 'Fixture\Relation\Depend\ParentClass\ShouldNotConstraint\Subject';
+        $target = 'Fixture\Relation\Depend\ParentClass\ShouldNotConstraint\Target';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
             'test',
-            $this->constraint,
+            Constraint::ShouldNot,
             'depend',
             [new Classname($subject, false)],
             [new Classname($target, false)]
         );
 
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+
+            namespace Fixture\Relation\Depend\ParentClass\ShouldNotConstraint;
+
+            class Target
+            {
+            }
+            class Subject extends Target
+            {
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should not depend on %s', $subject, $target), 8],
+        ]);
+    }
+
+    public function testRejectsDisallowedDependenciesWithCanOnly(): void
+    {
+        $subject = 'Fixture\Relation\Depend\ParentClass\CanOnlyConstraint\Subject';
+        $target = 'Fixture\Relation\Depend\ParentClass\CanOnlyConstraint\Allowed';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
+            'test',
+            Constraint::CanOnly,
+            'depend',
+            [new Classname($subject, false)],
+            [new Classname($target, false)]
+        );
+
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+
+            namespace Fixture\Relation\Depend\ParentClass\CanOnlyConstraint;
+
+            class Allowed
+            {
+            }
+            class Target
+            {
+            }
+            class Subject extends Target
+            {
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should not depend on Fixture\Relation\Depend\ParentClass\CanOnlyConstraint\Target', $subject), 11],
+        ]);
+    }
+
+    protected function getRule(): Rule
+    {
         return new ParentClassRule(
-            new StatementBuilder($testParser),
-            new Configuration(false, true, false),
+            new StatementBuilder($this->testParser),
+            $this->configuration,
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

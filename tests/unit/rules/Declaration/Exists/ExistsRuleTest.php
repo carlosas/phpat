@@ -22,33 +22,42 @@ class ExistsRuleTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    public function testShouldNotConstraint(): void
+    private FakeTestParser $testParser;
+
+    private Configuration $configuration;
+
+    public function testRejectsExistingClassesWithShouldNot(): void
     {
-        // Existing class — error expected when ShouldNot
+        $subject = 'Fixture\Declaration\Exists\ShouldNotConstraint\Subject';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
+            'test',
+            Constraint::ShouldNot,
+            'exist',
+            [new Classname($subject, false)],
+            []
+        );
+
         $file = $this->createPhpFile(<<<'PHP'
             <?php
+
             namespace Fixture\Declaration\Exists\ShouldNotConstraint;
-            class Subject {}
+
+            class Subject
+            {
+            }
             PHP);
 
         $this->analyse([$file], [
-            [sprintf('%s should not exist', 'Fixture\Declaration\Exists\ShouldNotConstraint\Subject'), 3],
+            [sprintf('%s should not exist', $subject), 5],
         ]);
     }
 
     protected function getRule(): Rule
     {
-        $testParser = FakeTestParser::create(
-            'test',
-            Constraint::ShouldNot,
-            'exist',
-            [new Classname('Fixture\Declaration\Exists\ShouldNotConstraint\Subject', false)],
-            []
-        );
-
         return new ExistsRule(
-            new StatementBuilder($testParser),
-            new Configuration(false, true, false),
+            new StatementBuilder($this->testParser),
+            $this->configuration,
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

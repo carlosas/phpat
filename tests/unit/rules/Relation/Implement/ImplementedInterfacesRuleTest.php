@@ -22,92 +22,106 @@ class ImplementedInterfacesRuleTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    private Constraint $constraint = Constraint::Should;
+    private FakeTestParser $testParser;
 
-    public function testShouldConstraint(): void
+    private Configuration $configuration;
+
+    public function testRejectsMissingInterfacesWithShould(): void
     {
-        // Class not implementing — error expected
-        $file = $this->createPhpFile(<<<'PHP'
-            <?php
-            namespace Fixture\Relation\Implement\ShouldConstraint;
-            interface Target {}
-            class Subject {}
-            PHP);
-
-        $this->analyse([$file], [
-            [sprintf('%s should implement %s', 'Fixture\Relation\Implement\ShouldConstraint\Subject', 'Fixture\Relation\Implement\ShouldConstraint\Target'), 4],
-        ]);
-
-        // Class correctly implementing — no errors
-        $subject2 = 'Fixture\Relation\Implement\ShouldConstraintPass\Subject';
-        $target2 = 'Fixture\Relation\Implement\ShouldConstraintPass\Target';
-
-        $file2 = $this->createPhpFile(<<<'PHP'
-            <?php
-            namespace Fixture\Relation\Implement\ShouldConstraintPass;
-            interface Target {}
-            class Subject implements Target {}
-            PHP);
-
-        $testParser2 = FakeTestParser::create(
+        $subject = 'Fixture\Relation\Implement\ShouldConstraint\Subject';
+        $target = 'Fixture\Relation\Implement\ShouldConstraint\Target';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
             'test',
             Constraint::Should,
-            'implement',
-            [new Classname($subject2, false)],
-            [new Classname($target2, false)]
-        );
-
-        $rule2 = new ImplementedInterfacesRule(
-            new StatementBuilder($testParser2),
-            new Configuration(false, true, false),
-            $this->createReflectionProvider(),
-            self::getContainer()->getByType(FileTypeMapper::class)
-        );
-
-        $this->analyse([$file2], []);
-    }
-
-    public function testShouldNotConstraint(): void
-    {
-        $this->constraint = Constraint::ShouldNot;
-
-        // Class implementing — error expected
-        $file = $this->createPhpFile(<<<'PHP'
-            <?php
-            namespace Fixture\Relation\Implement\ShouldNotConstraint;
-            interface Target {}
-            class Subject implements Target {}
-            PHP);
-
-        $this->analyse([$file], [
-            [sprintf('%s should not implement %s', 'Fixture\Relation\Implement\ShouldNotConstraint\Subject', 'Fixture\Relation\Implement\ShouldNotConstraint\Target'), 4],
-        ]);
-    }
-
-    protected function getRule(): Rule
-    {
-        [$subject, $target] = match ($this->constraint) {
-            Constraint::Should => [
-                'Fixture\Relation\Implement\ShouldConstraint\Subject',
-                'Fixture\Relation\Implement\ShouldConstraint\Target',
-            ],
-            default => [
-                'Fixture\Relation\Implement\ShouldNotConstraint\Subject',
-                'Fixture\Relation\Implement\ShouldNotConstraint\Target',
-            ],
-        };
-
-        $testParser = FakeTestParser::create(
-            'test',
-            $this->constraint,
             'implement',
             [new Classname($subject, false)],
             [new Classname($target, false)]
         );
 
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+
+            namespace Fixture\Relation\Implement\ShouldConstraint;
+
+            interface Target
+            {
+            }
+            class Subject
+            {
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should implement %s', $subject, $target), 8],
+        ]);
+    }
+
+    public function testAcceptsMatchingInterfacesWithShould(): void
+    {
+        $subject = 'Fixture\Relation\Implement\ShouldConstraintPass\Subject';
+        $target = 'Fixture\Relation\Implement\ShouldConstraintPass\Target';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
+            'test',
+            Constraint::Should,
+            'implement',
+            [new Classname($subject, false)],
+            [new Classname($target, false)]
+        );
+
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+
+            namespace Fixture\Relation\Implement\ShouldConstraintPass;
+
+            interface Target
+            {
+            }
+            class Subject implements Target
+            {
+            }
+            PHP);
+
+        $this->analyse([$file], []);
+    }
+
+    public function testRejectsMatchingInterfacesWithShouldNot(): void
+    {
+        $subject = 'Fixture\Relation\Implement\ShouldNotConstraint\Subject';
+        $target = 'Fixture\Relation\Implement\ShouldNotConstraint\Target';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
+            'test',
+            Constraint::ShouldNot,
+            'implement',
+            [new Classname($subject, false)],
+            [new Classname($target, false)]
+        );
+
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+
+            namespace Fixture\Relation\Implement\ShouldNotConstraint;
+
+            interface Target
+            {
+            }
+            class Subject implements Target
+            {
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should not implement %s', $subject, $target), 8],
+        ]);
+    }
+
+    protected function getRule(): Rule
+    {
         return new ImplementedInterfacesRule(
-            new StatementBuilder($testParser),
-            new Configuration(false, true, false),
+            new StatementBuilder($this->testParser),
+            $this->configuration,
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

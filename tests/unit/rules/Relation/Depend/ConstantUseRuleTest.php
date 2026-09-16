@@ -22,13 +22,28 @@ class ConstantUseRuleTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    private Constraint $constraint = Constraint::ShouldNot;
+    private FakeTestParser $testParser;
 
-    public function testShouldNotConstraint(): void
+    private Configuration $configuration;
+
+    public function testRejectsMatchingDependenciesWithShouldNot(): void
     {
+        $subject = 'Fixture\Relation\Depend\ConstantUse\ShouldNotConstraint\Subject';
+        $target = 'Fixture\Relation\Depend\ConstantUse\ShouldNotConstraint\Target';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
+            'test',
+            Constraint::ShouldNot,
+            'depend',
+            [new Classname($subject, false)],
+            [new Classname($target, false)]
+        );
+
         $file = $this->createPhpFile(<<<'PHP'
             <?php
+
             namespace Fixture\Relation\Depend\ConstantUse\ShouldNotConstraint;
+
             class Target
             {
                 public const CONSTANT = 'value';
@@ -43,17 +58,28 @@ class ConstantUseRuleTest extends RuleTestCase
             PHP);
 
         $this->analyse([$file], [
-            [sprintf('%s should not depend on %s', 'Fixture\Relation\Depend\ConstantUse\ShouldNotConstraint\Subject', 'Fixture\Relation\Depend\ConstantUse\ShouldNotConstraint\Target'), 11],
+            [sprintf('%s should not depend on %s', $subject, $target), 13],
         ]);
     }
 
-    public function testCanOnlyConstraint(): void
+    public function testRejectsDisallowedDependenciesWithCanOnly(): void
     {
-        $this->constraint = Constraint::CanOnly;
+        $subject = 'Fixture\Relation\Depend\ConstantUse\CanOnlyConstraint\Subject';
+        $target = 'Fixture\Relation\Depend\ConstantUse\CanOnlyConstraint\Allowed';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
+            'test',
+            Constraint::CanOnly,
+            'depend',
+            [new Classname($subject, false)],
+            [new Classname($target, false)]
+        );
 
         $file = $this->createPhpFile(<<<'PHP'
             <?php
+
             namespace Fixture\Relation\Depend\ConstantUse\CanOnlyConstraint;
+
             class Allowed
             {
                 public const ALLOWED_CONSTANT = 'ok';
@@ -72,34 +98,15 @@ class ConstantUseRuleTest extends RuleTestCase
             PHP);
 
         $this->analyse([$file], [
-            [sprintf('%s should not depend on %s', 'Fixture\Relation\Depend\ConstantUse\CanOnlyConstraint\Subject', 'Fixture\Relation\Depend\ConstantUse\CanOnlyConstraint\Target'), 15],
+            [sprintf('%s should not depend on Fixture\Relation\Depend\ConstantUse\CanOnlyConstraint\Target', $subject), 17],
         ]);
     }
 
     protected function getRule(): Rule
     {
-        [$subject, $target] = match ($this->constraint) {
-            Constraint::ShouldNot => [
-                'Fixture\Relation\Depend\ConstantUse\ShouldNotConstraint\Subject',
-                'Fixture\Relation\Depend\ConstantUse\ShouldNotConstraint\Target',
-            ],
-            default => [
-                'Fixture\Relation\Depend\ConstantUse\CanOnlyConstraint\Subject',
-                'Fixture\Relation\Depend\ConstantUse\CanOnlyConstraint\Allowed',
-            ],
-        };
-
-        $testParser = FakeTestParser::create(
-            'test',
-            $this->constraint,
-            'depend',
-            [new Classname($subject, false)],
-            [new Classname($target, false)]
-        );
-
         return new ConstantUseRule(
-            new StatementBuilder($testParser),
-            new Configuration(false, true, false),
+            new StatementBuilder($this->testParser),
+            $this->configuration,
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

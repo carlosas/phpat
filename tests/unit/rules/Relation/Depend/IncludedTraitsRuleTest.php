@@ -22,69 +22,82 @@ class IncludedTraitsRuleTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    private Constraint $constraint = Constraint::ShouldNot;
+    private FakeTestParser $testParser;
 
-    public function testShouldNotConstraint(): void
+    private Configuration $configuration;
+
+    public function testRejectsMatchingDependenciesWithShouldNot(): void
     {
-        $file = $this->createPhpFile(<<<'PHP'
-            <?php
-            namespace Fixture\Relation\Depend\IncludedTraits\ShouldNotConstraint;
-            trait Target {}
-            class Subject
-            {
-                use Target;
-            }
-            PHP);
-
-        $this->analyse([$file], [
-            [sprintf('%s should not depend on %s', 'Fixture\Relation\Depend\IncludedTraits\ShouldNotConstraint\Subject', 'Fixture\Relation\Depend\IncludedTraits\ShouldNotConstraint\Target'), 4],
-        ]);
-    }
-
-    public function testCanOnlyConstraint(): void
-    {
-        $this->constraint = Constraint::CanOnly;
-
-        $file = $this->createPhpFile(<<<'PHP'
-            <?php
-            namespace Fixture\Relation\Depend\IncludedTraits\CanOnlyConstraint;
-            trait Allowed {}
-            trait Target {}
-            class Subject
-            {
-                use Target;
-            }
-            PHP);
-
-        $this->analyse([$file], [
-            [sprintf('%s should not depend on %s', 'Fixture\Relation\Depend\IncludedTraits\CanOnlyConstraint\Subject', 'Fixture\Relation\Depend\IncludedTraits\CanOnlyConstraint\Target'), 5],
-        ]);
-    }
-
-    protected function getRule(): Rule
-    {
-        [$subject, $target] = match ($this->constraint) {
-            Constraint::ShouldNot => [
-                'Fixture\Relation\Depend\IncludedTraits\ShouldNotConstraint\Subject',
-                'Fixture\Relation\Depend\IncludedTraits\ShouldNotConstraint\Target',
-            ],
-            default => [
-                'Fixture\Relation\Depend\IncludedTraits\CanOnlyConstraint\Subject',
-                'Fixture\Relation\Depend\IncludedTraits\CanOnlyConstraint\Allowed',
-            ],
-        };
-
-        $testParser = FakeTestParser::create(
+        $subject = 'Fixture\Relation\Depend\IncludedTraits\ShouldNotConstraint\Subject';
+        $target = 'Fixture\Relation\Depend\IncludedTraits\ShouldNotConstraint\Target';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
             'test',
-            $this->constraint,
+            Constraint::ShouldNot,
             'depend',
             [new Classname($subject, false)],
             [new Classname($target, false)]
         );
 
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+
+            namespace Fixture\Relation\Depend\IncludedTraits\ShouldNotConstraint;
+
+            trait Target
+            {
+            }
+            class Subject
+            {
+                use Target;
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should not depend on %s', $subject, $target), 8],
+        ]);
+    }
+
+    public function testRejectsDisallowedDependenciesWithCanOnly(): void
+    {
+        $subject = 'Fixture\Relation\Depend\IncludedTraits\CanOnlyConstraint\Subject';
+        $target = 'Fixture\Relation\Depend\IncludedTraits\CanOnlyConstraint\Allowed';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
+            'test',
+            Constraint::CanOnly,
+            'depend',
+            [new Classname($subject, false)],
+            [new Classname($target, false)]
+        );
+
+        $file = $this->createPhpFile(<<<'PHP'
+            <?php
+
+            namespace Fixture\Relation\Depend\IncludedTraits\CanOnlyConstraint;
+
+            trait Allowed
+            {
+            }
+            trait Target
+            {
+            }
+            class Subject
+            {
+                use Target;
+            }
+            PHP);
+
+        $this->analyse([$file], [
+            [sprintf('%s should not depend on Fixture\Relation\Depend\IncludedTraits\CanOnlyConstraint\Target', $subject), 11],
+        ]);
+    }
+
+    protected function getRule(): Rule
+    {
         return new IncludedTraitsRule(
-            new StatementBuilder($testParser),
-            new Configuration(false, true, false),
+            new StatementBuilder($this->testParser),
+            $this->configuration,
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );

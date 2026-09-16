@@ -22,33 +22,42 @@ class IsReadonlyRuleTest extends RuleTestCase
 {
     use CreatesPhpFile;
 
-    public function testShouldConstraint(): void
+    private FakeTestParser $testParser;
+
+    private Configuration $configuration;
+
+    public function testRejectsNonReadonlyClassesWithShould(): void
     {
-        // Non-readonly class — error expected
+        $subject = 'Fixture\Declaration\IsReadonly\ShouldConstraint\Subject';
+        $this->configuration = new Configuration(false, true, false);
+        $this->testParser = FakeTestParser::create(
+            'test',
+            Constraint::Should,
+            'beReadonly',
+            [new Classname($subject, false)],
+            []
+        );
+
         $file = $this->createPhpFile(<<<'PHP'
             <?php
+
             namespace Fixture\Declaration\IsReadonly\ShouldConstraint;
-            class Subject {}
+
+            class Subject
+            {
+            }
             PHP);
 
         $this->analyse([$file], [
-            [sprintf('%s should be readonly', 'Fixture\Declaration\IsReadonly\ShouldConstraint\Subject'), 3],
+            [sprintf('%s should be readonly', $subject), 5],
         ]);
     }
 
     protected function getRule(): Rule
     {
-        $testParser = FakeTestParser::create(
-            'test',
-            Constraint::Should,
-            'beReadonly',
-            [new Classname('Fixture\Declaration\IsReadonly\ShouldConstraint\Subject', false)],
-            []
-        );
-
         return new IsReadonlyRule(
-            new StatementBuilder($testParser),
-            new Configuration(false, true, false),
+            new StatementBuilder($this->testParser),
+            $this->configuration,
             $this->createReflectionProvider(),
             self::getContainer()->getByType(FileTypeMapper::class)
         );
