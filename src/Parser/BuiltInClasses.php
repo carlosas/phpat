@@ -1542,5 +1542,13 @@ final class BuiltInClasses
         'MaxMind\Db\Reader\InvalidDatabaseException',
         'MaxMind\Db\Reader\Metadata',
         'Relay\TableMetricsSchemaException',
+        'Snmp\Mib',
+        'Snmp\OidOutput',
+        'Snmp\Output',
+        'Snmp\StringOutput',
+        'Time\Duration',
+        'Time\TimeException',
+        'Uri\WhatWg\UrlBuilder',
+        'Uri\WhatWg\UrlPercentEncodingMode',
     ];
 }
